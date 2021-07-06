@@ -16,7 +16,7 @@ const PerfScatter = ({ app })=> {
   
   const thingMounted = useRef(true);
   
-  const [ tickXY, tickXYSet ] = useState([]);
+  const [ tickXY, tickXYSet ] = useState(false);
   
   useEffect( ()=> {
     Meteor.call('getAllPerform', (err, re)=>{
@@ -31,9 +31,17 @@ const PerfScatter = ({ app })=> {
   
   return(
     <div className='chartNoHeightContain'>
+      <div className='rowWrap noPrint'>
+        {!tickXY ?
+          <n-fa1><i className='fas fa-spinner fa-lg fa-spin gapR'></i>Loading</n-fa1> :
+          <n-fa0><i className='fas fa-spinner fa-lg'></i></n-fa0>
+        }
+        <span className='flexSpace' />
+      </div>
+      
       <VictoryChart
         theme={Theme.NeptuneVictory}
-        padding={{top: 25, right: 25, bottom: 10, left: 25}}
+        padding={{top: 5, right: 25, bottom: 10, left: 25}}
         domainPadding={25}
         height={250}
         containerComponent={
@@ -75,7 +83,7 @@ const PerfScatter = ({ app })=> {
         />
           
         <VictoryScatter
-          data={tickXY}
+          data={tickXY || []}
           style={{
             data: { 
               fill: ({ datum }) => datum,

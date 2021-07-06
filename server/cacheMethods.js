@@ -74,7 +74,7 @@ Meteor.methods({
     const preftime = perfShade ? perfShade.lastUpdated : null;
     const stale = !preftime ? true :
               moment.duration(moment().diff(moment(preftime))).as('hours') > 12;
-    if(true) {
+    if(stale) {
       const app = AppDB.findOne({ orgKey: accessKey });
       const tideWall = app && app.tideWall;
 
@@ -116,26 +116,38 @@ Meteor.methods({
   getAllNCCount() {
     const accessKey = Meteor.user().orgKey;
     
-    const nccountShade = CacheDB.findOne({orgKey: accessKey, dataName: 'nccountShadow'});
-    const nctime = nccountShade ? nccountShade.lastUpdated : null;
+    const probShade = CacheDB.findOne({orgKey: accessKey, dataName: 'nccountShadow'});
+    const nctime = probShade ? probShade.lastUpdated : null;
     const stale = !nctime ? true :
               moment.duration(moment().diff(moment(nctime))).as('hours') > 12;
-    if(true) {
+    if(stale) {
       const batches = XBatchDB.find({
         orgKey: accessKey,
       },
         {fields:{'batch':1,'completedAt':1}}
       ).fetch();
       
-      let ncset = [];
+      let probset = [];
       for( let batch of batches) {
-        const srs = XSeriesDB.findOne({batch: batch.batch});
+        const srs = XSeriesDB.findOne({batch: batch.batch},{fields:{'nonCon':1,'shortfall':1}});
         const nc = srs ? srs.nonCon.length : 0;
-        ncset.push({
+        const sh = srs ? srs.shortfall.length : 0;
+        probset.push({
           y: nc,
           x: batch.completedAt || new Date(),
           z: `${batch.batch} = ${nc}`,
-          symbol: batch.completedAt ? 'diamond' : 'star',
+          a: 'nc',
+          label: 'nc',
+          symbol: 'square',
+          size: '3'
+        });
+        probset.push({
+          y: sh,
+          x: batch.completedAt || new Date(),
+          z: `${batch.batch} = ${sh}`,
+          a: 'sh',
+          label: 'sh',
+          symbol: 'triangleUp',
           size: '3'
         });
       }
@@ -145,12 +157,12 @@ Meteor.methods({
           orgKey: accessKey,
           lastUpdated: new Date(),
           dataName: 'nccountShadow',
-          dataArray: ncset
+          dataArray: probset
       }});
     
-      return ncset;
+      return probset;
     }else{
-      return nccountShade.dataArray;
+      return probShade.dataArray;
     }
   },
   
@@ -161,7 +173,7 @@ Meteor.methods({
     const qtytime = qtyShade ? qtyShade.lastUpdated : null;
     const stale = !qtytime ? true :
               moment.duration(moment().diff(moment(qtytime))).as('hours') > 12;
-    if(true) {
+    if(stale) {
       const batches = XBatchDB.find({
         orgKey: accessKey,
       },
@@ -174,7 +186,7 @@ Meteor.methods({
           y: batch.quantity,
           x: batch.createdAt,
           z: `${batch.batch} (so.${batch.salesOrder}) = ${batch.quantity}`,
-          symbol: 'triangleUp',
+          symbol: 'plus',
           size: '3'
         });
       }

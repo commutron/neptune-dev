@@ -49,7 +49,7 @@ const RemoveItemForm = ({ batchId, batch, seriesId, serial, check, verify })=> {
       if(reply === 'inUse') {
         toast.warning('You cannot do this, entry is in use');
       }else if(reply) {
-        toast.success('Entry removed');
+        toast.success('Item removed');
         FlowRouter.go(`/data/batch?request=${batch}`);
       }else{
         toast.error('Rejected by Server');

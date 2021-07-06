@@ -69,10 +69,10 @@ export const PrioritySquare = ({
         <NumStat
           num={false}
           icon={doneIcon}
-          name=''
+          name={doneName}
           title={doneName}
           color='blackblackT'
-          size='' />
+          size='bold vbig' />
       </div>
     );
   }
@@ -90,16 +90,16 @@ export const PrioritySquare = ({
     if(pt.completed) {
       const doneColor = pt.oRapid ? 'darkOrange' : 'green';
       const doneIcon = pt.oRapid ? 'fas fa-bolt fa-lg' : 'far fa-star fa-lg';
-      const doneName = oRapid ? 'Extended' : 'Complete';
+      const doneName = pt.oRapid ? 'Extended' : 'Complete';
       return(
         <div className={doneColor}>
           <NumStat
             num={false}
             icon={doneIcon}
-            name=''
+            name={doneName}
             title={doneName}
             color='blackblackT'
-            size='' />
+            size='bold vbig' />
         </div>
       );
     }

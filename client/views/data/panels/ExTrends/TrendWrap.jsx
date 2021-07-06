@@ -12,7 +12,7 @@ const TrendWrap = ({ app, isDebug, isNightly })=> (
       tabs={[
         <b><i className='fas fa-cubes fa-fw'></i> Orders</b>,
         <b><i className='fas fa-bullseye fa-fw'></i> Performance</b>,
-        <b><i className='fas fa-times-circle fa-fw'></i> NonCon</b>,
+        <b><i className='fas fa-exclamation-circle fa-fw'></i> Problems</b>,
       ]}
       wide={true}
       stick={false}

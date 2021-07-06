@@ -69,36 +69,6 @@ Meteor.methods({
       return false;
     }
   },
-
-  updateEndStates() {
-    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
-      const accessKey = Meteor.user().orgKey;
-      
-      const allBatchX = XBatchDB.find({completed: true}).fetch();
-      for( let bx of allBatchX ) {
-        if( bx.lockTrunc !== undefined) {
-          const endPerformance = Meteor.call('performTarget', bx._id);
-          
-          let trunc = bx.lockTrunc;
-          trunc['performTgt'] = endPerformance;
-          delete trunc['endPerformance'];
-          
-          XBatchDB.update({_id: bx._id}, {
-      			$set : { 
-      			  lockTrunc: trunc
-      		}});
-        }
-        
-        Meteor.defer( ()=>{
-          Meteor.call('saveEndState', bx._id, accessKey);
-        });
-      }
-      return true;
-    }else{
-      return false;
-    }
-  },
-  
   
   fixRemoveDamagedBatch() {
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {

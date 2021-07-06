@@ -16,7 +16,7 @@ const NCScatter = ({ app })=> {
   
   const thingMounted = useRef(true);
   
-  const [ tickXY, tickXYSet ] = useState([]);
+  const [ tickXY, tickXYSet ] = useState(false);
   
   useEffect( ()=> {
     Meteor.call('getAllNCCount', (err, re)=>{
@@ -31,9 +31,17 @@ const NCScatter = ({ app })=> {
   
   return(
     <div className='chartNoHeightContain'>
+      <div className='rowWrap noPrint'>
+        {!tickXY ?
+          <n-fa1><i className='fas fa-spinner fa-lg fa-spin gapR'></i>Loading</n-fa1> :
+          <n-fa0><i className='fas fa-spinner fa-lg'></i></n-fa0>
+        }
+        <span className='flexSpace' />
+      </div>
+      
       <VictoryChart
         theme={Theme.NeptuneVictory}
-        padding={{top: 25, right: 25, bottom: 25, left: 25}}
+        padding={{top: 5, right: 25, bottom: 25, left: 30}}
         domainPadding={25}
         height={250}
         containerComponent={<VictoryZoomContainer />}
@@ -63,10 +71,11 @@ const NCScatter = ({ app })=> {
         />
           
         <VictoryScatter
-          data={tickXY}
+          data={tickXY || []}
           style={{
             data: { 
-              fill: ({ datum }) => datum,
+              fill: ( datum ) => 
+                datum.symbol == 'triangleUp' ? 'rgb(243, 156, 18)' : 'rgb(231, 76, 60)',
               strokeWidth: 0
             },
             labels: { 
@@ -83,8 +92,8 @@ const NCScatter = ({ app })=> {
       </VictoryChart>
       
       <p className='lightgray fade'>
-        ◆ = Completed <br />
-        ★ = WIP <br />
+        ◼ = NonCons <br />
+        ▲ = Shortfalls <br />
         Scroll to Zoom <br />
         Click and Drag to Pan <br />
         Reliable data begins {moment(app.createdAt).format('MMMM YYYY')}

@@ -9,7 +9,7 @@ import { countWaterfall } from '/client/utility/Arrays';
 import '/client/components/riverX/waterfall/style.css';
 
 const CountTab = ({ batchData, fallData, rapidsData, app })=> {
-  
+
   return(
     <div className='space autoSelf max875'>
       
@@ -26,7 +26,7 @@ const CountTab = ({ batchData, fallData, rapidsData, app })=> {
             quantity={batchData.quantity}
             rapidsData={rapidsData}
             app={app} />
-            
+
           <TickScatter
             waterfall={batchData.waterfall}
             rapidsData={rapidsData}
@@ -45,7 +45,7 @@ const WaterfallTimeline = ({ wfCounts, waterfall, quantity, rapidsData, app })=>
   const waterfallS = waterfall.sort((w1, w2)=> 
           !w1.position ? -1 : !w2.position ? -1 :
           w1.position > w2.position ? 1 : w1.position < w2.position ? -1 : 0 );
-  
+
   return(
     <div className='wide'>
       

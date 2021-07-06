@@ -72,15 +72,6 @@ const DataRepair = ({ app, users })=> {
       </div>
       
       <DoCard
-        title='Run End States for Old Completed Batches'
-        sub=''
-        icon='screwdriver'
-        color='clearPurple'
-        button='Update Completed'
-        action={()=>doCallThing('updateEndStates')}
-      />
-      
-      <DoCard
         title='Run Weekly Avg Update'
         sub='Runs every Saturday at 12:03am (CST)'
         icon='calculator'

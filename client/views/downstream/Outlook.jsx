@@ -4,7 +4,6 @@ import React from 'react';
 // import Pref from '/client/global/pref.js';
 
 import TotalInQu from './cards/TotalInQu';
-import AvgDay from './cards/AvgDayTime';
 
 const Outlook = ({ 
   traceDT,
@@ -18,8 +17,6 @@ const Outlook = ({
           <TotalInQu
             traceDT={traceDT}
             app={app} />
-        
-          <AvgDay />
         
       </div>
     </div>

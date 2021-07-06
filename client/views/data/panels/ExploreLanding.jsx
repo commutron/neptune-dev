@@ -42,7 +42,9 @@ const ExploreLanding = ({
     
       {!queryState || resultState === null ? null
         : resultState === undefined ?
-          <p className='centreText'><i className="far fa-compass fa-2x fa-spin"></i></p>
+          <p className='centreText'>
+            <n-fa0><i className="far fa-compass fa-2x fa-spin"></i></n-fa0>
+          </p>
         : resultState === false || resultState.length === 0 ?
           <p className='centreText'><b>NO SEARCH RESULT</b></p>
         : null
@@ -56,10 +58,10 @@ const ExploreLanding = ({
               resultState={resultState}
               app={app} />
           :
-          <SerialResult
-            queryState={queryState}
-            resultState={resultState}
-            app={app} />
+            <SerialResult
+              queryState={queryState}
+              resultState={resultState}
+              app={app} />
           }
         </div>}
       

@@ -7,10 +7,7 @@ const BatchResult = ({
 })=> (
   <div className='centre'>
     {resultState && resultState.map( (ent, index)=> {
-      if(typeof ent[0] === 'string') {
-      // const tags = ent[5].map( (et, ix)=>{
-      //   return(<span key={ix} className='tagFlag'><i>{et}</i></span>);
-      // });
+      if(typeof ent.length > 3) {
         const sty = !ent[6] ? 'numFont gMark' : 'numFont activeMark';
         return(
           <LeapLine
@@ -19,7 +16,6 @@ const BatchResult = ({
             cTwo={<i><i className='smaller'>so: </i>{ent[1].toUpperCase()}</i>}
             cThree={`${ent[2].toUpperCase()}`}
             cFour={`${ent[3].toUpperCase()} v.${ent[4]}`}
-            // cFive={tags}
             sty={sty}
             address={'/data/batch?request=' + ent[0]}
           />

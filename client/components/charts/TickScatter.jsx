@@ -15,11 +15,12 @@ const TickScatter = ({ waterfall, rapidsData, app })=> {
   const [ tickXY, tickXYSet ] = useState([]);
   
   useEffect( ()=> {
-    let waterfalls = waterfall;
+    let allfalls = [];
+    allfalls.push( waterfall );
     for(let cas of rapidsData) {
-      waterfalls.push( cas.cascade );
+      allfalls.push( cas.cascade );
     }
-    const flatfalls = waterfalls.flat();
+    const flatfalls = allfalls.flat();
     
     let wipFallTicks = [];
     for( let fall of flatfalls ) {
@@ -63,18 +64,6 @@ const TickScatter = ({ waterfall, rapidsData, app })=> {
           } }
           scale={{ x: "time" }}
         />
-        {/*<VictoryAxis 
-          dependentAxis
-          fixLabelOverlap={true}
-          style={ {
-            axis: { stroke: 'grey' },
-            grid: { stroke: '#5c5c5c' },
-            ticks: { stroke: '#5c5c5c' },
-            tickLabels: { 
-              fontSize: '7px' }
-          } }
-        />*/}
-          
         <VictoryScatter
           data={tickXY}
           style={{

@@ -575,6 +575,24 @@ Meteor.methods({
     }
   },
   
+  fixCompleteTime(batchId, backDate) {
+    const accessKey = Meteor.user().orgKey;
+    if(Roles.userIsInRole(Meteor.userId(), ['edit'])) {
+      XBatchDB.update({_id: batchId, orgKey: accessKey}, {
+        $set : { 
+          completedAt: new Date(backDate),
+    			completedWho: Meteor.userId(),
+      }});
+      Meteor.defer( ()=>{ 
+        Meteor.call('updateOneMovement', batchId, accessKey);
+        Meteor.call('saveEndState', batchId, accessKey);
+      });
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
   // Undo Finish Batch
   undoFinishBatchX(batchId, override) {
     if(!Roles.userIsInRole(Meteor.userId(), 'run' || override === undefined)) {

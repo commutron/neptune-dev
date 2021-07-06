@@ -16,7 +16,7 @@ const QtyScatter = ({ app })=> {
   
   const thingMounted = useRef(true);
   
-  const [ tickXY, tickXYSet ] = useState([]);
+  const [ tickXY, tickXYSet ] = useState(false);
   
   useEffect( ()=> {
     Meteor.call('getAllQuantity', (err, re)=>{
@@ -31,9 +31,16 @@ const QtyScatter = ({ app })=> {
   
   return(
     <div className='chartNoHeightContain'>
+      <div className='rowWrap noPrint'>
+        {!tickXY ?
+          <n-fa1><i className='fas fa-spinner fa-lg fa-spin gapR'></i>Loading</n-fa1> :
+          <n-fa0><i className='fas fa-spinner fa-lg'></i></n-fa0>
+        }
+      </div>
+      
       <VictoryChart
         theme={Theme.NeptuneVictory}
-        padding={{top: 25, right: 25, bottom: 25, left: 40}}
+        padding={{top: 5, right: 25, bottom: 25, left: 30}}
         domainPadding={25}
         height={250}
         containerComponent={<VictoryZoomContainer />}
@@ -63,10 +70,9 @@ const QtyScatter = ({ app })=> {
         />
           
         <VictoryScatter
-          data={tickXY}
+          data={tickXY || []}
           style={{
-            data: { 
-              fill: ({ datum }) => datum,
+            data: {
               strokeWidth: 0
             },
             labels: { 

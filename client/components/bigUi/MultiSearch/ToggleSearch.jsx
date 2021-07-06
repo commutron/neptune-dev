@@ -31,15 +31,12 @@ const ToggleSearch = ({
   }, []);
 
   function batchAction() {
-    const valid = queryState && queryState.length > 0;
+    const valid = queryState && queryState.length > 1;
     if(valid) {
       let showList = blendedListState.filter( tx => tx.toString().toLowerCase()
                                   .includes(queryState.toLowerCase()) === true );
-      let sortList = showList.sort((b1, b2)=> {
-                  if (b1[0] < b2[0]) { return 1 }
-                  if (b1[0] > b2[0]) { return -1 }
-                  return 0;
-                });
+      let sortList = showList.sort((b1, b2)=>
+                      b1[0] < b2[0] ? 1 : b1[0] > b2[0] ? -1 : 0);
       resultUP( sortList );
     }else{
       resultUP(null);
@@ -59,11 +56,26 @@ const ToggleSearch = ({
     }
   }
   
+  function verifyAction() {
+    resultUP(undefined);
+    const valid = queryState && queryState.length > 2;
+    if(valid) {
+  	  Meteor.call('firstVerifyLookup', queryState, (error, reply)=>{
+        error && console.log(error);
+        resultUP(reply);
+  	  });
+    }else{
+      resultUP(null);
+    }
+  }
+  
 	useEffect( ()=> {
     if(tggl) {
       batchAction();
-    }else{
+    }else if(tggl === false) {
       serialAction();
+    }else{
+      verifyAction();
     }
   }, [queryState, tggl]);
   
@@ -74,7 +86,7 @@ const ToggleSearch = ({
   
   function handle(e) {
     const value = e.target.value;
-    const valid = value && value.length > (tggl ? 0 : 4);
+    const valid = value && value.length > (tggl ? 2 : tggl === false ? 5 : 3);
     queryUP(value);
     if(!valid) {
       e.target.reportValidity();
@@ -93,33 +105,35 @@ const ToggleSearch = ({
         ><i className="fas fa-cubes fa-fw"></i></button>
         
         <button
-          title={`${Pref.item} ${Pref.itemSerial}s/${Pref.serialType}s`}
-          className={`${bttnClss} ${!tggl ? 'toggleOn' : 'toggleOff'}`}
+          title={`${Pref.item} ${Pref.itemSerial}s`}
+          className={`${bttnClss} ${tggl === false ? 'toggleOn' : 'toggleOff'}`}
           onClick={(e)=>doTog(false)}
         ><i className="fas fa-qrcode fa-fw"></i></button>
+        
+        <button
+          title={`${Pref.trackFirst} details`}
+          className={`${bttnClss} ${tggl === null ? 'toggleOn' : 'toggleOff'}`}
+          onClick={(e)=>doTog(null)}
+        ><i className="fas fa-check-double fa-fw"></i></button>
       
         <input
           id='multiSearch'
           type='search'
-          pattern={tggl ? '[A-Za-z0-9 _-]*' : '([0-9]{8,10})|([0-9]{6}[-][0-9]{7})*'}
-          minLength={tggl ? '0' : '5'}
+          pattern={
+            tggl ? '[A-Za-z0-9 _-]*' : 
+            tggl === false ? '([0-9]{8,10})|([0-9]{6}[-][0-9]{7})*' : ''
+          }
+          minLength={tggl ? '2' : tggl === false ? '5' : '3'}
           className='variableInput big'
           onChange={(e)=>handle(e)}
           autoFocus={true}
           required
-          list={tggl ? 'tagList' : null}
         />
-        {/*tggl &&
-        <datalist id='tagList'>
-          {app.tagOption && app.tagOption.map( (entry, index)=>{
-            return ( 
-              <option key={index} value={entry} className=''>{entry}</option>
-          )})}
-        </datalist>*/}
       </p>
       
       <p>{tggl ? `Find a ${Pref.xBatch} by number, ${Pref.group}, ${Pref.widget} or tag.` : 
-                 `Find an item by whole or partial serial number`}
+          tggl === false ? 'Find an item by whole or partial serial number' :
+          `Find by ${Pref.trackFirst} ${Pref.method}, ${Pref.consume} or ${Pref.builder}(by userID)`}
       </p>
       
     </div>
