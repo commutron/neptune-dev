@@ -289,9 +289,28 @@
   display: none;
 }
 
+.relativeWrap { position: relative; }
 .fixedResults {
   max-height: calc( (92 * var(--vh)) - 2vmax - 110px);
   overflow-y: scroll;
+  box-shadow: var(--navIndicatorIn);
+}
+.fixedResults:before,
+.fixedResults:after {
+  content: '';
+  position: absolute;
+  height: 10px;
+  width: 100%;
+  max-width: 875px;
+  pointer-events: none
+}
+.fixedResults:before {
+  top: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0), rgba(0,0,0,0.15));
+}
+.fixedResults:after {
+  bottom: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,0.15));
 }
 .dashNumBox {
   min-width: 10vmin;

@@ -3,7 +3,6 @@ import 'moment-timezone';
 import 'moment-business-time';
 
 import Config from '/server/hardConfig.js';
-// import { syncHoliday } from '/server/utility.js';
 
 moment.updateLocale('en', {
   workinghours: Config.workingHours,

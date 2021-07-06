@@ -10,7 +10,7 @@ const TrendWrap = ({ app, isDebug, isNightly })=> (
   <div className='space36v'>
     <Tabs
       tabs={[
-        <b><i className='fas fa-cubes fa-fw'></i> Orders</b>,
+        <b><i className='fas fa-cubes fa-fw'></i> Orders & Quantity</b>,
         <b><i className='fas fa-bullseye fa-fw'></i> Performance</b>,
         <b><i className='fas fa-exclamation-circle fa-fw'></i> Problems</b>,
       ]}

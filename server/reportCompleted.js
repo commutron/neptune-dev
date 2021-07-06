@@ -41,7 +41,7 @@ function coreDlvDays(batchId, bEnd, bFinish) {
   
   const shipLate = didFinish.isAfter(shipDue);
   
-  return [ endWork, shipDue, didFinish, lateLate, lateDay, shipLate ];
+  return [ endWork, shipDue, didFinish.format(), lateLate, lateDay, shipLate ];
 }
 
 export function deliveryState(batchId, bEnd, bFinish) {
@@ -114,7 +114,6 @@ export function deliveryBinary(batchId, bEnd, bFinish) {
   
 function weekDoneAnalysis(rangeStart, rangeEnd) {
   const accessKey = Meteor.user().orgKey;
-  
   syncHoliday(accessKey);
     
   let batchMetrics = [];

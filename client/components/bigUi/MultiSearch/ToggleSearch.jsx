@@ -33,11 +33,16 @@ const ToggleSearch = ({
   function batchAction() {
     const valid = queryState && queryState.length > 1;
     if(valid) {
-      let showList = blendedListState.filter( tx => tx.toString().toLowerCase()
-                                  .includes(queryState.toLowerCase()) === true );
-      let sortList = showList.sort((b1, b2)=>
-                      b1[0] < b2[0] ? 1 : b1[0] > b2[0] ? -1 : 0);
-      resultUP( sortList );
+      Meteor.call('rapidLookup', queryState, (error, reply)=>{
+        error && console.log(error);
+        let showList = blendedListState.filter( tx => 
+                        tx.toString().toLowerCase()
+                          .includes(queryState.toLowerCase()) === true
+                        || reply.includes(tx[0]) );
+        let sortList = showList.sort((b1, b2)=>
+                        b1[0] < b2[0] ? 1 : b1[0] > b2[0] ? -1 : 0);
+        resultUP( sortList );
+  	  });
     }else{
       resultUP(null);
     }
@@ -49,7 +54,7 @@ const ToggleSearch = ({
     if(valid) {
       Meteor.call('serialLookupPartial', queryState, (error, reply)=>{
         error && console.log(error);
-        resultUP(reply);
+        resultUP(reply.sort((b1, b2)=>b1[0] < b2[0] ? 1 : b1[0] > b2[0] ? -1 : 0));
   	  });
     }else{
       resultUP(null);
@@ -62,7 +67,7 @@ const ToggleSearch = ({
     if(valid) {
   	  Meteor.call('firstVerifyLookup', queryState, (error, reply)=>{
         error && console.log(error);
-        resultUP(reply);
+        resultUP(reply.sort((b1, b2)=>b1[0] < b2[0] ? 1 : b1[0] > b2[0] ? -1 : 0));
   	  });
     }else{
       resultUP(null);
@@ -119,8 +124,7 @@ const ToggleSearch = ({
         <input
           id='multiSearch'
           type='search'
-          pattern={
-            tggl ? '[A-Za-z0-9 _-]*' : 
+          pattern={tggl ? '[A-Za-z0-9 _-]*' : 
             tggl === false ? '([0-9]{8,10})|([0-9]{6}[-][0-9]{7})*' : ''
           }
           minLength={tggl ? '2' : tggl === false ? '5' : '3'}
@@ -131,11 +135,11 @@ const ToggleSearch = ({
         />
       </p>
       
-      <p>{tggl ? `Find a ${Pref.xBatch} by number, ${Pref.group}, ${Pref.widget} or tag.` : 
+      <p>{tggl ? `Find by number, ${Pref.group}, ${Pref.widget}, sales order, tag, ${Pref.rapidEx} ID or issue.` : 
           tggl === false ? 'Find an item by whole or partial serial number' :
-          `Find by ${Pref.trackFirst} ${Pref.method}, ${Pref.consume} or ${Pref.builder}(by userID)`}
+          `Find by ${Pref.trackFirst}, ${Pref.method}, ${Pref.consume} or `}
+          {tggl === null && <abbr title="only by exact user ID">{Pref.builder}</abbr>}
       </p>
-      
     </div>
   );
 };

@@ -7,8 +7,7 @@ import NumStatBox from '/client/components/charts/Dash/NumStatBox';
 import BatchNewList from '../lists/BatchNewList';
 
 import ToggleSearch from '/client/components/bigUi/MultiSearch/ToggleSearch';
-import SerialResult from '/client/components/bigUi/MultiSearch/SerialResult';
-import BatchResult from '/client/components/bigUi/MultiSearch/BatchResult';
+import ScrollWrap from '/client/components/bigUi/MultiSearch/ScrollWrap';
 
 const ExploreLanding = ({ 
   groupData, widgetData, variantData, xBatchData, 
@@ -50,20 +49,16 @@ const ExploreLanding = ({
         : null
       }
       
-      {resultState && resultState.length > 0 &&
-        <div className='fixedResults forceScrollStyle wide max875'>
-          {tggl ?
-            <BatchResult
-              queryState={queryState}
-              resultState={resultState}
-              app={app} />
-          :
-            <SerialResult
-              queryState={queryState}
-              resultState={resultState}
-              app={app} />
-          }
-        </div>}
+      <div className='relativeWrap'>
+        {resultState && resultState.length > 0 ?
+          <ScrollWrap
+            tggl={tggl}
+            queryState={queryState}
+            resultState={resultState}
+            app={app}
+          />
+        : null}
+      </div>
       
       <div 
         hidden={

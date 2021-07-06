@@ -17,6 +17,7 @@ const NCScatter = ({ app })=> {
   const thingMounted = useRef(true);
   
   const [ tickXY, tickXYSet ] = useState(false);
+  const [ showZero, showZeroSet ] = useState(false);
   
   useEffect( ()=> {
     Meteor.call('getAllNCCount', (err, re)=>{
@@ -37,6 +38,13 @@ const NCScatter = ({ app })=> {
           <n-fa0><i className='fas fa-spinner fa-lg'></i></n-fa0>
         }
         <span className='flexSpace' />
+        <label className='beside'>show zeros
+          <input
+            type='checkbox'
+            className='minHeight'
+            defaultChecked={showZero}
+            onChange={()=>showZeroSet(!showZero)} 
+          /></label>
       </div>
       
       <VictoryChart
@@ -71,7 +79,7 @@ const NCScatter = ({ app })=> {
         />
           
         <VictoryScatter
-          data={tickXY || []}
+          data={showZero ? tickXY || [] : (tickXY || []).filter(t=>t.y>0)}
           style={{
             data: { 
               fill: ( datum ) => 

@@ -67,7 +67,7 @@ const ReportBasicTable = ({ title, dateString, rows })=> {
                                 keyword={sub} />
                             </td>
                           );
-                        }else if(sub.length >= 24 && moment(sub, moment.ISO_8601).isValid()){
+                        }else if(sub.length >= 24 & moment(sub, moment.ISO_8601).isValid()){
                           return(
                             <td key={ix+rndm}>
                               {moment(sub).format('llll')}

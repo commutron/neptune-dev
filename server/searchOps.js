@@ -54,12 +54,26 @@ Meteor.methods({
     }
   },
   
+  rapidLookup(orb) {
+    this.unblock();
+    const rapid = XRapidsDB.find({
+      $or: [ 
+        { rapid: { $regex: new RegExp( orb ), $options: 'i' } },
+        { issueOrder: { $regex: new RegExp( orb ), $options: 'i' } }
+      ]},
+      {fields:{'extendBatch':1}}
+    ).fetch();
+    const rBatch = Array.from(rapid, r => r.extendBatch);
+    return rBatch;
+  },
+  
   serialLookup(orb) {
     const itemsBatch = XSeriesDB.findOne({'items.serial': orb},{fields:{'batch':1}});
     return itemsBatch ? itemsBatch.batch : false;
   },
   
   serialLookupPartial(orb) {
+    this.unblock();
     const itemsSeries = XSeriesDB.find({
       $or: [ 
         { "items.serial": { $regex: new RegExp( orb ) } },
@@ -71,29 +85,29 @@ Meteor.methods({
 
     const results = [];
     for(let iS of itemsSeries) {
-      const describe = whatIsBatchX(iS.batch)[0].join(' ');
+      const describe = whatIsBatchX(iS.batch)[0];//.join(' ');
       const exact = !single ? false : iS.items.findIndex( x => x.serial === orb ) >= 0;
-      results.push([ iS.batch, describe, exact ]);
+      results.push([ iS.batch, ...describe, exact ]);
     }
     return results;
   },
   
   firstVerifyLookup(orb) {
-    
+    this.unblock();
     const itemsSeries = XSeriesDB.find({
       $or: [ 
         { 'items.history.info.builder': orb },
-        { 'items.history.info.buildMethod': { $regex: new RegExp( orb ) } },
-        { 'items.history.info.buildConsume': { $regex: new RegExp( orb ) } },
-        { 'items.history.info.verifyMethod': { $regex: new RegExp( orb ) } }
+        { 'items.history.info.buildMethod': { $regex: new RegExp( orb ), $options: 'i' } },
+        { 'items.history.info.buildConsume': { $regex: new RegExp( orb ), $options: 'i' } },
+        { 'items.history.info.verifyMethod': { $regex: new RegExp( orb ), $options: 'i' } }
       ]},
       {fields:{'batch':1}}
     ).fetch();
 
     const results = [];
     for(let iS of itemsSeries) {
-      const describe = whatIsBatchX(iS.batch)[0].join(' ');
-      results.push([ iS.batch, describe, false ]);
+      const describe = whatIsBatchX(iS.batch)[0];
+      results.push([ iS.batch, ...describe, false ]);
     }
   
     return results;

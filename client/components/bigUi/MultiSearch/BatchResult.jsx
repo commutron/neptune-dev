@@ -3,11 +3,11 @@ import React from 'react';
 import LeapLine from '/client/components/tinyUi/LeapLine';
 
 const BatchResult = ({ 
-  queryState, resultState
+  queryState, resultState, listLimit
 })=> (
   <div className='centre'>
     {resultState && resultState.map( (ent, index)=> {
-      if(typeof ent.length > 3) {
+      if(ent.length > 5 && index <= listLimit) {
         const sty = !ent[6] ? 'numFont gMark' : 'numFont activeMark';
         return(
           <LeapLine
