@@ -418,6 +418,7 @@ button.variableInput.biggest { height: 64px; }
   padding: calc(1 * var(--vh));
   width: auto;
   max-width: max-content;
+  max-width: -webkit-fill-available;
   min-height: calc(3.5 * var(--vh));
   background-color: var(--task-front-color);
   border-radius: 25px;

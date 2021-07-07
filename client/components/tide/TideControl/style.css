@@ -86,9 +86,15 @@ n-tide-task label {
   justify-content: center;
   align-items: center;
 }
-
+.auxLeft > .tideIn, 
+.auxLeft > .tideOut, 
+.auxLeft > .tideLock {
+  width: calc(7 * var(--vh));
+  height: calc(7 * var(--vh));
+}
 .tideIcon {
   font-size: 2.5vh;
+  font-size: calc(2.5 * var(--vh));
   border-radius: 50%;
 }
 .tideIcon svg {

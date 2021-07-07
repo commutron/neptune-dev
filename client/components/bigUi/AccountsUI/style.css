@@ -1,11 +1,13 @@
 .loginCard {
   min-height: 300px;
-  min-width: 250px;
-  max-width: 400px;
+  width: 300px;
   margin: 5vh 0 0 0;
 }
 .loginCard input {
   width: 100%;
+}
+.loginCard .tabBody {
+  padding: 0 25px;
 }
 
 .userFormButtons {
@@ -15,10 +17,10 @@
   max-width: 100%;
   margin-top: 0.75rem;
   font-size: medium;
-  color: white;
+  font-weight: 600;
+  color: rgb(35,35,35);
   text-align: center;
-  letter-spacing: 2px;
-  text-shadow: 0 0 5px black;
+  letter-spacing: 1.5px;
   box-shadow: var(--navIndicatorOut);
   cursor: pointer;
 }
@@ -51,7 +53,6 @@
 .scanInIndicator {
   margin: 30px;
   color: var(--neptuneColor);
-  /*position: absolute;*/
   overflow: hidden;
   display: flex;
   align-items: center;

@@ -1,5 +1,5 @@
 .react-contextmenu {
-  min-width: 10ch;
+  min-width: 20ch;
   max-width: 30ch;
   padding: 5px 0;
   margin: 2px 0 0;
@@ -8,15 +8,13 @@
   text-align: left;
   background-color: rgb(0,0,0);
   background-color: rgba(0,0,0,0.95);
-  background-clip: padding-box;
+  /*background-clip: padding-box;*/
   border: 1px solid rgb(10,10,10);
   border-radius:.25rem;
   outline: none;
   pointer-events: none;
   transition: opacity 250ms ease !important;
   z-index: 99;
-  position: absolute;
-  -webkit-transform: translate3d(0,0,0);
   box-shadow: var(--dropShadow0);
 }
 

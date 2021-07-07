@@ -5,7 +5,7 @@ import HomeIcon from '/client/layouts/HomeIcon.jsx';
 import TideFollow from '/client/components/tide/TideFollow.jsx';
 import Pref from '/client/global/pref.js';
 
-import { ToastContainer } from 'react-toastify';
+// import { ToastContainer } from 'react-toastify';
 
 export const PublicLayout = ({content}) => (
   <ErrorCatch>
@@ -19,7 +19,7 @@ export const PublicLayout = ({content}) => (
       <div className='auxRight' />
       <div className='proRight' />
     </div>
-    <div className='simpleContent darkTheme'>
+    <div className='simpleContent darkTheme forceScrollStyle'>
       {content}
     </div>
   </div>

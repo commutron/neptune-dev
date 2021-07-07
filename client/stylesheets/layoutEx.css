@@ -257,8 +257,8 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  position: -webkit-sticky;
   position: sticky;
+  position: -webkit-sticky;
   top: 0;
   background-color: var(--clouds);
   box-shadow: var(--dropShadow000);

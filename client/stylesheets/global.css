@@ -350,10 +350,11 @@ input[type='date']::-webkit-outer-spin-button {
 }
 input[type='search'] { 
   border-radius: 0;
+  -webkit-appearance: none;
 }
 select,
 input[type='searchbox'] { 
-  -webkit-appearance: menulist-text;
+  -webkit-appearance: none;
 }
 input[type='search']::-webkit-search-cancel-button {
   background-color: pink;

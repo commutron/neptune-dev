@@ -42,30 +42,6 @@ main {
   align-items: center;
 }
 
-.loading > .logoSVG {
-  opacity: 0.2;
-  animation: spinAround 6s infinite linear;
-  width: calc(60 * var(--vh));
-  height: calc(60 * var(--vh));
-  -webkit-filter: drop-shadow( -5px -5px 5px #000 );
-          filter: drop-shadow( -5px -5px 5px #000 );
-}
-.minispinLogoSVG {
-  opacity: 0.8;
-  animation: spinAround 4s infinite linear;
-  -webkit-filter: drop-shadow( -5px -5px 5px #000 );
-          filter: drop-shadow( -5px -5px 5px #000 );
-}
-
-@media screen and (prefers-reduced-motion: reduce) { 
-  .loading > .logoSVG {
-    animation: fadeIn 3s 1 linear;
-  }
-  .minispinLogoSVG {
-    animation: fadeIn 3s 1 linear;
-  }
-}
-
 .debugWarningLight {
   outline: 10px dotted red;
   outline-offset: -1vmin;
@@ -104,8 +80,8 @@ main {
 }
 
 .stickyBar {
-  position: -webkit-sticky;
   position: sticky;
+  position: -webkit-sticky;
   width: auto;
   background-color: transparent;
   z-index: 7;
@@ -200,7 +176,6 @@ main {
     'homeIcon auxLeft frontCenter auxRight proRight';
   overflow-x: hidden;
   overflow-y: hidden;
-  z-index: 7;
   background-color: rgb(25,25,25);
 }
 .topBorder {
@@ -211,7 +186,6 @@ main {
   grid-area: homeIcon;
   background-color: var(--neptuneColor);
   padding-bottom: var(--vh);
-  z-index: 7;
   background-image: url(neptune-logo-white.svg);
   background-repeat: no-repeat;
   background-position: 50% 30%;
