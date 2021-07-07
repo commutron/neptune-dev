@@ -5,8 +5,8 @@ import { toast } from 'react-toastify';
 
 
 const YMDItemForm = ({ 
-  bID, seriesId, more, unit, app, 
-  showToast, updateToast
+  bID, seriesId, unit, quantity, 
+  app, isDebug, showToast, updateToast
 })=> {
   
   const thingMounted = useRef(true);
@@ -22,6 +22,8 @@ const YMDItemForm = ({
   const [ digitState, digitSet ] = useState(10);
   const [ flrWarn, flrWarnSet ] = useState('');
   const [ quWarn, quWarnSet ] = useState('');
+  
+  const [ createLock, lockSet ] = useState(true);
   
   const [ previewData, previewSet ] = useState([]);
   const [ resultMess, resultSet ] = useState(false);
@@ -68,23 +70,22 @@ const YMDItemForm = ({
                    `Not in sequence (Below ${floor})`;
     flrWarnSet(flrChk);
     
-    const quChk = tryData.length > 0 && tryData.length <= Pref.seriesLimit ? 
+    const quChk = tryData.length > 0 && 
+                  tryData.length <= Pref.seriesLimit &&
+                  tryData.length <= quantity ? 
                   false : 'Invalid Range';
     quWarnSet(quChk);       
                    
-    !quChk ? this.goYMDSave.disabled = false : null;
+    lockSet(!!quChk);
     
-    Roles.userIsInRole(Meteor.userId(), 'debug') &&
-      console.log({ 
-        year_month_day, quVal,
-        startLoopNum, stopLoopNum, tryData
-      });
+    isDebug && console.log({ 
+      year_month_day, quVal, startLoopNum, stopLoopNum, tryData
+    });
 	}
-	
 	
 	function handleAdd(e) {
     if(previewData.length > 0) {
-      this.goYMDSave.disabled = true;
+      lockSet(true);
       
       const seqLth = digitState;
       const unitVal = this.unitInput.value.trim();
@@ -92,14 +93,9 @@ const YMDItemForm = ({
       showToast();
       Meteor.call('addYearMonthDayItems', bID, seriesId, seqLth, previewData, unitVal,
       (error, reply)=>{
-        if(error)
-          console.log(error);
-        if(reply.success === true) {
-          updateToast();
-          if(thingMounted.current) { resultSet(reply.dupes); }
-        }else{
-          toast.error('There was a problem...');
-        }
+        error && console.log(error);
+        updateToast(reply);
+        if(thingMounted.current) { resultSet(reply.dupes); }
       });
     }
 	}
@@ -259,7 +255,7 @@ const YMDItemForm = ({
         <p className='centre'>
           <button
             id='goYMDSave'
-            disabled={false}
+            disabled={createLock}
             className='action clearGreen'
             onClick={(e)=>handleAdd(e)}
           >Create</button>

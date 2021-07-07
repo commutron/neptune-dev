@@ -5,8 +5,8 @@ import { toast } from 'react-toastify';
 
 
 const YrWkPnItemFormX = ({ 
-  bID, seriesId, more, app, 
-  showToast, updateToast
+  bID, seriesId, quantity, 
+  app, isDebug, showToast, updateToast
 })=> {
   
   const thingMounted = useRef(true);
@@ -21,6 +21,8 @@ const YrWkPnItemFormX = ({
   const [ isPnl, isPnlSet ] = useState(true);
   const [ flrWarn, flrWarnSet ] = useState(false);
   const [ quWarn, quWarnSet ] = useState(false);
+  
+  const [ createLock, lockSet ] = useState(true);
   
   const [ previewData, previewSet ] = useState([]);
   const [ resultMess, resultSet ] = useState(false);
@@ -81,14 +83,15 @@ const YrWkPnItemFormX = ({
                    
     flrWarnSet(flrChk);
     
-    const quChk = tryData.length > 0 && tryData.length <= Pref.seriesLimit ? 
+    const quChk = tryData.length > 0 && 
+                  tryData.length <= Pref.seriesLimit &&
+                  tryData.length <= quantity ? 
                   false : 'Invalid Range';
     quWarnSet(quChk);       
                    
-    !quChk ? this.goYrWkSave.disabled = false : null;
+    lockSet(!!quChk);
     
-    Roles.userIsInRole(Meteor.userId(), 'debug') &&
-      console.log({ 
+    isDebug && console.log({ 
         year_week, itemPerVal, panelQuVal,
         startLoopNum, stopLoopNum, itemLoop, tryData
       });
@@ -97,17 +100,13 @@ const YrWkPnItemFormX = ({
 	
 	function handleAdd(e) {
     if(previewData.length > 0) {
-      this.goYrWkSave.disabled = true;
+      lockSet(true);
       showToast();
-      Meteor.call('addYearWeekPanelItemsX', bID, seriesId, previewData, (error, reply)=>{
-        if(error)
-          console.log(error);
-        if(reply.success === true) {
-          updateToast();
-          if(thingMounted.current) { resultSet(reply.dupes); }
-        }else{
-          toast.error('There was a problem...');
-        }
+      Meteor.call('addYearWeekPanelItemsX', bID, seriesId, previewData,
+      (error, reply)=>{
+        error && console.log(error);
+        updateToast(reply);
+        if(thingMounted.current) { resultSet(reply.dupes); }
       });
     }
 	}
@@ -251,7 +250,7 @@ const YrWkPnItemFormX = ({
         <p className='centre'>
           <button
             id='goYrWkSave'
-            disabled={false}
+            disabled={createLock}
             className='action clearGreen'
             onClick={(e)=>handleAdd(e)}
           >Create</button>

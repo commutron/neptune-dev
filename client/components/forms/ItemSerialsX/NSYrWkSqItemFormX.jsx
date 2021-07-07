@@ -5,8 +5,8 @@ import { toast } from 'react-toastify';
 
 
 const NSYrWkSqItemFormX = ({ 
-  bID, seriesId, more, app, 
-  showToast, updateToast
+  bID, seriesId, quantity,
+  app, isDebug, showToast, updateToast
 })=> {
   
   const thingMounted = useRef(true);
@@ -19,6 +19,8 @@ const NSYrWkSqItemFormX = ({
   const thisWeek = moment().week().toString().padStart(2, 0);
   
   const [ quWarn, quWarnSet ] = useState(false);
+  
+  const [ createLock, lockSet ] = useState(true);
   
   const [ previewData, previewSet ] = useState([]);
   const [ resultMess, resultSet ] = useState(false);
@@ -56,30 +58,32 @@ const NSYrWkSqItemFormX = ({
     
     previewSet(tryData);
     
-    const quChk = tryData.length > 0 && tryData.length <= Pref.seriesLimit ? 
+    const quChk = tryData.length > 0 && 
+                  tryData.length <= Pref.seriesLimit &&
+                  tryData.length <= quantity ? 
                   false : 'Invalid Range';
     quWarnSet(quChk);       
                    
-    !quChk ? this.goNS13Save.disabled = false : null;
+    lockSet(!!quChk);
     
     // const regexNS = RegExp(/^(\d{6}\-\d{7})$/);
     // const found = regexNS.test(tryData[0]);
+    isDebug && console.log({ 
+        man_lot_year_week, seqStVal, weekQuVal,
+        startLoopNum, stopLoopNum, tryData
+      });
 	}
 	
 	
 	function handleAdd(e) {
     if(previewData.length > 0) {
-      this.goNS13Save.disabled = true;
+      lockSet(true);
       showToast();
-      Meteor.call('addSourceYearWeekSeqItemsX', bID, seriesId, previewData, (error, reply)=>{
-        if(error)
-          console.log(error);
-        if(reply.success === true) {
-          updateToast();
-          if(thingMounted.current) { resultSet(reply.dupes); }
-        }else{
-          toast.error('There was a problem...');
-        }
+      Meteor.call('addSourceYearWeekSeqItemsX', bID, seriesId, previewData, 
+      (error, reply)=>{
+        error && console.log(error);
+        updateToast(reply);
+        if(thingMounted.current) { resultSet(reply.dupes); }
       });
     }
 	}
@@ -208,7 +212,7 @@ const NSYrWkSqItemFormX = ({
         <p className='centre'>
           <button
             id='goNS13Save'
-            disabled={false}
+            disabled={createLock}
             className='action clearGreen'
             onClick={(e)=>handleAdd(e)}
           >Create</button>

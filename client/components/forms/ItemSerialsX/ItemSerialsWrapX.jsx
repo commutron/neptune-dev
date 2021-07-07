@@ -20,21 +20,41 @@ const ItemSerialsWrapX = ({
       autoClose: false
     });
   }
-  function updateToast() {
-    toast.update(( bID + 'itemcreate' ), {
-      render: "Serials Created Successfully",
-      type: toast.TYPE.SUCCESS,
-      autoClose: 3000
-    });
+  function updateToast(rtn) {
+    const error = (err)=> {
+      toast.update(( bID + 'itemcreate' ), {
+        render: err,
+        type: toast.TYPE.ERROR,
+        autoClose: false
+      });
+    };
+    if(rtn === 'bad_range') {
+      error('Invalid Serials. Range Exceeds Quantity');
+    }else if(rtn === 'no_series') {
+      error('Series Not Available');
+    }else if(rtn === 'no_range') {
+      error('Invalid Serial Format');
+    }else if(rtn === 'no_access') {
+      error("No 'Create' Permission");
+    }else if(rtn.success === true) {
+      toast.update(( bID + 'itemcreate' ), {
+        render: "Serials Created Successfully",
+        type: toast.TYPE.SUCCESS,
+        autoClose: 3000
+      });
+    }else{
+      error("Unknown Server Error");
+    }
   }
   
   const access = Roles.userIsInRole(Meteor.userId(), 'create');
+  const isDebug = Roles.userIsInRole(Meteor.userId(), 'debug');
   const aT = !access ? Pref.norole : '';
   const lT = lock ? lock : '';
   const title = access && !lock ? `Add ${Pref.item} ${Pref.itemSerial} numbers` : `${aT}\n${lT}`;
 
   if(itemsQ >= quantity) {
-    updateToast();
+    // updateToast();
     return(
       <ModelSmall
         button={'Add ' + Pref.item + 's'}
@@ -62,7 +82,9 @@ const ItemSerialsWrapX = ({
         bID={bID}
         seriesId={seriesId}
         unit={unit}
+        quantity={quantity}
         app={app}
+        isDebug={isDebug}
         showToast={showToast}
         updateToast={updateToast}
       />
@@ -72,7 +94,10 @@ const ItemSerialsWrapX = ({
 
 export default ItemSerialsWrapX;
 
-const ItemSerialsTabs = ({ bID, seriesId, unit, app, showToast, updateToast })=> (
+const ItemSerialsTabs = ({ 
+  bID, seriesId, unit, quantity,
+  app, isDebug, showToast, updateToast
+})=> (
   <Tabs
     tabs={['Year-Month-Day', 'Year-Week-Panel', 'NorthStar Complex']}
     wide={true}
@@ -82,21 +107,27 @@ const ItemSerialsTabs = ({ bID, seriesId, unit, app, showToast, updateToast })=>
       bID={bID}
       seriesId={seriesId}
       unit={unit}
+      quantity={quantity}
       app={app}
+      isDebug={isDebug}
       showToast={showToast}
       updateToast={updateToast} />
       
     <YrWkPnItemFormX
       bID={bID}
       seriesId={seriesId}
+      quantity={quantity}
       app={app}
+      isDebug={isDebug}
       showToast={showToast}
       updateToast={updateToast} />
       
     <NSYrWkSqItemFormX
       bID={bID}
       seriesId={seriesId}
+      quantity={quantity}
       app={app}
+      isDebug={isDebug}
       showToast={showToast}
       updateToast={updateToast} />
     

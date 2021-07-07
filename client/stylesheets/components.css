@@ -12,10 +12,11 @@
   border: 1px solid rgb(10,10,10);
   border-radius:.25rem;
   outline: none;
-  /*opacity: 0;*/
   pointer-events: none;
   transition: opacity 250ms ease !important;
   z-index: 99;
+  position: absolute;
+  -webkit-transform: translate3d(0,0,0);
   box-shadow: var(--dropShadow0);
 }
 

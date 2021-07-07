@@ -47,7 +47,7 @@ Meteor.methods({
   
   addYearMonthDayItems(batchId, seriesId, seqLth, serialArr, unit) {
     const accessKey = Meteor.user().orgKey;
-    
+ 
     const appSetting = AppDB.findOne({orgKey: accessKey});
     const floor = seqLth === 10 ? appSetting.latestSerial.tenDigit :
                                   appSetting.latestSerial.nineDigit;
@@ -119,16 +119,16 @@ Meteor.methods({
             };
             
           }else{
-            return false;
+            return 'bad_range';
           }   
         }else{
-          return false;
+          return 'no_series';
         }
       }else{
-        return false;
+        return 'no_range';
       }
     }else{
-      return false;
+      return 'no_access';
     }
   },
   
@@ -195,16 +195,16 @@ Meteor.methods({
             };
             
           }else{
-            return false;
+            return 'bad_range';
           }   
         }else{
-          return false;
+          return 'no_series';
         }
       }else{
-        return false;
+        return 'no_range';
       }
     }else{
-      return false;
+      return 'no_access';
     }
   },
 
@@ -259,16 +259,16 @@ Meteor.methods({
             };
           
           }else{
-            return false;
+            return 'bad_range';
           } 
         }else{
-          return false;
+          return 'no_series';
         }
       }else{
-        return false;
+        return 'no_range';
       }
     }else{
-      return false;
+      return 'no_access';
     }
   },
 

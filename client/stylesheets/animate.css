@@ -318,6 +318,21 @@
   overflow: hidden;
 }
 
+.loading > .logoSVG {
+  opacity: 0.2;
+  animation: spinAround 6s infinite linear;
+  width: calc(60 * var(--vh));
+  height: calc(60 * var(--vh));
+  -webkit-filter: drop-shadow( -5px -5px 5px #000 );
+          filter: drop-shadow( -5px -5px 5px #000 );
+}
+.minispinLogoSVG {
+  opacity: 0.8;
+  animation: spinAround 4s infinite linear;
+  -webkit-filter: drop-shadow( -5px -5px 5px #000 );
+          filter: drop-shadow( -5px -5px 5px #000 );
+}
+
 @supports (filter: none) {
 	.colorShift {
     animation: hueCycle 90s infinite linear;
@@ -347,6 +362,12 @@
   }
   .fa-spin {
     animation: fa-spin 10s infinite linear;
+  }
+  .loading > .logoSVG {
+    animation: fadeIn 3s infinite linear;
+  }
+  .minispinLogoSVG {
+    animation: fadeIn 3s infinite linear;
   }
 
 }

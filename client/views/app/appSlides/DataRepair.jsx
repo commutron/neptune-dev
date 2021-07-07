@@ -17,14 +17,14 @@ const DataRepair = ({ app, users })=> {
   function forceLockCheck() {
     Meteor.call('lockingCacheUpdate', false, true, (error)=>{
       error && console.log(error);
-      toast.success('Lock Request Completed');
+      toast.success('Lock Request Completed', {autoClose: false});
     });
   }
   
   function doCallThing(mtrMethod) {
     Meteor.call(mtrMethod, (error, re)=>{
       error && console.log(error);
-      re && toast.success('success');
+      re && toast.success('success', {autoClose: false});
     });
   }
   
