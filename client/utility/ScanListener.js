@@ -38,7 +38,7 @@ function onPress(event) {
 
 function onMessage(event) {
   if(event.data.keyCode !== undefined) {
-    console.log(event);
+    // console.log(event);
     onPress(event.data);
   }
 }
@@ -56,13 +56,13 @@ export function ScanListenerUtility(user) {
   
   const wikiwin = document.getElementById('instruct');
   wikiwin && wikiwin.contentWindow.document.addEventListener('focus',function(){
-    console.log("contentWindow listener");
+    // console.log("contentWindow listener");
   });
 
   if(!autoScan) {
-    console.log('auto window scanning OFF');
+    // console.log('auto window scanning OFF');
   }else{
-    console.log('auto window scanning ON');
+    // console.log('auto window scanning ON');
     window.addEventListener('keydown', onPress);
     window.addEventListener('message', onMessage);
   }

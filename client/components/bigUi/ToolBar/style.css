@@ -33,6 +33,12 @@
   flex-grow: 2;
 }
 
+.actionForm input[type='search'],
+.actionForm input[type='searchbox'],
+.actionForm select { 
+  -webkit-appearance: none;
+}
+
 .actionForm .redIn option,
 .actionForm .redIn optgroup {
   color: black;

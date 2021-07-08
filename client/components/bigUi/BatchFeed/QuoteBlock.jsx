@@ -8,7 +8,7 @@ const QuoteBlock = ({ dt, cal })=>{
                     .asHours().toFixed(2, 10);
   
   return(
-    <n-feed-info-block class='alterEvent'>
+    <n-feed-info-block class='quoteEvent'>
       <n-feed-left-anchor>
         <i className="fas fa-hourglass-start fa-lg fa-fw"></i>
       </n-feed-left-anchor>

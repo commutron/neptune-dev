@@ -2,7 +2,7 @@ import React, { useEffect, Fragment } from 'react';
 import { toast } from 'react-toastify';
 import Pref from '/client/global/pref.js';
         
-const TideLock = ({ currentLive, classSty, children, message })=> {
+const TideLock = ({ currentLive, classSty, children, message, caution })=> {
   useEffect(() => {
     if(!currentLive && message) {
       toast(`Click 'START' to unlock. \n
@@ -14,6 +14,13 @@ const TideLock = ({ currentLive, classSty, children, message })=> {
           autoClose: false,
           position: toast.POSITION.BOTTOM_CENTER
       });
+      if(caution) {
+        toast.warn(`${Pref.XBatch} is ${Pref.released} with a ${Pref.shortfall}`, 
+        {
+          autoClose: false,
+          position: toast.POSITION.BOTTOM_CENTER
+      });
+      }
     }
   }, []);
   

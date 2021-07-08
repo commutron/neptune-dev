@@ -54,7 +54,8 @@ n-feed-info-title > span {
   margin: 0.5ch 1ch;
 }
 
-.create { background-color: var(--concretefade); }
+.create, 
+.genericEvent { background-color: var(--concretefade); }
 
 .inspect { background-color: var(--emeraldtrans); }
 .history { background-color: var(--peterriverfade); }
@@ -65,8 +66,11 @@ n-feed-info-title > span {
 
 .finish { background-color: var(--amethystfade); }
 
-.genericEvent { background-color: var(--midnightbluefade); }
-.alterEvent { background-color: var(--wetasphalttrans); }
+.evEvent { background-color: var(--belizeHolefade); }
+.relEvent { background-color: var(--emeraldtrans); }
+.ctnEvent { background-color: var(--sunflowerfade); }
+.alterEvent { background-color: var(--midnightbluefade); }
+.quoteEvent { background-color: var(--wetasphalttrans); }
 
 n-feed-info-block > dl {
   margin: 0 0 0 75px;

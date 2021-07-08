@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useLayoutEffect, Fragment } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { ToastContainer } from 'react-toastify';
-import Pref from '/client/global/pref.js';
 
 import { ScanListenerUtility, ScanListenerOff } from '/client/utility/ScanListener.js';
 
@@ -173,28 +172,24 @@ export const ProWrap = ({
           {children[1]}
         </div>
       
-        {seriesData ?
-          <XFormBar
-            batchData={batchData}
-            seriesData={seriesData}
-            itemData={itemData}
-            rapIs={rapIs}
-            widgetData={widgetData}
-            
-            tideFloodGate={tideFloodGate}
-            ncTypesCombo={ncTypesComboFlat}
-            action={action}
-            showVerifyState={showVerifyState}
-            handleVerify={(q, d)=>handleVerify(q, d)}
+        <XFormBar
+          batchData={batchData}
+          seriesData={seriesData}
+          itemData={itemData}
+          rapIs={rapIs}
+          widgetData={widgetData}
           
-            users={users}
-            user={user}
-            app={app} />
-        : 
-          <p className='whiteT centreText wide'>
-            <em>{Pref.nonCon}, {Pref.shortfall}, and {Pref.trackFirst} require a Series</em>
-          </p>
-        }
+          tideFloodGate={tideFloodGate}
+          ncTypesCombo={ncTypesComboFlat}
+          action={action}
+          showVerifyState={showVerifyState}
+          handleVerify={(q, d)=>handleVerify(q, d)}
+        
+          users={users}
+          user={user}
+          app={app} 
+        />
+
       </Fragment>
 
     </div>

@@ -54,7 +54,7 @@ const ProductionFindOps = ({
   function variantDataByKey(vKey) {
     return allVariant.find(x => x.versionKey === vKey);
   }
-
+  
   if(!orb) {
     Session.set('nowBatch', false);
     return (

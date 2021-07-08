@@ -156,7 +156,6 @@ const XBatchTimeline = ({
               <ReleaseBlock
                 key={dt.time+ix}
                 id={batchData._id}
-                isX={true}
                 done={doneBatch}
                 dt={dt}
                 icon={dt.type === 'floorRelease' && 'fas fa-flag'}

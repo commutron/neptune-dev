@@ -135,18 +135,14 @@ Meteor.methods({
         probset.push({
           y: nc,
           x: batch.completedAt || new Date(),
-          z: `${batch.batch} = ${nc}`,
-          a: 'nc',
-          label: 'nc',
+          z: `${batch.batch} = ${nc} noncons`,
           symbol: 'square',
           size: '3'
         });
         probset.push({
           y: sh,
           x: batch.completedAt || new Date(),
-          z: `${batch.batch} = ${sh}`,
-          a: 'sh',
-          label: 'sh',
+          z: `${batch.batch} = ${sh} shortfalls`,
           symbol: 'triangleUp',
           size: '3'
         });

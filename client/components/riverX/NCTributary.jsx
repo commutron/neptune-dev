@@ -23,16 +23,15 @@ const NCTributary = ({ seriesId, serial, nonCons, sType })=> {
   const inspector = Roles.userIsInRole(Meteor.userId(), 'inspect');
   const verifier = Roles.userIsInRole(Meteor.userId(), 'verify');
  
-  const chunkNC = Object.entries( _.groupBy(nonCons, x=> x.type) );
+  const chunkNC = Object.entries( _.groupBy(nonCons, x=> x.type) )
+                    .sort((a,b)=>a[0] > b[0] ? 1 : a[0] < b[0] ? -1 : 0);
   
   return(
     <Fragment>
       {chunkNC.map( (chunk, chindex)=>{
-        const rL = chunk[1][0].ref.charAt(0);
         const allFixed = chunk[1].every(c=>c.fix !== false);
         
         const cluster = chunk[1].length >= Pref.clusterMin &&
-          chunk[1].every(c=>c.ref.charAt(0) === rL) &&
           ( chunk[1].every(c=>c.fix === false) || allFixed );
         
         if(cluster) {

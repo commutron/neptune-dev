@@ -5,11 +5,12 @@
   margin: 2px 0 0;
   font-size: 16px;
   color: #373a3c;
+  color: white;
   text-align: left;
   background-color: rgb(0,0,0);
   background-color: rgba(0,0,0,0.95);
-  /*background-clip: padding-box;*/
-  border: 1px solid rgb(10,10,10);
+  border: 1px solid;
+  border-color: rgb(10,10,10);
   border-radius:.25rem;
   outline: none;
   pointer-events: none;
@@ -78,6 +79,28 @@
 .example-multiple-targets::after {
   content: attr(data-count);
   display: block;
+}
+
+.lightTheme .react-contextmenu {
+  background-color: rgba(255,255,255,0.95);
+  border-color: rgb(200,200,200);
+  color: darkgray;
+}
+.lightTheme .react-contextmenu-item {
+  background-color: transparent;
+  color: black;
+}
+.lightTheme .react-contextmenu-item.react-contextmenu-item--active,
+.lightTheme .react-contextmenu-item.react-contextmenu-item--active,
+.lightTheme .react-contextmenu-item.react-contextmenu-item--selected {
+  background-color: var(--midnightbluefade);
+  border-color: var(--midnightbluefade);
+}
+
+.lightTheme .react-contextmenu-item.react-contextmenu-item--disabled,
+.lightTheme .react-contextmenu-item.react-contextmenu-item--disabled:hover {
+  color: lightgray;
+  background-color: transparent;
 }
 
 /* TIMELINE */

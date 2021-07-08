@@ -281,11 +281,6 @@ select:-webkit-autofill,
 select:-webkit-autofill:hover,
 select:-webkit-autofill:focus {
   border-color: var(--neptuneColor);
-  /*
-  -webkit-box-shadow: 0 0 0px 1000px var(--peterriverfade) inset;
-  -moz-box-shadow: 0 0 0px 1000px var(--peterriverfade) inset;
-  box-shadow: 0 0 0px 1000px var(--peterriverfade) inset;
-  */
 }
 
 input + label, textarea + label, select + label {
@@ -350,11 +345,6 @@ input[type='date']::-webkit-outer-spin-button {
 }
 input[type='search'] { 
   border-radius: 0;
-  -webkit-appearance: none;
-}
-select,
-input[type='searchbox'] { 
-  -webkit-appearance: none;
 }
 input[type='search']::-webkit-search-cancel-button {
   background-color: pink;

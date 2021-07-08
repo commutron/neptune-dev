@@ -4,7 +4,7 @@ import '/client/components/bigUi/ItemFeedX/style.css';
 
 import UserNice from '/client/components/smallUi/UserNice.jsx';
 
-const ReleaseBlock = ({ id, isX, done, dt, icon, brancheS, cal })=>{
+const ReleaseBlock = ({ id, done, dt, icon, brancheS, cal })=>{
 
   const aK = dt.type;
   const niceB = brancheS.find( b => ( 'BRK' + b.brKey ) === aK );
@@ -19,19 +19,15 @@ const ReleaseBlock = ({ id, isX, done, dt, icon, brancheS, cal })=>{
   }
   
   function handleCancel() {
-    if(isX) {
-      Meteor.call('cancelRelease', id, aK, (err)=>{
-        err && console.log(err);
-      });
-    }else{
-      Meteor.call('cancelReleaseLEGACY', id, aK, (err)=>{
-        err && console.log(err);
-      });
-    }
+    Meteor.call('cancelRelease', id, aK, (err)=>{
+      err && console.log(err);
+    });
   }
   
+  const canRel = Roles.userIsInRole(Meteor.userId(), ['run', 'kitting']);
+  
   return(
-    <n-feed-info-block class='genericEvent'>
+    <n-feed-info-block class={dt.caution ? 'ctnEvent' : 'relEvent'}>
       <n-feed-left-anchor>
          <i className={`${icon || 'fas fa-check-square'} fa-lg fa-fw`}></i>
       </n-feed-left-anchor>
@@ -48,9 +44,9 @@ const ReleaseBlock = ({ id, isX, done, dt, icon, brancheS, cal })=>{
           title='Cancel'
           className='miniAction'
           onClick={()=>handleCancel()} 
-          disabled={done || !Roles.userIsInRole(Meteor.userId(), ['run', 'kitting'])}
+          disabled={done || !canRel}
           readOnly={true}>
-          <i className='fas fa-undo-alt fa-lg fa-fw'></i>
+          <i className='fas fa-ban fa-lg fa-fw'></i>
         </button>
       </n-feed-right-anchor>
     </n-feed-info-block>

@@ -402,7 +402,7 @@ main {
   vertical-align: bottom;
   margin: 0 10px;
 }
-@media screen and (max-width: 1200px){
+@media screen and (max-width: 1200px) {
   .titleSection > span, .titleSection > button {
     font-size: 1.5rem;
   }

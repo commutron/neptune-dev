@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './style.css';
-// import Pref from '/client/global/pref.js';
+import Pref from '/client/global/pref.js';
 import TideLock from '/client/components/tide/TideLock.jsx';
 
 import NCAdd from '/client/components/riverX/NCAdd.jsx';
@@ -34,6 +34,8 @@ const XFormBar = ({
   
   const verAuth = Roles.userIsInRole(Meteor.userId(), 'verify');
   const lockOutAll = !tideFloodGate || !b.live;
+  
+  const caution = b.releases.findIndex( x => x.type === 'floorRelease' && x.caution !== false) >= 0;
   
   return(
     <div className='proActionForm forceScrollStyle'>
@@ -76,30 +78,35 @@ const XFormBar = ({
         </div>
       : null}
       <div className='footFill'>
-        <TideLock currentLive={tideFloodGate && b.live} message={true}>
-        {i && showItem ?
-          show === 'NC' ?
-            <NCAdd
-              seriesId={srs._id}
-              serial={i.serial}
-              units={i.units}
-              user={user}
-              app={app}
-              ncTypesCombo={ncTypesCombo} />
-          : show === 'S' ?
-            <ShortAdd
-              seriesId={srs._id}
-              serial={i.serial}
-              units={i.units}
-              pastPN={pastPN}
-              pastRF={pastRF}
-              app={app}
-              doneClose={(e)=>handleDone(e)} />
-          : null
+        <TideLock currentLive={tideFloodGate && b.live} message={true} caution={caution}>
+        {!srs ?
+          <p className='whiteT centreText wide'>
+            <em>{Pref.nonCon}, {Pref.shortfall}, and {Pref.trackFirst} require a {Pref.series}</em>
+          </p>
+        : 
+          i && showItem ?
+            show === 'NC' ?
+              <NCAdd
+                seriesId={srs._id}
+                serial={i.serial}
+                units={i.units}
+                user={user}
+                app={app}
+                ncTypesCombo={ncTypesCombo} />
+            : show === 'S' ?
+              <ShortAdd
+                seriesId={srs._id}
+                serial={i.serial}
+                units={i.units}
+                pastPN={pastPN}
+                pastRF={pastRF}
+                app={app}
+                doneClose={(e)=>handleDone(e)} />
+            : null
         : null
         }
             
-        {!i && showBatch ?  /// HOW to Flood without dumb mistakes
+        {!i && showBatch ?
           <NCFlood
             seriesId={srs._id}
             live={b.completed === false}

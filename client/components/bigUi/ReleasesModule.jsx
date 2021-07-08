@@ -122,15 +122,17 @@ export const ReleaseWrapper = ({
   	      <MenuItem
   	        onClick={(e)=>handleRelease(e, false)}
   	        disabled={lockout}
-  	        >{actionText} {contextText}
+  	        ><i className='fas fa-check-square fa-fw gapR'></i>{actionText} {contextText}
   	      </MenuItem>
   	    }
   	    
   	    {clear &&
   	      <MenuItem
   	        onClick={(e)=>handleCautionFlip(e)}
-  	        disabled={lockout}>
-  	        {cautionState ? unholdText : holdText}
+  	        disabled={lockout}
+  	       >{cautionState ?
+  	          <n-fa0><i className='fas fa-check-square fa-fw gapR'></i>{unholdText}</n-fa0> :
+  	          <n-fa1><i className='far fa-minus-square fa-fw gapR'></i>{holdText}</n-fa1>}
   	      </MenuItem>
   	    }
   	    
@@ -138,7 +140,7 @@ export const ReleaseWrapper = ({
   	      <MenuItem
   	        onClick={(e)=>handleRelease(e, Pref.shortfall)}
   	        disabled={lockout}
-  	        >{holdText}
+  	        ><i className='far fa-minus-square fa-fw gapR'></i>{holdText}
   	      </MenuItem>
   	    }
   	    
@@ -146,7 +148,7 @@ export const ReleaseWrapper = ({
   	      <MenuItem
   	        onClick={()=>handleCancel()} 
   	        disabled={lockout}
-  	        >{undoText}
+  	        ><i className='fas fa-ban fa-fw gapR'></i>{undoText}
   	      </MenuItem>
   	    }
 	    </ContextMenu>
