@@ -25,6 +25,16 @@ const ToastSlide = ({app})=> {
     });
   }
   
+  function sendTestEmail() {
+    Meteor.call(
+      'sendEmail',
+      'mattutron@gmail.com',
+      'matt@commutron.ca',
+      'Hello from Meteor!',
+      'This is a test of Email.send.'
+    );
+  }
+  
   return(
     <div className='space3v'>
       <h2 className='cap'>Notification Styles:</h2>
@@ -56,6 +66,19 @@ const ToastSlide = ({app})=> {
         >Send Inbox Notification Test to ALL USERS</button>
       </form>
       
+      
+      <hr />
+      
+      <h2 className='cap'>Email Test</h2>
+      <i>50/50 chance this works</i>
+      <p>
+        <button
+          className='action clearBlue invert'
+          onClick={()=>sendTestEmail()}
+        >Send Email to "mattutron"</button>
+      </p>
+      
+      <hr />
     </div>
   );
 };
