@@ -13,7 +13,7 @@ moment.updateLocale('en', {
 });
 
 function shrinkWhole(bData, now, shipLoad, accessKey) {
-  return new Promise( (resolve)=> {
+  return new Promise( (resolve, reject)=> {
     const isWhat = Meteor.call('getBasicBatchInfo', bData.batch);
     
     const oRapid = XRapidsDB.findOne({extendBatch: bData.batch, live: true});
@@ -78,7 +78,7 @@ function shrinkWhole(bData, now, shipLoad, accessKey) {
         performTgt: perfFtr
     }});
     resolve(true);
-  });
+  }).catch(error => { throw new Meteor.Error(error.message) });
 }
 
 function checkMinify(bData, accessKey) {
@@ -183,7 +183,7 @@ Meteor.methods({
         const fetchX = XBatchDB.find({orgKey: accessKey}).fetch();
         await Promise.all(fetchX.map(async (x) => {
             await shrinkWhole( x, now, accessKey );
-        }));
+        })).then( ()=> console.log('trace rebuild done') );
         
         return true;
       }catch (err) {

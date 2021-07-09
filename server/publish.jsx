@@ -218,7 +218,7 @@ Meteor.publish('traceDataActive', function(){
       }, {
         fields: {
           // 'lastUpserted': 1,
-          // 'lastUpdated': 1,
+          'lastUpdated': 1,
           'batch': 1,
           'batchID': 1,
           'salesOrder': 1,

@@ -91,11 +91,20 @@ const DataRepair = ({ app, users })=> {
       
       <DoCard
         title='FORCE Run TraceDB Rebuild'
-        sub='Constantly watched for changes'
+        sub='Will freeze app while running'
         icon='screwdriver'
         color='clearTeal'
         button='Rebuild TraceDB'
         action={()=>doCallThing('rebuildTrace')}
+      />
+      
+      <DoCard
+        title='Run TraceDB Live Movment Update'
+        sub='Runs every Weekday at 12:02am (CST) and 12:02pm (CST)'
+        icon='sync'
+        color='clearTeal'
+        button='Update TraceDB'
+        action={()=>doCallThing('updateLiveMovement')}
       />
       
       <DoCard
