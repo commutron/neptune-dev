@@ -135,10 +135,11 @@ function collectProgress(privateKey, batchID, branchOnly) {
       const riverFlow = flow ? flow.flow : [];
       
       const srs = XSeriesDB.findOne({batch: bx.batch});
-      const totalItems = !srs ? 0 : srs.items.length;
+      const items = !srs ? [] : srs.items.filter( i => !i.altPath.some(a=> a.river !== false) );
+      const totalItems = items.length;
       
-      const doneItems = !srs ? 0 : srs.items.filter( x => x.completed ).length;
-      const wipItems = !srs ? [] : srs.items.filter( x => !x.completed );
+      const doneItems = items.filter( x => x.completed ).length;
+      const wipItems = items.filter( x => !x.completed );
       
       const historyFlat = flattenHistory(wipItems);
       
@@ -208,7 +209,7 @@ Meteor.methods({
         bundle = await collectProgress(accessKey, batchID, branchOnly);
         return bundle;
       }catch (err) {
-        throw new Meteor.Error(err);
+        throw new Meteor.Error(err.message);
       }
     }
     return bundleProgress(batchID);
@@ -221,7 +222,7 @@ Meteor.methods({
         bundle = await collectBranchCondition(accessKey, batchID);
         return bundle;
       }catch (err) {
-        throw new Meteor.Error(err);
+        throw new Meteor.Error(err.message);
       }
     }
     return bundleCondition(batchID);

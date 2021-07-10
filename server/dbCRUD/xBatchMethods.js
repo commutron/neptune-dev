@@ -5,7 +5,6 @@ import { getShipDue, getEndWork } from '/server/shipOps';
 
 Meteor.methods({
 
-//// Complex, Dexterous, Multiplex Batches \\\\
   addBatchX(batchNum, groupId, widgetId, vKey, 
             salesNum, sDate, eDate, quantity, withSeries, qTime
   ) {
@@ -132,7 +131,6 @@ Meteor.methods({
       return false;
     }
   },
-
 
   alterBatchXFulfill(batchId, oldDate, newDate, reason) {
     const accessKey = Meteor.user().orgKey;
@@ -407,7 +405,6 @@ Meteor.methods({
   },
   
   //// Waterfall
-  
   addCounter(batchId, wfKey, gate, type, wfBranch, actionVal) {
     const accessKey = Meteor.user().orgKey;
     const action = actionVal ? actionVal : 'clicker';
@@ -790,9 +787,7 @@ Meteor.methods({
     }else{ return false }
   },
     //////////////////// DESTRUCTIVE \\\\\\\\\\\\\\\\\\\\\
-  
   // Items delete is in the Series Methods
-  
   deleteXBatchTide(batchId, pinInput) {
     const accessKey = Meteor.user().orgKey;
     const doc = XBatchDB.findOne({_id: batchId});

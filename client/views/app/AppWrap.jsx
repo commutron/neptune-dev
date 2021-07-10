@@ -15,7 +15,7 @@ import NCTypeSlide from './appSlides/NCTypeSlide';
 import ScalesTagsSlide from './appSlides/ScalesTagsSlide';
 import AddressSlide from './appSlides/AddressSlide';
 import DataRepair from './appSlides/DataRepair';
-import ToastSlide from './appSlides/ToastSlide';
+import NotifySlide from './appSlides/NotifySlide';
 import CRONSlide from './appSlides/CRONSlide';
 import MetaSlide from './appSlides/MetaSlide';
 
@@ -51,7 +51,7 @@ const AppWrap = ({ isAdmin, isDebug, users, app })=> {
             <b><i className='fas fa-ruler-horizontal fa-fw gapR'></i>Scales & Tags</b>,
             <b><i className='fas fa-link fa-fw gapR'></i>Addresses</b>,
             <b><i className='fas fa-toolbox fa-fw gapR'></i>Data Repair</b>,
-            <b><i className='fas fa-bell fa-fw gapR'></i>Test Alerts</b>,
+            <b><i className='fas fa-bell fa-fw gapR'></i>Test Notifications</b>,
             <b><i className='fas fa-robot fa-fw gapR'></i>CRON Jobs</b>,
             <b><i className='fas fa-copyright fa-fw gapR'></i>Meta</b>
           ]}>
@@ -71,7 +71,7 @@ const AppWrap = ({ isAdmin, isDebug, users, app })=> {
           <ScalesTagsSlide key={5} app={app} />
           <AddressSlide key={6} app={app} />
           <DataRepair key={7} app={app} users={users} />
-          <ToastSlide key={8} />
+          <NotifySlide key={8} />
           <CRONSlide key={9} />
           <MetaSlide key={10} />
           

@@ -2,7 +2,7 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-const ToastSlide = ({app})=> {
+const NotifySlide = ({app})=> {
   
   function showToast() {
     toast('a default message');
@@ -25,13 +25,21 @@ const ToastSlide = ({app})=> {
     });
   }
   
-  function sendTestEmail() {
+  function sendTestEmail(e) {
+    e.preventDefault();
+    
+    const to = this.toEmail.value;
+    
     Meteor.call(
       'sendEmail',
-      'mattutron@gmail.com',
+      to,
       'matt@commutron.ca',
-      'Hello from Meteor!',
-      'This is a test of Email.send.'
+      'Hello from Neptune!',
+      'This is a test of MeteorJS Email',
+      (err, re)=> {
+        err && console.log(err);
+        re ? toast('Email Sent') : toast.warn('Invalid Email');
+      }
     );
   }
   
@@ -70,17 +78,26 @@ const ToastSlide = ({app})=> {
       <hr />
       
       <h2 className='cap'>Email Test</h2>
-      <i>50/50 chance this works</i>
-      <p>
-        <button
-          className='action clearBlue invert'
-          onClick={()=>sendTestEmail()}
-        >Send Email to "mattutron"</button>
-      </p>
-      
+      <form onSubmit={(e)=>sendTestEmail(e)}>
+        <p>
+          <label>To email address<br />
+            <input
+              id='toEmail'
+              type='email'
+              required
+            />
+          </label>
+        </p>
+        <p>
+          <button
+            className='action clearBlue'
+            type='submit'
+          >Send Email</button>
+        </p>
+      </form>
       <hr />
     </div>
   );
 };
 
-export default ToastSlide;
+export default NotifySlide;

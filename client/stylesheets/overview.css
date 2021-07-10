@@ -42,6 +42,7 @@
   flex-flow: row wrap;
   justify-content: flex-start;
   align-items: center;
+  overflow: hidden;
 }
 .overviewToolbar {
   grid-area: overviewNav;
@@ -353,6 +354,7 @@
   padding-left: 1vmin;
   display: flex;
   align-items: center;
+  overflow: hidden;
 }
 .downOrdersFixed {
   grid-area: downOrdersF;
@@ -532,7 +534,7 @@ n-sm-model .big { font-size: 1.5rem !important; }
       'homeIcon frontCenter auxRight proRight';
   }
   .overviewContent {
-    min-height: calc( (100 * var(--vh)) - 8vmin);
+    min-height: calc( (97 * var(--vh)) - 8vmin);
   }
   .upstreamView,
   .downstreamView {

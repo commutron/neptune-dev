@@ -1,6 +1,6 @@
 // import { Random } from 'meteor/random'
 import moment from 'moment';
-
+import { noIg } from './utility';
 // import Config from '/server/hardConfig.js';
 
 Meteor.methods({
@@ -69,7 +69,8 @@ Meteor.methods({
   
   getAllPerform() {
     const accessKey = Meteor.user().orgKey;
-    
+    const xid = noIg();
+
     const perfShade = CacheDB.findOne({orgKey: accessKey, dataName: 'performShadow'});
     const preftime = perfShade ? perfShade.lastUpdated : null;
     const stale = !preftime ? true :
@@ -80,6 +81,7 @@ Meteor.methods({
 
       const batches = XBatchDB.find({
         orgKey: accessKey,
+        groupId: { $ne: xid },
         createdAt: { 
           $gte: new Date(tideWall)
         }
@@ -115,7 +117,8 @@ Meteor.methods({
   
   getAllNCCount() {
     const accessKey = Meteor.user().orgKey;
-    
+    const xid = noIg();
+
     const probShade = CacheDB.findOne({orgKey: accessKey, dataName: 'nccountShadow'});
     const nctime = probShade ? probShade.lastUpdated : null;
     const stale = !nctime ? true :
@@ -123,6 +126,7 @@ Meteor.methods({
     if(stale) {
       const batches = XBatchDB.find({
         orgKey: accessKey,
+        groupId: { $ne: xid },
       },
         {fields:{'batch':1,'completedAt':1}}
       ).fetch();
@@ -164,7 +168,8 @@ Meteor.methods({
   
   getAllQuantity() {
     const accessKey = Meteor.user().orgKey;
-    
+    const xid = noIg();
+
     const qtyShade = CacheDB.findOne({orgKey: accessKey, dataName: 'qtyShadow'});
     const qtytime = qtyShade ? qtyShade.lastUpdated : null;
     const stale = !qtytime ? true :
@@ -172,6 +177,7 @@ Meteor.methods({
     if(stale) {
       const batches = XBatchDB.find({
         orgKey: accessKey,
+        groupId: { $ne: xid }
       },
         {fields:{'batch':1,'createdAt':1,'quantity':1,'salesOrder':1}}
       ).fetch();
