@@ -417,9 +417,9 @@ button.variableInput.biggest { height: 64px; }
   margin: calc(0.5 * var(--vh)) 0;
   padding: calc(1 * var(--vh));
   width: auto;
-  max-width: max-content;
   max-width: -webkit-fill-available;
-  min-height: calc(3.5 * var(--vh));
+  max-width: max-content;
+  /*min-height: calc(3.5 * var(--vh));*/
   background-color: var(--task-front-color);
   border-radius: 25px;
   text-transform: capitalize;
@@ -453,7 +453,7 @@ button.variableInput.biggest { height: 64px; }
   }
   .taskTip:before {
     left: 7.5vmin;
-    margin: 0.5vmin 0;
+    margin: 0;
   }
   .auxTip:before {
     margin: calc(0.15 * var(--vh)) 0;

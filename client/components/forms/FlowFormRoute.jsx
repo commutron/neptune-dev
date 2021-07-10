@@ -98,18 +98,19 @@ const FlowFormRoute = ({
         onSubmit={(e)=>save(e)}
       >
       {warn ?
-        <div className='centre'>
-          <p><b>{fTitle}</b> is in used by</p>
+        <div className='centre centreText'>
+          <p><b>{fTitle}</b> is in use by:
           {warn === 'liveRiver' ?
-            <h3>An Active {Pref.xBatch} as the {Pref.buildFlow}</h3>
+            <b> an Active {Pref.xBatch} as the {Pref.buildFlow}</b>
           : warn === 'liveAlt' ?
-            <h3>An Active {Pref.xBatch} as the {Pref.buildFlowAlt}</h3>
+            <b> an Active {Pref.xBatch} as the {Pref.buildFlowAlt}</b>
           : warn === 'liveAlt' ?
-            <h3>An Inactive {Pref.xBatch} as the {Pref.buildFlow}</h3>
+            <b> an Inactive {Pref.xBatch} as the {Pref.buildFlow}</b>
           : warn === 'liveAlt' ?
-            <h3>An Inactive {Pref.xBatch} as the {Pref.buildFlowAlt}</h3>
+            <b> an Inactive {Pref.xBatch} as the {Pref.buildFlowAlt}</b>
           :
-            <p>something</p>}
+            <b> an unknown something</b>}
+          </p>
         </div>
       : null}
       </form>

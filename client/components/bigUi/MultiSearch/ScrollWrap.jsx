@@ -10,7 +10,7 @@ const ScrollWrap = ({ tggl, queryState, resultState }) => {
   
   function handleScroll(e) {
     if(e.target.scrollTop > scrollY) {
-      scrollYSet(e.target.scrollTop);
+      scrollYSet(e.target.scrollTop / 2);
     }
   }
   

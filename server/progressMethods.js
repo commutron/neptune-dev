@@ -187,7 +187,7 @@ function collectProgress(privateKey, batchID, branchOnly) {
                         
         branchSets.push({
           branch: branch.branch,
-          steps: falls.length + steps.length,
+          steps: falls.length + firsts.length + steps.length,
           calNum: calNum,
           ncLeft: nonConLeft,
           shLeft: shortLeft

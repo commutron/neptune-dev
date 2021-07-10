@@ -15,6 +15,7 @@ moment.updateLocale('en', {
 });
 
 function dryPriorityCalc(bQuTmBdg, mEst, bTide, shipAim, now, shipLoad) {
+  console.log({bQuTmBdg, mEst, bTide, shipAim, now, shipLoad});
   const shipAimMmnt = moment(shipAim);
   
   const mQuote = bQuTmBdg.length === 0 ? 0 : bQuTmBdg[0].timeAsMinutes;
@@ -44,6 +45,7 @@ function dryPriorityCalc(bQuTmBdg, mEst, bTide, shipAim, now, shipLoad) {
 
 function collectPriority(privateKey, batchID, mockDay) {
   return new Promise(resolve => {
+    console.log({privateKey, batchID, mockDay});
     
     const now = moment().tz(Config.clientTZ);
 

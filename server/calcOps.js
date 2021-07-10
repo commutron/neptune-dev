@@ -51,8 +51,8 @@ export function percentOverUnder(goalNumber, realNumber) {
 }
 
 export function avgOfArray(arr, zeros) {
-  const cArr = zeros ? arr.filter( f => ( f || f === 0 ) && !isNaN(f) ) :
-                       arr.filter( f => f && !isNaN(f) );
+  const cArr = zeros ? arr.filter( f => ( f || f === 0 ) && isFinite(f) ) :
+                       arr.filter( f => f && isFinite(f) );
                        
   if(cArr.length == 1) {
     return round2Decimal( cArr[0] );
