@@ -104,7 +104,7 @@ function collectPriority(privateKey, batchID, mockDay) {
         });
       }
     }
-  });
+  }).catch(error => { throw new Meteor.Error(error.message) });
 }
 
 function getFastPriority(bData, now, shipAim) {
@@ -196,12 +196,12 @@ Meteor.methods({
     async function bundlePriority() {//batchID, orgKey, mockDay) {
       const accessKey = serverAccessKey || Meteor.user().orgKey;
       syncHoliday(accessKey);
-      try {
+      // try {
         bundle = await collectPriority(accessKey, batchID, mockDay);
         return bundle;
-      }catch (err) {
-        throw new Meteor.Error(err);
-      }
+      // }catch (err) {
+      //   throw new Meteor.Error(err);
+      // }
     }
     return bundlePriority();
   },

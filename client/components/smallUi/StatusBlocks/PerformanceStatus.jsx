@@ -9,6 +9,10 @@ const PerformanceData = ({ batchID })=> {
   const [ pfData, setPerform ] = useState(null);
   
   useEffect( ()=> {
+    return () => { thingMounted.current = false };
+  }, []);
+  
+  useEffect( ()=> {
     Meteor.call('performTrace', batchID, (err, re)=>{
       err && console.log(err);
       if( isFinite(re) ) { 
@@ -16,10 +20,6 @@ const PerformanceData = ({ batchID })=> {
       }
     });
   }, [batchID]);
-  
-  useEffect( ()=> {
-    return () => { thingMounted.current = false };
-  }, []);
   
   return(
     <PerformanceSquare perf={pfData} /> 

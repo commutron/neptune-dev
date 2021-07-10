@@ -13,11 +13,13 @@ export function sortBranches(branches) {
   return brancheS;
 }
 
-export function flattenHistory(itemArr) {
+export function flattenHistory(itemArr, incFirst) {
   let wipItemHistory = [];
   for( let i of itemArr ) { 
     wipItemHistory.push( 
-      i.history.filter( y => y.type !== 'first' && y.good === true)
+      incFirst ?
+        i.history.filter( y => y.good === true)
+      : i.history.filter( y => y.type !== 'first' && y.good === true)
     );
   }
   const historyFlat = [].concat(...wipItemHistory);

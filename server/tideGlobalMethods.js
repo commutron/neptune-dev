@@ -69,9 +69,9 @@ export function distTimeBudget(tide, quoteTimeBudget, allQuantity, lockTrunc) {
     const totalTide = tideVquote[0];
     const trueQuote = tideVquote[1];
     
-    const tidePerItem = round2Decimal( totalTide / allQuantity );
+    const tidePerItem = allQuantity <= 0 ? 0 : round2Decimal( totalTide / allQuantity );
     
-    const quotePerItem = round2Decimal( trueQuote / allQuantity );
+    const quotePerItem = allQuantity <= 0 ? 0 : round2Decimal( trueQuote / allQuantity );
     
     // xx quote minutes remain
     const quoteMNtide = trueQuote - totalTide;

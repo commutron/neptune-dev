@@ -141,7 +141,7 @@ function collectProgress(privateKey, batchID, branchOnly) {
       const doneItems = items.filter( x => x.completed ).length;
       const wipItems = items.filter( x => !x.completed );
       
-      const historyFlat = flattenHistory(wipItems);
+      const historyFlat = flattenHistory(wipItems, true);
       
       const rNC = !srs ? [] : srs.nonCon.filter( n => !n.trash && n.inspect === false );
       
@@ -157,6 +157,14 @@ function collectProgress(privateKey, batchID, branchOnly) {
           counter = counter + wfCount;
           const fllMax = fll.action === 'slider' ? 100 : totalTotal;
           maxCount = maxCount + fllMax;
+        }
+        
+        const firsts = riverFlow.filter( x => x.branchKey === branch.brKey && x.type === 'first' );
+        
+        for(let frt of firsts) {
+          const didFirst = historyFlat.findIndex( x => x.key === frt.key ) >= 0;
+          didFirst ? counter = counter + 1 : null;
+          maxCount = maxCount + 1;
         }
         
         const steps = riverFlow.filter( x => x.branchKey === branch.brKey && x.type !== 'first' );
