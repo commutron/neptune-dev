@@ -96,6 +96,7 @@ const NotifySlide = ({app})=> {
         </p>
       </form>
       <hr />
+      
     </div>
   );
 };

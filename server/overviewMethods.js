@@ -274,22 +274,35 @@ Meteor.methods({
                    Math.round( diff * 0.15 );
       
       const factor = isFinite(au) && isFinite(pb) ? au - pb : null;
+      console.log({
+        batch: b.batch,
+        perf: factor,
+        au: au,
+        diff: diff,
+        estMinutes: estMinutes,
+        mEst: mEst,
+        mQuote: mQuote,
+        goalTimePer: goalTimePer,
+        realTimePer: realTimePer,
+        pb: pb
+      });
+      
       return factor;
     }
   },
   
   performTrace(batchID) {
-    const b = XBatchDB.findOne({_id: batchID},{fields:{'lockTrunc':1}});
+    /*const b = XBatchDB.findOne({_id: batchID},{fields:{'lockTrunc':1}});
     if(b && b.lockTrunc && b.lockTrunc.performTgt !== undefined) {
       return b.lockTrunc.performTgt;
     }else{
       const t = TraceDB.findOne({batchID: batchID},{fields:{'performTgt':1}});
       if(t && t.performTgt !== undefined) {
         return t.performTgt;
-      }else{
+      }else{*/
         return Meteor.call('performTarget', batchID);
-      }
-    }
+      // }
+    // }
   },
   
   nonconQuickStats(batchID, temp) {
