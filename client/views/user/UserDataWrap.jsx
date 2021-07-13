@@ -36,7 +36,7 @@ const UserDataWrap = ({
   const branches = app.branches.filter( b => b.open === true );
   const brancheS = branchesSort(branches);
   
-  const iL = <i className='rAlign'>{user.inbox.length}</i>
+  const iL = <i className='rAlign'>{user.inbox.length}</i>;
      
   return(
     <ErrorCatch>

@@ -46,11 +46,14 @@ const UserManageForm = ({
   return(
     <div>
       
-      <h3>Username: {name}</h3>
-      <h3 className='clean'>ID: {id}</h3>
-      <h3 className='blueT'>{adminFlag}</h3>
-      <h3>organization: <i className='greenT'>{org}</i></h3>
-
+      <span className='noPrint readPs'>
+        <p><b>Username:</b> {name}</p>
+        <p><b>ID:</b> {id}</p>
+        <p>{adminFlag}</p>
+        <p><b>Organization:</b> <i className='greenT'>{org}</i></p>
+        <p><b>Joined:</b> {userObj.createdAt.toLocaleString()}</p>
+      </span>
+      
       <div className='grid min300 max400'>
       {!userObj.proTimeShare ? null :
         <UserSelectSetting

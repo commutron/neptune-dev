@@ -12,8 +12,6 @@ import IdCardCard from '/client/views/user/IdCardCard';
 
 const UserSettings = ({ app, user, isAdmin, brancheS })=> {
   
-  // const sup = Roles.userIsInRole(Meteor.userId(), ['admin', 'nightly']);
-  
   const speedOps = [
     // {value: 100, lock: !sup, name: 'Too Fast' },
     // {value: 250, lock: !sup, name: 'Crazy Fast' },
@@ -31,10 +29,11 @@ const UserSettings = ({ app, user, isAdmin, brancheS })=> {
   
   return(
     <div>
-      <span className='noPrint'>
-        <h3 className='clean'>Username: {user.username}</h3>
-        <h3 className='clean'>ID: {Meteor.user()._id}</h3>
-        <h3>Organization: <i className='greenT'>{Meteor.user().org}</i></h3>
+      <span className='noPrint medBig readPs'>
+        <p><b>Username:</b> {user.username}</p>
+        <p><b>ID:</b> {Meteor.user()._id}</p>
+        <p><b>Organization:</b> <i className='greenT'>{Meteor.user().org}</i></p>
+        <p><b>Joined:</b> {user.createdAt.toLocaleString()}</p>
       </span>
       
       <div className='autoFlex'>  

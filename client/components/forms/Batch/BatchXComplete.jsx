@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, useLayoutEffect, Fragment } from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
@@ -17,7 +17,13 @@ const BatchXComplete = ({ batchData, allFlow, allFall, nowater, canRun })=> {
     });
   }
   
-  const [ datetime, datetimeSet ] = useState( moment(batchData.completedAt).format() );
+  const [ datetime, datetimeSet ] = useState( moment().format() );
+  
+  useLayoutEffect( ()=>{
+    if(batchData.completed) {
+      datetimeSet(moment(batchData.completedAt).format());
+    }
+  },[batchData]);
   
   function backdateFinish() {
     const batchID = batchData._id;

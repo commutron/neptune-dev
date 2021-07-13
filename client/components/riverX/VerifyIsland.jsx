@@ -62,10 +62,9 @@ const VerifyIsland = ({
               defaultValue={selectedKeyState}
               required>
               <option></option>
-              {flowFirsts.map( (dt)=>{
-                return (
+              {flowFirsts.map( (dt)=> (
                   <option key={dt.key} value={dt.key}>{dt.step}</option>
-              )})}
+              ))}
             </select>
             <label htmlFor='repeatStep'>Repeat {Pref.trackFirst}</label>
           </div>

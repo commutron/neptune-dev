@@ -660,6 +660,10 @@ n-sm-model-content {
 .readlines dt {
   margin: 5px 0 5px 0;
 }
+.readPs p {
+  margin: 5px 0;
+  font-size: inherit;
+}
 
 .dropCeiling { margin-top: calc(4vh + 1rem); }
 .overscroll { margin-bottom: 5vh; }

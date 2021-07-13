@@ -26,7 +26,7 @@ const ScrollWrap = ({ tggl, queryState, resultState }) => {
     return ()=> {
       if(resultState.length > 50) {
         document.getElementById('queryResults')
-                    .removeEventListener('scroll', handleScroll);
+          .removeEventListener('scroll', handleScroll);
       }
     };
   }, []);
