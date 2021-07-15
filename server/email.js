@@ -7,7 +7,7 @@ Meteor.methods({
       
       const bcc = 'matt@commutron.ca';
       
-      const text = `
+      const html = `
         <table style="min-width: 140px; width: 80%; height: 80%; margin: 0 auto; font-family: sans-serif; line-height: 1; table-layout: auto; border-collapse: collapse; background-color: white;">
           <tbody>
             <tr><td colspan='2' style="background-color:#61a1cf;width:100%;height:15px"></td></tr>
@@ -33,7 +33,7 @@ Meteor.methods({
           </tbody>
         </table>`;
       
-      Email.send({ to, bcc, from, subject, text });
+      Email.send({ to, bcc, from, subject, html });
       
       return true;
     }else{
