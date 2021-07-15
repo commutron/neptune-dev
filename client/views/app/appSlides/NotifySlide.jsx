@@ -34,8 +34,7 @@ const NotifySlide = ({app})=> {
       'sendEmail',
       to,
       'matt@commutron.ca',
-      'Hello from Neptune!',
-      'This is a test of MeteorJS Email',
+      'TEST - Hello from Neptune!',
       (err, re)=> {
         err && console.log(err);
         re ? toast('Email Sent') : toast.warn('Invalid Email');

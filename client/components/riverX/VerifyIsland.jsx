@@ -46,7 +46,7 @@ const VerifyIsland = ({
     <div className='stoneForm noCopy blue'>
     	<div className='flexRR wide'>
       	<button
-      		className='action clearRed'
+      		className='action stoneFormClose'
       		onClick={()=>handleVerify(null, false)}>
       		<i className="fas fa-times fa-fw fa-2x"></i>
       	</button>

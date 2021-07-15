@@ -103,6 +103,10 @@ input.orangeIn:invalid {
   width: 45px !important;
   height: 45px !important;
 }
+.formBarToggle svg {
+  width: 30px !important;
+  height: 30px !important;
+}
 
 .actionForm span,
 .actionForm div {

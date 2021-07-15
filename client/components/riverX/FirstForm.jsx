@@ -25,11 +25,13 @@ const FirstForm = ({
   useLayoutEffect( ()=>{
     const inspectOps = sBranch ? sBranch.inspectMethods : [];
     const iCombo = Array.from(inspectOps, x => { 
-                            let icon = x.includes('eye') ? 'fa-eye' :
-                                       x.includes('auto') ? 'fa-camera' : 
-                                       x.includes('micro') ? 'fa-micro' :
-                                       'fa-check-double';
-                            return { name: x, icon: icon } } );
+                    let icon = x.toLowerCase().includes('eye') ? 'fa-eye' :
+                               x.toLowerCase().includes('magnify') ? 'fa-search' :
+                               x.toLowerCase().includes('camera') ? 'fa-camera' :
+                               x.toLowerCase().includes('video') ? 'fa-video' :
+                               x.toLowerCase().includes('x-ray') ? 'fa-x-ray' :
+                               'fa-microscope';
+                    return { name: x, icon: icon } } );
     if(iCombo.length === 1 ) { howISet( iCombo[0].name ) }
     inspectComboSet( iCombo );
     
@@ -109,7 +111,7 @@ const FirstForm = ({
   
   return(
     <Fragment>
-    	<p className='bigger centreText up'>{sStep}</p>
+      <div className='fakeFielset centreText bigger'>{sStep}</div>
       
       {inspectCombo && inspectCombo.length > 1 ?
         <div className='fakeFielset balancer'>
@@ -125,7 +127,7 @@ const FirstForm = ({
                 <label
                   htmlFor={obj.name+ix}
                   className='roundRadioSelect onblueHover'>
-                  <i className={`fas ${obj.icon} fa-2x fa-fw`}></i> {obj.name}
+                  <i className={`fas ${obj.icon} fa-2x fa-fw gapR`}></i>{obj.name}
                 </label>
               </Fragment>
           )})}
@@ -158,13 +160,13 @@ const FirstForm = ({
         : null}
         
         {sBranch.reqConsumable ?
-          <label htmlFor='consume' className='vmarginhalf wideStone w100'>
+          <label htmlFor='consume' className='vtop wideStone w100'>
             <textarea
     			    type='text'
     			    id='consume'
     			    onChange={(e)=>consume(e)}
     			    required>
-    			</textarea><br />{Pref.consume}</label>
+    			</textarea>{Pref.consume}</label>
         : null}
       </div>
 			
@@ -195,7 +197,7 @@ const FirstForm = ({
           className='roundActionIcon dbblRound firstBetter'
           disabled={noG}
           onClick={()=>pass(true)}
-        ><i className="fas fa-check fa-3x"></i>
+        ><i className="fas fa-check-double fa-3x"></i>
         <br /><i className='medBig whiteT'>OK</i></button>
       </div>
       

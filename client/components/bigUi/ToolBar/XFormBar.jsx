@@ -47,33 +47,36 @@ const XFormBar = ({
               type='checkbox'
               id='firstselect'
               name='toggleFirst'
+              title='Redo Step'
               className='radioIcon'
               checked={showVerifyState === true}
               onChange={()=>handleVerify(null, true)}
-              disabled={!verAuth || lockOutAll} />
-            <i className='fas fa-thumbs-up' data-fa-transform='up-1'></i>
+              disabled={!verAuth || lockOutAll} 
+            /><i className='fas fa-redo-alt'></i>
           </label> }
           <label htmlFor='ncselect' className='formBarToggle taskLink butRed'>
             <input
               type='radio'
               id='ncselect'
               name='formbarselect'
+              title={Pref.nonCon}
               className='radioIcon'
               checked={show === 'NC'}
               onChange={()=>showSet( 'NC' )}
-              disabled={lockOutAll} />
-            <i className='fas fa-times-circle'></i>
+              disabled={lockOutAll}
+            /><i className='fas fa-times'></i>
           </label>
           <label htmlFor='shortselect' className='formBarToggle taskLink butYellow'>
             <input
               type='radio'
               id='shortselect'
               name='formbarselect'
+              title={Pref.shortfall}
               className='radioIcon'
               checked={show === 'S'}
               onChange={()=>showSet( 'S' )}
-              disabled={lockOutAll} />
-            <i className='fas fa-exclamation-circle'></i>
+              disabled={lockOutAll} 
+            /><i className='fas fa-exclamation'></i>
           </label>
         </div>
       : null}

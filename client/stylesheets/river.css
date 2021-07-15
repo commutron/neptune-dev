@@ -562,12 +562,20 @@ n-trib-action-all {
   justify-content: space-around;
   align-self: flex-start;
 }
+.stoneFormClose {
+  color: rgb(25,25,25);
+  background-color: var(--peterriver);
+}
+.stoneFormClose:hover {
+  color: var(--peterriver);
+  background-color: rgb(25,25,25);
+}
 .fakeFielset {
   border-top: 5px dashed rgba(255,255,255,0.5);
   border-right: none;
   border-bottom: none;
   border-left: none;
-  padding: 3vmax 1vmax;
+  padding: 2.5vmax 1vmax;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;

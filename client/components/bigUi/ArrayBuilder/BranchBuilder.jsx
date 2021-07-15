@@ -60,25 +60,6 @@ const BranchEditRow = ({ branch, isDebug, lockout })=> {
   const [ buildState, buildSet ] = useState(br.buildMethods);
   const [ inspectState, inspectSet ] = useState(br.inspectMethods);
   
-  // useEffect( ()=>{
-  //   if(
-  //     posState != br.position ||
-  //     comState != br.common ||
-  //     openState != br.open || 
-  //     clearState != br.reqClearance ||
-  //     damState != br.reqProblemDam ||
-  //     uLockState != br.reqUserLock ||
-  //     buildState != br.buildMethods ||
-  //     inspectState != br.inspectMethods
-  //   ) {
-  //     this[id+'sv'].disabled = false;
-  //   }
-  // }, [
-  //   posState, comState, openState, 
-  //   clearState, damState, uLockState, 
-  //   buildState, inspectState
-  // ]);
-  
   function handleMulti(val, goes) {
     const textVal = val;
     const arrVal = textVal.split(",");
