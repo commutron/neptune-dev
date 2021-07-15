@@ -13,7 +13,9 @@ const VerifyIsland = ({
   optionVerify, handleVerify,
   
 })=> {
-
+  
+  const availableSteps = itemData.history.filter( x => x.type !== 'first' && x.type !== 'nest' && x.good === true );
+  
   const [ selectedKeyState, selectedKeySet ] = useState(false);
   
   const [ stepKeyState, stepKeySet ] = useState(false);
@@ -100,6 +102,13 @@ const VerifyIsland = ({
           app={app}
           users={users} /> 
       : null}
+      
+      <hr />
+      <hr />
+      
+      {availableSteps.map( (st, index)=>(
+        <p key={index}>{st.step} - {st.type}</p>
+      ))}
         
     </div>
   );
