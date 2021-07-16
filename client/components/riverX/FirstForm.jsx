@@ -179,7 +179,7 @@ const FirstForm = ({
   			</textarea>{Pref.outIssue}</label>
 			</div>
 			
-			<div className='balancer'>
+			<div className='balancer overscroll'>
         <button
           type='button'
           id='goBad'
@@ -194,7 +194,7 @@ const FirstForm = ({
           type='button'
           id='goFform'
           title={`OK ${Pref.trackFirst}, continue process`}
-          className='roundActionIcon dbblRound firstBetter'
+          className='roundActionIcon dbblRound firstGood'
           disabled={noG}
           onClick={()=>pass(true)}
         ><i className="fas fa-check-double fa-3x"></i>

@@ -1,20 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 // import { toast } from 'react-toastify';
-//import RoleCheck from '/client/utility/RoleCheck.js';
 
-import FirstForm from '/client/components/riverX/FirstForm.jsx';
+import FirstForm from '/client/components/riverX/FirstForm';
+import RedoStep from '/client/components/riverX/RedoStep';
 
-const VerifyIsland = ({
+const RedoIsland = ({
   batchId, seriesId, itemData, 
   flowFirsts,
   brancheS,
   app, users,
   optionVerify, handleVerify,
-  
 })=> {
-  
-  const availableSteps = itemData.history.filter( x => x.type !== 'first' && x.type !== 'nest' && x.good === true );
   
   const [ selectedKeyState, selectedKeySet ] = useState(false);
   
@@ -32,8 +29,7 @@ const VerifyIsland = ({
       stepNameSet( stepObj.step );
       
       const brKey = stepObj.branchKey;
-      const branchObj = brKey ?
-              brancheS.find( b => b.brKey === brKey ) : null;
+      const branchObj = brKey ? brancheS.find( b => b.brKey === brKey ) : null;
       stepBranchSet( branchObj ); 
     }
   }, [optionVerify, brancheS, selectedKeyState]);
@@ -103,15 +99,20 @@ const VerifyIsland = ({
           users={users} /> 
       : null}
       
-      <hr />
-      <hr />
+      {optionVerify || (stepKeyState && repeatOpState) ? null :
+        <RedoStep 
+          batchId={batchId}
+          seriesId={seriesId}
+          itemData={itemData}
+          brancheS={brancheS}
+          app={app}
+          close={()=>handleVerify(null, false)} />
+      }
       
-      {availableSteps.map( (st, index)=>(
-        <p key={index}>{st.step} - {st.type}</p>
-      ))}
+      
         
     </div>
   );
 };
 
-export default VerifyIsland;
+export default RedoIsland;

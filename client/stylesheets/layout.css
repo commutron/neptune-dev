@@ -626,6 +626,9 @@ n-sm-model-content {
 .vmarginquarter { margin: 6px 0; }
 .vtop { margin-top: 2vh; }
 .vgap { margin-bottom: 2vh; }
+.dmargin {
+  border-top: 48px solid var(--dark);
+}
 .wmargin { 
   margin-right: auto;
   margin-left: auto;}

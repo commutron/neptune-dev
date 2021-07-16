@@ -1,6 +1,5 @@
 import React, { Fragment, useState } from 'react';
 import { toast } from 'react-toastify';
-// import Pref from '/client/global/pref.js';
 import StoneProgRing from './StoneProgRing.jsx';
 
 const StoneTest = ({ 
@@ -10,7 +9,7 @@ const StoneTest = ({
 	lockout,
 	topClass, topTitle,
 	
-	allItems,// isAlt, hasAlt,
+	allItems,
 	
 	enactEntry,
 	resolveEntry,
@@ -27,7 +26,7 @@ const StoneTest = ({
 		
 		passT(false, false);
 	}
-  //// Action for test step
+
   function passT(pass, shipFail) {
     
     let comm = commTxtState;
@@ -65,8 +64,6 @@ const StoneTest = ({
       	<StoneProgRing
   				serial={barcode}
   				allItems={allItems}
-  				// isAlt={isAlt}
-  				// hasAlt={hasAlt}
   				sKey={sKey}
           step={step}
           type={type}

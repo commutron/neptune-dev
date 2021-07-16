@@ -10,7 +10,7 @@ const BranchProgress = ({
   updateTrigger, isDebug
 })=> {
   
-  const [ progData, setProg ] = useState(false);
+  const [ dt, setProg ] = useState(false);
   
   useEffect( ()=> {
     const branchOnly = branchArea ? filterBy : false;
@@ -22,8 +22,6 @@ const BranchProgress = ({
       }
     });
   }, [batchID, branchArea, filterBy, updateTrigger]);
-  
-  const dt = progData;
  
   if(dt && dt.batchID === batchID) {
     return(

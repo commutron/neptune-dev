@@ -50,6 +50,8 @@ const StoneControl = ({
 		const reqKey = thisBranch ? ( 'BRK' + branchObj.brKey ) : null;
   	if( reqUL && !Roles.userIsInRole(Meteor.userId(), reqKey) ) {
   		reqULSet(true);
+  	}else if(type === 'test' && !Roles.userIsInRole(Meteor.userId(), 'test')) {
+  		reqULSet(true);
   	}else if(type === 'inspect' && !Roles.userIsInRole(Meteor.userId(), 'inspect')) {
   		reqULSet(true);
   	}else if(type === 'first' && !canVerify) {

@@ -151,6 +151,7 @@ const ProductionFindOps = ({
         <ProWrap
           batchData={hotxBatch}
           seriesData={hotxSeries}
+          rapidsData={hotxRapids}
           itemData={item}
           itemSerial={item.serial}
           widgetData={widget}

@@ -28,8 +28,7 @@ class Pref {
       'create',
       'edit',
       'run',
-      // 'finish',
-      // 'test',
+      'test',
       'verify', // keep
       'inspect', // keep
       'active'

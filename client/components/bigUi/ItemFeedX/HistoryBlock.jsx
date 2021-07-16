@@ -12,13 +12,15 @@ const HistoryBlock = ({
   
   let dt = entry;
   
-  const redoAllow = canEdit && iopen && dt.good === true;
+  const redoAllow = canEdit && iopen && dt.good;
                
-  const indictor = dt.good ?
-          dt.type === 'test' && dt.info !== false ?
+  const indictor = dt.good && dt.type === 'test' && dt.info !== false ?
           <n-fa1><i className="fas fa-exclamation-circle fa-lg fa-fw" title='Bypass'></i></n-fa1> :
-          <n-fa2><i className="fas fa-check-circle fa-lg fa-fw" title='Good'></i></n-fa2> :
-          <n-fa3><i className="fas fa-times-circle fa-lg fa-fw" title='No Good'></i></n-fa3>;
+            dt.good === true ?
+              <n-fa0><i className="fas fa-check-circle fa-lg fa-fw" title='Good'></i></n-fa0> :
+            dt.good ?
+              <n-fa2><i className="far fa-check-circle fa-lg fa-fw" title='Redone'></i></n-fa2> :
+              <n-fa3><i className="fas fa-times-circle fa-lg fa-fw" title='No Good'></i></n-fa3>;
    
   const infoF = dt.type === 'first' && typeof dt.info === 'object';
   const infoT = dt.type === 'test' && typeof dt.info === 'string';

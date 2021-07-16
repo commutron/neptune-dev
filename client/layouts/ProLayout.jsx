@@ -13,7 +13,7 @@ import XFormBar from '/client/components/bigUi/ToolBar/XFormBar.jsx';
 import { NonConMerge } from '/client/utility/NonConOptions';
 
 export const ProWrap = ({ 
-  itemSerial, itemData, batchData, seriesData,
+  itemSerial, itemData, batchData, seriesData, rapidsData,
   widgetData, groupAlias, 
   user, users, app,
   action, tideLockOut, standAlone,
@@ -39,7 +39,10 @@ export const ProWrap = ({
     !Session.get('riverExpand') ? null : expandSet( true );
     
     if(itemData && itemData.altPath) {
-      rapIsSet( itemData.altPath.find( x => x.rapId && !x.completed ) );
+      const ropen = itemData.altPath.find( x => {
+                      let real = rapidsData.find( r => r._id === x.rapId );
+                      return x.rapId && !x.completed && real && real.live });
+      rapIsSet( ropen );
     }
   }, [(itemData && itemData.altPath)]);
   

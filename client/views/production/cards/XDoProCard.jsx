@@ -10,9 +10,8 @@ import ReleaseAction from '/client/components/bigUi/ReleasesModule.jsx';
 
 import WaterfallSelect from '/client/components/riverX/waterfall/WaterfallSelect';
 
-import River from '/client/components/riverX/River.jsx';
-
-import VerifyIsland from '/client/components/riverX/VerifyIsland.jsx';
+import River from '/client/components/riverX/River';
+import RedoIsland from '/client/components/riverX/RedoIsland';
 
 import XItemCard from './XItemCard';
 import XBatchCard from './XBatchCard';
@@ -185,8 +184,8 @@ const XDoProCard = ({
             optionVerify={optionVerify}
             handleVerify={handleVerify} />;
             
-  const insertVerifyIsland =
-          <VerifyIsland
+  const insertRedoIsland =
+          <RedoIsland
             batchId={batchData._id}
             seriesId={seriesData && seriesData._id}
             itemData={itemData}
@@ -241,7 +240,7 @@ const XDoProCard = ({
         
         !flowAction || ( iComplete && !rapidData.rapIs ) ? insertItemCard : // @ Rest
           
-          showVerifyState ? insertVerifyIsland : // @ First Form
+          showVerifyState ? insertRedoIsland : // @ First Form
             
             insertRiver // @ River
     }

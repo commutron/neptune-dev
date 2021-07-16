@@ -315,27 +315,6 @@ button.stoneExtra {
 .riverNG:hover, .riverNG:active {
   background-color: var(--alizarin);
 }
-.firstGood {
-  color: var(--orange);
-}
-.firstGood:hover {
-  background-color: var(--orange);
-  color: white;
-}
-.firstBetter {
-  color: var(--emerald);
-}
-.firstBetter:hover {
-  background-color: var(--emerald);
-  color: white;
-}
-.firstBad {
-  color: var(--alizarin);
-}
-.firstBad:hover {
-  background-color: var(--alizarin);
-  color: white;
-}
 
 .iFirst {
   background-image: url(first.svg);
@@ -557,7 +536,7 @@ n-trib-action-all {
 .stoneForm {
   display: flex;
   width: 100%;
-  padding-bottom: 3vh;
+  /*padding-bottom: 3vh;*/
   flex-direction: column;
   justify-content: space-around;
   align-self: flex-start;
@@ -580,6 +559,9 @@ n-trib-action-all {
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-around;
+}
+.fakeFielset label {
+  line-height: 1.2;
 }
 .wideStone {
   min-width: 11vmax;
@@ -643,7 +625,7 @@ n-trib-action-all {
 }
 .stoneForm .item-renderer {
   display: flex;
-  align-content: center;
+  align-items: center;
   color: black;
 }
 .stoneForm .dropdown-content {
@@ -661,6 +643,68 @@ n-trib-action-all {
 }
 .testFail summary {
   padding: 0;
+}
+
+.firstGood {
+  --high-color: var(--emerald);
+}
+.firstBad {
+  --high-color: var(--alizarin);
+}
+.firstGood, .firstBad {
+  background-color: var(--high-color);
+  border: 3px solid white;
+  color: white;
+}
+
+.reStep {
+  border-top: 2px solid white;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  width: 100%;
+}
+.reStep:last-child {
+  margin-bottom: 5vh;
+}
+.reStep span {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+.reInspect {
+  --high-color: var(--emerald);
+}
+.reTest {
+  --high-color: var(--turquoise);
+}
+.reFail {
+  --high-color: var(--alizarin);
+}
+.reBy {
+  --high-color: var(--pomegranate);
+}
+.reInspect, .reTest, .reFail, .reBy {
+  border-radius: 25rem;
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0.5rem 0;
+  padding: 0.5rem 0.75rem;
+  letter-spacing: 1px;
+  border: 3px solid;
+  border-color: white;
+  background-color: var(--high-color);
+  color: white;
+}
+.firstBad:hover, .firstBad:focus, .firstBad:active,
+.firstGood:hover, .firstGood:focus, .firstGood:active,
+.reInspect:hover, .reInspect:focus, .reInspect:active,
+.reTest:hover, .reTest:focus, .reTest:active,
+.reFail:hover, .reFail:focus, .reFail:active,
+.reBy:hover, .reBy:focus, .reBy:active {
+  border-color: var(--high-color);
+  box-shadow: 
+    0 0 0 3px white,
+    0 0 0 6px var(--high-color);
 }
 
 .scrapBanner {
