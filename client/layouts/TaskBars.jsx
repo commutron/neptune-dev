@@ -46,10 +46,10 @@ export const ExTaskBar = ({ subLink }) => (
     />
     
     <TaskElement
-      title='Trends'
-      subON={subLink === 'trendsundefined'}
-      goLink='/data/trends'
-      icon='fas fa-chart-line'
+      title='Visualization'
+      subON={subLink === 'visualizationundefined'}
+      goLink='/data/visualization'
+      icon='fas fa-chart-area'
       iconAdj='down-1'
     />
     

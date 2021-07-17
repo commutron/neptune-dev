@@ -27,19 +27,6 @@ export function flattenHistory(itemArr, incFirst) {
   return historyFlat;
 }
 
-// export function flattenWaterfall(waterfallArr) {
-//   let wipFallTicks = [];
-//   for( let p of waterfallArr ) { 
-//     wipFallTicks.push( 
-//       p.counts.filter( y => y.tick > 0 )
-//     );
-//   }
-//   const ticksFlat = [].concat(...wipFallTicks);
-//   const ticksSort = ticksFlat.sort((t1, t2)=>
-//                       t1.time < t2.time ? -1 : t1.time > t2.time ? 1 : 0 );
-//   return ticksSort;
-// }
-
 export function countWaterfall(stepCounts) {
   if(!Array.isArray(stepCounts) || stepCounts.length === 0) {
     return 0;
@@ -69,6 +56,11 @@ export function allNCOptions() {
 
 export function countMulti(ncArr) {
   const inst = Array.from(ncArr, x => Number(x.multi) || 1);
+  const count = inst.length > 0 ? inst.reduce((x,y)=> x + y) : 0;
+  return count;
+}
+export function countMultiRefs(shArr) {
+  const inst = Array.from(shArr, x => (Number(x.multi) || 1) * x.refs.length);
   const count = inst.length > 0 ? inst.reduce((x,y)=> x + y) : 0;
   return count;
 }

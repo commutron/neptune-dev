@@ -135,8 +135,8 @@ const OnTargetTrend = ({ app, isDebug, isNightly })=>{
             title: { padding: 2, fontSize: 10 } 
           }}
           data={[
-          { name: "On Time", symbol: { fill: "rgb(142, 68, 173)" } },
-          { name: "Under Quote", symbol: { fill: "rgb(39, 174, 96)" } }
+          { name: "On Time", symbol: { fill: "rgb(39, 174, 96)" } },
+          { name: "On Quote", symbol: { fill: "rgb(142, 68, 173)" } }
           ]}
           
         />
@@ -155,7 +155,7 @@ const OnTargetTrend = ({ app, isDebug, isNightly })=>{
           
             <VictoryLine
               data={tgglState == 'fulfill' ? fillDT : shipDT}
-              style={{ data: { stroke: 'rgb(155, 89, 182)' } }}
+              style={{ data: { stroke: 'rgb(46, 204, 113)' } }}
               interpolation="catmullRom"
               animate={{
                 duration: 800,
@@ -164,7 +164,7 @@ const OnTargetTrend = ({ app, isDebug, isNightly })=>{
             />
             <VictoryScatter 
               data={tgglState == 'fulfill' ? fillDT : shipDT}
-              style={{ data: { fill: 'rgb(142, 68, 173)' } }}
+              style={{ data: { fill: "rgb(39, 174, 96)" } }}
               size={2}
               animate={{
                 duration: 1100,
@@ -174,7 +174,7 @@ const OnTargetTrend = ({ app, isDebug, isNightly })=>{
             
             <VictoryLine
               data={dataQ}
-              style={{ data: { stroke: 'rgb(46, 204, 113)' } }}
+              style={{ data: { stroke: 'rgb(155, 89, 182)' } }}
               interpolation="monotoneX"
               animate={{
                 duration: 800,
@@ -183,7 +183,7 @@ const OnTargetTrend = ({ app, isDebug, isNightly })=>{
             />
             <VictoryScatter 
               data={dataQ}
-              style={{ data: { fill: 'rgb(39, 174, 96)' } }}
+              style={{ data: { fill: 'rgb(142, 68, 173)' } }}
               size={2}
               animate={{
                 duration: 1100,

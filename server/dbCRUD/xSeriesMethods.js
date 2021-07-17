@@ -47,41 +47,6 @@ Meteor.methods({
       return false;
     }
   },
-  /*
-  moveSeries(seriesId, newBatchId, newWidgetId) {
-    const accessKey = Meteor.user().orgKey;
-    const auth = Roles.userIsInRole(Meteor.userId(), 'edit');
-    
-    const srs = XSeriesDB.findOne({_id: seriesId});
-
-    const newbatch = XBatchDB.findOne({_id: newBatchId});
-    
-    if( auth && srs && newbatch && newbatch.orgKey === accessKey ) {
-      
-      const duplicate = XSeriesDB.findOne({batch: newbatch.batch});
-
-      if( !duplicate && srs.widgetId === newWidgetId ) {
-    
-        XSeriesDB.update({_id: seriesId, orgKey: accessKey}, {
-          $set : {
-            batch: newbatch.batch,
-            updatedAt: new Date(),
-  			    updatedWho: Meteor.userId()
-          }
-        });
-        Meteor.defer( ()=>{
-          Meteor.call('updateOneMinify', newBatchId, accessKey);
-        });
-        return true;
-      }else{
-        return false;
-      }
-    }else{
-      return false;
-    }
-  },
-*/
-
 
 //// Non-Cons \\\\
   floodNCX(seriesId, ref, type) {
@@ -364,8 +329,6 @@ Meteor.methods({
   },
 
   //// Shortages \\\\
-  // Shortfall // Narrow Shortage
-  
   addShortX(seriesId, partNum, refs, multi, serial, step, comm) {
     const srs = XSeriesDB.findOne({_id: seriesId, orgKey: Meteor.user().orgKey});
     const double = srs.shortfall.find( x => 
@@ -500,39 +463,47 @@ Meteor.methods({
     }
   },
   
-  /*
-  deleteSeriesProblems(seriesId) {
+
+  deleteSeriesProblems(batchId, seriesId, pinInput) {
     const accessKey = Meteor.user().orgKey;
-    const doc = BatchDB.findOne({_id: batchId});
     const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
-    const howManyNC = doc.nonCon.length + ' nonCons';
-    const howManyES = doc.escaped.length + ' escaped';
-    const howManySH = doc.shortfall.length + ' shortfalls';
-    const howMany = `${howManyNC}, ${howManyES}, ${howManySH}`;
     
-    if(auth && doc.orgKey === accessKey) {
-      BatchDB.update({_id: batchId, orgKey: accessKey}, {
+    const org = AppDB.findOne({ orgKey: accessKey });
+    const orgPIN = org ? org.orgPIN : null;
+    const pinMatch = pinInput === orgPIN;
+    
+    const srs = XSeriesDB.findOne({_id: seriesId});
+    const howManyNC = srs.nonCon.length + ' nonCons';
+    const howManySH = srs.shortfall.length + ' shortfalls';
+    const howMany = `${howManyNC}, ${howManySH}`;
+    
+    const keyMatch = srs.orgKey === accessKey;
+    
+    if(auth && keyMatch && pinMatch) {
+      XSeriesDB.update({_id: seriesId, orgKey: accessKey}, {
         $set : {
           nonCon: [],
-          escaped: [],
-          shortfall: [],
-        },
+          shortfall: []
+        }
+      });
+      XBatchDB.update({_id: batchId}, {
         $push : {
           altered: {
             changeDate: new Date(),
             changeWho: Meteor.userId(),
             changeReason: 'user discretion',
-            changeKey: 'nonCon, escaped, shortfall',
+            changeKey: 'nonCon, shortfall',
             oldValue: howMany,
             newValue: '0 nonCons, 0 escaped, 0 shortfalls'
           }
         }
       });
+      Meteor.defer( ()=>{ Meteor.call('updateOneMinify', batchId, accessKey); });
       return true;
     }else{
       return false;
     }
-  },*/
+  },
   
   deleteWholeSeries(batchId, seriesId) {
     const accessKey = Meteor.user().orgKey;

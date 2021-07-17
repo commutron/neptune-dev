@@ -28,13 +28,11 @@ export function min2hr(minutes) {
 
 export function round1Decimal(thrtytw) {
   const trunc = Math.round((thrtytw + Number.EPSILON) * 10) / 10;
-  // exactly rounding to 1 decimal points
   return trunc;
 }
 
 export function round2Decimal(thrtytw) {
   const trunc = Math.round((thrtytw + Number.EPSILON) * 100) / 100;
-  // exactly rounding to 2 decimal points
   return trunc;
 }
 
@@ -62,6 +60,16 @@ export function avgOfArray(arr, zeros) {
     return clean;
   }else{
     return 0;
+  }
+}
+
+export function asRate(instances, ofQty, one) {
+  const divide = instances / ofQty;
+  const finite = isFinite(divide) ? divide : 0;
+  if(one) {
+    return round1Decimal( finite );
+  }else{
+    return round2Decimal( finite );
   }
 }
 

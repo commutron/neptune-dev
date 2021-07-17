@@ -6,7 +6,7 @@ import PerfScatter from './PerfScatter';
 import NCScatter from './NCScatter';
 import QtyScatter from './QtyScatter';
 
-const TrendWrap = ({ app, isDebug, isNightly })=> (
+const TrendWrap = ({ app })=> (
   <div className='space36v'>
     <Tabs
       tabs={[

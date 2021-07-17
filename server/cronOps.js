@@ -196,7 +196,7 @@ async function runLoop(countFunc, dataName, tSpan) {
       
       countArray.unshift({ 
         x: moment(rangeStart).tz(Config.clientTZ).format(),
-        y:quantity
+        y: quantity
       });
     }
     

@@ -35,8 +35,6 @@ const DataViewOps = ({
   subLink, orb
 })=> {
   
-  const isNightly = Roles.userIsInRole(Meteor.userId(), 'nightly');
-  
   function allLinkedBatches(wId) {
     const xBatches = allXBatch.filter(x => x.widgetId === wId);
     return xBatches;
@@ -97,13 +95,10 @@ const DataViewOps = ({
     
     const generateSecond = (srs)=> {
       flowCounts = FlowCounter(riverFlow, srs);
-      
       ncTypesComboFlat = NonConMerge(ncListKeys, appData, user, true);
     };
 
-    getRiverFirst(widgetData, batchData)
-      .then(generateSecond(seriesData));
-      
+    getRiverFirst(widgetData, batchData).then(generateSecond(seriesData));
 
     return {
       riverTitle, riverFlow, srange,
@@ -113,9 +108,7 @@ const DataViewOps = ({
   
   function getFallData(batchData, appData) {
     if( batchData && appData ) {
-    
       const fallCounts = FallCounter(batchData, appData);
-     
       return fallCounts;
     }
   }
@@ -136,7 +129,6 @@ const DataViewOps = ({
   }
  
   if(!view) {
-    // Session.set('nowBatch', false);
     return (
       <TraverseWrap
 	      batchData={false}
@@ -162,7 +154,6 @@ const DataViewOps = ({
   }
   
   if(view === 'buildHistory') {
-    // Session.set('nowBatch', false);
     return (
       <TraverseWrap
 	      batchData={false}
@@ -187,7 +178,6 @@ const DataViewOps = ({
   }   
       
   if(view === 'reports') {
-    // Session.set('nowBatch', false);
     return (
       <TraverseWrap
 	      batchData={false}
@@ -207,13 +197,12 @@ const DataViewOps = ({
           allVariant={allVariant}
           allGroup={allGroup} 
           app={app}
-          isDebug={isDebug}
-          isNightly={isNightly} />
+          isDebug={isDebug} />
       </TraverseWrap>
     );
   }
   
-  if(view === 'trends') {
+  if(view === 'visualization') {
     return (
       <TraverseWrap
 	      batchData={false}
@@ -222,7 +211,7 @@ const DataViewOps = ({
         groupData={false}
         user={user}
         app={app}
-        title='Trends'
+        title='Visualization'
         subLink={subLink}
         action={false}
         base={true}
@@ -233,14 +222,12 @@ const DataViewOps = ({
           // allVariant={allVariant}
           // allGroup={allGroup} 
           app={app}
-          isDebug={isDebug}
-          isNightly={isNightly} />
+        />
       </TraverseWrap>
     );
   }
     
   if(view === 'overview') {
-    // Session.set('nowBatch', false);
     if(request === 'groups') {
       return(
         <TraverseWrap
@@ -264,31 +251,6 @@ const DataViewOps = ({
             specify={specify} />
         </TraverseWrap>
       );
-    // }else if(request === 'trends') {
-    //   return(
-    //     <TraverseWrap
-		  //     batchData={false}
-    //       widgetData={false}
-    //       variantData={false}
-    //       groupData={false}
-    //       user={user}
-    //       app={app}
-    //       title={Pref.batches}
-    //       subLink={subLink}
-    //       action={false}
-    //       base={true}
-    //     >
-    //       <AllBatches
-    //         batchData={allXBatch}
-    //         widgetData={allWidget}
-    //         groupData={allGroup}
-    //         allWidget={allWidget}
-    //         allVariant={allVariant}
-    //         allXBatch={allXBatch}
-    //         app={app}
-    //         isDebug={isDebug} />
-    //     </TraverseWrap>
-    //   );
     }else if(request === 'rapidex') {
       return(
         <TraverseWrap

@@ -445,8 +445,6 @@ Meteor.publish('skinnyData', function(){
           'alias': 1,
           'hibernate': 1,
           'internal': 1
-          // 'orgKey': 0,
-          // 'shareKey': 0,
         }}),
       WidgetDB.find({orgKey: orgKey}, {
         fields: {
@@ -480,15 +478,7 @@ Meteor.publish('skinnyData', function(){
             'completedAt': 1
             // 'lockTrunc': 1,
             // 'finBffrRel': 1
-        }}),
-      // XSeriesDB.find({}, {
-      //   sort: {batch:-1},
-      //   fields: {
-      //     'batch': 1
-      //   }}), 
-      // XRapidsDB.find({}, {
-      //   sort: {rapid:-1},
-      // }), 
+        }})
     ];
   }
 });

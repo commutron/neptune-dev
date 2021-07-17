@@ -16,6 +16,7 @@ class Config {
     
     this.maxShift = 10; // max number of consecutive hours 
     this.shipSoon = 2.5; // days away from its ship day, when its priority gets a boost. 
+    this.shipAhead = 0; // hours to buffer ahead of shipAim
     this.dropShipBffr = 5; // number of hours late is allowed
                           // compensating for out of hours hand delivery
     

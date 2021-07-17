@@ -3,7 +3,6 @@ import moment from 'moment';
 export function timeRanges(collected, counterFunc, cycles, bracket) {
   const nowLocal = moment();
   
-  // !async 
   function runLoop() {
     let countArray = [];
     for(let w = 0; w < cycles; w++) {

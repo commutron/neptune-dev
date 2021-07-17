@@ -26,11 +26,12 @@ const FirstForm = ({
     const inspectOps = sBranch ? sBranch.inspectMethods : [];
     const iCombo = Array.from(inspectOps, x => { 
                     let icon = x.toLowerCase().includes('eye') ? 'fa-eye' :
-                               x.toLowerCase().includes('magnify') ? 'fa-search' :
                                x.toLowerCase().includes('camera') ? 'fa-camera' :
                                x.toLowerCase().includes('video') ? 'fa-video' :
                                x.toLowerCase().includes('x-ray') ? 'fa-x-ray' :
-                               'fa-microscope';
+                               x.toLowerCase().includes('micro') ? 'fa-microscope' :
+                               x.toLowerCase().includes('aoi') ? 'fa-chalkboard' :
+                               'fa-search';
                     return { name: x, icon: icon } } );
     if(iCombo.length === 1 ) { howISet( iCombo[0].name ) }
     inspectComboSet( iCombo );
@@ -111,7 +112,7 @@ const FirstForm = ({
   
   return(
     <Fragment>
-      <div className='fakeFielset centreText bigger'>{sStep}</div>
+      <div className='fakeFielset centreText big cap'>{sStep}</div>
       
       {inspectCombo && inspectCombo.length > 1 ?
         <div className='fakeFielset balancer'>

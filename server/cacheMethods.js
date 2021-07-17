@@ -1,6 +1,7 @@
 // import { Random } from 'meteor/random'
 import moment from 'moment';
-import { noIg } from './utility';
+import { noIg, countMulti, countMultiRefs } from './utility';
+import { asRate } from './calcOps';
 // import Config from '/server/hardConfig.js';
 
 Meteor.methods({
@@ -133,20 +134,26 @@ Meteor.methods({
       
       let probset = [];
       for( let batch of batches) {
-        const srs = XSeriesDB.findOne({batch: batch.batch},{fields:{'nonCon':1,'shortfall':1}});
-        const nc = srs ? srs.nonCon.length : 0;
-        const sh = srs ? srs.shortfall.length : 0;
+        const srs = XSeriesDB.findOne({batch: batch.batch});
+        const ncQty = countMulti( srs ? srs.nonCon : [] );
+        const ncRte = srs ? asRate(ncQty, srs.items.length) : 0;
+        const shQty = countMultiRefs( srs ? srs.shortfall : [] );
+        const shRte = srs ? asRate(shQty, srs.items.length) : 0;
         probset.push({
-          y: nc,
+          r: ncRte,
+          s: `${batch.batch} = ${ncRte}`,
+          y: ncQty,
           x: batch.completedAt || new Date(),
-          z: `${batch.batch} = ${nc} noncons`,
+          z: `${batch.batch} = ${ncQty} noncons`,
           symbol: 'square',
           size: '3'
         });
         probset.push({
-          y: sh,
+          r: shRte,
+          s: `${batch.batch} = ${shRte}`,
+          y: shQty,
           x: batch.completedAt || new Date(),
-          z: `${batch.batch} = ${sh} shortfalls`,
+          z: `${batch.batch} = ${shQty} shortfalls`,
           symbol: 'triangleUp',
           size: '3'
         });

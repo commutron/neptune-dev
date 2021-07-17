@@ -374,18 +374,14 @@ Meteor.methods({
         const accessKey = Meteor.user().orgKey;
         
         const lite = CacheDB.findOne({ orgKey: accessKey, dataName: cName });
+        
         const liteSet = lite.dataSet || [];
         
-        if(liteSet.length >= cycles) {
-          
-          const cut = -Math.abs(cycles);
+        const cut = -Math.abs(cycles);
   
-          const sliceSet = liteSet.slice(cut, liteSet.length);
+        const sliceSet = liteSet.slice(cut, liteSet.length);
           
-          return sliceSet;
-        }else{
-          return [];
-        }
+        return sliceSet;
       }
     }catch(err) {
       throw new Meteor.Error(err);

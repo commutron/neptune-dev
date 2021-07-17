@@ -46,10 +46,33 @@ const RemoveXBatch = ({ batchData, seriesData, checkStr })=> {
           toast.error('Server Error. see console');
         }
         if(reply) {
-          toast.success('Items of BatchDB removed');
+          toast.success('Items of XSeriesDB removed');
         }else{
           toast.warning('Records are In-Use or No Authorization');
           this.cutItemGo.disabled = false;
+        }
+      });
+    }
+  }
+  
+  function handleProbRemove(e) {
+    this.cutProbGo.disabled = true;
+    const srsID = seriesData && seriesData._id;
+    const pinVal = this.orgPINprob.value;
+    
+    const check = window.confirm(`Permanently Delete All ${Pref.nonCons} & ${Pref.shortfalls}??`);
+    
+    if(check && srsID) {
+      Meteor.call('deleteSeriesProblems', batchData._id, srsID, pinVal, (err, reply)=>{
+        if(err) {
+          console.log(err);
+          toast.error('Server Error. see console');
+        }
+        if(reply) {
+          toast.success('nonCon & shortfall of XSeriesDB removed');
+        }else{
+          toast.warning('Records are In-Use or No Authorization');
+          this.cutProbGo.disabled = false;
         }
       });
     }
@@ -68,7 +91,7 @@ const RemoveXBatch = ({ batchData, seriesData, checkStr })=> {
           toast.error('Server Error. see console');
         }
         if(reply) {
-          toast.success('Waterfall of BatchDB removed');
+          toast.success('Waterfall of XBatchDB removed');
         }else{
           toast.warning('Records are In-Use or No Authorization');
           this.cutFallGo.disabled = false;
@@ -90,7 +113,7 @@ const RemoveXBatch = ({ batchData, seriesData, checkStr })=> {
           toast.error('Server Error. see console');
         }
         if(reply) {
-          toast.success('Times in BatchDB removed');
+          toast.success('Times in XBatchDB removed');
         }else{
           toast.warning('Records are In-Use or No Authorization');
           this.cutTideGo.disabled = false;
@@ -116,7 +139,7 @@ const RemoveXBatch = ({ batchData, seriesData, checkStr })=> {
           toast.warning('Cannot do this, records are in use');
         }else if(reply) {
           FlowRouter.go('/data');
-          toast.success('Entry in BatchDB removed');
+          toast.success('Entry in XBatchDB removed');
         }else{
           toast.error('Rejected by Server, No Authorization');
           this.cutAllGo.disabled = false;
@@ -126,7 +149,9 @@ const RemoveXBatch = ({ batchData, seriesData, checkStr })=> {
   }
   
   let checkshort = checkStr.split('T')[0];
-  const srsQ = !seriesData ? 0 : seriesData.items.length;
+  const itemsQ = !seriesData ? 0 : seriesData.items.length;
+  const probsQ = !seriesData ? 0 : seriesData.nonCon.length +
+                                  seriesData.shortfall.length;
   
   return(
     <div className='vspace wide centreText'>
@@ -134,7 +159,7 @@ const RemoveXBatch = ({ batchData, seriesData, checkStr })=> {
       
       <div className='vspace balancer cap'>
         <div>
-          <p>Delete ALL {srsQ} {Pref.items}</p>
+          <p>Delete ALL {itemsQ} {Pref.items}</p>
           <input
             id='orgPINitem'
             autoComplete="false"
@@ -150,8 +175,29 @@ const RemoveXBatch = ({ batchData, seriesData, checkStr })=> {
             type='button'
             onClick={(e)=>handleItemRemove(e)}
             id='cutItemGo'
-            disabled={srsQ === 0}
+            disabled={itemsQ === 0}
           >DELETE Items</button>
+        </div>
+        
+        <div>
+          <p>Delete ALL {probsQ} {Pref.nonCons} & {Pref.shortfalls}</p>
+          <input
+            id='orgPINprob'
+            autoComplete="false"
+            className='noCopy miniIn12 interSelect centreText gap redHover'
+            pattern='[\d\d\d\d]*'
+            maxLength='4'
+            minLength='4'
+            placeholder='PIN'
+            required />
+          <br />
+          <button
+            className='smallAction clearRed'
+            type='button'
+            onClick={(e)=>handleProbRemove(e)}
+            id='cutProbGo'
+            disabled={srsQ === 0}
+          >DELETE Problems</button>
         </div>
         
         <div>
@@ -201,7 +247,7 @@ const RemoveXBatch = ({ batchData, seriesData, checkStr })=> {
       
       {batchData.tide.length === 0 &&
        batchData.waterfall.length === 0 && 
-       srsQ === 0 ?
+       itemsQ === 0 && probsQ === 0 ?
         !Roles.userIsInRole(Meteor.userId(), 'admin') ? 
           <p>
             <strong>An "Admin" account is required to delete the entire {Pref.xBatch}</strong>

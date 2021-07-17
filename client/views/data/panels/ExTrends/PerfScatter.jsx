@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom';
 import moment from 'moment';
 import { 
   VictoryZoomContainer,
-  VictoryScatter, 
+  VictoryScatter,
+  VictoryArea,
   VictoryChart, 
   VictoryAxis,
   VictoryTooltip
@@ -86,7 +87,7 @@ const PerfScatter = ({ app })=> {
           data={tickXY || []}
           style={{
             data: { 
-              fill: ({ datum }) => datum,
+              fill: 'rgb(142, 68, 173)',
               strokeWidth: 0
             },
             labels: { 
@@ -99,6 +100,15 @@ const PerfScatter = ({ app })=> {
             <VictoryTooltip 
               style={{ fontSize: '6px' }}
             />}
+        />
+        <VictoryArea
+          data={tickXY || []}
+          interpolation='basis'
+          style={{
+            data: { 
+              fill: 'rgba(155,89,182,0.1)'
+            },
+          }}
         />
       </VictoryChart>
       

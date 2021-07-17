@@ -3,12 +3,13 @@ import ReactDOM from 'react-dom';
 import moment from 'moment';
 import { 
   VictoryZoomContainer,
-  VictoryScatter, 
+  VictoryScatter,
+  VictoryArea,
   VictoryChart, 
   VictoryAxis,
   VictoryTooltip
 } from 'victory';
-//import Pref from '/client/global/pref.js';
+import Pref from '/client/global/pref.js';
 import Theme from '/client/global/themeV.js';
 
 
@@ -18,6 +19,8 @@ const NCScatter = ({ app })=> {
   
   const [ tickXY, tickXYSet ] = useState(false);
   const [ showZero, showZeroSet ] = useState(false);
+  const [ showNC, showNCSet ] = useState(true);
+  const [ showRate, showRateSet ] = useState(false);
   
   useEffect( ()=> {
     Meteor.call('getAllNCCount', (err, re)=>{
@@ -30,6 +33,11 @@ const NCScatter = ({ app })=> {
     });
   }, []);
   
+  const dataset = tickXY || [];
+  const probset = showNC ? dataset.filter(d=> d.symbol === 'square') :
+                           dataset.filter(d=> d.symbol !== 'square');
+  const fullset = showZero ? probset : probset.filter(t=>t.y>0);
+  
   return(
     <div className='chartNoHeightContain'>
       <div className='rowWrap noPrint'>
@@ -38,7 +46,36 @@ const NCScatter = ({ app })=> {
           <n-fa0><i className='fas fa-spinner fa-lg'></i></n-fa0>
         }
         <span className='flexSpace' />
-        <label className='beside'>show zeros
+        
+        <label className='beside' style={{margin: '0 20px'}}>Total
+          <input
+            type='range'
+            id='rateTick'
+            max={1}
+            min={0}
+            step={1}
+            className='minHeight'
+            style={{width: '35px'}}
+            inputMode='numeric'
+            defaultValue={showRate ? 1 : 0}
+            onChange={(e)=>showRateSet(e.target.value == 0 ? false : true)} 
+        />Rate</label>
+        
+        <label className='beside' style={{margin: '0 20px'}}>{Pref.nonCon}
+          <input
+            type='range'
+            id='ncTick'
+            max={1}
+            min={0}
+            step={1}
+            className='minHeight'
+            style={{width: '35px'}}
+            inputMode='numeric'
+            defaultValue={showNC ? 0 : 1}
+            onChange={(e)=>showNCSet(e.target.value == 0 ? true : false)} 
+        />{Pref.shortfall}</label>
+        
+        <label className='beside gapL'>Zeros
           <input
             type='checkbox'
             className='minHeight'
@@ -77,13 +114,25 @@ const NCScatter = ({ app })=> {
               fontSize: '7px' }
           } }
         />
-          
-        <VictoryScatter
-          data={showZero ? tickXY || [] : (tickXY || []).filter(t=>t.y>0)}
+        
+        <VictoryArea
+          data={fullset}
+          y={showRate ? 'r' : 'y'}
+          interpolation='basis'
           style={{
             data: { 
-              fill: ( datum ) => 
-                datum.symbol == 'triangleUp' ? 'rgb(243, 156, 18)' : 'rgb(231, 76, 60)',
+              fill: 'rgba(211,84,0,0.1)'
+            },
+          }}
+        />
+        
+        <VictoryScatter
+          data={fullset}
+          y={showRate ? 'r' : 'y'}
+          style={{
+            data: { 
+              fill: ({ symbol }) => 
+                symbol == 'square' ? 'rgb(231, 76, 60)' : 'rgb(230, 126, 34)',
               strokeWidth: 0
             },
             labels: { 
@@ -91,12 +140,13 @@ const NCScatter = ({ app })=> {
             } 
           }}
           size={1}
-          labels={(d) => d.z}
+          labels={(d) => showRate ? d.s : d.z}
           labelComponent={
             <VictoryTooltip 
               style={{ fontSize: '6px' }}
             />}
         />
+        
       </VictoryChart>
       
       <p className='lightgray fade'>

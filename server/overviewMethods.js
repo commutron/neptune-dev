@@ -3,7 +3,7 @@ import 'moment-timezone';
 import 'moment-business-time';
 
 import Config from '/server/hardConfig.js';
-import { avgOfArray, percentOf, quadRegression } from './calcOps.js';
+import { avgOfArray, asRate, percentOf, quadRegression } from './calcOps.js';
 import { syncHoliday, countMulti, getEst } from './utility.js';
 import { batchTideTime } from './tideGlobalMethods.js';
 import { calcShipDay } from './reportCompleted.js';
@@ -26,11 +26,10 @@ function dryPriorityCalc(bQuTmBdg, mEst, bTide, shipAim, now, shipLoad) {
   const overQuote = totalTideMinutes > mQuote;
   const q2tNice = overQuote ? 0 : quote2tide;
   
-  // additional ship bumper
-  // const estConclude = shipAimMmnt.clone().subtractWorkingTime(0, 'hours');
+  const aimAhead = shipAimMmnt.clone().subtractWorkingTime(Config.shipAhead, 'hours');
   const estSoonest = now.clone().addWorkingTime(q2tNice, 'minutes');
 
-  const buffer = shipAimMmnt.workingDiff(estSoonest, 'minutes');
+  const buffer = aimAhead.workingDiff(estSoonest, 'minutes');
   
   const estEnd2fillBuffer = buffer || null;
   
@@ -155,7 +154,7 @@ function collectNonCon(privateKey, batchID, temp) {
       // how many are unresolved  
       const nonConLeft = countMulti( rNC.filter( x => x.inspect === false ) );
       // nc rate
-      const ncRate = ( nonConTotal / itemQuantity ).toFixed(1, 10);
+      const ncRate = asRate(nonConTotal, itemQuantity, true);
       // how many items have nonCons
       const hasNonCon = temp === 'cool' ? 0 :
         [... new Set( Array.from(rNC, x => x.serial) ) ].length;
@@ -174,7 +173,7 @@ function collectNonCon(privateKey, batchID, temp) {
         batch: bx.batch,
         batchID: bx._id,
         nonConTotal: nonConTotal,
-        nonConRate: isNaN(ncRate) ? 0 : ncRate,
+        nonConRate: ncRate,
         nonConLeft: nonConLeft,
         percentOfNCitems: isNaN(percentOfNCitems) ? '0%' : percentOfNCitems + '%',
         itemIsScrap: itemIsScrap,

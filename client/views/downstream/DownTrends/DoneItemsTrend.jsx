@@ -96,7 +96,7 @@ const DoneItemsTrend = ({ app, isDebug, isNightly })=>{
             title: { padding: 2, fontSize: 10 } 
           }}
           data={[
-          { name: "Serialized Units", symbol: { fill: "rgb(142, 68, 173)" } }
+          { name: "Serialized Units", symbol: { fill: "rgb(39, 174, 96)" } }
           ]}
           
         />
@@ -113,14 +113,14 @@ const DoneItemsTrend = ({ app, isDebug, isNightly })=>{
           
             <VictoryLine
               data={fillDT}
-              style={{ data: { stroke: 'rgb(155, 89, 182)' } }}
+              style={{ data: { stroke: 'rgb(46, 204, 113)' } }}
               animate={{
                 onLoad: { duration: 800 }
               }}
             />
             <VictoryScatter 
               data={fillDT}
-              style={{ data: { fill: 'rgb(142, 68, 173)' } }}
+              style={{ data: { fill: 'rgb(39, 174, 96)' } }}
               size={2}
               animate={{
                 onLoad: { duration: 1000 }

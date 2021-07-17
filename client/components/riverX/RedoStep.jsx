@@ -82,7 +82,7 @@ const RedoStep = ({
           if(st.type === 'test') {
   	        const isTest = (tstep ? checkAccess(tstep.branchKey) : true) && isTester;
             return(
-              <div key={index} className='wideStone reStep medBig'
+              <div key={index} className='wideStone reStep medBig cap'
                 >{!tstep && `${Pref.rapidExd} `}{st.step} Test
                 <span>
                   <button

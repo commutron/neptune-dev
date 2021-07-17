@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-// import Pref from '/client/global/pref.js';
 import DateRangeSelect from '/client/components/smallUi/DateRangeSelect';
 import PrintThis from '/client/components/tinyUi/PrintThis';
 import MonthKPIReport from './MonthKPIReport'; 
@@ -7,7 +6,7 @@ import ProblemReport from './ProblemReport';
 
 const ReportsWrap = ({ 
   allXBatch, allWidget, allVariant, allGroup,
-  app, isDebug, isNightly
+  app, isDebug
 })=> {
   
   const [ start, startSet ] = useState(false);

@@ -12,7 +12,7 @@ const ShortBlock = ({ seriesId, serial, units, entry, done, iopen, deleteAuth, c
     const shKey = entry.key;
     const partNum = this.shPN.value.trim();
     const refs = this.shRefs.value.trim().toLowerCase()
-                  .replace(",", " ").split(/\s* \s*/);
+                  .replace(Pref.listCut, "|").split("|");
     const multi = units > 1 ? this.shMulti.value : undefined;           
                   
     let effect = null;

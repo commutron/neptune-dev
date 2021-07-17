@@ -3,7 +3,7 @@ import moment from 'moment';
 import Config from '/server/hardConfig.js';
 import { batchTideTime, distTimeBudget } from './tideGlobalMethods.js';
 import { deliveryState } from './reportCompleted.js';
-import { avgOfArray, diffTrend } from './calcOps';
+import { avgOfArray, asRate, diffTrend } from './calcOps';
 import { allNCOptions, countMulti } from './utility';
 
 
@@ -228,8 +228,8 @@ Meteor.methods({
       for(let srs of series) {
         const b = XBatchDB.findOne({ batch: srs.batch });
         if(b.completed) {
-          const rate = srs.nonCon.length / srs.items.length;
-          isFinite(rate) ? rateArr.push(rate) : rateArr.push(0);
+          const total = countMulti( srs.nonCon.filter( n => !n.trash ) );
+          rateArr.push( asRate(total, srs.items.length) );
         }
       }
       const avgRate = avgOfArray(rateArr, true);
