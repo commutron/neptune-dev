@@ -21,9 +21,17 @@ Meteor.methods({
             </tr>
             <tr><td colspan='2' style="background-color:#2769ac;width:100%;height:15px"></td></tr>
             <tr>
-              <td colspan='2' style="padding:20px 10%;text-align:center;line-height: 1.5"
-                  ><p style="color:black">Automated message for [[ YOUR CUSTOMER NAME ]].</p>
-                  <p style="color:black">Your product <i>[[ XXXXXXX v.XX ]]</i> of sales order <i>[[ XXXXX ]]</i> was <b>released to the floor</b> on Wednesday July 14th 2021 at 2:53pm (CST).</p>
+              <td colspan='2' style="padding:20px 10%;text-align:center;line-height: 1.5">
+                <table style="height:10px;width:100%">
+                  <tr>
+                    <td style="background-color: #254690"></td>
+                    <td style="background-color: #D3D3D3"></td>
+                    <td style="background-color: #D3D3D3"></td>
+                    <td style="background-color: #D3D3D3"></td> 
+                  </tr>
+                </table>
+                <p style="color:black">Automated message for [[ YOUR CUSTOMER NAME ]].</p>
+                <p style="color:black">Your product <i>[[ XXXXXXX v.XX ]]</i> of sales order <i>[[ XXXXX ]]</i> was <b>released to the floor</b> on Wednesday July 14th 2021 at 2:53pm (CST).</p>
                 <p style="color:black">Do not reply to this email.</p>
               </td>
             </tr>
@@ -38,18 +46,7 @@ Meteor.methods({
           </tbody>
         </table>`;
         
-      const text = `COMMUTRON Industries Ltd.
-      
-      Automated message for Mao-Kwikowski Mercantile. 
-      
-      Your product GY0235-5E v.6b of sales order 1223dd was 
-      -- released to the floor -- 
-      on Wednesday July 14th 2021 at 2:53pm (CST).
-      
-      For support, do not reply to this email, please contact customer support at jeff@commutron.ca.
-      
-      306-854-2265
-      302 Stanley Street, Elbow, Saskatchewan, S0H 1J0`;
+      const text = `COMMUTRON Industries Ltd.\n\nAutomated message for Mao-Kwikowski Mercantile.\n\n===== ----- ----- -----\n\nYour product GY0235-5E v.6b of sales order 1223dd was\n++ released to the floor ++\non Wednesday July 14th 2021 at 2:53pm (CST).\n\ndo not reply to this email\n\n306-854-2265\nCustomer Support: jeff@commutron.ca\n302 Stanley Street, Elbow, Saskatchewan, S0H 1J0`;
       
       Email.send({ to, bcc, from, subject, html, text });
       

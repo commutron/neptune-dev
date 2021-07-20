@@ -1,8 +1,10 @@
-// import { Random } from 'meteor/random'
 import moment from 'moment';
+import 'moment-timezone';
+import 'moment-business-time';
 import { noIg, countMulti, countMultiRefs } from './utility';
-import { asRate } from './calcOps';
-// import Config from '/server/hardConfig.js';
+import { asRate, round1Decimal } from './calcOps';
+import { getShipAim, getEndWork } from '/server/shipOps';
+import Config from '/server/hardConfig.js';
 
 Meteor.methods({
 
@@ -98,7 +100,7 @@ Meteor.methods({
           x: batch.completedAt || new Date(),
           z: `${batch.batch} = ${p > 0 ? '+'+p : p}`,
           symbol: batch.completedAt ? 'diamond' : 'star',
-          size: '3'
+          size: '2'
         });
       }
       
@@ -113,6 +115,55 @@ Meteor.methods({
       return perfset;
     }else{
       return perfShade.dataArray;
+    }
+  },
+  
+  getAllOnTime() {
+    const accessKey = Meteor.user().orgKey;
+    const xid = noIg();
+
+    const onShade = CacheDB.findOne({orgKey: accessKey, dataName: 'ontimeShadow'});
+    const ontime = onShade ? onShade.lastUpdated : null;
+    const stale = !ontime ? true :
+              moment.duration(moment().diff(moment(ontime))).as('hours') > 12;
+    if(stale) {
+      const batches = XBatchDB.find({
+        orgKey: accessKey,
+        groupId: { $ne: xid }
+      },
+        {fields:{'batch':1,'completedAt':1, 'salesEnd':1}}
+      ).fetch();
+      
+      let onset = [];
+      for( let batch of batches) {
+        const did = batch.completedAt || moment.tz(Config.clientTZ).format();
+        const aim = getShipAim(batch._id, batch.salesEnd);
+        const aimGap = round1Decimal( moment(aim).workingDiff(did, 'days', true) );
+        const fin = getEndWork(batch._id, batch.salesEnd);
+        const finGap = round1Decimal( moment(fin).workingDiff(did, 'days', true) );
+
+        onset.push({
+          v: finGap,
+          w: `${batch.batch} = ${finGap}`,
+          y: aimGap,
+          x: batch.completedAt || new Date(),
+          z: `${batch.batch} = ${aimGap}`,
+          symbol: batch.completedAt ? 'diamond' : 'star',
+          size: '2'
+        });
+      }
+      
+      CacheDB.upsert({dataName: 'ontimeShadow'}, {
+        $set : {
+          orgKey: accessKey,
+          lastUpdated: new Date(),
+          dataName: 'ontimeShadow',
+          dataArray: onset
+      }});
+    
+      return onset;
+    }else{
+      return onset.dataArray;
     }
   },
   
@@ -146,7 +197,7 @@ Meteor.methods({
           x: batch.completedAt || new Date(),
           z: `${batch.batch} = ${ncQty} noncons`,
           symbol: 'square',
-          size: '3'
+          size: '2'
         });
         probset.push({
           r: shRte,
@@ -155,7 +206,7 @@ Meteor.methods({
           x: batch.completedAt || new Date(),
           z: `${batch.batch} = ${shQty} shortfalls`,
           symbol: 'triangleUp',
-          size: '3'
+          size: '2'
         });
       }
       
@@ -196,7 +247,7 @@ Meteor.methods({
           x: batch.createdAt,
           z: `${batch.batch} (so.${batch.salesOrder}) = ${batch.quantity}`,
           symbol: 'plus',
-          size: '3'
+          size: '2'
         });
       }
       

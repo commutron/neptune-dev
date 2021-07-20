@@ -3,6 +3,7 @@ import React from 'react';
 import Tabs from '/client/components/smallUi/Tabs/Tabs';
 
 import PerfScatter from './PerfScatter';
+import ShipScatter from './ShipScatter';
 import NCScatter from './NCScatter';
 import QtyScatter from './QtyScatter';
 
@@ -11,6 +12,7 @@ const TrendWrap = ({ app })=> (
     <Tabs
       tabs={[
         <b><i className='fas fa-cubes fa-fw'></i> Orders & Quantity</b>,
+        <b><i className='fas fa-flag-checkered fa-fw'></i> Completed On Time</b>,
         <b><i className='fas fa-bullseye fa-fw'></i> Performance</b>,
         <b><i className='fas fa-exclamation-circle fa-fw'></i> Problems</b>,
       ]}
@@ -20,6 +22,8 @@ const TrendWrap = ({ app })=> (
       sessionTab='exTrendPanelTabs'
     >
       <QtyScatter app={app} />
+      
+      <ShipScatter app={app} />
       
       <PerfScatter app={app} />
         

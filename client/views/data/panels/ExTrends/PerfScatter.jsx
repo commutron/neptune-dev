@@ -82,7 +82,15 @@ const PerfScatter = ({ app })=> {
               fontSize: '7px' }
           } }
         />
-          
+        <VictoryArea
+          data={tickXY || []}
+          interpolation='basis'
+          style={{
+            data: { 
+              fill: 'rgba(155,89,182,0.2)'
+            },
+          }}
+        /> 
         <VictoryScatter
           data={tickXY || []}
           style={{
@@ -100,15 +108,6 @@ const PerfScatter = ({ app })=> {
             <VictoryTooltip 
               style={{ fontSize: '6px' }}
             />}
-        />
-        <VictoryArea
-          data={tickXY || []}
-          interpolation='basis'
-          style={{
-            data: { 
-              fill: 'rgba(155,89,182,0.1)'
-            },
-          }}
         />
       </VictoryChart>
       

@@ -121,7 +121,7 @@ const NCScatter = ({ app })=> {
           interpolation='basis'
           style={{
             data: { 
-              fill: 'rgba(211,84,0,0.1)'
+              fill: 'rgba(211,84,0,0.2)'
             },
           }}
         />
