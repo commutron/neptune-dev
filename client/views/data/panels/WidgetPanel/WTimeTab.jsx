@@ -43,17 +43,21 @@ const WTimeTab = ({
           <td>{ result['compAvg'] && `${round1Decimal(result['compAvg'])} days`}</td>
         </tr>
       </tbody></table>
-      {result['qtyAvg'] &&
-        <p className='small rightText fade'
-          >Based on an average quantity of <n-num>{result['qtyAvg']}</n-num> per {Pref.xBatch}
+      
+      <details className='footnotes grayT'>
+        <summary>Calculation Details</summary>
+        {result['qtyAvg'] &&
+          <p className='small'
+            >Based on an average quantity of <n-num>{result['qtyAvg']}</n-num> per {Pref.xBatch}
+          </p>
+        }
+        <p className='small'
+          >Counts completed {Pref.xBatchs} and scheduled work days
         </p>
-      }
-      <p className='small rightText fadeMore'
-        >Counts completed {Pref.xBatchs} and scheduled work days
-      </p>
-      <p className='small rightText fadeMore'
-        >* Only applicable to {Pref.xBatchs} that include serialized items
-      </p>
+        <p className='small'
+          >* Only applicable to {Pref.xBatchs} that include serialized items
+        </p>
+      </details>
      
       <TideMultiBatchBar 
         batchIDs={batchIDs}

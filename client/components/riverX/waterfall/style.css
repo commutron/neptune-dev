@@ -55,7 +55,7 @@
 .countOff:active, .countOff:disabled,
 .slidePlus:active, .slidePlus:disabled,
 .slideMinus:active, .slideMinus:disabled {
-  filter: blur(5px);
+  filter: blur(3px);
 }
 .countPlus.countStop:disabled,
 .countMinus.countStop:disabled,

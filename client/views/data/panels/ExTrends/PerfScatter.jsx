@@ -9,8 +9,8 @@ import {
   VictoryAxis,
   VictoryTooltip
 } from 'victory';
-//import Pref from '/client/global/pref.js';
 import Theme from '/client/global/themeV.js';
+import PrintThis from '/client/components/tinyUi/PrintThis';
 
 
 const PerfScatter = ({ app })=> {
@@ -38,6 +38,7 @@ const PerfScatter = ({ app })=> {
           <n-fa0><i className='fas fa-spinner fa-lg'></i></n-fa0>
         }
         <span className='flexSpace' />
+        <PrintThis />
       </div>
       
       <VictoryChart
@@ -66,7 +67,7 @@ const PerfScatter = ({ app })=> {
         />
         <VictoryAxis
           style={ {
-            axis: { stroke: 'rgb(46, 204, 113)', strokeWidth: '3px' },
+            axis: { stroke: '#000', strokeWidth: '3px' },
             ticks: { stroke: 'transparent' },
           } }
           tickFormat={() => ''}
@@ -116,7 +117,8 @@ const PerfScatter = ({ app })=> {
         ★ = WIP <br />
         Scroll to Zoom <br />
         Click and Drag to Pan <br />
-        Reliable data begins {moment(app.tideWall).format('MMMM YYYY')}
+        Reliable data begins {moment(app.tideWall).format('MMMM YYYY')}<br />
+        Data curve is smoothed by a basis spline function
       </p>
     </div>
   );

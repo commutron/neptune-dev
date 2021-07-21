@@ -478,6 +478,9 @@ button.variableInput.biggest { height: 64px; }
   --task-front-color: var(--orange);
   --box-shadow-color: var(--orange);
 }
+.taskLink.fGreen {
+  --box-shadow-color: var(--nephritis);
+}
 
 .lightTheme .taskLink {
   --task-front-color: var(--asbestos);

@@ -162,7 +162,7 @@ function collectProgress(privateKey, batchID, branchOnly) {
         const firsts = riverFlow.filter( x => x.branchKey === branch.brKey && x.type === 'first' );
         
         for(let frt of firsts) {
-          const didFirst = historyFlat.findIndex( x => x.key === frt.key ) >= 0;
+          const didFirst = items.findIndex(x=> x.history.findIndex(y=> y.key === frt.key) >= 0) >= 0;
           didFirst ? counter = counter + 1 : null;
           maxCount = maxCount + 1;
         }

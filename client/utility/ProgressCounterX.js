@@ -70,17 +70,12 @@ function flowLoop(river, items, firstsFlat, wndw) {
 
 
 function unitTotalCount(items) {
-  let totalUnits = 0;
-  for(let i of items) {
-    totalUnits += i.units;
-  }
-  return totalUnits;
+  const count = items.length > 0 ? items.reduce((t,i)=> t + i.units, 0) : 0;
+  return count;
 }
 
 function outScrap(items) { 
-  return ( 
-    items.filter( o => !o.scrapped )
-  );
+  return items.filter( o => !o.scrapped );
 }
 
 function getFirsts(items) { 
@@ -96,8 +91,6 @@ function FlowCounter(flow, seriesData) {
   
   const now = moment().format();
   const wndw = (t)=>moment(t).isSame(now, 'day');
-  // const flowSeries = seriesData && flow.length > 0;
-  // const allItems = flowSeries ? srsItems : [];
   
   const allLiveItems = outScrap(srsItems);
   const scrapCount = srsItems.length - allLiveItems.length;

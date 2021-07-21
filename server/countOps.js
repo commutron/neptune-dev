@@ -229,7 +229,8 @@ Meteor.methods({
         const b = XBatchDB.findOne({ batch: srs.batch });
         if(b.completed) {
           const total = countMulti( srs.nonCon.filter( n => !n.trash ) );
-          rateArr.push( asRate(total, srs.items.length) );
+          const units = srs.items.length > 0 ? srs.items.reduce((t,i)=> t + i.units, 0) : 0;
+          rateArr.push( asRate(total, units) );
         }
       }
       const avgRate = avgOfArray(rateArr, true);

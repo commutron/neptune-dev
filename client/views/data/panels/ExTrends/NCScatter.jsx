@@ -11,6 +11,8 @@ import {
 } from 'victory';
 import Pref from '/client/global/pref.js';
 import Theme from '/client/global/themeV.js';
+import { ToggleSwitch } from '/client/components/smallUi/ToolBarTools';
+import PrintThis from '/client/components/tinyUi/PrintThis';
 
 
 const NCScatter = ({ app })=> {
@@ -19,11 +21,11 @@ const NCScatter = ({ app })=> {
   
   const [ tickXY, tickXYSet ] = useState(false);
   const [ showZero, showZeroSet ] = useState(false);
-  const [ showNC, showNCSet ] = useState(true);
+  const [ showSH, showSHSet ] = useState(false);
   const [ showRate, showRateSet ] = useState(false);
   
   useEffect( ()=> {
-    Meteor.call('getAllNCCount', (err, re)=>{
+    Meteor.call('getAllProbCount', (err, re)=>{
       err && console.log(err);
       if(re) {
         if(thingMounted.current) {
@@ -34,8 +36,8 @@ const NCScatter = ({ app })=> {
   }, []);
   
   const dataset = tickXY || [];
-  const probset = showNC ? dataset.filter(d=> d.symbol === 'square') :
-                           dataset.filter(d=> d.symbol !== 'square');
+  const probset = showSH ? dataset.filter(d=> d.symbol !== 'square') :
+                           dataset.filter(d=> d.symbol === 'square');
   const fullset = showZero ? probset : probset.filter(t=>t.y>0);
   
   return(
@@ -47,33 +49,21 @@ const NCScatter = ({ app })=> {
         }
         <span className='flexSpace' />
         
-        <label className='beside' style={{margin: '0 20px'}}>Total
-          <input
-            type='range'
-            id='rateTick'
-            max={1}
-            min={0}
-            step={1}
-            className='minHeight'
-            style={{width: '35px'}}
-            inputMode='numeric'
-            defaultValue={showRate ? 1 : 0}
-            onChange={(e)=>showRateSet(e.target.value == 0 ? false : true)} 
-        />Rate</label>
+        <ToggleSwitch 
+          tggID='rateTick'
+          toggleLeft='Total'
+          toggleRight='Rate'
+          toggleVal={showRate}
+          toggleSet={showRateSet}
+        />
         
-        <label className='beside' style={{margin: '0 20px'}}>{Pref.nonCon}
-          <input
-            type='range'
-            id='ncTick'
-            max={1}
-            min={0}
-            step={1}
-            className='minHeight'
-            style={{width: '35px'}}
-            inputMode='numeric'
-            defaultValue={showNC ? 0 : 1}
-            onChange={(e)=>showNCSet(e.target.value == 0 ? true : false)} 
-        />{Pref.shortfall}</label>
+        <ToggleSwitch 
+          tggID='probTick'
+          toggleLeft={Pref.nonCon}
+          toggleRight={Pref.shortfall}
+          toggleVal={showSH}
+          toggleSet={showSHSet}
+        />
         
         <label className='beside gapL'>Zeros
           <input
@@ -81,7 +71,8 @@ const NCScatter = ({ app })=> {
             className='minHeight'
             defaultChecked={showZero}
             onChange={()=>showZeroSet(!showZero)} 
-          /></label>
+        /></label>
+        <PrintThis />  
       </div>
       
       <VictoryChart
@@ -154,7 +145,8 @@ const NCScatter = ({ app })=> {
         ▲ = Shortfalls <br />
         Scroll to Zoom <br />
         Click and Drag to Pan <br />
-        Reliable data begins {moment(app.createdAt).format('MMMM YYYY')}
+        Reliable data begins {moment(app.createdAt).format('MMMM YYYY')}<br />
+        Data curve is smoothed by a basis spline function
       </p>
     </div>
   );

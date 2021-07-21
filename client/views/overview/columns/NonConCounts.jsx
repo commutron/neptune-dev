@@ -47,7 +47,7 @@ const NonConCounts = ({
         <div>
           <NumStat
             num={dt.nonConRate}
-            name='NC per Item'
+            name='NC Rate'
             title='Rate of Noncons per Item'
             color='redT'
             size='big' />

@@ -67,10 +67,14 @@
 button.stoneExtra {
   width: 100%;
   height: auto;
-  border-radius: 10px;
-  background-image: none;
   margin: 0;
   padding: 0.25rem;
+}
+.extraFail {
+  font-size: calc(0.5rem + 0.75vmax);
+  color: white;
+  background-color: var(--pomegranate);
+  --high-color: var(--alizarin);
 }
 
 .riverPath, .stoneComm {
@@ -123,11 +127,6 @@ button.stoneExtra {
 }
 
 .stone {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%) rotate(0deg);
-	z-index: 1;
 	margin: 0;
   border: 10px solid transparent;
   width: 11.5vmax;
@@ -154,33 +153,69 @@ button.stoneExtra {
   cursor: pointer;
 }
 
-.stone:hover,
-.crackedTop:hover, 
-.crackedBot:hover { 
+.stone:focus, .stone:hover,
+.crackedTop:focus, .crackedTop:hover, 
+.crackedBot:focus, .crackedBot:hover { 
   background-color: var(--high-color); 
 }
 
-.stone:active,
-.crackedTop:active, 
-.crackedBot:active {
-  filter: blur(5px);
-  animation: pulse 0.5s;
-  animation-iteration-count: infinite;
-  box-shadow: 0 0 0 2em rgba(255, 255, 255, 0);
+.stone::after,
+.crackedTop::after,
+.crackedBot::after {
+  content: "";
+  position: fixed;
+  z-index: -1;
+  width: 100%;
+  background-color: var(--high-color);
+  opacity: 0;
+  pointer-events: none;
 }
-.crackedBot.fail2step {
-  background-color: var(--high-color); 
-  animation: pulse 0.5s;
-  animation-iteration-count: 1;
-  box-shadow: 0 0 10px 5px var(--pomegranatefrost);
+.stone::after {
+  top: 0;
+  height: 100%;
+  border-radius: 50%;
+}
+.crackedTop::after {
+  top: -5%;
+  left: 0;
+  height: 55%;
+  border-radius: 9rem 9rem 0 0;
+}
+.crackedBot::after {
+  bottom: -5%;
+  left: 0;
+  height: 55%;
+  border-radius: 0 0 9rem 9rem;
+}
+.stone:active::after {
+  animation: pulselite 500ms;
+  animation-iteration-count: infinite;
+}
+.crackedTop:active::after,
+.crackedBot:active::after {
+  animation: pulselitehalf 500ms;
+  animation-iteration-count: infinite;
+}
+.fail2step.crackedBot::after {
+  transition: box-shadow 100ms linear;
+  opacity: 1;
+  box-shadow: 0 0 0px 3px var(--dark),
+              0 0 0px 6px var(--high-color);
+}
+.extraFail:active {
+  transition: outline-width 100ms linear;
+  outline-width: 3px;
+  outline: solid var(--high-color);
+  outline-offset: 0px;
 }
 
 .stone:disabled:active,
-.crackedTop:disabled:active, 
-.crackedBot:disabled:active {
-  filter: none;
+.stone:disabled:active::after,
+.crackedTop:disabled:active,
+.crackedTop:disabled:active::after, 
+.crackedBot:disabled:active,
+.crackedBot:disabled:active::after {
   animation: none;
-  box-shadow: none;
 }
 
 .stone label {
@@ -190,7 +225,8 @@ button.stoneExtra {
 }
 .stone label,
 .crackedTop label,
-.crackedBot label {
+.crackedBot label,
+.extraFail label {
   line-height: 1.2;
 }
 
@@ -290,12 +326,29 @@ button.stoneExtra {
 
 .ncAct.pass2step {
   background-color: var(--high-color);
-  box-shadow: 0 0 15px 10px var(--high-color);
+  outline-offset: 2px;
+  outline: 2px solid var(--high-color);
 }
 .ncAct:hover { background-color: var(--high-color); }
-.ncAct:active {
-  animation: pulse 0.5s;
-  box-shadow: 0 0 0 2em rgba(255, 255, 255, 0);
+.ncAct {
+  position: relative;
+  z-index: 5;
+}
+.ncAct::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: var(--high-color);
+  opacity: 0;
+  pointer-events: none;
+}
+.ncAct:active::before {
+  animation: pulselite 500ms;
+  animation-iteration-count: infinite;
 }
 
 .riverInfo {
@@ -405,7 +458,7 @@ n-trib-info {
   align-items: flex-start;
   justify-content: center;
   padding: 8px;
-  word-break: break-word;/*weird no standerd thing but it works*/
+  word-break: break-word;/*weird no standard thing but it works*/
   word-wrap: break-word;
   font-size: calc( 0.5rem + 0.75vmin);
 }
@@ -432,7 +485,6 @@ n-trib-action-all > button {
 	vertical-align: middle;
   transition: background-color 500ms ease-in-out;
   background-origin: content-box;
-  overflow: hidden;
   text-overflow: ellipsis;
   text-overflow: fade;
 }
@@ -448,6 +500,7 @@ n-trib-action-all > button {
 n-trib-action-main > button:after {
   content: attr(data-name);
   position: relative;
+  z-index: 2;
   left: 0;
   bottom: -20%;
 }
@@ -536,7 +589,6 @@ n-trib-action-all {
 .stoneForm {
   display: flex;
   width: 100%;
-  /*padding-bottom: 3vh;*/
   flex-direction: column;
   justify-content: space-around;
   align-self: flex-start;
@@ -776,14 +828,12 @@ n-trib-action-all {
 
 @media screen and (prefers-reduced-motion: reduce) { 
   .stone, .crackedTop, .crackedBot {
-    transition: 500ms;
+    transition: none;
   }
-  .stone:active,
-  .crackedTop:active, 
-  .crackedBot:active {
-    filter: brightness(0.75);
-    animation: none;
-    box-shadow: 0 0 0 1vmax black,
-                0 0 0 2vmax var(--high-color);
+  .stone:active::after,
+  .crackedTop:active::after,
+  .crackedBot:active::after,
+  .ncAct:active::before {
+    animation-iteration-count: 1;
   }
 }

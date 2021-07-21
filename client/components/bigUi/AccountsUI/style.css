@@ -22,32 +22,28 @@
   text-align: center;
   letter-spacing: 1.5px;
   box-shadow: var(--navIndicatorOut);
+  outline: 3px solid;
+  outline-offset: -3px;
   cursor: pointer;
 }
 .loginoutButton {
   background-color: var(--neptuneColor);
+  outline-color: var(--neptuneColor);
 }
 .loginoutButton:hover, 
 .loginoutButton:focus, 
 .loginoutButton:active {
-  outline-style: hidden;
-  outline-color: transparent;
-  box-shadow: 
-    0 0 0 3px rgb(35,35,35),
-    0 0 0 5px var(--belizeHole);
+  outline-offset: 3px;
 }
 
 .createButton {
   background-color: var(--nephritis);
+  outline-color: var(--nephritis);
 }
 .createButton:hover, 
 .createButton:focus, 
 .createButton:active {
-  outline-style: hidden;
-  outline-color: transparent;
-  box-shadow: 
-    0 0 0 3px rgb(35,35,35),
-    0 0 0 5px var(--emerald);
+  outline-offset: 3px;
 }
 
 .scanInIndicator {

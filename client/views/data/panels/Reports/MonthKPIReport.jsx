@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
-import { CalcSpin } from '/client/components/tinyUi/Spin.jsx';
 
 import ReportStatsTable from '/client/components/tables/ReportStatsTable.jsx'; 
 
@@ -51,9 +50,9 @@ const MonthKPIReport = ({ start, end, dataset, isDebug })=> {
       </div>
       
       {working ?
-        <div>
-          <p className='centreText'>This may take a while...</p>
-          <CalcSpin />
+        <div className='centreText'>
+          <p>This may take a while...</p>
+          <n-fa0><i className='fas fa-spinner fa-lg fa-spin'></i></n-fa0>
         </div>
       :   
         <ReportStatsTable 

@@ -1,10 +1,12 @@
 import moment from 'moment';
 import 'moment-timezone';
 import 'moment-business-time';
-import { noIg, countMulti, countMultiRefs } from './utility';
-import { asRate, round1Decimal } from './calcOps';
-import { getShipAim, getEndWork } from '/server/shipOps';
-import Config from '/server/hardConfig.js';
+import { noIg } from './utility';
+import { 
+  plotPerform,
+  plotOnTime,
+  plotProblems,
+  plotCreatedQty } from '/server/plotOps';
 
 Meteor.methods({
 
@@ -92,17 +94,7 @@ Meteor.methods({
         {fields:{'batch':1,'completedAt':1}}
       ).fetch();
       
-      let perfset = [];
-      for( let batch of batches) {
-        const p = Meteor.call('performTrace', batch._id);
-        perfset.push({
-          y: p,
-          x: batch.completedAt || new Date(),
-          z: `${batch.batch} = ${p > 0 ? '+'+p : p}`,
-          symbol: batch.completedAt ? 'diamond' : 'star',
-          size: '2'
-        });
-      }
+      let perfset = plotPerform(batches);
       
       CacheDB.upsert({dataName: 'performShadow'}, {
         $set : {
@@ -134,25 +126,8 @@ Meteor.methods({
         {fields:{'batch':1,'completedAt':1, 'salesEnd':1}}
       ).fetch();
       
-      let onset = [];
-      for( let batch of batches) {
-        const did = batch.completedAt || moment.tz(Config.clientTZ).format();
-        const aim = getShipAim(batch._id, batch.salesEnd);
-        const aimGap = round1Decimal( moment(aim).workingDiff(did, 'days', true) );
-        const fin = getEndWork(batch._id, batch.salesEnd);
-        const finGap = round1Decimal( moment(fin).workingDiff(did, 'days', true) );
+      let onset = plotOnTime(batches);
 
-        onset.push({
-          v: finGap,
-          w: `${batch.batch} = ${finGap}`,
-          y: aimGap,
-          x: batch.completedAt || new Date(),
-          z: `${batch.batch} = ${aimGap}`,
-          symbol: batch.completedAt ? 'diamond' : 'star',
-          size: '2'
-        });
-      }
-      
       CacheDB.upsert({dataName: 'ontimeShadow'}, {
         $set : {
           orgKey: accessKey,
@@ -163,11 +138,11 @@ Meteor.methods({
     
       return onset;
     }else{
-      return onset.dataArray;
+      return onShade.dataArray;
     }
   },
   
-  getAllNCCount() {
+  getAllProbCount() {
     const accessKey = Meteor.user().orgKey;
     const xid = noIg();
 
@@ -183,32 +158,7 @@ Meteor.methods({
         {fields:{'batch':1,'completedAt':1}}
       ).fetch();
       
-      let probset = [];
-      for( let batch of batches) {
-        const srs = XSeriesDB.findOne({batch: batch.batch});
-        const ncQty = countMulti( srs ? srs.nonCon : [] );
-        const ncRte = srs ? asRate(ncQty, srs.items.length) : 0;
-        const shQty = countMultiRefs( srs ? srs.shortfall : [] );
-        const shRte = srs ? asRate(shQty, srs.items.length) : 0;
-        probset.push({
-          r: ncRte,
-          s: `${batch.batch} = ${ncRte}`,
-          y: ncQty,
-          x: batch.completedAt || new Date(),
-          z: `${batch.batch} = ${ncQty} noncons`,
-          symbol: 'square',
-          size: '2'
-        });
-        probset.push({
-          r: shRte,
-          s: `${batch.batch} = ${shRte}`,
-          y: shQty,
-          x: batch.completedAt || new Date(),
-          z: `${batch.batch} = ${shQty} shortfalls`,
-          symbol: 'triangleUp',
-          size: '2'
-        });
-      }
+      let probset = plotProblems(batches);
       
       CacheDB.upsert({dataName: 'nccountShadow'}, {
         $set : {
@@ -240,16 +190,7 @@ Meteor.methods({
         {fields:{'batch':1,'createdAt':1,'quantity':1,'salesOrder':1}}
       ).fetch();
       
-      let qtyset = [];
-      for( let batch of batches) {
-        qtyset.push({
-          y: batch.quantity,
-          x: batch.createdAt,
-          z: `${batch.batch} (so.${batch.salesOrder}) = ${batch.quantity}`,
-          symbol: 'plus',
-          size: '2'
-        });
-      }
+      let qtyset = plotCreatedQty(batches);
       
       CacheDB.upsert({dataName: 'qtyShadow'}, {
         $set : {

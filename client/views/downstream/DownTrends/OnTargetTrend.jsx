@@ -1,5 +1,4 @@
 import React, { useRef, useState, useEffect } from 'react';
-// import Pref from '/client/global/pref.js';
 import moment from 'moment';
 // import 'moment-timezone';
 import { 
@@ -10,9 +9,8 @@ import {
   VictoryLegend,
   VictoryZoomContainer
 } from 'victory';
-//import Pref from '/client/global/pref.js';
 import Theme from '/client/global/themeV.js';
-import ToggleBar from '/client/components/smallUi/Tabs/ToggleBar';
+import { ToggleSwitch } from '/client/components/smallUi/ToolBarTools';
 
 import { percentOf } from '/client/utility/Convert';
 
@@ -25,7 +23,7 @@ const OnTargetTrend = ({ app, isDebug, isNightly })=>{
   const [ working, workingSet ] = useState(false);
   
   const [ tgglSpan, tgglSpanSet ] = useState( false );
-  const [ tgglState, tgglSet ] = useState( 'fulfill' );
+  const [ tgglState, tgglSet ] = useState( false );
   
   const [ fillDT, fillSet ] = useState( blank );
   const [ shipDT, shipSet ] = useState( blank );
@@ -82,7 +80,7 @@ const OnTargetTrend = ({ app, isDebug, isNightly })=>{
   }
   
   return(
-    <div className=''>
+    <div>
        
       <div className='rowWrap noPrint'>
         {working ?
@@ -104,10 +102,12 @@ const OnTargetTrend = ({ app, isDebug, isNightly })=>{
         
         <span className='flexSpace' />
         
-        <ToggleBar
-          toggleOptions={['fulfill', 'ship']}
+        <ToggleSwitch 
+          tggID='shipfilltrnd'
+          toggleLeft='ship'
+          toggleRight='fulfill'
           toggleVal={tgglState}
-          toggleSet={(e)=>tgglSet(e)}
+          toggleSet={tgglSet}
         />
       </div>
 
@@ -154,7 +154,7 @@ const OnTargetTrend = ({ app, isDebug, isNightly })=>{
           />
           
             <VictoryLine
-              data={tgglState == 'fulfill' ? fillDT : shipDT}
+              data={tgglState ? fillDT : shipDT}
               style={{ data: { stroke: 'rgb(46, 204, 113)' } }}
               interpolation="catmullRom"
               animate={{
@@ -163,7 +163,7 @@ const OnTargetTrend = ({ app, isDebug, isNightly })=>{
               }}
             />
             <VictoryScatter 
-              data={tgglState == 'fulfill' ? fillDT : shipDT}
+              data={tgglState ? fillDT : shipDT}
               style={{ data: { fill: "rgb(39, 174, 96)" } }}
               size={2}
               animate={{

@@ -146,7 +146,7 @@ function collectNonCon(privateKey, batchID, temp) {
       const srs = XSeriesDB.findOne({batch: bx.batch});
       
       const items = !srs ? [] : srs.items;
-      const itemQuantity = items.length;
+      const itemQty = items.length > 0 ? items.reduce((t,i)=> t + i.units, 0) : 0;
       // nonCon relevant
       const rNC = !srs ? [] : srs.nonCon.filter( n => !n.trash );
       // how many nonCons
@@ -154,14 +154,14 @@ function collectNonCon(privateKey, batchID, temp) {
       // how many are unresolved  
       const nonConLeft = countMulti( rNC.filter( x => x.inspect === false ) );
       // nc rate
-      const ncRate = asRate(nonConTotal, itemQuantity, true);
+      const ncRate = asRate(nonConTotal, itemQty, true);
       // how many items have nonCons
       const hasNonCon = temp === 'cool' ? 0 :
         [... new Set( Array.from(rNC, x => x.serial) ) ].length;
       // what percent of items have nonCons
       const percentOfNCitems = temp === 'cool' ? 0 :
-        itemQuantity === 0 ? 0 : hasNonCon >= itemQuantity ? 100 :
-        ((hasNonCon / itemQuantity) * 100 ).toFixed(0);
+        itemQty === 0 ? 0 : hasNonCon >= itemQty ? 100 :
+        ((hasNonCon / itemQty) * 100 ).toFixed(0);
       // how many items are scrapped
       const itemIsScrap = temp === 'cool' ? 0 :
         items.filter( x => x.scrapped ).length;
@@ -246,9 +246,10 @@ Meteor.methods({
       const srs = XSeriesDB.findOne({batch: b.batch});
       const items = srs ? srs.items : [];
       
-      const nc = srs ? srs.nonCon.filter( n => !n.trash ) : [];
-      const rate = nc.length / b.quantity;
-      const pb = isFinite(rate) ? rate < 1 ? Math.round(rate) : Math.ceil(rate*0.1) : 0;
+      const nc = countMulti( srs ? srs.nonCon.filter( n => !n.trash ) : [] );
+      const units = items.length > 0 ? items.reduce((t,i)=> t + i.units, 0) : 0;
+      const rate = asRate(nc, units);
+      const pb = rate < 1 ? Math.round(rate) : Math.ceil(rate*0.1);
           
       const done = items.filter( i => i.completed );
       const donePer = b.completed ? 100 : percentOf( items.length, done.length );

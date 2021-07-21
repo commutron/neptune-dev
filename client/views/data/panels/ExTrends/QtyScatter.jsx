@@ -9,8 +9,8 @@ import {
   VictoryAxis,
   VictoryTooltip
 } from 'victory';
-//import Pref from '/client/global/pref.js';
 import Theme from '/client/global/themeV.js';
+import PrintThis from '/client/components/tinyUi/PrintThis';
 
 
 const QtyScatter = ({ app })=> {
@@ -37,6 +37,8 @@ const QtyScatter = ({ app })=> {
           <n-fa1><i className='fas fa-spinner fa-lg fa-spin gapR'></i>Loading</n-fa1> :
           <n-fa0><i className='fas fa-spinner fa-lg'></i></n-fa0>
         }
+        <span className='flexSpace' />
+        <PrintThis />
       </div>
       
       <VictoryChart
@@ -100,7 +102,8 @@ const QtyScatter = ({ app })=> {
       <p className='lightgray fade'>
         Scroll to Zoom <br />
         Click and Drag to Pan <br />
-        Reliable data begins {moment(app.createdAt).format('MMMM YYYY')}
+        Reliable data begins {moment(app.createdAt).format('MMMM YYYY')}<br />
+        Data curve is smoothed by a basis spline function
       </p>
     </div>
   );

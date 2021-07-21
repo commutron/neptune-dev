@@ -9,8 +9,9 @@ import {
   VictoryAxis,
   VictoryTooltip
 } from 'victory';
-//import Pref from '/client/global/pref.js';
 import Theme from '/client/global/themeV.js';
+import { ToggleSwitch } from '/client/components/smallUi/ToolBarTools';
+import PrintThis from '/client/components/tinyUi/PrintThis';
 
 
 const ShipScatter = ({ app })=> {
@@ -40,19 +41,15 @@ const ShipScatter = ({ app })=> {
         }
         <span className='flexSpace' />
         
-        <label className='beside' style={{margin: '0 20px'}}>Ship
-          <input
-            type='range'
-            id='rateTick'
-            max={1}
-            min={0}
-            step={1}
-            className='minHeight'
-            style={{width: '35px'}}
-            inputMode='numeric'
-            defaultValue={toggle ? 1 : 0}
-            onChange={(e)=>toggleSet(e.target.value == 0 ? false : true)} 
-        />Fulfill</label>
+        <ToggleSwitch 
+          tggID='shipfillvis'
+          toggleLeft='Ship'
+          toggleRight='Fulfill'
+          toggleVal={toggle}
+          toggleSet={toggleSet}
+        />
+        
+        <PrintThis />
       </div>
       
       <VictoryChart
@@ -81,7 +78,7 @@ const ShipScatter = ({ app })=> {
         />
         <VictoryAxis
           style={ {
-            axis: { stroke: 'rgb(46, 204, 113)', strokeWidth: '3px' },
+            axis: { stroke: '#000', strokeWidth: '3px' },
             ticks: { stroke: 'transparent' },
           } }
           tickFormat={() => ''}
@@ -133,7 +130,8 @@ const ShipScatter = ({ app })=> {
         ★ = WIP <br />
         Scroll to Zoom <br />
         Click and Drag to Pan <br />
-        Reliable data begins {moment(app.createdAt).format('MMMM YYYY')}
+        Reliable data begins {moment(app.createdAt).format('MMMM YYYY')}<br />
+        Data curve is smoothed by a basis spline function
       </p>
     </div>
   );

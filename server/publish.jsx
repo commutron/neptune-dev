@@ -134,7 +134,6 @@ Meteor.publish('bNameData', function(){
           'batch': 1,
           'batchID': 1,
           'isWhat': 1,
-          // 'describe': 1
         }
       })
     ];
@@ -164,7 +163,6 @@ Meteor.publish('peopleData', function(){
 Meteor.publish('traceDataLive', function(){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
-  // Meteor.defer( ()=>{ Meteor.call('reMiniOpenTrace'); });
   if(!this.userId){
     return this.ready();
   }else{
@@ -172,8 +170,6 @@ Meteor.publish('traceDataLive', function(){
       TraceDB.find({
         orgKey: orgKey, live: true, onFloor: false }, {
         fields: {
-          // 'lastUpserted': 1,
-          // 'lastUpdated': 1,
           'batch': 1,
           'batchID': 1,
           'salesOrder': 1,
@@ -182,22 +178,17 @@ Meteor.publish('traceDataLive', function(){
           'quantity': 1,
           'serialize': 1,
           'riverChosen': 1,
-          // 'live': 1,
           'salesEnd': 1,
           'shipAim': 1,
-          // 'completed': 1,
-          // 'completedAt': 1,
           'lateLate': 1,
           'oRapid': 1,
           'isActive': 1,
-          // 'onFloor': 1,
           'branchCondition': 1,
           'quote2tide': 1,
           'estSoonest': 1,
           'bffrRel': 1,
           'estEnd2fillBuffer': 1,
           'overQuote': 1
-          // 'performTgt': 1
         }
       })
     ];
@@ -207,7 +198,6 @@ Meteor.publish('traceDataLive', function(){
 Meteor.publish('traceDataActive', function(){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
-  // Meteor.defer( ()=>{ Meteor.call('reMiniOpenTrace'); });
   if(!this.userId){
     return this.ready();
   }else{
@@ -217,8 +207,6 @@ Meteor.publish('traceDataActive', function(){
         $or: [ { live: true }, { 'isActive.hasDay': { $gt: 0 } } ]
       }, {
         fields: {
-          // 'lastUpserted': 1,
-          // 'lastUpdated': 1,
           'batch': 1,
           'batchID': 1,
           'salesOrder': 1,
@@ -227,11 +215,8 @@ Meteor.publish('traceDataActive', function(){
           'quantity': 1,
           'serialize': 1,
           'riverChosen': 1,
-          // 'live': 1,
           'salesEnd': 1,
           'shipAim': 1,
-          // 'completed': 1,
-          // 'completedAt': 1,
           'lateLate': 1,
           'oRapid': 1,
           'isActive': 1,
@@ -262,8 +247,6 @@ Meteor.publish('traceDataOpen', function(){
         $or: [ { live: true }, { salesEnd: { $gte: ystrday } } ]
       }, {
         fields: {
-          // 'lastUpserted': 1,
-          // 'lastUpdated': 1,
           'batch': 1,
           'batchID': 1,
           'salesOrder': 1,
@@ -271,7 +254,6 @@ Meteor.publish('traceDataOpen', function(){
           'describe': 1,
           'quantity': 1,
           'serialize': 1,
-          // 'riverChosen': 1,
           'live': 1,
           'salesEnd': 1,
           'shipAim': 1,
@@ -298,7 +280,6 @@ Meteor.publish('traceDataOpen', function(){
 Meteor.publish('partsPlusCacheData', function(){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
-  // Meteor.defer( ()=>{ Meteor.call('partslistCacheUpdate', orgKey); });
   if(!this.userId){
     return this.ready();
   }else{
@@ -476,8 +457,6 @@ Meteor.publish('skinnyData', function(){
             'salesOrder': 1,
             'completed': 1,
             'completedAt': 1
-            // 'lockTrunc': 1,
-            // 'finBffrRel': 1
         }})
     ];
   }

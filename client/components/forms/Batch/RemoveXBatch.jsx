@@ -155,11 +155,11 @@ const RemoveXBatch = ({ batchData, seriesData, checkStr })=> {
   
   return(
     <div className='vspace wide centreText'>
-      <h2 className='redT'>This cannot be undone</h2>
+      <h2 className='redT up'>This cannot be undone</h2>
       
-      <div className='vspace balancer cap'>
+      <div className='vspace balancer gapsC cap'>
         <div>
-          <p>Delete ALL {itemsQ} {Pref.items}</p>
+          <p>Delete ALL {itemsQ}<br />{Pref.items}</p>
           <input
             id='orgPINitem'
             autoComplete="false"
@@ -180,7 +180,7 @@ const RemoveXBatch = ({ batchData, seriesData, checkStr })=> {
         </div>
         
         <div>
-          <p>Delete ALL {probsQ} {Pref.nonCons} & {Pref.shortfalls}</p>
+          <p>Delete ALL {probsQ}<br />{Pref.nonCons} & {Pref.shortfalls}</p>
           <input
             id='orgPINprob'
             autoComplete="false"
@@ -196,12 +196,12 @@ const RemoveXBatch = ({ batchData, seriesData, checkStr })=> {
             type='button'
             onClick={(e)=>handleProbRemove(e)}
             id='cutProbGo'
-            disabled={srsQ === 0}
+            disabled={probsQ === 0}
           >DELETE Problems</button>
         </div>
         
         <div>
-          <p>Delete ALL {Pref.counter}s</p>
+          <p>Delete ALL {batchData.waterfall.length}<br />{Pref.counter}s</p>
           <input
             id='orgPINfall'
             autoComplete="false"
@@ -222,7 +222,7 @@ const RemoveXBatch = ({ batchData, seriesData, checkStr })=> {
         </div>
         
         <div>
-          <p>Delete ALL {batchData.tide.length} {Pref.tide}s</p>
+          <p>Delete ALL {batchData.tide.length}<br />{Pref.tide}s</p>
           <input
             id='orgPINtime'
             autoComplete="false"
@@ -248,13 +248,7 @@ const RemoveXBatch = ({ batchData, seriesData, checkStr })=> {
       {batchData.tide.length === 0 &&
        batchData.waterfall.length === 0 && 
        itemsQ === 0 && probsQ === 0 ?
-        !Roles.userIsInRole(Meteor.userId(), 'admin') ? 
-          <p>
-            <strong>An "Admin" account is required to delete the entire {Pref.xBatch}</strong>
-          </p> 
-        :
         <div>
-        
           <p>
             <strong>Are you sure you want to try to delete all of "{batchData.batch}"?</strong>
           </p>
@@ -298,7 +292,6 @@ const RemoveXBatch = ({ batchData, seriesData, checkStr })=> {
           <strong>{Pref.XBatch} cannot be deleted while there are recorded times or item history</strong>
         </p>
       }
-      
       <hr />
     </div>
   );

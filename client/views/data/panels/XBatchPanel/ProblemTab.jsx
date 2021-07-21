@@ -76,7 +76,7 @@ const ProblemTab = ({
               <i className="fas fa-braille fa-lg fa-fw"></i>,
               <i className="fas fa-chart-bar fa-lg fa-fw"></i>,
               <i className="fas fa-chess-board fa-lg fa-fw"></i>,
-              <i className="fas fa-chart-area fa-lg fa-fw"></i>,
+              <i className="fas fa-chart-line fa-lg fa-fw"></i>,
               <i className="fas fa-th fa-lg fa-fw"></i>,
             ] }
             names={[ 

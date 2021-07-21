@@ -1,5 +1,4 @@
 import React from 'react';
-// import Pref from '/client/global/pref.js';
 import Tabs from '/client/components/smallUi/Tabs/Tabs';
 
 import PerfScatter from './PerfScatter';

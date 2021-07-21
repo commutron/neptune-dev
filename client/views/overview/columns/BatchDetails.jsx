@@ -25,7 +25,7 @@ const BatchDetails = ({
   const progCols = branchArea ?
                     [ brancheS.find( x => x.branch === filterBy).common ] :
                     Array.from(brancheS, x => x.common);
-  const ncCols = ['NC total', 'NC remain', 'NC per item', 'NC items', 'scrap', 'RMA'];
+  const ncCols = ['NC total', 'NC remain', 'NC rate', 'NC items', 'scrap', 'RMA'];
 
   const fullHead = ['sales order','active',...statusCols,'released',...progCols,'Perfomance',...ncCols,''];
   const brchHead = ['sales order','active',...statusCols,...progCols,'Perfomance',...ncCols,''];

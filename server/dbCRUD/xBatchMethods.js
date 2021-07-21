@@ -792,6 +792,7 @@ Meteor.methods({
     const accessKey = Meteor.user().orgKey;
     const doc = XBatchDB.findOne({_id: batchId});
     const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
+    const done = doc.completed;
     const inUse = doc.tide.some( x => x.stopTime === false ) ? true : false;
     const howMany = doc.tide.length + ' times';
     
@@ -801,7 +802,7 @@ Meteor.methods({
     const orgPIN = org ? org.orgPIN : null;
     const pinMatch = pinInput === orgPIN;
     
-    if(!inUse && auth && keyMatch && pinMatch) {
+    if(!done && !inUse && auth && keyMatch && pinMatch) {
       XBatchDB.update({_id: batchId, orgKey: accessKey}, {
         $set : {
           tide: [],
@@ -830,6 +831,7 @@ Meteor.methods({
     const accessKey = Meteor.user().orgKey;
     const doc = XBatchDB.findOne({_id: batchId});
     const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
+    const done = doc.completed;
     const howMany = doc.waterfall.length + ' counters';
     
     const keyMatch = doc.orgKey === accessKey;
@@ -838,7 +840,7 @@ Meteor.methods({
     const orgPIN = org ? org.orgPIN : null;
     const pinMatch = pinInput === orgPIN;
     
-    if(auth && keyMatch && pinMatch) {
+    if(!done && auth && keyMatch && pinMatch) {
       XBatchDB.update({_id: batchId, orgKey: accessKey}, {
         $set : {
           waterfall: [],
@@ -872,8 +874,9 @@ Meteor.methods({
     const items = !srs ? false : srs.items.length > 0;
     const probs = !srs ? false : srs.nonCon.length > 0 || srs.shortfall.length > 0;
     const inUse = doc.tide.length > 0 || doc.waterfall.length > 0;
-                  
-    if(!items && !probs && !inUse) {
+    const done = doc.completed;
+    
+    if(!done && !items && !probs && !inUse) {
       const lock = doc.createdAt.toISOString().split("T")[0];
       const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
       const access = doc.orgKey === accessKey;

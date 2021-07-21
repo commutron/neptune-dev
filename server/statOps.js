@@ -5,6 +5,8 @@ import 'moment-business-time';
 import Config from '/server/hardConfig.js';
 import { batchTideTime } from './tideGlobalMethods.js';
 import { countWaterfall, countMulti } from './utility';
+import { avgOfArray } from './calcOps';
+import { getEndWork } from '/server/shipOps';
 
 moment.updateLocale('en', {
   workinghours: Config.workingHours,
@@ -83,6 +85,54 @@ Meteor.methods({
     }});
     
     return [ variants, batchInfoX, rate ];
+  },
+  
+  groupTops(gID) {
+      
+    const batches = XBatchDB.find({
+      orgKey: Meteor.user().orgKey,
+      groupId: gID
+    },{fields:{'batch':1,'completedAt':1,'salesEnd':1,'lockTrunc':1}}).fetch();
+    
+    let ontm = 0;
+    let late = 0;
+    let pftargets = [];
+      
+    for( let batch of batches) {
+      const fin = getEndWork(batch._id, batch.salesEnd);
+      const nowLate = moment().isAfter(fin);
+      
+      if( batch.completedAt && moment(batch.completedAt).isSameOrBefore(fin) ) {
+        ontm += 1;
+      }else if( (!batch.completedAt && nowLate) || ( batch.completedAt && moment(batch.completedAt).isAfter(fin) ) ) {
+        late += 1;
+      }else{
+        null;
+      }
+      
+      if(batch.lockTrunc) {
+  			batch.lockTrunc.performTgt ? pftargets.push(batch.lockTrunc.performTgt) : null;
+      }else{
+        const t = TraceDB.findOne({batchID: batch._id},{fields:{'performTgt':1}});
+        t && t.performTgt !== undefined ? pftargets.push(t.performTgt) : null;
+      }
+    }
+    let ontimesplit = [{
+      x: 'on time',
+      y: Math.round( (ontm / (ontm+late || 1)) * 100 )
+    },{
+      x: 'late',
+      y: Math.round( (late / (ontm+late || 1)) * 100 )
+    }];
+    const avgPf = Math.round( avgOfArray(pftargets, true) );
+      
+    const widgets = WidgetDB.find({ groupId: gID 
+    },{fields:{'ncRate':1}}).fetch();
+    const avgNCrate = avgOfArray(Array.from(widgets, x=> x.ncRate ? x.ncRate.rate : 0), true);
+    
+    return {
+      ontimesplit, avgNCrate, avgPf
+    };
   },
   
   nonConSelfCount(nonConCol) {

@@ -89,7 +89,7 @@ const StoneWeir = ({
       closeUndoOption={closeUndoOption}
       
       timeOutCntrl={timeOutCntrl}
-      riverFlowStateSet={(e)=>riverFlowStateSet(e)}
+      riverFlowStateSet={(e)=>mounted.current && riverFlowStateSet(e)}
     />
   );
 };

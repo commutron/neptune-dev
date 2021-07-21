@@ -10,6 +10,7 @@ import GroupInternal from '/client/components/forms/GroupInternal';
 import WidgetNewForm from '/client/components/forms/WidgetNewForm';
 import Remove from '/client/components/forms/Remove';
 
+import GroupTops from '/client/components/charts/GroupTops';
 
 function groupActiveWidgets(gId, widgetsList, allXBatch) {
   
@@ -105,13 +106,15 @@ const GroupSlide = ({ groupData, widgetsList, batchDataX, app, inter })=>{
       <p className='capFL vmargin'>
         {Pref.instruct} index: <a className='clean wordBr' href={g.wiki} target='_blank'>{g.wiki}</a>
       </p>
+      
+      <GroupTops groupId={g._id} app={app} />
         
       <WidgetsDepth
         groupAlias={g.alias}
         widgetData={widgetsList}
         active={active} />
       
-      <div className='wide space edit'>
+      <div className='wide space'>
         <CreateTag
           when={g.createdAt}
           who={g.createdWho}

@@ -96,7 +96,7 @@ const StoneTest = ({
 			
 			{failing &&
 				<button
-      	  className='crackedBot stoneExtra'
+      	  className='stoneExtra extraFail'
   				name={step + ' bypass'}
   				id='stonebypassButton'
   				onClick={()=>passT(true, true)}

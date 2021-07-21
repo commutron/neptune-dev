@@ -114,3 +114,22 @@ export const ThemeSwitch = ({ themeState, changeFunc })=> (
     ><i className='fas fa-sun fa-fw'></i></button>
   </span>
 );
+
+export const ToggleSwitch = ({ 
+  tggID, toggleLeft, toggleRight, toggleVal, toggleSet 
+})=> (
+  <label className='beside' style={{margin: '0 20px'}}>{toggleLeft}
+    <input
+      type='range'
+      id={tggID}
+      max={1}
+      min={0}
+      step={1}
+      className='minHeight'
+      style={{width: '35px',filter: 'grayscale(100%)'}}
+      inputMode='numeric'
+      defaultValue={toggleVal ? 1 : 0}
+      onChange={(e)=>toggleSet(e.target.value == 1 ? true : false)} 
+    />{toggleRight}
+  </label>
+);

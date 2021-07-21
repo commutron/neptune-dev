@@ -35,7 +35,7 @@ const WindowGlass = ({
   
   const statCols = ['sales order','active','quote'];
   const progCols = ['total items',...Array.from(brancheS, x => x.common)];
-  const ncCols = ['NC total', 'NC remain', 'NC per item', 'NC items', 'scrap', 'RMA'];
+  const ncCols = ['NC total', 'NC remain', 'NC rate', 'NC items', 'scrap', 'RMA'];
   const headersArr = [...statCols,...progCols,'Perfomance',...ncCols,'',''];
 
   return(
