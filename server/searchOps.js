@@ -4,11 +4,12 @@ import moment from 'moment';
 import Config from '/server/hardConfig.js';
 
 export function whatIsBatchX(keyword, labelString) {
-  const batch = XBatchDB.findOne({batch: keyword});
-  const group = GroupDB.findOne({_id: batch.groupId});
+  const batch = XBatchDB.findOne({batch: keyword},{fields:
+                {'groupId':1,'widgetId':1,'versionKey':1,'salesOrder':1,'quantity':1}});
+  const group = GroupDB.findOne({_id: batch.groupId},{fields:{'alias':1,'hibernate':1}});
   const groupH = group.hibernate ? "."+group.alias : group.alias;
-  const widget = WidgetDB.findOne({_id: batch.widgetId});
-  const variant = VariantDB.findOne({versionKey: batch.versionKey});
+  const widget = WidgetDB.findOne({_id: batch.widgetId},{fields:{'widget':1,'describe':1}});
+  const variant = VariantDB.findOne({versionKey: batch.versionKey},{fields:{'variant':1}});
   const more = widget.describe;
   
   if(labelString) {
@@ -114,20 +115,18 @@ Meteor.methods({
   },
   
   quickVariant(vKey) {
-    const variant = VariantDB.findOne({versionKey: vKey});
-    const found = variant.variant;
+    const variant = VariantDB.findOne({versionKey: vKey},{fields:{'variant':1}});
+    const found = variant ? null : variant.variant;
     return found;
   },
   
   getNextBatch() {
-    const last = XBatchDB.find({},
-                  {
-                    fields:{'batch':1}, 
-                    sort: { batch: -1 },
-                    limit: 1
-                  }
-                ).fetch();
-    const next = !last ? '00000' : ( parseInt( last[0].batch ) + 1 ).toString();
+    const last = XBatchDB.find({},{
+                  fields:{'batch':1}, 
+                  sort: { batch: -1 },
+                  limit: 1
+                }).fetch();
+    const next = !last ? '00000' : ( parseInt( last[0].batch, 10 ) + 1 ).toString();
     return next;
   },
   
@@ -135,7 +134,7 @@ Meteor.methods({
     // First Firsts
    ///////////////////////////////////////////////////////////////////////////
   firstFirst(seriesId) {
-    const srs = XSeriesDB.findOne({_id: seriesId});
+    const srs = XSeriesDB.findOne({_id: seriesId},{fields:{'items.history':1}});
                    
     let first = moment();
     if(!srs) { null }else{
@@ -157,7 +156,6 @@ Meteor.methods({
   fetchShortfallParts() {
     
     let sMatch = [];
-    
     /* All, Complete or Not
       XSeriesDB.find({
       shortfall: { $elemMatch: { inEffect: { $ne: true }, reSolve: { $ne: true } } }
@@ -186,7 +184,9 @@ Meteor.methods({
     	    bsMatch.map((ent, ix)=>{
     	      const same = srs.shortfall.filter( s => s.partNum === ent[3] );
     	      const locations = [].concat(...Array.from(same, sm => sm.refs));
-    	      ent.push(_.uniq(locations).join(", "), locations.length);
+    	      const total = same.reduce((x,y)=> ( x + (Number(y.multi) || 1) * y.refs.length ), 0);
+    	      ent.push(_.uniq(locations).join(", "), total);
+    	      
     	      sMatch.push(ent);
     	    });
         }
@@ -203,9 +203,9 @@ Meteor.methods({
     
     XRapidsDB.find({orgKey: Meteor.user().orgKey})
     .forEach( r => {
-      const b = XBatchDB.findOne({batch: r.extendBatch});
-      const w = WidgetDB.findOne({_id: b.widgetId});
-      const g = GroupDB.findOne({_id: r.groupId});
+      const b = XBatchDB.findOne({batch: r.extendBatch},{fields:{'widgetId':1}});
+      const w = WidgetDB.findOne({_id: b.widgetId},{fields:{'widget':1}});
+      const g = GroupDB.findOne({_id: r.groupId},{fields:{'alias':1}});
 
       compactData.push({
         rapid: r.rapid, 
@@ -234,8 +234,8 @@ Meteor.methods({
       orgKey: Meteor.user().orgKey,
       'items.scrapped': true
     }).forEach( srs => {
-      const w = WidgetDB.findOne({_id: srs.widgetId});
-      const g = GroupDB.findOne({_id: srs.groupId});
+      const w = WidgetDB.findOne({_id: srs.widgetId},{fields:{'widget':1}});
+      const g = GroupDB.findOne({_id: srs.groupId},{fields:{'alias':1}});
       const items = srs.items.filter( x => x.scrapped === true );
       for(let i of items) {
         const scEntry = i.history.find( y => 
@@ -264,8 +264,8 @@ Meteor.methods({
       'items.history.type': 'test',
       'items.history.good': false
     }).forEach( srs => {
-      const w = WidgetDB.findOne({_id: srs.widgetId});
-      const g = GroupDB.findOne({_id: srs.groupId});
+      const w = WidgetDB.findOne({_id: srs.widgetId},{fields:{'widget':1}});
+      const g = GroupDB.findOne({_id: srs.groupId},{fields:{'alias':1}});
       
       for(let i of srs.items) {
         const tfEntries = i.history.filter( y => 
@@ -294,20 +294,20 @@ Meteor.methods({
       orgKey: Meteor.user().orgKey,
       'assembly.component': num
     }).forEach( v => {
-      let findG = GroupDB.findOne({ _id: v.groupId });
-      let findW = WidgetDB.findOne({ _id: v.widgetId });
+      let findG = GroupDB.findOne({ _id: v.groupId },{fields:{'alias':1}});
+      let findW = WidgetDB.findOne({ _id: v.widgetId },{fields:{'widget':1,'describe':1}});
 
       let batches = [];
       if(batchInfo) {
-        const findB = XBatchDB.find({live: true, versionKey: v.versionKey}).fetch();
-        batches = Array.from(findB, x => { 
-                    let countI = 0;
-                    !unitInfo ? null : 
-                      x.items.forEach( y => countI += y.units );
-                    return {
-                      btch: x.batch,
-                      cnt: countI
-                  }});
+        const findB = XBatchDB.find({live: true, versionKey: v.versionKey},{fields:{'batch':1}}).fetch();
+        for(let b of findB) {
+          const srs = XSeriesDB.findOne({batch: b.batch},{fields:{'items.units':1}});
+          const countI = !unitInfo ? null : srs.items.reduce((x,y)=> x + y.units, 0);
+          batches.push({
+            btch: b.batch,
+            cnt: countI
+          });
+        }
       }else{null}
 
       data.push({

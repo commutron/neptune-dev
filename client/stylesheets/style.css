@@ -724,8 +724,7 @@ n-prog-bar progress {
 }
 
 .searchResult {
-  max-width: 500px;
-  text-align: center;
+  max-width: 800px;
 }
 .searchResult td {
   padding: 20px;
@@ -737,14 +736,9 @@ n-prog-bar progress {
 .searchResult td:nth-child(2) {
   font-family: VarelaLocal;
 }
-.searchResult .mockTableCell {
-  padding: 5px 10px;
-  width: 1%;
-  border-color: black;
-  border-color: rgba(0,0,0,0.2);
-  
-}
-.searchResult .mockTableRow {
+.searchResult div {
+  padding: 5px;
+  border-bottom: 1px solid;
   border-color: black;
   border-color: rgba(0,0,0,0.2);
 }

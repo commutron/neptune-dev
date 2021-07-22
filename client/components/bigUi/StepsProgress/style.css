@@ -15,7 +15,6 @@
   height: 12px;
   border: none;
 }
-  
 .meterTrinary meter::-webkit-meter-bar {
   width: 100%;
   height: 12px;
@@ -39,4 +38,3 @@
   background: none;
   background-color: var(--orange);
 }
-

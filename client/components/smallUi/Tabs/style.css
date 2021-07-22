@@ -13,17 +13,14 @@
 .darkTheme .tabOn, .darkTheme .tabOff {
   color: white;
 }
-
 .tabOn {
 	background-color: var(--navIndicatorB);
   box-shadow: var(--navIndicatorOut);
 }
-
 .tabOff {
 	background-color: var(--navIndicatorA);
 	box-shadow: var(--navIndicatorIn);
 }
-
 .tabOff:hover {
 	background-color: var(--navIndicatorB);
 }

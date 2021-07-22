@@ -187,16 +187,14 @@ const CompSearchWrap = ({ plCache, user, app })=> {
                 <tbody key={index}>
                   <tr className='cap'>
                     <td rowSpan={mtch}>
-                      {entry.grp} {entry.wdgt} v.{entry.vrnt} {entry.dsc}
+                      {entry.grp} {entry.wdgt}-{entry.vrnt} {entry.dsc}
                     </td>
                     <td>
                     {entry.btchs.map((b, ix)=>{
                       return(
-                        <div key={b.btch + ix} className='mockTableRow'>
-                          <div className='mockTableCell'>{b.btch}</div>
-                          {b.cnt > 0 ?
-                            <div className='mockTableCell'>{b.cnt} boards</div>
-                          :null}
+                        <div key={b.btch + ix}
+                          >{b.btch}
+                          {b.cnt > 0 ? <b> ({b.cnt} {Pref.items})</b> : null}
                         </div>
                     )})}
                     </td>

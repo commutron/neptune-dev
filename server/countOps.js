@@ -74,7 +74,7 @@ Meteor.methods({
   countMultiBatchTideToQuote(widgetId) {
     this.unblock();
     
-    const widget = WidgetDB.findOne({ _id: widgetId });
+    const widget = WidgetDB.findOne({ _id: widgetId },{fields:{'quoteStats':1}});
     const quoteStats = widget.quoteStats || null;
     const statime = quoteStats ? quoteStats.updatedAt : null;
     const stale = !statime ? true :
@@ -123,11 +123,16 @@ Meteor.methods({
           createdAt: { 
             $gte: new Date(cutoff)
           }
-        }).fetch();
+        },{ 
+          fields: {
+            'salesEnd': 1, 'completedAt': 1,
+            'tide': 1, 'quoteTimeBudget': 1, 'quantity': 1, 'lockTrunc':1
+          }}
+        ).fetch();
         
         for(let batch of batches) {
-          discoverTQ(batch);
           discoverOT(batch._id, batch.salesEnd, batch.completedAt);
+          discoverTQ(batch);
         }
       }catch(err) {
         throw new Meteor.Error(err);
@@ -190,7 +195,7 @@ Meteor.methods({
     this.unblock();
     
     const series = (b)=> {
-      let srs = XSeriesDB.findOne({ batch: b });
+      let srs = XSeriesDB.findOne({ batch: b },{fields:{'nonCon':1}});
       if(srs) {
         return { batch: b, nonCon: srs.nonCon };
       }else{
@@ -214,6 +219,7 @@ Meteor.methods({
   },
   
   nonConBatchTrend(wID) {
+    this.unblock();
     const widget = WidgetDB.findOne({ _id: wID });
     
     const ncRate = widget.ncRate || null;
@@ -221,15 +227,18 @@ Meteor.methods({
     const stale = !statime ? true :
               moment.duration(moment().diff(moment(statime))).as('hours') > 12;
     if(stale) {
-      const series = XSeriesDB.find({ widgetId: wID }).fetch();
+      const series = XSeriesDB.find(
+        { widgetId: wID },
+        { fields: {'batch':1,'nonCon':1,'items.units':1}}
+      ).fetch();
     
       let rateArr = [];
     
       for(let srs of series) {
-        const b = XBatchDB.findOne({ batch: srs.batch });
+        const b = XBatchDB.findOne({ batch: srs.batch },{fields:{'completed':1}});
         if(b.completed) {
           const total = countMulti( srs.nonCon.filter( n => !n.trash ) );
-          const units = srs.items.length > 0 ? srs.items.reduce((t,i)=> t + i.units, 0) : 0;
+          const units = srs.items.reduce((t,i)=> t + i.units, 0);
           rateArr.push( asRate(total, units) );
         }
       }

@@ -140,7 +140,8 @@ import { countMulti, noIg } from './utility';
         $gte: new Date(rangeStart),
         $lte: new Date(rangeEnd) 
       }}}
-    }).forEach( (srs)=> {
+    },{fields:{'items.createdAt':1}}
+    ).forEach( (srs)=> {
       const thisI = srs.items.filter( x =>
         moment(x.createdAt).isBetween(rangeStart, rangeEnd)
       );
@@ -166,10 +167,10 @@ import { countMulti, noIg } from './utility';
         $gte: new Date(rangeStart),
         $lte: new Date(rangeEnd) 
       }}}
-    }).forEach( (srs)=> {
+    },{fields:{'items.completed':1,'items.completedAt':1}}
+    ).forEach( (srs)=> {
       const thisI = srs.items.filter( x =>
-        x.completed &&
-        moment(x.completedAt).isBetween(rangeStart, rangeEnd)
+        x.completed && moment(x.completedAt).isBetween(rangeStart, rangeEnd)
       );
       diCount = diCount + thisI.length;   
     });
@@ -192,7 +193,8 @@ import { countMulti, noIg } from './utility';
         $gte: new Date(rangeStart),
         $lte: new Date(rangeEnd) 
       }}}
-    }).forEach( (srs)=> {
+    },{fields:{'nonCon.time':1}}
+    ).forEach( (srs)=> {
       const thisNC = srs.nonCon.filter( 
         x => moment(x.time).isBetween(rangeStart, rangeEnd) 
       );
@@ -221,7 +223,8 @@ import { countMulti, noIg } from './utility';
         $gte: new Date(rangeStart),
         $lte: new Date(rangeEnd)
       }}}
-    }).forEach( (srs)=> {
+    },{fields:{'shortfall.cTime':1}}
+    ).forEach( (srs)=> {
       const thisSH = srs.shortfall.filter( 
         x => moment(x.cTime).isBetween(rangeStart, rangeEnd) 
       );
@@ -253,7 +256,8 @@ import { countMulti, noIg } from './utility';
         completedAt: { 
           $gte: new Date(rangeStart)
       }}}
-    }).forEach( (srs)=> {
+    },{fields:{'items.history':1}}
+    ).forEach( (srs)=> {
       const thisTF = srs.items.filter( x =>
         x.history.find( y =>
           moment(y.time).isBetween(rangeStart, rangeEnd) &&
@@ -280,7 +284,8 @@ import { countMulti, noIg } from './utility';
         $gte: new Date(rangeStart),
         $lte: new Date(rangeEnd) 
       }}}
-    }).forEach( (srs)=> {
+    },{fields:{'items.scrapped':1,'items.history':1}}
+    ).forEach( (srs)=> {
       const scItems = srs.items.filter( i => i.scrapped === true );
       const thisSC = scItems.filter( x =>
         x.history.find( y =>

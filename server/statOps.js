@@ -77,62 +77,92 @@ Meteor.methods({
     const ncRate = widget.ncRate || null;
     const rate = ncRate ? ncRate.rate : 0;
     
-    const variants = VariantDB.find({widgetId: wID}).fetch().length;
+    const variants = VariantDB.find({widgetId: wID},{fields:{_id:1}}).count();
     
-    const batchesX = XBatchDB.find({orgKey: Meteor.user().orgKey, widgetId: wID}).fetch();
-    const batchInfoX = Array.from(batchesX, x => { return { 
-      quantity: x.quantity,
-    }});
+    const batchesX = XBatchDB.find({
+      orgKey: Meteor.user().orgKey, widgetId: wID},
+      {fields:{'quantity':1}}).fetch();
+    const batchInfoX = Array.from(batchesX, x => x.quantity);
     
     return [ variants, batchInfoX, rate ];
   },
   
   groupTops(gID) {
-      
-    const batches = XBatchDB.find({
-      orgKey: Meteor.user().orgKey,
-      groupId: gID
-    },{fields:{'batch':1,'completedAt':1,'salesEnd':1,'lockTrunc':1}}).fetch();
+    this.unblock();
     
-    let ontm = 0;
-    let late = 0;
-    let pftargets = [];
+    const group = GroupDB.findOne({ _id: gID });
+    const topStats = group.topStats || null;
+    const statime = topStats ? topStats.updatedAt : null;
+    const stale = !statime ? true :
+            moment.duration(moment().diff(moment(statime))).as('hours') > 24;
+    if(stale) {
+      const batches = XBatchDB.find({
+        orgKey: Meteor.user().orgKey,
+        groupId: gID
+      },{fields:{'batch':1,'salesEnd':1,'completedAt':1,'lockTrunc.performTgt':1}}
+      ).fetch();
       
-    for( let batch of batches) {
-      const fin = getEndWork(batch._id, batch.salesEnd);
-      const nowLate = moment().isAfter(fin);
+      let ontm = 0;
+      let late = 0;
+      let pftargets = [];
       
-      if( batch.completedAt && moment(batch.completedAt).isSameOrBefore(fin) ) {
-        ontm += 1;
-      }else if( (!batch.completedAt && nowLate) || ( batch.completedAt && moment(batch.completedAt).isAfter(fin) ) ) {
-        late += 1;
-      }else{
-        null;
+      for( let batch of batches) {
+        const fin = getEndWork(batch._id, batch.salesEnd);
+        const nowLate = moment().isAfter(fin);
+        
+        if( batch.completedAt && moment(batch.completedAt).isSameOrBefore(fin) ) {
+          ontm += 1;
+        }else if( (!batch.completedAt && nowLate) || ( batch.completedAt && moment(batch.completedAt).isAfter(fin) ) ) {
+          late += 1;
+        }else{
+          null;
+        }
+        
+        if(batch.lockTrunc) {
+    			batch.lockTrunc.performTgt ? pftargets.push(batch.lockTrunc.performTgt) : null;
+        }else{
+          const t = TraceDB.findOne({batchID: batch._id},{fields:{'performTgt':1}});
+          t && t.performTgt !== undefined ? pftargets.push(t.performTgt) : null;
+        }
       }
+      let ontime = [{
+        x: 'on time',
+        y: Math.round( (ontm / (ontm+late || 1)) * 100 )
+      },{
+        x: 'late',
+        y: Math.round( (late / (ontm+late || 1)) * 100 )
+      }];
+      const avgPf = Math.round( avgOfArray(pftargets, true) );
+        
+      const widgets = WidgetDB.find({ groupId: gID 
+      },{fields:{'ncRate':1}}).fetch();
+      const avgNC = avgOfArray(Array.from(widgets, x=> x.ncRate ? x.ncRate.rate : 0), true);
       
-      if(batch.lockTrunc) {
-  			batch.lockTrunc.performTgt ? pftargets.push(batch.lockTrunc.performTgt) : null;
-      }else{
-        const t = TraceDB.findOne({batchID: batch._id},{fields:{'performTgt':1}});
-        t && t.performTgt !== undefined ? pftargets.push(t.performTgt) : null;
-      }
+      const last = topStats ? topStats.stats : null;
+      let tt = !last ? 0 : ontime >= last.ontime ? 1 : -1;
+      let nt = !last ? 0 : avgNC <= last.avgNC ? 1 : -1;
+      let tp = !last ? 0 : avgPf >= last.avgPf ? 1 : -1;
+      const trend = tt + nt + tp === 3 ? 'up' :
+                    tt + nt + tp === -3 ? 'down' : 'flat';
+      
+      const top = {
+        ontime: ontime,
+        avgNC: avgNC,
+        avgPf: avgPf,
+        trend: trend
+      };
+      
+      GroupDB.update({ _id: gID }, {
+        $set : {
+          topStats: {
+            stats: top,
+            updatedAt: new Date(),
+          }
+      }});
+      return top;
+    }else{
+      return topStats.stats;
     }
-    let ontimesplit = [{
-      x: 'on time',
-      y: Math.round( (ontm / (ontm+late || 1)) * 100 )
-    },{
-      x: 'late',
-      y: Math.round( (late / (ontm+late || 1)) * 100 )
-    }];
-    const avgPf = Math.round( avgOfArray(pftargets, true) );
-      
-    const widgets = WidgetDB.find({ groupId: gID 
-    },{fields:{'ncRate':1}}).fetch();
-    const avgNCrate = avgOfArray(Array.from(widgets, x=> x.ncRate ? x.ncRate.rate : 0), true);
-    
-    return {
-      ontimesplit, avgNCrate, avgPf
-    };
   },
   
   nonConSelfCount(nonConCol) {

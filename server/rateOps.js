@@ -14,8 +14,8 @@ Meteor.methods({
   ////////////////////////////////////////////////////////
   layeredHistoryRate(batchId, seriesId, start, end, riverFlow) {
     this.unblock();
-    const b = XBatchDB.findOne({_id: batchId});
-    const srs = XSeriesDB.findOne({_id: seriesId});
+    const b = XBatchDB.findOne({_id: batchId},{fields:{'quantity':1,'waterfall':1}});
+    const srs = XSeriesDB.findOne({_id: seriesId},{fields:{'items':1}});
 
     let now = moment().tz(Config.clientTZ);
     
@@ -84,8 +84,7 @@ Meteor.methods({
     
     if(srs) {
       const flowKeys = Array.from( 
-                        riverFlow.filter( x => x.type !== 'first'), 
-                          x => x.key );
+              riverFlow.filter( x => x.type !== 'first'), x => x.key );
   
       const items = srs.items.filter( x => !x.scrapped );
       const totalItems = items.length;
@@ -100,11 +99,9 @@ Meteor.methods({
         });
       }
     }
-    
-    const totalQ = b.quantity;
 
     for(let fall of b.waterfall) {
-      const dayCounts = loopFallDays(fall, totalQ, startDay, howManyDays);
+      const dayCounts = loopFallDays(fall, b.quantity, startDay, howManyDays);
       burnSeries.push({
         name: fall.gate,
         data: dayCounts
@@ -121,7 +118,7 @@ Meteor.methods({
   nonConRateLoop(batches) {
 
     const allNC = Array.from( batches, x => {
-      const bDT = XSeriesDB.findOne({batch: x});
+      const bDT = XSeriesDB.findOne({batch: x},{fields:{'nonCon':1}});
       if(bDT) { return bDT.nonCon }            
     }).filter(f=>f);
     

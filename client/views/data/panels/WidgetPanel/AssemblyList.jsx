@@ -46,7 +46,7 @@ const AssemblyList = ({ variantData, widgetData, groupData })=> {
   }
   
   return(
-    <details open={false} className='blueBorder'>
+    <details open={false} className='blueBorder vmarginhalf'>
       <summary>
         <i className='cap miniAction'>{Pref.comp}s:</i>
         <i className='numFont gap'>{v.assembly.length}</i>

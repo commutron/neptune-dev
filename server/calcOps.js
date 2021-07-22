@@ -25,7 +25,6 @@ export function min2hr(minutes) {
   return parseFloat(trunc);
 }
 
-
 export function round1Decimal(thrtytw) {
   const trunc = Math.round((thrtytw + Number.EPSILON) * 10) / 10;
   return trunc;
@@ -55,7 +54,7 @@ export function avgOfArray(arr, zeros) {
   if(cArr.length == 1) {
     return round2Decimal( cArr[0] );
   }else if(cArr.length > 1) {
-    const reduced = cArr.reduce( (a,c)=>a+c ) / cArr.length;
+    const reduced = cArr.reduce( (a,c)=> a + c ) / cArr.length;
     const clean = round2Decimal( reduced );
     return clean;
   }else{

@@ -80,20 +80,24 @@ Meteor.methods({
   
   stopTideTask(tideKey) {
     try {
-      const orgKey = Meteor.user().orgKey;
-      const userId = Meteor.userId(); 
+      const docX = XBatchDB.findOne({ 
+        'tide.tKey': tideKey, 
+        'tide.who': Meteor.userId() 
+      },{
+        fields: { 'batch': 1 }
+      });
       
-      const docX = XBatchDB.findOne({ 'tide.tKey': tideKey });
-      const subX = docX && docX.tide.find( x => x.tKey === tideKey && x.who === userId );
-      
-      if(docX && subX) {
+      if(docX) {
         const batchIDx = docX._id || false;
         if(batchIDx) {
-          XBatchDB.update({_id: batchIDx, orgKey: orgKey, 'tide.tKey': tideKey}, {
+          XBatchDB.update({
+            _id: batchIDx,
+            'tide.tKey': tideKey
+          }, {
             $set : { 
               'tide.$.stopTime' : new Date()
           }});
-          Meteor.users.update(userId, {
+          Meteor.users.update(Meteor.userId(), {
             $set: {
               engaged: false
             },

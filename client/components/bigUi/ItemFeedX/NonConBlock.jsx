@@ -73,8 +73,7 @@ const NonConBlock = ({
     const yes = window.confirm('Permanently delete this ' + Pref.nonCon + '?');
     if(yes) {
       const ncKey = entry.key;
-      const override = !canQA ? prompt("Enter PIN to override", "") : false;
-      Meteor.call('removeNCX', seriesId, ncKey, override, (error)=>{
+      Meteor.call('removeNCX', seriesId, ncKey, (error)=>{
         error && console.log(error);
         editSet(false);
       });

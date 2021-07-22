@@ -2,7 +2,7 @@ Meteor.methods({
   
   //// Widgets \\\\
   addNewWidget(widget, groupId, desc) {
-    const duplicate = WidgetDB.findOne({widget: widget});
+    const duplicate = WidgetDB.findOne({widget: widget},{fields:{'_id':1}});
     if(!duplicate && Roles.userIsInRole(Meteor.userId(), 'create')) {
       const appDoc = AppDB.findOne({orgKey: Meteor.user().orgKey});
       const endTrack = appDoc.lastTrack;
@@ -34,10 +34,9 @@ Meteor.methods({
     }
   },
   
-  
   editWidget(widgetId, newName, newDesc) {
-    const doc = WidgetDB.findOne({_id: widgetId});
-    let duplicate = WidgetDB.findOne({widget: newName});
+    const doc = WidgetDB.findOne({_id: widgetId},{fields:{'widget':1}});
+    let duplicate = WidgetDB.findOne({widget: newName},{fields:{'_id':1}});
     doc.widget === newName ? duplicate = false : null;
     if(!duplicate && Roles.userIsInRole(Meteor.userId(), 'edit')) {
       WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey}, {
@@ -53,9 +52,8 @@ Meteor.methods({
     }
   },
   
-  
   deleteWidget(widgetId, pass) {
-    const inUseX = XBatchDB.findOne({widgetId: widgetId});
+    const inUseX = VariantDB.findOne({widgetId: widgetId},{fields:{'_id':1}});
     if(!inUseX) {
       const doc = WidgetDB.findOne({_id: widgetId});
       const lock = doc.createdAt.toISOString().split("T")[0];
@@ -95,21 +93,6 @@ Meteor.methods({
       return false;
     }
   },
-  
-  /*
-  let counterObjs = [];
-    for(let cs of counterSelect) {
-      let app = AppDB.findOne({orgKey: Meteor.user().orgKey});
-      let step = app && app.counterOptions && app.counterOptions.find( x => x.key === cs );
-      if(step) {
-        counterObjs.push({
-          ckey: cs,
-          step: step.step,
-          counts: []
-        });
-      }
-    }
-    */
 
 // edit 
   setBasicPlusFlowHead(widgetId, editId, flowTitle, ncLists) {
@@ -146,7 +129,7 @@ Meteor.methods({
       const options = appDoc.trackOption;
       const endTrack = appDoc.lastTrack;
       
-      const doc = WidgetDB.findOne({_id: widgetId});
+      const doc = WidgetDB.findOne({_id: widgetId},{fields:{'flows':1}});
       if(doc) {
         for( let flow of doc.flows) {
           const editKey = flow.flowKey;
@@ -182,8 +165,8 @@ Meteor.methods({
 
 // remove
   pullFlow(widgetId, fKey) {
-    const inUseX = XBatchDB.findOne({river: fKey});
-    const inUseS = XSeriesDB.findOne({'items.altPath.river': fKey});
+    const inUseX = XBatchDB.findOne({river: fKey},{fields:{'_id':1}});
+    const inUseS = XSeriesDB.findOne({'items.altPath.river': fKey},{fields:{'_id':1}});
     
     if(!inUseX && !inUseS) {
       if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
@@ -200,11 +183,11 @@ Meteor.methods({
   },
   
   activeFlowCheck(fKey) {
-    const inUseXA = XBatchDB.findOne({live: true, river: fKey});
-    const inUseX = XBatchDB.findOne({live: false, river: fKey});
+    const inUseXA = XBatchDB.findOne({live: true, river: fKey},{fields:{'_id':1}});
+    const inUseX = XBatchDB.findOne({live: false, river: fKey},{fields:{'_id':1}});
     
-    const inUseSA = XSeriesDB.findOne({live: true, 'items.altPath.river': fKey});
-    const inUseS = XSeriesDB.findOne({live: false, 'items.altPath.river': fKey});
+    const inUseSA = XSeriesDB.findOne({live: true, 'items.altPath.river': fKey},{fields:{'_id':1}});
+    const inUseS = XSeriesDB.findOne({live: false, 'items.altPath.river': fKey},{fields:{'_id':1}});
     
     if(inUseXA) {
       return 'liveRiver';

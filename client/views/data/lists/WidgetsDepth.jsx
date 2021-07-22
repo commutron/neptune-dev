@@ -1,5 +1,4 @@
 import React, { useState, useEffect, Fragment } from 'react';
-// import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import DumbFilter from '/client/components/tinyUi/DumbFilter.jsx';
 import LeapLine from '/client/components/tinyUi/LeapLine';
@@ -56,18 +55,12 @@ const WidgetIndexCard = ({ data, barStyle })=>{
     });
   }, []);
   
-  function totalI(mData) {
-    let quantities = Array.from(mData, x => x.quantity);
-    let totalX = quantities.length > 0 ? quantities.reduce((x,y)=>x+y) : 0;
-    return totalX;
-  }
-  
   if(!moreData) {
     return null;
   }
     
   let totalBatches = moreData[1].length;
-  let totalItems = totalI(moreData[1]);
+  let totalItems = moreData[1].reduce((x,y)=>x+y, 0); 
     
   return(
     <LeapLine
@@ -89,8 +82,8 @@ const WidgetIndexCard = ({ data, barStyle })=>{
             size='medBig' />
           <NumStat
             num={totalItems}
-            name={Pref.items}
-            title={`Total serialized items of all ${Pref.xBatchs}`}
+            name='Total Quantity'
+            title={`Total quantities of all ${Pref.xBatchs}`}
             color='blueT'
             size='medBig' />
           <NumStat

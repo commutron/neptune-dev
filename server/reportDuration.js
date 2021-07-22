@@ -73,9 +73,16 @@ function getWidgetDur(widget, accessKey) {
       createdAt: { 
         $gte: new Date(cutoff)
       },
-    }).fetch();
+    },{fields:{
+      'batch':1,'salesStart':1,'completedAt':1,
+      'quantity':1,'tide':1,'releases':1}}
+    ).fetch();
+    
     for( let x of compX ) {
-      const srs = XSeriesDB.findOne({batch: x.batch});
+      const srs = XSeriesDB.findOne(
+        {batch: x.batch},
+        {fields:{'items.completed':1,'items.completedAt':1}}
+      );
       const items = srs ? srs.items : [];
       qtyAvg.push( x.quantity );
       
@@ -154,12 +161,10 @@ function splitItemTime(itemS, total, tide, perBaseTen ) {
 
 Meteor.methods({
   
- 
-
   oneWidgetTurnAround(wID, privateKey) {
     const accessKey = privateKey || Meteor.user().orgKey;
     
-    const widget = WidgetDB.findOne({ _id: wID });
+    const widget = WidgetDB.findOne({ _id: wID },{fields:{'turnStats':1}});
     
     const timeArr = getWidgetDur(widget, accessKey);
     

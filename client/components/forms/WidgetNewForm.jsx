@@ -2,7 +2,7 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import ModelMedium from '../smallUi/ModelMedium.jsx';
+import ModelSmall from '../smallUi/ModelSmall';
 
 
 const WidgetNewWrapper = ({ groupId, lock })=> {
@@ -11,7 +11,7 @@ const WidgetNewWrapper = ({ groupId, lock })=> {
   const lT = lock ? `${Pref.group} is hibernated` : '';
   const title = access && !lock ? `New ${Pref.widget}` : `${aT}\n${lT}`;
   return(
-    <ModelMedium
+    <ModelSmall
       button={'new ' + Pref.widget}
       title={title}
       color='greenT'
@@ -20,7 +20,7 @@ const WidgetNewWrapper = ({ groupId, lock })=> {
       <WidgetNewForm
         groupId={groupId}
       />
-    </ModelMedium>
+    </ModelSmall>
   );
 };
 
@@ -63,7 +63,7 @@ const WidgetNewForm = ({ groupId })=> {
           type='text'
           id='prodiption'
           placeholder='Description ie. CRC Display'
-          className='wide'
+          className='wide min300'
           required />
         <label htmlFor='prodiption'>{Pref.widget} Description</label>
       </p>

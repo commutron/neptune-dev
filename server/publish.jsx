@@ -432,6 +432,7 @@ Meteor.publish('skinnyData', function(){
           'widget': 1,
           'describe': 1,
           'groupId': 1,
+          'versions': 1
         }}),
         
       VariantDB.find({orgKey: orgKey}, {
@@ -496,6 +497,7 @@ Meteor.publish('hotDataEx', function(dataRequest, hotWidget){
           fields: {
             'orgKey': 0,
             'shareKey': 0,
+            'topStats': 0
         }}),
         WidgetDB.find({orgKey: orgKey}, {
           fields: {

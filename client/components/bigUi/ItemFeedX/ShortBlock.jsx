@@ -4,7 +4,7 @@ import Pref from '/client/global/pref.js';
 
 import UserNice from '/client/components/smallUi/UserNice.jsx';
 
-const ShortBlock = ({ seriesId, serial, units, entry, done, iopen, deleteAuth, cal })=> {
+const ShortBlock = ({ seriesId, serial, units, entry, done, iopen, canQA, cal })=> {
   
   const [ editState, editSet ] = useState(false);
 
@@ -52,15 +52,12 @@ const ShortBlock = ({ seriesId, serial, units, entry, done, iopen, deleteAuth, c
     const yes = window.confirm(check);
     if(yes) {
       const shKey = entry.key;
-      const override = !deleteAuth ? 
-                        prompt("Enter PIN to override", "") : false;
-      Meteor.call('removeShortX', seriesId, shKey, override, (error)=>{
+      Meteor.call('removeShortX', seriesId, shKey, (error)=>{
         error && console.log(error);
         editSet(false);
       });
     }else{editSet(false)}
   }
-  
   
   const dt = entry;
   
@@ -133,6 +130,7 @@ const ShortBlock = ({ seriesId, serial, units, entry, done, iopen, deleteAuth, c
             <button
               className='smallAction inlineButton vmarginhalf clearRed blackT'
               onClick={(e)=>popSh(e)}
+              disabled={!canQA}
             >Remove</button>
             <button
               className='smallAction inlineButton vmarginhalf clearGreen blackT'

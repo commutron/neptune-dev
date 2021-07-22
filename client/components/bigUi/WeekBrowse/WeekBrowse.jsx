@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import 'moment-timezone';
-import "./style.css";
 
 const WeekBrowse = ({ sendUp, app })=> {
   

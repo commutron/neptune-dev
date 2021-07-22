@@ -3,14 +3,14 @@ Meteor.methods({
 //// Variants \\\\
   
   addNewVariant(widgetId, groupId, variant, wiki, unit) {
-    const duplicate = VariantDB.findOne({widgetId: widgetId, variant: variant});
+    const duplicate = VariantDB.findOne({widgetId: widgetId, variant: variant},{fields:{'_id':1}});
     if(!duplicate && Roles.userIsInRole(Meteor.userId(), 'create')) {
           
       VariantDB.insert({
         orgKey: Meteor.user().orgKey,
         groupId: groupId,
         widgetId: widgetId,
-        versionKey: new Meteor.Collection.ObjectID().valueOf(),// leagcy connector
+        versionKey: new Meteor.Collection.ObjectID().valueOf(),
         variant: variant,
         createdAt: new Date(),
         createdWho: Meteor.userId(),
@@ -29,6 +29,45 @@ Meteor.methods({
       return false;
     }
   },
+  
+  
+  dbbleCheckVersions() {
+    let found = [];
+    
+    const docs = WidgetDB.find({}).fetch();
+      
+    for( let w of docs ) {
+      if(w.versions) {
+        const variants = VariantDB.find({widgetId: w._id},{fields:{'variant':1,'versionKey':1}}).fetch();
+        found.push({
+          widget: w.widget,
+          vers: w.versions,
+          variants: variants
+        });
+      }
+    }
+    
+    return found;
+    
+  },
+  
+  /*UNSEToldwidgetversionsArray() {
+    try{
+      if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+        AppDB.update({orgKey: Meteor.user().orgKey}, {
+          $unset : { 
+            'phases': ""
+          }})//,{multi: true});
+      }else{
+        null;
+      }
+    }catch (err) {
+      throw new Meteor.Error(err);
+    }
+  },
+  */
+  
+  
   
   migrateWidgetVersions(widgetId) {
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
@@ -78,8 +117,8 @@ Meteor.methods({
   },
   
   editVariant(widgetId, vId, newVar, newWiki, newUnit) {
-    const doc = VariantDB.findOne({_id: vId});
-    const dups = VariantDB.findOne({widgetId: widgetId, variant: newVar});
+    const doc = VariantDB.findOne({_id: vId},{fields:{'variant':1}});
+    const dups = VariantDB.findOne({widgetId: widgetId, variant: newVar},{fields:{'_id':1}});
     let duplicate = doc.variant !== newVar && dups ? true : false;
     
     if(!duplicate && Roles.userIsInRole(Meteor.userId(), 'edit')) {
@@ -118,7 +157,7 @@ Meteor.methods({
   deleteVariant(vObj, pass) {
     const doc = VariantDB.findOne({_id: vObj._id});
     const versionKey = doc.versionKey;
-    const inUseX = XBatchDB.findOne({versionKey: versionKey});
+    const inUseX = XBatchDB.findOne({versionKey: versionKey},{fields:{'_id':1}});
     if(!inUseX) {
       const lock = doc.createdAt.toISOString().split("T")[0];
       const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
@@ -148,7 +187,6 @@ Meteor.methods({
       return false;
     }
   },
-  
   
   // push a tag
   pushVTag(vId, vKey, tag) {
@@ -212,7 +250,6 @@ Meteor.methods({
   },
   
   componentExport(wId, vId) {
-    // const variant = VariantDB.findOne({_id: vID, orgKey: Meteor.user().orgKey});
     const widget = WidgetDB.findOne({_id: wId, orgKey: Meteor.user().orgKey});
     const variant = VariantDB.findOne({_id: vId, orgKey: Meteor.user().orgKey});
     
@@ -228,32 +265,3 @@ Meteor.methods({
   }
   
 });
-
-  // needs testing
-    /*
-    assembly: [
-      { 
-        ref: 'referance',
-        component: 'part nummber',
-        location: [x,y,z], // "z is optional"
-        theta: 'orientation in degrees',
-        bSide: true, // "or false" // "a split for double sided items"
-      }
-    ]
-    */
-  /*
-  setAssembly(widgetId, vKey, assembly, verify) {
-    if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
-      const verified = verify ? Meteor.userId() : false;
-      WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey, 'versions.versionKey': vKey}, {
-        $set : {
-          'versions.$.updatedAt': new Date(),
-          'versions.$.verifiedWho': verified,
-          'versions.$.assembly': assembly
-  		   }});
-  		return true;
-    }else{
-      return false;
-    }
-  },
-  */

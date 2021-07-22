@@ -21,10 +21,13 @@ const DataRepair = ({ app, users })=> {
     });
   }
   
-  function doCallThing(mtrMethod) {
+  function doCallThing(mtrMethod, rtnLog) {
     Meteor.call(mtrMethod, (error, re)=>{
       error && console.log(error);
       re && toast.success('success', {autoClose: false});
+      if(rtnLog) {
+        console.log(re);
+      }
     });
   }
   
@@ -72,11 +75,11 @@ const DataRepair = ({ app, users })=> {
       </div>
       
       <DoCard
-        title='Run Weekly Avg Update'
+        title='Run Daily Avg Update'
         sub='Runs every Saturday at 12:03am (CST)'
         icon='calculator'
         color='clearPurple'
-        button='Request Avg'
+        button='Request Update'
         action={()=>doCallThing('fetchWeekAvg')}
       />
       
@@ -181,6 +184,20 @@ const DataRepair = ({ app, users })=> {
           >fix</button>
         </form>
       </div>
+      
+      
+      
+      <hr />
+      
+      <DoCard
+        title='Make Sure All Versions are Migrated'
+        icon='question'
+        color='clearOrange'
+        button='Double Check'
+        action={()=>doCallThing('dbbleCheckVersions', true)}
+      />
+      
+      
     </div>
   );
 };

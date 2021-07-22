@@ -124,7 +124,10 @@ function weekDoneAnalysis(rangeStart, rangeEnd) {
       $gte: new Date(rangeStart),
       $lte: new Date(rangeEnd) 
     }
-  }).fetch();
+  },{fields:{
+    'batch':1,'salesOrder':1,'salesEnd':1,'quoteTimeBudget':1,
+    'completedAt':1,'quantity':1,'tide':1,'altered':1
+  }}).fetch();
   
   for(let gf of generalFindX) {
     const batchNum = gf.batch;
@@ -249,12 +252,13 @@ function weekDoneAnalysis(rangeStart, rangeEnd) {
       $gte: new Date(localDate.startOf('day').format()),
       $lte: new Date(localDate.endOf('day').format())
     }}}
-    }).fetch();
+    },{fields:{'batch':1,'items.serial':1,'items.completed':1,'items.completedAt':1}}
+    ).fetch();
     
     for(let srs of touchedSRS) {
       const items = srs.items.filter( i => i.completed && localDate.isSame(i.completedAt, 'day') );
       const describe = whatIsBatchX(srs.batch)[0].join(' ');
-      const batchX = XBatchDB.findOne({batch: srs.batch});
+      const batchX = XBatchDB.findOne({batch: srs.batch},{fields:{'salesOrder':1}});
       const salesOrder = batchX ? batchX.salesOrder : '';
       
       for(let ic of items) {
@@ -282,7 +286,7 @@ function weekDoneAnalysis(rangeStart, rangeEnd) {
           $gte: new Date(now.startOf('week').format()),
           $lte: new Date(now.endOf('week').format())
         }}}
-      }).fetch();
+      },{fields:{'items.completed':1,'items.completedAt':1}}).fetch();
       
       for(let srs of touchedSRS) {
         const items = srs.items.filter( i => i.completed && now.isSame(i.completedAt, 'week') );

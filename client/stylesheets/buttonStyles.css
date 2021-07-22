@@ -648,3 +648,17 @@ input[type='radio'].interInput {
 .showValid:invalid {
   box-shadow: 0 0 10px var(--sunflowerfade);
 }
+
+.bttnTXTbttn {
+  font-size: 2.5vmax;
+  vertical-align: middle;
+}
+.BTTNtxtBTTN {
+  line-height: 1;
+  letter-spacing: 1px;
+  min-width: 2vmax;
+	height: 2.5vmax;
+	font-size: 1.5vmax;
+	padding: 0 10px;
+  cursor: pointer;
+}

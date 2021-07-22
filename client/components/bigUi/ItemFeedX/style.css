@@ -13,7 +13,6 @@
 .feedInfoHeader { padding: 1vh 2vw; }
 .feedInfoHeader button {  color: white; }
 
-
 n-feed-info-block {
   display: grid;
   width: 100%;

@@ -15,13 +15,13 @@ Meteor.methods({
     return true;
   },
   
-  getAvgDayCache() {
-    const accessKey = Meteor.user().orgKey;
-    return {
-      avgTime : smplresult('avgDayTime', accessKey),
-      avgItem : smplresult('avgDayItemFin', accessKey),
-    };
-  },
+  // getAvgDayCache() {
+  //   const accessKey = Meteor.user().orgKey;
+  //   return {
+  //     avgTime : smplresult('avgDayTime', accessKey),
+  //     avgItem : smplresult('avgDayItemFin', accessKey),
+  //   };
+  // },
   
   getAvgDayFin() {
     return smplresult('avgDayItemFin', Meteor.user().orgKey);
@@ -32,6 +32,7 @@ Meteor.methods({
     const widgets = WidgetDB.find({},{fields:{'_id':1}}).fetch();
 
     for(let w of widgets) {
+      Meteor.call('nonConBatchTrend', w._id);
       Meteor.call('countMultiBatchTideToQuote', w._id);
       Meteor.call('oneWidgetTurnAround', w._id, accessKey);
     }

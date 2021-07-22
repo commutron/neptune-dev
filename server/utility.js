@@ -32,7 +32,7 @@ export function countWaterfall(stepCounts) {
     return 0;
   }else{
     const ticks = Array.from(stepCounts, x => x.tick);
-    const total = ticks.length > 0 ? ticks.reduce((x,y)=> x + y) : 0;
+    const total = ticks.reduce((x,y)=> x + y, 0);
     return total;
   }
 }
@@ -56,12 +56,12 @@ export function allNCOptions() {
 
 export function countMulti(ncArr) {
   const inst = Array.from(ncArr, x => Number(x.multi) || 1);
-  const count = inst.length > 0 ? inst.reduce((x,y)=> x + y) : 0;
+  const count = inst.reduce((x,y)=> x + y, 0);
   return count;
 }
 export function countMultiRefs(shArr) {
   const inst = Array.from(shArr, x => (Number(x.multi) || 1) * x.refs.length);
-  const count = inst.length > 0 ? inst.reduce((x,y)=> x + y) : 0;
+  const count = inst.reduce((x,y)=> x + y, 0);
   return count;
 }
 

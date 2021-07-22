@@ -11,7 +11,6 @@ import {
   countNewWidget,
   countNewVariant,
   countNewUser
-  
 } from './rateStatsOps.js';
 
 import { totalTideTimePromise } from './statOps.js';

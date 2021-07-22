@@ -115,7 +115,7 @@ const ItemFeedX = ({
                 units={units}
                 done={done}
                 iopen={iopen}
-                deleteAuth={canRun}
+                canQA={canQA}
                 cal={calFunc} /> 
             );
           }else if(typeof dt.rapId === 'string') {

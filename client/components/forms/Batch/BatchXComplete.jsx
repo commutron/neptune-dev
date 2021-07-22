@@ -48,13 +48,14 @@ const BatchXComplete = ({ batchData, allFlow, allFall, nowater, canRun })=> {
   const canBackDate = batchData.completed && 
     !batchData.lock && Roles.userIsInRole(Meteor.userId(), 'edit');
   
-  const datesearch = !canBackDate || 
+  const datesearch = canBackDate ?
     Math.max(...[
+      batchData.createdAt,
       ...Array.from(batchData.waterfall, w => 
           w.counts[w.counts.length-1].time ),
       ...Array.from(batchData.events, e => {
           if(e.title === 'End of Process' ){ return e.time } })
-    ].filter(f=>f));
+    ].filter(f=>f)) : null;
   
   return(
     <div className='endBox borderPurple'>
@@ -83,7 +84,7 @@ const BatchXComplete = ({ batchData, allFlow, allFall, nowater, canRun })=> {
             onChange={(e)=> datetimeSet( this.backDateTime.value )}
             options={{
               defaultDate: datetime,
-              minDate: moment(datesearch).startOf('minute').format(),
+              minDate: !datesearch ? null : moment(datesearch).startOf('minute').format(),
               maxDate: moment(batchData.completedAt).endOf('minute').format(),
               minuteIncrement: 1,
               enableTime: true,

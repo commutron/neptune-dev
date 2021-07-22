@@ -8,9 +8,9 @@ Meteor.methods({
     const accessKey = Meteor.user().orgKey;
     const auth = Roles.userIsInRole(Meteor.userId(), 'create');
     
-    const batch = XBatchDB.findOne({_id: batchId});
+    const batch = XBatchDB.findOne({_id: batchId, orgKey: accessKey},{fields:{'batch':1}});
     
-    if( batch && batch.orgKey === accessKey ) {
+    if( batch ) {
       
       const duplicate = XSeriesDB.findOne({batch: batch.batch});
     
@@ -50,7 +50,10 @@ Meteor.methods({
 
 //// Non-Cons \\\\
   floodNCX(seriesId, ref, type) {
-    const srs = XSeriesDB.findOne({_id: seriesId, orgKey: Meteor.user().orgKey});
+    const srs = XSeriesDB.findOne(
+      {_id: seriesId, orgKey: Meteor.user().orgKey},
+      {fields: {'items.serial':1,'items.completed':1,'nonCon':1}}
+    );
     if(!Meteor.userId() || !srs) { null }else{
       const liveItems = srs.items.filter( x => x.completed === false );
       const liveSerials = Array.from(liveItems, x => {
@@ -84,7 +87,10 @@ Meteor.methods({
   },
 
   addNCX(seriesId, bar, ref, multi, type, step, fix) {
-    const srs = XSeriesDB.findOne({_id: seriesId, orgKey: Meteor.user().orgKey});
+    const srs = XSeriesDB.findOne(
+      {_id: seriesId, orgKey: Meteor.user().orgKey},
+      {fields: {'nonCon':1}}
+    );
     const double = srs.nonCon.find( x => 
                     x.serial === bar &&
                     x.ref === ref &&
@@ -216,7 +222,10 @@ Meteor.methods({
   },
 
   editNCX(seriesId, serial, ncKey, ref, multi, type, where) {
-    const srs = XSeriesDB.findOne({_id: seriesId, orgKey: Meteor.user().orgKey});
+    const srs = XSeriesDB.findOne(
+      {_id: seriesId, orgKey: Meteor.user().orgKey},
+      {fields: {'nonCon':1}}
+    );
     const double = srs.nonCon.find( x => 
                     x.serial === serial &&
                     x.ref === ref &&
@@ -293,7 +302,10 @@ Meteor.methods({
   autoTrashMissingNC(accessKey, seriesId, serial, refs) {
     const app = AppDB.findOne({orgKey:accessKey}, {fields:{'missingType':1}});
     const type = app ? app.missingType : false;
-    const srs = XSeriesDB.findOne({_id: seriesId, orgKey: accessKey});
+    const srs = XSeriesDB.findOne(
+      {_id: seriesId, orgKey: accessKey},
+      {fields: {'nonCon':1}}
+    );
     if(type && srs) {
       const related = srs.nonCon.filter( x => 
                         x.serial === serial &&
@@ -312,25 +324,22 @@ Meteor.methods({
   
   removeNCX(seriesId, ncKey, override) {
     const auth = Roles.userIsInRole(Meteor.userId(), ['remove', 'qa']);
-    if(!auth && override === undefined) {
-      null;
+    if(auth) {
+      XSeriesDB.update({_id: seriesId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
+        $pull : { nonCon: {key: ncKey}
+      }});
+      return true;
     }else{
-      const org = AppDB.findOne({ orgKey: Meteor.user().orgKey });
-      const minorPIN = org ? org.minorPIN : null;
-      if(auth || minorPIN === override) {
-        XSeriesDB.update({_id: seriesId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
-          $pull : { nonCon: {key: ncKey}
-        }});
-        return true;
-      }else{
-        return false;
-      }
+      return false;
     }
   },
 
   //// Shortages \\\\
   addShortX(seriesId, partNum, refs, multi, serial, step, comm) {
-    const srs = XSeriesDB.findOne({_id: seriesId, orgKey: Meteor.user().orgKey});
+    const srs = XSeriesDB.findOne(
+      {_id: seriesId, orgKey: Meteor.user().orgKey},
+      {fields: {'shortfall':1}}
+    );
     const double = srs.shortfall.find( x => 
                       x.partNum === partNum && x.serial === serial );
                       
@@ -359,7 +368,10 @@ Meteor.methods({
   },
 
   editShortX(seriesId, serial, shKey, partNum, refs, multi, inEffect, reSolve, comm) {
-    const srs = XSeriesDB.findOne({_id: seriesId, orgKey: Meteor.user().orgKey});
+    const srs = XSeriesDB.findOne(
+      {_id: seriesId, orgKey: Meteor.user().orgKey},
+      {fields: {'shortfall':1}}
+    );
     const double = srs.shortfall.filter( x => 
                     x.partNum === partNum && x.serial === serial );
                     
@@ -405,21 +417,15 @@ Meteor.methods({
     }
   },
   
-  removeShortX(seriesId, shKey, override) {
-    const auth = Roles.userIsInRole(Meteor.userId(), ['remove', 'qa', 'run']);
-    if(!auth && override === undefined) {
-      null;
+  removeShortX(seriesId, shKey) {
+    const auth = Roles.userIsInRole(Meteor.userId(), ['remove', 'qa']);
+    if(auth) {
+      XSeriesDB.update({_id: seriesId, orgKey: Meteor.user().orgKey, 'shortfall.key': shKey}, {
+        $pull : { shortfall: {key: shKey}
+      }});
+      return true;
     }else{
-      const org = AppDB.findOne({ orgKey: Meteor.user().orgKey });
-      const minorPIN = org ? org.minorPIN : null;
-      if(auth || minorPIN === override) {
-        XSeriesDB.update({_id: seriesId, orgKey: Meteor.user().orgKey, 'shortfall.key': shKey}, {
-          $pull : { shortfall: {key: shKey}
-        }});
-        return true;
-      }else{
-        return false;
-      }
+      return false;
     }
   },
 
