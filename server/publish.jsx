@@ -400,7 +400,6 @@ Meteor.publish('hotDataPlus', function(scanOrb, keyMatch){
       WidgetDB.find({_id: wID, orgKey: orgKey}, {
         fields: {
           'orgKey': 0,
-          'versions': 0,
           'quoteStats': 0,
           'turnStats': 0
         }}),
@@ -431,8 +430,7 @@ Meteor.publish('skinnyData', function(){
         fields: {
           'widget': 1,
           'describe': 1,
-          'groupId': 1,
-          'versions': 1
+          'groupId': 1
         }}),
         
       VariantDB.find({orgKey: orgKey}, {
@@ -513,7 +511,6 @@ Meteor.publish('hotDataEx', function(dataRequest, hotWidget){
         WidgetDB.find({_id: hothotWidgetID, orgKey: orgKey}, {
           fields: {
             'orgKey': 0,
-            'versions': 0,
             'quoteStats': 0,
             'turnStats': 0,
             'ncRate': 0
@@ -528,7 +525,6 @@ Meteor.publish('hotDataEx', function(dataRequest, hotWidget){
         WidgetDB.find({widget: hothotWidget, orgKey: orgKey}, {
           fields: {
             'orgKey': 0,
-            'versions': 0,
             'quoteStats': 0,
             'turnStats': 0,
             'ncRate': 0

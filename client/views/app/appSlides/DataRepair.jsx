@@ -190,11 +190,11 @@ const DataRepair = ({ app, users })=> {
       <hr />
       
       <DoCard
-        title='Make Sure All Versions are Migrated'
+        title='Clear former Migrated widget Versions'
         icon='question'
         color='clearOrange'
-        button='Double Check'
-        action={()=>doCallThing('dbbleCheckVersions', true)}
+        button='UNSET thing'
+        action={()=>doCallThing('UNSEToldwidgetversionsArray', true)}
       />
       
       

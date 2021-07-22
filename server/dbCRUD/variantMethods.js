@@ -30,91 +30,36 @@ Meteor.methods({
     }
   },
   
-  
-  dbbleCheckVersions() {
-    let found = [];
-    
-    const docs = WidgetDB.find({}).fetch();
-      
-    for( let w of docs ) {
-      if(w.versions) {
-        const variants = VariantDB.find({widgetId: w._id},{fields:{'variant':1,'versionKey':1}}).fetch();
-        found.push({
-          widget: w.widget,
-          vers: w.versions,
-          variants: variants
-        });
-      }
-    }
-    
-    return found;
-    
-  },
-  
-  /*UNSEToldwidgetversionsArray() {
+  UNSEToldwidgetversionsArray() {
     try{
       if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
-        AppDB.update({orgKey: Meteor.user().orgKey}, {
+        WidgetDB.update({orgKey: Meteor.user().orgKey}, {
           $unset : { 
-            'phases': ""
-          }})//,{multi: true});
+            'versions': ""
+          }},{multi: true});
+
+        let found = [];
+        
+        const docs = WidgetDB.find({}).fetch();
+        
+        for( let w of docs ) {
+          if(w.versions) {
+            found.push({
+              widget: w.widget,
+              vers: w.versions
+            });
+          }
+        }
+        
+        return found;
       }else{
-        null;
+        return false;
       }
     }catch (err) {
       throw new Meteor.Error(err);
     }
   },
-  */
   
-  
-  
-  migrateWidgetVersions(widgetId) {
-    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
-      
-      const doc = WidgetDB.findOne({_id: widgetId});
-      
-      if(doc) {
-        for( let ver of doc.versions) {
-          
-          const orgKey = doc.orgKey;
-          const groupId = doc.groupId;
-          const OLDversionKey = ver.versionKey; 
-          const OLDversion = ver.version;
-          const OLDcreateAt = ver.createdAt;
-          const OLDcreateWho = ver.createdWho; 
-          const OLDlive = ver.live;
-          const OLDtags = ver.tags;
-          const OLDnotes = ver.notes;
-          const OLDwiki = ver.wiki;
-          const OLDunit = ver.units;
-          const OLDassembly = ver.assembly;
-    
-          VariantDB.insert({
-            orgKey: orgKey,
-            groupId: groupId,
-            widgetId: widgetId,
-            versionKey: OLDversionKey,
-            variant: OLDversion,
-            createdAt: OLDcreateAt,
-            createdWho: OLDcreateWho,
-            updatedAt: new Date(),
-    		    updatedWho: Meteor.userId(),
-            live: OLDlive,
-            tags: OLDtags,
-            instruct: OLDwiki,
-            runUnits: Number(OLDunit),
-    		    notes: OLDnotes,
-    		    assembly: OLDassembly,
-    		    npiTime: []
-          });
-        }
-      }
-      return true;
-    }else{
-      return false;
-    }
-  },
   
   editVariant(widgetId, vId, newVar, newWiki, newUnit) {
     const doc = VariantDB.findOne({_id: vId},{fields:{'variant':1}});

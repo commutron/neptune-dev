@@ -2,8 +2,8 @@ Meteor.methods({
 
 //// Groups \\\\
   addGroup(groupName, alias, wiki) {
-    const duplicate = GroupDB.findOne({group: groupName});
-    const dupe = GroupDB.findOne({alias: alias});
+    const duplicate = GroupDB.findOne({group: groupName},{fields:{'_id':1}});
+    const dupe = GroupDB.findOne({alias: alias},{fields:{'_id':1}});
     const auth = Roles.userIsInRole(Meteor.userId(), 'create');
     if(!duplicate && !dupe && auth) {
       GroupDB.insert({
@@ -25,8 +25,8 @@ Meteor.methods({
   },
 
   editGroup(groupId, newGroupName, newAlias, newWiki) {
-    const doc = GroupDB.findOne({_id: groupId});
-    let duplicate = GroupDB.findOne({group: newGroupName});
+    const doc = GroupDB.findOne({_id: groupId},{fields:{'group':1,'alias':1}});
+    let duplicate = GroupDB.findOne({group: newGroupName},{fields:{'_id':1}});
     let dupe = GroupDB.findOne({alias: newAlias});
     const auth = Roles.userIsInRole(Meteor.userId(), 'edit');
     doc.group === newGroupName ? duplicate = false : null;
@@ -47,11 +47,11 @@ Meteor.methods({
   },
   
   hibernateGroup(groupId) {
-    const doc = GroupDB.findOne({_id: groupId});
-    const inUse = VariantDB.find({groupId: groupId, live: true}).fetch();
+    const doc = GroupDB.findOne({_id: groupId},{fields:{'hibernate':1}});
+    const inUse = VariantDB.find({groupId: groupId, live: true},{fields:{'_id':1}}).count();
     const auth = Roles.userIsInRole(Meteor.userId(), 'edit');
     const switchTo = !doc.hibernate;
-    if(inUse.length === 0 && auth) {
+    if(inUse === 0 && auth) {
       GroupDB.update({_id: groupId, orgKey: Meteor.user().orgKey}, {
         $set : {
           hibernate: switchTo,
@@ -93,7 +93,7 @@ Meteor.methods({
   },
   
   deleteGroup(groupId, pass) {
-    const inUse = WidgetDB.findOne({groupId: groupId});
+    const inUse = WidgetDB.findOne({groupId: groupId},{fields:{'_id':1}});
     if(!inUse) {
       const doc = GroupDB.findOne({_id: groupId});
       const lock = doc.createdAt.toISOString().split("T")[0];
