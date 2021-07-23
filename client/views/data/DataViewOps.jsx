@@ -120,6 +120,7 @@ const DataViewOps = ({
         const rapidCount = WhiteWaterCounter(rapid, seriesData);
         rapid.rSet = rapidCount[0];
         rapid.rDone = rapidCount[1];
+        rapid.rNew = rapidCount[3];
         calcRapids.push( rapid );
       }
       return calcRapids;
@@ -374,6 +375,7 @@ const DataViewOps = ({
             <ItemsListX
               seriesData={hotXSeries}
               batchData={hotXBatch}
+              rapidsData={rapXData}
               widgetData={widget}
               flowData={flowData}
               fallData={fallData}
@@ -448,6 +450,7 @@ const DataViewOps = ({
           <ItemsListX
             seriesData={hotXSeries}
 		        batchData={hotXBatch}
+		        rapidsData={rapXData}
 		        widgetData={widget}
 		        flowData={flowData}
 		        fallData={fallData}

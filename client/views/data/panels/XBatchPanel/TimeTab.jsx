@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 
-import ProgLayerBurndown, { ProgLayerBurndownExplain } 
-  from '/client/components/charts/ProgLayerBurndown.jsx';
+import TabsLite from '/client/components/smallUi/Tabs/TabsLite';
+import ProgLayerBurndown from '/client/components/charts/BatchBurn/ProgLayerBurndown';
+import PeopleScatter from '/client/components/charts/BatchBurn/PeopleScatter';
 import TimeBudgetsChunk from '/client/views/data/panels/XBatchPanel/TimeBudgetsChunk';
 import TimeExtendChunk from '/client/views/data/panels/XBatchPanel/TimeExtendChunk';
 import TimeNextChunk from './TimeNextChunk';
@@ -49,6 +50,16 @@ const TimeTab = ({
       : null}
     
       <div className='dropCeiling vmargin space'>
+        <TabsLite 
+          tabs={ [ 
+            <i className="fas fa-chart-line fa-lg fa-fw"></i>,
+            <i className="fas fa-chess-board fa-lg fa-fw"></i>,
+            
+          ] }
+          names={[ 
+            'Progress Burndown', 'People Distribution'
+          ]}>
+            
         <ProgLayerBurndown
           batchId={batchData._id}
           seriesId={seriesData._id}
@@ -58,10 +69,16 @@ const TimeTab = ({
           riverFlow={riverFlow || []}
           itemData={seriesData ? seriesData.items : []}
           title='Progress Burndown'
-          isDebug={isDebug} />
-              
-        <ProgLayerBurndownExplain />
+          isDebug={isDebug}
+        />
+        
+        <PeopleScatter 
+          tide={batchData.tide}
+          isDebug={isDebug} 
+          app={app} 
+        />
 
+        </TabsLite>
       </div>
       
       <TimeNextChunk

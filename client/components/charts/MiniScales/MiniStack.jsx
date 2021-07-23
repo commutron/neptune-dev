@@ -9,8 +9,8 @@ const MiniStack = ({ title, subtitle, count, countNew, total, truncate })=> {
   const vX = countNew;
   let t = total === 'percent' ? 100 : total;
   
-  const dataArr = [ [v - vX], [vX], [t - v] ];
-  
+  const dataArr = [ [v - vX], [vX], [Math.max(0, t - v)] ];
+
   let name = {
     fontSize: '0.9rem',
     letterSpacing: '1px'

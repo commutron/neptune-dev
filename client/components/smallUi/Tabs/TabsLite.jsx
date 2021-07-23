@@ -5,7 +5,7 @@ const TabsLite = ({ tabs, names, children })=> {
   
   const [ show, showSet ] = useState( 0 );
   
-  return (
+  return(
     <div>
       <div className='liteTabs flexRR'>
         {tabs.map( (entry, index)=>{

@@ -20,18 +20,14 @@ const ProgLayerBurndown = ({
     (error, reply)=> {
       error && console.log(error);
       reply && mounted.current ? countSet( reply ) : null;
+      isDebug && console.log(reply);
     });
   }, []);
   
-    
-  isDebug && console.log(countState);
-  
-  if(!countState) {
-    return <CalcSpin />;
-  }
-    
   return(
-    <span className='burndownFill centre'>
+    <div className='burndownFill centre'>
+    {!countState ? <CalcSpin /> :
+      
       <div className='wide balance cap'>
       
         <VictoryChart
@@ -86,27 +82,25 @@ const ProgLayerBurndown = ({
         <div className='centreText smCap'>{title}</div>
         
       </div>
-    </span>
+    }
+    
+      <details className='footnotes wide'>
+        <summary>Chart Details</summary>
+        <p className='footnote'>
+          The X axis is the percentage of counters and serialized items remaining.
+        </p>
+        <p className='footnote'>
+          The Y axis starts with the batch creation date and ends with 
+          either today or the batch complete day. Weekends are skipped 
+          entirely.
+        </p>
+        <p className='footnote'>
+          A step that was added mid-run might not reach zero because 
+          finished items would have skipped recording that step.
+        </p>
+      </details>
+    </div>
   );
 };
 
 export default ProgLayerBurndown;
-
-
-export const ProgLayerBurndownExplain = ()=>(
-  <details className='footnotes'>
-    <summary>Chart Details</summary>
-    <p className='footnote'>
-      The X axis is the percentage of counters and serialized items remaining.
-    </p>
-    <p className='footnote'>
-      The Y axis starts with the batch creation date and ends with 
-      either today or the batch complete day. Weekends are skipped 
-      entirely.
-    </p>
-    <p className='footnote'>
-      A step that was added mid-run might not reach zero because 
-      finished items would have skipped recording that step.
-    </p>
-  </details>
-);

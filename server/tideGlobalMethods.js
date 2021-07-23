@@ -86,7 +86,10 @@ export function distTimeBudget(tide, quoteTimeBudget, allQuantity, lockTrunc) {
   
 function collectActivtyLevel(privateKey, batchID) {
   return new Promise(resolve => {
-    const batch = XBatchDB.findOne({_id: batchID});
+    const batch = XBatchDB.findOne(
+      {_id: batchID},
+      {fields: {'batch':1,'live':1,'completedAt':1,'tide':1}}
+    );
     
     const now = moment().tz(Config.clientTZ);
     
@@ -186,7 +189,6 @@ Meteor.methods({
   ///////////////////////////////////////
   // Tide Records \\\\\\\\\\\\\\\\\\\\\\\
   ///////////////////////////////////////
-
   fetchOrgTideActivity(dateString) {
     try {
       const localDate = moment.tz(dateString, Config.clientTZ);

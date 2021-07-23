@@ -22,7 +22,7 @@ Meteor.methods({
     const endDay = end === true ? 
       moment(end).endOf('day').add(2, 'd') : 
       now.clone().endOf('day').add(1, 'd');
-    const startDay = moment(start).tz(Config.clientTZ).endOf('day');
+    const startDay = moment(start).tz(Config.clientTZ).startOf('day');
     const howManyDays = endDay.diff(startDay, 'day');
     
     function historyPings(history, totalItems, flowKey, day) {
@@ -109,7 +109,6 @@ Meteor.methods({
     }
       
     return burnSeries;
-
   },
   
    ///////////////////////////

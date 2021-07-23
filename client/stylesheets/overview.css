@@ -467,9 +467,11 @@ n-sm-model .big { font-size: 1.5rem !important; }
 }
 
 .infoSquareOuter {
-  display: inline-block;
   text-align: center;
-  margin: 5px;
+  display: flex;
+  place-items: center;
+  flex-flow: column nowrap;
+  text-align: center;
 }
 .infoSquareLabel {
   font-size: smaller;

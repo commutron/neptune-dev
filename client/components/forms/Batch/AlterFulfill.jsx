@@ -108,10 +108,10 @@ const AlterFulfillForm = ({ batchId, end, app, selfclose })=> {
         <button type='submit' className='action clear greenHover'>Save</button>
       </p>
       <hr className='nomargin w100' />
-      <p className='nomargin clean'>Ship Due {shipAim}</p>
+      <p className='nomargin clean'>The nearest ship day is {shipAim}</p>
       {loadState === null ? <em>...</em> :
        <p className='nomargin nospace clean'
-        >with <b>{loadState}</b> uncompleted {Pref.xBatchs}</p>
+        ><b>{loadState}</b> incomplete {Pref.xBatchs} are scheduled for this ship day</p>
       }
       <div className='vmarginhalf'>
         <PrioritySquareData

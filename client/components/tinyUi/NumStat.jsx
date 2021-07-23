@@ -17,7 +17,7 @@ import React from 'react';
   };
  
 const NumStat = ({ num, icon, name, title, color, size, moreClass }) => (
-  <div style={sty} title={title} className={'noCopy centre margin5 ' + moreClass || ''}>
+  <div style={sty} title={title} className={'noCopy centre  ' + (moreClass || '')}>
     <span 
       style={bSty} 
       className={color + ' numFont ' + size}

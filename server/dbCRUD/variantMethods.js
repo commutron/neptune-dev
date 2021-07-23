@@ -96,8 +96,6 @@ Meteor.methods({
       return false;
     }
   },
-  
-  /// move a variant to a different widget??
 
   deleteVariant(vObj, pass) {
     const doc = VariantDB.findOne({_id: vObj._id});

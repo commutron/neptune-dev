@@ -65,15 +65,15 @@ export const PrioritySquare = ({
     const doneIcon = oRapid ? 'fas fa-bolt' : 'far fa-star';
     const doneName = oRapid ? 'Extended' : 'Complete';
     return(
-      <div className={doneColor}>
-        <NumStat
-          num={false}
-          icon={doneIcon}
-          name={doneName}
-          title={doneName}
-          color='blackblackT'
-          size='bold vbig' />
-      </div>
+      <NumStat
+        num={false}
+        icon={doneIcon}
+        name={showLess ? '' : doneName}
+        title={doneName}
+        color='blackblackT'
+        size='bold vbig' 
+        moreClass={doneColor}
+      />
     );
   }
     
@@ -92,28 +92,27 @@ export const PrioritySquare = ({
       const doneIcon = pt.oRapid ? 'fas fa-bolt fa-lg' : 'far fa-star fa-lg';
       const doneName = pt.oRapid ? 'Extended' : 'Complete';
       return(
-        <div className={doneColor}>
-          <NumStat
-            num={false}
-            icon={doneIcon}
-            name={doneName}
-            title={doneName}
-            color='blackblackT'
-            size='bold vbig' />
-        </div>
+        <NumStat
+          num={false}
+          icon={doneIcon}
+          name={showLess ? '' : doneName}
+          title={doneName}
+          color='blackblackT'
+          size='bold vbig'
+          moreClass={doneColor}
+        />
       );
     }
     
     if(bffrRel === undefined || bffrRel === null || bffrRel === false) {
       return(
-        <div>
-          <NumStat
-            num='X'
-            name=''
-            title='priority rank unavailable'
-            color='fade'
-            size='vbigger' />
-        </div>
+        <NumStat
+          num='X'
+          name=''
+          title='priority rank unavailable'
+          color='fade'
+          size='vbigger'
+        />
       );
     }
     
@@ -157,33 +156,46 @@ export const PrioritySquare = ({
     const title = `${prTxt}\n${ovrTxt}\n\n${treTxt}\n${soonTxt}`;
     const debugTitle = `${prTxt}\n${ovrTxt}\n\n${treTxt}\n${soonTxt}\n\n${bffTxt}\n${pt.bffrRel}`;
     
+    if(showExtra && !showLess) {
+      return(
+        <div 
+          className={`${baseClass} ${extraClass} ${priorityClass} ${overClass}`}
+          title={isDebug ? debugTitle : title}
+        >
+          <NumStat
+            num={pLabel}
+            name={showLess ? '' : subLabel}
+            color='blackblackT'
+            size='bold big'
+          />
+          {showExtra && !showLess ? 
+            <dl className='med clean noindent espace'>
+              <dd>{treTxt}</dd>
+              <dd>{soonTxt}</dd>
+            </dl> : null}
+        </div>
+      );
+    }
+    
     return(
-      <div 
-        className={`${baseClass} ${extraClass} ${priorityClass} ${overClass}`}
+      <NumStat
+        num={pLabel}
+        name={showLess ? '' : subLabel}
+        color='blackblackT'
+        size='bold big'
         title={isDebug ? debugTitle : title}
-      >
-        <NumStat
-          num={pLabel}
-          name={showLess ? '' : subLabel}
-          color='blackblackT'
-          size='bold big' />
-        {showExtra && !showLess ? 
-          <dl className='med clean noindent espace'>
-            <dd>{treTxt}</dd>
-            <dd>{soonTxt}</dd>
-          </dl> : null}
-      </div>
+        moreClass={`${baseClass} ${extraClass} ${priorityClass} ${overClass}`}
+      />
     );
   }
   
   return(
-    <div>
-      <NumStat
-        num='?'
-        name=''
-        title='priority rank unknown'
-        color='fade'
-        size='vbigger' />
-    </div>
+    <NumStat
+      num='?'
+      name=''
+      title='priority rank unknown'
+      color='fade'
+      size='vbigger'
+    />
   );
 };

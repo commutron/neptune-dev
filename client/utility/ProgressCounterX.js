@@ -68,7 +68,6 @@ function flowLoop(river, items, firstsFlat, wndw) {
   return stepsData;
 }
 
-
 function unitTotalCount(items) {
   const count = items.length > 0 ? items.reduce((t,i)=> t + i.units, 0) : 0;
   return count;
@@ -80,8 +79,7 @@ function outScrap(items) {
 
 function getFirsts(items) { 
   const firsts = Array.from( items, 
-                  x => x.history.filter( 
-                    y => y.type === 'first') );
+                  x => x.history.filter( y => y.type === 'first') );
   const fFlat = [].concat(...firsts);
   return fFlat;
 }
@@ -137,6 +135,8 @@ export function FallCounter(batchData) {
   for(let wf of waterfall) {
     const wfType = wf.type;
     const wfCount = countWaterfall(wf.counts);
+    let fresh = wf.counts.filter( t=> moment(t.time).isSame(moment(), 'day') );
+    const nwCount = countWaterfall(fresh);
     const topNum = wf.action === 'slider' ? 100 : quantity;
     
     doneCheck.push( wfCount === topNum );
@@ -148,7 +148,8 @@ export function FallCounter(batchData) {
       bKey: wf.branchKey,
       action: wf.action,
       pos: wf.position || 0,
-      count: wfCount
+      count: wfCount,
+      countNew: nwCount
     });
   }
   const fallCounts = countData.sort((w1, w2)=> 
@@ -165,8 +166,10 @@ export function WhiteWaterCounter(rapidData, seriesData) {
   
   let countArr = [];
   let pointArr = [];
+  let newptArr = [];
   let iSet = 0;
   let iDone = null;
+  let iNew = null;
   
   const fallS = rapidData.cascade.sort((w1, w2)=> 
           w1.position < w2.position ? -1 : w1.position > w2.position ? 1 : 0 );
@@ -174,8 +177,10 @@ export function WhiteWaterCounter(rapidData, seriesData) {
   for(let wf of fallS) {
     const wfCount = countWaterfall(wf.counts);
     countArr.push(wfCount);
-    const point = ( wfCount / totalQ );
-    pointArr.push(point);
+    pointArr.push( wfCount / totalQ );
+    
+    let fresh = wf.counts.filter( t=> moment(t.time).isSame(moment(), 'day') );
+    newptArr.push( countWaterfall(fresh) / totalQ );
   }
   
   if(rapidData.extendBatch && seriesData) {
@@ -184,16 +189,22 @@ export function WhiteWaterCounter(rapidData, seriesData) {
                       i.altPath.find( r => r.rapId === rapidData._id ) );
     iSet = rapSetI.length;
     
-    const rapDidI = rapSetI.filter( i => 
-                      i.altPath.find( r => 
-                        r.rapId === rapidData._id && r.completed === true ) 
+    const rapDidI = rapSetI.filter( i => i.altPath.find( r => 
+                      r.rapId === rapidData._id && r.completed === true ) 
                     ).length;
     iDone = ( rapDidI / totalQ );
+    
+    const rapNewI = rapSetI.filter( i => i.altPath.find( r => 
+                      r.rapId === rapidData._id && r.completed === true &&
+                      moment(r.completedAt).isSame(moment(), 'day') ) 
+                    ).length;
+    iNew = ( rapNewI / totalQ );
   }
   
   const pointProgress = avgOfArray([...pointArr,iDone]);
+  const freshProgress = avgOfArray([...newptArr,iNew]);
   
-  return [ iSet, pointProgress, countArr ];
+  return [ iSet, pointProgress, countArr, freshProgress ];
 }
 
 

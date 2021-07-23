@@ -102,7 +102,7 @@ const QtyScatter = ({ app })=> {
       <p className='lightgray fade'>
         Scroll to Zoom <br />
         Click and Drag to Pan <br />
-        Reliable data begins {moment(app.createdAt).format('MMMM YYYY')}<br />
+        Data begins {moment(app.createdAt).format('MMMM YYYY')}<br />
         Data curve is smoothed by a basis spline function
       </p>
     </div>

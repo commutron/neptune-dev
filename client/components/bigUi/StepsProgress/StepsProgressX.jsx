@@ -32,10 +32,6 @@ const StepsProgressX  = ({
   const unitsExist = totalIU > totalI ? true : false;
   const calcItem = countCalc === 'items' ? true : false;
   
-  // const oRvr = rvrDt.filter( r => !r.bKey );
-  // const oWfl = wflDt.filter( r => !r.bKey );
-  // let rndmKeyO = Math.random().toString(36).substr(2, 5);
-  
   return(
     <div>
       {!truncate &&
@@ -117,7 +113,7 @@ const StepsProgressX  = ({
               title={`${entry.step} ${entry.type}`}
               subtitle={brch ? brch.branch : ''}
               count={entry.count}
-              countNew={0}
+              countNew={entry.countNew}
               total={topNum}
               truncate={truncate} />
         )})}
@@ -173,7 +169,7 @@ const StepsProgressX  = ({
             title={`${r.rapid} ${r.issueOrder}`}
             subtitle={r.type}
             count={round2Decimal(r.quantity * (isNaN(r.rDone) ? 1 : r.rDone))}
-            countNew={0}
+            countNew={round2Decimal(r.quantity * (isNaN(r.rNew) ? 1 : r.rNew))}
             total={r.quantity}
             truncate={truncate} />
       )})}

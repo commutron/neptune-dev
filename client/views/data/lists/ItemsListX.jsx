@@ -7,7 +7,7 @@ import { SeriesDelete } from '/client/components/forms/ItemSerialsX/SeriesForm';
 
 
 const ItemsListX = ({ 
-  seriesData, batchData, widgetData, flowData,
+  seriesData, batchData, rapidsData, widgetData, flowData,
   orb, isDebug
 })=> {
   
@@ -341,13 +341,18 @@ const ItemsListX = ({
   }, [ seriesData, keyword, timeModifyer, notModifyer ]);
   
   const bttnClss = 'leapBar numFont';
-      
+  
+  const steps = [ 
+    (flowData.riverFlow || []),
+    Array.from(rapidsData, r=> r.whitewater).flat()
+  ].flat();
+
   return(
     <Fragment>
       <FilterItemsX
         title={batchData.batch}
         total={stateList.length}
-        advancedList={flowData.riverFlow || []}
+        advancedList={steps}
         selectedKeyword={keyword}
         selectedTime={timeModifyer}
         selectedToggle={notModifyer}

@@ -32,7 +32,7 @@ const GroupTops = ({ groupId, app })=> {
       <n-fa1><i className='fas fa-arrow-up greenT'></i></n-fa1> :
     trend === 'down' ?
       <n-fa2><i className='fas fa-arrow-down redT'></i></n-fa2> :
-    <n-fa3><i className='fas fa-minus darkgrayT'></i></n-fa3>;
+    <n-fa3><i className='fas fa-minus'></i></n-fa3>;
         
   return(
     <div className='balancer'>
@@ -41,8 +41,8 @@ const GroupTops = ({ groupId, app })=> {
         total={total !== false ? `${total}%` :
           <n-fa0><i className='fas fa-spinner fa-spin'></i></n-fa0>}
         nums={tickXY || []}
-        name="Items on time"
-        title='items on time'
+        title="Average On Time"
+        name='On Time'
         colour={["rgb(46, 204, 113)", "rgb(241, 196, 15)"]}
         maxSize='chart10Shrink'
       />
@@ -51,8 +51,8 @@ const GroupTops = ({ groupId, app })=> {
         total={avgPf !== false ? avgPf :
           <n-fa1><i className='fas fa-spinner fa-spin'></i></n-fa1>}
         nums={[{x:1,y:1}]}
-        name='Average Performance'
-        title='Avg Perf.'
+        title='Average Performance'
+        name='Performance'
         colour={['#000']}
         noGap={true}
         maxSize='chart10Shrink'
@@ -62,8 +62,8 @@ const GroupTops = ({ groupId, app })=> {
         total={avgNC !== false ? avgNC :
           <n-fa2><i className='fas fa-spinner fa-spin'></i></n-fa2>}
         nums={[{x:1,y:1}]}
-        name='Average NonCon Rate'
-        title='Avg NC Rate'
+        name='NonCon Rate'
+        title='Average NonConformance Rate'
         colour='redTri'
         noGap={true}
         maxSize='chart10Shrink'
@@ -73,10 +73,10 @@ const GroupTops = ({ groupId, app })=> {
         total={trendIcon}
         nums={[{x:1,y:1}]}
         name='Trending'
-        title='Trend'
-        colour={[
-          !trend || trend == 'flat' ? '#000' : 
-          trend == 'down' ? 'redTri' : 'greenBi']}
+        title={`Metrics are trending ${trend || 'flat'}`}
+        colour={
+          !trend || trend == 'flat' ? ['#000'] : 
+          trend == 'down' ? 'redTri' : 'greenBi'}
         maxSize='chart10Shrink'
       />
       

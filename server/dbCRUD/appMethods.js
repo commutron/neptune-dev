@@ -687,22 +687,6 @@ Meteor.methods({
     }else{
       return false;
     }
-  },
-  
-  resetNonWorkDay() {
-    try {
-      if(Roles.userIsInRole(Meteor.userId(), ['admin', 'peopleSuper'])) {
-        AppDB.update({orgKey: Meteor.user().orgKey}, {
-          $set : {
-            nonWorkDays: [],
-          }});
-        return true;
-      }else{
-        return false;
-      }
-    }catch (err) {
-      throw new Meteor.Error(err);
-    }
   }
         
 });

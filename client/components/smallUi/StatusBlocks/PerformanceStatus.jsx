@@ -60,12 +60,12 @@ export const PerformanceSquare = ({ perf })=> {
     'On Target';
     
   return(
-    <div title={pfText}>
-      <NumStat
-        num={<span className='perf'>{golden}{pfRank}</span>}
-        name='Performance'
-        color='blackblackT'
-        size='bold bigger' />
-    </div>
+    <NumStat
+      num={<span className='perf'>{golden}{pfRank}</span>}
+      name='Performance'
+      title={pfText}
+      color='blackblackT'
+      size='bold bigger'
+    />
   );
 };

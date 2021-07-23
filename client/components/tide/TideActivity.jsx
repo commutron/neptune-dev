@@ -48,13 +48,13 @@ export const TideActivitySquare = ({ batchID, acData, isDebug })=> {
                        'grayT fadeMore';
     
     const iconState = !moving ?
-      <strong><i className='fas fa-minus fa-2x fa-fw grayT fade'></i></strong>
+      <n-fa0><i className='fas fa-minus fa-2x fa-fw grayT fade'></i></n-fa0>
       : moving === 'still' ?
-      <em className={movedClass}><i className='fas fa-shoe-prints fa-2x fa-fw'></i></em>
+      <n-fa1><i className={`fas fa-shoe-prints ${movedClass} fa-2x fa-fw`}></i></n-fa1>
       : moving === 'walk' ?
-      <b><i className='fas fa-walking greenT fa-2x fa-fw'></i></b>
+      <n-fa2><i className='fas fa-walking greenT fa-2x fa-fw'></i></n-fa2>
       :
-      <i><i className='fas fa-running greenT fa-2x fa-fw'></i></i>;
+      <n-fa3><i className='fas fa-running greenT fa-2x fa-fw'></i></n-fa3>;
       
     const noun = (num)=> num === 1 ? 'person' : 'people';
     
@@ -66,23 +66,17 @@ export const TideActivitySquare = ({ batchID, acData, isDebug })=> {
     const title = `${nTxt}\n${joiner}\n${hTxt}\n${dTxt}`;
 
     return(
-      <div title={title}>
-        <div className='infoSquareOuter noCopy'>
-          {iconState}
-          <br />
-          <i className='label infoSquareLabel'>Activity</i>
-        </div>
+      <div className='infoSquareOuter noCopy center' title={title}>
+        {iconState}
+        <i className='label infoSquareLabel'>Activity</i>
       </div>
     );
   }
   
   return(
-    <div title='activity unknown'>
-      <div className='infoSquareOuter noCopy'>
-        <i className='medBig'>?</i>
-        <br />
-        <i className='label infoSquareLabel'></i>
-      </div>
+    <div className='infoSquareOuter noCopy' title='activity unknown'>
+      <i className='medBig'>?</i>
+      <i className='label infoSquareLabel'></i>
     </div>
   );
 };

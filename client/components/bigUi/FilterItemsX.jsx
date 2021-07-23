@@ -46,7 +46,7 @@ const FilterItems = ({
             <option value='extended'>Extended Flow</option>
             <option value='scrap'>Scrap</option>
           </optgroup>
-          <optgroup label='Steps'>
+          <optgroup label='Steps' className='cap'>
             {advancedList.map( (entry, index)=>{
               return(
                 <option
@@ -64,18 +64,15 @@ const FilterItems = ({
     </div>
     
     <div>
-      <label className='fltrsInput'>
-        <i className='far fa-calendar-alt fa-lg fa-fw'></i>
+      <label className='fltrsInput'
+      ><i className='far fa-calendar-alt fa-lg fa-fw'></i>
       <input
         type='date'
         id='fltItmdate'
         defaultValue={selectedTime}
         onChange={(e)=>onTimeChange(e.target.value)}
-        disabled={
-          disableTime /*|| 
-          selectedKeyword === 'alternative' ||
-          selectedKeyword === 'rma'*/
-        } />
+        disabled={disableTime} 
+      />
       </label>
     </div>
       

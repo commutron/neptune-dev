@@ -24,7 +24,7 @@ const ShortScatter = ({ shortfalls, app, isDebug })=> {
         shCounts.push({
           x: ref,
           y: sh.partNum,
-          symbol: "square",
+          symbol: "triangleUp",
           size: 5
         });
       }

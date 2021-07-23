@@ -5,8 +5,9 @@ function find(id) {
   return nice;
 }
     
-const UserName = ({ id }) => (
-  find(id)
-);
+const UserName = (id, nice) => {
+  const user = find(id);
+  return nice ? user.replace('.', ' ').replace('_', ' ') : user;
+};
 
 export default UserName;

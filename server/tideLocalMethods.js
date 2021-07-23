@@ -13,7 +13,9 @@ Meteor.methods({
     }else{
       let objArr = [];
       for( let uTkey of userTkeys ) {
-        const batchX = XBatchDB.findOne({ 'tide.tKey': uTkey });
+        const batchX = XBatchDB.findOne(
+          { 'tide.tKey': uTkey },
+          { fields: {'batch':1,'tide':1} });
         const subX = batchX && batchX.tide.find( x => x.tKey === uTkey);
         if(subX) {
           objArr.push({
@@ -41,7 +43,10 @@ Meteor.methods({
         null;
       }else{
         
-        const docX = XBatchDB.findOne({ _id: batchId, orgKey: orgKey });
+        const docX = XBatchDB.findOne(
+          { _id: batchId, orgKey: orgKey },
+          { fields: {'batch':1,'tide':1} }
+        );
         
         if(docX && docX.tide) {
           const keyChecX = docX.tide.every( x => x.tKey !== newTkey );
@@ -150,7 +155,10 @@ Meteor.methods({
         return false;
       }else{
         
-        const docX = XBatchDB.findOne({ batch: batch, 'tide.tKey': tideKey });
+        const docX = XBatchDB.findOne(
+          { batch: batch, 'tide.tKey': tideKey },
+          { fields: {'batch':1,'tide':1} }
+        );
         
         if(docX) {
           const subX = docX.tide.find( x => x.tKey === tideKey );
@@ -180,7 +188,10 @@ Meteor.methods({
       const userId = Meteor.userId();
       const isSuper = Roles.userIsInRole(userId, 'peopleSuper');
       
-      const docX = XBatchDB.findOne({ batch: batch, 'tide.tKey': tideKey });
+      const docX = XBatchDB.findOne(
+        { batch: batch, 'tide.tKey': tideKey },
+        { fields: {'tide':1} }
+      );
       
       if(docX) {
         const subX = docX.tide.find( x => x.tKey === tideKey );
@@ -203,7 +214,10 @@ Meteor.methods({
   
   stopTideTimeBlock(batch, tideKey) {
     try {
-      const docX = XBatchDB.findOne({ batch: batch, 'tide.tKey': tideKey });
+      const docX = XBatchDB.findOne(
+        { batch: batch, 'tide.tKey': tideKey },
+        { fields: {'tide':1} }
+      );
       if(docX) {
     
         const subX = docX.tide.find( x => x.tKey === tideKey );
@@ -235,7 +249,10 @@ Meteor.methods({
         return false;
       }else{
         
-        const docX = XBatchDB.findOne({ batch: batch, 'tide.tKey': tideKey });
+        const docX = XBatchDB.findOne(
+          { batch: batch, 'tide.tKey': tideKey },
+          { fields: {'tide':1} }
+        );
         
         if(docX) {
           const subX = docX.tide.find( x => x.tKey === tideKey );

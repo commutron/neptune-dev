@@ -53,15 +53,6 @@ const ScheduleSlide = ({ app, user, users, isAdmin, isPeopleSuper })=> {
       console.log(re);
     });
   }
-  function handleReset() {
-    const check = window.confirm('Permanently Delete All Days??');
-    if(check) {
-      Meteor.call('resetNonWorkDay', (err, re)=>{
-        err && console.log(err);
-        console.log(_.itr(re));
-      });
-    }
-  }
   
   const nWD = app.nonWorkDays || [];
   const sortList = nWD.sort();
@@ -146,32 +137,36 @@ const ScheduleSlide = ({ app, user, users, isAdmin, isPeopleSuper })=> {
           {isAuth ?
           <Fragment>
             <div className='vspace balance'>
+              <button 
+                className='action clearGreen'
+                onClick={()=>handleAdd(true)}
+                disabled={!isAuth}>Add {wildState}
+              </button>
               
               <button 
                 className='action clearGreen'
                 onClick={()=>handleAdd(false)}
-                disabled={!isAuth}>Add {dateState}</button>
-              
-              <button
-                className='action clearRed'
-                onClick={()=>handleRemove(false)}
-                disabled={!isAuth || noRmv}>Remove {dateState}</button>
-            
+                disabled={!isAuth}>Add {dateState}
+              </button>
             </div>
       
             <div className='vspace balance'>
-                
-              <button 
-                className='action clearGreen'
-                onClick={()=>handleAdd(true)}
-                disabled={!isAuth}>Add {wildState}</button>
-              
               <button
                 className='action clearRed'
                 onClick={()=>handleRemove(true)}
-                disabled={!isAuth || noRmv}>Remove {wildState}</button>
-              
+                disabled={!isAuth || noRmv}>Remove {wildState}
+              </button>
+            
+              <button
+                className='action clearRed'
+                onClick={()=>handleRemove(false)}
+                disabled={!isAuth || noRmv}>Remove {dateState}
+              </button>
             </div>
+            
+            <p className='small grayT centreText'
+            >removing former holidays will create inacurate on time / late calculations
+            </p>
           </Fragment>
           :
           <p className='small grayT rightText'
@@ -189,13 +184,6 @@ const ScheduleSlide = ({ app, user, users, isAdmin, isPeopleSuper })=> {
               })
             }
             </ul>
-            
-            <hr />
-            
-            <button
-              className='action clearBlack'
-              onClick={()=>handleReset()}
-                disabled={!isAdmin}>RESET ALL</button>
           </details>
         </div>
       </div>
