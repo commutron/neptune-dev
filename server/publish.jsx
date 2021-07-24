@@ -247,6 +247,8 @@ Meteor.publish('traceDataOpen', function(){
         $or: [ { live: true }, { salesEnd: { $gte: ystrday } } ]
       }, {
         fields: {
+          'lastUpserted': 1,
+          'lastUpdated': 1,
           'batch': 1,
           'batchID': 1,
           'salesOrder': 1,
