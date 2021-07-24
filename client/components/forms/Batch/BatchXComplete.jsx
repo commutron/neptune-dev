@@ -6,7 +6,7 @@ import '/client/components/riverX/waterfall/style';
 import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/themes/airbnb.css';
 
-const BatchXComplete = ({ batchData, allFlow, allFall, nowater, canRun })=> {
+const BatchXComplete = ({ batchData, allFlow, allFall, nowater, quantity, canRun })=> {
   
   const [ reopenState, reopenSet ] = useState(false);
   
@@ -60,6 +60,7 @@ const BatchXComplete = ({ batchData, allFlow, allFall, nowater, canRun })=> {
   return(
     <div className='endBox borderPurple'>
       {batchData.completed === false ?
+        quantity > 0 &&
         nowater || (allFlow && allFall) ?
           <Fragment>
             <p className='centreText'>

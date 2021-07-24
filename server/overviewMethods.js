@@ -26,7 +26,7 @@ function dryPriorityCalc(bQuTmBdg, mEst, bTide, shipAim, now, shipLoad) {
   const overQuote = totalTideMinutes > mQuote;
   const q2tNice = overQuote ? 0 : quote2tide;
   
-  const aimAhead = shipAimMmnt.clone().subtractWorkingTime(Config.shipAhead, 'hours');
+  const aimAhead = shipAimMmnt.clone().subtract(Config.shipAhead, 'hours');
   const estSoonest = now.clone().addWorkingTime(q2tNice, 'minutes');
 
   const buffer = aimAhead.workingDiff(estSoonest, 'minutes');
@@ -262,7 +262,8 @@ Meteor.methods({
       const mEst = getEst(b.widgetId, b.quantity);
       const budget = b.quoteTimeBudget || [];
       const mQuote = budget.length === 0 ? 0 : Number(budget[0].timeAsMinutes);
-      const estMinutes = mQuote > 0 && mQuote < mEst ? mQuote : avgOfArray([mQuote, mEst]);
+      const estMinutes = mQuote === 0 ? mEst :
+                         mQuote < mEst ? mQuote : avgOfArray([mQuote, mEst]);
       
       const realTimePer = percentOf( estMinutes, totalTideMinutes );
       

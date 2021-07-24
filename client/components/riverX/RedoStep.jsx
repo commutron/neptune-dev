@@ -13,7 +13,7 @@ const RedoStep = ({
   const [ lock, lockSet ] = useState(false);
   
   const reSteps = itemData.history.filter( x => x.good === true &&
-                    ( x.type === 'inspect' || x.type === 'test') );
+              x.type !== 'finish' && x.type !== 'nest' && x.type !== 'first' );
   
   function passT(sKey, step, type, pass, shipFail) {
     lockSet(true);
@@ -50,21 +50,26 @@ const RedoStep = ({
     }
   }
   
-  function checkAccess(tbranchKey) {
-    const brObj = brancheS.find( b => b.brKey === tbranchKey ) || null;
+  function checkAccess(tstep, type) {
+    const tbrKey = tstep ? tstep.branchKey : null;
+    const brObj = brancheS.find( b => b.brKey === tbrKey ) || null;
 	  const reqUL = brObj ? brObj.reqUserLock === true : null;
-		const reqKey = reqUL ? ( 'BRK' + tbranchKey ) : null;
-  	return !reqUL ? true : Roles.userIsInRole(Meteor.userId(), reqKey);
+		const reqKey = reqUL ? ( 'BRK' + tbrKey ) : null;
+  	const stepClr = !reqUL ? true : Roles.userIsInRole(Meteor.userId(), reqKey);
+  	const typeClr = type === 'inspect' ? isInspect : type === 'test' ? isTester : true;
+    return stepClr && typeClr;
   }
   
   if(reSteps.length === 0) {
     return null;
   }
   
+  const types = _.uniq(Array.from(reSteps, x => x.type)).join(' or ');
+  
   return(
     <div className='dmargin stoneForm'>
-      <div className='fakeFielset centreText medBig cap'
-        >Repeat Inspection {reSteps.find(re=> re.type === 'test') && ' or Test'}</div>
+      <div className='vmarginhalf centreText medBig cap'
+        >Repeat {types}</div>
       
       <div className='fakeFielset'>
         <label htmlFor='redoCommField' className='wideStone'>
@@ -76,11 +81,11 @@ const RedoStep = ({
           </textarea>Repetition Reason
         </label>
           
-      {redoCommTxt.trim().length < 3 ? null :
+      {redoCommTxt.trim().length < 5 ? null :
         reSteps.map( (st, index)=> {
           const tstep = app.trackOption.find( x => x.key === st.key );
+          const isAuth = checkAccess(tstep, st.type);
           if(st.type === 'test') {
-  	        const isTest = (tstep ? checkAccess(tstep.branchKey) : true) && isTester;
             return(
               <div key={index} className='wideStone reStep medBig cap'
                 >{!tstep && `${Pref.rapidExd} `}{st.step} Test
@@ -90,7 +95,7 @@ const RedoStep = ({
             				name={'Pass '+ st.step}
             				id={st.key+'redopass'}
             				onClick={()=>passT(st.key, st.step, st.type, 'redone', false)}
-            				disabled={lock || !isTest}>
+            				disabled={lock || !isAuth}>
             				<label>Pass</label>
           				</button>
           				<button
@@ -98,7 +103,7 @@ const RedoStep = ({
             				name={'Fail '+ st.step}
             				id={st.key+'redofail'}
             				onClick={()=>passT(st.key, st.step, st.type, false, false)}
-            				disabled={lock || !isTest}>
+            				disabled={lock || !isAuth}>
             				<label>Fail</label>
           				</button>
           				<button
@@ -106,24 +111,23 @@ const RedoStep = ({
             				name={'Bypass '+ st.step}
             				id={st.key+'redobypass'}
             				onClick={()=>passT(st.key, st.step, st.type, 'redone', true)}
-            				disabled={lock || !isTest}>
+            				disabled={lock || !isAuth}>
             				<label>Bypass</label>
           				</button>
         				</span>
       				</div>
   		      );
           }else{
-  	        const isInst = (tstep ? checkAccess(tstep.branchKey) : true) && isInspect;
             return(
               <div key={index} className='wideStone reStep medBig cap'
-                >{!tstep && `${Pref.rapidExd} `}{st.step} Inspect
+                >{!tstep && `${Pref.rapidExd} `}{st.step} {st.type}
                 <span>
           				<button
                 	  className='reInspect'
-            				name={st.step + ' inspect'}
+            				name={`${st.step}  ${st.type}`}
             				id={st.key+'redook'}
             				onClick={()=>passS(st.key, st.step, st.type, 'redone')}
-            				disabled={lock || !isInst}>
+            				disabled={lock || !isAuth}>
             				<label>OK</label>
           				</button>
           				<button
@@ -131,7 +135,7 @@ const RedoStep = ({
             				name={st.step + ' fail'}
             				id={st.key+'redong'}
             				onClick={()=>passS(st.key, st.step, st.type, false)}
-            				disabled={lock || !isInst}>
+            				disabled={lock || !isAuth}>
             				<label>NG</label>
           				</button>
         				</span>

@@ -294,6 +294,7 @@ function branchBestGuess(
 Meteor.methods({
   
   getOneBranchBestGuess(batchNum, tideObj) {
+    this.unblock();
     const accessKey = Meteor.user().orgKey;
     const app = AppDB.findOne({ orgKey: accessKey });
     const branchOptions = sortBranches(app.branches);
@@ -322,6 +323,7 @@ Meteor.methods({
   
   
   assembleBranchTime(batchNum) {
+    this.unblock();
     const accessKey = Meteor.user().orgKey;
     const app = AppDB.findOne({ orgKey: accessKey});
     const branchOptions = sortBranches(app.branches);

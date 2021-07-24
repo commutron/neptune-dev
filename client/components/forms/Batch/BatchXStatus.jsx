@@ -13,13 +13,6 @@ const BatchXStatus = ({ batchData, allFlow, allFall, nowater, rapid })=>	{
     });
   };
   
-  /*function handleLock(e) { // Manual Locking
-    this.doLock.disabled = true;
-    Meteor.call('enableLockX', batchData._id, (err, re)=>{
-      err && console.log(err);
-      re ? null : toast.warning('Can Not Lock');
-    });
-  }*/
   function handleUnLock(e) {
     this.doUnLock.disabled = true;
     Meteor.call('disableLockX', batchData._id, (err, re)=>{
@@ -34,13 +27,13 @@ const BatchXStatus = ({ batchData, allFlow, allFall, nowater, rapid })=>	{
   return(
     <div className='cap'>
       {!rapid && 
-       batchData.quantity > 0 &&
        ( nowater || (allFlow && allFall) || batchData.completed ) ?
         <BatchXComplete 
           batchData={batchData}
           allFlow={allFlow}
           allFall={allFall}
           nowater={nowater}
+          quantity={batchData.quantity}
           canRun={canRun} />
       :null}
         
@@ -56,18 +49,6 @@ const BatchXStatus = ({ batchData, allFlow, allFall, nowater, rapid })=>	{
             ><n-fa1><i className='fas fa-power-off grayT fa-lg fa-fw'></i></n-fa1>
             </button>   {Pref.xBatch} is {Pref.notlive}
           </p>
-          {/*isAdmin && !batchData.lock && // Manual Locking
-            <p>
-              <button
-                id='doLock'
-                title={canRun ? 'Enable Lock' : Pref.norole}
-                className='miniAction noFade medBig'
-                onClick={(e)=>handleLock(e)}
-                disabled={!canRun}
-              ><n-fa4><i className='fas fa-lock-open purpleT fa-lg fa-fw'></i></n-fa4>
-              </button>   UnLocked
-            </p>
-          */}
           {canRun && batchData.lock &&
             <p>
               <button

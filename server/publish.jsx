@@ -384,6 +384,9 @@ Meteor.publish('hotDataPlus', function(scanOrb, keyMatch){
           'orgKey': 0,
           'shareKey': 0,
           'lockTrunc': 0,
+          'finShipAim': 0,
+          'finShipDue': 0,
+          'finEndWork': 0,
           'finBffrRel': 0
         }}),
       XSeriesDB.find({batch: trueBatch, orgKey: orgKey}, {
@@ -538,6 +541,9 @@ Meteor.publish('hotDataEx', function(dataRequest, hotWidget){
             'orgKey': 0,
             'shareKey': 0,
             'lockTrunc': 0,
+            'finShipAim': 0,
+            'finShipDue': 0,
+            'finEndWork': 0,
             'finBffrRel': 0
         }}),
         XSeriesDB.find({batch: dataRequest, orgKey: orgKey}, {

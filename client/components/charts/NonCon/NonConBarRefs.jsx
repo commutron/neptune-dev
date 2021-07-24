@@ -75,17 +75,16 @@ const NonConBarRefs = ({ ncOp, nonCons, app, isDebug })=> {
             grid: { stroke: '#5c5c5c' },
             ticks: { stroke: '#5c5c5c' },
             tickLabels: { 
-              fontSize: '7px' }
+              fontSize: '6px' }
           } }
         />
         <VictoryAxis 
-          //fixLabelOverlap={true} 
           style={ {
             axis: { stroke: 'grey' },
             grid: { stroke: '#5c5c5c' },
             ticks: { stroke: '#5c5c5c' },
             tickLabels: { 
-              fontSize: '7px' }
+              fontSize: '6px' }
           } }
         />
         <VictoryStack

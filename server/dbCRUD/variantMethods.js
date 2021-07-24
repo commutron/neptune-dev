@@ -30,37 +30,6 @@ Meteor.methods({
     }
   },
   
-  UNSEToldwidgetversionsArray() {
-    try{
-      if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
-        WidgetDB.update({orgKey: Meteor.user().orgKey}, {
-          $unset : { 
-            'versions': ""
-          }},{multi: true});
-
-        let found = [];
-        
-        const docs = WidgetDB.find({}).fetch();
-        
-        for( let w of docs ) {
-          if(w.versions) {
-            found.push({
-              widget: w.widget,
-              vers: w.versions
-            });
-          }
-        }
-        
-        return found;
-      }else{
-        return false;
-      }
-    }catch (err) {
-      throw new Meteor.Error(err);
-    }
-  },
-  
-  
   editVariant(widgetId, vId, newVar, newWiki, newUnit) {
     const doc = VariantDB.findOne({_id: vId},{fields:{'variant':1}});
     const dups = VariantDB.findOne({widgetId: widgetId, variant: newVar},{fields:{'_id':1}});

@@ -171,6 +171,10 @@ const StepsProgressX  = ({
             count={round2Decimal(r.quantity * (isNaN(r.rDone) ? 1 : r.rDone))}
             countNew={round2Decimal(r.quantity * (isNaN(r.rNew) ? 1 : r.rNew))}
             total={r.quantity}
+            tips={[
+              r.rFin ? 'Completed ' + Pref.items + ': ' + r.rFin[0] : null,
+              r.rFin ? 'Completed ' + Pref.items + ' Today: ' + r.rFin[1] : null
+            ]}
             truncate={truncate} />
       )})}
       

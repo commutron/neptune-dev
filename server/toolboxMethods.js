@@ -1,5 +1,18 @@
-// import moment from 'moment';
-// import Config from '/server/hardConfig.js';
+import moment from 'moment';
+import 'moment-timezone';
+import 'moment-business-time';
+
+import Config from '/server/hardConfig.js';
+import { avgOfArray } from './calcOps.js';
+import { syncHoliday, getEst } from './utility.js';
+import { batchTideTime } from './tideGlobalMethods.js';
+import { calcShipDay } from './reportCompleted.js';
+import { getShipLoad } from '/server/shipOps';
+
+moment.updateLocale('en', {
+  workinghours: Config.workingHours,
+  shippinghours: Config.shippingHours
+});
 
 Meteor.methods({
   
@@ -167,5 +180,67 @@ Meteor.methods({
       throw new Meteor.Error(err);
     }
   },
+  
+  
+  diagnoseProduct(batchID) {
+    syncHoliday(Meteor.user().orgKey);
+    const now = moment().tz(Config.clientTZ);
+
+    const b = XBatchDB.findOne({_id: batchID});
+    
+    if(!b) {
+      return batchID;
+    }else{
+      const mEst = getEst(b.widgetId, b.quantity);
+
+      const salesEnd = b.salesEnd;
+
+      const doneEntry = b.completedAt;
+      
+      const calcShip = calcShipDay( batchID, now, salesEnd );
+      const shipAim = calcShip[1];
+      const lateLate = calcShip[2];
+
+      const qtBready = !!b.quoteTimeBudget;
+      
+      if(qtBready && b.tide) {
+        const shipLoad = getShipLoad(now);
+
+        const shipAimMmnt = moment(shipAim);
+ 
+        const mQuote = b.quoteTimeBudget.length === 0 ? 0 : b.quoteTimeBudget[0].timeAsMinutes;
+        const estimatedMinutes = avgOfArray([mQuote, mEst]);
+        
+        const totalTideMinutes = batchTideTime(b.tide);
+        
+        const quote2tide = estimatedMinutes - totalTideMinutes;
+        const overQuote = totalTideMinutes > mQuote;
+        const q2tNice = overQuote ? 0 : quote2tide;
+        
+        const aimAhead = shipAimMmnt.clone().subtract(Config.shipAhead, 'hours');
+        const estSoonest = now.clone().addWorkingTime(q2tNice, 'minutes');
+  
+        const buffer = aimAhead.workingDiff(estSoonest, 'minutes');
+       
+        const estEnd2fillBuffer = buffer || null;
+        
+        const dayGap = shipAimMmnt.workingDiff(now, 'days', true);
+        const shipPull = dayGap <= Config.shipSoon ? shipLoad * 2 : shipLoad;
+      
+        const bffrRel = Math.round( ( estEnd2fillBuffer / 100 ) + dayGap - shipPull );
+
+        return { 
+          mEst, salesEnd, doneEntry, calcShip, shipAim, lateLate, qtBready,
+          shipLoad, shipAimMmnt: shipAimMmnt.format(), mQuote, estimatedMinutes, totalTideMinutes, 
+          quote2tide, overQuote, q2tNice, 
+          aimAhead: aimAhead.format(), 
+          estSoonest: estSoonest.format(),
+          buffer, estEnd2fillBuffer, dayGap, shipPull, bffrRel
+        };
+      }else{
+        return false;
+      }
+    }
+  }
   
 });

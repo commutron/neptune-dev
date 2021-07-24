@@ -31,6 +31,15 @@ const DataRepair = ({ app, users })=> {
     });
   }
   
+  function requestDiagnostic(e) {
+    e.preventDefault();
+    const id = this.inputBid.value;
+    Meteor.call('diagnoseProduct', id, (err, re)=>{
+      err && console.log(err, err.message);
+      console.log(re);
+    });
+  }
+  
   function doProgToTimeCurve() {
     Meteor.call('getAvgTimeShare', (err, reply)=>{
 	    err && console.log(err);
@@ -185,18 +194,26 @@ const DataRepair = ({ app, users })=> {
         </form>
       </div>
       
-      
-      
-      <hr />
-      
-      <DoCard
-        title='Clear former Migrated widget Versions'
-        icon='question'
-        color='clearOrange'
-        button='UNSET thing'
-        action={()=>doCallThing('UNSEToldwidgetversionsArray', true)}
-      />
-      
+      <div>
+        <h3><i className="fas fa-stethoscope fa-lg gap"></i>
+          Ship and Quote Diagnostic
+        </h3>
+        <form onSubmit={(e)=>requestDiagnostic(e)}>
+          <p>
+            <input
+              id='inputBid'
+              placeholder='XBatch _id'
+              required
+            />
+          </p>
+          <p>
+            <button
+              className='action clearBlue'
+              type='submit'
+            >Request Log</button>
+          </p>
+        </form>
+      </div>
       
     </div>
   );

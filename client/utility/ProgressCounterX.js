@@ -170,6 +170,7 @@ export function WhiteWaterCounter(rapidData, seriesData) {
   let iSet = 0;
   let iDone = null;
   let iNew = null;
+  let nFin = null;
   
   const fallS = rapidData.cascade.sort((w1, w2)=> 
           w1.position < w2.position ? -1 : w1.position > w2.position ? 1 : 0 );
@@ -199,12 +200,13 @@ export function WhiteWaterCounter(rapidData, seriesData) {
                       moment(r.completedAt).isSame(moment(), 'day') ) 
                     ).length;
     iNew = ( rapNewI / totalQ );
+    nFin = [ rapDidI, rapNewI ];
   }
   
   const pointProgress = avgOfArray([...pointArr,iDone]);
   const freshProgress = avgOfArray([...newptArr,iNew]);
   
-  return [ iSet, pointProgress, countArr, freshProgress ];
+  return [ iSet, pointProgress, countArr, freshProgress, nFin ];
 }
 
 

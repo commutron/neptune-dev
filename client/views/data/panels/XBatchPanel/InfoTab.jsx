@@ -82,7 +82,7 @@ const InfoTab = ({
             batchId={b._id}
             end={b.salesEnd}
             app={app}
-            lock={b.completed === true && !isDebug ? Pref.isDone : false}
+            lock={(b.completed === true && !isDebug ) || b.lock ? Pref.isDone : false}
             canDo={Roles.userIsInRole(Meteor.userId(), ['edit', 'sales'])}
             noText={true}
             lgIcon={true}

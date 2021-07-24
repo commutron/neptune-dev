@@ -67,6 +67,7 @@ export function WhiteWater( itemData, seriesData, rapidsData ) {
       rapid.rDone = rCount[1];
       rapid.rCounts = rCount[2];
       rapid.rNew = rCount[3];
+      rapid.rFin = rCount[4];
       rapDo = rapid;
     }else{
       rapDids.push({
@@ -78,7 +79,8 @@ export function WhiteWater( itemData, seriesData, rapidsData ) {
         rSet: rCount[0],
         rDone: rCount[1],
         rCounts: rCount[2],
-        rNew: rCount[3]
+        rNew: rCount[3],
+        rFin: rCount[4]
       });
     }
   }

@@ -3,7 +3,11 @@ import './style.css';
 
 import { VictoryBar, VictoryStack, VictoryTooltip } from 'victory';
 
-const MiniStack = ({ title, subtitle, count, countNew, total, truncate })=> {
+const MiniStack = ({ 
+  title, subtitle, 
+  count, countNew, total,
+  tips, truncate
+})=> {
   
   const v = count;
   const vX = countNew;
@@ -20,11 +24,14 @@ const MiniStack = ({ title, subtitle, count, countNew, total, truncate })=> {
     fontSize: '0.9rem',
     letterSpacing: '1px'
   };
+  
+  const info = `New: ${dataArr[1]}\nRemaining: ${dataArr[2]}`;
+  const tooltip = tips ? info + `\n\n` + tips.join(`\n`) : info;
     
   return(
     <div 
       className={`wide miniStack meterprogStack noCopy ${t === 0 ? 'empty' : ''}`}
-      title={`New: ${dataArr[1]}\nRemaining: ${dataArr[2]}`}
+      title={tooltip}
       >
       <p style={name} className='cap'>{title}</p>
 

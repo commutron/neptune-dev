@@ -7,7 +7,6 @@ import {
   VictoryTooltip,
   VictoryStack
 } from 'victory';
-// import Pref from '/client/global/pref.js';
 import Theme from '/client/global/themeV.js';
 import { countMulti } from '/client/utility/Arrays';
 
@@ -80,17 +79,16 @@ const NonConBar = ({ ncOp, nonCons, app, isDebug })=> {
             grid: { stroke: '#5c5c5c' },
             ticks: { stroke: '#5c5c5c' },
             tickLabels: { 
-              fontSize: '7px' }
+              fontSize: '6px' }
           } }
         />
         <VictoryAxis 
-          //fixLabelOverlap={true} 
           style={ {
             axis: { stroke: 'grey' },
             grid: { stroke: '#5c5c5c' },
             ticks: { stroke: '#5c5c5c' },
             tickLabels: { 
-              fontSize: '7px' }
+              fontSize: '6px' }
           } }
         />
         <VictoryStack
@@ -98,10 +96,6 @@ const NonConBar = ({ ncOp, nonCons, app, isDebug })=> {
           colorScale='heatmap'
           horizontal={true}
           padding={0}
-          // animate={{
-          //   duration: 500,
-          //   onLoad: { duration: 250 }
-          // }}
         >
         
         {series.map( (entry, index)=>{

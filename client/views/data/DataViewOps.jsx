@@ -121,6 +121,7 @@ const DataViewOps = ({
         rapid.rSet = rapidCount[0];
         rapid.rDone = rapidCount[1];
         rapid.rNew = rapidCount[3];
+        rapid.rFin = rapidCount[4];
         calcRapids.push( rapid );
       }
       return calcRapids;

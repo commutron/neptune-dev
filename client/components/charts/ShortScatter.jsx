@@ -50,7 +50,7 @@ const ShortScatter = ({ shortfalls, app, isDebug })=> {
             grid: { stroke: '#5c5c5c' },
             ticks: { stroke: '#5c5c5c' },
             tickLabels: { 
-              fontSize: '7px' }
+              fontSize: '6px' }
           } }
         />
         <VictoryAxis 
@@ -60,7 +60,7 @@ const ShortScatter = ({ shortfalls, app, isDebug })=> {
             grid: { stroke: '#5c5c5c' },
             ticks: { stroke: '#5c5c5c' },
             tickLabels: { 
-              fontSize: '7px' }
+              fontSize: '6px' }
           } }
         />
         <VictoryScatter

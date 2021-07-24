@@ -20,12 +20,7 @@ const TabsLite = ({ tabs, names, children })=> {
         )})}
       </div>
         <div className='tabBody'>
-          {children.map( (child, index)=>{
-            return (
-              <span key={index+'tab'} hidden={index !== show}>
-               {child}
-              </span>
-          )})}
+          {children[show]}
         </div>
     </div>
   );
