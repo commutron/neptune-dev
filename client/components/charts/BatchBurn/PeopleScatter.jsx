@@ -17,9 +17,10 @@ const PeopleScatter = ({ tide, app, isDebug })=> {
   const [ idNum, idNumSet ] = useState(1);
   
   useEffect( ()=> {
-    const max = _.uniq( Array.from(tide, t=> t.who) ).length;
-    const tideS = tide.sort((a,b)=> a.startTime > b.startTime ? 1 : 
-                                    a.startTime < b.startTime ? -1 : 0);
+    const tideArr = tide || [];
+    const max = _.uniq( Array.from(tideArr, t=> t.who) ).length;
+    const tideS = tideArr.sort((a,b)=> a.startTime > b.startTime ? 1 : 
+                                       a.startTime < b.startTime ? -1 : 0);
     
     let days = [];
     for(let t of tideS) {

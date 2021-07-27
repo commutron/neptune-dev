@@ -35,7 +35,8 @@ const TimeNextChunk = ({
   
   const flDelay = flrRel ? flgap : est[1] < 0 ? est[1] : 0;
   
-  const stTide = batchData.tide.length > 0  ? batchData.tide[0].startTime : false;
+  const tide = batchData.tide || [];
+  const stTide = tide.length > 0 ? tide[0].startTime : false;
   const stgap = stTide ? moment(stTide).workingDiff(est[2], 'days', true) : 0;
   
   const stDelay = stTide ? stgap : est[3] < 0 ? est[3] : 0;
