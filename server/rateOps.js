@@ -18,24 +18,6 @@ Meteor.methods({
     const srs = XSeriesDB.findOne({_id: seriesId},{fields:{'items':1}});
 
     let now = moment().tz(Config.clientTZ);
-    
-    // useEffect( ()=> {
-    //   const max = _.uniq( Array.from(tide, t=> t.who) ).length;
-    //   const tideS = tide.sort((a,b)=> a.startTime > b.startTime ? 1 : 
-    //                                   a.startTime < b.startTime ? -1 : 0);
-      
-    //   let days = [];
-    //   for(let t of tideS) {
-    //     days.push({
-    //       x: moment(t.startTime).startOf('day').format(),
-    //       y: UserName(t.who, true)
-    //     });
-    //   }
-    //   const slim = _.uniq(days, n=> n.x + n.y );
-      
-    //   seriesSet(slim);
-    //   idNumSet(max);
-    // }
 
     const endDay = end === true ? 
       moment(end).endOf('day').add(2, 'd') : 
@@ -93,6 +75,7 @@ Meteor.methods({
             x: new Date( day.format() ),
             y: fallRemain,
           });
+          if(fallRemain === 0) { break }
         }
       }
       return fallRemainOverTime;

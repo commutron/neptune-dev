@@ -8,8 +8,8 @@ Meteor.methods({
   addBatchX(batchNum, groupId, widgetId, vKey, 
             salesNum, sDate, eDate, quantity, withSeries, qTime
   ) {
-    const doc = WidgetDB.findOne({ _id: widgetId });
-    const duplicateX = XBatchDB.findOne({ batch: batchNum });
+    const doc = WidgetDB.findOne({ _id: widgetId },{fields:{'orgKey':1}});
+    const duplicateX = XBatchDB.findOne({ batch: batchNum },{fields:{'_id':1}});
     const auth = Roles.userIsInRole(Meteor.userId(), 'create');
     const accessKey = Meteor.user().orgKey;
     
@@ -55,7 +55,7 @@ Meteor.methods({
       
       // full scheme adds lock, lockTrunc, finBffrRel, finShipAim, finShipDue, finEndWork
       if(withSeries) {
-        const duplicate = XSeriesDB.findOne({batch: batchNum});
+        const duplicate = XSeriesDB.findOne({batch: batchNum},{fields:{'_id':1}});
         
         if(!duplicate) {
           XSeriesDB.insert({
@@ -88,16 +88,17 @@ Meteor.methods({
     const accessKey = Meteor.user().orgKey;
     const auth = Roles.userIsInRole(Meteor.userId(), ['edit','run']);
     
-    const doc = XBatchDB.findOne({_id: batchId});
-    const srs = XSeriesDB.findOne({batch: doc.batch});
+    const doc = XBatchDB.findOne({_id: batchId},{fields:{'orgKey':1,'batch':1,'tide':1}});
+    const srs = XSeriesDB.findOne({batch: doc.batch},{fields:{'_id':1}});
 
     if(auth && doc.orgKey === accessKey) {
       const numswitch = doc.batch !== newBatchNum;
       
-      const openTide = numswitch ?
-              doc.tide && doc.tide.find( t => t.stopTime === false ) : false;
+      const openTide = !numswitch ? false :
+                       doc.tide && doc.tide.find( t => t.stopTime === false );
       
-      let duplicate = numswitch ? XBatchDB.findOne({batch: newBatchNum}) : false;
+      let duplicate = !numswitch ? false :
+                      XBatchDB.findOne({batch: newBatchNum},{fields:{'_id':1}});
     
       if(!openTide && !duplicate) {
         XBatchDB.update({_id: batchId, orgKey: accessKey}, {
@@ -135,6 +136,7 @@ Meteor.methods({
   alterBatchXFulfill(batchId, oldDate, newDate, reason) {
     const accessKey = Meteor.user().orgKey;
     const auth = Roles.userIsInRole(Meteor.userId(), ['edit', 'sales']);
+    
     if(auth) {
       XBatchDB.update({_id: batchId, orgKey: accessKey}, {
         $set : {
@@ -154,6 +156,11 @@ Meteor.methods({
       Meteor.defer( ()=>{
         Meteor.call('updateOneMovement', batchId, accessKey);
       });
+      if(XBatchDB.findOne({_id: batchId, completed: true},{fields:{'_id':1}})) {
+        Meteor.defer( ()=>{
+          Meteor.call('saveEndState', batchId, accessKey);
+        });
+      }
       return true;
     }else{
       return false;
@@ -242,7 +249,7 @@ Meteor.methods({
   },
   
   disableLockX(batchId, privateKey) {
-    const doc = XBatchDB.findOne({_id: batchId});
+    const doc = XBatchDB.findOne({_id: batchId},{fields:{'lock':1}});
     const locked = doc.lock === true;
     const accessKey = privateKey || Meteor.user().orgKey;
     const auth = privateKey || Roles.userIsInRole(Meteor.userId(), 'run');
@@ -357,7 +364,7 @@ Meteor.methods({
       throw new Meteor.Error(err);
     }
   },
-  // push time budget, whole time for batch
+  // push time budget, whole time in minutes for batch
   pushBatchXTimeBudget(batchId, qTime) {
     try{
       const accessKey = Meteor.user().orgKey;
@@ -392,7 +399,6 @@ Meteor.methods({
           updatedAt: new Date(),
   			  updatedWho: Meteor.userId(),
           river: riverId,
-          // riverAlt: riverAltId,
         }});
       Meteor.defer( ()=>{ 
         Meteor.call('updateOneMinify', batchId, accessKey); 
@@ -416,7 +422,7 @@ Meteor.methods({
             gate: gate,
             type: type,
             position: Number(0),
-            action: action,// "slider", --"timer", "stopwatch"--
+            action: action,// "slider"
             branchKey: wfBranch,
             counts: []
           }
@@ -448,7 +454,7 @@ Meteor.methods({
   },
   removeCounter(batchId, wfKey) {
     const accessKey = Meteor.user().orgKey;
-    const doc = XBatchDB.findOne({_id: batchId});
+    const doc = XBatchDB.findOne({_id: batchId},{fields:{'waterfall':1}});
     const subdoc = doc ? doc.waterfall.find( x => x.wfKey === wfKey) : null;
     const inUse = subdoc ? subdoc.counts.length > 0 : null;
     if(doc && subdoc && !inUse) {
@@ -507,7 +513,8 @@ Meteor.methods({
     {
       const accessKey = privateKey || Meteor.user().orgKey;
       
-      const doc = XBatchDB.findOne({_id: batchId});
+      const doc = XBatchDB.findOne({_id: batchId},
+                  {fields:{'batch':1,'quantity':1,'serialize':1,'tide':1,'waterfall':1}});
       
       const didSome = doc.quantity > 0;
       
@@ -522,7 +529,7 @@ Meteor.methods({
       const allFall = !didFall ? true : falling.every( x => x === true );
       
       const didFlow = doc.serialize === true;
-      const srs = didFlow && XSeriesDB.findOne({batch: doc.batch});
+      const srs = didFlow && XSeriesDB.findOne({batch: doc.batch},{fields:{'items':1}});
       const allFlow = !srs ? true : srs.items.every( x => x.completed === true );
     
       if(didSome && allFall && allFlow) {
@@ -533,7 +540,7 @@ Meteor.methods({
     			  completedWho: Meteor.userId(),
         }});
         
-        const openRapid = XRapidsDB.findOne({extendBatch: doc.batch, live: true});
+        const openRapid = XRapidsDB.findOne({extendBatch: doc.batch, live: true},{fields:{'_id':1}});
         if(!openRapid) {
           XBatchDB.update({_id: batchId, orgKey: accessKey}, {
       			$set : { 
@@ -595,14 +602,14 @@ Meteor.methods({
     if(!Roles.userIsInRole(Meteor.userId(), 'run' || override === undefined)) {
       null;
     }else{
-      const doc = XBatchDB.findOne({_id: batchId});
+      const doc = XBatchDB.findOne({_id: batchId},{fields:{'completed':1,'completedAt':1,'lock':1}});
       const completed = doc && doc.completed;
       
       if(completed && !doc.lock) {
         const privateKey = Meteor.user().orgKey;
         const cmltDate = doc.completedAt;
         const inTime = moment().diff(moment(cmltDate), 'minutes') < 60;
-        const org = AppDB.findOne({ orgKey: privateKey });
+        const org = AppDB.findOne({ orgKey: privateKey },{fields:{'orgPIN':1}});
         const orgPIN = org ? org.orgPIN : null;
         if(inTime || orgPIN === override) {
           XBatchDB.update({_id: batchId, orgKey: privateKey}, {
@@ -653,7 +660,7 @@ Meteor.methods({
   },
   
   editBlockX(batchId, blKey, blockTxt) {
-    const doc = XBatchDB.findOne({_id: batchId});
+    const doc = XBatchDB.findOne({_id: batchId},{fields:{'blocks':1}});
     const subDoc = doc.blocks.find( x => x.key === blKey );
     const mine = subDoc.who === Meteor.userId();
     const auth = Roles.userIsInRole(Meteor.userId(), 'run');
@@ -705,22 +712,22 @@ Meteor.methods({
     if(Roles.userIsInRole(Meteor.userId(), "qa") ) {
       const accessKey = Meteor.user().orgKey;
       
-      const org = AppDB.findOne({ orgKey: accessKey });
+      const org = AppDB.findOne({ orgKey: accessKey },{fields:{'orgPIN':1}});
       const orgPIN = org ? org.orgPIN : null;
         
-      const doc = XBatchDB.findOne({_id: batchId});
+      const doc = XBatchDB.findOne({_id: batchId},{fields:{'batch':1,'serialize':1}});
       
       if(pinInput === orgPIN) {
   
         const didFlow = doc.serialize === true;
-        const srs = didFlow && XSeriesDB.findOne({batch: doc.batch});
+        const srs = didFlow && XSeriesDB.findOne({batch: doc.batch},{fields:{'items':1}});
         
         const srsId = !srs ? null : srs._id;
         
         const srsI = !srs ? [] : srs.items;
         
-        const doneI = srsI.filter( i=> i.completed && i.history.findIndex( s => 
-                              s.type === 'scrap' && s.good === true ) === -1 );
+        const doneI = srsI.filter( i=> i.completed && 
+          i.history.findIndex( s => s.type === 'scrap' && s.good === true ) === -1 );
         for(let di of doneI) {
           if(doneScrap) {  
             Meteor.call('scrapItemX', srsId, di.serial, 'force finish', 'Force Finish All');
@@ -798,7 +805,7 @@ Meteor.methods({
     
     const keyMatch = doc.orgKey === accessKey;
     
-    const org = AppDB.findOne({ orgKey: accessKey });
+    const org = AppDB.findOne({ orgKey: accessKey },{fields:{'orgPIN':1}});
     const orgPIN = org ? org.orgPIN : null;
     const pinMatch = pinInput === orgPIN;
     
@@ -836,7 +843,7 @@ Meteor.methods({
     
     const keyMatch = doc.orgKey === accessKey;
     
-    const org = AppDB.findOne({ orgKey: accessKey });
+    const org = AppDB.findOne({ orgKey: accessKey },{fields:{'orgPIN':1}});
     const orgPIN = org ? org.orgPIN : null;
     const pinMatch = pinInput === orgPIN;
     
@@ -882,7 +889,7 @@ Meteor.methods({
       const access = doc.orgKey === accessKey;
       const unlock = lock === pass;
       
-      const org = AppDB.findOne({ orgKey: accessKey });
+      const org = AppDB.findOne({ orgKey: accessKey },{fields:{'orgPIN':1}});
       const orgPIN = org ? org.orgPIN : null;
       const pinMatch = pinInput === orgPIN;
       

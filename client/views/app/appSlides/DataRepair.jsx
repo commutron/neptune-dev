@@ -34,7 +34,7 @@ const DataRepair = ({ app, users })=> {
   function requestDiagnostic(e) {
     e.preventDefault();
     const id = this.inputBid.value;
-    Meteor.call('diagnoseProduct', id, (err, re)=>{
+    Meteor.call('diagnosePriority', id, (err, re)=>{
       err && console.log(err, err.message);
       console.log(re);
     });
@@ -62,6 +62,14 @@ const DataRepair = ({ app, users })=> {
   
   return(
     <div className='space3v autoFlex'>
+      <DoCard
+        title='Check for Legacy batches without QuoteBudget'
+        sub=''
+        icon='search'
+        color='clearBlack'
+        button='Lookup'
+        action={()=>doCallThing('checkforNoQuote', true)}
+      />
       
       <DoCard
         title='Force Randomize Org PIN'

@@ -1,12 +1,12 @@
 import React from 'react';
 import moment from 'moment';
-import Username from '/client/utility/Username.js';
+import UserName from '/client/utility/Username.js';
 
 const CreateTag = ({ when, who, whenNew, whoNew }) => (
   <p className='clean small indent fadeMore dropCeiling'>
-    Last updated {moment(whenNew).format("YYYY/MM/DD, kk:mm:ss")} by <Username id={whoNew} />
+    Last updated {moment(whenNew).format("YYYY/MM/DD, kk:mm:ss")} by {UserName(whoNew)}
     <br />
-    Created {moment(when).format("YYYY/MM/DD, kk:mm:ss")} by <Username id={who} />
+    Created {moment(when).format("YYYY/MM/DD, kk:mm:ss")} by {UserName(who)}
   </p>
 );
 
