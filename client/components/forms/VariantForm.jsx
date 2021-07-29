@@ -16,7 +16,7 @@ const VariantModel = ({ widgetData, app, rootWI, lockOut })=> {
     <ModelLarge
       button={name}
       title={title}
-      color='greenT'
+      color='blueT'
       icon='fa-cube fa-rotate-90'
       lock={!access || lockOut}
     >
@@ -94,12 +94,12 @@ const VariantForm = ({ widgetData, app, rootWI, selfclose })=> {
               type='url'
               id='wikdress'
               placeholder='Full Address'
-              className='wide' />{/*instructState*/}
+              className='wide' />
             <label htmlFor='wikdress'>Work Instructions</label>
           </p>
           <button
             type='submit'
-            className='action clearGreen'
+            className='action clearBlue'
             id='go'
             disabled={false}>SAVE</button>
         </form>

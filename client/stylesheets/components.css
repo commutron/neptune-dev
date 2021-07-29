@@ -171,3 +171,78 @@ n-timeline-marker:after {
 n-timeline-item:last-child n-timeline-marker:after {
   content: none;
 }
+
+.bigInfoBox {
+  position: relative;
+  cursor: default;
+}
+.bigInfoBox::after {
+  content: attr(data-describe);
+  position: absolute;
+  top: 25%;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  padding: 0.5em 1ch;
+  background-color: rgb(250,250,250);
+  color: black;
+  font-size: 0.9rem;
+  min-height: 3rem;
+  border: 2px solid rgb(75,75,75);
+  border-radius: 0 0 10px 10px;
+  pointer-events: none;
+  opacity: 0;
+}
+@media screen and (prefers-reduced-motion: no-preference) { 
+  .bigInfoBox::after {
+    transition: opacity 250ms ease-in,
+                top 250ms ease-in;
+  }
+}
+.bigInfoBox:hover::after,
+.bigInfoBox:focus-within::after {
+  opacity: 1;
+  top: 90%;
+}
+
+.miniStack {
+  position: relative;
+  cursor: default;
+  line-height: 1.5;
+}
+.miniStack::after {
+  content: attr(data-new) '\a' 
+           attr(data-not) '\a' 
+           attr(data-tips);
+  position: absolute;
+  bottom: 70%;
+  right: 1%;
+  z-index: 1;
+  padding: 0.5em 1ch 0.5em 2ch;
+  background-color: rgb(245,245,245);
+  color: black;
+  font-size: 0.8rem;
+  white-space: pre-wrap;
+  text-align: right;
+  text-transform: capitalize;
+  border: 1px solid;
+  border-radius: 10px 10px 0 10px;
+  pointer-events: none;
+  opacity: 0;
+}
+.darkTheme .miniStack::after {
+  background-color: rgb(40,40,40);
+  color: white;
+  /*left: 1%;*/
+  /*bottom: 90%;*/
+  /*z-index: 5;*/
+  /*border-radius: 10px 0 10px 10px;*/
+}
+@media screen and (prefers-reduced-motion: no-preference) { 
+  .miniStack::after {
+    transition: opacity 150ms ease-in;
+  }
+}
+.miniStack:hover::after {
+  opacity: 1;
+}

@@ -61,7 +61,7 @@ const PerfScatter = ({ app })=> {
             grid: { stroke: 'transparent' },
             ticks: { stroke: '#5c5c5c' },
             tickLabels: { 
-              fontSize: '7px' }
+              fontSize: '6px' }
           } }
           scale={{ x: "time" }}
         />
@@ -80,7 +80,7 @@ const PerfScatter = ({ app })=> {
             grid: { stroke: '#5c5c5c' },
             ticks: { stroke: '#5c5c5c' },
             tickLabels: { 
-              fontSize: '7px' }
+              fontSize: '6px' }
           } }
         />
         <VictoryArea

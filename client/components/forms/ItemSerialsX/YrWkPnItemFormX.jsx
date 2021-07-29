@@ -225,7 +225,7 @@ const YrWkPnItemFormX = ({
             <button
               id='goYrWk'
               disabled={false}
-              className='action clearGreen'
+              className='action clearBlack'
               type='submit'
             >Check</button>
           </p>
@@ -251,7 +251,7 @@ const YrWkPnItemFormX = ({
           <button
             id='goYrWkSave'
             disabled={createLock}
-            className='action clearGreen'
+            className='action clearBlue'
             onClick={(e)=>handleAdd(e)}
           >Create</button>
         </p>

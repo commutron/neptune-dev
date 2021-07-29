@@ -13,7 +13,7 @@ const CompModel = ({ vID, lockOut })=> {
     <ModelMedium
       button={'Add ' + Pref.comp + 's'}
       title={title}
-      color='greenT'
+      color='blueT'
       icon='fa-microchip'
       lock={!access || lockOut}
     >
@@ -62,7 +62,7 @@ const CompForm = ({ vID, selfclose })=> {
         <button
           id='go'
           disabled={false}
-          className='action clearGreen'
+          className='action clearBlue'
           type='submit'>Add</button>
       </p>
     </form>

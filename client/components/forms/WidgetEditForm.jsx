@@ -13,7 +13,7 @@ const WidgetEditWrapper = ({ id, now, lockOut })=> {
     <ModelSmall
       button={'Edit ' + Pref.widget}
       title={title}
-      color='greenT'
+      color='blueT'
       icon='fa-cube'
       lock={!access || lockOut}>
       <WidgetEditForm
@@ -45,7 +45,7 @@ const WidgetEditForm = ({ id, now })=> {
   }
 
   return(
-    <form className='centre' onSubmit={(e)=>save(e)}>
+    <form className='fitWide' onSubmit={(e)=>save(e)}>
       <p>
         <input
           type='text'
@@ -63,11 +63,16 @@ const WidgetEditForm = ({ id, now })=> {
           id='prodiption'
           defaultValue={now.describe}
           placeholder='Description ie. CRC Display'
+          className='dbbleWide'
           required />
         <label htmlFor='prodiption'>{Pref.widget} Description</label>
       </p>
-      <br />
-      <button type='submit' className='action clearGreen'>SAVE</button>
+      <span className='centre'>
+        <button
+          type='submit' 
+          className='action clearBlue'
+        >SAVE</button>
+      </span>
     </form>
   );
 };

@@ -26,7 +26,7 @@ const RiverSelect = ({ bID, wFlows, river, riverTitle, lock })=> {
                     riverTitle.length * 0.7 + 6 + 'ch';
   
   return(
-    <i><i className='fas fa-project-diagram fa-fw greenT'></i> {Pref.flow}:
+    <i><i className='fas fa-project-diagram fa-fw blueT'></i> {Pref.flow}:
       <select 
         id='riverchoice'
         title={title}

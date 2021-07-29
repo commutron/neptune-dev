@@ -1,7 +1,7 @@
 import React from 'react';
 import './style.css';
 
-import { VictoryBar, VictoryStack, VictoryTooltip } from 'victory';
+import { VictoryBar, VictoryStack } from 'victory';
 
 const MiniStack = ({ 
   title, subtitle, 
@@ -25,13 +25,12 @@ const MiniStack = ({
     letterSpacing: '1px'
   };
   
-  const info = `New: ${dataArr[1]}\nRemaining: ${dataArr[2]}`;
-  const tooltip = tips ? info + `\n\n` + tips.join(`\n`) : info;
-    
   return(
     <div 
       className={`wide miniStack meterprogStack noCopy ${t === 0 ? 'empty' : ''}`}
-      title={tooltip}
+      data-new={vX + ' New'}
+      data-not={dataArr[2] + ' Remain'}
+      data-tips={tips ? tips.join(`\n`) : ''}
       >
       <p style={name} className='cap'>{title}</p>
 
@@ -44,41 +43,15 @@ const MiniStack = ({
         <VictoryBar 
           data={dataArr[0]}
           barRatio={5}
-          labels={dataArr[0]}
-          labelComponent={
-            <VictoryTooltip 
-              orientation='top'
-              dx={-10}
-              dy={10}
-            />
-          }
         />
         <VictoryBar
           data={dataArr[1]}
           barRatio={5}
-          labels={dataArr[1]}
-          labelComponent={
-            <VictoryTooltip 
-              orientation='top'
-              dx={-10}
-              dy={10}
-            />
-          }
         />
         <VictoryBar
           data={dataArr[2]}
           barRatio={5}
-          labels={dataArr[2]}
           style={ { height: '20px' } }
-          labelComponent={
-            <VictoryTooltip 
-              orientation='top' 
-              dx={-10}
-              dy={10}
-              flyoutWidth={50}
-              flyoutHeight={50}
-            />
-          }
         />
       </VictoryStack>
       

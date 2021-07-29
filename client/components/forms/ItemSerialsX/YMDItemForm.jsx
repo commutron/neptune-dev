@@ -230,7 +230,7 @@ const YMDItemForm = ({
             <button
               id='goYMD'
               disabled={false}
-              className='action clearGreen'
+              className='action clearBlack'
               type='submit'
             >Check</button>
           </p>
@@ -256,7 +256,7 @@ const YMDItemForm = ({
           <button
             id='goYMDSave'
             disabled={createLock}
-            className='action clearGreen'
+            className='action clearBlue'
             onClick={(e)=>handleAdd(e)}
           >Create</button>
         </p>

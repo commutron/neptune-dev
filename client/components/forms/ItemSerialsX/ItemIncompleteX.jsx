@@ -70,7 +70,7 @@ const ItemIncompleteForm = ({ seriesId, item, app, selfclose })=> {
         <button 
           type="submit"
           id='inFinGo'
-          className='action orangeHover orangeBorder'
+          className='action clearOrange'
           disabled={false}
           >Finish {item.serial}</button>
       </p>

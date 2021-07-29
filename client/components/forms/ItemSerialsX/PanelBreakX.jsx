@@ -19,7 +19,7 @@ const PanelBreakX = ({ seriesId, batchId, batchNum, item })=> {
     <ModelLarge
       button='Split Panel'
       title={title}
-      color='orangeT'
+      color='blueT'
       icon='fa-cut'
       lock={!auth || lock}
     >
@@ -107,7 +107,7 @@ const PanelBreakForm = ({ seriesId, batchId, batchNum, item })=> {
           <button
             id='pBrkGO'
             disabled={newSerials.length !== item.units}
-            className='action clearGreen'
+            className='action clearBlue'
             type='submit'>Split</button>
         </p>
       </form>

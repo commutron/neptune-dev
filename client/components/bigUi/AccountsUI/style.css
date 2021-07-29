@@ -6,7 +6,7 @@
 .loginCard input {
   width: 100%;
 }
-.loginCard .tabBody {
+.loginCard .tabBody > form {
   padding: 0 25px;
 }
 
@@ -53,6 +53,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.scanIn { 
+  width: 100%;
+  overflow: hidden;
 }
 @supports (-webkit-touch-callout: none) {
   .scanIn {

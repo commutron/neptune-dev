@@ -188,7 +188,7 @@ const NSYrWkSqItemFormX = ({
           <button
             id='goYrWk'
             disabled={false}
-            className='action clearGreen'
+            className='action clearBlack'
             type='submit'
           >Check</button>
         </p>
@@ -213,7 +213,7 @@ const NSYrWkSqItemFormX = ({
           <button
             id='goNS13Save'
             disabled={createLock}
-            className='action clearGreen'
+            className='action clearBlue'
             onClick={(e)=>handleAdd(e)}
           >Create</button>
         </p>

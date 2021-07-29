@@ -18,7 +18,7 @@ const Tabs = ({ tabs, names, wide, stick, hold, sessionTab, disable, children })
   const styl = wide ? { width: 100 / tabs.length + '%'} : null;
   const dA = Array.isArray(disable) ? disable : [];
   
-  return (
+  return(
     <div>
       <div className={`tabNav ${sticky}`}>
         {tabs.map( (entry, index)=>{

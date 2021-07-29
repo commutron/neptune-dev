@@ -84,7 +84,7 @@ const BlockAddForm = ({ id, edit, doneLock, selfclose })=> {
         <p><button
           type='submit'
           id='addBlockGo'
-          className='action clearGreen'>Save</button>
+          className='action clearBlue'>Save</button>
         </p>
       </form>
     </div>

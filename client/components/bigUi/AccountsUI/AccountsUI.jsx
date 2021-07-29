@@ -31,7 +31,7 @@ const AccountsUI = ({ login, uID, username })=> {
         	names={true}
         	wide={true}>
         	
-        	<ScanUI />
+        	<ScanUI sty={sty} />
 					
 					<SignIn sty={sty} />
 					

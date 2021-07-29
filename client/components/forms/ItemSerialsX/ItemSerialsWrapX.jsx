@@ -54,12 +54,11 @@ const ItemSerialsWrapX = ({
   const title = access && !lock ? `Add ${Pref.item} ${Pref.itemSerial} numbers` : `${aT}\n${lT}`;
 
   if(itemsQ >= quantity) {
-    // updateToast();
     return(
       <ModelSmall
         button={'Add ' + Pref.item + 's'}
         title={title}
-        color='greenT'
+        color='blueT'
         icon={'fa-' + Pref.serialIcon}
         lgIcon={lgIcon}
         lock={!access || lock}
@@ -73,7 +72,7 @@ const ItemSerialsWrapX = ({
     <ModelLarge
       button={'Add ' + Pref.item + 's'}
       title={title}
-      color='greenT'
+      color='blueT'
       icon={'fa-' + Pref.serialIcon}
       lgIcon={lgIcon}
       lock={!access || lock}

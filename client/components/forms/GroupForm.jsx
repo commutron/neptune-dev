@@ -21,7 +21,7 @@ const GroupFormWrapper = ({
     <ModelMedium
       button={bttn}
       title={title}
-      color='greenT'
+      color='blueT'
       icon='fa-industry'
       lock={!access || lockOut}
       noText={noText}
@@ -131,7 +131,7 @@ const GroupForm = ({ id, name, alias, wiki, title, selfclose })=> {
         <button
           type='submit'
           id='grpSave'
-          className='action clearGreen'
+          className='action clearBlue'
           >Save
         </button>
       </span>

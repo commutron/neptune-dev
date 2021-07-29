@@ -23,8 +23,9 @@ const StoneReg = ({
 	  enactEntry();
     let comm = commTxtState;
    
-		Meteor.call('addHistoryX', batchId, seriesId, barcode, sKey, step, type, comm, pass, benchmark, 
-			(error, reply)=>{
+		Meteor.call('addHistoryX', batchId, seriesId, barcode,
+			sKey, step, type, comm, pass, benchmark, 
+		(error, reply)=>{
 	    if(error) {
 		    console.log(error);
 		    toast.error('Server Error');

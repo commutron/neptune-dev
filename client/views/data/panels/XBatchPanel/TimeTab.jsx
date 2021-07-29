@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import TabsLite from '/client/components/smallUi/Tabs/TabsLite';
 import ProgLayerBurndown from '/client/components/charts/BatchBurn/ProgLayerBurndown';
 import PeopleScatter from '/client/components/charts/BatchBurn/PeopleScatter';
+import ItemsOnTime from '/client/components/charts/BatchBurn/ItemsOnTime';
 import TimeBudgetsChunk from '/client/views/data/panels/XBatchPanel/TimeBudgetsChunk';
 import TimeExtendChunk from '/client/views/data/panels/XBatchPanel/TimeExtendChunk';
 import TimeNextChunk from './TimeNextChunk';
@@ -52,14 +53,20 @@ const TimeTab = ({
       <div className='dropCeiling vmargin space'>
         <TabsLite 
           tabs={ [ 
+            <i className="fas fa-running fa-lg fa-fw"></i>,
             <i className="fas fa-chart-line fa-lg fa-fw"></i>,
-            <i className="fas fa-chess-board fa-lg fa-fw"></i>,
-            
+            <i className="far fa-clock fa-lg fa-fw"></i>
           ] }
           names={[ 
-            'Progress Burndown', 'People Distribution'
+            'People Distribution','Progress Burndown','Items Completed On Time'
           ]}>
-            
+        
+        <PeopleScatter 
+          tide={batchData.tide}
+          isDebug={isDebug} 
+          app={app} 
+        />
+        
         <ProgLayerBurndown
           batchId={batchData._id}
           seriesId={seriesData._id}
@@ -72,12 +79,12 @@ const TimeTab = ({
           isDebug={isDebug}
         />
         
-        <PeopleScatter 
-          tide={batchData.tide}
-          isDebug={isDebug} 
-          app={app} 
+        <ItemsOnTime 
+          items={seriesData ? seriesData.items : []}
+          salesEnd={batchData.salesEnd}
+          isDebug={isDebug}
         />
-
+        
         </TabsLite>
       </div>
       

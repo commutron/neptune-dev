@@ -10,7 +10,7 @@ const UnitSetX = ({ seriesId, item, noText })=> {
     <ModelSmall
       button={Pref.unit + ' set'}
       title={access ? `Set ${Pref.unit}` : Pref.norole}
-      color='greenT'
+      color='blueT'
       icon='fa-th'
       lock={!access}
       noText={noText}

@@ -18,7 +18,7 @@ const BatchXEdit = ({ batchData, seriesData, allVariants, lock })=> {
     <ModelMedium
       button={'Edit ' + Pref.xBatch}
       title={title}
-      color='greenT'
+      color='blueT'
       icon='fa-cubes'
       lock={!(canEdit || canRun) || lock}
     >
@@ -188,7 +188,7 @@ const BXEditForm = ({ batchData, seriesData, allVariants, canEdit, selfclose })=
       <div className='centreRow vmargin'>
         <button
           type='submit'
-          className='action clearGreen'
+          className='action clearBlue'
         >Save</button>
       </div>
     </form>

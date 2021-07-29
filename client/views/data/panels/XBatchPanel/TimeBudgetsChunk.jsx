@@ -88,8 +88,9 @@ const TimeBudgetsChunk = ({
       
       {!moment(b.createdAt).isAfter(tideWall) && 
         <div className='big'>
-          <p className='orangeT'>{` ** This ${Pref.batch} was created before \n
-            Start-Stop was enacted. Totals may not be acurate`} 
+          <p className='orangeT'
+          >** This legacy ${Pref.xBatch} was created before Start-Stop was enacted. 
+          <br />Totals may not be acurate
           </p>
         </div>}
       

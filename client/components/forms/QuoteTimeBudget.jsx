@@ -28,7 +28,7 @@ export const TimeBudgetUpgrade = ({ bID, isX })=>	{
       <button
         type='submit'
         title={auth ? 'upgrade' : Pref.norole}
-        className='action greenHover'
+        className='action blueHover'
         onClick={(e)=>upgradeForQuoteTime(e)}
         disabled={!auth}
       >Add Time Budget</button>
@@ -91,7 +91,7 @@ export const WholeTimeBudget = ({ bID, isX, lockOut })=>	{
       <button
         type='submit'
         id='goscale'
-        className='action clearGreen numberSet minIn7'
+        className='action clearBlue numberSet minIn7'
         disabled={!auth || lockOut}
       >Update {Pref.timeBudget}</button>
     </form>

@@ -35,8 +35,7 @@ const GroupHibernate = ({ id, hState, selfclose })=> {
 
   function handleHibernate(e) {
     Meteor.call('hibernateGroup', id, (error, reply)=>{
-      if(error)
-        console.log(error);
+      error && console.log(error);
       if(reply) {
         toast.success('Saved');
         selfclose();

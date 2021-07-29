@@ -19,6 +19,11 @@ const XFormBar = ({
   function handleDone(e) {
     showSet( 'NC' );
     this.ncselect.checked = true;
+    if(user.shFocusReset) {
+      document.getElementById('lookup').focus();
+    }else{
+      document.getElementById('ncRefs').focus();
+    }
   }
   
   const b = batchData;

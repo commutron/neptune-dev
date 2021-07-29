@@ -13,7 +13,7 @@ const SeriesCreate = ({ batchData, lock, noText })=> {
     <ModelSmall
       button={`Add ${Pref.series}`}
       title={title}
-      color='greenT'
+      color='blueT'
       icon='fa-layer-group'
       lock={!access || lock}
       noText={noText}>
@@ -59,7 +59,7 @@ const SeriesCreateForm = ({ batchData, selfclose })=> {
           id='goSRS'
           onClick={(e)=>save(e)}
           disabled={false}
-          className='action clearGreen'
+          className='action clearBlue'
         >Create</button>
       </p>
     </div>

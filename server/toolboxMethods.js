@@ -219,9 +219,15 @@ Meteor.methods({
         { quoteTimeBudget: { $exists: false } },
         {fields:{'batch':1}}
       ).fetch();
-      
       const lagacy = Array.from(noQuoteX, x => x.batch);
-      return lagacy;
+      
+      const noTideX = XBatchDB.find(
+        { tide: { $exists: false } },
+        {fields:{'batch':1}}
+      ).fetch();
+      const tagacy = Array.from(noTideX, x => x.batch);
+      
+      return [ lagacy, tagacy ];
     }else{
       return false;
     }

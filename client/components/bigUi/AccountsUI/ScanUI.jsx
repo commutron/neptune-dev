@@ -4,26 +4,27 @@ import { SigninListenerUtility, SigninListenerOff } from '/client/utility/Signin
 
 import './style.css';
 
-const ScanUI = ({ listenSet })=> {
+const ScanUI = ({ sty })=> {
 	
 	const [ loginState, loginSet ] = useState( false );
-
+  
 	useEffect( ()=> {
+	  Session.set('signinError', '');
     SigninListenerUtility(loginSet);
     return ()=>{ SigninListenerOff() };
   }, []);
 
-		// /Mac|iPod|iPhone|iPad/
 	return(
 		<div className='scanIn centre'>
 		{/iPod|iPhone|iPad/.test(navigator.platform) ? null :
-      <span className={`fa-stack fa-6x scanInIndicator ${loginState ? 'spinOut':''}`}>
+      <span className={`fa-stack fa-6x scanInIndicator ${loginState ? 'spinOut' : ''}`}>
         <i className="fas fa-sun fa-stack-2x colorShift"></i>
         <i className="fas fa-user-astronaut fa-stack-1x darkT" 
            data-fa-transform='shrink-5 flip-h'
         ></i>
       </span>
 		}
+		  <p style={sty} className='centreText'>{Session.get('signinError')}</p>
     </div>
 	);
 };

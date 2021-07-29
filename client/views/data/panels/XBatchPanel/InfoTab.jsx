@@ -137,14 +137,14 @@ const InfoTab = ({
           <BlockForm
             id={b._id}
             edit={false}
-            doneLock={b.completed}
+            doneLock={b.lock}
             noText={true}
             lgIcon={true} />
             
           <BlockList 
             id={b._id} 
             data={b.blocks} 
-            doneLock={done} 
+            doneLock={b.lock} 
             truncate={false} />
         </div>
      

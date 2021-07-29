@@ -61,13 +61,11 @@ const WaterfallTimeline = ({ wfCounts, waterfall, quantity, rapidsData, app })=>
       )})}
       
       {rapidsData && rapidsData.map( (entry, index)=> {
-        return(
-          <div key={index}>
-            <h4>{entry.rapid}</h4>
-            {entry.cascade.length === 0 ?
-              <p className='medBig grayT'>No Counters</p>
-              :
-              entry.cascade.map( (cas)=> {
+        if(entry.cascade.length > 0) {
+          return(
+            <div key={index}>
+              <h4>{entry.rapid}</h4>
+              {entry.cascade.map( (cas)=> {
                 const count = countWaterfall(cas.counts);
                 return(
                   <FallsHistory
@@ -76,9 +74,9 @@ const WaterfallTimeline = ({ wfCounts, waterfall, quantity, rapidsData, app })=>
                     count={count}
                     quantity={entry.quantity}
                   />
-            )})}
-          </div>
-      )})}
+              )})}
+            </div>
+      )}})}
     </div> 
   );
 };

@@ -62,7 +62,7 @@ const SignIn = ({ sty })=> {
           className='userFormButtons loginoutButton'
          >Sign In</button>
       </p>
-      <p style={sty}>{loginResultState}</p>
+      <p style={sty} className='centreText'>{loginResultState}</p>
     </form>
 	);
 };

@@ -3,7 +3,8 @@ import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
 const FoldInNested = ({ 
-	seriesId, serial, sKey, step, lockout, topClass, topTitle,
+	batchId, seriesId, serial, sKey, step, benchmark,
+	lockout, topClass, topTitle,
 	riverFlowStateSet, closeUndoOption, commTxtState
 })=> {
 	
@@ -42,7 +43,9 @@ const FoldInNested = ({
   	closeUndoOption();
   	const comm = commTxtState;
   	
-		Meteor.call('addNestedX', seriesId, serial, sKey, step, comm, subSerial, exists, complete,
+		Meteor.call('addNestedX', seriesId, serial, 
+			sKey, step, comm, subSerial, exists, complete, 
+			batchId, benchmark,
 		(error, reply)=>{
 	    error && console.log(error);
 			if(reply) {

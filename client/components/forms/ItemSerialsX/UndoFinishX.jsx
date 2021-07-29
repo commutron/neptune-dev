@@ -95,7 +95,7 @@ const UndoFinishForm = ({
             <p key={rindex} className='centreText'>
               <button
                 id='notDone'
-                className='action orangeHover'
+                className='action clearOrange'
                 onClick={()=>handleRapidUndo(rentry.rapId)}
               >Undo {rapid.rapid} Finish</button>
             </p>
@@ -117,7 +117,7 @@ const UndoFinishForm = ({
       <p className='centre'>
         <button
           id='notDone'
-          className='action blueHover'
+          className='action clearOrange'
           onClick={()=>handleUndo()}
           disabled={!grace}
         >Undo Finish</button>

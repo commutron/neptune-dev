@@ -36,7 +36,7 @@ const AppSetSimple = ({title, action, rndmKey})=> {
           <button
             type='submit'
             id={rndmKey + 'go'}
-            className='smallAction clearGreen'
+            className='smallAction clearBlue'
             disabled={false}
           >Set</button>
         </label>

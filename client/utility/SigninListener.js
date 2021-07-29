@@ -1,6 +1,6 @@
-
 function onBarcodePress(event) {
   !event.preventDefault ? null : event.preventDefault();
+  Session.set('signinError', '');
   
   let signinListener = Session.get('signinListener') || '';
   
@@ -36,7 +36,7 @@ function onBarcodePress(event) {
     
         if(!decode) {
           console.error('utf8decoder was unable to decode the array provided');
-          window.alert('Barcode is unreadable');
+          Session.set('signinError', 'Barcode cannot be decoded');
           turnOff();
         }else{
           const cut2 = decode.split("<+>");
@@ -48,7 +48,7 @@ function onBarcodePress(event) {
             Meteor.loginWithPassword(usrnm, psswrd1, (error)=>{
         	    if(error) {
         	      console.error(`SERVER ERROR : ${error}`);
-                window.alert(error);
+                Session.set('signinError', error.reason);
                 turnOff();
         	    }else{
         	    	Meteor.logoutOtherClients();
@@ -56,7 +56,7 @@ function onBarcodePress(event) {
         	  });
           }else{
             console.error(`invalid decoded string = ${usrnm}, ${psswrd1}`);
-            window.alert('Barcode does not contain valid information');
+            Session.set('signinError', 'Barcode does not contain a username and password');
             turnOff();
           }
         }

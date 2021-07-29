@@ -161,7 +161,7 @@ const FlowFormHead = ({ id, existFlows, preFill, app, selfclose })=> {
           type='submit'
           id='go'
           form='flowSave'
-          className='action clearGreen'>SAVE</button>
+          className='action clearBlue'>SAVE</button>
         <br />
       </div>
     </div>

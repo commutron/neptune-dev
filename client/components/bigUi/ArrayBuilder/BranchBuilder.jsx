@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
-
 import './style.css';
 
 const BranchBuilder = ({ app, isDebug, lockout })=> {
@@ -10,7 +8,6 @@ const BranchBuilder = ({ app, isDebug, lockout })=> {
   const branchesSort = branches.sort((b1, b2)=>
           b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 );
 
-    
   return(
     <div className=''>
       <div className='stepList'>
@@ -266,4 +263,3 @@ const BranchEditRow = ({ branch, isDebug, lockout })=> {
     </div>
   );
 };
-

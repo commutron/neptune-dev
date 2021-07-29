@@ -3,7 +3,7 @@ import 'moment-timezone';
 import 'moment-business-time';
 import { countMulti, countMultiRefs } from './utility';
 import { asRate, round1Decimal } from './calcOps';
-import { getShipAim, getEndWork } from '/server/shipOps';
+import { getEndWork } from '/server/shipOps';
 import Config from '/server/hardConfig.js';
 
 export function plotCreatedQty(batches) {
@@ -39,17 +39,13 @@ export function plotOnTime(batches) {
   let onset = [];
   for( let batch of batches) {
     const did = batch.completedAt || moment.tz(Config.clientTZ).format();
-    const aim = getShipAim(batch._id, batch.salesEnd);
-    const aimGap = round1Decimal( moment(aim).workingDiff(did, 'days', true) );
     const fin = getEndWork(batch._id, batch.salesEnd);
     const finGap = round1Decimal( moment(fin).workingDiff(did, 'days', true) );
 
     onset.push({
-      v: finGap,
-      w: `${batch.batch} = ${finGap}`,
-      y: aimGap,
+      y: finGap,
       x: batch.completedAt || new Date(),
-      z: `${batch.batch} = ${aimGap}`,
+      z: `${batch.batch} = ${finGap}`,
       symbol: batch.completedAt ? 'diamond' : 'star',
       size: '2'
     });
@@ -57,38 +53,32 @@ export function plotOnTime(batches) {
   return onset;
 }
 
-function plotItemOnTime(batches) {
-  let ontm = 0;
-  let late = 0;
-  for( let batch of batches) {
-    const srs = XSeriesDB.findOne({batch: batch.batch});
-    if(!srs) {
-      continue;
-    }else{
-      const fin = getEndWork(batch._id, batch.salesEnd);
-      const nowLate = moment().isAfter(fin);
-      
-      const ontmItems = srs.items.filter( 
-          x => x.completed && moment(x.completedAt).isSameOrBefore(fin) 
-        ).length;
-      const lateItems = srs.items.filter( 
-          x => (!x.completed && nowLate) || ( x.completed && moment(x.completedAt).isAfter(fin) )
-        ).length;
-      
-      ontm += ontmItems;
-      late += lateItems;
+/*function plotItemOnTime(batch) {
+  const srs = XSeriesDB.findOne({batch: batch},
+          {fields:{'items.serial':1,'items.completed':1,'items.completedAt':1}});
+  if(!srs) {
+    return [];
+  }else{
+    let onset = [];
+    
+    const fin = getEndWork(batch._id, batch.salesEnd);
+    
+    const doneitems = srs.items.filter( x=> x.completed );
+    
+    for(let i of doneitems) {
+      const finGap = round1Decimal( moment(fin).workingDiff(i.completedAt, 'days', true) );
+
+      onset.push({
+        y: finGap,
+        x: i.completedAt,
+        z: `${i.serial} = ${finGap}`,
+        symbol: 'diamond',
+        size: '2'
+      });
     }
   }
-  let onset = [{
-    x: 'on time',
-    y: Math.round( (ontm / (ontm+late || 1)) * 100 )
-  },
-  {
-    x: 'late',
-    y: Math.round( (late / (ontm+late || 1)) * 100 )
-  }];
   return onset;
-}
+}*/
 
 export function plotProblems(batches) {
   let probset = [];
@@ -124,49 +114,61 @@ export function plotProblems(batches) {
 
 Meteor.methods({
   
-  groupPlotPerform(groupId) {
-    const accessKey = Meteor.user().orgKey;
+  // groupPlotPerform(groupId) {
+  //   const accessKey = Meteor.user().orgKey;
 
-    const app = AppDB.findOne({ orgKey: accessKey });
-    const tideWall = app && app.tideWall;
+  //   const app = AppDB.findOne({ orgKey: accessKey });
+  //   const tideWall = app && app.tideWall;
 
-    const batches = XBatchDB.find({
-      orgKey: accessKey,
-      groupId: groupId,
-      createdAt: { 
-        $gte: new Date(tideWall)
-      }
-    },
-      {fields:{'batch':1,'completedAt':1}}
-    ).fetch();
+  //   const batches = XBatchDB.find({
+  //     orgKey: accessKey,
+  //     groupId: groupId,
+  //     createdAt: { 
+  //       $gte: new Date(tideWall)
+  //     }
+  //   },
+  //     {fields:{'batch':1,'completedAt':1}}
+  //   ).fetch();
     
-    let perfset = plotPerform(batches);
-    return perfset;
-  },
+  //   let perfset = plotPerform(batches);
+  //   return perfset;
+  // },
   
-  groupPlotProb(groupId) {
-    const batches = XBatchDB.find({
-      orgKey: Meteor.user().orgKey,
-      groupId: groupId
-    },
-      {fields:{'batch':1,'completedAt':1}}
-    ).fetch();
+  // groupPlotProb(groupId) {
+  //   const batches = XBatchDB.find({
+  //     orgKey: Meteor.user().orgKey,
+  //     groupId: groupId
+  //   },
+  //     {fields:{'batch':1,'completedAt':1}}
+  //   ).fetch();
     
-    let probset = plotProblems(batches);
-    return probset;
-  },
+  //   let probset = plotProblems(batches);
+  //   return probset;
+  // },
   
-  groupPlotOnTime(groupId) {
-    const batches = XBatchDB.find({
-      orgKey: Meteor.user().orgKey,
-      groupId: groupId
-    },
-      {fields:{'batch':1,'completedAt':1,'salesEnd':1}}
-    ).fetch();
+  // widgetPlotOnTime(groupId) {
+  //   const batches = XBatchDB.find({
+  //     orgKey: Meteor.user().orgKey,
+  //     groupId: groupId
+  //   },
+  //     {fields:{'batch':1,'completedAt':1,'salesEnd':1}}
+  //   ).fetch();
     
-    let onset = plotItemOnTime(batches);
-    return onset;
-  }
+  //   let onset = plotItemOnTime(batches);
+  //   return onset;
+  // },
+  
+  // batchPlotOnTime(batchId) {
+  //   const batch = XBatchDB.findOne({
+  //     _id: batchId,
+  //     orgKey: Meteor.user().orgKey,
+  //   },
+  //     {fields:{'batch':1,'completedAt':1,'salesEnd':1}}
+  //   );
+    
+  //   let onset = plotItemOnTime(batch && batch.batch);
+  //   return onset;
+  // }
 
   
 });

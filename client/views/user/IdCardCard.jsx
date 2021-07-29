@@ -30,7 +30,6 @@ const IdCardCard = ({ user })=> {
     
     const encoder = new TextEncoder();
     const ePass = encoder.encode(userstring).toString();
-        
     let svgNode = DATAMatrix({
                     msg :  ePass,
                     dim :   128,

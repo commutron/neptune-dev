@@ -52,7 +52,7 @@ export const AddAutoNCwrap = ({ rapidData, ncTypesCombo, user, editAuth })=> {
           ><n-fa1><i className='far fa-edit'></i></n-fa1> cancel</button>
           
           <button
-            className='smallAction gap clearGreen'
+            className='smallAction gap clearBlue'
             onClick={()=>handleSave()}
             disabled={!rapidData.live}
           >Save</button>

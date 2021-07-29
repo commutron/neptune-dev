@@ -13,7 +13,7 @@ const NCAdd = ({ seriesId, serial, units, user, app, ncTypesCombo })=> {
     e.preventDefault();
     const uMulti = units > 1 ? this.ncMulti.value : undefined;
     const type = this.ncType.value.trim();
-    
+      
     const tgood = NonConCheck(this.ncType, flatCheckList);
     
     const where = Session.get('ncWhere') || "";
@@ -23,6 +23,7 @@ const NCAdd = ({ seriesId, serial, units, user, app, ncTypesCombo })=> {
     const refSplit = refCut.split("|");
     
     if(tgood && refSplit.length > 0 && refSplit[0] !== '') {
+      Session.set('ncAddTypeSticky', type);
       for(let ref of refSplit) {
         if(ref.length < 8) {
           Meteor.call('addNCX', seriesId, serial, ref, uMulti, type, where, andFix, 
@@ -39,8 +40,11 @@ const NCAdd = ({ seriesId, serial, units, user, app, ncTypesCombo })=> {
       }
       this.ncRefs.value = '';
       units > 1 ? this.ncMulti.value = 1 : null;
-      // const findBox = document.getElementById('lookup');
-      // findBox.focus();
+      if(user.ncFocusReset) {
+        document.getElementById('lookup').focus();
+      }else{
+        document.getElementById('ncRefs').focus();
+      }
     }else{
       this.ncRefs.reportValidity();
       this.ncType.reportValidity();
@@ -92,6 +96,7 @@ const NCAdd = ({ seriesId, serial, units, user, app, ncTypesCombo })=> {
           placeholder='Type'
           list='ncTypeList'
           onInput={(e)=>NonConCheck(e.target, flatCheckList)}
+          defaultValue={Session.get('ncAddTypeSticky')}
           required
           disabled={lock || ncTypesCombo.length < 1}
           autoComplete={navigator.userAgent.includes('Firefox/') ? "off" : ""}
@@ -126,6 +131,7 @@ const NCAdd = ({ seriesId, serial, units, user, app, ncTypesCombo })=> {
           <select 
             id='ncType'
             className='redIn'
+            defaultValue={Session.get('ncAddTypeSticky')}
             required
             disabled={lock || ncTypesCombo.length < 1}
           >

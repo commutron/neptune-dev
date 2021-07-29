@@ -51,7 +51,7 @@ const TickScatter = ({ waterfall, rapidsData, app })=> {
         theme={Theme.NeptuneVictory}
         padding={{top: 20, right: 20, bottom: 20, left: 20}}
         domainPadding={25}
-        height={250}
+        height={200}
       >
         <VictoryAxis
           tickFormat={(t) => moment(t).format('MMM D')}

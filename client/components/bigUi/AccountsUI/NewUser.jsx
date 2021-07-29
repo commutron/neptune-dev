@@ -31,20 +31,20 @@ const NewUser = ({ sty })=> {
 	      	Accounts.createUser(options, (error)=>{
 	      		if(error) {
 	      			console.log(error);
-	      			toast.error('the server says no');
+	      			toast.error('Validation Failed');
 	      			newUserResultSet( error.reason );
 	      		}else{
 	      			toast.success('Everything worked corectly');
 	      		}
 	      	});
 		    }else{
-		    	toast.error('the server says no');
+		    	toast.error('Invalid PIN');
 		    	newUserResultSet( "Can't find an organization with that PIN" );
 		    }
 	    });
 	  }else{
-	    toast.warning("the client says no match");
-	    newUserResultSet( "the password fields don't match, try typing them in again" );
+	    toast.warning("Passwords do not match");
+	    newUserResultSet( "The password fields don't match, try typing them in again" );
 	  }
 	}
 	
@@ -129,7 +129,7 @@ const NewUser = ({ sty })=> {
           className='userFormButtons createButton'
          >Create New User</button>
       </p>
-      <p style={sty}>{newUserResultState}</p>
+      <p style={sty} className='centreText'>{newUserResultState}</p>
     </form>
   );
 };

@@ -48,7 +48,7 @@ Meteor.methods({
   addYearMonthDayItems(batchId, seriesId, seqLth, serialArr, unit) {
     const accessKey = Meteor.user().orgKey;
  
-    const appSetting = AppDB.findOne({orgKey: accessKey});
+    const appSetting = AppDB.findOne({orgKey: accessKey},{fields:{'latestSerial':1}});
     const floor = seqLth === 10 ? appSetting.latestSerial.tenDigit :
                                   appSetting.latestSerial.nineDigit;
                     
@@ -57,8 +57,8 @@ Meteor.methods({
     if(Roles.userIsInRole(Meteor.userId(), 'create')) {
     
       if(Array.isArray(serialArr) && serialArr.length > 0) {
-        const doc = XBatchDB.findOne({_id: batchId, orgKey: accessKey});
-        const srs = XSeriesDB.findOne({_id: seriesId, orgKey: accessKey});
+        const doc = XBatchDB.findOne({_id: batchId, orgKey: accessKey},{fields:{'completed':1,'quantity':1}});
+        const srs = XSeriesDB.findOne({_id: seriesId, orgKey: accessKey},{fields:{'items':1}});
         const open = doc.completed === false;
         
         if(open && srs) {
@@ -141,8 +141,8 @@ Meteor.methods({
     if(Roles.userIsInRole(Meteor.userId(), 'create')) {
     
       if(Array.isArray(serialArr) && serialArr.length > 0) {
-        const doc = XBatchDB.findOne({_id: batchId, orgKey: accessKey});
-        const srs = XSeriesDB.findOne({_id: seriesId, orgKey: accessKey});
+        const doc = XBatchDB.findOne({_id: batchId, orgKey: accessKey},{fields:{'completed':1,'quantity':1}});
+        const srs = XSeriesDB.findOne({_id: seriesId, orgKey: accessKey},{fields:{'latestSerial':1}});
         const open = doc.completed === false;
         
         if(open && srs) {
@@ -214,8 +214,8 @@ Meteor.methods({
     if(Roles.userIsInRole(Meteor.userId(), 'create')) {
     
       if(Array.isArray(serialArr) && serialArr.length > 0) {
-        const doc = XBatchDB.findOne({_id: batchId, orgKey: accessKey});
-        const srs = XSeriesDB.findOne({_id: seriesId, orgKey: accessKey});
+        const doc = XBatchDB.findOne({_id: batchId, orgKey: accessKey},{fields:{'completed':1,'quantity':1}});
+        const srs = XSeriesDB.findOne({_id: seriesId, orgKey: accessKey},{fields:{'latestSerial':1}});
         const open = doc.completed === false;
         
         if(open && srs) {
@@ -278,12 +278,12 @@ Meteor.methods({
     const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
     const regexSN = RegExp(/^(\d{8,10})$|^(\d{6}\-\d{7})$/);
     
-    const srs = XSeriesDB.findOne({_id: seriesId, orgKey: accessKey});
+    const srs = XSeriesDB.findOne({_id: seriesId, orgKey: accessKey},{fields:{'items':1}});
     const item = srs ? srs.items.find( x => x.serial === bar ) : false;
     if(auth && item) {
       for(let serialTry of newSerials) {
         
-        const dupNew = XSeriesDB.findOne({ 'items.serial': serialTry });
+        const dupNew = XSeriesDB.findOne({ 'items.serial': serialTry },{fields:{'_id':1}});
         const correctFormat = regexSN.test(serialTry);
         
         if(dupNew || !correctFormat) {
@@ -313,7 +313,9 @@ Meteor.methods({
     			  updatedWho: Meteor.userId()
         }});
       }
-      Meteor.defer( ()=>{ Meteor.call('updateOneMinify', batchId, accessKey); });
+      Meteor.defer( ()=>{ 
+        Meteor.call('updateOneMinify', batchId, accessKey); 
+      });
       return true;
     }else{
       return false;
@@ -336,11 +338,12 @@ Meteor.methods({
   
   //// history entries
   addHistoryX(batchId, seriesId, bar, key, step, type, com, pass, benchmark) {
-    if(type === 'inspect' && !Roles.userIsInRole(Meteor.userId(), 'inspect')) {
+    if(type === 'inspect' && !Roles.userIsInRole(Meteor.userId(), 'inspect') ||
+       type !== 'inspect' && !Roles.userIsInRole(Meteor.userId(), 'active') 
+    ) {
       return false;
     }else{
       const orgKey = Meteor.user().orgKey;
-      const username = Meteor.user().username;
       XSeriesDB.update({_id: seriesId, orgKey: orgKey, 'items.serial': bar}, {
         $push : { 'items.$.history': {
           key: key,
@@ -352,26 +355,28 @@ Meteor.methods({
           comm : com,
           info: false
       }}});
-      Meteor.defer( ()=>{
-        if(benchmark === 'first') {
-          Meteor.call(
-            'setXBatchEvent', 
-            orgKey,
-            batchId, 
-            'Start of Process', 
-            `First ${step} ${type} recorded by ${username}`
-          );
-        }
-        if(benchmark === 'last') {
-          Meteor.call(
-            'setXBatchEvent', 
-            orgKey, 
-            batchId,
-            'End of Process', 
-            `Final ${step} ${type} recorded by ${username}`
-          );
-        }
-      });
+      if(benchmark) {
+        const username = Meteor.user().username;
+        Meteor.defer( ()=>{
+          if(benchmark === 'first') {
+            Meteor.call(
+              'setXBatchEvent', 
+              orgKey,
+              batchId, 
+              'Start of Process', 
+              `First ${step} ${type} recorded by ${username}`
+            );
+          }else if(benchmark === 'last') {
+            Meteor.call(
+              'setXBatchEvent', 
+              orgKey, 
+              batchId,
+              'End of Process', 
+              `Final ${step} ${type} recorded by ${username}`
+            );
+          }else{ null }
+        });
+      }
       return true;
     }
   },
@@ -409,8 +414,7 @@ Meteor.methods({
             'NG First-off Verification', 
             `An unacceptable ${step} first-off recorded by ${username}`
           );
-        }
-        if(firstfirst === true && good === true) {
+        }else if(firstfirst === true && good === true) {
           Meteor.call(
             'setXBatchEvent', 
             orgKey, 
@@ -418,7 +422,7 @@ Meteor.methods({
             'First-off Verification', 
             `First good ${step} first-off recorded by ${username}`
           );
-        }
+        }else{ null }
       });
       return true;
     }
@@ -426,13 +430,10 @@ Meteor.methods({
 
   // ship failed test
   addTestX(batchId, seriesId, bar, key, step, type, com, pass, more, benchmark) {
-    if(!Roles.userIsInRole(Meteor.userId(), 'active') ||
-       !Roles.userIsInRole(Meteor.userId(), 'inspect')
-    ) {
+    if(!Roles.userIsInRole(Meteor.userId(), 'test')) {
       return false;
     }else{
       const orgKey = Meteor.user().orgKey;
-      const username = Meteor.user().username;
       XSeriesDB.update({_id: seriesId, orgKey: orgKey, 'items.serial': bar}, {
         $push : { 'items.$.history': {
           key: key,
@@ -444,33 +445,34 @@ Meteor.methods({
           comm : com,
           info: more
       }}});
-      Meteor.defer( ()=>{
-        if(benchmark === 'first' && pass === true) {
-          Meteor.call(
-            'setXBatchEvent', 
-            orgKey,
-            batchId, 
-            'Start of Process', 
-            `First passed ${step} recorded by ${username}`
-          );
-        }
-        if(benchmark === 'last' && pass === true) {
-          Meteor.call(
-            'setXBatchEvent', 
-            orgKey, 
-            batchId, 
-            'End of Process', 
-            `Final passed ${step} recorded by ${username}`
-          );
-        }
-      });
+      if(benchmark && pass === true) {
+        const username = Meteor.user().username;
+        Meteor.defer( ()=>{
+          if(benchmark === 'first' && pass === true) {
+            Meteor.call(
+              'setXBatchEvent', 
+              orgKey,
+              batchId, 
+              'Start of Process', 
+              `First passed ${step} recorded by ${username}`
+            );
+          }else if(benchmark === 'last' && pass === true) {
+            Meteor.call(
+              'setXBatchEvent', 
+              orgKey, 
+              batchId, 
+              'End of Process', 
+              `Final passed ${step} recorded by ${username}`
+            );
+          }else{ null }
+        });
+      }
       return true;
     }
   },
   
   checkNestX(serial) {
-    
-    const elsewhere = XSeriesDB.findOne({"items.subItems": { $in: [ serial ] } });
+    const elsewhere = XSeriesDB.findOne({"items.subItems": { $in: [ serial ] } },{fields:{'_id':1}});
     const isSubed = !elsewhere ? false : true; 
                     
     const internal = XSeriesDB.findOne({'items.serial': serial});
@@ -488,7 +490,7 @@ Meteor.methods({
     return [ isSubed, exists, icomplete, openNC, openSH, iscrap ];
   },
   
-  addNestedX(seriesId, serial, key, step, com, subSerial, exists, complete) {
+  addNestedX(seriesId, serial, key, step, com, subSerial, exists, complete, batchId, benchmark) {
     if(!subSerial || serial === subSerial || !Roles.userIsInRole(Meteor.userId(), 'active')) {
       return false;
     }else{
@@ -548,6 +550,28 @@ Meteor.methods({
           }
         });
       }
+      if(benchmark) {
+        const username = Meteor.user().username;
+        Meteor.defer( ()=>{
+          if(benchmark === 'first') {
+            Meteor.call(
+              'setXBatchEvent', 
+              Meteor.user().orgKey,
+              batchId, 
+              'Start of Process', 
+              `First ${step} ${type} recorded by ${username}`
+            );
+          }else if(benchmark === 'last') {
+            Meteor.call(
+              'setXBatchEvent', 
+              Meteor.user().orgKey, 
+              batchId, 
+              'End of Process', 
+              `Final ${step} ${type} recorded by ${username}`
+            );
+          }else{ null }
+        });
+      }
       return true;
     }
   },
@@ -558,7 +582,6 @@ Meteor.methods({
       return false;
     }else{
       const orgKey = Meteor.user().orgKey;
-      const username = Meteor.user().username;
       XSeriesDB.update({_id: seriesId, orgKey: orgKey, 'items.serial': serial}, {
   			$push : { 
   			  'items.$.history': {
@@ -578,27 +601,29 @@ Meteor.methods({
   			  'items.$.completedWho': Meteor.userId()
   			}
       });
-      Meteor.defer( ()=>{
-        if(benchmark === 'first') {
-          Meteor.call(
-            'setXBatchEvent', 
-            orgKey,
-            batchId, 
-            'Start of Process', 
-            `First item recorded as complete by ${username}`
-          );
-        }
-        if(benchmark === 'last') {
-          Meteor.call(
-            'setXBatchEvent', 
-            orgKey, 
-            batchId, 
-            'End of Process', 
-            `Final item recorded as complete by ${username}`
-          );
-          Meteor.call('finishBatchX', batchId, orgKey);
-        }
-      });
+      if(benchmark) {
+        const username = Meteor.user().username;
+        Meteor.defer( ()=>{
+          if(benchmark === 'first') {
+            Meteor.call(
+              'setXBatchEvent', 
+              orgKey,
+              batchId, 
+              'Start of Process', 
+              `First item recorded as complete by ${username}`
+            );
+          }else if(benchmark === 'last') {
+            Meteor.call(
+              'setXBatchEvent', 
+              orgKey, 
+              batchId, 
+              'End of Process', 
+              `Final item recorded as complete by ${username}`
+            );
+            Meteor.call('finishBatchX', batchId, orgKey);
+          }else{ null }
+        });
+      }
   		return true;
     }
   },
@@ -609,7 +634,7 @@ Meteor.methods({
     }else{
       const orgKey = Meteor.user().orgKey;
       
-      const srs = XSeriesDB.findOne({_id: seriesId});
+      const srs = XSeriesDB.findOne({_id: seriesId},{fields:{'items.serial':1,'items.altPath':1}});
       const item = srs.items.find( x => x.serial === serial );
       let rapidPath = item.altPath.find( y => y.rapId === rapId );
       rapidPath['completed'] = true;
@@ -708,8 +733,11 @@ Meteor.methods({
   //  remove a step
   popHistoryX(seriesId, serial) {
     if(Roles.userIsInRole(Meteor.userId(), 'active')) {
-      const series = XSeriesDB.findOne({_id: seriesId, orgKey: Meteor.user().orgKey, 'items.serial': serial});
+      const series = XSeriesDB.findOne(
+              {_id: seriesId, orgKey: Meteor.user().orgKey, 'items.serial': serial},
+              {fields:{'items':1}});
       const itemHistory = series.items.find( x => x.serial === serial).history;
+      
       if(itemHistory.length > 0) {
         const lastEntry = itemHistory[itemHistory.length -1];
         const timeElapse = moment.duration(moment().diff(moment(lastEntry.time))).asSeconds();
@@ -801,10 +829,10 @@ Meteor.methods({
     if( !Roles.userIsInRole(Meteor.userId(), "BRKt3rm1n2t1ng8r2nch") ) {
       null;
     }else{
-      const doc = XBatchDB.findOne({_id: batchId});
+      const doc = XBatchDB.findOne({_id: batchId},{fields:{'completed':1}});
       const docOpen = doc ? doc.completed === false : null;
       
-      const srs = XSeriesDB.findOne({_id: seriesId});
+      const srs = XSeriesDB.findOne({_id: seriesId},{fields:{'items':1}});
       const subDoc = srs ? srs.items.find( x => x.serial === serial ) : null;
       
       const whenDid = subDoc.completedAt;
@@ -847,7 +875,8 @@ Meteor.methods({
   },
 
   setInflowAltPath(seriesId, serial, altKey) {
-    const doc = XSeriesDB.findOne({_id: seriesId, 'items.serial': serial});
+    const doc = XSeriesDB.findOne({_id: seriesId, 'items.serial': serial},
+                                  {fields:{'items.serial':1,'items.altPath':1}});
     const subDoc = doc.items.find( x => x.serial === serial );
     const isAlt = subDoc.altPath.find( a => a.river !== false );
     
@@ -876,7 +905,8 @@ Meteor.methods({
   },
   
   setRapidFork(seriesId, serial, rapId) {
-    const doc = XSeriesDB.findOne({_id: seriesId, 'items.serial': serial});
+    const doc = XSeriesDB.findOne({_id: seriesId, 'items.serial': serial},
+                                  {fields:{'items.serial':1,'items.altPath':1}});
     const subDoc = doc.items.find( x => x.serial === serial );
     
     const rapid = XRapidsDB.findOne({_id: rapId});
@@ -944,7 +974,8 @@ Meteor.methods({
   
   /// unset an rapid alt path
   unsetRapidFork(seriesId, serial, rapId) {
-    const doc = XSeriesDB.findOne({_id: seriesId, orgKey: Meteor.user().orgKey, 'items.serial': serial});
+    const doc = XSeriesDB.findOne({_id: seriesId, orgKey: Meteor.user().orgKey, 'items.serial': serial},
+                                  {fields:{'items.serial':1,'items.altPath':1}});
     const subDoc = doc.items.find( x => x.serial === serial );
     const rapIs = subDoc.altPath.find( y => y.rapId === rapId );
     
@@ -1005,7 +1036,7 @@ Meteor.methods({
   deleteItemX(batchId, seriesId, serial, pass, pinVal) {
     const accessKey = Meteor.user().orgKey;
     
-    const doc = XSeriesDB.findOne({_id: seriesId});
+    const doc = XSeriesDB.findOne({_id: seriesId},{fields:{'orgKey':1,'items':1}});
     const subDoc = doc.items.find( x => x.serial === serial );
     
     const inUse = subDoc.history.length > 0 ? true : false;
@@ -1016,7 +1047,7 @@ Meteor.methods({
     const access = doc.orgKey === accessKey;
     const unlock = lock === pass;
     
-    const org = AppDB.findOne({ orgKey: accessKey });
+    const org = AppDB.findOne({ orgKey: accessKey },{fields:{'orgPIN':1}});
     const orgPIN = org ? org.orgPIN : null;
     const pinMatch = pinVal === orgPIN;
     

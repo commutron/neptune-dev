@@ -8,19 +8,22 @@ Accounts.config({
 });
 
 Accounts.validateLoginAttempt(function(attempt) {
-  if(!attempt.user || !Roles.userIsInRole(attempt.user._id, 'active')) {
+  if(!attempt.user) {
     attempt.allowed = false;
-    throw new Meteor.Error(403, "User account is inactive");
+    return attempt.error;
+  }
+  if(!Roles.userIsInRole(attempt.user._id, 'active')) {
+    attempt.allowed = false;
+    throw new Meteor.Error(403, "User account is deactivated");
   }
   return true;
 });
 
 Accounts.validateNewUser(function(attempt) {
-  if(attempt.username.length >= Config.minUsernameChar) {
-    return true;
-  }else {
+  if(attempt.username.length < Config.minUsernameChar) {
     throw new Meteor.Error(403, 'Username must have at least 4 characters');
   }
+  return true;
 });
 
 Accounts.onCreateUser((options, user) => {
@@ -135,7 +138,7 @@ Meteor.methods({
         return result.error;
       }
     }else{
-      throw new Meteor.Error();
+      throw new Meteor.Error(403, 'Input is not strings');
     }
   },
 
@@ -148,14 +151,13 @@ Meteor.methods({
       Accounts.setPassword(userId, newPassword, {logout: true});
       return true;
     }else{
-      return false;
+      throw new Meteor.Error();
     }
   },
 
   deleteUserForever(userId, pin) {
     const auth = Roles.userIsInRole(Meteor.userId(), 'admin');
     const user = Meteor.users.findOne({_id: userId});
-    //const orgless = user.orgKey === false;
     const inactive = !Roles.userIsInRole(userId, 'active');
     const admin = Roles.userIsInRole(userId, 'admin');
     const self = Meteor.userId() === userId;
@@ -242,6 +244,26 @@ Meteor.methods({
     Meteor.users.update(Meteor.userId(), {
       $set: {
         typeNCselection: change,
+      }
+    });
+  },
+  
+  setUserNCFocus() {
+    const curr = Meteor.user().ncFocusReset;
+    const change = !curr ? true : false;
+    Meteor.users.update(Meteor.userId(), {
+      $set: {
+        ncFocusReset: change,
+      }
+    });
+  },
+  
+  setUserSHFocus() {
+    const curr = Meteor.user().shFocusReset;
+    const change = !curr ? true : false;
+    Meteor.users.update(Meteor.userId(), {
+      $set: {
+        shFocusReset: change,
       }
     });
   },

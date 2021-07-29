@@ -15,14 +15,6 @@ Meteor.methods({
     return true;
   },
   
-  // getAvgDayCache() {
-  //   const accessKey = Meteor.user().orgKey;
-  //   return {
-  //     avgTime : smplresult('avgDayTime', accessKey),
-  //     avgItem : smplresult('avgDayItemFin', accessKey),
-  //   };
-  // },
-  
   getAvgDayFin() {
     return smplresult('avgDayItemFin', Meteor.user().orgKey);
   },

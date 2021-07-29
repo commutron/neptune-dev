@@ -20,13 +20,6 @@ export function round2Decimal(thrtytw) {
   return trunc;
 }
 
-
-// const array1 = [1, 2, 3, 4];
-// const reducer = (accumulator, currentValue) => accumulator + currentValue;
-
-// console.log(array1.reduce(reducer));
-// // expected output: 10
-
 export function avgOfArray(arr, zeros) {
   const cArr = zeros ? arr.filter( f => ( f || f === 0 ) && !isNaN(f) ) :
                        arr.filter( f => f && !isNaN(f) );

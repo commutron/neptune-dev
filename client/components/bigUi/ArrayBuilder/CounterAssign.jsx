@@ -123,7 +123,7 @@ const CounterAssignForm = ({ bID, app, waterfall })=> {
             type='submit'
             id='go'
             disabled={false}
-            className='action clearGreen'
+            className='action clearBlue'
           >Add A Counter</button>
         </p>
       </form>

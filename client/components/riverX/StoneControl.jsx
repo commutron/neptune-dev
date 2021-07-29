@@ -150,10 +150,12 @@ const StoneControl = ({
 	
 	const renderNest =
 		<FoldInNested
+			batchId={batchId}
       seriesId={seriesId}
       serial={serial}
       sKey={sKey}
       step={step}
+      benchmark={benchmark}
       topClass={topClass}
 			topTitle={topTitle}
       lockout={lockout}

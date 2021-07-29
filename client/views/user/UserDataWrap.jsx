@@ -4,16 +4,15 @@ import { withTracker } from 'meteor/react-meteor-data';
 import { ToastContainer } from 'react-toastify';
 import InboxToastPop from '/client/utility/InboxToastPop.js';
 
-// import Pref from '/client/global/pref.js';
 import { branchesSort } from '/client/utility/Arrays.js';
-import { SpinWrap } from '/client/components/tinyUi/Spin.jsx';
-import ErrorCatch from '/client/layouts/ErrorCatch.jsx';
-import HomeIcon from '/client/layouts/HomeIcon.jsx';
-import TideFollow from '/client/components/tide/TideFollow.jsx';
-import Slides from '../../components/smallUi/Slides.jsx';
-import ActivityPanel from './ActivityPanel.jsx';
-import InboxPanel from './InboxPanel.jsx';
-import PrivacyPanel from './PrivacyPanel.jsx';
+import { SpinWrap } from '/client/components/tinyUi/Spin';
+import ErrorCatch from '/client/layouts/ErrorCatch';
+import HomeIcon from '/client/layouts/HomeIcon';
+import TideFollow from '/client/components/tide/TideFollow';
+import Slides from '../../components/smallUi/Slides';
+import ActivityPanel from './ActivityPanel';
+import InboxPanel from './InboxPanel';
+import PrivacyPanel from './PrivacyPanel';
 
 import UserSettings from '/client/components/forms/User/UserSettings';
 
@@ -68,7 +67,6 @@ const UserDataWrap = ({
             app={app}
             brancheS={brancheS}
             user={user}
-            // isAdmin={isAdmin}
             isDebug={isDebug}
             users={users}
             traceDT={traceDT} />
@@ -78,7 +76,6 @@ const UserDataWrap = ({
             app={app}
             user={user}
             isAdmin={isAdmin}
-            // isDebug={isDebug}
             brancheS={brancheS} />
           
           <PrivacyPanel
@@ -88,7 +85,6 @@ const UserDataWrap = ({
             app={app}
             user={user}
             isAdmin={isAdmin}
-            // isDebug={isDebug}
           />
           
           <InboxPanel
@@ -97,8 +93,6 @@ const UserDataWrap = ({
             bolt={bolt}
             app={app}
             user={user}
-            // isAdmin={isAdmin}
-            // isDebug={isDebug}
             users={users} />
           
         </Slides>

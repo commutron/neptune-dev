@@ -99,7 +99,7 @@ const TimeNextChunk = ({
       <p className='lightgray fade max600 nomargin'
       >DISCLAIMER:<br /> An estimated date is an extrapolation of the product's historical average turn around. 
       They are not outright predictions as they do not factor in workload or supply.
-      Estimations should be read as context for the above burndown and inform realistic planning.
+      Estimations should be read as context and inform realistic planning.
       </p>}
     </div>
   );

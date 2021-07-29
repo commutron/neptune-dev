@@ -14,7 +14,7 @@ const WidgetNewWrapper = ({ groupId, lock })=> {
     <ModelSmall
       button={'new ' + Pref.widget}
       title={title}
-      color='greenT'
+      color='blueT'
       icon='fa-cube'
       lock={!access || lock}>
       <WidgetNewForm
@@ -70,7 +70,7 @@ const WidgetNewForm = ({ groupId })=> {
       <br />
       <button
         type='submit'
-        className='action clearGreen'
+        className='action clearBlue'
         id='go'
         disabled={false}>SAVE</button>
     </form>

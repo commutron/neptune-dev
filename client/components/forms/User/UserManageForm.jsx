@@ -1,5 +1,4 @@
 import React from 'react';
-// import { Accounts } from 'meteor/accounts-base'
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
@@ -50,7 +49,7 @@ const UserManageForm = ({
         <p><b>Username:</b> {name}</p>
         <p><b>ID:</b> {id}</p>
         <p>{adminFlag}</p>
-        <p><b>Organization:</b> <i className='greenT'>{org}</i></p>
+        <p><b>Organization:</b> <i className='blueT bold'>{org}</i></p>
         <p><b>Joined:</b> {userObj.createdAt.toLocaleString()}</p>
       </span>
       
@@ -128,7 +127,7 @@ const UserManageForm = ({
           <fieldset>
             <legend>Forgot Password</legend>
             <button
-              className='smallAction clear redT'
+              className='smallAction clearRed'
               onClick={(e)=>forcePassword(e)}
             >Change Password</button>
           </fieldset>
@@ -148,8 +147,7 @@ const SetCheckSuper = ({ user, role, roleName })=>	{
   function changeSuper() {
     const flip = check ? 'superUserDisable' : 'superUserEnable';
     Meteor.call(flip, user, role, (error, reply)=>{
-      if(error)
-        console.log(error);
+      error && console.log(error);
       if(reply) {
         toast.success('Saved');
       }else{
@@ -181,8 +179,7 @@ const SetCheck = ({ user, role, roleName })=> {
   function change() {
     const flip = check ? 'permissionUnset' : 'permissionSet';
     Meteor.call(flip, user, role, (error, reply)=>{
-      if(error)
-        console.log(error);
+      error && console.log(error);
       if(reply) {
         toast.success('Saved');
       }else{

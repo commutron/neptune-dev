@@ -16,7 +16,7 @@ const BatchXCreate = ({ groupId, widgetId, allVariants, lock })=> {
     <ModelMedium
       button={'New ' + Pref.xBatch}
       title={title}
-      color='greenT'
+      color='blueT'
       icon='fa-cubes'
       lock={!access || lock}
     >
@@ -200,7 +200,7 @@ const BXCreateForm = ({ groupId, widgetId, allVariants })=> {
       <div className='vmargin'>
         <button
           type='submit'
-          className='action clear greenHover'
+          className='action clearBlue'
         >Create</button>
       </div>
     </form>

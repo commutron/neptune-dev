@@ -89,7 +89,7 @@ export const FlowStepsWrap = ({
           ><n-fa1><i className='far fa-edit'></i></n-fa1> cancel</button>
           
           <button
-            className='smallAction gap clearGreen'
+            className='smallAction gap clearBlue'
             onClick={()=>handleSave()}
             disabled={
               !rapidData.live || flowsState.length === 0 || 
@@ -322,7 +322,7 @@ const AddFlowSteps = ({
       {editState && handleClear && steps.length === 0 ?
         <span className='rightRow'>
           <button
-            className='miniAction gap greenLineHover'
+            className='miniAction gap blueLineHover'
             onClick={()=>handleClear()}
           >Save Empty Flow</button>
         </span>
