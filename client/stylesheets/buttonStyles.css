@@ -413,55 +413,37 @@ button.variableInput.biggest { height: 64px; }
 .auxTip {
   vertical-align: middle;
 }
-.taskTip:before, .auxTip:before, .auxTipScale:before {
+.taskTip::before, 
+.auxTip::before, 
+.auxTipScale::before {
   position: absolute;
   content: attr(aria-label);
   margin: calc(0.5 * var(--vh)) 0;
-  padding: calc(1 * var(--vh));
-  width: auto;
   max-width: -webkit-fill-available;
   max-width: max-content;
-  /*min-height: calc(3.5 * var(--vh));*/
   background-color: var(--task-front-color);
-  border-radius: 25px;
-  text-transform: capitalize;
-  font-family: 'VarelaLocal';
-  font-size: calc(1.5 * var(--vh));
   color: var(--task-back-color);
-  opacity: 0;
-  visibility: hidden;
-  transition: all 150ms ease-in;
   box-shadow: var(--dropShadow0);
-  pointer-events: none;
   z-index: 11;
 }
-.taskTip:before {
+.taskTip::before {
   left: calc(7.5 * var(--vh));
 }
-.auxTip:before, 
-.auxTipScale:before {
+.auxTip::before, 
+.auxTipScale::before {
   right: calc(14 * var(--vh));
 }
-.taskTip:focus:before, .taskTip:hover:before,
-.auxTip:focus:before, .auxTip:hover:before,
-.auxTipScale:focus:before, .auxTipScale:hover:before {
-  opacity: 1;
-  visibility: visible;
-}
+
 @media (orientation: portrait) {
-  .taskTip:before, .auxTipScale:before {
-    padding: 1vmin;
-    font-size: 1.5vmin;
-  }
-  .taskTip:before {
+  .taskTip::before {
     left: 7.5vmin;
     margin: 0;
   }
-  .auxTip:before {
+  .auxTip::before {
     margin: calc(0.15 * var(--vh)) 0;
     right: calc(12 * var(--vh));
   }
-  .auxTipScale:before {
+  .auxTipScale::before {
     margin: 0.25vmin 0;
     right: 15.5vmin;
   }

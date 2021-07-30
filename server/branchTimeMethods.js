@@ -123,7 +123,6 @@ function tryFromHour(tStop, trackOptions, branchOptions, yourHistoryFlat) {
       
   const fromSameHour = deriveFromHistory(sameHourTide, trackOptions, branchOptions);
   const fromSameHourClean = fromSameHour.cleanResult;
-  // const fromSameHourTally= fromSameHour.qbranches;
   
   return fromSameHourClean;
 }

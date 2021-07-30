@@ -5,8 +5,6 @@ import 'moment-business-time';
 import Config from '/server/hardConfig.js';
 import { avgOfArray } from './calcOps.js';
 import { syncHoliday, getEst } from './utility.js';
-import { batchTideTime } from './tideGlobalMethods.js';
-import { calcShipDay } from './reportCompleted.js';
 import { getShipLoad } from '/server/shipOps';
 
 moment.updateLocale('en', {
@@ -211,26 +209,6 @@ Meteor.methods({
         }
       }
     }
-  },
-  
-  checkforNoQuote() {
-    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
-      const noQuoteX = XBatchDB.find(
-        { quoteTimeBudget: { $exists: false } },
-        {fields:{'batch':1}}
-      ).fetch();
-      const lagacy = Array.from(noQuoteX, x => x.batch);
-      
-      const noTideX = XBatchDB.find(
-        { tide: { $exists: false } },
-        {fields:{'batch':1}}
-      ).fetch();
-      const tagacy = Array.from(noTideX, x => x.batch);
-      
-      return [ lagacy, tagacy ];
-    }else{
-      return false;
-    }
-  },
+  }
   
 });

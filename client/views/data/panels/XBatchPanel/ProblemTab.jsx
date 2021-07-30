@@ -25,9 +25,9 @@ const ProblemTab = ({
   isDebug
 })=>	{
   
-  const srsItems = seriesData.items;
-  const srsNonCon = seriesData.nonCon;
-  const srsShorts = seriesData.shortfall;
+  const srsItems = seriesData.items || [];
+  const srsNonCon = seriesData.nonCon || [];
+  const srsShorts = seriesData.shortfall || [];
   
   const flatTypeList = Array.from(ncTypesCombo, x => 
 	  typeof x === 'string' ? x : x.typeText
@@ -40,7 +40,7 @@ const ProblemTab = ({
     <div className='vFrameContainer space'>
       <div className='avOneContent centreSelf centreText'>
         <p className='small'>NonCons</p>
-        {srsNonCon ?
+        {seriesData ?
           <div className='wide autoGrid topLine'>  
             <NonConStatusPie nonCons={nonConArrayClean} />
             <span>
@@ -56,7 +56,7 @@ const ProblemTab = ({
       
       <div className='avTwoContent centreText'>
         <p className='small'>Shortfalls</p>
-        {srsShorts ?
+        {seriesData ?
           <div className='wide autoGrid topLine'>  
             <ShortfallStatusPie shortfalls={srsShorts} />
             <span>
@@ -70,14 +70,14 @@ const ProblemTab = ({
       </div>
       
       <div className='avThreeContent vmargin'>
-        {nonConArrayClean.length > 0 ?
+        {nonConArrayClean.length > 0 || srsShorts.length > 0 ?
           <TabsLite 
             tabs={ [ 
               <i className="fas fa-braille fa-lg fa-fw"></i>,
               <i className="fas fa-chart-bar fa-lg fa-fw"></i>,
               <i className="fas fa-chess-board fa-lg fa-fw"></i>,
               <i className="fas fa-chart-line fa-lg fa-fw"></i>,
-              <i className="fas fa-th fa-lg fa-fw"></i>,
+              <i className="fas fa-exclamation-triangle fa-fw"></i>,
             ] }
             names={[ 
               'Type Bubbles', 

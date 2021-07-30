@@ -161,51 +161,39 @@ n-tide-task label {
   }
 }
 
-.tideOut:before, .tideFollowTip:before {
+.tideOut::before, 
+.tideFollowTip::before {
   position: absolute;
   top: calc(2 * var(--vh));
   border-radius: 25px;
-  margin: calc(0.5 * var(--vh)) 0;
-  padding: calc(1 * var(--vh));
   text-transform: capitalize;
   width: auto;
-  font-family: 'VarelaLocal';
-  font-size: calc(1.5 * var(--vh));
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transition: all 150ms ease-in;
   z-index: 11;
 }
-.tideOut:before {
+.tideOut::before {
+  content: "STOP";
   left: 15vh;
   background-color: var(--alizarin);
   color: rgb(25,25,25);
-  content: "STOP";
+  margin: calc(0.5 * var(--vh));
+  box-shadow: var(--dropShadow00);
 }
-.tideFollowTip:before {
+.tideFollowTip::before {
+  content: attr(aria-label);
   right: 7vh;
   background-color: rgb(0,0,0);
   color: var(--silver);
-  content: attr(aria-label);
+  margin: calc(0.5 * var(--vh)) 0;
 }
-.tideOut:focus:before, .tideOut:hover:before, 
-.tideFollowTip:focus:before, .tideFollowTip:hover:before {
-  visibility: visible;
-  opacity: 1;
-}
+
 @media (orientation: portrait) {
-  .tideFollowTip:before {
+  .tideFollowTip::before {
     top: 2vmin;
-    padding: 1vmin;
-    font-size: 1.5vmin;
     margin: 0.5vmin 0;
     right: 7.5vmin;
   }
-  .containerPro .tideFollowTip:before {
+  .containerPro .tideFollowTip::before {
     top: calc(2 * var(--vh));
-    padding: calc(1 * var(--vh));
-    font-size: calc(1.5 * var(--vh));
     margin: calc(0.5 * var(--vh)) 0;
     right: calc(6 * var(--vh));
   }

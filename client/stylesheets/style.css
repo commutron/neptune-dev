@@ -298,15 +298,13 @@ input::-webkit-calendar-picker-indicator {
 }
 .noRightBorder { border-right: none; }
 
-.low { text-transform: lowercase; }
-
 .cap, n-c { text-transform: capitalize; }
 .capFL:first-letter { text-transform: capitalize; }
 
 .smCap { font-variant: small-caps; }
 
-.up { text-transform: uppercase; }
-/*.low { text-transform: lowercase; }*/
+.up, n-u { text-transform: uppercase; }
+.low { text-transform: lowercase; }
 
 .bold { font-weight: 600; }
 

@@ -51,10 +51,6 @@ const TideMultiBatchBar = ({ batchIDs, app })=> {
             colorScale={["rgb(52, 152, 219)", "rgb(149, 165, 166)", "rgb(241, 196, 15)"]}
             horizontal={true}
             padding={0}
-            animate={{
-              duration: 500,
-              onLoad: { duration: 250 }
-            }}
           >
             <VictoryBar
               data={batchTimes.batchTides}

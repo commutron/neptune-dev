@@ -13,11 +13,8 @@ const PeoplePanel = ({
   
   useEffect( ()=>{
     const openTBlocks = JSON.parse(openTBlockState);
-    const nmrlChunks = openTBlocks.sort((x1, x2)=> {
-      if (x1.batch < x2.batch) { return 1 }
-      if (x1.batch > x2.batch) { return -1 }
-      return 0;
-    });
+    const nmrlChunks = openTBlocks.sort((x1, x2)=> 
+                        x1.batch < x2.batch ? 1 : x1.batch > x2.batch ? -1 : 0);
     setChunks(nmrlChunks);
   }, [eUsers, openTBlockState, update]);
   

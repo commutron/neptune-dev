@@ -65,17 +65,7 @@
   border-bottom: 1px solid rgba(100,100,100,0.5);
   cursor: inherit;
 }
-/*
-.react-contextmenu-item.react-contextmenu-submenu {
-	padding: 0;
-}
-.react-contextmenu-item.react-contextmenu-submenu > .react-contextmenu-item:after {
-  content: "▶";
-  display: inline-block;
-  position: absolute;
-  right: 7px;
-}
-*/
+
 .example-multiple-targets::after {
   content: attr(data-count);
   display: block;
@@ -215,34 +205,25 @@ n-timeline-item:last-child n-timeline-marker:after {
            attr(data-not) '\a' 
            attr(data-tips);
   position: absolute;
-  bottom: 70%;
+  z-index: 2;
+  bottom: 65%;
   right: 1%;
-  z-index: 1;
-  padding: 0.5em 1ch 0.5em 2ch;
+  padding: 0.5em 1ch;
   background-color: rgb(245,245,245);
   color: black;
   font-size: 0.8rem;
   white-space: pre-wrap;
   text-align: right;
-  text-transform: capitalize;
   border: 1px solid;
   border-radius: 10px 10px 0 10px;
-  pointer-events: none;
-  opacity: 0;
 }
 .darkTheme .miniStack::after {
   background-color: rgb(40,40,40);
   color: white;
-  /*left: 1%;*/
-  /*bottom: 90%;*/
-  /*z-index: 5;*/
-  /*border-radius: 10px 0 10px 10px;*/
+  bottom: 55%;
 }
 @media screen and (prefers-reduced-motion: no-preference) { 
   .miniStack::after {
     transition: opacity 150ms ease-in;
   }
-}
-.miniStack:hover::after {
-  opacity: 1;
 }

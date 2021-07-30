@@ -6,7 +6,7 @@ import { TraverseWrap } from '/client/layouts/DataExploreLayout.jsx';
 
 import ExploreLanding from './panels/ExploreLanding.jsx';
 import ReportsWrap from './panels/Reports/ReportsWrap.jsx';
-import TrendWrap from './panels/ExTrends/TrendWrap';
+import VisWrap from './panels/ExVis/VisWrap';
 import AllGroups from './panels/AllGroups/AllGroups.jsx';
 
 import BuildHistory from './panels/BuildHistory.jsx';
@@ -218,11 +218,8 @@ const DataViewOps = ({
         action={false}
         base={true}
       >
-        <TrendWrap
-          // allXBatch={allXBatch}
-          // allWidget={allWidget}
-          // allVariant={allVariant}
-          // allGroup={allGroup} 
+        <VisWrap
+          brancheS={brancheS}
           app={app}
         />
       </TraverseWrap>

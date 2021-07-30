@@ -6,9 +6,9 @@ import UserNice from '/client/components/smallUi/UserNice.jsx';
 import { CalcSpin } from '/client/components/tinyUi/Spin.jsx';
 import ToggleBar from '/client/components/smallUi/Tabs/ToggleBar';
 
-import { TimeBudgetUpgrade, WholeTimeBudget } from '/client/components/forms/QuoteTimeBudget.jsx';
-import TimeBudgetBar from '/client/components/charts/Tides/TimeBudgetBar.jsx';
-import TimeSplitBar from '/client/components/charts/Tides/TimeSplitBar.jsx';
+import QuoteTimeBudget from '/client/components/forms/QuoteTimeBudget';
+import TimeBudgetBar from '/client/components/charts/Tides/TimeBudgetBar';
+import TimeSplitBar from '/client/components/charts/Tides/TimeSplitBar';
 
 import TimeBlocksRaw from '/client/views/data/panels/XBatchPanel/TimeBlocksRaw';
 
@@ -16,7 +16,7 @@ import { splitTidebyPeople } from '/client/utility/WorkTimeCalc';
 import { min2hr, percentOf, percentOverUnder } from '/client/utility/Convert';
 
 const TimeBudgetsChunk = ({
-  tideWall, b, isX, addTime, 
+  tideWall, b, addTime, 
   conversion, conversionSet, plus, plusSet,
   isDebug
 }) =>	{
@@ -89,7 +89,7 @@ const TimeBudgetsChunk = ({
       {!moment(b.createdAt).isAfter(tideWall) && 
         <div className='big'>
           <p className='orangeT'
-          >** This legacy ${Pref.xBatch} was created before Start-Stop was enacted. 
+          >** This legacy {Pref.xBatch} was created before Start-Stop was enacted. 
           <br />Totals may not be acurate
           </p>
         </div>}
@@ -130,11 +130,9 @@ const TimeBudgetsChunk = ({
             </p>
             
             <div className='vmargin'>
-              {!qtBready ? <TimeBudgetUpgrade bID={b._id} isX={isX} /> :
-                <WholeTimeBudget 
-                  bID={b._id} 
-                  isX={isX}
-                  lockOut={b.lock} /> }
+              <QuoteTimeBudget 
+                bID={b._id} 
+                lockOut={b.lock} />
             </div>
           </div>
         
@@ -151,8 +149,8 @@ const TimeBudgetsChunk = ({
                     <dt 
                       key={ix}
                       className='rightRow doJustWeen'
-                    ><i className='medBig gapR'><UserNice id={per.uID} /> </i>
-                      <i className='grayT rightText'
+                    ><i className='gapR'><UserNice id={per.uID} /> </i>
+                      <i className='grayT rightText medSm'
                       > {timeAs} {conversion}</i>
                     </dt> 
               )}})}
@@ -183,8 +181,8 @@ const TimeBudgetsChunk = ({
                             key={ix}
                             title={`${Math.round(br.y)} minutes`}
                             className='rightRow doJustWeen'
-                          ><i className='medBig cap'>{br.x}</i>
-                            <i className='grayT rightText'
+                          ><i className='cap'>{br.x}</i>
+                            <i className='grayT rightText medSm'
                             > {timeAs} {conversion}</i>
                           </dt> 
                     )}})}

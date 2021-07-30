@@ -21,6 +21,8 @@ export const ProWrap = ({
 })=> {
   
   const [ expand, expandSet ] = useState(false);
+  
+  const [ isFirst, isFirstSet ] = useState(false);
   const [ showVerifyState, showVerifySet ] = useState(false);
   const [ optionVerify, optionVerifySet ] = useState(false);
   
@@ -34,6 +36,19 @@ export const ProWrap = ({
     }
     return ()=> ScanListenerOff();
   }, []);
+  
+  useEffect( ()=> {
+    if(itemData) {
+      const frstyp = Array.from(itemData.history, x =>
+                      x.type === 'first' && x.good ? x.step : null)
+                        .filter(f=>f).join('\n');
+      if(frstyp) {
+        isFirstSet(frstyp);
+      }else{
+        isFirstSet(false);
+      }
+    }
+  }, [(itemData && itemData.history)]);
   
   useLayoutEffect( ()=> {
     !Session.get('riverExpand') ? null : expandSet( true );
@@ -120,7 +135,7 @@ export const ProWrap = ({
         <div className='topBorder' />
         <HomeIcon />
         {bData && 
-          <div className='auxLeft'>
+          <div className='proLeft'>
             <TideControl 
               batchID={bData._id} 
               tideKey={et} 
@@ -128,6 +143,14 @@ export const ProWrap = ({
               tideLockOut={tideLockOut}
               stopOnly={true} />
           </div>}
+        {iS && isFirst ?
+          <div className='auxLeft firstBadge' data-steps={isFirst}>
+            <span className='fa-stack'>
+              <i className="fas fa-certificate fa-stack-2x fa-fw blueT"></i>
+              <i className="fas fa-check-double fa-stack-1x fa-fw" ></i>
+            </span>
+          </div>
+        : null}
         <div className='frontCenterTitle'>
           <FindBox append={append} />
         </div>

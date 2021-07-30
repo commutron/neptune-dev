@@ -310,7 +310,7 @@ Meteor.methods({
             caution: caution
           }
       }});
-      Meteor.defer( ()=>{ Meteor.call('updateOneMovement', batchId, accessKey); });
+      Meteor.defer( ()=>{ Meteor.call('updateOneNoise', batchId, accessKey); });
       return true;
     }else{
       return false;
@@ -323,7 +323,7 @@ Meteor.methods({
       XBatchDB.update({_id: batchId, orgKey: accessKey, 'releases.type': rType}, {
         $pull : { releases: { type: rType }
       }});
-      Meteor.defer( ()=>{ Meteor.call('updateOneMovement', batchId, accessKey); });
+      Meteor.defer( ()=>{ Meteor.call('updateOneNoise', batchId, accessKey); });
       return true;
     }else{
       return false;
@@ -344,26 +344,6 @@ Meteor.methods({
   
   //// Tide
   
-  // setup quote time key // LEGACY SUPPORT
-  upBatchXTimeBudget(batchId) {
-    try{
-      if(Roles.userIsInRole(Meteor.userId(), ['sales', 'edit'])) {
-        XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
-          $set : { 
-            'quoteTimeBudget': []
-        }});
-        const doc = XBatchDB.findOne({ _id: batchId });
-        if(!doc.tide) {
-          XBatchDB.update({ _id: batchId }, {
-            $set : { 
-              'tide': []
-          }});
-        }else{null}
-      }else{null}
-    }catch (err) {
-      throw new Meteor.Error(err);
-    }
-  },
   // push time budget, whole time in minutes for batch
   pushBatchXTimeBudget(batchId, qTime) {
     try{

@@ -306,6 +306,18 @@ Meteor.methods({
       }
     })();
   },
+  updateOneNoise(bID, privateKey) {
+    const accessKey = privateKey || Meteor.user().orgKey;
+    (async ()=> {
+      try {
+        const batchBX = XBatchDB.findOne({_id: bID});
+        
+        await checkNoise( batchBX, accessKey );
+      }catch (err) {
+        throw new Meteor.Error(err);
+      }
+    })();
+  },
   
   
   updateLiveMovement(privateKey) {

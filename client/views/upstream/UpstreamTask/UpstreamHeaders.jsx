@@ -32,7 +32,7 @@ const UpstreamHeaders = ({
 
 export default UpstreamHeaders;
 
-const UpstreamHeaderChunk = ({ck, tBatch, bCache, app, isDebug, focusBy })=> {
+const UpstreamHeaderChunk = ({ck, tBatch, app, isDebug, focusBy })=> {
   
   const isDone = ck.completed || ck.finishedAt ? true : false;
 
@@ -45,7 +45,7 @@ const UpstreamHeaderChunk = ({ck, tBatch, bCache, app, isDebug, focusBy })=> {
         batchID={ck._id}
         ptData={tBatch}
         isDone={isDone}
-        oRapid={tBatch.oRapid}
+        oRapid={tBatch ? tBatch.oRapid : false}
         app={app}
         isDebug={isDebug}
         showLess={true}
@@ -53,7 +53,7 @@ const UpstreamHeaderChunk = ({ck, tBatch, bCache, app, isDebug, focusBy })=> {
       <div>
         <ExploreLinkBlock type='batch' keyword={ck.batch} wrap={false} />
       </div>
-      <div title={tBatch.describe}
+      <div title={tBatch ? tBatch.describe : 'unavailable'}
       >{whaT.length <= 50 ? whaT : whaT.substring(0, 50) + '...'}</div>
     </div>
   );

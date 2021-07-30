@@ -168,12 +168,13 @@ main {
   grid-template-columns: 
     calc(8 * var(--vh))
     calc(7 * var(--vh))
+    calc(7 * var(--vh))
     1fr 
     calc(7 * var(--vh))
     calc(7 * var(--vh));
   grid-template-areas: 
-    'topBorder topBorder topBorder topBorder topBorder'
-    'homeIcon auxLeft frontCenter auxRight proRight';
+    'topBorder topBorder topBorder topBorder topBorder topBorder'
+    'homeIcon proLeft auxLeft frontCenter auxRight proRight';
   overflow-x: hidden;
   overflow-y: hidden;
   background-color: rgb(25,25,25);
@@ -223,7 +224,13 @@ main {
 }
 .homeIconLogo { padding: var(--vh); }
 
-.auxLeft { grid-area: auxLeft; }
+.proLeft { grid-area: proLeft; }
+.auxLeft { 
+  grid-area: auxLeft; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 .homeNavi, .homeNaviMini {
   display: grid;
@@ -408,30 +415,6 @@ main {
   }
 }
 
-/*
-.wrapDeck {
-  display: flex;
-  width: 100%;
-  margin: 16px 0;
-  flex-flow: row wrap;
-  align-items: flex-start;
-  justify-content: space-evenly;
-}
-.wrapDeckCard {
-  width: calc(92% / 3);
-  margin: 8px 0;
-}
-@media screen and (max-width: 1500px){
-  .wrapDeckCard {
-    width: calc(94% / 2);
-  }
-}
-@media screen and (max-width: 1000px){
-  .wrapDeckCard {
-    width: 96%
-  }
-}
-*/
 .tableList {
   min-width: calc(75vw - (10 * var(--vh)) - 0.75vw);
   display: table;
@@ -523,6 +506,58 @@ n-sm-model-content {
 }
 @media screen and (max-width: 1000px){
   n-lg-model { max-width: 95%; }
+}
+
+.tideOut::before, 
+.tideFollowTip::before,
+.taskTip::before, 
+.auxTip::before, 
+.auxTipScale::before,
+.firstBadge::after {
+  font-size: calc(1.5 * var(--vh));
+  border-radius: 25px;
+  width: auto;
+  padding: calc(1 * var(--vh));
+  transition: opacity 150ms ease-in;
+}
+.tideOut::before, 
+.tideFollowTip::before,
+.taskTip::before, 
+.auxTip::before, 
+.auxTipScale::before,
+.miniStack::after,
+.firstBadge::after {
+  font-family: 'VarelaLocal';
+  letter-spacing: 0.1ch;
+  text-transform: capitalize;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+}
+.firstBadge:focus::after, .firstBadge:hover::after,
+.miniStack:focus::after, .miniStack:hover::after,
+.taskTip:focus::before, .taskTip:hover::before,
+.auxTip:focus::before, .auxTip:hover::before,
+.auxTipScale:focus::before, .auxTipScale:hover::before,
+.tideOut:enabled:focus::before, .tideOut:enabled:hover::before, 
+.tideFollowTip:focus::before, .tideFollowTip:hover::before {
+  visibility: visible;
+  opacity: 1;
+}
+@media (orientation: portrait) {
+  .taskTip:before, 
+  .auxTipScale:before {
+    padding: 1vmin;
+    font-size: 1.5vmin;
+  }
+  .tideFollowTip::before {
+    padding: 1vmin;
+    font-size: 1.5vmin;
+  }
+  .containerPro .tideFollowTip::before {
+    padding: calc(1 * var(--vh));
+    font-size: calc(1.5 * var(--vh));
+  }
 }
 
 .centre {
@@ -861,8 +896,8 @@ n-sm-i {
   font-size: 0.7rem;
 }
 
+.medSm { font-size: 0.9rem; }
 .med { font-size: 1rem; }
-
 .medBig { font-size: 1.2rem; }
 
 .big { font-size: 1.5rem; }

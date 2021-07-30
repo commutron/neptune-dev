@@ -37,11 +37,11 @@ export const PerformanceSquare = ({ perf })=> {
   
   const pfRank = 
     perf === null ? <n-faX><i className='fas fa-meh'></i></n-faX> :
-    perf <= -6 ? <n-fa4><i className='fas fa-sad-cry'></i></n-fa4> :
+    perf <= -8 ? <n-fa4><i className='fas fa-angry'></i></n-fa4> :
     perf <= -4 ? <n-fa3><i className='fas fa-sad-tear'></i></n-fa3> :
     perf <= -2 ? <n-fa2><i className='fas fa-frown-open'></i></n-fa2> :
     perf <= -1 ? <n-fa1><i className='fas fa-frown'></i></n-fa1> :
-    perf >= 6 ? <n-fa7><i className='fas fa-grin-hearts'></i></n-fa7> :
+    perf >= 8 ? <n-fa7><i className='fas fa-grin-hearts'></i></n-fa7> :
     perf >= 4 ? <n-fa6><i className='fas fa-grin-alt'></i></n-fa6> :
     perf >= 2 ? <n-fa5><i className='fas fa-grin'></i></n-fa5> :
     // perf >= 0 ? 
@@ -49,11 +49,11 @@ export const PerformanceSquare = ({ perf })=> {
   
   const pfText = 
     perf === null ? 'Fine, Indiscernible' :
-    perf <= -6 ? 'Dreadful' :
+    perf <= -8 ? 'Dreadful' :
     perf <= -4 ? 'Terrible' :
     perf <= -2 ? 'Awful' :
     perf <= -1 ? 'Below Target' :
-    perf >= 6 ? 'Tremendous' :
+    perf >= 8 ? 'Tremendous' :
     perf >= 4 ? 'Exceptional' :
     perf >= 2 ? 'Above Target' :
     // perf >= 0 ? 

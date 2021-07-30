@@ -31,7 +31,6 @@ const KittingChecks = ({
               <div title='N/A' key={'skipBRK'+br.brKey+ix}>
               <div className='infoSquareOuter noCopy'>
                 <i className='fas fa-minus fa-2x fa-fw darkgrayT fade'></i>
-                <br />
                 <i className='label infoSquareLabel'></i>
               </div>
             </div>
@@ -72,7 +71,6 @@ const KittingChecks = ({
           <div title='N/A'>
             <div className='infoSquareOuter noCopy'>
               <i className='fas fa-minus fa-2x fa-fw darkgrayT fade'></i>
-              <br />
               <i className='label infoSquareLabel'></i>
             </div>
           </div>

@@ -27,7 +27,6 @@ const TimeTab = ({
       <TimeBudgetsChunk
         tideWall={app.tideWall}
         b={batchData}
-        isX={true}
         addTime={addTime}
         conversion={conversion}
         conversionSet={conversionSet}

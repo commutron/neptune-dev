@@ -111,40 +111,30 @@ export function plotProblems(batches) {
   return probset;
 }
 
+export function plotBranchNC(batches, branches) {
+  let brSet = branches.reduce((x, y)=>(x[y] = [], x), {});
+
+  for( let batch of batches) {
+    const srs = XSeriesDB.findOne({batch: batch.batch},{fields:{'nonCon':1}});
+    const ncs = srs ? srs.nonCon : [];
+    for(let br in brSet) {
+      const qty = countMulti(ncs.filter(n=> n.where === br));
+      brSet[br].push({
+        y: qty,
+        x: batch.completedAt || new Date(),
+        z: `${batch.batch} = ${qty} noncons`,
+        symbol: 'square',
+        size: '1'
+      });
+    }
+  }
+  const itr = Object.entries(brSet);
+  return itr;
+}
+
 
 Meteor.methods({
   
-  // groupPlotPerform(groupId) {
-  //   const accessKey = Meteor.user().orgKey;
-
-  //   const app = AppDB.findOne({ orgKey: accessKey });
-  //   const tideWall = app && app.tideWall;
-
-  //   const batches = XBatchDB.find({
-  //     orgKey: accessKey,
-  //     groupId: groupId,
-  //     createdAt: { 
-  //       $gte: new Date(tideWall)
-  //     }
-  //   },
-  //     {fields:{'batch':1,'completedAt':1}}
-  //   ).fetch();
-    
-  //   let perfset = plotPerform(batches);
-  //   return perfset;
-  // },
-  
-  // groupPlotProb(groupId) {
-  //   const batches = XBatchDB.find({
-  //     orgKey: Meteor.user().orgKey,
-  //     groupId: groupId
-  //   },
-  //     {fields:{'batch':1,'completedAt':1}}
-  //   ).fetch();
-    
-  //   let probset = plotProblems(batches);
-  //   return probset;
-  // },
   
   // widgetPlotOnTime(groupId) {
   //   const batches = XBatchDB.find({
@@ -157,18 +147,6 @@ Meteor.methods({
   //   let onset = plotItemOnTime(batches);
   //   return onset;
   // },
-  
-  // batchPlotOnTime(batchId) {
-  //   const batch = XBatchDB.findOne({
-  //     _id: batchId,
-  //     orgKey: Meteor.user().orgKey,
-  //   },
-  //     {fields:{'batch':1,'completedAt':1,'salesEnd':1}}
-  //   );
-    
-  //   let onset = plotItemOnTime(batch && batch.batch);
-  //   return onset;
-  // }
 
   
 });

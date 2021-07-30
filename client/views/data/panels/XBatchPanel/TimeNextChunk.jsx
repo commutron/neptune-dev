@@ -64,14 +64,16 @@ const TimeNextChunk = ({
           </n-timeline-item>
         : null}
         
-        <n-timeline-item>
-          <n-timeline-info>
-            {stTide ? toDay(stTide) : toDay(est[2], flDelay) + toDur(est[3]+flDelay)}
-            {label(stTide)}
-          </n-timeline-info>
-          <n-timeline-marker class={stTide ? 'done' : ''} />
-          <n-timeline-title>Production Start</n-timeline-title>
-        </n-timeline-item>
+        {batchData.completed && tide.length === 0 ? null :
+          <n-timeline-item>
+            <n-timeline-info>
+              {stTide ? toDay(stTide) : toDay(est[2], flDelay) + toDur(est[3]+flDelay)}
+              {label(stTide)}
+            </n-timeline-info>
+            <n-timeline-marker class={stTide ? 'done' : ''} />
+            <n-timeline-title>Production Start</n-timeline-title>
+          </n-timeline-item>
+        }
         
         {seriesData &&
           <n-timeline-item>

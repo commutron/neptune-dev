@@ -79,15 +79,15 @@ const TimeExtendChunk = ({ b, rapid, conversion, conversionSet, isDebug }) =>	{
             c={totalOverMinutes}
             thin={true} />
           
-          <p className='big line1x'
+          <p className='medBig line1x'
             >{totalQuoteAs} <i className='med'>{conversion === 'minutes' ? 'minutes' : 'hours'} budgeted</i>
           </p>
           
-          <p className='big line1x'
+          <p className='medBig line1x'
             >{totalTideAs} <i className='med'>{conversion} logged</i>
           </p>
           
-          <p className='big line1x' 
+          <p className='medBig line1x' 
             >{bufferAs} <i className='med'>{conversion} {bufferMessage}</i>
           </p>
           
@@ -106,8 +106,8 @@ const TimeExtendChunk = ({ b, rapid, conversion, conversionSet, isDebug }) =>	{
                   <dt 
                     key={ix}
                     className='rightRow doJustWeen'
-                  ><i className='medBig gapR'><UserNice id={per.uID} /> </i>
-                    <i className='grayT rightText'
+                  ><i className='gapR'><UserNice id={per.uID} /> </i>
+                    <i className='grayT rightText medSm'
                     > {timeAs} {conversion}</i>
                   </dt> 
             )}})}

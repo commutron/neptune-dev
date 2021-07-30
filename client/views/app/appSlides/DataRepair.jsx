@@ -62,14 +62,6 @@ const DataRepair = ({ app, users })=> {
   
   return(
     <div className='space3v autoFlex'>
-      <DoCard
-        title='Check for Legacy batches without QuoteBudget'
-        sub=''
-        icon='search'
-        color='clearBlack'
-        button='Lookup'
-        action={()=>doCallThing('checkforNoQuote', true)}
-      />
       
       <DoCard
         title='Force Randomize Org PIN'

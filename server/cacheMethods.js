@@ -6,6 +6,7 @@ import {
   plotPerform,
   plotOnTime,
   plotProblems,
+  plotBranchNC,
   plotCreatedQty } from '/server/plotOps';
 
 Meteor.methods({
@@ -171,6 +172,38 @@ Meteor.methods({
       return probset;
     }else{
       return probShade.dataArray;
+    }
+  },
+  
+  getAllBrNcCount(brOps) {
+    const accessKey = Meteor.user().orgKey;
+    const xid = noIg();
+
+    const brShade = CacheDB.findOne({orgKey: accessKey, dataName: 'brcountShadow'});
+    const brtime = brShade ? brShade.lastUpdated : null;
+    const stale = !brtime ? true :
+              moment.duration(moment().diff(moment(brtime))).as('hours') > 12;
+    if(true) {
+      const batches = XBatchDB.find({
+        orgKey: accessKey,
+        groupId: { $ne: xid },
+      },
+        {fields:{'batch':1,'completedAt':1}}
+      ).fetch();
+      
+      let brncset = plotBranchNC(batches, brOps);
+      
+      CacheDB.upsert({dataName: 'brcountShadow'}, {
+        $set : {
+          orgKey: accessKey,
+          lastUpdated: new Date(),
+          dataName: 'brcountShadow',
+          dataArray: brncset
+      }});
+    
+      return brncset;
+    }else{
+      return brShade.dataArray;
     }
   },
   

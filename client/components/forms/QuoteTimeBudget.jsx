@@ -3,40 +3,7 @@ import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-
-export const TimeBudgetUpgrade = ({ bID, isX })=>	{
-  
-  const auth = Roles.userIsInRole(Meteor.userId(), ['sales', 'edit']);
-  
-  const upgradeForQuoteTime = ()=> {
-    if(auth) {
-      Meteor.call('upBatchXTimeBudget', bID, (error)=>{
-        if(error) {
-          console.log(error);
-          toast.error('Server Error');
-        }
-      });
-    }else{ toast.error('NO Permission'); }
-  };
-  
-  if(!isX) {
-    return null;
-  }
-  
-  return(
-    <label>
-      <button
-        type='submit'
-        title={auth ? 'upgrade' : Pref.norole}
-        className='action blueHover'
-        onClick={(e)=>upgradeForQuoteTime(e)}
-        disabled={!auth}
-      >Add Time Budget</button>
-    </label>
-  );
-};
-
-export const WholeTimeBudget = ({ bID, isX, lockOut })=>	{
+const QuoteTimeBudget = ({ bID, lockOut })=>	{
   
   const auth = Roles.userIsInRole(Meteor.userId(), ['sales', 'edit']);
   
@@ -45,21 +12,12 @@ export const WholeTimeBudget = ({ bID, isX, lockOut })=>	{
     const inHours = parseFloat( e.target.hourNum.value );
     const inMinutes = moment.duration(inHours, 'hours').asMinutes();
     if(auth) {
-      if(isX) {
-        Meteor.call('pushBatchXTimeBudget', bID, inMinutes, (error)=>{
-          if(error) {
-            console.log(error);
-            toast.error('Server Error');
-          }
-        });
-      }else{
-        Meteor.call('pushBatchTimeBudget', bID, inMinutes, (error)=>{
-          if(error) {
-            console.log(error);
-            toast.error('Server Error');
-          }
-        });
-      }
+      Meteor.call('pushBatchXTimeBudget', bID, inMinutes, (error)=>{
+        if(error) {
+          console.log(error);
+          toast.error('Server Error');
+        }
+      });
       e.target.hourNum.value = '';
     }else{ toast.error('NO Permission'); }
   };
@@ -97,3 +55,5 @@ export const WholeTimeBudget = ({ bID, isX, lockOut })=>	{
     </form>
   );
 };
+
+export default QuoteTimeBudget;
