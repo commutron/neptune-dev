@@ -3,42 +3,41 @@ import ReactDOM from 'react-dom';
 import moment from 'moment';
 import { 
   VictoryZoomContainer,
-  VictoryArea,
   VictoryScatter,
+  VictoryArea,
   VictoryChart, 
   VictoryAxis,
-  VictoryTooltip,
+  VictoryTooltip
 } from 'victory';
 import Pref from '/client/global/pref.js';
 import Theme from '/client/global/themeV.js';
+import { ToggleSwitch } from '/client/components/smallUi/ToolBarTools';
 import { FilterSelect } from '/client/components/smallUi/ToolBarTools';
 import PrintThis from '/client/components/tinyUi/PrintThis';
 
 
-const NCBranches = ({ brancheS, app })=> {
+const ProbScatter = ({ fetchFunc, fill, fillfade, title, brancheS, app })=> {
   
   const thingMounted = useRef(true);
+  
+  const [ tickXY, tickXYSet ] = useState(false);
   
   const [ brOps, brOpsSet ] = useState([]);
   const [ brFtr, brFtrSet ] = useState(0);
   const [ showZero, showZeroSet ] = useState(false);
-  
-  const [ tickXY, tickXYSet ] = useState(false);
+  const [ showRate, showRateSet ] = useState(false);
   
   useEffect( ()=> {
-    let ops = ['before release'];
+    let ops = ['wip'];
     for(let anc of app.ancillaryOption) {
       ops.push(anc);
     }
     for(let br of brancheS) {
       ops.push(br.branch);
     }
-    for(let oth of ['after complete', 'out of route', 'wip', 'unknown']) {
-      ops.push(oth);
-    }
     brOpsSet(ops);
-      
-    Meteor.call('getAllBrNcCount', ops, (err, re)=>{
+    
+    Meteor.call(fetchFunc, ops, (err, re)=>{
       err && console.log(err);
       if(re) {
         if(thingMounted.current) {
@@ -49,7 +48,7 @@ const NCBranches = ({ brancheS, app })=> {
   }, []);
   
   const dataset = !tickXY ? [] : showZero ? tickXY : tickXY.filter(t=>t.y[brFtr] > 0);
-
+  
   return(
     <div className='chartNoHeightContain'>
       <div className='rowWrap noPrint'>
@@ -58,24 +57,37 @@ const NCBranches = ({ brancheS, app })=> {
           <n-fa0><i className='fas fa-spinner fa-lg'></i></n-fa0>
         }
         <span className='flexSpace' />
+        
+        <ToggleSwitch 
+          tggID='rateTick'
+          toggleLeft='Total'
+          toggleRight='Rate'
+          toggleVal={showRate}
+          toggleSet={showRateSet}
+        />
+        
+        <label className='beside gapR'>Zeros
+          <input
+            type='checkbox'
+            className='minHeight'
+            defaultChecked={showZero}
+            onChange={()=>showZeroSet(!showZero)} 
+        /></label>
+        
         <FilterSelect
           unqID='fltrBRANCH'
           title={`Filter ${Pref.branch}`}
           selectList={brOps}
           selectState={brFtr}
-          falsey={false}
-          changeFunc={(e)=>brFtrSet(brOps.findIndex(i=> i === e.target.value))}
+          falsey='All'
+          changeFunc={(e)=>brFtrSet(
+                        e.target.value == false ? 0 :
+                        brOps.findIndex(i=> i === e.target.value)+1
+                      )}
         />
-        <label className='beside gapL'>Zeros
-          <input
-            type='checkbox'
-            className='minHeight gapL'
-            defaultChecked={showZero}
-            onChange={()=>showZeroSet(!showZero)} 
-        /></label>
         <PrintThis />  
       </div>
-
+      
       <VictoryChart
         theme={Theme.NeptuneVictory}
         padding={{top: 5, right: 25, bottom: 25, left: 30}}
@@ -106,45 +118,48 @@ const NCBranches = ({ brancheS, app })=> {
               fontSize: '6px' }
           } }
         />
+        
         <VictoryArea
           data={dataset}
-          y={(d)=> !tickXY ? d.y : d.y[brFtr]}
+          y={(d)=> !tickXY ? d.y : showRate ? d.r[brFtr] : d.y[brFtr]}
           interpolation='basis'
           style={{
             data: { 
-              fill: 'rgba(211,84,0,0.2)'
+              fill: fillfade
             },
           }}
         />
+        
         <VictoryScatter
           data={dataset}
-          y={(d)=> !tickXY ? d.y : d.y[brFtr]}
+          y={(d)=> !tickXY ? d.y : showRate ? d.r[brFtr] : d.y[brFtr]}
           style={{
             data: { 
-              fill: 'rgb(231, 76, 60)',
+              fill: fill,
               strokeWidth: 0
             },
             labels: { 
               padding: 2,
             } 
           }}
-          labels={(d)=> tickXY ? d.z + d.y[brFtr] : d.z}
+          labels={(d)=> !tickXY ? d.z : d.z + d.y[brFtr]}
           labelComponent={
             <VictoryTooltip 
               style={{ fontSize: '6px' }}
             />}
         />
-
+        
       </VictoryChart>
-      <p className='centreText'>Noncons by Branch</p>
+      
+      <p className='centreText cap'>{title}</p>
       <p className='lightgray fade'>
         Scroll to Zoom <br />
         Click and Drag to Pan <br />
         Data begins {moment(app.createdAt).format('MMMM YYYY')}<br />
+        Data curve is smoothed by a basis spline function
       </p>
     </div>
   );
 };
 
-export default NCBranches;
-
+export default ProbScatter;

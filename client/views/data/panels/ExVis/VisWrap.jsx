@@ -1,11 +1,11 @@
 import React from 'react';
+import Pref from '/client/global/pref.js';
 import Tabs from '/client/components/smallUi/Tabs/Tabs';
 
 import PerfScatter from './PerfScatter';
 import ShipScatter from './ShipScatter';
-import NCScatter from './NCScatter';
+import ProbScatter from './ProbScatter';
 import QtyScatter from './QtyScatter';
-import NCBranches from './NCBranches';
 import FailScatter from './FailScatter';
 
 const TrendWrap = ({ brancheS, app })=> (
@@ -15,8 +15,8 @@ const TrendWrap = ({ brancheS, app })=> (
         <b><i className='fas fa-cubes fa-fw'></i> Order Quantity</b>,
         <b><i className='fas fa-flag-checkered fa-fw'></i> Fulfill On Time</b>,
         <b><i className='fas fa-bullseye fa-fw'></i> Performance</b>,
-        <b><i className='fas fa-exclamation-circle fa-fw'></i> Problems</b>,
-        <b><i className='fas fa-code-branch fa-fw'></i> Branches</b>,
+        <b><i className='fas fa-exclamation-circle fa-fw'></i> {Pref.nonCons}</b>,
+        <b><i className='fas fa-exclamation-triangle fa-fw'></i> {Pref.shortfalls}</b>,
         <b><i className='fas fa-microscope fa-fw'></i> Test Fails</b>,
       ]}
       wide={true}
@@ -30,10 +30,24 @@ const TrendWrap = ({ brancheS, app })=> (
       
       <PerfScatter app={app} />
         
-      <NCScatter app={app} />
-      
-      <NCBranches brancheS={brancheS} app={app} />
-      
+      <ProbScatter 
+        key='N0NC0N'
+        fetchFunc='getAllNConCount'
+        fillfade='rgba(211,84,0,0.2)'
+        fill='rgb(231, 76, 60)'
+        title={Pref.nonCons}
+        brancheS={brancheS}
+        app={app} />
+        
+      <ProbScatter 
+        key='SH0R7'
+        fetchFunc='getAllShortCount'
+        fillfade='rgba(230, 126, 34,0.2)'
+        fill='rgb(230, 126, 34)'
+        title={Pref.shortfalls}
+        brancheS={brancheS}
+        app={app} />
+        
       <FailScatter app={app} />
      
     </Tabs>

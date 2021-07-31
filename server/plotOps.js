@@ -80,57 +80,67 @@ export function plotOnTime(batches) {
   return onset;
 }*/
 
-export function plotProblems(batches) {
-  let probset = [];
+
+export function plotNonCons(batches, branches) {
+  let ncnset = [];
   for( let batch of batches) {
     const srs = XSeriesDB.findOne({batch: batch.batch});
     const units = srs ? srs.items.length > 0 ? srs.items.reduce((t,i)=> t + i.units, 0) : 0 : 0;
-    const ncQty = srs ? countMulti(srs.nonCon) : 0;
+    const nncns = srs ? srs.nonCon : [];
+    
+    const ncQty = srs ? countMulti(nncns) : 0;
     const ncRte = asRate(ncQty, units);
-    const shQty = srs ? countMultiRefs(srs.shortfall) : 0;
-    const shRte = asRate(shQty, units);
-    probset.push({
-      r: ncRte,
-      s: `${batch.batch} = ${ncRte}`,
-      y: ncQty,
-      x: batch.completedAt || new Date(),
-      z: `${batch.batch} = ${ncQty} noncons`,
-      symbol: 'square',
-      size: 2+ncRte
-    });
-    probset.push({
-      r: shRte,
-      s: `${batch.batch} = ${shRte}`,
-      y: shQty,
-      x: batch.completedAt || new Date(),
-      z: `${batch.batch} = ${shQty} shortfalls`,
-      symbol: 'triangleUp',
-      size: 2+shRte
-    });
-  }
-  return probset;
-}
-
-export function plotBranchNC(batches, branches) {
-  let bSet = [];
-  
-  for( let batch of batches) {
-    const srs = XSeriesDB.findOne({batch: batch.batch},{fields:{'nonCon':1}});
-    const ncs = srs ? srs.nonCon : [];
-    let brnc = [];
+    
+    let brncQt = [ ncQty ];
+    let brncRt = [ ncRte ];
     for(let br of branches) {
-      const qty = countMulti(ncs.filter(n=> n.where === br));
-      brnc.push(qty);
+      const qty = countMulti(nncns.filter(n=> n.where === br));
+      brncQt.push(qty);
+      const ncRt = asRate(qty, units);
+      brncRt.push(ncRt);
     }
-    bSet.push({
-      y: brnc,
+    
+    ncnset.push({
+      r: brncRt,
+      y: brncQt,
       x: batch.completedAt || new Date(),
       z: `${batch.batch} = `,
       symbol: 'square',
-      size: '2'
+      size: 2
     });
   }
-  return bSet;
+  return ncnset;
+}
+
+export function plotShorts(batches, branches) {
+  let shtset = [];
+  for( let batch of batches) {
+    const srs = XSeriesDB.findOne({batch: batch.batch});
+    const units = srs ? srs.items.length > 0 ? srs.items.reduce((t,i)=> t + i.units, 0) : 0 : 0;
+    const shfls = srs ? srs.shortfall : [];
+    
+    const shQty = countMultiRefs(shfls);
+    const shRte = asRate(shQty, units);
+    
+    let brshQt = [ shQty ];
+    let brshRt = [ shRte ];
+    for(let br of branches) {
+      const qty = countMulti(shfls.filter(n=> n.where === br));
+      brshQt.push(qty);
+      const shRt = asRate(qty, units);
+      brshRt.push(shRt);
+    }
+    
+    shtset.push({
+      r: brshRt,
+      y: brshQt,
+      x: batch.completedAt || new Date(),
+      z: `${batch.batch} = `,
+      symbol: 'triangleUp',
+      size: 2
+    });
+  }
+  return shtset;
 }
 
 export function plotTest(batches) {

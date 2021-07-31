@@ -5,7 +5,8 @@ import { noIg } from './utility';
 import { 
   plotPerform,
   plotOnTime,
-  plotProblems,
+  plotNonCons,
+  plotShorts,
   plotBranchNC,
   plotTest,
   plotCreatedQty } from '/server/plotOps';
@@ -146,16 +147,16 @@ Meteor.methods({
     }
   },
   
-  getAllProbCount() {
+  getAllNConCount(brOps) {
     this.unblock();
     const accessKey = Meteor.user().orgKey;
     const xid = noIg();
 
-    const probShade = CacheDB.findOne({orgKey: accessKey, dataName: 'nccountShadow'});
-    const nctime = probShade ? probShade.lastUpdated : null;
+    const ncShade = CacheDB.findOne({orgKey: accessKey, dataName: 'nccountShadow'});
+    const nctime = ncShade ? ncShade.lastUpdated : null;
     const stale = !nctime ? true :
               moment.duration(moment().diff(moment(nctime))).as('hours') > 12;
-    if(stale) {
+    if(true) {
       const batches = XBatchDB.find({
         orgKey: accessKey,
         groupId: { $ne: xid },
@@ -163,32 +164,32 @@ Meteor.methods({
         {fields:{'batch':1,'completedAt':1}}
       ).fetch();
       
-      let probset = plotProblems(batches);
+      let ncset = plotNonCons(batches, brOps);
       
       CacheDB.upsert({dataName: 'nccountShadow'}, {
         $set : {
           orgKey: accessKey,
           lastUpdated: new Date(),
           dataName: 'nccountShadow',
-          dataArray: probset
+          dataArray: ncset
       }});
     
-      return probset;
+      return ncset;
     }else{
-      return probShade.dataArray;
+      return ncShade.dataArray;
     }
   },
   
-  getAllBrNcCount(brOps) {
+  getAllShortCount(brOps) {
     this.unblock();
     const accessKey = Meteor.user().orgKey;
     const xid = noIg();
 
-    const brShade = CacheDB.findOne({orgKey: accessKey, dataName: 'brcountShadow'});
-    const brtime = brShade ? brShade.lastUpdated : null;
-    const stale = !brtime ? true :
-              moment.duration(moment().diff(moment(brtime))).as('hours') > 12;
-    if(stale) {
+    const shShade = CacheDB.findOne({orgKey: accessKey, dataName: 'shcountShadow'});
+    const shtime = shShade ? shShade.lastUpdated : null;
+    const stale = !shtime ? true :
+              moment.duration(moment().diff(moment(shtime))).as('hours') > 12;
+    if(true) {
       const batches = XBatchDB.find({
         orgKey: accessKey,
         groupId: { $ne: xid },
@@ -196,19 +197,24 @@ Meteor.methods({
         {fields:{'batch':1,'completedAt':1}}
       ).fetch();
       
-      let brncset = plotBranchNC(batches, brOps);
+      let shset = plotShorts(batches, brOps);
       
-      CacheDB.upsert({dataName: 'brcountShadow'}, {
+      CacheDB.upsert({dataName: 'shcountShadow'}, {
         $set : {
           orgKey: accessKey,
           lastUpdated: new Date(),
-          dataName: 'brcountShadow',
-          dataArray: brncset
+          dataName: 'shcountShadow',
+          dataArray: shset
       }});
     
-      return brncset;
+    
+    CacheDB.remove({dataName: 'brcountShadow'});
+    
+    
+    
+      return shset;
     }else{
-      return brShade.dataArray;
+      return shShade.dataArray;
     }
   },
   

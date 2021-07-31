@@ -96,7 +96,7 @@ const FailScatter = ({ app })=> {
           data={dataset}
           bubbleProperty="q"
           minBubbleSize={2}  
-          maxBubbleSize={16}
+          maxBubbleSize={12}
           style={{
             data: { 
               fill: 'rgb(192, 57, 43)',
