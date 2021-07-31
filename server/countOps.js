@@ -4,7 +4,7 @@ import Config from '/server/hardConfig.js';
 import { batchTideTime, distTimeBudget } from './tideGlobalMethods.js';
 import { deliveryState } from './reportCompleted.js';
 import { avgOfArray, asRate, diffTrend } from './calcOps';
-import { allNCOptions, countMulti } from './utility';
+import { allNCOptions, countMulti, countMultiRefs } from './utility';
 
 
 Meteor.methods({
@@ -187,35 +187,68 @@ Meteor.methods({
     const allTypes = ncCounter(ncArray, ncOptionS);
     return allTypes;
   },
-  
-    //////////////////////////////////////
    // nonCons of Multiple Batches ///////
   //////////////////////////////////////
-  nonConBatchesTypes(batches) {
+  nonConBatchesTypes(widgetId) {
     this.unblock();
     
-    const series = (b)=> {
-      let srs = XSeriesDB.findOne({ batch: b },{fields:{'nonCon':1}});
-      if(srs) {
-        return { batch: b, nonCon: srs.nonCon };
-      }else{
-        return { batch: b, nonCon: [] };
-      }
-    };
-    const allBatch = Array.from( batches, b => series(b) );
-    
+    const series = XSeriesDB.find({
+      orgKey: Meteor.user().orgKey,
+      widgetId: widgetId
+    },
+      { fields:{'batch':1,'nonCon':1} }
+    ).fetch();
+
     let allTypes = [];
-    for(let b of allBatch) {
+    for(let b of series) {
       allTypes.push(Array.from(b.nonCon, n => n.type));
     }
     const nonConReq = _.uniq( [].concat(...allTypes) );
     
     let countNonCon = [];
-    for(let b of allBatch) {
+    for(let b of series) {
       const count = Meteor.call('countNonConTypes', b.batch, b.nonCon, nonConReq);
       countNonCon.push( count );
     }
     return JSON.stringify(countNonCon);
+  },
+  
+    ////////////////////////////////////////
+   // shortfall of Multiple Batches //////
+  //////////////////////////////////////
+  shortWidgetBatches(widgetId) {
+    this.unblock();
+    
+    const series = XSeriesDB.find({
+      orgKey: Meteor.user().orgKey,
+      widgetId: widgetId
+    },
+      {fields:{'batch':1,'shortfall':1}}
+    ).fetch();
+    
+    let parts = new Set();
+    
+    for( let srs of series ) {
+      for( let sh of srs.shortfall ) {
+        parts.add( sh.partNum );
+      }
+    }
+    
+    const partS = [...parts].sort();
+    
+    let countShortSrs = [];
+    
+    for( let srs of series ) {
+      let shCounts = [];
+      
+      for( let sh of partS ) {
+        const count = countMultiRefs( srs.shortfall.filter( n => n.partNum === sh ) );
+        shCounts.push({x: sh, y: count, l: srs.batch});
+      }
+      countShortSrs.push(shCounts);
+    }
+    
+    return JSON.stringify(countShortSrs);
   },
   
   nonConBatchTrend(wID) {

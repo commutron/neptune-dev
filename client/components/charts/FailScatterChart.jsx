@@ -9,34 +9,37 @@ import {
   VictoryAxis,
   VictoryTooltip,
 } from 'victory';
-// import Pref from '/client/global/pref.js';
 import Theme from '/client/global/themeV.js';
 import PrintThis from '/client/components/tinyUi/PrintThis';
 
 
-const FailScatter = ({ app })=> {
+const FailScatterChart = ({ 
+  fetchFunc, idLimit,
+  print, height, leftpad, dtst, extraClass 
+})=> {
   
-  const thingMounted = useRef(true);
-  
+  const mounted = useRef(true);
+   
   const [ showZero, showZeroSet ] = useState(false);
-  
   const [ tickXY, tickXYSet ] = useState(false);
   
   useEffect( ()=> {
-    Meteor.call('getAllFailCount', (err, re)=>{
+    Meteor.call(fetchFunc, idLimit, (err, re)=>{
       err && console.log(err);
       if(re) {
-        if(thingMounted.current) {
+        if(mounted.current) {
           tickXYSet(re);
         }
       }
     });
+    
+    return () => { mounted.current = false; };
   }, []);
   
   const dataset = !tickXY ? [] : showZero ? tickXY : tickXY.filter(t=>t.y > 0);
 
   return(
-    <div className='chartNoHeightContain'>
+    <div className={'chartNoHeightContain ' + extraClass || ''}>
       <div className='rowWrap noPrint'>
         {!tickXY ?
           <n-fa1><i className='fas fa-spinner fa-lg fa-spin gapR'></i>Loading</n-fa1> :
@@ -50,14 +53,14 @@ const FailScatter = ({ app })=> {
             defaultChecked={showZero}
             onChange={()=>showZeroSet(!showZero)} 
         /></label>
-        <PrintThis />  
+        {print && <PrintThis /> }
       </div>
 
       <VictoryChart
         theme={Theme.NeptuneVictory}
-        padding={{top: 5, right: 25, bottom: 25, left: 30}}
+        padding={{top: 5, right: 25, bottom: 25, left: leftpad || 30}}
         domainPadding={25}
-        height={250}
+        height={height || 250}
         containerComponent={<VictoryZoomContainer />}
       >
         <VictoryAxis
@@ -114,17 +117,16 @@ const FailScatter = ({ app })=> {
         />
 
       </VictoryChart>
-      <p className='centreText'>Test Failures</p>
+      <p className='centreText small'>Test Failures</p>
       <p className='lightgray fade'>
         Y axis is number of items that failed<br />
         Datapoint size is scaled by how many failures<br /> 
-        Scroll to Zoom <br />
-        Click and Drag to Pan <br />
-        Data begins {moment(app.createdAt).format('MMMM YYYY')}<br />
+        Scroll to Zoom. Click and Drag to Pan.<br />
+        {dtst && `Data begins ${moment(dtst).format('MMMM YYYY')}`}
       </p>
     </div>
   );
 };
 
-export default FailScatter;
+export default FailScatterChart;
 

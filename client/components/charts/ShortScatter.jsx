@@ -40,7 +40,7 @@ const ShortScatter = ({ shortfalls, app, isDebug })=> {
     <div className='chartNoHeightContain up'>
       <VictoryChart
         theme={Theme.NeptuneVictory}
-        padding={{top: 10, right: 20, bottom: 20, left: 100}}
+        padding={{top: 10, right: 20, bottom: 20, left: 50}}
         domainPadding={20}
         height={50 + ( yNum * 15 )}
       >

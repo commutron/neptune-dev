@@ -12,14 +12,14 @@ import {
 import Theme from '/client/global/themeV.js';
 
 
-const ShipScatterChart = ({ xy })=> {
+const ShipScatterChart = ({ xy, height, leftpad })=> {
   
   return(
     <VictoryChart
       theme={Theme.NeptuneVictory}
-      padding={{top: 5, right: 25, bottom: 10, left: 25}}
+      padding={{top: 5, right: 25, bottom: 10, left: leftpad || 25}}
       domainPadding={25}
-      height={250}
+      height={height || 250}
       containerComponent={
         <VictoryZoomContainer
           zoomDimension="x"

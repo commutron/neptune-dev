@@ -53,34 +53,6 @@ export function plotOnTime(batches) {
   return onset;
 }
 
-/*function plotItemOnTime(batch) {
-  const srs = XSeriesDB.findOne({batch: batch},
-          {fields:{'items.serial':1,'items.completed':1,'items.completedAt':1}});
-  if(!srs) {
-    return [];
-  }else{
-    let onset = [];
-    
-    const fin = getEndWork(batch._id, batch.salesEnd);
-    
-    const doneitems = srs.items.filter( x=> x.completed );
-    
-    for(let i of doneitems) {
-      const finGap = round1Decimal( moment(fin).workingDiff(i.completedAt, 'days', true) );
-
-      onset.push({
-        y: finGap,
-        x: i.completedAt,
-        z: `${i.serial} = ${finGap}`,
-        symbol: 'diamond',
-        size: '2'
-      });
-    }
-  }
-  return onset;
-}*/
-
-
 export function plotNonCons(batches, branches) {
   let ncnset = [];
   for( let batch of batches) {
@@ -94,7 +66,7 @@ export function plotNonCons(batches, branches) {
     let brncQt = [ ncQty ];
     let brncRt = [ ncRte ];
     for(let br of branches) {
-      const qty = countMulti(nncns.filter(n=> n.where === br));
+      const qty = ncQty === 0 ? 0 : countMulti(nncns.filter(n=> n.where === br));
       brncQt.push(qty);
       const ncRt = asRate(qty, units);
       brncRt.push(ncRt);
@@ -125,7 +97,7 @@ export function plotShorts(batches, branches) {
     let brshQt = [ shQty ];
     let brshRt = [ shRte ];
     for(let br of branches) {
-      const qty = countMulti(shfls.filter(n=> n.where === br));
+      const qty = shQty === 0 ? 0 : countMulti(shfls.filter(n=> n.where === br));
       brshQt.push(qty);
       const shRt = asRate(qty, units);
       brshRt.push(shRt);
@@ -168,18 +140,29 @@ export function plotTest(batches) {
 
 Meteor.methods({
   
-  
-  // widgetPlotOnTime(groupId) {
-  //   const batches = XBatchDB.find({
-  //     orgKey: Meteor.user().orgKey,
-  //     groupId: groupId
-  //   },
-  //     {fields:{'batch':1,'completedAt':1,'salesEnd':1}}
-  //   ).fetch();
+  getBatchOnTime(idLimiter) {
+    const batches = XBatchDB.find({
+      orgKey: Meteor.user().orgKey,
+      widgetId: idLimiter
+    },
+      {fields:{'batch':1,'completedAt':1,'salesEnd':1}}
+    ).fetch();
     
-  //   let onset = plotItemOnTime(batches);
-  //   return onset;
-  // },
+    let onset = plotOnTime(batches);
+    return onset;
+  },
+  
+  getBatchFailPlot(idLimiter) {
+    const batches = XBatchDB.find({
+      orgKey: Meteor.user().orgKey,
+      widgetId: idLimiter
+    },
+      {fields:{'batch':1,'completedAt':1}}
+    ).fetch();
+    
+    let onset = plotTest(batches);
+    return onset;
+  },
 
   
 });

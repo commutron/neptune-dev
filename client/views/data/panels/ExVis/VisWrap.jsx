@@ -3,10 +3,10 @@ import Pref from '/client/global/pref.js';
 import Tabs from '/client/components/smallUi/Tabs/Tabs';
 
 import PerfScatter from './PerfScatter';
-import ShipScatter from './ShipScatter';
+import ShipScatter from '/client/components/charts/ShipScatter';
 import ProbScatter from './ProbScatter';
 import QtyScatter from './QtyScatter';
-import FailScatter from './FailScatter';
+import FailScatterChart from '/client/components/charts/FailScatterChart';
 
 const TrendWrap = ({ brancheS, app })=> (
   <div className='space36v'>
@@ -26,7 +26,11 @@ const TrendWrap = ({ brancheS, app })=> (
     >
       <QtyScatter app={app} />
       
-      <ShipScatter app={app} />
+      <ShipScatter 
+        fetchFunc='getAllOnTime'
+        idLimit={false}
+        dtStart={app.createdAt}
+        print={true} />
       
       <PerfScatter app={app} />
         
@@ -47,8 +51,16 @@ const TrendWrap = ({ brancheS, app })=> (
         title={Pref.shortfalls}
         brancheS={brancheS}
         app={app} />
-        
-      <FailScatter app={app} />
+      
+      <FailScatterChart
+        fetchFunc='getAllFailCount'
+        idLimit={false}
+        print={true}
+        // height
+        // leftpad
+        dtst={app.createdAt}
+        // extraClass
+      />
      
     </Tabs>
   </div>

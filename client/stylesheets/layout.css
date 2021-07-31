@@ -793,6 +793,15 @@ n-sm-model-content {
   align-items: start;
   justify-content: stretch;
 }
+
+.cardSelf,
+.cardify > div,
+.cardify > span > div,
+.cardify > span > span > div,
+.autoFlex > div {
+  padding: 1vmin 2vmin 2vmin 2vmin;
+  box-shadow: var(--dropShadow00);
+}
 .cardify > div,
 .cardify > span > div,
 .cardify > span > span > div,
@@ -800,8 +809,6 @@ n-sm-model-content {
   width: -moz-fit-content;
   width: fit-content;
   margin: 2vmin;
-  padding: 1vmin 2vmin 2vmin 2vmin;
-  box-shadow: var(--dropShadow00);
 }
 .cardify > div > h3,
 .cardify > span > div > h3,

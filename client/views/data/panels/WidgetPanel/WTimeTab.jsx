@@ -1,7 +1,8 @@
 import React, { useRef, useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 
-import TideMultiBatchBar from '/client/components/charts/Tides/TideMultiBatchBar.jsx';
+import TideMultiBatchBar from '/client/components/charts/Tides/TideMultiBatchBar';
+import ShipScatter from '/client/components/charts/ShipScatter';
 import { round1Decimal } from '/client/utility/Convert';
 
 const WTimeTab = ({ 
@@ -58,11 +59,19 @@ const WTimeTab = ({
           >* Only applicable to {Pref.xBatchs} that include serialized items
         </p>
       </details>
-     
+      
       <TideMultiBatchBar 
         batchIDs={batchIDs}
-        app={app} />
-        
+        app={app}
+        extraClass='cardSelf dropCeiling' />
+      
+      <ShipScatter 
+        fetchFunc='getBatchOnTime'
+        idLimit={widgetData._id}
+        height={100}
+        leftpad={50}
+        extraClass='cardSelf dropCeiling' />
+
     </div>
   );
 };

@@ -4,44 +4,53 @@ import ShipScatterChart from '/client/components/charts/ShipScatterChart';
 import PrintThis from '/client/components/tinyUi/PrintThis';
 
 
-const ShipScatter = ({ app })=> {
+const ShipScatter = ({ 
+  fetchFunc, idLimit, 
+  print, height, leftpad, extraClass, dtStart
+})=> {
   
-  const thingMounted = useRef(true);
+  const mounted = useRef(true);
   
   const [ tickXY, tickXYSet ] = useState(false);
   
   useEffect( ()=> {
-    Meteor.call('getAllOnTime', (err, re)=>{
+    Meteor.call(fetchFunc, idLimit, (err, re)=>{
       err && console.log(err);
       if(re) {
-        if(thingMounted.current) {
+        if(mounted.current) {
           tickXYSet(re);
         }
       }
     });
+    
+    return () => { mounted.current = false; };
   }, []);
   
   return(
-    <div className='chartNoHeightContain'>
+    <div className={'chartNoHeightContain ' + extraClass || ''}>
       <div className='rowWrap noPrint'>
         {!tickXY ?
           <n-fa1><i className='fas fa-spinner fa-lg fa-spin gapR'></i>Loading</n-fa1> :
           <n-fa0><i className='fas fa-spinner fa-lg'></i></n-fa0>
         }
         <span className='flexSpace' />
-        <PrintThis />
+        {print && <PrintThis />}
       </div>
       
-      <ShipScatterChart xy={tickXY || []} />
+      <ShipScatterChart 
+        xy={tickXY || []} 
+        height={height}
+        leftpad={leftpad}
+      />
       
+      <p className='centreText small'>Fulfill On Time</p>
       <p className='lightgray fade'>
         ◆ = Completed <br />
         ★ = WIP <br />
-        Scroll to Zoom <br />
-        Click and Drag to Pan <br />
-        X-axis data begins {moment(app.createdAt).format('MMMM YYYY')}<br />
         Y-axis data is in days<br />
-        Data curve is smoothed by a basis spline function
+        Scroll to Zoom. Click and Drag to Pan.<br />
+        Data curve is smoothed by a basis spline function<br />
+        {dtStart && `X-axis data begins ${moment(dtStart).format('MMMM YYYY')}`}
       </p>
     </div>
   );

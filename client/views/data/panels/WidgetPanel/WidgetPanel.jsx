@@ -90,7 +90,7 @@ const WidgetPanel = ({
       <div>
           
       <Tabs
-        tabs={[Pref.variants, Pref.flow + 's', 'Times', Pref.nonCon + 's']}
+        tabs={[Pref.variants, Pref.flow + 's', 'Times', 'Problems']}
         wide={true}
         stick={false}
         hold={true}

@@ -15,7 +15,7 @@ import PrintThis from '/client/components/tinyUi/PrintThis';
 
 const QtyScatter = ({ app })=> {
   
-  const thingMounted = useRef(true);
+  const mounted = useRef(true);
   
   const [ tickXY, tickXYSet ] = useState(false);
   
@@ -23,11 +23,13 @@ const QtyScatter = ({ app })=> {
     Meteor.call('getAllQuantity', (err, re)=>{
       err && console.log(err);
       if(re) {
-        if(thingMounted.current) {
+        if(mounted.current) {
           tickXYSet(re);
         }
       }
     });
+    
+    return () => { mounted.current = false; };
   }, []);
   
   return(
@@ -99,11 +101,11 @@ const QtyScatter = ({ app })=> {
         />
       </VictoryChart>
       
+      <p className='centreText small'>Order Quantity</p>
       <p className='lightgray fade'>
-        Scroll to Zoom <br />
-        Click and Drag to Pan <br />
-        Data begins {moment(app.createdAt).format('MMMM YYYY')}<br />
-        Data curve is smoothed by a basis spline function
+        Scroll to Zoom. Click and Drag to Pan.<br />
+        Data curve is smoothed by a basis spline function<br />
+        Data begins {moment(app.createdAt).format('MMMM YYYY')}
       </p>
     </div>
   );

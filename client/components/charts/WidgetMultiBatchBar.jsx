@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { CalcSpin } from '/client/components/tinyUi/Spin.jsx';
 import { 
   VictoryBar, 
@@ -10,16 +10,22 @@ import {
 import Pref from '/client/global/pref.js';
 import Theme from '/client/global/themeV.js';
 
-const NonConMultiBatchBar = ({ batches })=> {
+const WidgetMultiBatchBar = ({ fetchFunc, widgetId, leftpad })=> {
+  
+  const mounted = useRef(true);
   
   const [ seriesState, seriesSet ] = useState( false );
   
   useEffect( ()=> {
-    Meteor.call('nonConBatchesTypes', batches, (error, reply)=>{
+    Meteor.call(fetchFunc, widgetId, (error, reply)=>{
       error && console.log(error);
-      reply && seriesSet(reply);
+      if(reply && mounted.current) {
+        seriesSet(reply);
+      }
     });
-  }, [batches]);
+    
+    return () => { mounted.current = false; };
+  }, []);
 
   if(!seriesState) {
     return(
@@ -27,19 +33,19 @@ const NonConMultiBatchBar = ({ batches })=> {
     );
   }
   
-  const ncsObj = JSON.parse(seriesState);
+  const probObj = JSON.parse(seriesState);
   
-  if(ncsObj.length > 0) {
+  if(probObj.length > 0) {
 
-    const typeCount = ncsObj[0] ? ncsObj[0].length : ncsObj.length;
+    const yCount = probObj[0] ? probObj[0].length : probObj.length;
     
     return(
       <div className='chartNoHeightContain'>
         <VictoryChart
           theme={Theme.NeptuneVictory}
-          padding={{top: 25, right: 20, bottom: 20, left: 120}}
+          padding={{top: 25, right: 20, bottom: 20, left: leftpad || 120}}
           domainPadding={{x: 10, y: 40}}
-          height={50 + ( typeCount * 15 )}
+          height={50 + ( yCount * 15 )}
         >
           <VictoryAxis
             dependentAxis
@@ -69,7 +75,7 @@ const NonConMultiBatchBar = ({ batches })=> {
             horizontal={true}
             padding={0}
           >
-            {ncsObj.map( (entry, index)=>{
+            {probObj.map( (entry, index)=>{
               if(entry.length > 0) {
                 return(
                   <VictoryBar
@@ -97,4 +103,4 @@ const NonConMultiBatchBar = ({ batches })=> {
   );
 };
 
-export default NonConMultiBatchBar;
+export default WidgetMultiBatchBar;

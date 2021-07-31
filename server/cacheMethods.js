@@ -156,7 +156,7 @@ Meteor.methods({
     const nctime = ncShade ? ncShade.lastUpdated : null;
     const stale = !nctime ? true :
               moment.duration(moment().diff(moment(nctime))).as('hours') > 12;
-    if(true) {
+    if(stale) {
       const batches = XBatchDB.find({
         orgKey: accessKey,
         groupId: { $ne: xid },
@@ -189,7 +189,7 @@ Meteor.methods({
     const shtime = shShade ? shShade.lastUpdated : null;
     const stale = !shtime ? true :
               moment.duration(moment().diff(moment(shtime))).as('hours') > 12;
-    if(true) {
+    if(stale) {
       const batches = XBatchDB.find({
         orgKey: accessKey,
         groupId: { $ne: xid },
@@ -206,12 +206,7 @@ Meteor.methods({
           dataName: 'shcountShadow',
           dataArray: shset
       }});
-    
-    
-    CacheDB.remove({dataName: 'brcountShadow'});
-    
-    
-    
+
       return shset;
     }else{
       return shShade.dataArray;

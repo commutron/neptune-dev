@@ -18,7 +18,7 @@ import PrintThis from '/client/components/tinyUi/PrintThis';
 
 const ProbScatter = ({ fetchFunc, fill, fillfade, title, brancheS, app })=> {
   
-  const thingMounted = useRef(true);
+  const mounted = useRef(true);
   
   const [ tickXY, tickXYSet ] = useState(false);
   
@@ -40,11 +40,13 @@ const ProbScatter = ({ fetchFunc, fill, fillfade, title, brancheS, app })=> {
     Meteor.call(fetchFunc, ops, (err, re)=>{
       err && console.log(err);
       if(re) {
-        if(thingMounted.current) {
+        if(mounted.current) {
           tickXYSet(re);
         }
       }
     });
+    
+    return () => { mounted.current = false; };
   }, []);
   
   const dataset = !tickXY ? [] : showZero ? tickXY : tickXY.filter(t=>t.y[brFtr] > 0);
@@ -151,12 +153,11 @@ const ProbScatter = ({ fetchFunc, fill, fillfade, title, brancheS, app })=> {
         
       </VictoryChart>
       
-      <p className='centreText cap'>{title}</p>
+      <p className='centreText cap small'>{title}</p>
       <p className='lightgray fade'>
-        Scroll to Zoom <br />
-        Click and Drag to Pan <br />
-        Data begins {moment(app.createdAt).format('MMMM YYYY')}<br />
-        Data curve is smoothed by a basis spline function
+        Scroll to Zoom. Click and Drag to Pan.<br />
+        Data curve is smoothed by a basis spline function<br />
+        Data begins {moment(app.createdAt).format('MMMM YYYY')}
       </p>
     </div>
   );

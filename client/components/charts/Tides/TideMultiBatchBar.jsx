@@ -15,7 +15,7 @@ import {
 import Pref from '/client/global/pref.js';
 import Theme from '/client/global/themeV.js';
 
-const TideMultiBatchBar = ({ batchIDs, app })=> {
+const TideMultiBatchBar = ({ batchIDs, app, extraClass })=> {
   
   const [ batchTimes, storeTimes ] = useState(false);
   
@@ -34,18 +34,27 @@ const TideMultiBatchBar = ({ batchIDs, app })=> {
   
   if(batchTimes.batchTides.length > 0) {
     return(
-      <div className='invert chartNoHeightContain'>
+      <div className={'chartNoHeightContain ' + extraClass || ''}>
         <VictoryChart
           theme={Theme.NeptuneVictory}
           padding={{top: 25, right: 25, bottom: 25, left: 50}}
           domainPadding={{x: 10, y: 40}}
-          height={50 + ( batchTimes.batchTides.length * 35 )}
+          height={50 + ( batchTimes.batchTides.length * 30 )}
         >
           <VictoryAxis 
             dependentAxis 
             tickFormat={(t) => Math.round( min2hr(t) )}
+            style={ {
+              tickLabels: { 
+                fontSize: '6px' }
+            } }
           />
-          <VictoryAxis />
+          <VictoryAxis
+            style={ {
+              tickLabels: { 
+                fontSize: '6px' }
+            } }
+          />
           <VictoryStack
             theme={Theme.NeptuneVictory}
             colorScale={["rgb(52, 152, 219)", "rgb(149, 165, 166)", "rgb(241, 196, 15)"]}
@@ -61,7 +70,7 @@ const TideMultiBatchBar = ({ batchIDs, app })=> {
                 <VictoryLabel
                   verticalAnchor="end"
                 />}
-              barWidth={12}
+              barWidth={10}
             />
             <VictoryBar
               data={batchTimes.batchLeftBuffer}
@@ -72,7 +81,7 @@ const TideMultiBatchBar = ({ batchIDs, app })=> {
                 <VictoryLabel
                   verticalAnchor="start"
                 />}
-              barWidth={12}
+              barWidth={10}
             />
             <VictoryBar
               data={batchTimes.batchOverBuffer}
@@ -83,7 +92,7 @@ const TideMultiBatchBar = ({ batchIDs, app })=> {
                 <VictoryLabel
                   verticalAnchor="start"
                 />}
-              barWidth={12}
+              barWidth={10}
             />
         </VictoryStack>
         </VictoryChart>
