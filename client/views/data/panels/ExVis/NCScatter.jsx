@@ -130,7 +130,6 @@ const NCScatter = ({ app })=> {
               padding: 2,
             } 
           }}
-          size={1}
           labels={(d) => showRate ? d.s : d.z}
           labelComponent={
             <VictoryTooltip 
@@ -143,6 +142,7 @@ const NCScatter = ({ app })=> {
       <p className='lightgray fade'>
         ◼ = NonCons <br />
         ▲ = Shortfalls <br />
+        Datapoint size is scaled by rate<br />
         Scroll to Zoom <br />
         Click and Drag to Pan <br />
         Data begins {moment(app.createdAt).format('MMMM YYYY')}<br />

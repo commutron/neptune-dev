@@ -9,36 +9,21 @@ import {
   VictoryAxis,
   VictoryTooltip,
 } from 'victory';
-import Pref from '/client/global/pref.js';
+// import Pref from '/client/global/pref.js';
 import Theme from '/client/global/themeV.js';
-import { FilterSelect } from '/client/components/smallUi/ToolBarTools';
 import PrintThis from '/client/components/tinyUi/PrintThis';
 
 
-const NCBranches = ({ brancheS, app })=> {
+const FailScatter = ({ app })=> {
   
   const thingMounted = useRef(true);
   
-  const [ brOps, brOpsSet ] = useState([]);
-  const [ brFtr, brFtrSet ] = useState(0);
   const [ showZero, showZeroSet ] = useState(false);
   
   const [ tickXY, tickXYSet ] = useState(false);
   
   useEffect( ()=> {
-    let ops = ['before release'];
-    for(let anc of app.ancillaryOption) {
-      ops.push(anc);
-    }
-    for(let br of brancheS) {
-      ops.push(br.branch);
-    }
-    for(let oth of ['after complete', 'out of route', 'wip', 'unknown']) {
-      ops.push(oth);
-    }
-    brOpsSet(ops);
-      
-    Meteor.call('getAllBrNcCount', ops, (err, re)=>{
+    Meteor.call('getAllFailCount', (err, re)=>{
       err && console.log(err);
       if(re) {
         if(thingMounted.current) {
@@ -48,7 +33,7 @@ const NCBranches = ({ brancheS, app })=> {
     });
   }, []);
   
-  const dataset = !tickXY ? [] : showZero ? tickXY : tickXY.filter(t=>t.y[brFtr] > 0);
+  const dataset = !tickXY ? [] : showZero ? tickXY : tickXY.filter(t=>t.y > 0);
 
   return(
     <div className='chartNoHeightContain'>
@@ -58,14 +43,6 @@ const NCBranches = ({ brancheS, app })=> {
           <n-fa0><i className='fas fa-spinner fa-lg'></i></n-fa0>
         }
         <span className='flexSpace' />
-        <FilterSelect
-          unqID='fltrBRANCH'
-          title={`Filter ${Pref.branch}`}
-          selectList={brOps}
-          selectState={brFtr}
-          falsey={false}
-          changeFunc={(e)=>brFtrSet(brOps.findIndex(i=> i === e.target.value))}
-        />
         <label className='beside gapL'>Zeros
           <input
             type='checkbox'
@@ -108,27 +85,28 @@ const NCBranches = ({ brancheS, app })=> {
         />
         <VictoryArea
           data={dataset}
-          y={(d)=> !tickXY ? d.y : d.y[brFtr]}
           interpolation='basis'
           style={{
             data: { 
-              fill: 'rgba(211,84,0,0.2)'
+              fill: 'rgba(192, 57, 43,0.2)'
             },
           }}
         />
         <VictoryScatter
           data={dataset}
-          y={(d)=> !tickXY ? d.y : d.y[brFtr]}
+          bubbleProperty="q"
+          minBubbleSize={2}  
+          maxBubbleSize={16}
           style={{
             data: { 
-              fill: 'rgb(231, 76, 60)',
+              fill: 'rgb(192, 57, 43)',
               strokeWidth: 0
             },
             labels: { 
               padding: 2,
             } 
           }}
-          labels={(d)=> tickXY ? d.z + d.y[brFtr] : d.z}
+          labels={(d)=> d.z}
           labelComponent={
             <VictoryTooltip 
               style={{ fontSize: '6px' }}
@@ -136,8 +114,10 @@ const NCBranches = ({ brancheS, app })=> {
         />
 
       </VictoryChart>
-      <p className='centreText'>Noncons by Branch</p>
+      <p className='centreText'>Test Failures</p>
       <p className='lightgray fade'>
+        Y axis is number of items that failed<br />
+        Datapoint size is scaled by how many failures<br /> 
         Scroll to Zoom <br />
         Click and Drag to Pan <br />
         Data begins {moment(app.createdAt).format('MMMM YYYY')}<br />
@@ -146,5 +126,5 @@ const NCBranches = ({ brancheS, app })=> {
   );
 };
 
-export default NCBranches;
+export default FailScatter;
 

@@ -7,6 +7,7 @@ import {
   plotOnTime,
   plotProblems,
   plotBranchNC,
+  plotTest,
   plotCreatedQty } from '/server/plotOps';
 
 Meteor.methods({
@@ -74,6 +75,7 @@ Meteor.methods({
   },
   
   getAllPerform() {
+    this.unblock();
     const accessKey = Meteor.user().orgKey;
     const xid = noIg();
 
@@ -112,6 +114,7 @@ Meteor.methods({
   },
   
   getAllOnTime() {
+    this.unblock();
     const accessKey = Meteor.user().orgKey;
     const xid = noIg();
 
@@ -144,6 +147,7 @@ Meteor.methods({
   },
   
   getAllProbCount() {
+    this.unblock();
     const accessKey = Meteor.user().orgKey;
     const xid = noIg();
 
@@ -176,6 +180,7 @@ Meteor.methods({
   },
   
   getAllBrNcCount(brOps) {
+    this.unblock();
     const accessKey = Meteor.user().orgKey;
     const xid = noIg();
 
@@ -183,7 +188,7 @@ Meteor.methods({
     const brtime = brShade ? brShade.lastUpdated : null;
     const stale = !brtime ? true :
               moment.duration(moment().diff(moment(brtime))).as('hours') > 12;
-    if(true) {
+    if(stale) {
       const batches = XBatchDB.find({
         orgKey: accessKey,
         groupId: { $ne: xid },
@@ -207,7 +212,41 @@ Meteor.methods({
     }
   },
   
+  getAllFailCount() {
+    this.unblock();
+    const accessKey = Meteor.user().orgKey;
+    const xid = noIg();
+
+    const failShade = CacheDB.findOne({orgKey: accessKey, dataName: 'failShadow'});
+    const tftime = failShade ? failShade.lastUpdated : null;
+    const stale = !tftime ? true :
+              moment.duration(moment().diff(moment(tftime))).as('hours') > 12;
+    if(stale) {
+      const batches = XBatchDB.find({
+        orgKey: accessKey,
+        groupId: { $ne: xid },
+      },
+        {fields:{'batch':1,'completedAt':1}}
+      ).fetch();
+      
+      let failset = plotTest(batches);
+      
+      CacheDB.upsert({dataName: 'failShadow'}, {
+        $set : {
+          orgKey: accessKey,
+          lastUpdated: new Date(),
+          dataName: 'failShadow',
+          dataArray: failset
+      }});
+    
+      return failset;
+    }else{
+      return failShade.dataArray;
+    }
+  },
+  
   getAllQuantity() {
+    this.unblock();
     const accessKey = Meteor.user().orgKey;
     const xid = noIg();
 

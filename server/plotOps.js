@@ -96,7 +96,7 @@ export function plotProblems(batches) {
       x: batch.completedAt || new Date(),
       z: `${batch.batch} = ${ncQty} noncons`,
       symbol: 'square',
-      size: '2'
+      size: 2+ncRte
     });
     probset.push({
       r: shRte,
@@ -105,33 +105,56 @@ export function plotProblems(batches) {
       x: batch.completedAt || new Date(),
       z: `${batch.batch} = ${shQty} shortfalls`,
       symbol: 'triangleUp',
-      size: '2'
+      size: 2+shRte
     });
   }
   return probset;
 }
 
 export function plotBranchNC(batches, branches) {
-  let brSet = branches.reduce((x, y)=>(x[y] = [], x), {});
-
+  let bSet = [];
+  
   for( let batch of batches) {
     const srs = XSeriesDB.findOne({batch: batch.batch},{fields:{'nonCon':1}});
     const ncs = srs ? srs.nonCon : [];
-    for(let br in brSet) {
+    let brnc = [];
+    for(let br of branches) {
       const qty = countMulti(ncs.filter(n=> n.where === br));
-      brSet[br].push({
-        y: qty,
+      brnc.push(qty);
+    }
+    bSet.push({
+      y: brnc,
+      x: batch.completedAt || new Date(),
+      z: `${batch.batch} = `,
+      symbol: 'square',
+      size: '2'
+    });
+  }
+  return bSet;
+}
+
+export function plotTest(batches) {
+  let tSet = [];
+  
+  for( let batch of batches) {
+    const srs = XSeriesDB.findOne({batch: batch.batch},{fields:{'items':1}});
+    const itm = srs ? srs.items.some(i=> i.history.find(h=> h.type === 'test')) : false;
+    if(itm) {
+      let ngi = srs.items.filter(i=> i.history.find(h=> h.type === 'test' && h.good === false));
+      let ngf = 0;
+      for(let i of ngi) {
+        ngf += i.history.filter(h=> h.type === 'test' && h.good === false).length;
+      }
+      tSet.push({
+        y: ngi.length,
         x: batch.completedAt || new Date(),
-        z: `${batch.batch} = ${qty} noncons`,
-        symbol: 'square',
-        size: '1'
+        z: `${batch.batch} = ${ngi.length} items`,
+        q: ngf
       });
     }
   }
-  const itr = Object.entries(brSet);
-  return itr;
+  return tSet;
 }
-
 
 Meteor.methods({
   

@@ -48,12 +48,6 @@ const TestFailPanel = ({ batchData, app })=> {
       const chunk = byWidget.filter( x => x.tfEntries.some( y =>
                                         moment(y.time).isAfter(rangeStart) ) );
       
-      // const sortList = chunk.sort((f1, f2)=> {
-      //         let f1t = f1.tfEntries[f1.tfEntries.length-1].time;
-      //         let f2t = f2.tfEntries[f2.tfEntries.length-1].time;
-      //         return f1t < f2t ? 1 : f1t > f2t ? -1 : 0;
-      // });
-
       workingListSet(chunk);
     }
                     
