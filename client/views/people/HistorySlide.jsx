@@ -94,11 +94,8 @@ const HistorySlide = ({ app, user, users, traceDT, isDebug })=> {
           'Distribution', 'Tasks', 'All Entries'
         ]}
       >
-          
-        <PeopleScatter 
+        <TidePeoplePlot
           tide={dayData}
-          period='hour'
-          xlabel='hh:mma'
           isDebug={isDebug} 
           app={app} 
         />
@@ -155,6 +152,37 @@ const HistorySlide = ({ app, user, users, traceDT, isDebug })=> {
 
 export default HistorySlide;
 
+const TidePeoplePlot = ({ tide, isDebug, app })=> {
+  
+  const [ hrs, hrsSet ] = useState([]);
+  
+  useEffect( ()=>{
+    let hoursTide = [];
+    for(let t of tide) {
+      const strt = moment(t.startTime).hour();
+      const stop = moment(t.stopTime || new Date()).hour();
+      const dhrs = Math.abs(stop - strt);
+      for(let i = dhrs; i > -1; i--) {
+        hoursTide.push({
+          startTime: moment(t.startTime).add(i, 'hours').format(),
+          who: t.who
+        });
+      }
+    }
+    hrsSet(hoursTide);
+  }, [tide]);
+
+  return(
+    <PeopleScatter 
+      tide={hrs}
+      period='hour'
+      xlabel='hh:mma'
+      isDebug={isDebug} 
+      app={app} 
+    />
+  );
+};
+
 const TideTaskCols = ({ tide, traceDT })=> {
   
   const userList = [...new Set( Array.from(tide, x => x.who ) )]
@@ -171,7 +199,7 @@ const TideTaskCols = ({ tide, traceDT })=> {
     <div className='autoGrid'>
             
       <span className='space1v centre'>
-        <h4>{userList.length} Users</h4>
+        <h4>{userList.length} People</h4>
         <dl className='readlines'>
           {userList.map( (w, ix)=>(
             <dt key={w+ix}>

@@ -33,7 +33,7 @@ const PeopleScatter = ({ tide, period, xlabel, app, isDebug })=> {
     
     seriesSet(slim);
     idNumSet(max);
-  }, []);
+  }, [tide]);
           
 
   isDebug && console.log({series, idNum});

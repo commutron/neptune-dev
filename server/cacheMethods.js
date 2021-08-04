@@ -254,7 +254,7 @@ Meteor.methods({
     const bchtime = bchShade ? bchShade.lastUpdated : null;
     const stale = !bchtime ? true :
               moment.duration(moment().diff(moment(bchtime))).as('hours') > 12;
-    if(stale) {
+    if(true) {
       const batches = XBatchDB.find({
         orgKey: accessKey,
         groupId: { $ne: xid }

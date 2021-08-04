@@ -9,8 +9,14 @@ import Config from '/server/hardConfig.js';
 export function plotCreatedOrders(batches) {
   let orderset = [];
   for( let b of batches) {
+    
+    b.quantity === undefined && console.log('noQty');
+    b.createdAt === undefined && console.log('noCrt');
+    b.salesStart === undefined && console.log('noSSt');
+    b.completedAt === undefined && console.log('noCAt');
+
     const did = b.completedAt || moment.tz(Config.clientTZ).format();
-    const trnGap = round1Decimal( moment(did).workingDiff(b.salesStart, 'days', true) );
+    const trnGap = round1Decimal( moment(did).workingDiff(b.salesStart, 'days') );
     
     orderset.push({
       y1: b.quantity,

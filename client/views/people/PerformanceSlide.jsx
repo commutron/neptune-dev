@@ -174,7 +174,7 @@ const PerformanceSlide = ({ app, user, users, traceDT, isDebug })=> {
           <div className='autoGrid'>
             
             <span className='space1v centre'>
-              <h4>{userList.length} Users [{selectDayState || 'Week ' + weekChoice.weekNum}]</h4>
+              <h4>{userList.length} People [{selectDayState || 'Week ' + weekChoice.weekNum}]</h4>
               <dl className='readlines'>
                 {userList.map( (ent, ix)=>(
                   <dt key={ent+ix}>
