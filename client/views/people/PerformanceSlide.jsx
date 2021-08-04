@@ -7,8 +7,8 @@ import WeekBrowse from '/client/components/bigUi/WeekBrowse/WeekBrowse.jsx';
 import TideWorkWeek from '/client/components/charts/Tides/TideWorkWeek.jsx';
 import NumLine from '/client/components/tinyUi/NumLine.jsx';
 
-import UserNice from '/client/components/smallUi/UserNice.jsx';
-import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock.jsx';
+import UserNice from '/client/components/smallUi/UserNice';
+import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock';
 
 const PerformanceSlide = ({ app, user, users, traceDT, isDebug })=> {
   
@@ -106,9 +106,8 @@ const PerformanceSlide = ({ app, user, users, traceDT, isDebug })=> {
     const unqBatcheS = unqBatches.sort((b1, b2)=> b1 < b2 ? 1 : b1 > b2 ? -1 : 0 );
     setBatchList(unqBatcheS);
     
-    const unqTasks = new Set( Array.from(dayFiltered, x => x.task ) );
-    const unqTasksclean = [...unqTasks].filter( x => x !== null );
-    const unqTaskSclean = unqTasksclean.sort((t1, t2)=> t1 > t2 ? 1 : t1 < t2 ? -1 : 0 );
+    const unqTasks = [...new Set( Array.from(dayFiltered, x => x.task ) )].filter(f=>f);
+    const unqTaskSclean = unqTasks.sort((t1, t2)=> t1 > t2 ? 1 : t1 < t2 ? -1 : 0 );
     setTaskList(unqTaskSclean);
     
   }, [weekData, selectDayState, weekDays]);
@@ -176,34 +175,35 @@ const PerformanceSlide = ({ app, user, users, traceDT, isDebug })=> {
             
             <span className='space1v centre'>
               <h4>{userList.length} Users [{selectDayState || 'Week ' + weekChoice.weekNum}]</h4>
-              <dl>
+              <dl className='readlines'>
                 {userList.map( (ent, ix)=>(
-                  <dd key={ent+ix}>
+                  <dt key={ent+ix}>
                     <UserNice id={ent._id} />
-                  </dd>
+                  </dt>
                 ))}
               </dl>
             </span>
               
             <span className='space1v centre'>
               <h4>{batchList.length} {Pref.XBatchs} [{selectDayState || 'Week ' + weekChoice.weekNum}]</h4>
-              <dl>
+              <dl className='readlines'>
                 {batchList.map( (ent, ix)=>{
                   const moreInfo = traceDT ? traceDT.find( x => x.batch === ent) : false;
                   const what = moreInfo ? moreInfo.isWhat.join(' ') : 'unavailable';
                   return(
-                    <dd key={ent+ix}>
-                      <ExploreLinkBlock type='batch' keyword={ent} /> <em>{what}</em>
-                    </dd>
+                    <dt key={ent+ix} className='rightRow doJustWeen'>
+                      <ExploreLinkBlock type='batch' keyword={ent} /> 
+                      <em className='rightText'>{what}</em>
+                    </dt>
                 )})}
               </dl>
             </span>
             
-            <span className='space1v center'>
+            <span className='space1v centre'>
               <h4> {taskList.length} Known Tasks [{selectDayState || 'Week ' + weekChoice.weekNum}]</h4>
-              <dl>
+              <dl className='readlines'>
                 {taskList.map( (ent, ix)=>(
-                  <dd key={ent+ix}>{ent}</dd>
+                  <dt key={ent+ix}>{ent}</dt>
                 ))}
               </dl>
             </span>

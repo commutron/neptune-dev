@@ -49,12 +49,12 @@ const TimeTab = ({
         </div>
       : null}
     
-      <div className='dropCeiling vmargin space'>
+      <div className='dropCeiling vmargin space cardSelf'>
         <TabsLite 
           tabs={ [ 
             <i className="fas fa-running fa-lg fa-fw"></i>,
-            <i className="fas fa-chart-line fa-lg fa-fw"></i>,
-            <i className="far fa-clock fa-lg fa-fw"></i>
+            <i className="fas fa-chart-area fa-lg fa-fw"></i>,
+            <i className="fas fa-flag-checkered fa-fw"></i>
           ] }
           names={[ 
             'People Distribution','Progress Burndown','Items Completed On Time'
@@ -62,8 +62,10 @@ const TimeTab = ({
         
         <PeopleScatter 
           tide={batchData.tide}
+          period='day'
+          xlabel='MMM D YYYY'
           isDebug={isDebug} 
-          app={app} 
+          app={app}
         />
         
         <ProgLayerBurndown

@@ -51,37 +51,36 @@ const WeekBrowse = ({ sendUp, app })=> {
   
   return(
     <span>
-      <label>
-        <button 
-          title='First'
-          className='BTTNtxtBTTN clear clearBlack'
-          onClick={()=>tickWeek(false)} 
-          disabled={backwardLock}
-        ><i className="fas fa-angle-double-left fa-fw"></i></button>
-      </label>
-      <label>
-        <button 
-          title='Previous'
-          className='BTTNtxtBTTN clear clearBlack'
-          onClick={()=>tickWeek('down')} 
-          disabled={backwardLock}
-        ><i className="fas fa-angle-left fa-fw"></i></button>
-      </label>
+     
+      <button 
+        title='First'
+        className='BTTNtxtBTTN clearBlack'
+        onClick={()=>tickWeek(false)} 
+        disabled={backwardLock}
+      ><i className="fas fa-angle-double-left fa-fw"></i></button>
+   
+      <button 
+        title='Previous'
+        className='BTTNtxtBTTN clearBlack'
+        onClick={()=>tickWeek('down')} 
+        disabled={backwardLock}
+      ><i className="fas fa-angle-left fa-fw"></i></button>
+      
       <span className='bttnTXTbttn numFont'> {yearNum}<sub>w</sub>{weekNum} </span>
       
-        <button 
-          title='Next'
-          className='BTTNtxtBTTN clear clearBlack'
-          onClick={()=>tickWeek('up')} 
-          disabled={forwardLock}
-        ><i className="fas fa-angle-right fa-fw"></i></button>
-      
-        <button 
-          title='This week'
-          className='BTTNtxtBTTN clear clearBlack'
-          onClick={()=>tickWeek('now')} 
-          disabled={forwardLock}
-        ><i className="fas fa-angle-double-right fa-fw"></i></button>
+      <button 
+        title='Next'
+        className='BTTNtxtBTTN clearBlack'
+        onClick={()=>tickWeek('up')} 
+        disabled={forwardLock}
+      ><i className="fas fa-angle-right fa-fw"></i></button>
+    
+      <button 
+        title='This week'
+        className='BTTNtxtBTTN clearBlack'
+        onClick={()=>tickWeek('now')} 
+        disabled={forwardLock}
+      ><i className="fas fa-angle-double-right fa-fw"></i></button>
       
     </span>
   );

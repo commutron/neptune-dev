@@ -668,7 +668,7 @@ n-prog-bar progress {
 .uniSelect:after {
   content: "\f078";
   font-family: FontAwesome;
-  font-size: small;
+  font-size: 0.8rem;
   color: white;
   position: relative;
   right: 18px;
@@ -688,7 +688,6 @@ n-prog-bar progress {
 
 .miniDateRange select,
 .miniDateRange input[type='date'] {
-  /*min-height: 24px;*/
   line-height: 1.2rem;
   text-indent: 3px;
 }

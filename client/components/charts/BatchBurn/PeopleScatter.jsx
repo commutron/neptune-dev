@@ -11,7 +11,7 @@ import {
 import Theme from '/client/global/themeV.js';
 import UserName from '/client/utility/Username.js';
 
-const PeopleScatter = ({ tide, app, isDebug })=> {
+const PeopleScatter = ({ tide, period, xlabel, app, isDebug })=> {
   
   const [ series, seriesSet ] = useState([]);
   const [ idNum, idNumSet ] = useState(1);
@@ -25,7 +25,7 @@ const PeopleScatter = ({ tide, app, isDebug })=> {
     let days = [];
     for(let t of tideS) {
       days.push({
-        x: moment(t.startTime).startOf('day').format(),
+        x: moment(t.startTime).startOf(period).format(),
         y: UserName(t.who, true)
       });
     }
@@ -52,7 +52,7 @@ const PeopleScatter = ({ tide, app, isDebug })=> {
           />}
       >
         <VictoryAxis
-          tickFormat={(t) => moment(t).format('MMM D YYYY')}
+          tickFormat={(t) => moment(t).format(xlabel || 'MMM D YYYY')}
           fixLabelOverlap={true}
           style={ {
             axis: { stroke: 'grey' },

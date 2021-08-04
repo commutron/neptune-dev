@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import moment from 'moment';
-import ShipScatterChart from '/client/components/charts/ShipScatterChart';
+import ZeroLineScatterChart from '/client/components/charts/ZeroLineScatterChart';
 import PrintThis from '/client/components/tinyUi/PrintThis';
 
 
@@ -37,8 +37,10 @@ const ShipScatter = ({
         {print && <PrintThis />}
       </div>
       
-      <ShipScatterChart 
+      <ZeroLineScatterChart 
         xy={tickXY || []} 
+        fade='rgba(46, 204, 113,0.2)'
+        fill='rgb(39, 174, 96)'
         height={height}
         leftpad={leftpad}
       />
@@ -47,7 +49,7 @@ const ShipScatter = ({
       <p className='lightgray fade'>
         ◆ = Completed <br />
         ★ = WIP <br />
-        Y-axis data is in days<br />
+        Y-axis data is in workdays<br />
         Scroll to Zoom. Click and Drag to Pan.<br />
         Data curve is smoothed by a basis spline function<br />
         {dtStart && `X-axis data begins ${moment(dtStart).format('MMMM YYYY')}`}

@@ -5,17 +5,17 @@ import Tabs from '/client/components/smallUi/Tabs/Tabs';
 import PerfScatter from './PerfScatter';
 import ShipScatter from '/client/components/charts/ShipScatter';
 import ProbScatter from './ProbScatter';
-import QtyScatter from './QtyScatter';
+import OrderScatter from './OrderScatter';
 import FailScatterChart from '/client/components/charts/FailScatterChart';
 
 const TrendWrap = ({ brancheS, app })=> (
   <div className='space36v'>
     <Tabs
       tabs={[
-        <b><i className='fas fa-cubes fa-fw'></i> Order Quantity</b>,
+        <b><i className='fas fa-cubes fa-fw'></i> {Pref.xBatchs}</b>,
         <b><i className='fas fa-flag-checkered fa-fw'></i> Fulfill On Time</b>,
         <b><i className='fas fa-bullseye fa-fw'></i> Performance</b>,
-        <b><i className='fas fa-exclamation-circle fa-fw'></i> {Pref.nonCons}</b>,
+        <b><i className='fas fa-times-circle fa-fw'></i> {Pref.nonCons}</b>,
         <b><i className='fas fa-exclamation-triangle fa-fw'></i> {Pref.shortfalls}</b>,
         <b><i className='fas fa-microscope fa-fw'></i> Test Fails</b>,
       ]}
@@ -24,14 +24,14 @@ const TrendWrap = ({ brancheS, app })=> (
       hold={true}
       sessionTab='exTrendPanelTabs'
     >
-      <QtyScatter app={app} />
+      <OrderScatter app={app} />
       
       <ShipScatter 
         fetchFunc='getAllOnTime'
         idLimit={false}
         dtStart={app.createdAt}
         print={true} />
-      
+        
       <PerfScatter app={app} />
         
       <ProbScatter 
@@ -56,10 +56,7 @@ const TrendWrap = ({ brancheS, app })=> (
         fetchFunc='getAllFailCount'
         idLimit={false}
         print={true}
-        // height
-        // leftpad
         dtst={app.createdAt}
-        // extraClass
       />
      
     </Tabs>

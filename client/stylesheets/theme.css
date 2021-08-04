@@ -1,4 +1,15 @@
 :root {
+  --sm7: 0.7rem;
+  --sm8: 0.8rem;
+  --sm9: 0.9rem;
+  --tx0: 1rem;
+  --tx2: 1.2rem;
+  --tx5: 1.5rem;
+  --tx6: 1.65rem;
+  --tx7: 1.75rem;
+  --txx1: 2rem;
+  --txx5: 2.5rem;
+
   --neptuneColor: #007fff;
   --turquoise: rgb(26, 188, 156);
   --turquoisetrans: rgba(26, 188, 156, 0.5);

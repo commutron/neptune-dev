@@ -10,17 +10,19 @@ import {
   VictoryTooltip
 } from 'victory';
 import Theme from '/client/global/themeV.js';
+import { ToggleSwitch } from '/client/components/smallUi/ToolBarTools';
 import PrintThis from '/client/components/tinyUi/PrintThis';
 
 
-const QtyScatter = ({ app })=> {
+const OrderScatter = ({ app })=> {
   
   const mounted = useRef(true);
   
   const [ tickXY, tickXYSet ] = useState(false);
+  const [ tggl, tgglSet ] = useState(false);
   
   useEffect( ()=> {
-    Meteor.call('getAllQuantity', (err, re)=>{
+    Meteor.call('getAllOrders', (err, re)=>{
       err && console.log(err);
       if(re) {
         if(mounted.current) {
@@ -40,6 +42,13 @@ const QtyScatter = ({ app })=> {
           <n-fa0><i className='fas fa-spinner fa-lg'></i></n-fa0>
         }
         <span className='flexSpace' />
+        <ToggleSwitch 
+          tggID='toggleType'
+          toggleLeft='Quantity'
+          toggleRight='Duration'
+          toggleVal={tggl}
+          toggleSet={tgglSet}
+        />
         <PrintThis />
       </div>
       
@@ -75,15 +84,19 @@ const QtyScatter = ({ app })=> {
         />
         <VictoryArea
           data={tickXY || []}
+          x={(d)=> tggl ? d.x2 : d.x1}
+          y={(d)=> tggl ? d.y2 : d.y1}
           interpolation='basis'
           style={{
             data: { 
-              fill: 'rgba(52,152,219,0.2)'
+              fill: 'rgba(41, 128, 185, 0.2)'
             },
           }}
         /> 
         <VictoryScatter
           data={tickXY || []}
+          x={(d)=> tggl ? d.x2 : d.x1}
+          y={(d)=> tggl ? d.y2 : d.y1}
           style={{
             data: {
               fill: 'rgb(41, 128, 185)'
@@ -92,8 +105,8 @@ const QtyScatter = ({ app })=> {
               padding: 2,
             } 
           }}
-          size={1}
-          labels={(d) => d.z}
+          symbol={(d) => tggl ? d.s2 : d.s1}
+          labels={(d)=> d.z + (tggl ? d.y2 : d.y1)}
           labelComponent={
             <VictoryTooltip 
               style={{ fontSize: '6px' }}
@@ -101,7 +114,10 @@ const QtyScatter = ({ app })=> {
         />
       </VictoryChart>
       
-      <p className='centreText small'>Order Quantity</p>
+      <p className='centreText small'
+      >{tggl ? 'Workdays Duration. From Sales Start to Completed' : 
+               'Created Order Quantity'}
+      </p>
       <p className='lightgray fade'>
         Scroll to Zoom. Click and Drag to Pan.<br />
         Data curve is smoothed by a basis spline function<br />
@@ -111,4 +127,4 @@ const QtyScatter = ({ app })=> {
   );
 };
 
-export default QtyScatter;
+export default OrderScatter;

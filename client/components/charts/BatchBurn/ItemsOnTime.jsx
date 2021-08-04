@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import moment from 'moment';
 import 'moment-business-time';
 
-import ShipScatterChart from '/client/components/charts/ShipScatterChart';
+import ZeroLineScatterChart from '/client/components/charts/ZeroLineScatterChart';
 import { round1Decimal } from '/client/utility/Convert.js';
 
 const ItemsOnTime = ({ items, salesEnd, isDebug })=> {
@@ -40,12 +40,23 @@ const ItemsOnTime = ({ items, salesEnd, isDebug })=> {
     
   return(
     <div className='chartNoHeightContain'>
+      <div className='rowWrap noPrint'>
+        {series.length === 0 ?
+          <n-fa1><i className='fas fa-spinner fa-lg fa-spin gapR'></i>Loading</n-fa1> :
+          <n-fa0><i className='fas fa-spinner fa-lg'></i></n-fa0>
+        }
+        <span className='flexSpace' />
+      </div>
       {series === false ?
         <div className='centreText fade'>
-          <p className='cap'>nothing complete to chart</p>
+          <p>Nothing Complete To Chart</p>
         </div>
       :
-        <ShipScatterChart xy={series} />
+        <ZeroLineScatterChart 
+          xy={series}
+          fade='rgba(46, 204, 113,0.2)'
+          fill='rgb(39, 174, 96)'
+        />
       }
       
       <p className='centreText small cap'>Items Completed On Time</p>

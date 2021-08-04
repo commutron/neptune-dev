@@ -51,16 +51,16 @@ main {
 .errorReport {
   margin: 10vh auto;
   width: 50vmax;
-  font-size: 1.5rem;
+  font-size: var(--tx5);
   color: white;
 }
 .errorReport p {
-  font-size: 1.25rem;
+  font-size: var(--tx2);
   line-height: 1.75rem;
   font-family: sans-serif;
   padding: 0.5vh 0;
 }
-.errorReport button { font-size: 1.25rem; }
+.errorReport button { font-size: var(--tx2); }
 .errorReport a:hover, .errorReport button:hover {
   text-decoration: underline;
 }
@@ -68,12 +68,12 @@ main {
   box-shadow: none;
   letter-spacing: 2px;
   font-family: monospace;
-  font-size: 1.2rem;
-  line-height: 1.5rem;
+  font-size: var(--tx2);
+  line-height: 1.5;
 }
 .errorReport summary {
   padding: 0.5vh 0;
-  font-size: 0.9rem;
+  font-size: var(--sm9);
   font-family: sans-serif;
   text-transform: none;
   cursor: pointer
@@ -404,14 +404,14 @@ main {
 .titleSection > span {
   display: table-cell;
   width: auto;
-  font-size: 1.75rem;
+  font-size: var(--tx7);
   font-style: normal;
   vertical-align: bottom;
   margin: 0 10px;
 }
 @media screen and (max-width: 1200px) {
   .titleSection > span, .titleSection > button {
-    font-size: 1.5rem;
+    font-size: var(--tx5);
   }
 }
 
@@ -698,6 +698,7 @@ n-sm-model-content {
 .readlines dd,
 .readlines dt {
   margin: 5px 0 5px 0;
+  align-items: flex-start;
 }
 .readPs p {
   margin: 5px 0;
@@ -734,7 +735,7 @@ n-sm-model-content {
 
 .footnotes {
   box-shadow: none;
-  font-size: small;
+  font-size: var(--sm8);
   text-transform: none;
   margin: 0 2vw;
   max-width: 800px;
@@ -885,37 +886,36 @@ n-sm-model-content {
   border-bottom: 5vh solid var(--clouds);
 }
 
-.smaller { font-size: 0.7rem; }
-.small { font-size: 0.8rem; }
-.smTxt { font-size: 0.9rem; }
+.smaller, .smaller > p { font-size: var(--sm7); }
+.small, .small > p { font-size: var(--sm8); }
+.smTxt, .medSm { font-size: var(--sm9); }
 n-sm { 
-  font-size: 0.8rem;
+  font-size: var(--sm8);
   line-height: 1;
   letter-spacing: 0.5px;
 }
 n-sm-b {
-  font-size: 0.8rem;
+  font-size: var(--sm8);
   font-weight: 600;
   letter-spacing: 0.5px;
 }
 n-sm-i {
   font-style: italic;
-  font-size: 0.7rem;
+  font-size: var(--sm7);
 }
 
-.medSm { font-size: 0.9rem; }
-.med { font-size: 1rem; }
-.medBig { font-size: 1.2rem; }
+.med { font-size: var(--tx0); }
+.medBig { font-size: var(--tx2); }
 
-.big { font-size: 1.5rem; }
+.big { font-size: var(--tx5); }
 
-.bigbig { font-size: 1.65rem; }
+.bigbig { font-size: var(--tx6); }
 
-.bigger { font-size: 1.75rem; }
+.bigger { font-size: var(--tx7); }
 
-.biggest { font-size: 2rem; }
+.biggest { font-size: var(--txx0); }
 
-.biggester { font-size: 2.5rem; }
+.biggester { font-size: var(--txx5); }
 
 .vbig { font-size: 2vh; }
 .vbigger { font-size: 3vh; }
@@ -924,22 +924,22 @@ n-sm-i {
 .inlineForm > input[type='text'].dbbleWide { width: 30vw; }
 
 input.variableInput.medBig {
-  font-size: 1.2rem; 
+  font-size: var(--tx2); 
   height: 40px;
   width: 248px;
 }
 input.variableInput.big { 
-  font-size: 1.5rem;
+  font-size: var(--tx5);
   height: 48px;
   width: 256px;
 }
 input.variableInput.bigger { 
-  font-size: 1.75rem; 
+  font-size: var(--tx7); 
   height: 56px;
   width: 264px;
 }
 input.variableInput.biggest { 
-  font-size: 2rem;
+  font-size: var(--txx0);
   height: 64px;
   width: 272px;
 }
@@ -956,7 +956,7 @@ input.miniIn24, select.miniIn24 { width: 24ch; }
   text-align: initial;
 }
 .numberSet {
-  min-height: 2rem;
+  min-height: var(--txx0);
   line-height: 1.1;
   font-family: 'VarelaLocal';
 }
@@ -964,7 +964,7 @@ input.numberSet:focus, input.numberSet:active {
   border-color: var(--neptuneColor);
 }
 button.numberSet {
-  font-size: 0.9rem;
+  font-size: var(--sm9);
   text-transform: none;
 }
 
@@ -978,7 +978,7 @@ button.numberSet {
 .fltrsInput input, .fltrsInput select {
   height: 1.25rem;
   min-width: 80%;
-  font-size: 0.9rem;
+  font-size: var(--sm9);
   margin: 5px 5px;
 }
 
@@ -994,7 +994,7 @@ button.numberSet {
 .icontext {
   display: block;
   white-space: nowrap;
-  font-size: 0.9rem;
+  font-size: var(--sm9);
 }
 
 .navSpacer {
@@ -1037,13 +1037,13 @@ button.numberSet {
 
 .actionBox .flatpickr-input ~ .form-control {
   max-width: 100%;
-  font-size: 1.1rem;
+  font-size: var(--tx0);
   text-indent: 0rem;
 }
 
 .timeInputs .flatpickr-input ~ .form-control {
   width: 9ch;
-  font-size: 1rem;
+  font-size: var(--tx0);
   text-indent: 0.10rem;
 }
 

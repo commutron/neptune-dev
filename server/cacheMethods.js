@@ -7,9 +7,8 @@ import {
   plotOnTime,
   plotNonCons,
   plotShorts,
-  plotBranchNC,
   plotTest,
-  plotCreatedQty } from '/server/plotOps';
+  plotCreatedOrders } from '/server/plotOps';
 
 Meteor.methods({
 
@@ -246,36 +245,42 @@ Meteor.methods({
     }
   },
   
-  getAllQuantity() {
+  getAllOrders() {
     this.unblock();
     const accessKey = Meteor.user().orgKey;
     const xid = noIg();
 
-    const qtyShade = CacheDB.findOne({orgKey: accessKey, dataName: 'qtyShadow'});
-    const qtytime = qtyShade ? qtyShade.lastUpdated : null;
-    const stale = !qtytime ? true :
-              moment.duration(moment().diff(moment(qtytime))).as('hours') > 12;
+    const bchShade = CacheDB.findOne({orgKey: accessKey, dataName: 'bchShadow'});
+    const bchtime = bchShade ? bchShade.lastUpdated : null;
+    const stale = !bchtime ? true :
+              moment.duration(moment().diff(moment(bchtime))).as('hours') > 12;
     if(stale) {
       const batches = XBatchDB.find({
         orgKey: accessKey,
         groupId: { $ne: xid }
       },
-        {fields:{'batch':1,'createdAt':1,'quantity':1,'salesOrder':1}}
+        {fields:{
+          'batch':1,'createdAt':1,'quantity':1,
+          'salesOrder':1,'salesStart':1,'completedAt':1
+        }}
       ).fetch();
       
-      let qtyset = plotCreatedQty(batches);
+      let bchset = plotCreatedOrders(batches);
       
-      CacheDB.upsert({dataName: 'qtyShadow'}, {
+      CacheDB.upsert({dataName: 'bchShadow'}, {
         $set : {
           orgKey: accessKey,
           lastUpdated: new Date(),
-          dataName: 'qtyShadow',
-          dataArray: qtyset
+          dataName: 'bchShadow',
+          dataArray: bchset
       }});
+      
+      CacheDB.remove({dataName: 'qtyShadow'});
+      CacheDB.remove({dataName: 'turnShadow'});
     
-      return qtyset;
+      return bchset;
     }else{
-      return qtyShade.dataArray;
+      return bchShade.dataArray;
     }
   }
   

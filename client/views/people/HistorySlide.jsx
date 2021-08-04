@@ -2,14 +2,16 @@ import React, { Fragment, useState, useEffect } from 'react';
 import moment from 'moment';
 import 'moment-timezone';
 import { HolidayCheck } from '/client/utility/WorkTimeCalc.js';
-// import Pref from '/client/global/pref.js';
+import Pref from '/client/global/pref.js';
 import { CalcSpin } from '/client/components/tinyUi/Spin.jsx';
 import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/themes/airbnb.css';
 import TideDayMini from '/client/components/charts/Tides/TideDayMini.jsx';
+import TabsLite from '/client/components/smallUi/Tabs/TabsLite';
+import PeopleScatter from '/client/components/charts/BatchBurn/PeopleScatter';
 
 import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock.jsx';
-import { AnonyUser } from '/client/components/smallUi/UserNice.jsx';
+import UserNice from '/client/components/smallUi/UserNice.jsx';
 
 const HistorySlide = ({ app, user, users, traceDT, isDebug })=> {
   
@@ -40,7 +42,7 @@ const HistorySlide = ({ app, user, users, traceDT, isDebug })=> {
   
   const localDate = moment.tz(dateString, moment.tz.guess());
   const isHoliday = HolidayCheck( app.nonWorkDays, moment(dateString, 'YYYY-MM-DD').format());
-                      
+       
   return(
     <div className='space5x5 overscroll'>
       <div className='med vbreak comfort middle'>
@@ -78,60 +80,71 @@ const HistorySlide = ({ app, user, users, traceDT, isDebug })=> {
       :
       dayData.length === 0 ?
         <div>
-          <p className='centreText'><i className="fas fa-ghost fa-4x grayT fade"></i></p>
-          <p className='medBig centreText line3x'>No activity on this day</p>
+          <p className='centreText'><i className="fas fa-ghost fa-3x grayT fade"></i></p>
+          <p className='centreText line3x'>No activity on this day</p>
         </div>
       :
-      <table className='wide cap space'>
-        {/*<tbody key={00}>
-          <tr className='leftText line2x'>
-            <th colSpan='3' className='bigger'
-              >{moment(dateString, 'YYYY-MM-DD').format('dddd MMMM Do')}
-            </th>
-            
-            <th className='centreText'><i className="fas fa-play fa-fw fa-xs blackT"></i> Start<sup>i</sup></th>
-            <th className='centreText'></th>
-            <th className='centreText'><i className="fas fa-stop fa-fw fa-xs blackT"></i> Stop<sup>i</sup></th>
-            
-            <th>Task<sup>ii</sup></th>
-            <th className='rightText'>Duration<sup>iii</sup></th>
-          </tr>
-        </tbody>*/}
-        <tbody>
-        {dayData.map( (blk, index)=>{
-          const keyword = blk.batch;
-          const moreInfo = traceDT ? traceDT.find( x => x.batch === blk.batch) : false;
-          const what = moreInfo ? moreInfo.isWhat.join(' ') : 'unavailable';
+      <TabsLite 
+        tabs={ [ 
+          <i className="fas fa-running fa-lg fa-fw"></i>,
+          <i className="fas fa-clipboard-list fa-lg fa-fw"></i>,
+          <i className="fas fa-bars fa-lg fa-fw"></i>,
+        ] }
+        names={[ 
+          'Distribution', 'Tasks', 'All Entries'
+        ]}
+      >
           
-          const lastStart = dayData[index-1] && dayData[index-1].startTime;
+        <PeopleScatter 
+          tide={dayData}
+          period='hour'
+          xlabel='hh:mma'
+          isDebug={isDebug} 
+          app={app} 
+        />
+        
+        <TideTaskCols 
+          tide={dayData}
+          traceDT={traceDT}
+        />
           
-          if(index === 0 || moment(blk.startTime).isSame(lastStart, 'hour') === false) {
-            return(
-              <Fragment key={blk.tKey+index}>
-                <tr key={blk.startTime.toISOString()} className='medBig leftText line4x'>
-                  <th colSpan='4'>{moment(blk.startTime).format('h A')}</th>
-                </tr>
+        <table className='wide cap space'>
+          <tbody>
+          {dayData.map( (blk, index)=>{
+            const keyword = blk.batch;
+            const moreInfo = traceDT ? traceDT.find( x => x.batch === blk.batch) : false;
+            const what = moreInfo ? moreInfo.isWhat.join(' ') : 'unavailable';
+            
+            const lastStart = dayData[index-1] && dayData[index-1].startTime;
+            
+            if(index === 0 || moment(blk.startTime).isSame(lastStart, 'hour') === false) {
+              return(
+                <Fragment key={blk.tKey+index}>
+                  <tr key={blk.startTime.toISOString()} className='medBig leftText line4x'>
+                    <th colSpan='4'>{moment(blk.startTime).format('h A')}</th>
+                  </tr>
+                  <TidePlainRow
+                    key={blk.tKey}
+                    batch={keyword}
+                    describe={what}
+                    tBlock={blk} />
+                </Fragment>
+              );
+            }else{
+              return(
                 <TidePlainRow
                   key={blk.tKey}
                   batch={keyword}
                   describe={what}
                   tBlock={blk} />
-              </Fragment>
-            );
-          }else{
-            return(
-              <TidePlainRow
-                key={blk.tKey}
-                batch={keyword}
-                describe={what}
-                tBlock={blk} />
-            );
-          }
-        })}
-        </tbody>
-      </table>
+              );
+          }})}
+          </tbody>
+        </table>
+      
+      </TabsLite>
       }
-      <div className='small fadeMore vmargin nopmargin'>
+      <div className='fadeMore vmargin nopmargin'>
         <p><sup>i.</sup>Times are displayed for timezone: {moment.tz.guess()}</p>
         <p><sup>ii.</sup>Task is from direct user input only</p>
         <p><sup>iii.</sup>Durations are rounded to the nearest minute</p>
@@ -142,45 +155,79 @@ const HistorySlide = ({ app, user, users, traceDT, isDebug })=> {
 
 export default HistorySlide;
 
+const TideTaskCols = ({ tide, traceDT })=> {
+  
+  const userList = [...new Set( Array.from(tide, x => x.who ) )]
+                      .sort((u1, u2)=> u1 > u2 ? 1 : u1 < u2 ? -1 : 0 );
+                      
+  const batchList = [...new Set( Array.from(tide, x => x.batch ) )]
+                      .sort((b1, b2)=> b1 > b2 ? 1 : b1 < b2 ? -1 : 0 );
+                      
+  const taskList = [...new Set( Array.from(tide, x => x.task ) )]
+                    .filter(f=>f)
+                    .sort((t1, t2)=> t1 > t2 ? 1 : t1 < t2 ? -1 : 0 );
+ 
+  return(
+    <div className='autoGrid'>
+            
+      <span className='space1v centre'>
+        <h4>{userList.length} Users</h4>
+        <dl className='readlines'>
+          {userList.map( (w, ix)=>(
+            <dt key={w+ix}>
+              <UserNice id={w} />
+            </dt>
+          ))}
+        </dl>
+      </span>
+        
+      <span className='space1v centre'>
+        <h4>{batchList.length} {Pref.XBatchs}</h4>
+        <dl className='readlines'>
+          {batchList.map( (ent, ix)=>{
+            const moreInfo = traceDT ? traceDT.find( x => x.batch === ent) : false;
+            const what = moreInfo ? moreInfo.isWhat.join(' ') : 'unavailable';
+            return(
+              <dt key={ent+ix} className='rightRow doJustWeen'>
+                <ExploreLinkBlock type='batch' keyword={ent} /> 
+                <em className='rightText'>{what}</em>
+              </dt>
+          )})}
+        </dl>
+      </span>
+      
+      <span className='space1v centre'>
+        <h4> {taskList.length} Known Tasks</h4>
+        <dl className='readlines'>
+          {taskList.map( (ent, ix)=>(
+            <dt key={ent+ix}>{ent}</dt>
+          ))}
+        </dl>
+      </span>
+      
+    </div>
+  );
+};
 
 const TidePlainRow = ({ 
   batch, describe, tBlock
 })=> {
   
-  // const tideKey = tBlock.tKey;
   const tideWho = tBlock.who;
   const durrAsMin = tBlock.durrAsMin;
   const task = tBlock.task;
   
-  // const mStart = moment(tBlock.startTime);
   const mStop = tBlock.stopTime && moment(tBlock.stopTime);
 
-  // const staticFormat = Roles.userIsInRole(Meteor.userId(), 'debug') ? 'hh:mm:ss A' : 'hh:mm A';
-  
   return(
     <tr className='smTxt'>
-      <td className='noRightBorder'><AnonyUser id={tideWho} /></td>
+      <td className='noRightBorder'><UserNice id={tideWho} /></td>
       
       <td className='noRightBorder'>
         <ExploreLinkBlock type='batch' keyword={batch} />
       </td>
       
       <td className='noRightBorder'>{describe}</td>
-      
-      {/*
-      <td className='noRightBorder numFont centreText timeInputs'>
-        <i className="fas fa-play fa-fw fa-xs greenT"></i><i> {mStart.format(staticFormat)}</i>
-      </td>
-      
-      <td className='noRightBorder centreText timeInputs'>
-        <em><i className="fas fa-long-arrow-alt-right"></i></em>
-      </td>
-        
-      <td className='noRightBorder numFont centreText timeInputs'>
-        <i className="fas fa-stop fa-fw fa-xs redT"></i>
-        {!mStop ? <i> __:__ __</i> : <i> {mStop.format(staticFormat)}</i>}
-      </td>
-      */}
       
       <td className='noRightBorder timeInputs'>
         {task ? task : '   '}

@@ -16,7 +16,7 @@ import MultiBatchKPI from '/client/components/bigUi/MultiBatchKPI';
 
 import FlowTable from '/client/components/tables/FlowTable';
 import WTimeTab from './WTimeTab';
-import WNCTab from './WNCTab';
+import WProbTab from './WProbTab';
 
 
 const WidgetPanel = ({ 
@@ -126,9 +126,8 @@ const WidgetPanel = ({
           batchIDs={batchIDs}
           app={a} />
           
-        <WNCTab
+        <WProbTab
           widgetData={widgetData}
-          batchIDs={batchIDs}
           app={a}
           batches={batches} />
         

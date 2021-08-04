@@ -6,18 +6,24 @@ import { asRate, round1Decimal } from './calcOps';
 import { getEndWork } from '/server/shipOps';
 import Config from '/server/hardConfig.js';
 
-export function plotCreatedQty(batches) {
-  let qtyset = [];
-  for( let batch of batches) {
-    qtyset.push({
-      y: batch.quantity,
-      x: batch.createdAt,
-      z: `${batch.batch} (so.${batch.salesOrder}) = ${batch.quantity}`,
-      symbol: 'plus',
+export function plotCreatedOrders(batches) {
+  let orderset = [];
+  for( let b of batches) {
+    const did = b.completedAt || moment.tz(Config.clientTZ).format();
+    const trnGap = round1Decimal( moment(did).workingDiff(b.salesStart, 'days', true) );
+    
+    orderset.push({
+      y1: b.quantity,
+      x1: b.createdAt,
+      y2: trnGap,
+      x2: b.salesStart,
+      z: `${b.batch} (so.${b.salesOrder}) = `,
+      s1: 'plus',
+      s2: b.completedAt ? 'diamond' : 'star',
       size: '2'
     });
   }
-  return qtyset;
+  return orderset;
 }
 
 export function plotPerform(batches) {

@@ -12,7 +12,7 @@ import {
 import Theme from '/client/global/themeV.js';
 
 
-const ShipScatterChart = ({ xy, height, leftpad })=> {
+const ZeroLineScatterChart = ({ xy, fade, fill, height, leftpad })=> {
   
   return(
     <VictoryChart
@@ -63,7 +63,7 @@ const ShipScatterChart = ({ xy, height, leftpad })=> {
         interpolation='basis'
         style={{
           data: { 
-            fill: 'rgba(46, 204, 113,0.2)'
+            fill: fade
           },
         }}
       />
@@ -71,7 +71,7 @@ const ShipScatterChart = ({ xy, height, leftpad })=> {
         data={xy || []}
         style={{
           data: { 
-            fill: 'rgb(39, 174, 96)',
+            fill: fill,
             strokeWidth: 0
           },
           labels: { 
@@ -89,4 +89,4 @@ const ShipScatterChart = ({ xy, height, leftpad })=> {
   );
 };
 
-export default ShipScatterChart;
+export default ZeroLineScatterChart;

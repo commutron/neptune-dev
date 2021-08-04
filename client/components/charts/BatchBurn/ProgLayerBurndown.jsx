@@ -1,5 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { VictoryChart, VictoryAxis, VictoryArea } from 'victory';
+import { 
+  VictoryChart,
+  VictoryAxis, 
+  VictoryArea, 
+  VictoryZoomContainer } from 'victory';
 import Theme from '/client/global/themeV.js';
 
 import { CalcSpin } from '/client/components/tinyUi/Spin.jsx';
@@ -36,6 +40,11 @@ const ProgLayerBurndown = ({
           scale={{x: "time", y: "linear"}}
           height={200}
           width={400}
+          containerComponent={
+          <VictoryZoomContainer
+            zoomDimension="x"
+            minimumZoom={{x: 1000/500, y: 0.1}}
+          />}
         >
           <VictoryAxis 
             style={ {
@@ -68,10 +77,6 @@ const ProgLayerBurndown = ({
                   strokeWidth: '1px',
                   fill: 'rgba(41, 128, 185, 0.2)'
                 },
-              }}
-              animate={{
-                duration: 2000,
-                onLoad: { duration: 1000 }
               }}
             />
           )}
