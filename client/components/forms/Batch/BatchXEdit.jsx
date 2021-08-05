@@ -139,6 +139,7 @@ const BXEditForm = ({ batchData, seriesData, allVariants, canEdit, selfclose })=
         <input
           type='date'
           id='sDate'
+          max={moment(bDt.createdAt).format('YYYY-MM-DD')}
           defaultValue={moment(bDt.salesStart).format('YYYY-MM-DD')}
           pattern='[0-9]{4}-[0-9]{2}-[0-9]{2}'
           required 
@@ -148,6 +149,7 @@ const BXEditForm = ({ batchData, seriesData, allVariants, canEdit, selfclose })=
         <input
           type='date'
           id='eDate'
+          min={moment(bDt.createdAt).format('YYYY-MM-DD')}
           defaultValue={moment(bDt.salesEnd).format('YYYY-MM-DD')}
           pattern='[0-9]{4}-[0-9]{2}-[0-9]{2}'
           disabled={true}

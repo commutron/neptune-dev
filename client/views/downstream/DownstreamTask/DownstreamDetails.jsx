@@ -111,6 +111,7 @@ const DownstreamScrollChunk = ({
       <div className='overButton'>  
         <AlterFulfill
           batchId={ck.batchID}
+          createdAt={ck.createdAt}
           batch={ck.batch}
           end={ck.salesEnd}
           app={app}

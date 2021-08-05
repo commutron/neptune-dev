@@ -1,6 +1,6 @@
 import React from 'react';
 
-const RemoveUser = ({ userID })=> {
+const DeleteUser = ({ userID, isDebug })=> {
   
   function deleteForever(e) {
     const check = window.confirm('Delete this User Forever??');
@@ -29,4 +29,4 @@ const RemoveUser = ({ userID })=> {
   );
 };
 
-export default RemoveUser;
+export default DeleteUser; 

@@ -80,6 +80,7 @@ const InfoTab = ({
           <p>Ship Due: <b>{shipDue.format("MMMM Do, YYYY")}</b></p>
           <AlterFulfill
             batchId={b._id}
+            createdAt={b.createdAt}
             end={b.salesEnd}
             app={app}
             lock={(b.completed === true && !isDebug ) || b.lock ? Pref.isDone : false}

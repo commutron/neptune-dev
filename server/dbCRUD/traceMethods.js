@@ -54,6 +54,7 @@ function shrinkWhole(bData, now, shipLoad, accessKey) {
         lastUpdated: new Date(),
         batch: bData.batch,
         batchID: bData._id,
+        createdAt: bData.createdAt,
         salesOrder: bData.salesOrder,
         isWhat: isWhat.isWhat,
         describe: isWhat.more,

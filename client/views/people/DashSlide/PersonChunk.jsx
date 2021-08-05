@@ -31,7 +31,7 @@ const PersonChunk = ({
   useEffect( ()=>{
     if(branchGuess) {
       branchGuess[1].forEach( (gu, ix) => updateBranches(userChunk.uID+ix, gu) );
-    }               // with index appended to set multiple branch per person
+    }
   }, [branchGuess]);
   
   useEffect( ()=>{

@@ -1,24 +1,24 @@
 import React from 'react';
 
-export const AdminUp = (props)=> {
+export const AdminUp = ({ userId })=> {
 
   function up(e) {
     e.preventDefault();
     const pIn = this.pIn.value.trim();
-    const user = props.userId;
-    Meteor.call('adminUpgrade', user, pIn, (err, reply)=>{
+
+    Meteor.call('adminUpgrade', userId, pIn, (err, reply)=>{
       if(err)
         console.log(err);
       reply ? window.location.reload(true) : alert('Incorrect PIN');
     });
   }
 
-  const self = props.userId === Meteor.userId();
+  const self = userId === Meteor.userId();
   const adminOther = Roles.getUsersInRole( 'admin' ).fetch();
   
   return(
     <div>
-    {!self && adminOther.length < 2 ?
+    {!self && adminOther.length < 3 ?
       <fieldset>
         <legend>Upgrade to Admin</legend>
         <form onSubmit={(e)=>up(e)} autoComplete='off'>
@@ -46,8 +46,7 @@ export const AdminUp = (props)=> {
 };
 
 
-
-export const AdminDown = (props)=> {
+export const AdminDown = ()=> {
   
   function down(e) {
     const check = window.confirm('Are you sure you want to become a regular user?');

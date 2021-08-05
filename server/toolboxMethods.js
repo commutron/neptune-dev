@@ -209,6 +209,58 @@ Meteor.methods({
         }
       }
     }
+  },
+  
+  cleanupAppEntry() {
+    AppDB.update({orgKey: Meteor.user().orgKey}, {
+      $unset : { 
+        'minorPIN': "",
+        'phases': "",
+        'toolOption': ""
+      }});
+    return true;
+  },
+  
+  checkSalesDates() {
+    const batches = XBatchDB.find({}).fetch();
+    
+    let nosales = [];
+    
+    let ngStart = [];
+    
+    let ngEnd = [];
+    
+    let startAfterCreate = [];
+    
+    let startAfterComplete = [];
+    
+    for(let b of batches) {
+      
+      if(!b.salesStart || !b.salesEnd) {
+        nosales.push(b.batch);
+      }
+      
+      if(typeof b.salesStart === 'string') {
+        ngStart.push(b.batch);
+      }
+      
+      if(typeof b.salesEnd === 'string') {
+        ngEnd.push(b.batch);
+      }
+      
+      if(moment(b.salesStart).isAfter(b.createdAt)) {
+        startAfterCreate.push(b.batch);
+      }
+      
+      if(moment(b.salesStart).isAfter(b.completedAt || new Date())) {
+        startAfterComplete.push(b.batch);
+      }
+      
+    }
+    
+    return {
+      nosales, ngStart, ngEnd, startAfterCreate, startAfterComplete
+    };
   }
   
 });

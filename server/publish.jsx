@@ -60,9 +60,6 @@ Meteor.publish('appData', function(){
         {fields: { 
           'orgKey': 0,
           'orgPIN': 0,
-          'minorPIN': 0,
-          'phases': 0,
-          'toolOption': 0
         }}),
       Meteor.users.find({},
         {fields: {
@@ -80,15 +77,11 @@ Meteor.publish('appData', function(){
         {fields: { 
           'orgKey': 0,
           'orgPIN': 0,
-          'minorPIN': 0,
-          'phases': 0,
-          'toolOption': 0
         }}),
       Meteor.users.find({orgKey: orgKey},
         {fields: {
           'username': 1,
-          'org': 1,
-          'roles': 1,
+          'org': 1
         }}),
     ];
   }
@@ -251,6 +244,7 @@ Meteor.publish('traceDataOpen', function(){
           'lastUpdated': 1,
           'batch': 1,
           'batchID': 1,
+          'createdAt': 1,
           'salesOrder': 1,
           'isWhat': 1,
           'describe': 1,

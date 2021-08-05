@@ -135,6 +135,7 @@ const BXCreateForm = ({ groupId, widgetId, allVariants })=> {
           type='date'
           id='sDate'
           className='numberSet'
+          max={moment().format('YYYY-MM-DD')}
           defaultValue={moment().format('YYYY-MM-DD')}
           pattern='[0-9]{4}-[0-9]{2}-[0-9]{2}'
           required 
@@ -145,6 +146,7 @@ const BXCreateForm = ({ groupId, widgetId, allVariants })=> {
           type='date'
           id='eDate'
           className='numberSet'
+          min={moment().format('YYYY-MM-DD')}
           pattern='[0-9]{4}-[0-9]{2}-[0-9]{2}'
           required
         /></label>

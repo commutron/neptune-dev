@@ -8,7 +8,7 @@ import PrioritySquareData from '/client/components/smallUi/StatusBlocks/Priority
 
 
 const AlterFulfill = ({ 
-  batchId, batch, end, app, canDo, lock, 
+  batchId, createdAt, batch, end, app, canDo, lock, 
   noText, lgIcon, cleanIcon
 })=> {
   const aT = !canDo ? Pref.norole : '';
@@ -27,6 +27,7 @@ const AlterFulfill = ({
     >
       <AlterFulfillForm
         batchId={batchId}
+        createdAt={createdAt}
         end={end}
         app={app} 
       />
@@ -36,7 +37,7 @@ const AlterFulfill = ({
 
 export default AlterFulfill;
 
-const AlterFulfillForm = ({ batchId, end, app, selfclose })=> {
+const AlterFulfillForm = ({ batchId, createdAt, end, app, selfclose })=> {
 
   const [ reasonState, reasonSet ] = useState(false);
   const [ endDateState, endDateSet ] = useState( end );
@@ -101,18 +102,23 @@ const AlterFulfillForm = ({ batchId, end, app, selfclose })=> {
           type='date'
           id='eDate'
           className='numberSet'
+          min={moment(createdAt).format('YYYY-MM-DD')}
           defaultValue={moment(end).format('YYYY-MM-DD')}
           onChange={(e)=>endDateSet(e.target.value)}
           required 
         /></label>
         <button type='submit' className='action clearBlue'>Save</button>
       </p>
+      
       <hr className='nomargin w100' />
+      
       <p className='nomargin clean'>The nearest ship day is {shipAim}</p>
+      
       {loadState === null ? <em>...</em> :
        <p className='nomargin nospace clean'
         ><b>{loadState}</b> incomplete {Pref.xBatchs} are scheduled for this ship day</p>
       }
+      
       <div className='vmarginhalf'>
         <PrioritySquareData
           batchID={batchId}

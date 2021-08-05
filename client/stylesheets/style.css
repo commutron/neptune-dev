@@ -445,7 +445,7 @@ input::-webkit-calendar-picker-indicator {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  font-size: 0.6rem;
+  font-size: var(--sm7);
 }
 
 .infoBox {

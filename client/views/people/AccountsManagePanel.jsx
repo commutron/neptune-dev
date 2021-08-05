@@ -1,23 +1,19 @@
 import React, { Fragment } from 'react';
 import Pref from '/client/global/pref.js';
 
-import SlidesNested from '/client/components/smallUi/SlidesNested.jsx';
+import SlidesNested from '/client/components/smallUi/SlidesNested';
 
-import RemoveUser from '/client/components/forms/User/RemoveUser.jsx';
+import DeleteUser from '/client/components/forms/User/DeleteUser';
 
-import Tabs from '/client/components/smallUi/Tabs/Tabs.jsx';
+import Tabs from '/client/components/smallUi/Tabs/Tabs';
 import AccountsTop from './AccountsTop';
-import ActivityPanel from '/client/views/user/ActivityPanel.jsx';
-import UserManageForm from '/client/components/forms/User/UserManageForm.jsx';
-import UserDMForm from '/client/components/forms/User/UserDMForm.jsx';
+import ActivityPanel from '/client/views/user/ActivityPanel';
+import UserManageForm from '/client/components/forms/User/UserManageForm';
+import UserDMForm from '/client/components/forms/User/UserDMForm';
 
-
-import { ForceStopEngage } from '/client/views/app/appSlides/DataRepair.jsx';
+import { ForceStopEngage } from '/client/views/app/appSlides/DataRepair';
 
 const AccountsManagePanel = ({ app, users, traceDT, brancheS, isDebug })=> {
-  
-  const auths = Pref.auths;
-  const areas = Pref.areas;
   
   const usersSort = users.sort((user1, user2)=> {
           let u1 = user1.username.substr(0, 4).toLowerCase();
@@ -78,14 +74,13 @@ const AccountsManagePanel = ({ app, users, traceDT, brancheS, isDebug })=> {
                       id={entry._id}
                       name={entry.username}
                       org={entry.org}
-                      auths={auths}
-                      areas={areas}
+                      auths={Pref.auths}
+                      areas={Pref.areas}
                       brancheS={brancheS}
                     />
                     {!Roles.userIsInRole(entry._id, 'active') &&
-                      entry._id !== Meteor.userId() &&
-                      !entry.org ?
-                        <RemoveUser userID={entry._id} />
+                      entry._id !== Meteor.userId() && !entry.org ?
+                        <DeleteUser userID={entry._id} />
                     :null}
                     
                     {isAdmin && isDebug ?

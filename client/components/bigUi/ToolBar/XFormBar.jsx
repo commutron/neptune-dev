@@ -40,7 +40,8 @@ const XFormBar = ({
   const verAuth = Roles.userIsInRole(Meteor.userId(), 'verify');
   const lockOutAll = !tideFloodGate || !b.live;
   
-  const caution = b.releases.findIndex( x => x.type === 'floorRelease' && x.caution !== false) >= 0;
+  const caution = b && b.releases.findIndex( x => 
+                    x.type === 'floorRelease' && x.caution !== false) >= 0;
   
   return(
     <div className='proActionForm forceScrollStyle'>

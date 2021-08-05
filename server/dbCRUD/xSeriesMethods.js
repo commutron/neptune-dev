@@ -1,5 +1,3 @@
-// import moment from 'moment';
-// import { batchTideTime } from '/server/tideGlobalMethods';
 
 Meteor.methods({
 
@@ -544,7 +542,6 @@ Meteor.methods({
     }else{
       return false;
     }
-  },
+  }
 
-  
 });

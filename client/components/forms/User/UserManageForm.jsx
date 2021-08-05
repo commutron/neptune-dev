@@ -48,7 +48,7 @@ const UserManageForm = ({
       <span className='noPrint readPs'>
         <p><b>Username:</b> {name}</p>
         <p><b>ID:</b> {id}</p>
-        <p>{adminFlag}</p>
+        <p><b>{adminFlag}</b></p>
         <p><b>Organization:</b> <i className='blueT bold'>{org}</i></p>
         <p><b>Joined:</b> {userObj.createdAt.toLocaleString()}</p>
       </span>

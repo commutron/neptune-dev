@@ -42,7 +42,8 @@ Accounts.onCreateUser((options, user) => {
         updatedAt: new Date(),
         timeAsDecimal: Number(1)
       }],
-      engaged: false
+      engaged: false,
+      tidepools: []
     }, user);
   
     return customizedUser;
@@ -80,7 +81,7 @@ Meteor.methods({
     const org = AppDB.findOne({ orgKey: Meteor.user().orgKey });
     const orgPIN = org ? org.orgPIN : false;
     const others = Meteor.users.find({orgKey: Meteor.user().orgKey, roles: 'admin'}).fetch();
-    if(orgPIN && others.length < 2) {
+    if(orgPIN && others.length < 3) {
       const auth = orgPIN === pin;
       if(auth) {
         Roles.addUsersToRoles(userId, 'admin');
@@ -154,21 +155,27 @@ Meteor.methods({
       throw new Meteor.Error();
     }
   },
-
+  
   deleteUserForever(userId, pin) {
     const auth = Roles.userIsInRole(Meteor.userId(), 'admin');
-    const user = Meteor.users.findOne({_id: userId});
-    const inactive = !Roles.userIsInRole(userId, 'active');
-    const admin = Roles.userIsInRole(userId, 'admin');
-    const self = Meteor.userId() === userId;
-    
     const org = AppDB.findOne({ orgKey: Meteor.user().orgKey });
     const orgPIN = org ? org.orgPIN : null;
-    const dbblCheck = orgPIN === pin;
-
-    if(user && auth && inactive && !admin && !self && dbblCheck) {
-      Meteor.users.remove(userId);
-      return true;
+    const pinMatch = orgPIN === pin;
+    
+    const user = Meteor.users.findOne({_id: userId});
+    
+    if(auth && pinMatch && user) {
+      const notActive = !Roles.userIsInRole(userId, 'active');
+      const notAdmin = !Roles.userIsInRole(userId, 'admin');
+      const notSelf = Meteor.userId() !== userId;
+      const notInOrg = !user.org;
+      
+      if(notActive && notAdmin && notSelf && notInOrg) {
+        Meteor.users.remove(userId);
+        return true;
+      }else{
+        return false;
+      }
     }else{
       return false;
     }
