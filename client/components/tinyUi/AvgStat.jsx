@@ -1,8 +1,11 @@
 import React from 'react';
 
 const AvgStat = ({ num, trend, type, flip })=> (
-  <span title={trend || ''} className='beside bigger'>
-    <n-num class='centre'>{num}<n-sm class='grayT cap'>{type}</n-sm></n-num>
+  <span title={trend || ''} className='beside bigger' style={{ maxWidth: '125px' }}>
+    <n-num class='centre'>
+      <span>{num}</span>
+      <n-sm class='grayT cap centreText'>{type}</n-sm>
+    </n-num>
     {!trend ? null :
       trend === 'up' ?
         <n-fa1>

@@ -1,5 +1,3 @@
-// import { Meteor } from 'meteor/meteor';
-
 //// Preferences singleton class \\\\
 
 let instance = null;
@@ -12,7 +10,7 @@ class Pref {
     
     this.InitialAppSetup = false;
     
-    this.neptuneVersion = '3.5.2';
+    this.neptuneVersion = '3.5.3';
     this.neptuneIs = 'Neptune Process Tracking';
 
     this.prefName = 'default';
@@ -29,8 +27,8 @@ class Pref {
       'edit',
       'run',
       'test',
-      'verify', // keep
-      'inspect', // keep
+      'verify',
+      'inspect',
       'active'
     ];
     this.areas = [

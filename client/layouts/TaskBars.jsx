@@ -11,7 +11,6 @@ const TaskElement = ({ title, subON, goLink, icon, iconAdj  }) => (
   ><i className={icon} data-fa-transform={iconAdj}></i></button>
 );
 
-
 export const ExTaskBar = ({ subLink }) => (
   <div className='taskColumn'>
   
@@ -123,11 +122,10 @@ export const DownTaskBar = ({ subLink }) => (
   <div className='taskColumn'>
   
     <TaskElement
-      title='Upstream'
+      title='Downstream'
       subON={!subLink}
       goLink='/downstream'
       icon='fas fa-satellite'
-      //iconAdj=''
     />
     
     <TaskElement
@@ -158,28 +156,6 @@ export const DownTaskBar = ({ subLink }) => (
       icon='fas fa-chart-line'
       iconAdj='down-1'
     />
-    
-    {Roles.userIsInRole(Meteor.userId(), 'nightly') &&
-      <TaskElement
-        title='Experimental'
-        subON={subLink === 'outlook'}
-        goLink='/downstream/outlook'
-        icon='fas fa-meteor'
-        //iconAdj=''
-      />
-    }
-    
-    {/* switch to external link
-    <div className='flexSpace'></div>
-    
-    <TaskElement
-      title='Downstream Data Explain'
-      subON={subLink === 'explain'}
-      goLink='/downstream/explain'
-      icon='fas fa-question'
-      iconAdj='down-1'
-    />
-    */}
     
     
   </div>

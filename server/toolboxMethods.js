@@ -209,40 +209,6 @@ Meteor.methods({
         }
       }
     }
-  },
-  
-  cleanupAppEntry() {
-    AppDB.update({orgKey: Meteor.user().orgKey}, {
-      $unset : { 
-        'minorPIN': "",
-        'phases': "",
-        'toolOption': ""
-      }});
-    return true;
-  },
-  
-  fixSalesStartDates() {
-    const batches = XBatchDB.find({}).fetch();
-    
-    for(let b of batches) {
-      const sStart = b.salesStart;
-        
-      if(moment(sStart).isAfter(b.createdAt)) {
-        XBatchDB.update({_id: b._id}, {
-          $set : {
-            salesStart: new Date(b.createdAt),
-        }});
-        
-      }else if(typeof sStart === 'string') {
-        XBatchDB.update({_id: b._id}, {
-          $set : {
-            salesStart: new Date(sStart),
-        }});
-      }
-      
-    }
-    
-    return true;
   }
   
 });

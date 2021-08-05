@@ -186,7 +186,6 @@ Meteor.methods({
             await shrinkWhole( x, now, accessKey );
         }));
         
-        return true;
       }catch (err) {
         throw new Meteor.Error(err);
       }

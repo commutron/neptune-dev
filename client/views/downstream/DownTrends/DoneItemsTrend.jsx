@@ -48,7 +48,7 @@ const DoneItemsTrend = ({ app, isDebug, isNightly })=>{
   }
   
   return(
-    <div className=''>
+    <div>
       
       <div className='rowWrap noPrint'>
         {working ?
@@ -75,9 +75,9 @@ const DoneItemsTrend = ({ app, isDebug, isNightly })=>{
       <div style={{backgroundColor:'white'}}>
         <VictoryChart
           theme={Theme.NeptuneVictory}
-          padding={{top: 25, right: 25, bottom: 25, left: 50}}
-          domainPadding={{x: 10, y: 40}}
-          height={250}
+          padding={{top: 25, right: 30, bottom: 25, left: 30}}
+          domainPadding={{x: 10, y: 10}}
+          height={200}
           containerComponent={<VictoryZoomContainer
             zoomDimension="x"
             minimumZoom={{x: 1/0.1}}
@@ -86,22 +86,26 @@ const DoneItemsTrend = ({ app, isDebug, isNightly })=>{
         
         <VictoryLegend x={0} y={0}
         	title=""
-          labels={{ fontSize: 15 }}
           titleOrientation="left"
           gutter={10}
           symbolSpacer={3}
-          borderPadding={{ top: 4, bottom: 0 }}
+          borderPadding={{ top: 4, bottom: 0, left: 4 }}
           orientation="horizontal"
           style={{ 
-            title: { padding: 2, fontSize: 10 } 
+            labels: { padding: 2, fontSize: 8 } 
           }}
           data={[
-          { name: "Serialized Units", symbol: { fill: "rgb(39, 174, 96)" } }
+            { name: "Serialized Units", symbol: { fill: "rgb(39, 174, 96)" } }
           ]}
           
         />
           <VictoryAxis
             dependentAxis
+            tickFormat={(t) => !tgglSpan ? '*' : t}
+            style={{
+              tickLabels: { 
+                fontSize: '6px' }
+            }}
           />
           <VictoryAxis
             fixLabelOverlap={true}
@@ -109,6 +113,10 @@ const DoneItemsTrend = ({ app, isDebug, isNightly })=>{
               tgglSpan == 'month' ?
               moment(t).format('MMM-YYYY') :
               moment(t).format('w-YYYY')}
+            style={{
+              tickLabels: { 
+                fontSize: '6px' }
+            }}
           />
           
             <VictoryLine
@@ -130,7 +138,6 @@ const DoneItemsTrend = ({ app, isDebug, isNightly })=>{
           </VictoryChart>
           
       </div>
-      <p className='small rightText noPrint'>Data is NOT live. Refreshed once a day</p>
     </div>
   );
 };

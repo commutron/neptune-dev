@@ -64,23 +64,6 @@ const DataRepair = ({ app, users })=> {
     <div className='space3v autoFlex'>
       
       <DoCard
-        title='Unset old keys in AppDB'
-        sub='minorPIN, phases, toolOption'
-        icon='key'
-        color='clearBlack'
-        button='Cleanup'
-        action={()=>doCallThing('cleanupAppEntry')}
-      />
-      
-      <DoCard
-        title='fix salesStart date errors'
-        icon='calendar'
-        color='clearBlack'
-        button='FIX'
-        action={()=>doCallThing('fixSalesStartDates')}
-      />
-      
-      <DoCard
         title='Force Randomize Org PIN'
         sub='Runs every day at 12:00am (CST)'
         icon='user-secret'

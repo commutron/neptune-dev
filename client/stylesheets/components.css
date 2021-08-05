@@ -185,6 +185,16 @@ n-timeline-item:last-child n-timeline-marker:after {
 .bigInfoBox {
   position: relative;
   cursor: default;
+  padding: 1rem 0.5rem;
+  border-bottom: 1px solid rgb(100,100,100);
+  width: 100%;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: space-between;
+}
+.bigInfoBox > div:nth-child(2) {
+  padding-left: 16px;
 }
 .bigInfoBox::after {
   content: attr(data-describe);
@@ -210,7 +220,7 @@ n-timeline-item:last-child n-timeline-marker:after {
   }
 }
 .bigInfoBox:hover::after,
-.bigInfoBox:focus-within::after {
+.bigInfoBox:focus::after {
   opacity: 1;
   top: 90%;
 }

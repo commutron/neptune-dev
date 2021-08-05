@@ -114,9 +114,9 @@ const OnTargetTrend = ({ app, isDebug, isNightly })=>{
       <div style={{backgroundColor:'white'}}>
         <VictoryChart
           theme={Theme.NeptuneVictory}
-          padding={{top: 25, right: 25, bottom: 25, left: 30}}
-          domainPadding={{x: 10, y: 40}}
-          height={250}
+          padding={{top: 25, right: 30, bottom: 25, left: 30}}
+          domainPadding={{x: 10, y: 10}}
+          height={200}
           containerComponent={<VictoryZoomContainer
             zoomDimension="x"
             minimumZoom={{x: 1/0.1}}
@@ -125,18 +125,17 @@ const OnTargetTrend = ({ app, isDebug, isNightly })=>{
         
         <VictoryLegend x={0} y={0}
         	title=""
-          labels={{ fontSize: 15 }}
           titleOrientation="left"
           gutter={10}
           symbolSpacer={3}
-          borderPadding={{ top: 4, bottom: 0 }}
+          borderPadding={{ top: 4, bottom: 0, left: 4 }}
           orientation="horizontal"
           style={{ 
-            title: { padding: 2, fontSize: 10 } 
+            labels: { padding: 2, fontSize: 8 }
           }}
           data={[
-          { name: "On Time", symbol: { fill: "rgb(39, 174, 96)" } },
-          { name: "On Quote", symbol: { fill: "rgb(142, 68, 173)" } }
+            { name: "On Time", symbol: { fill: "rgb(39, 174, 96)" } },
+            { name: "On Quote", symbol: { fill: "rgb(142, 68, 173)" } }
           ]}
           
         />
@@ -144,6 +143,10 @@ const OnTargetTrend = ({ app, isDebug, isNightly })=>{
             dependentAxis
             tickValues={[10,20,30,40,50,60,70,80,90,100]}
             tickFormat={(t) => `${t}%`}
+            style={{
+              tickLabels: { 
+                fontSize: '6px' }
+            }}
           />
           <VictoryAxis
             fixLabelOverlap={true}
@@ -151,6 +154,10 @@ const OnTargetTrend = ({ app, isDebug, isNightly })=>{
               tgglSpan == 'month' ?
                 moment(t).format('MMM-YYYY') :
                 moment(t).format('w-YYYY')}
+            style={{
+              tickLabels: { 
+                fontSize: '6px' }
+            }}
           />
           
             <VictoryLine
@@ -166,10 +173,6 @@ const OnTargetTrend = ({ app, isDebug, isNightly })=>{
               data={tgglState ? fillDT : shipDT}
               style={{ data: { fill: "rgb(39, 174, 96)" } }}
               size={2}
-              animate={{
-                duration: 1100,
-                onLoad: { duration: 1100 }
-              }}
             />
             
             <VictoryLine
@@ -185,16 +188,11 @@ const OnTargetTrend = ({ app, isDebug, isNightly })=>{
               data={dataQ}
               style={{ data: { fill: 'rgb(142, 68, 173)' } }}
               size={2}
-              animate={{
-                duration: 1100,
-                onLoad: { duration: 1100 }
-              }}
             />
           </VictoryChart>
           
       </div>
-      <p className='small rightText'>Gaps in the data are intentional. Indicate when no orders were completed</p>
-      <p className='small rightText noPrint'>Data is NOT live. Refreshed once a day</p>
+
     </div>
   );
 };

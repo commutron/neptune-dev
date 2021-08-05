@@ -170,7 +170,6 @@ function slimBlockReturnData(batch, thePeriod, lockout) {
 
 Meteor.methods({
 
-
 //// Tide \\\\\
 
   tideActivityLevel(batchID, serverAccessKey) {
@@ -301,6 +300,41 @@ Meteor.methods({
           dataNum: Number(newavg),
           dataTrend: trend
       }});
+    }
+  },
+  
+  fetchOpenApproxTime() {
+    this.unblock();
+    const accessKey = Meteor.user().orgKey;
+
+    const apxOpenShade = CacheDB.findOne({orgKey: accessKey, dataName: 'apxOpenTime'});
+    const apxtime = apxOpenShade ? apxOpenShade.lastUpdated : null;
+    const stale = !apxtime ? true :
+              moment.duration(moment().diff(moment(apxtime))).as('hours') > 12;
+    if(true) {
+      const traces = TraceDB.find({onFloor: true},{fields:{'quote2tide':1}}).fetch();
+      
+      const q2tArr = Array.from(traces, x => typeof x.quote2tide === 'number' && x.quote2tide );
+      const q2tTotal = q2tArr.reduce( (arr, x)=> !isNaN(x) && x > 0 ? arr + x : arr, 0 );
+      const totalMin = Math.round(q2tTotal);
+      
+      const openHours = round2Decimal( moment.duration(totalMin, "minutes").asHours() );
+
+      const runningapx = apxOpenShade ? apxOpenShade.dataNum : 0;
+      const trend = diffTrend(openHours, runningapx);
+      
+      CacheDB.upsert({dataName: 'apxOpenTime'}, {
+        $set : {
+          orgKey: accessKey,
+          lastUpdated: new Date(),
+          dataName: 'apxOpenTime',
+          dataNum: Number(openHours),
+          dataTrend: trend
+      }});
+      
+      return [ openHours, trend ];
+    }else{
+      return [ apxOpenShade.dataNum, apxOpenShade.dataTrend ];
     }
   },
   

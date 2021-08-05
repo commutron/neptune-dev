@@ -1,7 +1,5 @@
 import React from 'react';
-// import { Accounts } from 'meteor/accounts-base'
 import Pref from '/client/global/pref.js';
-// import { toast } from 'react-toastify';
 
 import UsernameChange from './UsernameChange';
 import PasswordChange from './PasswordChange';
@@ -29,7 +27,7 @@ const UserSettings = ({ app, user, isAdmin, brancheS })=> {
   
   return(
     <div>
-      <span className='noPrint medBig readPs'>
+      <span className='noPrint readPs'>
         <p><b>Username:</b> {user.username}</p>
         <p><b>ID:</b> {Meteor.user()._id}</p>
         <p><b>Organization:</b> <i className='blueT bold'>{Meteor.user().org}</i></p>
@@ -40,7 +38,7 @@ const UserSettings = ({ app, user, isAdmin, brancheS })=> {
         
         <div className='noPrint'>
           <h3><i className='fas fa-sliders-h fa-fw'></i> Interface Preferences</h3>
-          <div className='grid'>
+          <div>
         
             <UserToggleSetting
               userSetting={Meteor.user().miniAction}
@@ -155,12 +153,12 @@ const UserToggleSetting = ({ userSetting, labelText, yesText, noText, callMethod
               <n-fa0><i className='fas fa-check-circle fa-2x'></i></n-fa0> : 
               <n-fa1><i className='far fa-check-circle fa-2x'></i></n-fa1>;
   return(
-    <div className='gridRow bigInfoBox' 
+    <div className='bigInfoBox' 
       data-describe={userSetting ? yesText : noText}>
-      <div className='gridCell line4x'>{labelText}</div>
-      <div className='gridCell'>
+      <div>{labelText}</div>
+      <div>
         <button
-          className={'iconAction ' + color}
+          className={color}
           onClick={()=>handle()}
         >{icon}</button>
       </div>
@@ -177,10 +175,10 @@ export const UserSelectSetting = ({
   }
 
   return(
-    <div className='gridRow bigInfoBox' 
+    <div className='bigInfoBox' 
       data-describe={yesText}>
-      <div className='gridCell line4x'>{labelText}</div>
-      <div className='gridCell'>
+      <div>{labelText}</div>
+      <div>
         <select
           id='speedSetting'
           className='tableAction'

@@ -8,7 +8,6 @@ import MonthlyReport from './MonthlyReport';
 import WeeklyReport from './WeeklyReport';
 import DailyReport from './DailyReport';
 import TrendWrap from './DownTrends/TrendWrap';
-import Outlook from './Outlook';
 
 const DownstreamWrap = ({ 
   view, subLink, 
@@ -18,7 +17,7 @@ const DownstreamWrap = ({
 })=> {
   
   if(view === 'reportweek') {
-    return (
+    return(
       <StreamLayout
         user={user}
         app={app}
@@ -34,7 +33,7 @@ const DownstreamWrap = ({
   }
   
   if(view === 'reportday') {
-    return (
+    return(
       <StreamLayout
         user={user}
         app={app}
@@ -53,7 +52,7 @@ const DownstreamWrap = ({
   }
   
   if(view === 'reportmonths') {
-    return (
+    return(
       <StreamLayout
         user={user}
         app={app}
@@ -72,7 +71,7 @@ const DownstreamWrap = ({
   }
   
   if(view === 'trends') {
-    return (
+    return(
       <StreamLayout
         user={user}
         app={app}
@@ -90,27 +89,7 @@ const DownstreamWrap = ({
     );
   }
   
-  if(isNightly && view === 'outlook') {
-    return (
-      <StreamLayout
-        user={user}
-        app={app}
-        title='Future Outlook'
-        subLink={view}
-        action={false}
-        navBar='down'
-      >
-        <Outlook 
-          traceDT={traceDT}
-          app={app}
-          user={user}
-          isNightly={isNightly}
-        />
-      </StreamLayout>
-    );
-  }
-  
-  return (
+  return(
     <StreamLayout
       user={user}
       app={app}
