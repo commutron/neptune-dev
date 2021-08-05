@@ -221,46 +221,28 @@ Meteor.methods({
     return true;
   },
   
-  checkSalesDates() {
+  fixSalesStartDates() {
     const batches = XBatchDB.find({}).fetch();
     
-    let nosales = [];
-    
-    let ngStart = [];
-    
-    let ngEnd = [];
-    
-    let startAfterCreate = [];
-    
-    let startAfterComplete = [];
-    
     for(let b of batches) {
-      
-      if(!b.salesStart || !b.salesEnd) {
-        nosales.push(b.batch);
-      }
-      
-      if(typeof b.salesStart === 'string') {
-        ngStart.push(b.batch);
-      }
-      
-      if(typeof b.salesEnd === 'string') {
-        ngEnd.push(b.batch);
-      }
-      
-      if(moment(b.salesStart).isAfter(b.createdAt)) {
-        startAfterCreate.push(b.batch);
-      }
-      
-      if(moment(b.salesStart).isAfter(b.completedAt || new Date())) {
-        startAfterComplete.push(b.batch);
+      const sStart = b.salesStart;
+        
+      if(moment(sStart).isAfter(b.createdAt)) {
+        XBatchDB.update({_id: b._id}, {
+          $set : {
+            salesStart: new Date(b.createdAt),
+        }});
+        
+      }else if(typeof sStart === 'string') {
+        XBatchDB.update({_id: b._id}, {
+          $set : {
+            salesStart: new Date(sStart),
+        }});
       }
       
     }
     
-    return {
-      nosales, ngStart, ngEnd, startAfterCreate, startAfterComplete
-    };
+    return true;
   }
   
 });

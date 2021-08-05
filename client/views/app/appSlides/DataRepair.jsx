@@ -73,12 +73,11 @@ const DataRepair = ({ app, users })=> {
       />
       
       <DoCard
-        title='check for date errors'
-        // sub='minorPIN, phases, toolOption'
+        title='fix salesStart date errors'
         icon='calendar'
         color='clearBlack'
-        button='Check'
-        action={()=>doCallThing('checkSalesDates', true)}
+        button='FIX'
+        action={()=>doCallThing('fixSalesStartDates')}
       />
       
       <DoCard

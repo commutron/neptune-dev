@@ -16,7 +16,7 @@ export function plotCreatedOrders(batches) {
       y1: b.quantity,
       x1: b.createdAt,
       y2: trnGap,
-      x2: new Date(b.salesStart),
+      x2: b.salesStart,
       z: `${b.batch} (so.${b.salesOrder}) = `,
       s1: 'plus',
       s2: b.completedAt ? 'diamond' : 'star',
