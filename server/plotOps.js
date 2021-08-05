@@ -9,12 +9,6 @@ import Config from '/server/hardConfig.js';
 export function plotCreatedOrders(batches) {
   let orderset = [];
   for( let b of batches) {
-    
-    b.quantity === undefined && console.log('noQty');
-    b.createdAt === undefined && console.log('noCrt');
-    b.salesStart === undefined && console.log('noSSt');
-    b.completedAt === undefined && console.log('noCAt');
-
     const did = b.completedAt || moment.tz(Config.clientTZ).format();
     const trnGap = round1Decimal( moment(did).workingDiff(b.salesStart, 'days') );
     
@@ -22,7 +16,7 @@ export function plotCreatedOrders(batches) {
       y1: b.quantity,
       x1: b.createdAt,
       y2: trnGap,
-      x2: b.salesStart,
+      x2: new Date(b.salesStart),
       z: `${b.batch} (so.${b.salesOrder}) = `,
       s1: 'plus',
       s2: b.completedAt ? 'diamond' : 'star',
