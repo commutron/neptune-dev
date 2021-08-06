@@ -1,11 +1,11 @@
 import moment from 'moment';
 import 'moment-timezone';
-import 'moment-business-time';
 
 import Config from '/server/hardConfig.js';
 
 import { min2hr, round2Decimal, percentOverUnder, diffTrend } from './calcOps';
 import { noIg } from './utility';
+
 
 export function batchTideTime(batchTide, lockTrunc) {
     
@@ -311,7 +311,7 @@ Meteor.methods({
     const apxtime = apxOpenShade ? apxOpenShade.lastUpdated : null;
     const stale = !apxtime ? true :
               moment.duration(moment().diff(moment(apxtime))).as('hours') > 12;
-    if(true) {
+    if(stale) {
       const traces = TraceDB.find({onFloor: true},{fields:{'quote2tide':1}}).fetch();
       
       const q2tArr = Array.from(traces, x => typeof x.quote2tide === 'number' && x.quote2tide );
@@ -338,17 +338,38 @@ Meteor.methods({
     }
   },
   
+  fetchOverRun(accessKey) {
+    const stillEng = Meteor.users.find({'engaged.task': 'PROX'}).fetch();
+    
+    if(stillEng.length > 0) {
+      const ttle = "Time Overrun";
+      const mssg = "Excessive Time Recorded. Please Correct";
+      
+      for( let u of stillEng ) {
+        const b = XBatchDB.findOne({ 'tide.tKey': u.tKey });
+        if(b) {
+          const t = b.tide.find( x => x.tKey ===  u.tKey );
+          const overDay = ( new Date() - t.startTime ) > 
+                          ( (Config.maxShift / 2) * 60 * 60000 );
+          if(overDay) {
+            Meteor.call('sendUserDM', u._id, ttle, mssg);
+          }
+        }
+      }
+    }
+  },
+  
   fetchErrorTimes(tooVal) {
     try {
       const now = new Date();
       let badDurr = [];
       
       const tooManyMin = tooVal ? Number(tooVal) : 500;
-      const tooManyMs = tooManyMin * 60000;
+      const tooManyMsec = tooManyMin * 60000;
       
       const screenT = (tideArr)=> {
         for( let t of tideArr ) {
-          if( ( ( t.stopTime || now ) - t.startTime ) > tooManyMs ) {
+          if( ( ( t.stopTime || now ) - t.startTime ) > tooManyMsec ) {
             badDurr.push([
               t.startTime, t.who
             ]);

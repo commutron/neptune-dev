@@ -176,8 +176,7 @@ privlegedRoutes.route('/downstream', {
 });
 
 privlegedRoutes.route('/downstream/:view', {
-  name: 'downstream', // optional
-  // do some action for this route
+  name: 'downstream',
   action: function(params) {
     mount(CleanLayout, {
       content: ( <DownstreamData view={params.view} /> )
@@ -195,8 +194,7 @@ privlegedRoutes.route('/upstream', {
 });
 
 privlegedRoutes.route('/upstream/:view', {
-  name: 'upstream', // optional
-  // do some action for this route
+  name: 'upstream',
   action: function(params) {
     mount(CleanLayout, {
       content: ( <UpstreamData view={params.view} /> )
@@ -247,11 +245,8 @@ privlegedRoutes.route('/data', {
 });
 
 privlegedRoutes.route('/data/:view', {
-  name: 'explore', // optional
-  // do some action for this route
+  name: 'explore',
   action: function(params, queryParams) {
-    //console.log("Params:", params);
-    //console.log("Query:", queryParams);
     mount(CleanLayout, {
       content: (<DataData
                   view={params.view}
@@ -353,7 +348,9 @@ Accounts.onLogin( ()=>{
   	const agent = window.navigator.userAgent;
   	const sessionID = Meteor.connection._lastSessionId;
   	Meteor.call('logLogInOut', true, agent, sessionID);
-    alert('Your account is in debug mode. \n Your activity may be monitored and recorded. \n See your Neptune administrator for more information');
+    alert(`Your account is in debug mode.\n
+            Your activity may be monitored and recorded.\n
+            See your Neptune administrator for more information`);
 	}
 });
 

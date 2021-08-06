@@ -81,7 +81,8 @@ Meteor.publish('appData', function(){
       Meteor.users.find({orgKey: orgKey},
         {fields: {
           'username': 1,
-          'org': 1
+          'org': 1,
+          'roles': 1
         }}),
     ];
   }
@@ -354,7 +355,7 @@ Meteor.publish('thinData', function(){
           'completed': 1,
           'completedAt': 1,
         }})
-      ];
+    ];
   }
 });
 

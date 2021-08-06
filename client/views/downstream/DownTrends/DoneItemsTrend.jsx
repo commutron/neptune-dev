@@ -38,7 +38,9 @@ const DoneItemsTrend = ({ app, isDebug, isNightly })=>{
       err && console.log(err);
       if(re) {
         if(thingMounted.current) {
-          isDebug && console.log(re);
+          // isDebug && 
+          console.log(re);
+          
           fillSet(re);
           tgglSpanSet(tspan);
           workingSet(false);

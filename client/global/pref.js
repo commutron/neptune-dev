@@ -10,7 +10,7 @@ class Pref {
     
     this.InitialAppSetup = false;
     
-    this.neptuneVersion = '3.5.3';
+    this.neptuneVersion = '3.5.4';
     this.neptuneIs = 'Neptune Process Tracking';
 
     this.prefName = 'default';
@@ -39,7 +39,7 @@ class Pref {
     // Config
     this.userTimePublic = true;
     this.blurOut = 5; // minutes in background before DDP disconnects
-    this.tooManyMin = 600;
+    this.tooManyMin = 600; // minutes, warning duration
     this.groupMax = 128;
     this.aliasMax = 16;
     this.downDayMax = 24; // max ship days in downstream
