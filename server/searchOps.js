@@ -84,12 +84,26 @@ Meteor.methods({
                         
     const single = itemsSeries.length === 1 || itemsSeries.length === 2;
 
-    const results = [];
+    let results = [];
     for(let iS of itemsSeries) {
-      const describe = whatIsBatchX(iS.batch)[0];//.join(' ');
+      const describe = whatIsBatchX(iS.batch)[0];
       const exact = !single ? false : iS.items.findIndex( x => x.serial === orb ) >= 0;
       results.push([ iS.batch, ...describe, exact ]);
     }
+    return results;
+  },
+  
+  proLookupPartial(orb) {
+    let results = [];
+    
+    XSeriesDB.find({
+      "items.serial": { $regex: new RegExp( orb ) }
+    },{fields:{'batch':1}})
+    .forEach( (srs)=> {
+      const describe = whatIsBatchX(srs.batch)[0];
+      results.push([ srs.batch, describe ]);
+    });
+    
     return results;
   },
   

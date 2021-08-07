@@ -1,6 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
 import moment from 'moment';
-// import 'moment-timezone';
 import { 
   VictoryLine,
   VictoryScatter,
@@ -15,7 +14,7 @@ import { ToggleSwitch } from '/client/components/smallUi/ToolBarTools';
 import { percentOf } from '/client/utility/Convert';
 
 
-const OnTargetTrend = ({ app, isDebug, isNightly })=>{
+const OnTargetTrend = ({ app, isDebug })=>{
 
   const thingMounted = useRef(true);
   const blank =  [ {x:1,y:0} ];
@@ -164,10 +163,6 @@ const OnTargetTrend = ({ app, isDebug, isNightly })=>{
               data={tgglState ? fillDT : shipDT}
               style={{ data: { stroke: 'rgb(46, 204, 113)' } }}
               interpolation="catmullRom"
-              animate={{
-                duration: 800,
-                onLoad: { duration: 800 }
-              }}
             />
             <VictoryScatter 
               data={tgglState ? fillDT : shipDT}
@@ -179,10 +174,6 @@ const OnTargetTrend = ({ app, isDebug, isNightly })=>{
               data={dataQ}
               style={{ data: { stroke: 'rgb(155, 89, 182)' } }}
               interpolation="monotoneX"
-              animate={{
-                duration: 800,
-                onLoad: { duration: 800 }
-              }}
             />
             <VictoryScatter 
               data={dataQ}

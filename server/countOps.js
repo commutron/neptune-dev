@@ -78,7 +78,7 @@ Meteor.methods({
     const quoteStats = widget.quoteStats || null;
     const statime = quoteStats ? quoteStats.updatedAt : null;
     const stale = !statime ? true :
-            moment.duration(moment().diff(moment(statime))).as('hours') > 12;
+            moment.duration(moment().diff(moment(statime))).as('hours') > Config.freche;
     if(stale) {
       
       let tidePerItem = [];
@@ -258,7 +258,7 @@ Meteor.methods({
     const ncRate = widget.ncRate || null;
     const statime = ncRate ? ncRate.updatedAt : null;
     const stale = !statime ? true :
-              moment.duration(moment().diff(moment(statime))).as('hours') > 12;
+              moment.duration(moment().diff(moment(statime))).as('hours') > Config.freche;
     if(stale) {
       const series = XSeriesDB.find(
         { widgetId: wID },

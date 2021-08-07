@@ -318,7 +318,7 @@
   grid-area: downWeek;
   writing-mode: tb-rl;
   transform: rotate(-180deg);
-  font-size: 3vmin;
+  font-size: 2.75vmin;
   text-align: center;
   text-transform: capitalize;
   padding-bottom: calc(3 * var(--vh));

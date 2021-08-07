@@ -268,7 +268,15 @@ Meteor.publish('traceDataOpen', function(){
           'overQuote': 1,
           'performTgt': 1
         }
-      })
+      }),
+      CacheDB.find({orgKey: orgKey,
+        $or: [ { dataName: 'avgDayTime' },
+               { dataName: 'avgDayItemFin' } ]
+      },{
+        fields: {
+          'orgKey': 0,
+          'lastUpdated': 0
+        }})
     ];
   }
 });

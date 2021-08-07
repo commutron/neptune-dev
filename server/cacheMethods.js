@@ -1,6 +1,7 @@
 import moment from 'moment';
 import 'moment-timezone';
 import 'moment-business-time';
+import Config from '/server/hardConfig.js';
 import { noIg } from './utility';
 import { 
   plotPerform,
@@ -82,7 +83,7 @@ Meteor.methods({
     const perfShade = CacheDB.findOne({orgKey: accessKey, dataName: 'performShadow'});
     const preftime = perfShade ? perfShade.lastUpdated : null;
     const stale = !preftime ? true :
-              moment.duration(moment().diff(moment(preftime))).as('hours') > 12;
+              moment.duration(moment().diff(moment(preftime))).as('hours') > Config.freche;
     if(stale) {
       const app = AppDB.findOne({ orgKey: accessKey });
       const tideWall = app && app.tideWall;
@@ -121,7 +122,7 @@ Meteor.methods({
     const onShade = CacheDB.findOne({orgKey: accessKey, dataName: 'ontimeShadow'});
     const ontime = onShade ? onShade.lastUpdated : null;
     const stale = !ontime ? true :
-              moment.duration(moment().diff(moment(ontime))).as('hours') > 12;
+              moment.duration(moment().diff(moment(ontime))).as('hours') > Config.freche;
     if(stale) {
       const batches = XBatchDB.find({
         orgKey: accessKey,
@@ -154,7 +155,7 @@ Meteor.methods({
     const ncShade = CacheDB.findOne({orgKey: accessKey, dataName: 'nccountShadow'});
     const nctime = ncShade ? ncShade.lastUpdated : null;
     const stale = !nctime ? true :
-              moment.duration(moment().diff(moment(nctime))).as('hours') > 12;
+              moment.duration(moment().diff(moment(nctime))).as('hours') > Config.freche;
     if(stale) {
       const batches = XBatchDB.find({
         orgKey: accessKey,
@@ -187,7 +188,7 @@ Meteor.methods({
     const shShade = CacheDB.findOne({orgKey: accessKey, dataName: 'shcountShadow'});
     const shtime = shShade ? shShade.lastUpdated : null;
     const stale = !shtime ? true :
-              moment.duration(moment().diff(moment(shtime))).as('hours') > 12;
+              moment.duration(moment().diff(moment(shtime))).as('hours') > Config.freche;
     if(stale) {
       const batches = XBatchDB.find({
         orgKey: accessKey,
@@ -220,7 +221,7 @@ Meteor.methods({
     const failShade = CacheDB.findOne({orgKey: accessKey, dataName: 'failShadow'});
     const tftime = failShade ? failShade.lastUpdated : null;
     const stale = !tftime ? true :
-              moment.duration(moment().diff(moment(tftime))).as('hours') > 12;
+              moment.duration(moment().diff(moment(tftime))).as('hours') > Config.freche;
     if(stale) {
       const batches = XBatchDB.find({
         orgKey: accessKey,
@@ -253,7 +254,7 @@ Meteor.methods({
     const bchShade = CacheDB.findOne({orgKey: accessKey, dataName: 'bchShadow'});
     const bchtime = bchShade ? bchShade.lastUpdated : null;
     const stale = !bchtime ? true :
-              moment.duration(moment().diff(moment(bchtime))).as('hours') > 12;
+              moment.duration(moment().diff(moment(bchtime))).as('hours') > Config.freche;
     if(stale) {
       const batches = XBatchDB.find({
         orgKey: accessKey,
@@ -279,6 +280,26 @@ Meteor.methods({
     }else{
       return bchShade.dataArray;
     }
+  },
+  
+  fetchWeekAvg(accessKey) {
+    const privateKey = accessKey || Meteor.user().orgKey;
+
+    Meteor.call('fetchWeekAvgTime', privateKey);
+    Meteor.call('fetchWeekAvgSerial', privateKey);
+    return true;
+  },
+  
+  updateAllWidgetAvg(accessKey) {
+
+    const widgets = WidgetDB.find({},{fields:{'_id':1}}).fetch();
+
+    for(let w of widgets) {
+      Meteor.call('nonConBatchTrend', w._id);
+      Meteor.call('countMultiBatchTideToQuote', w._id);
+      Meteor.call('oneWidgetTurnAround', w._id, accessKey);
+    }
+    return true;
   }
   
 });

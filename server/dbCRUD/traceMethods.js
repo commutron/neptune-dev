@@ -234,7 +234,7 @@ Meteor.methods({
         const ystrday = ( d => new Date(d.setDate(d.getDate()-1)) )(new Date);
         const lstweek = ( d => new Date(d.setDate(d.getDate()-7)) )(new Date);
         
-        const fresh = moment().subtract(12, 'hours').toISOString();
+        const fresh = moment().subtract(Config.freche, 'hours').toISOString();
       
         const fetchX = XBatchDB.find({orgKey: accessKey, lock: {$ne: true},
                         $or: [ { live: true }, 

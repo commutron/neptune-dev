@@ -5,11 +5,9 @@ import Pref from '/client/global/pref.js';
 const TideLock = ({ currentLive, classSty, children, message, caution })=> {
   useEffect(() => {
     if(!currentLive && message) {
-      toast(`Click 'START' to unlock. \n
-             Click 'SWITCH' to stop your current ${Pref.xBatch}
-             and start this ${Pref.xBatch}. \n
-             (Only one ${Pref.xBatch} can be 
-             ${Pref.engaged} at a time).`, 
+      toast(`Click 'START' to unlock.
+      Click 'SWITCH' to stop your current ${Pref.xBatch} and start this ${Pref.xBatch}.
+      (Only one ${Pref.xBatch} can be ${Pref.engaged} at a time).`, 
         {
           autoClose: false,
           position: toast.POSITION.BOTTOM_CENTER

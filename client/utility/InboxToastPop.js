@@ -15,6 +15,7 @@ export default function InboxToastPop(currUser) {
               <hr />
               <p>{inbox.detail}</p>
             </div>, {
+            toastId: nKey+uID,
             autoClose: false,
             onClose: ()=>{ Meteor.call('setReadToast', uID, nKey) },
           } );

@@ -5,7 +5,7 @@ import OnTargetTrend from './OnTargetTrend';
 import DoneItemsTrend from './DoneItemsTrend';
 import AvgStat from '/client/components/tinyUi/AvgStat';
 
-const TrendWrap = ({ app, isDebug, isNightly })=> {
+const TrendWrap = ({ app, isDebug })=> {
   
   const [ rate, rateSet ] = useState([0,'flat']);
   
@@ -39,12 +39,12 @@ const TrendWrap = ({ app, isDebug, isNightly })=> {
         <OnTargetTrend
           app={app}
           isDebug={isDebug}
-          isNightly={isNightly} />
+        />
           
         <DoneItemsTrend
           app={app}
           isDebug={isDebug}
-          isNightly={isNightly} />
+        />
           
       </Tabs> 
 

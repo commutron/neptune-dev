@@ -45,6 +45,7 @@ class Pref {
     this.downDayMax = 24; // max ship days in downstream
     this.pagingSize = 25;
     this.idleMinutes = 0; // minus idle time from timeInDay calculation
+    this.breakMin = 15; // fixed break minutes
     this.statisticalStartHour = 6; // 6am
     this.statisticalEndHour = 20; // 8pm
     this.stepUndoWindow = 1000*30; // remember to match ".spinRe"

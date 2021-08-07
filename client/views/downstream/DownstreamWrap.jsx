@@ -11,9 +11,8 @@ import TrendWrap from './DownTrends/TrendWrap';
 
 const DownstreamWrap = ({ 
   view, subLink, 
-  traceDT,
-  user, app,
-  isDebug, isNightly
+  traceDT, dayTime, dayIFin,
+  user, app, isDebug
 })=> {
   
   if(view === 'reportweek') {
@@ -43,6 +42,7 @@ const DownstreamWrap = ({
         navBar='down'
       >
         <DailyReport 
+          dayIFin={dayIFin}
           app={app}
           user={user}
           isDebug={isDebug}
@@ -83,7 +83,6 @@ const DownstreamWrap = ({
         <TrendWrap 
           app={app}
           isDebug={isDebug}
-          isNightly={isNightly}
         />
       </StreamLayout>
     );
@@ -100,10 +99,10 @@ const DownstreamWrap = ({
     >
       <DownstreamView
         traceDT={traceDT}
+        dayTime={dayTime}
         user={user}
         app={app}
         isDebug={isDebug}
-        isNightly={isNightly}
       />
     </StreamLayout>
   );

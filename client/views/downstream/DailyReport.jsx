@@ -12,9 +12,7 @@ import AvgStat from '/client/components/tinyUi/AvgStat';
 
 import ReportBasicTable from '/client/components/tables/ReportBasicTable.jsx'; 
 
-const DailyReport = ({ app, user, isDebug })=> {
-  
-  const [ rate, rateSet ] = useState([0,'flat']);
+const DailyReport = ({ dayIFin, app, user, isDebug })=> {
   
   const [ dateString, setDateString ] = useState(moment().format('YYYY-MM-DD'));
   const [ dayData, setDayData ] = useState(false);
@@ -31,13 +29,6 @@ const DailyReport = ({ app, user, isDebug })=> {
       setDayData(cronoTimes);
 	  });
   }
-  
-  useEffect(() => {
-    Meteor.call('getAvgDayFin', (err, rtn)=>{
-	    err && console.log(err);
-      rateSet(rtn);
-	  });
-  }, []);
   
   useEffect(() => {
     getData();
@@ -85,7 +76,10 @@ const DailyReport = ({ app, user, isDebug })=> {
           color='purpleT'
           size='bigger' />
         
-        <AvgStat num={rate[0]} trend={rate[1]} type={'avg ' + Pref.items} />
+        <AvgStat 
+          num={dayIFin && dayIFin.dataNum} 
+          trend={dayIFin && dayIFin.dataTrend}
+          type={'avg ' + Pref.items} />
         
         <PrintThis />
       </div>

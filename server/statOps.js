@@ -94,7 +94,7 @@ Meteor.methods({
     const topStats = group.topStats || null;
     const statime = topStats ? topStats.updatedAt : null;
     const stale = !statime ? true :
-            moment.duration(moment().diff(moment(statime))).as('hours') > 24;
+            moment.duration(moment().diff(moment(statime))).as('hours') > Config.freche;
     if(stale) {
       const batches = XBatchDB.find({
         orgKey: Meteor.user().orgKey,

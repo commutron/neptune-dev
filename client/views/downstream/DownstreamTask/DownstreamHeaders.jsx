@@ -8,7 +8,7 @@ import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock.jsx';
 const DownstreamHeaders = ({
   indexKey, oB, traceDT,
   user, app,
-  isDebug, isNightly,
+  isDebug,
   focusBy, dense
 })=> (
   <Fragment>

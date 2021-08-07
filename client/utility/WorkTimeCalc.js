@@ -16,20 +16,27 @@ export function HolidayCheck( nonWorkDays, dateTime ) {
   return isit;
 }
 
-export function listShipDays( nonWorkDays, arrLength, withLast ) {
+export function listShipDays( nonWorkDays, qty, withLast ) {
   if( Array.isArray(nonWorkDays) ) {  
     moment.updateLocale('en', {
       holidays: nonWorkDays
     });
   }
-  const now = moment().lastShipDay();
+  const loops = withLast ? qty + 1 : qty;
+  const last = moment().lastShipDay().startOf('day').nextShippingTime();
 
   let sArr = [];
-  for(let s = 0; sArr.length < arrLength; s++) {
-    const newDay = sArr.length === 0 ?
-                    withLast ? now : now.nextShipDay() :
-                    sArr[sArr.length - 1].nextShipDay();
-    sArr.push(newDay);
+  for(let s = 0; s < loops; s++) {
+    const newDay = s === 0 ? 
+                    withLast ? last : last.nextShipDay().startOf('day').nextShippingTime() :
+                    sArr[s - 1][0].nextShipDay().startOf('day').nextShippingTime();
+    
+    const gap = s === 0 && withLast ? 0 : 
+                (s === 0 && !withLast) || (s === 1 && withLast) ? 
+                  newDay.workingDiff(moment(), 'days', true) :
+                  newDay.workingDiff(sArr[s - 1][0], 'days', true);
+                  
+    sArr.push([newDay, gap]);
   }
   return sArr;
 }
@@ -51,7 +58,7 @@ export function TimeInWeek( nonWorkDays, weekStart ) {
       const dayEnd = moment(begin).add(n, 'd').endOf('day');
       const dayTotal = dayEnd.workingDiff(dayStart, 'hours', true);
       
-      const breakTime = dayTotal <= 5 ? 15 : 30; // << hard coded 15min breaks
+      const breakTime = dayTotal <= 5 ? Pref.breakMin : Pref.breakMin * 2;
       const idleTime = breakTime + Pref.idleMinutes;
       const minusTime = ( dayTotal * 60 ) < breakTime ? 0 :
                         ( dayTotal * 60 ) < idleTime ? breakTime : idleTime;
@@ -81,7 +88,7 @@ export function TimeInDay( nonWorkDays, dayStart ) {
     const end = moment(dayStart).endOf('day').format();
     const dayTotal = moment(end).workingDiff(begin, 'hours', true);
 
-    const breakTime = dayTotal <= 5 ? 15 : 30; //<< hard coded 15min breaks
+    const breakTime = dayTotal <= 5 ? Pref.breakMin : Pref.breakMin * 2;
     const idleTime = breakTime + Pref.idleMinutes;
     const minusTime = ( dayTotal * 60 ) < breakTime ? 0 :
                       ( dayTotal * 60 ) < idleTime ? breakTime : idleTime;

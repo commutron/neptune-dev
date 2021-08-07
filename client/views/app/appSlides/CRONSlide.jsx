@@ -59,25 +59,13 @@ const CRONSlide = ()=> {
             <td>Weekdays</td>
             <td>6:05</td>
             <td>{isLocal('6:05')}</td>
-            <td>Done Target By Month</td>
+            <td>Time Overrun Check</td>
           </tr>
           <tr>
             <td>Weekdays</td>
             <td>6:06</td>
             <td>{isLocal('6:06')}</td>
-            <td>Done Target By Week</td>
-          </tr>
-          <tr>
-            <td>Weekdays</td>
-            <td>6:07</td>
-            <td>{isLocal('6:07')}</td>
-            <td>Done Units By Month</td>
-          </tr>
-          <tr>
-            <td>Weekdays</td>
-            <td>6:08</td>
-            <td>{isLocal('6:08')}</td>
-            <td>Done Units By Week</td>
+            <td>Done Target By Month, Done Target By Week, Done Units By Month, Done Units By Week</td>
           </tr>
         </tbody>
       </table>

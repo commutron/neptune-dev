@@ -1,16 +1,17 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
 
-import { ProWrap, ProWindow } from '/client/layouts/ProLayout.jsx';
+import { ProWrap, ProWindow } from '/client/layouts/ProLayout';
 
-import WikiOps from '../wiki/WikiOps.jsx';
-import SearchHelp from './SearchHelp.jsx';
+import WikiOps from '../wiki/WikiOps';
+import SearchHelp from './SearchHelp';
 
 import XDoProCard from './cards/XDoProCard';
+import PartialCard from './cards/PartialCard';
 
-import BatchesList from './lists/BatchesList.jsx';
-import GroupsList from './lists/GroupsList.jsx';
-import WidgetsList from './lists/WidgetsList.jsx';
+import BatchesList from './lists/BatchesList';
+import GroupsList from './lists/GroupsList';
+import WidgetsList from './lists/WidgetsList';
 
 const ProductionFindOps = ({ 
   hotxBatch, hotxSeries, hotxRapids,
@@ -206,14 +207,12 @@ const ProductionFindOps = ({
     }
   }
   
-  // number that looks like a barcode but such a barcode does not exist
-  if(!isNaN(orb) && orb.length > 5 && orb.length <= 14) {
+  if(!isNaN(orb) && orb.length >= 5) {
     Session.set('nowBatch', orb);
     return(
       <ProWindow app={app}>
         <div className='centre wide space'>
-          <p className='big centerText'>{orb} is not a registered serial number</p>
-          <hr />
+          <PartialCard orb={orb} />
           <SearchHelp />
         </div>
       </ProWindow>

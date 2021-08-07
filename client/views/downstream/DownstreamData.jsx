@@ -10,7 +10,7 @@ import DownstreamWrap from './DownstreamWrap.jsx';
 const View = ({
   login, readyT, view,
   user, app, isDebug,
-  traceDT,
+  traceDT, dayTime, dayIFin
 })=> {
   
   useLayoutEffect( ()=>{
@@ -20,18 +20,18 @@ const View = ({
   if( !readyT || !app ) {
     return( <SpinWrap /> );
   }
-  
-  const isNightly = Roles.userIsInRole(Meteor.userId(), 'nightly');
 
   return(
     <ErrorCatch>
       <DownstreamWrap 
         view={view}
         traceDT={traceDT}
+        dayTime={dayTime}
+        dayIFin={dayIFin}
         user={user}
         app={app}
         isDebug={isDebug}
-        isNightly={isNightly} />
+      />
     </ErrorCatch>
   );
 };
@@ -58,6 +58,8 @@ export default withTracker( ({ view } ) => {
       isDebug: isDebug,
       app: AppDB.findOne({org: org}),
       traceDT: TraceDB.find({}).fetch(),
+      dayTime: CacheDB.findOne({ dataName: 'avgDayTime' }),
+      dayIFin: CacheDB.findOne({ dataName: 'avgDayItemFin' })
     };
   }
 })(View);

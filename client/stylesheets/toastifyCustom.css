@@ -5,19 +5,19 @@
   width: 25vw;
   color: #fff; }
   .Toastify__toast-container--top-center {
-    width: 30vw;
+    width: 40vmax;
     top: 1vh;
     left: 50%;
-    margin-left: -15vw;
+    margin-left: -20vmax;
     text-align: center; }
   .Toastify__toast-container--top-right {
     top: 1vh;
     right: 1em; }
   .Toastify__toast-container--bottom-center {
-    width: 50vw;
+    width: 50vmax;
     bottom: 0;
     left: 50%;
-    margin-left: -25vw;
+    margin-left: -25vmax;
     text-align: center; }
   
 @media only screen and (max-width: 480px) {
@@ -63,7 +63,10 @@
   .Toastify__toast-body {
     margin: auto 1vw;
     -ms-flex: 1;
-        flex: 1; }
+        flex: 1;
+    line-height: 1.5;
+    white-space: pre-line;
+  }
 
 @media only screen and (max-width: 480px) {
   .Toastify__toast {

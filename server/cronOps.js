@@ -53,13 +53,13 @@ SyncedCron.add({
 
 SyncedCron.add({
   name: 'Daily Tide Overrun',
-  schedule: (parser)=> parser.text('at 7:15 am every weekday'),
+  schedule: (parser)=> parser.text('at 6:05 am every weekday'),
   job: ()=> goDo('fetchOverRun')
 });
 
 SyncedCron.add({
   name: 'Daily Trend Loops',
-  schedule: (parser)=> parser.text('at 7:16 am every weekday'),
+  schedule: (parser)=> parser.text('at 6:06 am every weekday'),
   job: ()=> runRanges()
 });
 
@@ -223,11 +223,7 @@ async function runRanges() {
       
       await countDoneBatchTarget(app.orgKey, app.createdAt, 'doneBatchLiteMonths', 'month');
       await countDoneBatchTarget(app.orgKey, app.createdAt, 'doneBatchLiteWeeks', 'week');
-      
-      
-      console.log("Trend Range Update");
     }
-    
     return true;
   }catch (error) {
     throw new Meteor.Error(error);

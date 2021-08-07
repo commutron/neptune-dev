@@ -279,7 +279,7 @@ Meteor.methods({
                           yearNum, weekNum, true, false, accessKey, true);
       
       const durrs = Array.from(weekTides, x => x.durrAsMin);
-      const total = durrs.length > 0 ? durrs.reduce((x,y)=> x + y) : 0;
+      const total = durrs.reduce((x,y)=> x + y, 0);
       const days = [...new Set(Array.from(weekTides, x => moment(x.startTime).day())) ].length;
       
       const avgperday = total > 0 ? total / days : 0;
@@ -310,7 +310,7 @@ Meteor.methods({
     const apxOpenShade = CacheDB.findOne({orgKey: accessKey, dataName: 'apxOpenTime'});
     const apxtime = apxOpenShade ? apxOpenShade.lastUpdated : null;
     const stale = !apxtime ? true :
-              moment.duration(moment().diff(moment(apxtime))).as('hours') > 12;
+              moment.duration(moment().diff(moment(apxtime))).as('hours') > Config.freche * 2;
     if(stale) {
       const traces = TraceDB.find({onFloor: true},{fields:{'quote2tide':1}}).fetch();
       
@@ -338,24 +338,30 @@ Meteor.methods({
     }
   },
   
-  fetchOverRun(accessKey) {
-    const stillEng = Meteor.users.find({'engaged.task': 'PROX'}).fetch();
-    
-    if(stillEng.length > 0) {
-      const ttle = "Time Overrun";
-      const mssg = "Excessive Time Recorded. Please Correct";
+  fetchOverRun() {
+    try {
+      const stillEng = Meteor.users.find({'engaged.task': 'PROX'},
+                                         { fields:{'engaged':1} }).fetch();
       
-      for( let u of stillEng ) {
-        const b = XBatchDB.findOne({ 'tide.tKey': u.tKey });
-        if(b) {
-          const t = b.tide.find( x => x.tKey ===  u.tKey );
-          const overDay = ( new Date() - t.startTime ) > 
-                          ( (Config.maxShift / 2) * 60 * 60000 );
-          if(overDay) {
-            Meteor.call('sendUserDM', u._id, ttle, mssg);
+      if(stillEng.length > 0) {
+        const mssg = `You did not stop your time tracker from the previous workday.\nPlease correct your Production Activity record.`;
+        
+        for( let u of stillEng ) {
+          const ttle = `${u.engaged.tName} Production Time Overrun`;
+        
+          const b = XBatchDB.findOne({ 'tide.tKey': u.engaged.tKey },{fields:{'tide':1}});
+          if(b) {
+            const t = b.tide.find( x => x.tKey === u.engaged.tKey );
+            const overDay = ( new Date() - t.startTime ) > 
+                            ( (Config.maxShift / 2) * 60 * 60000 );
+            if(overDay) {
+              Meteor.call('sendUserDM', u._id, ttle, mssg);
+            }
           }
         }
       }
+    }catch (error) {
+      throw new Meteor.Error(error);
     }
   },
   

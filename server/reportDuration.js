@@ -55,7 +55,7 @@ function getWidgetDur(widget, accessKey) {
   const turnStats = widget.turnStats || null;
   const statime = turnStats ? turnStats.updatedAt : null;
   const stale = !statime ? true :
-            moment.duration(moment().diff(moment(statime))).as('hours') > 12;
+            moment.duration(moment().diff(moment(statime))).as('hours') > Config.freche;
   if(stale) {
     syncHoliday(accessKey);
    

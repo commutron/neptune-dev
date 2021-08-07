@@ -1,7 +1,5 @@
-import React, { useRef, useState, useEffect, Fragment } from 'react';
-// import Pref from '/client/global/pref.js';
+import React, { useRef, useState, useEffect } from 'react';
 import moment from 'moment';
-// import 'moment-timezone';
 import { 
   VictoryLine,
   VictoryScatter,
@@ -10,10 +8,9 @@ import {
   VictoryLegend,
   VictoryZoomContainer
 } from 'victory';
-//import Pref from '/client/global/pref.js';
 import Theme from '/client/global/themeV.js';
 
-const DoneItemsTrend = ({ app, isDebug, isNightly })=>{
+const DoneItemsTrend = ({ app, isDebug })=>{
 
   const thingMounted = useRef(true);
   const blank =  [ {x:1,y:0} ];
@@ -38,9 +35,7 @@ const DoneItemsTrend = ({ app, isDebug, isNightly })=>{
       err && console.log(err);
       if(re) {
         if(thingMounted.current) {
-          // isDebug && 
-          console.log(re);
-          
+          isDebug && console.log(re);
           fillSet(re);
           tgglSpanSet(tspan);
           workingSet(false);
@@ -124,17 +119,11 @@ const DoneItemsTrend = ({ app, isDebug, isNightly })=>{
             <VictoryLine
               data={fillDT}
               style={{ data: { stroke: 'rgb(46, 204, 113)' } }}
-              animate={{
-                onLoad: { duration: 800 }
-              }}
             />
             <VictoryScatter 
               data={fillDT}
               style={{ data: { fill: 'rgb(39, 174, 96)' } }}
               size={2}
-              animate={{
-                onLoad: { duration: 1000 }
-              }}
             />
            
           </VictoryChart>

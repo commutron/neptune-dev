@@ -7,10 +7,7 @@ import DownstreamTools from './DownstreamTools';
 import ShipWindows from './ShipWindows';
 
 
-const DownstreamView = ({ 
-  traceDT,
-  user, app, isDebug, isNightly
-})=> {
+const DownstreamView = ({ traceDT, dayTime, user, app, isDebug })=> {
   
   const sessionSticky = 'overviewDownstream';
   
@@ -48,12 +45,6 @@ const DownstreamView = ({
             Number(e) > Pref.downDayMax ? Pref.downDayMax : Number(e);
     calcForSet( cleanVal );
   }
-  
-  // function changeSort(e) {
-  //   const sort = e.target.value;
-  //   sortBySet( sort );
-  //   Session.set(sessionSticky+'sort', sort);
-  // }
   
   function changeFocus(e) {
     const value = e.target.value;
@@ -115,6 +106,7 @@ const DownstreamView = ({
       <ShipWindows
         calcFor={calcFor}
         traceDT={traceDT}
+        dayTime={dayTime ? dayTime.dataNum : 0}
         brancheS={brancheS}
         app={app}
         user={user}
