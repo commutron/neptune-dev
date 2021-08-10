@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
 
-import Spin from '/client/components/tinyUi/Spin.jsx';
+import Spin from '/client/components/tinyUi/Spin';
 
 import { FocusSelect, FilterSelect } from '/client/components/smallUi/ToolBarTools';
-import NumBox from '/client/components/tinyUi/NumBox.jsx';
-import PagingSelect from '/client/components/tinyUi/PagingSelect.jsx';
+import NumBox from '/client/components/tinyUi/NumBox';
+import PagingSelect from '/client/components/tinyUi/PagingSelect';
 import RapidExTable from '/client/components/tables/RapidExTable';
 
 import { chunkArray } from '/client/utility/Convert';
@@ -123,4 +123,3 @@ const RextendPanel = ({ batchData, app })=> {
 };
 
 export default RextendPanel;
-

@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import 'moment-timezone';
-//import Pref from '/client/global/pref.js';
-import { CalcSpin } from '/client/components/tinyUi/Spin.jsx';
-import WeekBrowse from '/client/components/bigUi/WeekBrowse/WeekBrowse.jsx';
-import TideWeekMini from '/client/components/charts/Tides/TideWeekMini.jsx';
-import TideEditWrap from '/client/components/tide/TideEditWrap.jsx';
+import { CalcSpin } from '/client/components/tinyUi/Spin';
+import WeekBrowse from '/client/components/bigUi/WeekBrowse/WeekBrowse';
+import TideWeekMini from '/client/components/charts/Tides/TideWeekMini';
+import TideEditWrap from '/client/components/tide/TideEditWrap';
 
 const ActivityPanel = ({ app, brancheS, user, isDebug, users, traceDT })=> {
   
@@ -65,16 +64,6 @@ const ActivityPanel = ({ app, brancheS, user, isDebug, users, traceDT })=> {
         </div>
       :
       <table className='wide cap space'>
-        {/*<tbody key={00}>
-          <tr className='leftText line2x'>
-            <th colSpan='3'></th>
-            <th className='centreText'><i className="fas fa-play fa-fw fa-xs blackT"></i> Start<sup>i</sup></th>
-            <th className='centreText'></th>
-            <th className='centreText'><i className="fas fa-stop fa-fw fa-xs blackT"></i> Stop<sup>i</sup></th>
-            <th className='rightText'>Duration<sup>ii</sup></th>
-            <th></th>
-          </tr>
-        </tbody>*/}
         <TideEditWrap 
           weekData={weekData} 
           traceDT={traceDT} 

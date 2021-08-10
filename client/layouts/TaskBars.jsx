@@ -2,7 +2,6 @@ import { Meteor } from 'meteor/meteor';
 import React from 'react';
 import Pref from '/client/global/pref.js';
 
-
 const TaskElement = ({ title, subON, goLink, icon, iconAdj  }) => (
   <button
     aria-label={title}
@@ -78,7 +77,6 @@ export const ExTaskBar = ({ subLink }) => (
     
   </div>
 );
-
 
 export const UpTaskBar = ({ subLink }) => (
   <div className='taskColumn'>
@@ -157,8 +155,5 @@ export const DownTaskBar = ({ subLink }) => (
       iconAdj='down-1'
     />
     
-    
   </div>
 );
-
-

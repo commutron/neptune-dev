@@ -1,8 +1,8 @@
 import React from 'react';
 
-import NumStatRing from '/client/components/charts/Dash/NumStatRing.jsx';
-import NumLine from '/client/components/tinyUi/NumLine.jsx';
-import TrendLine from '/client/components/charts/Trends/TrendLine.jsx';
+import NumStatRing from '/client/components/charts/Dash/NumStatRing';
+import NumLine from '/client/components/tinyUi/NumLine';
+import TrendLine from '/client/components/charts/Trends/TrendLine';
 
 
 const AccountsTop = ({ users })=> {

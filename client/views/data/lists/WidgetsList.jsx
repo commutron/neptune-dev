@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 
-import LeapButton from '/client/components/tinyUi/LeapButton.jsx';
-import FilterActive from '/client/components/bigUi/FilterActive.jsx';
+import LeapButton from '/client/components/tinyUi/LeapButton';
+import FilterActive from '/client/components/bigUi/FilterActive';
 
 
 const WidgetsList = ({ active, widgetData, groupAlias })=> {

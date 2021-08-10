@@ -1,7 +1,8 @@
 import moment from 'moment';
 import 'moment-timezone';
 import 'moment-business-time';
-import { countMulti, countMultiRefs } from './utility';
+
+import { syncLocale, countMulti, countMultiRefs } from './utility';
 import { asRate, round1Decimal } from './calcOps';
 import { getEndWork } from '/server/shipOps';
 import Config from '/server/hardConfig.js';
@@ -147,6 +148,8 @@ export function plotTest(batches) {
 Meteor.methods({
   
   getBatchOnTime(idLimiter) {
+    syncLocale(Meteor.user().orgKey);
+    
     const batches = XBatchDB.find({
       orgKey: Meteor.user().orgKey,
       widgetId: idLimiter

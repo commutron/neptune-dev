@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
-// import moment from 'moment';
 import Pref from '/client/global/pref.js';
+
 import TrinaryStat from '/client/components/tinyUi/TrinaryStat';
 import { ReleaseWrapper } from '/client/components/bigUi/ReleasesModule';
 
@@ -65,7 +65,6 @@ const KittingChecks = ({
             );
           }
         })}
-        
         
         {!tBatch.serialize ?
           <div title='N/A'>

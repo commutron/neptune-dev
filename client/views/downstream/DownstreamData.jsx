@@ -1,11 +1,12 @@
 import React, { useLayoutEffect } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
-import ErrorCatch from '/client/layouts/ErrorCatch.jsx';
+import ErrorCatch from '/client/layouts/ErrorCatch';
 import InboxToastPop from '/client/utility/InboxToastPop.js';
+import { localeUpdate } from '/client/utility/WorkTimeCalc';
 
-import { SpinWrap } from '/client/components/tinyUi/Spin.jsx';
-import DownstreamWrap from './DownstreamWrap.jsx';
+import { SpinWrap } from '/client/components/tinyUi/Spin';
+import DownstreamWrap from './DownstreamWrap';
 
 const View = ({
   login, readyT, view,
@@ -20,6 +21,8 @@ const View = ({
   if( !readyT || !app ) {
     return( <SpinWrap /> );
   }
+  
+  localeUpdate(app);
 
   return(
     <ErrorCatch>

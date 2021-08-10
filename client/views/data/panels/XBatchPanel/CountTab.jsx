@@ -1,8 +1,7 @@
 import React from 'react';
 import moment from 'moment';
-// import Pref from '/client/global/pref.js';
-import UserNice from '/client/components/smallUi/UserNice.jsx';
-import MiniBar from '/client/components/charts/MiniScales/MiniBar.jsx';
+import UserNice from '/client/components/smallUi/UserNice';
+import MiniBar from '/client/components/charts/MiniScales/MiniBar';
 import TickScatter from '/client/components/charts/TickScatter';
 import { countWaterfall } from '/client/utility/Arrays';
 

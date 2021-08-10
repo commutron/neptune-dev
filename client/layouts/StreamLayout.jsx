@@ -1,15 +1,12 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { ToastContainer } from 'react-toastify';
-//import Pref from '/client/global/pref.js';
 
-import HomeIcon from '/client/layouts/HomeIcon.jsx';
-import TideFollow from '/client/components/tide/TideFollow.jsx';
-import { UpTaskBar, DownTaskBar } from './TaskBars.jsx';
+import HomeIcon from '/client/layouts/HomeIcon';
+import TideFollow from '/client/components/tide/TideFollow';
+import { UpTaskBar, DownTaskBar } from './TaskBars';
 
 const StreamLayout = ({
-  // batchData,
-  // bCache, pCache, acCache, brCache,
   user,
   app,
   flowData,

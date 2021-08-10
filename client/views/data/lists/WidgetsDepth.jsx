@@ -1,8 +1,8 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import Pref from '/client/global/pref.js';
-import DumbFilter from '/client/components/tinyUi/DumbFilter.jsx';
+import DumbFilter from '/client/components/tinyUi/DumbFilter';
 import LeapLine from '/client/components/tinyUi/LeapLine';
-import NumStat from '/client/components/tinyUi/NumStat.jsx';
+import NumStat from '/client/components/tinyUi/NumStat';
 
 const WidgetsDepth = ({ groupAlias, widgetData, active })=> {
   

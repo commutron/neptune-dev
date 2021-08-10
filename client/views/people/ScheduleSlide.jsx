@@ -2,10 +2,11 @@ import React, { useState, Fragment } from 'react';
 import moment from 'moment';
 import 'moment-timezone';
 import 'moment-business-time';
-import * as ShipTime from '/client/utility/ShipTime.js';
 import { toast } from 'react-toastify';
 import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/themes/airbnb.css';
+
+import TimesEdit from '/client/components/forms/LocaleTime';
 
 const ScheduleSlide = ({ app, user, users, isAdmin, isPeopleSuper })=> {
   
@@ -26,17 +27,17 @@ const ScheduleSlide = ({ app, user, users, isAdmin, isPeopleSuper })=> {
   
   function handleTest() {
     const testDate = dateState;
-    const nonWorkDays = app.nonWorkDays;
-    if( Array.isArray(nonWorkDays) ) {  
-      moment.updateLocale('en', {
-        holidays: nonWorkDays
-      });
+    // const nonWorkDays = app.nonWorkDays;
+    // if( Array.isArray(nonWorkDays) ) {  
+    //   moment.updateLocale('en', {
+    //     holidays: nonWorkDays
+    //   });
       if( moment( testDate ).isWorkingDay() ) {
         toast.info(`${dateState} IS a workday`);
       }else{
         toast(`${dateState} is NOT a workday`);
       }
-    }
+    // }
   }
   
   function handleAdd(wild) {
@@ -75,18 +76,31 @@ const ScheduleSlide = ({ app, user, users, isAdmin, isPeopleSuper })=> {
       
       <div className='comfort'>
         <div className='overscroll'>
+        
           <h3>Working Hours</h3>
-          <TimeObjMap timeObj={ShipTime.workingHours} />
+          <TimeObjMap timeObj={app.workingHours} />
+          {isAdmin &&
+            <TimesEdit
+              key='S3TW0RK'
+              setFunc='setWorkTimes'
+              idpre='work'
+              defaultObj={app.workingHours}
+            />
+          }
           
           <hr className='vmargin' />
           
           <h3>Shipping Hours</h3>
-          <TimeObjMap timeObj={ShipTime.shippingHours} />
-    
-          <p className='small grayT rightText'
-            >workinghours and shippinghours objects are hard coded and not user adjustable
-          </p>
-      
+          <TimeObjMap timeObj={app.shippingHours} />
+          {isAdmin &&
+            <TimesEdit
+              key='S3TSH1P'
+              setFunc='setShipTimes'
+              idpre='ship'
+              defaultObj={app.shippingHours}
+            />
+          }
+          
           <hr className='vmargin' />
       
           <h3>Upcoming Holidays</h3>

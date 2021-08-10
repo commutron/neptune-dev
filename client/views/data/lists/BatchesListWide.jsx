@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import LeapLine from '/client/components/tinyUi/LeapLine';
-import DumbFilter from '/client/components/tinyUi/DumbFilter.jsx';
+import DumbFilter from '/client/components/tinyUi/DumbFilter';
 
 const BatchesListWide = ({ 
   batchData, widgetData, variantData, groupData, app 

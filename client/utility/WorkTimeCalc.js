@@ -1,27 +1,29 @@
 import moment from 'moment';
-// import 'moment-timezone';
 import 'moment-business-time';
-import './ShipTime.js';
 import Pref from '/client/global/pref.js';
 
 import { round2Decimal } from '/client/utility/Convert.js';
 
-export function HolidayCheck( nonWorkDays, dateTime ) {
-  if( Array.isArray(nonWorkDays) ) {  
-    moment.updateLocale('en', {
-      holidays: nonWorkDays
+export function localeUpdate(app) {
+  if( app ) {  
+    moment.updateLocale('en', { 
+      holidays: app.nonWorkDays,
+      workinghours: app.workingHours,
+      shippinghours: app.shippingHours
     });
   }
+}
+
+export function HolidayCheck( app, dateTime ) {
+  localeUpdate(app);
+  
   const isit = moment(dateTime).isHoliday() ? true : false;
   return isit;
 }
 
-export function listShipDays( nonWorkDays, qty, withLast ) {
-  if( Array.isArray(nonWorkDays) ) {  
-    moment.updateLocale('en', {
-      holidays: nonWorkDays
-    });
-  }
+export function listShipDays( app, qty, withLast ) {
+  localeUpdate(app);
+  
   const loops = withLast ? qty + 1 : qty;
   const last = moment().lastShipDay().startOf('day').nextShippingTime();
 
@@ -41,12 +43,9 @@ export function listShipDays( nonWorkDays, qty, withLast ) {
   return sArr;
 }
 
-export function TimeInWeek( nonWorkDays, weekStart ) {
-  if( Array.isArray(nonWorkDays) ) {  
-    moment.updateLocale('en', {
-      holidays: nonWorkDays
-    });
-  }
+export function TimeInWeek( app, weekStart ) {
+  localeUpdate(app);
+  
   if(moment(weekStart, ["YYYY", moment.ISO_8601]).isValid()) {
   
     const begin = moment(weekStart).startOf('day').format(); 
@@ -75,12 +74,8 @@ export function TimeInWeek( nonWorkDays, weekStart ) {
 }
 
 
-export function TimeInDay( nonWorkDays, dayStart ) {
-  if( Array.isArray(nonWorkDays) ) {  
-    moment.updateLocale('en', {
-      holidays: nonWorkDays
-    });
-  }
+export function TimeInDay( app, dayStart ) {
+  localeUpdate(app);
   
   if(moment(dayStart, ["YYYY", moment.ISO_8601]).isValid()) {
   
@@ -116,8 +111,6 @@ export function UserTime( userObj, dateTime, span, spanHours ) {
   
   return proHoursNice;
 }
-    
-    
 
 export function UsersTimeTotal( userIDs, allUsers, dateTime, span, spanHours ) {
   

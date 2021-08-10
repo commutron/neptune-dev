@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import moment from 'moment';
-//import Pref from '/client/global/pref.js';
-import LeapButton from '/client/components/tinyUi/LeapButton.jsx';
+
+import LeapButton from '/client/components/tinyUi/LeapButton';
 import FilterItemsX from '/client/components/bigUi/FilterItemsX';
 import { SeriesDelete } from '/client/components/forms/ItemSerialsX/SeriesForm';
 
@@ -44,7 +44,6 @@ const ItemsListX = ({
   const [ timeModifyer, setTime ] = useState( Session.get(sessionSticky+'time') || false);
   const [ notModifyer, setMod ] = useState( Session.get(sessionSticky+'toggle') || false);
 
-  // update filter state
   function setKeywordFilter(keyword) {
     itemLimitSet(200);
     setKeyword( keyword );

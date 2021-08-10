@@ -54,7 +54,6 @@ const InboxPanel = ({ orb, bolt, app, user, users })=> {
 export default InboxPanel;
 
 
-
 const UnReadButton = ({nKey, unread})=> {
   
   function changeRead(nKey, read) {

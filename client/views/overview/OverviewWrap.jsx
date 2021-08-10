@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useLayoutEffect } from 'react';
 import moment from 'moment';
 import { ToastContainer } from 'react-toastify';
-// import Pref from '/client/global/pref.js';
 
-import Spin from '../../components/tinyUi/Spin.jsx';
-import HomeIcon from '/client/layouts/HomeIcon.jsx';
-import TideFollow from '/client/components/tide/TideFollow.jsx';
+import Spin from '../../components/tinyUi/Spin';
+import HomeIcon from '/client/layouts/HomeIcon';
+import TideFollow from '/client/components/tide/TideFollow';
 
 import OverviewTools from './OverviewTools';
 import BatchHeaders from './columns/BatchHeaders';

@@ -1,5 +1,4 @@
 import React from 'react';
-import '/client/utility/ShipTime.js';
 import DownstreamDetails from './DownstreamDetails';
 
 const WindowGlass = ({ 

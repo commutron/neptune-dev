@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
-// import Pref from '/client/global/pref.js';
 import { FieldObject } from './CompValuesSlide';
 import { ms2sc, ms2mn, sc2hr } from '/client/utility/Convert';
 

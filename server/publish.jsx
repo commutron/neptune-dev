@@ -1,4 +1,3 @@
-// import moment from 'moment';
 import Config from '/server/hardConfig.js';
 
 // Collections \\
@@ -563,4 +562,3 @@ Meteor.publish('hotDataEx', function(dataRequest, hotWidget){
     }
   }
 });
-  

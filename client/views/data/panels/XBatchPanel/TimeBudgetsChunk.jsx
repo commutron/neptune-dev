@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import 'moment-timezone';
 import Pref from '/client/global/pref.js';
-import UserNice from '/client/components/smallUi/UserNice.jsx';
-import { CalcSpin } from '/client/components/tinyUi/Spin.jsx';
+import UserNice from '/client/components/smallUi/UserNice';
+import { CalcSpin } from '/client/components/tinyUi/Spin';
 import ToggleBar from '/client/components/smallUi/Tabs/ToggleBar';
 
 import QuoteTimeBudget from '/client/components/forms/QuoteTimeBudget';

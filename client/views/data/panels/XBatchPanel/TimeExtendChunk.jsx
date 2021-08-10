@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import 'moment-timezone';
-import Pref from '/client/global/pref.js';
-import UserNice from '/client/components/smallUi/UserNice.jsx';
-// import { CalcSpin } from '/client/components/tinyUi/Spin.jsx';
-import ToggleBar from '/client/components/smallUi/Tabs/ToggleBar';
+import UserNice from '/client/components/smallUi/UserNice';
 
-import TimeBudgetBar from '/client/components/charts/Tides/TimeBudgetBar.jsx';
+import TimeBudgetBar from '/client/components/charts/Tides/TimeBudgetBar';
 
 import { splitTidebyPeople } from '/client/utility/WorkTimeCalc';
 import { min2hr, percentOf, percentOverUnder } from '/client/utility/Convert';

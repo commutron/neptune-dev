@@ -4,7 +4,7 @@ import Config from '/server/hardConfig.js';
 import { batchTideTime, distTimeBudget } from './tideGlobalMethods.js';
 import { deliveryState } from './reportCompleted.js';
 import { avgOfArray, asRate, diffTrend } from './calcOps';
-import { allNCOptions, countMulti, countMultiRefs } from './utility';
+import { syncLocale, allNCOptions, countMulti, countMultiRefs } from './utility';
 
 
 Meteor.methods({
@@ -80,6 +80,7 @@ Meteor.methods({
     const stale = !statime ? true :
             moment.duration(moment().diff(moment(statime))).as('hours') > Config.freche;
     if(stale) {
+      syncLocale(Meteor.user().orgKey);
       
       let tidePerItem = [];
       

@@ -2,7 +2,7 @@ import React from 'react';
 import { toast } from 'react-toastify';
 import Pref from '/client/global/pref.js';
 
-import CompForm from '/client/components/forms/CompForm.jsx';
+import CompForm from '/client/components/forms/CompForm';
 import ActionFunc from '/client/components/tinyUi/ActionFunc';
 
 const AssemblyList = ({ variantData, widgetData, groupData })=> {

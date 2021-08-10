@@ -3,7 +3,7 @@ import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import UserNice from '/client/components/smallUi/UserNice.jsx';
+import UserNice from '/client/components/smallUi/UserNice';
 
 const TimeErrorCheck = ()=> {
   

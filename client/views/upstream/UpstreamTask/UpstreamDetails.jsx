@@ -1,8 +1,7 @@
 import React from 'react';
-// import moment from 'moment';
 import Pref from '/client/global/pref.js';
 
-import BatchTopStatus from '../../overview/columns/BatchTopStatus.jsx';
+import BatchTopStatus from '/client/views/overview/columns/BatchTopStatus';
 import KittingChecks from './KittingChecks';
 import { TideActivitySquare } from '/client/components/tide/TideActivity';
 import PrintJump from '/client/components/smallUi/PrintJump';

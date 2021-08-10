@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
-// import 'moment-timezone';
 import Pref from '/client/global/pref.js';
 import { AnonyUser } from '/client/components/smallUi/UserNice';
 import TaskTag from '/client/components/tide/TaskTag';
@@ -72,7 +71,6 @@ const TimeBlocksRaw = ({ batch, tide, lockOut, isDebug })=> {
 export default TimeBlocksRaw;
 
 
-
 const RawBlock = ({ tB, batch, isSuper, isDebug, showZero })=> {
   
   const [ brGuess, setGuess ] = useState(false);
@@ -90,8 +88,6 @@ const RawBlock = ({ tB, batch, isSuper, isDebug, showZero })=> {
       });
     }
   }, []);
-  
-  
   
   const mStart = moment(tB.startTime);
   const mStop = tB.stopTime ? moment(tB.stopTime) : moment();

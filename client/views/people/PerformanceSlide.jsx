@@ -2,10 +2,10 @@ import React, { Fragment, useState, useLayoutEffect } from 'react';
 import moment from 'moment';
 import 'moment-business-time';
 import Pref from '/client/global/pref.js';
-import { CalcSpin } from '/client/components/tinyUi/Spin.jsx';
-import WeekBrowse from '/client/components/bigUi/WeekBrowse/WeekBrowse.jsx';
-import TideWorkWeek from '/client/components/charts/Tides/TideWorkWeek.jsx';
-import NumLine from '/client/components/tinyUi/NumLine.jsx';
+import { CalcSpin } from '/client/components/tinyUi/Spin';
+import WeekBrowse from '/client/components/bigUi/WeekBrowse/WeekBrowse';
+import TideWorkWeek from '/client/components/charts/Tides/TideWorkWeek';
+import NumLine from '/client/components/tinyUi/NumLine';
 
 import UserNice from '/client/components/smallUi/UserNice';
 import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock';
@@ -218,6 +218,3 @@ const PerformanceSlide = ({ app, user, users, traceDT, isDebug })=> {
 };
 
 export default PerformanceSlide;
-        
-        
-        

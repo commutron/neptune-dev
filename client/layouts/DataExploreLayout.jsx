@@ -2,11 +2,11 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { ToastContainer } from 'react-toastify';
 
-import HomeIcon from '/client/layouts/HomeIcon.jsx';
-import TideFollow from '/client/components/tide/TideFollow.jsx';
-import { ExTaskBar } from './TaskBars.jsx';
-import ActionBar from '/client/components/bigUi/ToolBar/ActionBar.jsx';
-import CookieBar from './CookieBar.jsx';
+import HomeIcon from '/client/layouts/HomeIcon';
+import TideFollow from '/client/components/tide/TideFollow';
+import { ExTaskBar } from './TaskBars';
+import ActionBar from '/client/components/bigUi/ToolBar/ActionBar';
+import CookieBar from './CookieBar';
 
 export const TraverseWrap = ({
   itemData,

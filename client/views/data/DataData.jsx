@@ -1,15 +1,14 @@
 import React, { useLayoutEffect } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
-import ErrorCatch from '/client/layouts/ErrorCatch.jsx';
+import ErrorCatch from '/client/layouts/ErrorCatch';
 import InboxToastPop from '/client/utility/InboxToastPop.js';
-import moment from 'moment';
+import { localeUpdate } from '/client/utility/WorkTimeCalc';
 
-//import Pref from '/client/global/pref.js';
-import { TraverseWrap } from '/client/layouts/DataExploreLayout.jsx';
+import { TraverseWrap } from '/client/layouts/DataExploreLayout';
 import { branchesSort } from '/client/utility/Arrays.js';
-import Spin from '../../components/tinyUi/Spin.jsx';
-import DataViewOps from './DataViewOps.jsx';
+import Spin from '../../components/tinyUi/Spin';
+import DataViewOps from './DataViewOps';
 
 const ExploreView = ({
   coldReady, hotReady, // subs
@@ -46,9 +45,8 @@ const ExploreView = ({
     );
   }
   
-  if( Array.isArray(app.nonWorkDays) ) {  
-    moment.updateLocale('en', { holidays: app.nonWorkDays });
-  }
+  localeUpdate(app);
+  
   const brancheS = branchesSort(app.branches);
 
   return(

@@ -5,16 +5,16 @@ import Pref from '/client/global/pref.js';
 
 import InboxToastPop from '/client/utility/InboxToastPop.js';
 
-import { SpinWrap } from '/client/components/tinyUi/Spin.jsx';
-import ProductionFindOps from './ProductionFindOps.jsx';
+import { SpinWrap } from '/client/components/tinyUi/Spin';
+import ProductionFindOps from './ProductionFindOps';
 
 
 const ProdData = ({
-  coldReady, hotReady, // subs
-  orb, anchor, user, org, users, app, // self 
-  allGroup, allWidget, allVariant, // customer data
+  coldReady, hotReady,
+  orb, anchor, user, org, users, app,
+  allGroup, allWidget, allVariant,
   allxBatch,
-  hotxBatch, hotxSeries, hotxRapids // working data
+  hotxBatch, hotxSeries, hotxRapids
 })=> {
 
   useLayoutEffect( ()=>{

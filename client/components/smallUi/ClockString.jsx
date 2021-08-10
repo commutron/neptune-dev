@@ -1,16 +1,14 @@
 import React, {useState, useEffect, useRef, Fragment} from 'react';
 import moment from 'moment';
-// import 'moment-timezone';
 
 
 function useInterval(callback, delay) {
   const savedCallback = useRef();
-  // Remember the latest callback.
+
   useEffect(() => {
     savedCallback.current = callback;
   }, [callback]);
 
-  // Set up the interval.
   useEffect(() => {
     function tick() {
       savedCallback.current();
@@ -23,14 +21,6 @@ function useInterval(callback, delay) {
 }
 
 const ClockString = ({ loadTime, doThing })=> {
-  // var options = {
-  //   month: 'short',
-  //   day: 'long',
-  //   hour: 'numeric',
-  //   minute: '2-digit',
-  //   second: '2-digit'
-  // };
-  // new Date().toLocaleTimeString('en-CA', options) );
   const fstring = "MMM Do, h:mm:ss a";
   
   const [ chill ] = useState(Roles.userIsInRole(Meteor.userId(), 'readOnly'));

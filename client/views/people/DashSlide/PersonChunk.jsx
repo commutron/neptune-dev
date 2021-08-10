@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-//import { toast } from 'react-toastify';
 import moment from 'moment';
-//import Pref from '/client/global/pref.js';
-import UserNice from '/client/components/smallUi/UserNice.jsx';
-import TaskTag from '/client/components/tinyUi/TaskTag.jsx';
-import { LeapTextLink } from '/client/components/tinyUi/LeapText.jsx';
+
+import UserNice from '/client/components/smallUi/UserNice';
+import TaskTag from '/client/components/tinyUi/TaskTag';
+import { LeapTextLink } from '/client/components/tinyUi/LeapText';
 
 const PersonChunk = ({ 
   userChunk, traceDT, app,

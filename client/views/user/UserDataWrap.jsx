@@ -18,10 +18,10 @@ import UserSettings from '/client/components/forms/User/UserSettings';
 
 
 const UserDataWrap = ({
-  readybNames, // subs
-  orb, bolt, // meta
-  user, isAdmin, isDebug, org, app, // self
-  traceDT, users // working data
+  readybNames,
+  orb, bolt,
+  user, isAdmin, isDebug, org, app,
+  traceDT, users
 })=> {
   
   useLayoutEffect( ()=>{

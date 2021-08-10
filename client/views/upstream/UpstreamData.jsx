@@ -1,12 +1,13 @@
 import React, { useLayoutEffect } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
-import moment from 'moment';
-import ErrorCatch from '/client/layouts/ErrorCatch.jsx';
+import ErrorCatch from '/client/layouts/ErrorCatch';
+import { localeUpdate } from '/client/utility/WorkTimeCalc';
+
 import InboxToastPop from '/client/utility/InboxToastPop.js';
 import { branchesOpenSort } from '/client/utility/Arrays.js';
-import { SpinWrap } from '/client/components/tinyUi/Spin.jsx';
-import UpstreamWrap from './UpstreamWrap.jsx';
+import { SpinWrap } from '/client/components/tinyUi/Spin';
+import UpstreamWrap from './UpstreamWrap';
 
 const View = ({
   login,
@@ -24,11 +25,7 @@ const View = ({
     return( <SpinWrap /> );
   }
   
-  if( Array.isArray(app.nonWorkDays) ) {  
-    moment.updateLocale('en', {
-      holidays: app.nonWorkDays
-    });
-  }
+  localeUpdate(app);
   
   const brancheS = branchesOpenSort(app.branches);
 

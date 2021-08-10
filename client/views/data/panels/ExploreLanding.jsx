@@ -1,8 +1,8 @@
 import { Meteor } from 'meteor/meteor';
 import React, { useState } from 'react';
 import Pref from '/client/global/pref.js';
-import TrendLine from '/client/components/charts/Trends/TrendLine.jsx';
-import { TrendBarCache } from '/client/components/charts/Trends/TrendBar.jsx';
+import TrendLine from '/client/components/charts/Trends/TrendLine';
+import { TrendBarCache } from '/client/components/charts/Trends/TrendBar';
 import NumStatBox from '/client/components/charts/Dash/NumStatBox';
 import BatchNewList from '../lists/BatchNewList';
 

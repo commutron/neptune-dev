@@ -10,7 +10,7 @@ import 'flatpickr/dist/themes/airbnb.css';
 import NumStat from '/client/components/tinyUi/NumStat';
 import AvgStat from '/client/components/tinyUi/AvgStat';
 
-import ReportBasicTable from '/client/components/tables/ReportBasicTable.jsx'; 
+import ReportBasicTable from '/client/components/tables/ReportBasicTable'; 
 
 const DailyReport = ({ dayIFin, app, user, isDebug })=> {
   
@@ -44,7 +44,7 @@ const DailyReport = ({ dayIFin, app, user, isDebug })=> {
   
   const clientTZ = moment.tz.guess();
   const localDate = moment.tz(dateString, clientTZ);
-  const isHoliday = HolidayCheck( app.nonWorkDays, moment(dateString, 'YYYY-MM-DD').format());
+  const isHoliday = HolidayCheck( app, moment(dateString, 'YYYY-MM-DD').format());
                       
   return(
     <div className='space36v overscroll'>

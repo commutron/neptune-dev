@@ -3,15 +3,15 @@ import moment from 'moment';
 import 'moment-timezone';
 import { HolidayCheck } from '/client/utility/WorkTimeCalc.js';
 import Pref from '/client/global/pref.js';
-import { CalcSpin } from '/client/components/tinyUi/Spin.jsx';
+import { CalcSpin } from '/client/components/tinyUi/Spin';
 import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/themes/airbnb.css';
-import TideDayMini from '/client/components/charts/Tides/TideDayMini.jsx';
+import TideDayMini from '/client/components/charts/Tides/TideDayMini';
 import TabsLite from '/client/components/smallUi/Tabs/TabsLite';
 import PeopleScatter from '/client/components/charts/BatchBurn/PeopleScatter';
 
-import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock.jsx';
-import UserNice from '/client/components/smallUi/UserNice.jsx';
+import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock';
+import UserNice from '/client/components/smallUi/UserNice';
 
 const HistorySlide = ({ app, user, users, traceDT, isDebug })=> {
   
@@ -41,7 +41,7 @@ const HistorySlide = ({ app, user, users, traceDT, isDebug })=> {
   let minDate = moment(app.tideWall || app.createdAt).format('YYYY-MM-DD');
   
   const localDate = moment.tz(dateString, moment.tz.guess());
-  const isHoliday = HolidayCheck( app.nonWorkDays, moment(dateString, 'YYYY-MM-DD').format());
+  const isHoliday = HolidayCheck( app, moment(dateString, 'YYYY-MM-DD').format());
        
   return(
     <div className='space5x5 overscroll'>

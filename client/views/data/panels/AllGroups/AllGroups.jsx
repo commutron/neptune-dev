@@ -1,9 +1,9 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
 
-import SlidesNested from '/client/components/smallUi/SlidesNested.jsx';
-import GroupLanding from './GroupLanding.jsx';
-import GroupSlide from './GroupSlide.jsx';
+import SlidesNested from '/client/components/smallUi/SlidesNested';
+import GroupLanding from './GroupLanding';
+import GroupSlide from './GroupSlide';
 
 const AllGroups = ({ 
   groupData, widgetData, variantData, batchDataX, app, specify 
@@ -11,13 +11,11 @@ const AllGroups = ({
   
   const inter = groupData.find( g => g.internal );
   
-  const sortList = groupData.sort((g1, g2)=> {
-                    //if (g1.hibernate) { return 1 }
-                    //if (g2.hibernate) { return -1 }
-                    if (g1.alias < g2.alias) { return -1 }
-                    if (g1.alias > g2.alias) { return 1 }
-                    return 0;
-                  });
+  const groupS = groupData.sort((g1, g2)=>
+                  g1.alias < g2.alias ? -1 : g1.alias > g2.alias ? 1 : 0 );
+                  
+  const sortList = groupS.sort((g1, g2)=>
+                    g1.hibernate ? 1 : g2.hibernate ? -1 : 0 );
         
   const menuList = sortList.map( (entry, index)=> {
                     const clss = entry.hibernate ? 'strike fade' : '';

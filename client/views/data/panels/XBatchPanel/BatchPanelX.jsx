@@ -1,11 +1,8 @@
 import React from 'react';
-// import moment from 'moment';
-// import Pref from '/client/global/pref.js';
-import CreateTag from '/client/components/tinyUi/CreateTag.jsx';
-//import UserName from '/client/components/tinyUi/UserName.jsx';
-import Tabs from '/client/components/smallUi/Tabs/Tabs.jsx';
+import CreateTag from '/client/components/tinyUi/CreateTag';
+import Tabs from '/client/components/smallUi/Tabs/Tabs';
 
-import XBatchTimeline from '/client/components/bigUi/BatchFeed/XBatchTimeline.jsx';
+import XBatchTimeline from '/client/components/bigUi/BatchFeed/XBatchTimeline';
 
 import InfoTab from './InfoTab';
 import TimeTab from './TimeTab';

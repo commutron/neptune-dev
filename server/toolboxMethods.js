@@ -4,13 +4,8 @@ import 'moment-business-time';
 
 import Config from '/server/hardConfig.js';
 import { avgOfArray } from './calcOps.js';
-import { syncHoliday, getEst } from './utility.js';
+import { syncLocale, getEst } from './utility.js';
 import { getShipLoad } from '/server/shipOps';
-
-moment.updateLocale('en', {
-  workinghours: Config.workingHours,
-  shippinghours: Config.shippingHours
-});
 
 Meteor.methods({
   
@@ -181,7 +176,7 @@ Meteor.methods({
   
   diagnosePriority(batchID) {
     if(Roles.userIsInRole(Meteor.userId(), 'admin') && typeof batchID === 'string') {
-      syncHoliday(Meteor.user().orgKey);
+      syncLocale(Meteor.user().orgKey);
       const now = moment().tz(Config.clientTZ);
   
       const b = XBatchDB.findOne({_id: batchID});

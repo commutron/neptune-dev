@@ -1,5 +1,4 @@
 // import { Random } from 'meteor/random';
-// import moment from 'moment';
 
 Meteor.startup(function () {  
   // ensureIndex is depreciated but new createIndex errors as "not a function"
@@ -665,7 +664,57 @@ Meteor.methods({
     }
   },
   
-  ////// no work days
+  ////// work days and times
+  setWorkTimes(timesArray) {
+    regextm = RegExp(/^(\d{2}\:\d{2}\:\d{2})$/);
+    
+    const valid = timesArray.every( x => x === null ||
+                    ( x.length%2 == 0 && x.every( y => regextm.test(y) ) ) );
+    
+    if(valid && Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      AppDB.update({orgKey: Meteor.user().orgKey}, {
+        $set : { 
+          workingHours : {
+            0: timesArray[0],
+            1: timesArray[1],
+            2: timesArray[2],
+            3: timesArray[3],
+            4: timesArray[4],
+            5: timesArray[5],
+            6: timesArray[6]
+          }
+      }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  setShipTimes(timesArray) {
+    regextm = RegExp(/^(\d{2}\:\d{2}\:\d{2})$/);
+    
+    const valid = timesArray.every( x => x === null ||
+                    ( x.length%2 == 0 && x.every( y => regextm.test(y) ) ) );
+    
+    if(valid && Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      AppDB.update({orgKey: Meteor.user().orgKey}, {
+        $set : { 
+          shippingHours : {
+            0: timesArray[0],
+            1: timesArray[1],
+            2: timesArray[2],
+            3: timesArray[3],
+            4: timesArray[4],
+            5: timesArray[5],
+            6: timesArray[6]
+          }
+      }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+      
   addNonWorkDay(newDay) {
     if(Roles.userIsInRole(Meteor.userId(), ['admin', 'peopleSuper'])) {
       AppDB.update({orgKey: Meteor.user().orgKey}, {

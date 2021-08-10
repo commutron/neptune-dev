@@ -2,18 +2,17 @@ import React, { Fragment } from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
 
-import Tabs from '/client/components/smallUi/Tabs/Tabs.jsx';
+import Tabs from '/client/components/smallUi/Tabs/Tabs';
 
 import { TideBump } from '/client/components/riverX/TideWall';
 
 import StepsProgressX from '/client/components/bigUi/StepsProgress/StepsProgressX';
-import TagsModule from '/client/components/bigUi/TagsModule.jsx';
-// import NoteLine from '/client/components/smallUi/NoteLine.jsx';
-import BlockForm from '/client/components/forms/BlockForm.jsx';
-import BlockList from '/client/components/bigUi/BlockList.jsx';
+import TagsModule from '/client/components/bigUi/TagsModule';
+import BlockForm from '/client/components/forms/BlockForm';
+import BlockList from '/client/components/bigUi/BlockList';
 
 const BatchCardX = ({
-  batchData, bOpen, bClosed, rapidData, //seriesData, itemData
+  batchData, bOpen, bClosed, rapidData,
   user, app, brancheS, plainBrancheS, ancOptionS,
   floorReleased, srange, flowCounts, fallCounts,
   tideKey, tideFloodGate, 
@@ -150,10 +149,6 @@ const MiniInfo = ({ batchData, srange, flowCounts, rapidMerge, bClosed, app })=>
       tags={batchData.tags}
       tagOps={app.tagOption}
       truncate={true} />
-    {/*<NoteLine 
-      action={Pref.xBatch}
-      id={batchData._id}
-      entry={batchData.notes} />*/}
     <BlockForm
       id={batchData._id}
       edit={false}

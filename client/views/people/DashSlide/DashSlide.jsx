@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
-import NumStatRing from '/client/components/charts/Dash/NumStatRing.jsx';
-import PeoplePanel from './PeoplePanel.jsx';
+import NumStatRing from '/client/components/charts/Dash/NumStatRing';
+import PeoplePanel from './PeoplePanel';
 
 
 const DashSlide = ({ app, user, users, traceDT, brancheS, isDebug })=> {
@@ -150,4 +150,3 @@ const DashSlide = ({ app, user, users, traceDT, brancheS, isDebug })=> {
 };
 
 export default DashSlide;
-  

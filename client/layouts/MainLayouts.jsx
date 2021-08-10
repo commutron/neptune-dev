@@ -1,11 +1,9 @@
 import { Meteor } from 'meteor/meteor';
 import React from 'react';
-import ErrorCatch from '/client/layouts/ErrorCatch.jsx';
-import HomeIcon from '/client/layouts/HomeIcon.jsx';
-import TideFollow from '/client/components/tide/TideFollow.jsx';
+import ErrorCatch from '/client/layouts/ErrorCatch';
+import HomeIcon from '/client/layouts/HomeIcon';
+import TideFollow from '/client/components/tide/TideFollow';
 import Pref from '/client/global/pref.js';
-
-// import { ToastContainer } from 'react-toastify';
 
 export const PublicLayout = ({content}) => (
   <ErrorCatch>
@@ -79,5 +77,3 @@ export const LabelLayout = ({content}) => (
   </div>
   </ErrorCatch>
 );
-
-    

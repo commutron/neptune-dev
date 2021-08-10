@@ -4,15 +4,10 @@ import 'moment-business-time';
 
 import Config from '/server/hardConfig.js';
 import { avgOfArray, asRate, percentOf, quadRegression } from './calcOps.js';
-import { syncHoliday, countMulti, getEst } from './utility.js';
+import { syncLocale, countMulti, getEst } from './utility.js';
 import { batchTideTime } from './tideGlobalMethods.js';
 import { calcShipDay } from './reportCompleted.js';
 import { getShipLoad } from '/server/shipOps';
-
-moment.updateLocale('en', {
-  workinghours: Config.workingHours,
-  shippinghours: Config.shippingHours
-});
 
 function dryPriorityCalc(bQuTmBdg, mEst, bTide, shipAim, now, shipLoad) {
   const shipAimMmnt = moment(shipAim);
@@ -191,9 +186,9 @@ function collectNonCon(privateKey, batchID, temp) {
 Meteor.methods({
   
   priorityRank(batchID, serverAccessKey, mockDay) {
-    async function bundlePriority() {//batchID, orgKey, mockDay) {
+    async function bundlePriority() {
       const accessKey = serverAccessKey || Meteor.user().orgKey;
-      syncHoliday(accessKey);
+      syncLocale(accessKey);
       try {
         bundle = await collectPriority(accessKey, batchID, mockDay);
         return bundle;
@@ -205,6 +200,7 @@ Meteor.methods({
   },
   priorityFast(serverAccessKey, bData, now, shipAim) {
     async function bundlePriority() {
+      syncLocale(serverAccessKey);
       try {
         bundle = await getFastPriority(bData, now, shipAim);
         return bundle;

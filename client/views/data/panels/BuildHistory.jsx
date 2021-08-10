@@ -1,9 +1,9 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
-// import { CalcSpin } from '/client/components/tinyUi/Spin.jsx';
-import ReportStatsTable from '/client/components/tables/ReportStatsTable.jsx'; 
-import NumLine from '/client/components/tinyUi/NumLine.jsx';
+
+import ReportStatsTable from '/client/components/tables/ReportStatsTable'; 
+import NumLine from '/client/components/tinyUi/NumLine';
 
 
 const BuildHistory = ({ allXBatch, allVariant, allWidget, allGroup })=> {

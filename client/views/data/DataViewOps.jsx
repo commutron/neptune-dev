@@ -2,17 +2,17 @@ import React from 'react';
 
 import Pref from '/client/global/pref.js';
 
-import { TraverseWrap } from '/client/layouts/DataExploreLayout.jsx';
+import { TraverseWrap } from '/client/layouts/DataExploreLayout';
 
-import ExploreLanding from './panels/ExploreLanding.jsx';
-import ReportsWrap from './panels/Reports/ReportsWrap.jsx';
+import ExploreLanding from './panels/ExploreLanding';
+import ReportsWrap from './panels/Reports/ReportsWrap';
 import VisWrap from './panels/ExVis/VisWrap';
-import AllGroups from './panels/AllGroups/AllGroups.jsx';
+import AllGroups from './panels/AllGroups/AllGroups';
 
-import BuildHistory from './panels/BuildHistory.jsx';
+import BuildHistory from './panels/BuildHistory';
 
 import ItemPanelX from './panels/ItemPanelX';
-import BatchPanelX from './panels/XBatchPanel/BatchPanelX.jsx';
+import BatchPanelX from './panels/XBatchPanel/BatchPanelX';
 import WidgetPanel from './panels/WidgetPanel/WidgetPanel';
 import RextendPanel from './panels/RextendPanel';
 import TestFailPanel from './panels/TestFailPanel';

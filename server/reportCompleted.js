@@ -2,19 +2,14 @@ import moment from 'moment';
 import 'moment-timezone';
 import 'moment-business-time';
 
-import { syncHoliday } from '/server/utility.js';
+import Config from '/server/hardConfig.js';
+
+import { syncLocale, noIg } from '/server/utility.js';
 import { getShipAim, getShipDue, getEndWork } from '/server/shipOps';
 import { distTimeBudget } from './tideGlobalMethods.js';
 import { whatIsBatchX } from './searchOps.js';
 import { round1Decimal, diffTrend, percentOf } from './calcOps';
-import { noIg } from './utility';
 
-import Config from '/server/hardConfig.js';
-
-moment.updateLocale('en', {
-  workinghours: Config.workingHours,
-  shippinghours: Config.shippingHours
-});
 
 export function calcShipDay( batchId, nowDay, futureDay ) {
   const shipAim = getShipAim(batchId, futureDay);
@@ -114,7 +109,7 @@ export function deliveryBinary(batchId, bEnd, bFinish) {
   
 function weekDoneAnalysis(rangeStart, rangeEnd) {
   const accessKey = Meteor.user().orgKey;
-  syncHoliday(accessKey);
+  syncLocale(accessKey);
     
   let batchMetrics = [];
   

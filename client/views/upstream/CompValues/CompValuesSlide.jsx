@@ -1,18 +1,11 @@
 import React from 'react';
-// import Pref from '/client/global/pref.js';
 
 import FaradConvert from './FaradConvert';
 import OhmConvert from './OhmConvert';
 import MilsConvert from './MilsConvert';
 import TimeConvert from './TimeConvert';
 
-const CompValuesSlide = ({ 
-  view, subLink,
-  //batch, batchX, 
-  //bCache, pCache, acCache, brCache,
-  user, app, // clientTZ,
-  //isDebug, isNightly
-})=> (
+const CompValuesSlide = ({ view, subLink, user, app })=> (
   <div className='space5x5'>
     
     <FaradConvert />

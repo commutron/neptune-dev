@@ -2,7 +2,7 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import ModelMedium from '/client/components/smallUi/ModelMedium';
+import ModelSmall from '/client/components/smallUi/ModelSmall';
 
 
 const RemoveItem = ({ batchId, batch, seriesId, serial, check, verify, lockOut })=> {
@@ -13,7 +13,7 @@ const RemoveItem = ({ batchId, batch, seriesId, serial, check, verify, lockOut }
   const title = access && !lockOut ? `Delete "${serial}"` : `${aT}\n${lT}`;
   
   return(
-    <ModelMedium
+    <ModelSmall
       button='Delete'
       title={title}
       color='redT'
@@ -28,7 +28,7 @@ const RemoveItem = ({ batchId, batch, seriesId, serial, check, verify, lockOut }
         check={check}
         verify={verify}
       />
-    </ModelMedium>
+    </ModelSmall>
   );  
 };
 

@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react';
 
-import LeapButton from '/client/components/tinyUi/LeapButton.jsx';
-import FilterActive from '/client/components/bigUi/FilterActive.jsx';
+import LeapButton from '/client/components/tinyUi/LeapButton';
+import FilterActive from '/client/components/bigUi/FilterActive';
 
 const BatchesList = ({ batchData, widgetData, variantData })=> {
   

@@ -1,12 +1,11 @@
 import React, { Fragment } from 'react';
-// import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import { min2hr } from '/client/utility/Convert';
 
 import ProJump from '/client/components/smallUi/ProJump';
 import TideActivityData, { TideActivitySquare } from '/client/components/tide/TideActivity';
 import { PerformanceSquare } from '/client/components/smallUi/StatusBlocks/PerformanceStatus';
-import BranchProgress from '../../overview/columns/BranchProgress.jsx';
+import BranchProgress from '../../overview/columns/BranchProgress';
 import NonConCounts from '../../overview/columns/NonConCounts';
 import AlterFulfill from '/client/components/forms/Batch/AlterFulfill';
 

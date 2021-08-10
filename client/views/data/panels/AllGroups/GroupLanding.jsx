@@ -1,10 +1,9 @@
 import React from 'react';
-// import moment from 'moment';
 import Pref from '/client/global/pref.js';
 
-import GroupForm from '/client/components/forms/GroupForm.jsx';
-import NumBox from '/client/components/tinyUi/NumBox.jsx';
-import TrendLine from '/client/components/charts/Trends/TrendLine.jsx';
+import GroupForm from '/client/components/forms/GroupForm';
+import NumBox from '/client/components/tinyUi/NumBox';
+import TrendLine from '/client/components/charts/Trends/TrendLine';
 import VariantNewList from '../../lists/VariantNewList';
 
 import { timeRanges } from '/client/utility/CycleCalc';

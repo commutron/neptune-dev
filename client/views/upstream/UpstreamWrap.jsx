@@ -1,7 +1,7 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
 
-import StreamLayout from '/client/layouts/StreamLayout.jsx';
+import StreamLayout from '/client/layouts/StreamLayout';
 
 import UpstreamView from '/client/views/upstream/UpstreamTask/UpstreamView';
 import CompSearchData from '/client/views/upstream/CompSearch/CompSearchData';

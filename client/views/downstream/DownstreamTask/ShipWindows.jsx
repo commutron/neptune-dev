@@ -1,6 +1,5 @@
 import React, { useState, useLayoutEffect } from 'react';
 import moment from 'moment';
-import '/client/utility/ShipTime.js';
 
 import WindowFrame from './WindowFrame';
 import WindowGlass from './WindowGlass';
@@ -29,7 +28,7 @@ const ShipWindows = ({
     traceRapidSet(someR);
     rapidChunkSet(rapidShip);
         
-    const getShipDays = listShipDays( app.nonWorkDays, calcFor, true );
+    const getShipDays = listShipDays( app, calcFor, true );
     
     const limitToSales = !salesBy ? traceDT :
                           traceDT.filter( t => t.salesOrder === salesBy );
@@ -74,10 +73,11 @@ const ShipWindows = ({
       
       const remain = timeBucket + overflow - wipTime;
       overflow = remain;
-      const loaded = index === 0 || wipTime === 0 ? '' :
-                     Math.abs(remain) <= (timeBucket * 0.10) ? 'balanced' :
-                     remain < 0 ? Math.round(Math.abs(wipTime) / timeBucket * 10)+'pts heavy' :
-                     Math.round(timeBucket / Math.abs(wipTime) * 10)+'pts light';
+      const loaded = index === 0 || wipTime === 0 ? [ '', false ] :
+              Math.abs(remain) <= (timeBucket * 0.10) ? ['', 'balanced'] :
+              remain < 0 ? 
+                [ Math.ceil(Math.abs(wipTime) / timeBucket)+'pts', 'heavy' ] :
+                [ Math.ceil(timeBucket / Math.abs(wipTime))+'pts', 'light' ];
 
       windowChunks.push({
         windowMoment: day[0],
@@ -100,7 +100,7 @@ const ShipWindows = ({
           <WindowFrame 
             key={'f'+'-1'}
             windowMoment={moment()}
-            loaded=''
+            loaded={['', false]}
             mixedOrders={rapidChunk}
             indexKey={-1}
             traceDT={traceDTSort}

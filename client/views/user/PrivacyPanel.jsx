@@ -1,6 +1,4 @@
 import React from 'react';
-import moment from 'moment';
-// import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 import { PermissionHelp } from '/client/views/people/AccountsManagePanel';
 

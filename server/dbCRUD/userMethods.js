@@ -1,5 +1,3 @@
-import moment from 'moment';
-import timezone from 'moment-timezone';
 import { Accounts } from 'meteor/accounts-base';
 import Config from '/server/hardConfig.js';
 
@@ -378,7 +376,7 @@ Meteor.methods({
   logReactError(sessionID, errorType, info) {
     try {
       if(Roles.userIsInRole(Meteor.userId(), 'debug')) {
-        const time = moment().format();
+        const time = (new Date()).toISOString();
         const logString = `Error, Type: ${errorType}, ${time}, 
                             username: ${Meteor.user().username} 
                               session: ${sessionID}, ${info}`;

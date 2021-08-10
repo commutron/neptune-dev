@@ -1,32 +1,31 @@
 import React, { useLayoutEffect } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
-// import moment from 'moment';
-// import 'moment-timezone';
 import { ToastContainer } from 'react-toastify';
 import InboxToastPop from '/client/utility/InboxToastPop.js';
+import { localeUpdate } from '/client/utility/WorkTimeCalc';
 import { branchesSort } from '/client/utility/Arrays.js';
-import ErrorCatch from '/client/layouts/ErrorCatch.jsx';
+import ErrorCatch from '/client/layouts/ErrorCatch';
 import Pref from '/client/global/pref.js';
-import { SpinWrap } from '../../components/tinyUi/Spin.jsx';
+import { SpinWrap } from '../../components/tinyUi/Spin';
 
-import HomeIcon from '/client/layouts/HomeIcon.jsx';
-import TideFollow from '/client/components/tide/TideFollow.jsx';
-import Slides from '../../components/smallUi/Slides.jsx';
+import HomeIcon from '/client/layouts/HomeIcon';
+import TideFollow from '/client/components/tide/TideFollow';
+import Slides from '../../components/smallUi/Slides';
 
-import DashSlide from './DashSlide/DashSlide.jsx';
-import PerformanceSlide from './PerformanceSlide.jsx';
-import HistorySlide from './HistorySlide.jsx';
-import ScheduleSlide from './ScheduleSlide.jsx';
-import AccountsManagePanel, { PermissionHelp } from './AccountsManagePanel.jsx';
+import DashSlide from './DashSlide/DashSlide';
+import PerformanceSlide from './PerformanceSlide';
+import HistorySlide from './HistorySlide';
+import ScheduleSlide from './ScheduleSlide';
+import AccountsManagePanel, { PermissionHelp } from './AccountsManagePanel';
 import TimeErrorCheck from './TimeErrorCheck';
 import RevolvingPINCheck from './RevolvingPINCheck';
 
 const PeopleDataWrap = ({
-  readybName, readyPeople, // subs
-  user, active, isDebug, // self
-  org, users, app, // org
-  traceDT // batch name cache
+  readybName, readyPeople,
+  user, active, isDebug,
+  org, users, app,
+  traceDT
 })=> {
   
   useLayoutEffect( ()=>{
@@ -37,13 +36,14 @@ const PeopleDataWrap = ({
     return( <SpinWrap /> );
   }
   
+  localeUpdate(app);
+  
   const userS = users.sort((u1, u2)=>
           u1.username.toLowerCase() > u2.username.toLowerCase() ? 1 : 
           u1.username.toLowerCase() < u2.username.toLowerCase() ? -1 : 0 );
   const brancheS = branchesSort(app.branches);
      
   const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
-  // const isNightly = Roles.userIsInRole(Meteor.userId(), 'nightly');
   const isPeopleSuper = Roles.userIsInRole(Meteor.userId(), 'peopleSuper');
   const antiAuth = !isAdmin && !isPeopleSuper;
   

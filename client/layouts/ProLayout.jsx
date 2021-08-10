@@ -4,12 +4,12 @@ import { ToastContainer } from 'react-toastify';
 
 import { ScanListenerUtility, ScanListenerOff } from '/client/utility/ScanListener.js';
 
-import HomeIcon from './HomeIcon.jsx';
-import FindBox from './FindBox.jsx';
+import HomeIcon from './HomeIcon';
+import FindBox from './FindBox';
 
-import TideControl from '/client/components/tide/TideControl/TideControl.jsx';
-import TideFollow from '/client/components/tide/TideFollow.jsx';
-import XFormBar from '/client/components/bigUi/ToolBar/XFormBar.jsx';
+import TideControl from '/client/components/tide/TideControl/TideControl';
+import TideFollow from '/client/components/tide/TideFollow';
+import XFormBar from '/client/components/bigUi/ToolBar/XFormBar';
 import { NonConMerge } from '/client/utility/NonConOptions';
 
 export const ProWrap = ({ 

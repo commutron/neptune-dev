@@ -1,9 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import moment from 'moment';
 import 'moment-business-time';
-import '/client/utility/ShipTime.js';
-// import glTest from '/client/utility/GoodLocal.js';
-// import Pref from '/client/global/pref.js';
+
 import NumStat from '/client/components/tinyUi/NumStat';
 import TrinaryStat from '/client/components/tinyUi/TrinaryStat';
 
@@ -55,7 +53,6 @@ const BatchTopStatus = ({
         <NumStat
           num={tBatch.quantity || '?'}
           name='Total Items'
-          // title=''
           color='blueT'
           size='big' />
       </div>

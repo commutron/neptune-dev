@@ -1,8 +1,6 @@
 import moment from 'moment';
-import 'moment-timezone';
-import 'moment-business-time';
 import Config from '/server/hardConfig.js';
-import { noIg } from './utility';
+import { syncLocale, noIg } from './utility';
 import { 
   plotPerform,
   plotOnTime,
@@ -124,6 +122,8 @@ Meteor.methods({
     const stale = !ontime ? true :
               moment.duration(moment().diff(moment(ontime))).as('hours') > Config.freche;
     if(stale) {
+      syncLocale(accessKey);
+      
       const batches = XBatchDB.find({
         orgKey: accessKey,
         groupId: { $ne: xid }
@@ -256,6 +256,8 @@ Meteor.methods({
     const stale = !bchtime ? true :
               moment.duration(moment().diff(moment(bchtime))).as('hours') > Config.freche;
     if(stale) {
+      syncLocale(accessKey);
+      
       const batches = XBatchDB.find({
         orgKey: accessKey,
         groupId: { $ne: xid }

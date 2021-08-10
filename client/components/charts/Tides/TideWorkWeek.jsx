@@ -4,7 +4,6 @@ import {
   TimeInDay, UsersTimeTotal, HolidayCheck
 } from '/client/utility/WorkTimeCalc.js';
 import { round2Decimal } from '/client/utility/Convert.js';
-// import Pref from '/client/global/pref.js';
 import { 
   VictoryChart, VictoryArea, VictoryBar,
   VictoryLabel, VictoryAxis, 
@@ -39,8 +38,8 @@ const TideWorkWeek = ({
         if( weekEnd.isBefore(dateTime, 'day') ) {
           break;
         }else{
-          const dayHours = TimeInDay( app.nonWorkDays, dateTime );
-          const isNoDay = HolidayCheck(app.nonWorkDays, dateTime);
+          const dayHours = TimeInDay( app, dateTime );
+          const isNoDay = HolidayCheck(app, dateTime);
           if(isNoDay) { 
             nonWorkDays.push({ name: day, symbol: { type: "star" } });
           }

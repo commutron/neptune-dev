@@ -1,10 +1,10 @@
 import moment from 'moment';
 import 'moment-timezone';
-// import 'moment-business-time';
+
 import Config from '/server/hardConfig.js';
 import { deliveryBinary } from '/server/reportCompleted.js';
 import { checkTimeBudget } from '/server/tideGlobalMethods';
-import { countMulti, noIg } from './utility';
+import { syncLocale, countMulti, noIg } from './utility';
 
   export function countNewUser(accessKey, rangeStart, rangeEnd) {
     const resultU = Meteor.users.find({
@@ -71,6 +71,7 @@ import { countMulti, noIg } from './utility';
   
   export async function countDoneBatch(accessKey, rangeStart, rangeEnd) {
     const xid = noIg();
+    syncLocale(accessKey);
     
     let doneOnTime = 0;
     let doneLate = 0;
@@ -200,10 +201,6 @@ import { countMulti, noIg } from './utility';
       );
       ncCount += countMulti( thisNC );
     });
-    /* // count from batch lockTrunc \\
-      const tnc = batch.lockTrunc.ncTypes.reduce( 
-                      (acc, obj)=> { return acc + obj.count },0);
-      ncCount += tnc; */
       
     return ncCount;
   }
@@ -230,10 +227,6 @@ import { countMulti, noIg } from './utility';
       );
       shCount += countMulti( thisSH );
     });
-    /* // count from batch lockTrunc \\
-      const tsh = batch.lockTrunc.shTypes.reduce( 
-                      (acc, obj)=> { return acc + obj.count },0);
-      shCount += tsh; */
       
     return shCount;
   }
@@ -392,6 +385,5 @@ Meteor.methods({
       throw new Meteor.Error(err);
     }
   }
-  
   
 });

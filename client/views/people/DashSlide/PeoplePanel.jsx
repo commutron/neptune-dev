@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
-import UserNice from '/client/components/smallUi/UserNice.jsx';
+import UserNice from '/client/components/smallUi/UserNice';
 
-import PersonChunk from './PersonChunk.jsx';
+import PersonChunk from './PersonChunk';
 
 const PeoplePanel = ({ 
   app, eUsers, dUsers, openTBlockState, traceDT,

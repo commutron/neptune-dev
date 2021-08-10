@@ -2,18 +2,17 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
 
-import Spin from '/client/components/tinyUi/Spin.jsx';
+import Spin from '/client/components/tinyUi/Spin';
 
 import { FocusSelect, FilterSelect } from '/client/components/smallUi/ToolBarTools';
-import TimeWindower from '/client/components/bigUi/TimeWindower/TimeWindower.jsx';
-import { StatLine } from '/client/components/tinyUi/NumLine.jsx';
-import NumStatRing from '/client/components/charts/Dash/NumStatRing.jsx';
-import TrendLine from '/client/components/charts/Trends/TrendLine.jsx';
-import ScrapTableAll from '/client/components/tables/ScrapTableAll.jsx';
+import TimeWindower from '/client/components/bigUi/TimeWindower/TimeWindower';
+import { StatLine } from '/client/components/tinyUi/NumLine';
+import NumStatRing from '/client/components/charts/Dash/NumStatRing';
+import TrendLine from '/client/components/charts/Trends/TrendLine';
+import ScrapTableAll from '/client/components/tables/ScrapTableAll';
 
-import PagingSelect from '/client/components/tinyUi/PagingSelect.jsx';
+import PagingSelect from '/client/components/tinyUi/PagingSelect';
 import { chunkArray } from '/client/utility/Convert';
-
 import { timeRanges } from '/client/utility/CycleCalc';
 
 

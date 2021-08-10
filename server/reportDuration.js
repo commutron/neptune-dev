@@ -4,13 +4,7 @@ import 'moment-business-time';
 
 import { avgOfArray, percentOf } from '/server/calcOps';
 import Config from '/server/hardConfig.js';
-import { noIg, syncHoliday } from './utility';
-
-moment.updateLocale('en', {
-  workinghours: Config.workingHours,
-  shippinghours: Config.shippingHours
-});
-
+import { syncLocale, noIg } from './utility';
 
 function toRelDiff(bSalesStart, bReleases) {
   
@@ -57,7 +51,7 @@ function getWidgetDur(widget, accessKey) {
   const stale = !statime ? true :
             moment.duration(moment().diff(moment(statime))).as('hours') > Config.freche;
   if(stale) {
-    syncHoliday(accessKey);
+    syncLocale(accessKey);
    
     const cutoff = ( d => new Date(d.setDate(d.getDate()-Config.avgSpan)) )(new Date);
   
@@ -174,7 +168,7 @@ Meteor.methods({
   estBatchTurnAround(bID, wID) {
     this.unblock();
     const accessKey = Meteor.user().orgKey;
-    syncHoliday(accessKey);
+    syncLocale(accessKey);
     
     const now = moment().tz(Config.clientTZ);
     

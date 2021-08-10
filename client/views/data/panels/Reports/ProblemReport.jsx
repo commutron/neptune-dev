@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 import { percentOf } from '/client/utility/Convert';
 
-import ReportStatsTable from '/client/components/tables/ReportStatsTable.jsx'; 
+import ReportStatsTable from '/client/components/tables/ReportStatsTable'; 
 
 const ProblemReport = ({ start, end, dataset })=> {
   

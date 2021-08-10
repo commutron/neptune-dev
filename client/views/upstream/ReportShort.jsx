@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 
-import { CalcSpin } from '/client/components/tinyUi/Spin.jsx';
+import { CalcSpin } from '/client/components/tinyUi/Spin';
 import PrintThis from '/client/components/tinyUi/PrintThis';
-import ReportBasicTable from '/client/components/tables/ReportBasicTable.jsx'; 
+import ReportBasicTable from '/client/components/tables/ReportBasicTable'; 
 
 const ReportShort = ({ app, user, isDebug })=> {
   

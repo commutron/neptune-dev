@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import 'moment-business-time';
-import { CalcSpin } from '/client/components/tinyUi/Spin.jsx';
+import { CalcSpin } from '/client/components/tinyUi/Spin';
 
 const TimeNextChunk = ({
   batchData, seriesData, widgetData,

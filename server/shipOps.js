@@ -4,11 +4,6 @@ import 'moment-business-time';
 
 import Config from '/server/hardConfig.js';
 
-moment.updateLocale('en', {
-  workinghours: Config.workingHours,
-  shippinghours: Config.shippingHours
-});
-
 export function getShipAim(batchId, salesEnd) {
   const b = XBatchDB.findOne({_id: batchId, completed: true},{fields:{'finShipAim':1}});
   const finAim = b ? b.finShipAim || null : null;

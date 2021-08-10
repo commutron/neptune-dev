@@ -1,12 +1,10 @@
 // import { SyncedCron } from 'meteor/littledata:synced-cron';
-
 import moment from 'moment';
 import 'moment-timezone';
-import 'moment-business-time';
 
 import { deliveryBinary } from '/server/reportCompleted.js';
 import { checkTimeBudget } from '/server/tideGlobalMethods';
-import { noIg } from '/server/utility';
+import { syncLocale, noIg } from '/server/utility';
 import Config from '/server/hardConfig.js';
 
 
@@ -153,6 +151,7 @@ function countDoneUnits(accessKey, createdAt, dataName, period) {
 
 async function countDoneBatchTarget(accessKey, createdAt, dataName, period) {
   return new Promise(function(resolve) {
+    syncLocale(accessKey);
     const xid = noIg();
     const ranges = getRanges(createdAt, period);
     

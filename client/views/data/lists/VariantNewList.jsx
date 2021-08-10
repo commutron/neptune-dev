@@ -1,5 +1,4 @@
 import React, { useState, useEffect, Fragment } from 'react';
-// import Pref from '/client/global/pref.js';
 import LeapLine from '/client/components/tinyUi/LeapLine';
 
 const VariantNewList = ({ 

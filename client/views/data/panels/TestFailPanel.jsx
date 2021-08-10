@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
 
-import Spin from '/client/components/tinyUi/Spin.jsx';
+import Spin from '/client/components/tinyUi/Spin';
 import TimeWindower from '/client/components/bigUi/TimeWindower/TimeWindower';
 import { FocusSelect, FilterSelect } from '/client/components/smallUi/ToolBarTools';
 
-import { StatLine } from '/client/components/tinyUi/NumLine.jsx';
-import NumStatRing from '/client/components/charts/Dash/NumStatRing.jsx';
-import TrendLine from '/client/components/charts/Trends/TrendLine.jsx';
+import { StatLine } from '/client/components/tinyUi/NumLine';
+import NumStatRing from '/client/components/charts/Dash/NumStatRing';
+import TrendLine from '/client/components/charts/Trends/TrendLine';
 import FailAllTable from '/client/components/tables/FailAllTable';
 
 import { timeRanges } from '/client/utility/CycleCalc';

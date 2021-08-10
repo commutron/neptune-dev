@@ -1,8 +1,3 @@
-import moment from 'moment';
-import 'moment-timezone';
-import 'moment-business-time';
-
-
 Meteor.methods({
 
 //// For a Person \\\\\

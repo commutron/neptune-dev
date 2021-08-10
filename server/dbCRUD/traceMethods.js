@@ -3,14 +3,10 @@ import 'moment-timezone';
 import 'moment-business-time';
 
 import Config from '/server/hardConfig.js';
-import { syncHoliday } from '/server/utility.js';
+import { syncLocale } from '/server/utility.js';
 import { deliveryState, calcShipDay } from '/server/reportCompleted.js';
 import { getShipLoad } from '/server/shipOps';
 
-moment.updateLocale('en', {
-  workinghours: Config.workingHours,
-  shippinghours: Config.shippingHours
-});
 
 function shrinkWhole(bData, now, shipLoad, accessKey) {
   return new Promise( (resolve, reject)=> {
@@ -178,7 +174,7 @@ Meteor.methods({
     const accessKey = Meteor.user().orgKey;
     (async ()=> {
       try {
-        syncHoliday(accessKey);
+        syncLocale(accessKey);
         const now = moment().tz(Config.clientTZ);
         
         const fetchX = XBatchDB.find({orgKey: accessKey}).fetch();
@@ -212,7 +208,7 @@ Meteor.methods({
     const accessKey = privateKey || Meteor.user().orgKey;
     (async ()=> {
       try {
-        syncHoliday(accessKey);
+        syncLocale(accessKey);
         const now = moment().tz(Config.clientTZ);
         const shipLoad = getShipLoad(now);
         
@@ -229,7 +225,7 @@ Meteor.methods({
     const accessKey = privateKey || Meteor.user().orgKey;
     (async ()=> {
       try {
-        syncHoliday(accessKey);
+        syncLocale(accessKey);
         
         const ystrday = ( d => new Date(d.setDate(d.getDate()-1)) )(new Date);
         const lstweek = ( d => new Date(d.setDate(d.getDate()-7)) )(new Date);
@@ -262,7 +258,7 @@ Meteor.methods({
     const accessKey = privateKey || Meteor.user().orgKey;
     (async ()=> {
       try {
-        syncHoliday(accessKey);
+        syncLocale(accessKey);
         const now = moment().tz(Config.clientTZ);
         const shipLoad = getShipLoad(now);
         
@@ -279,7 +275,7 @@ Meteor.methods({
     const accessKey = privateKey || Meteor.user().orgKey;
     (async ()=> {
       try {
-        syncHoliday(accessKey);
+        syncLocale(accessKey);
         
         const batchBX = XBatchDB.findOne({_id: bID});
                         
@@ -294,7 +290,7 @@ Meteor.methods({
     const accessKey = privateKey || Meteor.user().orgKey;
     (async ()=> {
       try {
-        syncHoliday(accessKey);
+        syncLocale(accessKey);
         const now = moment().tz(Config.clientTZ);
         const shipLoad = getShipLoad(now);
         
@@ -324,7 +320,7 @@ Meteor.methods({
     (async ()=> {
       const accessKey = privateKey || Meteor.user().orgKey;
       try {
-        syncHoliday(accessKey);
+        syncLocale(accessKey);
         const now = moment().tz(Config.clientTZ);
         const shipLoad = getShipLoad(now);
         

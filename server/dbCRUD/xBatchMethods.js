@@ -1,6 +1,6 @@
 import moment from 'moment';
 import { batchTideTime } from '/server/tideGlobalMethods';
-import { syncHoliday } from '/server/utility.js';
+import { syncLocale } from '/server/utility.js';
 import { getShipDue, getEndWork } from '/server/shipOps';
 
 Meteor.methods({
@@ -539,7 +539,7 @@ Meteor.methods({
     this.unblock();
     const b = XBatchDB.findOne({_id: batchId},{fields:{'salesEnd':1}});
     if(b) {
-      syncHoliday(privateKey);
+      syncLocale(privateKey);
       
       const endPriority = Meteor.call('priorityRank', batchId, privateKey);
       

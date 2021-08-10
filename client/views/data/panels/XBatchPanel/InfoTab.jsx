@@ -1,7 +1,6 @@
 import React from 'react';
 import moment from 'moment';
 import 'moment-business-time';
-import '/client/utility/ShipTime.js';
 import Pref from '/client/global/pref.js';
 
 import { min2hr } from '/client/utility/Convert.js';

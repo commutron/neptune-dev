@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import Pref from '/client/global/pref.js';
 import moment from 'moment';
 import { CalcSpin } from '/client/components/tinyUi/Spin';
+
 import PrintThis from '/client/components/tinyUi/PrintThis';
 import { avgOfArray, round2Decimal } from '/client/utility/Convert';
 import { FilterSelect } from '/client/components/smallUi/ToolBarTools';

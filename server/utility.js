@@ -1,9 +1,14 @@
 import moment from 'moment';
 
-export function syncHoliday(accessKey) {
-  const app = AppDB.findOne({orgKey:accessKey}, {fields:{'nonWorkDays':1}});
-  if(Array.isArray(app.nonWorkDays) ) { 
-    moment.updateLocale('en', { holidays: app.nonWorkDays });
+export function syncLocale(accessKey) {
+  const app = AppDB.findOne({orgKey:accessKey}, 
+                {fields:{'nonWorkDays':1,'workinghours':1,'shippinghours':1}});
+  if( app ) { 
+    moment.updateLocale('en', { 
+      holidays: app.nonWorkDays,
+      workinghours: app.workingHours,
+      shippinghours: app.shippingHours
+    });
   }
 }
 

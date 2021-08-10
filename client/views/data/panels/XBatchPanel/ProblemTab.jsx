@@ -1,22 +1,21 @@
 import React from 'react';
-// import moment from 'moment';
 import Pref from '/client/global/pref.js';
 
-import NonConRate from '/client/components/charts/NonCon/NonConRate.jsx';
-import { HasNonCon } from '/client/components/bigUi/NonConMiniTops.jsx';
-import { NonConPer } from '/client/components/bigUi/NonConMiniTops.jsx';
-import { LeftFxNonCon } from '/client/components/bigUi/NonConMiniTops.jsx';
-import { LeftInNonCon } from '/client/components/bigUi/NonConMiniTops.jsx';
-import NonConStatusPie from '/client/components/charts/NonCon/NonConStatusPie.jsx';
-import { HasShortfall } from '/client/components/bigUi/ShortfallMiniTops.jsx';
-import { RefCount } from '/client/components/bigUi/ShortfallMiniTops.jsx';
-import { PartsShort } from '/client/components/bigUi/ShortfallMiniTops.jsx';
-import { LeftToResolve } from '/client/components/bigUi/ShortfallMiniTops.jsx';
-import ShortfallStatusPie from '/client/components/charts/Blockers/ShortfallStatusPie.jsx';
-import TabsLite from '/client/components/smallUi/Tabs/TabsLite.jsx';
-import NonConBubble from '/client/components/charts/NonCon/NonConBubble.jsx';
-import NonConBar from '/client/components/charts/NonCon/NonConBar.jsx';
-import NonConBarRefs from '/client/components/charts/NonCon/NonConBarRefs.jsx';
+import NonConRate from '/client/components/charts/NonCon/NonConRate';
+import { HasNonCon } from '/client/components/bigUi/NonConMiniTops';
+import { NonConPer } from '/client/components/bigUi/NonConMiniTops';
+import { LeftFxNonCon } from '/client/components/bigUi/NonConMiniTops';
+import { LeftInNonCon } from '/client/components/bigUi/NonConMiniTops';
+import NonConStatusPie from '/client/components/charts/NonCon/NonConStatusPie';
+import { HasShortfall } from '/client/components/bigUi/ShortfallMiniTops';
+import { RefCount } from '/client/components/bigUi/ShortfallMiniTops';
+import { PartsShort } from '/client/components/bigUi/ShortfallMiniTops';
+import { LeftToResolve } from '/client/components/bigUi/ShortfallMiniTops';
+import ShortfallStatusPie from '/client/components/charts/Blockers/ShortfallStatusPie';
+import TabsLite from '/client/components/smallUi/Tabs/TabsLite';
+import NonConBubble from '/client/components/charts/NonCon/NonConBubble';
+import NonConBar from '/client/components/charts/NonCon/NonConBar';
+import NonConBarRefs from '/client/components/charts/NonCon/NonConBarRefs';
 import ShortScatter from '/client/components/charts/ShortScatter';
 
 const ProblemTab = ({

@@ -1,5 +1,5 @@
 import moment from 'moment';
-
+import 'moment-timezone';
 import Config from '/server/hardConfig.js';
 import { sortBranches } from '/server/utility';
 
@@ -16,8 +16,7 @@ function deriveFromHistory(history, trackOptions, branchOptions) {
   
   const branches = Array.from(foundTrackKeys, x => key2branch(x) );
   const qbranches = _.countBy(branches, x => x);
-  // const qKeysClean = _.omit(qKeys, (value, key)=> key === false );
-  
+
   const entryBranches = Object.entries(qbranches);
   const uniqBranches = _.uniq( Array.from(entryBranches, z => z[0] ) );
 

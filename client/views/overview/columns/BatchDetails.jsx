@@ -1,13 +1,12 @@
 import React from 'react';
-// import moment from 'moment';
 import Pref from '/client/global/pref.js';
 
-import BatchTopStatus from './BatchTopStatus.jsx';
-import ReleasedCheck from './ReleasedCheck.jsx';
+import BatchTopStatus from './BatchTopStatus';
+import ReleasedCheck from './ReleasedCheck';
 import TideActivityData, { TideActivitySquare } from '/client/components/tide/TideActivity';
 import { PerformanceSquare } from '/client/components/smallUi/StatusBlocks/PerformanceStatus';
-import BranchProgress from './BranchProgress.jsx';
-import NonConCounts from './NonConCounts.jsx';
+import BranchProgress from './BranchProgress';
+import NonConCounts from './NonConCounts';
 import ProJump from '/client/components/smallUi/ProJump';
 
 const BatchDetails = ({

@@ -1,17 +1,10 @@
 import moment from 'moment';
-import 'moment-timezone';
-import 'moment-business-time';
 
 import Config from '/server/hardConfig.js';
 import { batchTideTime } from './tideGlobalMethods.js';
-import { countWaterfall, countMulti } from './utility';
+import { syncLocale, countWaterfall, countMulti } from './utility';
 import { avgOfArray } from './calcOps';
 import { getEndWork } from '/server/shipOps';
-
-moment.updateLocale('en', {
-  workinghours: Config.workingHours,
-  shippinghours: Config.shippingHours
-});
 
 
 function countItemsWith(accessKey, rangeStart, rangeEnd, historyType) {
@@ -96,6 +89,8 @@ Meteor.methods({
     const stale = !statime ? true :
             moment.duration(moment().diff(moment(statime))).as('hours') > Config.freche;
     if(stale) {
+      syncLocale(Meteor.user().orgKey);
+      
       const batches = XBatchDB.find({
         orgKey: Meteor.user().orgKey,
         groupId: gID

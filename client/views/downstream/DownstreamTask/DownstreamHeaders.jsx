@@ -1,9 +1,7 @@
 import React, { Fragment } from 'react';
-// import moment from 'moment';
-// import Pref from '/client/global/pref.js';
 
-import { PrioritySquare } from '/client/components/smallUi/StatusBlocks/PrioritySquare.jsx';
-import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock.jsx';
+import { PrioritySquare } from '/client/components/smallUi/StatusBlocks/PrioritySquare';
+import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock';
 
 const DownstreamHeaders = ({
   indexKey, oB, traceDT,
