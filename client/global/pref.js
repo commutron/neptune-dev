@@ -85,9 +85,6 @@ class Pref {
     this.xBatchs = 'work orders';
     this.XBatchs = 'Work Orders';
     
-	  this.batch = 'legacy work order';//order
-	  this.Batch = 'legacy Work Order';//Order
-	  this.batches = 'legacy work orders';
 	  this.item = 'item';
 	  this.Item = 'Item';
 	  this.items = 'items';

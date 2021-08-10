@@ -27,17 +27,11 @@ const ScheduleSlide = ({ app, user, users, isAdmin, isPeopleSuper })=> {
   
   function handleTest() {
     const testDate = dateState;
-    // const nonWorkDays = app.nonWorkDays;
-    // if( Array.isArray(nonWorkDays) ) {  
-    //   moment.updateLocale('en', {
-    //     holidays: nonWorkDays
-    //   });
       if( moment( testDate ).isWorkingDay() ) {
         toast.info(`${dateState} IS a workday`);
       }else{
         toast(`${dateState} is NOT a workday`);
       }
-    // }
   }
   
   function handleAdd(wild) {
@@ -78,26 +72,26 @@ const ScheduleSlide = ({ app, user, users, isAdmin, isPeopleSuper })=> {
         <div className='overscroll'>
         
           <h3>Working Hours</h3>
-          <TimeObjMap timeObj={app.workingHours} />
+          <TimeObjMap timeObj={app.workingHours || {}} />
           {isAdmin &&
             <TimesEdit
               key='S3TW0RK'
               setFunc='setWorkTimes'
               idpre='work'
-              defaultObj={app.workingHours}
+              defaultObj={app.workingHours || {}}
             />
           }
           
           <hr className='vmargin' />
           
           <h3>Shipping Hours</h3>
-          <TimeObjMap timeObj={app.shippingHours} />
+          <TimeObjMap timeObj={app.shippingHours || {}} />
           {isAdmin &&
             <TimesEdit
               key='S3TSH1P'
               setFunc='setShipTimes'
               idpre='ship'
-              defaultObj={app.shippingHours}
+              defaultObj={app.shippingHours || {}}
             />
           }
           
