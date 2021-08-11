@@ -1,7 +1,6 @@
 import React from 'react';
 import moment from 'moment';
 import './style.css';
-//import Pref from '/client/global/pref.js';
 
 import CreateBlock from './CreateBlock';
 import HistoryBlock from './HistoryBlock';

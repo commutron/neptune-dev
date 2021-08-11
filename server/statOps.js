@@ -2,7 +2,7 @@ import moment from 'moment';
 
 import Config from '/server/hardConfig.js';
 import { batchTideTime } from './tideGlobalMethods.js';
-import { syncLocale, countWaterfall, countMulti } from './utility';
+import { syncLocale, noIg, countWaterfall, countMulti } from './utility';
 import { avgOfArray } from './calcOps';
 import { getEndWork } from '/server/shipOps';
 
@@ -64,6 +64,22 @@ export const totalTideTimePromise = (accessKey, rangeStart, rangeEnd)=> {
 
 
 Meteor.methods({
+  
+  exploreTops() {
+    const xid = noIg();
+    
+    const allB = XBatchDB.find({
+      orgKey: Meteor.user().orgKey,
+      groupId: { $ne: xid },
+    },{fields:{'_id':1, 'live':1, 'completed':1, 'lock':1}}).fetch();
+    
+    const xTotal = allB.length;
+    const xlive = allB.filter( x => x.live === true ).length;
+    const xProcess = allB.filter( x => x.completed === false ).length;
+    const xlocked = allB.filter( x => x.lock === true ).length;
+  
+    return [ xTotal, xlive, xProcess, xlocked ];
+  },
 
   widgetTops(wID) {
     const widget = WidgetDB.findOne({ _id: wID });

@@ -1,5 +1,4 @@
 import React, { useRef, useState, useEffect } from 'react';
-// import Pref from '/client/global/pref.js';
 
 import StoneWeir from './StoneWeir';
 

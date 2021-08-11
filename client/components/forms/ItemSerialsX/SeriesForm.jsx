@@ -105,7 +105,7 @@ const SeriesRemoveForm = ({ batchId, seriesId, selfclose })=> {
   }
   
   return(
-    <form onSubmit={(e)=>save(e)}>
+    <div>
       <h4>Removing the Series will remove individual item tracking by serial number</h4>
       <dt>Including:</dt>
       <dd>First-off, Build, Inspection and Test records</dd>
@@ -121,6 +121,6 @@ const SeriesRemoveForm = ({ batchId, seriesId, selfclose })=> {
           className='action clearRed'
         >Delete Series</button>
       </p>
-    </form>
+    </div>
   );
 };

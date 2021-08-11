@@ -8,7 +8,7 @@ const BatchResult = ({
   <div className='centre'>
     {resultState && resultState.map( (ent, index)=> {
       if(ent.length > 5 && index <= listLimit) {
-        const sty = !ent[6] ? 'numFont gMark' : 'numFont activeMark';
+        const sty = !ent[5] ? 'numFont gMark' : 'numFont activeMark';
         return(
           <LeapLine
             key={"wo"+index}

@@ -16,7 +16,7 @@ import { chunkArray } from '/client/utility/Convert';
 import { timeRanges } from '/client/utility/CycleCalc';
 
 
-const ScrapPanel = ({ batchData, app })=> {
+const ScrapPanel = ({ app })=> {
   
   const [ scraps, scrapsSet ] = useState(false);
   const [ cycleCount, cycleCountSet ] = useState(2);

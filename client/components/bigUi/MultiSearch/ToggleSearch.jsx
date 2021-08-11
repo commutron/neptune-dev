@@ -2,46 +2,19 @@ import React, { useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 
 const ToggleSearch = ({ 
-  batchData, widgetData, variantData, groupData, app,
   tggl, tgglSet, queryState, queryUP, resultUP
 })=> {
-	
-	const [ blendedListState, blendedListSet ] = useState( [] );
-  
-	useEffect( ()=> {
-    const w = widgetData;
-    const v = variantData;
-    const g = groupData;
-    let blendedList = [];
-    for(let b of batchData){
-      const subW = w.find( x => x._id === b.widgetId);
-      const subV = v.find( x => x.versionKey === b.versionKey);
-      const subG = g.find( x => x._id === subW.groupId);
-      blendedList.push([
-        b.batch,
-        b.salesOrder || 'n/a',
-        subG.alias,
-        subW.widget, 
-        subV.variant,
-        b.tags,
-        b.live
-      ]);
-    }
-    blendedListSet( blendedList );
-  }, []);
 
   function batchAction() {
-    const valid = queryState && queryState.length > 1;
+    const valid = queryState && queryState.length > 2;
     if(valid) {
-      Meteor.call('rapidLookup', queryState, (error, reply)=>{
+      Meteor.call('batchExtraLookup', queryState, (error, reply)=>{
         error && console.log(error);
-        let showList = blendedListState.filter( tx => 
-                        tx.toString().toLowerCase()
-                          .includes(queryState.toLowerCase()) === true
-                        || reply.includes(tx[0]) );
-        let sortList = showList.sort((b1, b2)=>
-                        b1[0] < b2[0] ? 1 : b1[0] > b2[0] ? -1 : 0);
-        resultUP( sortList );
+        if(reply) {
+          let sortList = reply.sort((b1, b2)=>
+                          b1[0] < b2[0] ? 1 : b1[0] > b2[0] ? -1 : 0);
+          resultUP( sortList );
+        }
   	  });
     }else{
       resultUP(null);
@@ -91,7 +64,7 @@ const ToggleSearch = ({
   
   function handle(e) {
     const value = e.target.value;
-    const valid = value && value.length > (tggl ? 2 : tggl === false ? 5 : 3);
+    const valid = value && value.length > (tggl === false ? 5 : 3);
     queryUP(value);
     if(!valid) {
       e.target.reportValidity();
@@ -127,7 +100,7 @@ const ToggleSearch = ({
           pattern={tggl ? '[A-Za-z0-9 _-]*' : 
             tggl === false ? '([0-9]{8,10})|([0-9]{6}[-][0-9]{7})*' : ''
           }
-          minLength={tggl ? '2' : tggl === false ? '5' : '3'}
+          minLength={tggl === false ? '5' : '3'}
           className='variableInput big'
           onChange={(e)=>handle(e)}
           autoFocus={true}

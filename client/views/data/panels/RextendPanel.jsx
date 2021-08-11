@@ -12,7 +12,7 @@ import RapidExTable from '/client/components/tables/RapidExTable';
 import { chunkArray } from '/client/utility/Convert';
 
 
-const RextendPanel = ({ batchData, app })=> {
+const RextendPanel = ({ app })=> {
   
   const [ rapex, rapexSet ] = useState(false);
   

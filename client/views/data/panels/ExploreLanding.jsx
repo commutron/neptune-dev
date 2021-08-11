@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor';
-import React, { useState } from 'react';
+import React, { useState, useLayoutEffect } from 'react';
 import Pref from '/client/global/pref.js';
 import TrendLine from '/client/components/charts/Trends/TrendLine';
 import { TrendBarCache } from '/client/components/charts/Trends/TrendBar';
@@ -9,19 +9,25 @@ import BatchNewList from '../lists/BatchNewList';
 import ToggleSearch from '/client/components/bigUi/MultiSearch/ToggleSearch';
 import ScrollWrap from '/client/components/bigUi/MultiSearch/ScrollWrap';
 
-const ExploreLanding = ({ 
-  groupData, widgetData, variantData, xBatchData, 
-  app, isDebug
-}) => {
+const ExploreLanding = ({ app, isDebug }) => {
   
   const [ tggl, tgglSet ] = useState( true );
   const [ queryState, querySet ] = useState( null );
 	const [ resultState, resultSet ] = useState( null );
+	
+	const [ xtop, xtopSet ] = useState( [ 0, 0, 0, 0 ] );
   
-  const xTotal = xBatchData.length;
-  const xlive = xBatchData.filter( x => x.live === true ).length;
-  const xProcess = xBatchData.filter( x => x.completed === false ).length;
-  const xlocked = xBatchData.filter( x => x.lock === true ).length;
+  useLayoutEffect( ()=>{
+    Meteor.call('exploreTops', (err, re)=>{
+      err && console.log(err);
+      re && xtopSet(re);
+    });
+  }, []);
+  
+  const xTotal = xtop[0];
+  const xlive = xtop[1];
+  const xProcess = xtop[2];
+  const xlocked = xtop[3];
   
   return(
     <section className='space1v'>
@@ -32,11 +38,6 @@ const ExploreLanding = ({
         queryState={queryState}
         queryUP={(v)=>querySet(v)}
         resultUP={(r)=>resultSet(r)}
-        batchData={xBatchData}
-        widgetData={widgetData}
-        variantData={variantData}
-        groupData={groupData}
-        app={app}
       />
     
       {!queryState || resultState === null ? null
@@ -122,13 +123,7 @@ const ExploreLanding = ({
        
         <div className='wide max875 vspacehalf'>
           <h3>New from the Last 7 Days</h3>
-          <BatchNewList
-            batchData={xBatchData}
-            widgetData={widgetData}
-            variantData={variantData}
-            groupData={groupData}
-            daysBack={7}
-          />
+          <BatchNewList daysBack={7} />
         </div>
         
       </div>
@@ -137,43 +132,3 @@ const ExploreLanding = ({
 };
 
 export default ExploreLanding;
-
-
-/*  
-  <div className='centreRow'>
-      
-    <TrendLine 
-      title={`completed ${Pref.items}`}
-      statType='doneItem'
-      cycleCount={isDebug ? 26 : 4}
-      cycleBracket='week'
-      lineColor='rgb(46, 204, 113)' />
-    
-    <TrendLine 
-      title={`discovered ${Pref.shortfall}s`}
-      statType='newSH'
-      cycleCount={isDebug ? 26 : 4}
-      cycleBracket='week'
-      lineColor='rgb(230, 126, 34)' />
-      
-    <TrendLine 
-      title={`discovered ${Pref.nonCons}`}
-      statType='newNC'
-      cycleCount={isDebug ? 26 : 4}
-      cycleBracket='week'
-      lineColor='rgb(231, 76, 60)' />
-    
-  </div>
-  
-  <details className='footnotes'>
-    <summary>Chart Details</summary>
-    <p className='footnote'>
-      Trends include {isDebug ? 26 : 4} weeks, including the current week. 
-      Read left to right as past to current.
-    </p>
-    <p className='footnote'>
-      Completed on time {Pref.batches} are indicated in green.
-      Completed late {Pref.batches} are indicated in yellow.
-    </p>
-  </details>
-  */

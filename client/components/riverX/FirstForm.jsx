@@ -46,7 +46,6 @@ const FirstForm = ({
   }, [sBranch]);
   
   
-  
   function consume() {
     let val = this.consume.value.trim();
     if(!val || val === '') {

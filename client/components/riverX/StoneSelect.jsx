@@ -1,5 +1,4 @@
 import React, { useRef, useState, useEffect } from 'react';
-// import moment from 'moment';
 import Pref from '/client/global/pref.js';
 
 import StoneControl from './StoneControl';
@@ -261,7 +260,8 @@ const GoBack = ({ handleStepUndo, selfCancel })=> {
   return(
     <button
 			className='textAction'
-			onClick={(e)=>handleStepUndo(e)}
-		><i className="fas fa-undo-alt spinRe"></i> Go Back</button>
+			onClick={(e)=>{e.target.disabled = true;handleStepUndo(e)}}
+			disabled={false}
+		><i className="fas fa-undo-alt spinRe gapR"></i>Go Back</button>
   );
 };

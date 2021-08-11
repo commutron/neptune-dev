@@ -247,8 +247,6 @@ const BuildHistory = ({ allXBatch, allVariant, allWidget, allGroup })=> {
         rows={viewState}
         extraClass='max750 transparent' />
         
-      
-
     </div>
   );
 };

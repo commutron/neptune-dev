@@ -145,10 +145,6 @@ const DataViewOps = ({
         base={true}
       >
         <ExploreLanding
-          xBatchData={allXBatch}
-          widgetData={allWidget}
-          variantData={allVariant}
-          groupData={allGroup} 
           app={app}
           isDebug={isDebug} />
       </TraverseWrap>
@@ -283,7 +279,6 @@ const DataViewOps = ({
           base={true}
         >
           <TestFailPanel 
-            groupData={allGroup}
             app={app} />
         </TraverseWrap>
       );
@@ -302,7 +297,6 @@ const DataViewOps = ({
           base={true}
         >
           <ScrapPanel 
-            batchData={allXBatch} 
             app={app} />
         </TraverseWrap>
       );
@@ -507,13 +501,14 @@ const DataViewOps = ({
       groupData={false}
       user={user}
       app={app}
-      title='???'
+      title='?!? 404 ?!?'
       subLink={subLink}
       action={false}
       base={true}
     >
-      <div className='centre wide'>
+      <div className='centre centreText wide'>
         <p className='biggest'>¯\_(ツ)_/¯</p>
+        <p className='bigger'>Page Not Found</p>
       </div>
       <div></div>
     </TraverseWrap>

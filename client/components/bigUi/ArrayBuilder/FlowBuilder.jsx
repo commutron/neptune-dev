@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 
 import './style.css';
+import AnimateOnChange from 'react-animate-on-change';
 
 import { 
   branchOptions,
@@ -188,7 +189,7 @@ const FlowBuilder = ({ app, options, defaultEnd, baseline, onClick })=> {
           const branch = app.branches.find( x => x.brKey === entry.branchKey );
           const niceBr =  branch ? branch.branch : '';
           return(                 
-            <div key={index}>                      
+            <div key={index}>
               <div>{entry.step}</div>
               <div>{entry.type}</div>
               <div>{niceBr}</div>

@@ -28,11 +28,8 @@ const BatchesList = ({ batchData, widgetData, variantData })=> {
       b;
     let showList = basicFilter.filter( 
                     tx => tx.batch.toLowerCase().includes(textString) === true );
-    let sortList = showList.sort((b1, b2)=> {
-                if (b1.batch < b2.batch) { return 1 }
-                if (b1.batch > b2.batch) { return -1 }
-                return 0;
-              });
+    let sortList = showList.sort((b1, b2)=>
+                    b1.batch < b2.batch ? 1 : b1.batch > b2.batch ? -1 : 0 );
     listSet(sortList);
   }, [ batchData, filter, textString ]);
             

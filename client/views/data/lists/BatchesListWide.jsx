@@ -32,7 +32,6 @@ const BatchesListWide = ({
         subG.alias,
         subW.widget, 
         subV.variant,
-        b.tags,
         b.live
       ]);
     }
@@ -42,11 +41,8 @@ const BatchesListWide = ({
   useEffect( ()=> {
     let showList = blendedListState.filter( tx =>
                     JSON.stringify(tx).toLowerCase().includes(textString) === true );
-    let sortList = showList.sort((b1, b2)=> {
-                if (b1[0] < b2[0]) { return 1 }
-                if (b1[0] > b2[0]) { return -1 }
-                return 0;
-              });
+    let sortList = showList.sort((b1, b2)=> 
+                    b1[0] < b2[0] ? 1 : b1[0] > b2[0] ? -1 : 0 );
     showListSet( sortList );
   }, [ blendedListState, textString ]);
   
@@ -74,9 +70,6 @@ const BatchesListWide = ({
         </div>
 
         {showListState.map( (ent, index)=> {
-          // const tags = ent[5].map( (et, ix)=>{
-          //   return(<span key={ix} className='tagFlag'><i>{et}</i></span>);
-          // });
           if(!allState && !ent[6]) { return null }else{
             const sty = !ent[6] ? 'numFont gMark' : 'numFont activeMark';
             return(
@@ -86,7 +79,6 @@ const BatchesListWide = ({
                 cTwo={<i><i className='smaller'>so: </i>{ent[1].toUpperCase()}</i>}
                 cThree={`${ent[2].toUpperCase()}`}
                 cFour={`${ent[3].toUpperCase()} v.${ent[4]}`}
-                // cFive={tags}
                 sty={sty}
                 address={'/data/batch?request=' + ent[0]}
               />

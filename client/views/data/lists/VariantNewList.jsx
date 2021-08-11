@@ -22,8 +22,7 @@ const VariantNewList = ({
         subG.alias,
         subW.widget,
         subW.describe,
-        v.variant,
-        v.tags
+        v.variant
       ]);
     }
     let sortList = blendedList.sort((v1, v2)=> 

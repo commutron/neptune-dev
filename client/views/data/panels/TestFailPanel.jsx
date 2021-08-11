@@ -14,7 +14,7 @@ import FailAllTable from '/client/components/tables/FailAllTable';
 import { timeRanges } from '/client/utility/CycleCalc';
 
 
-const TestFailPanel = ({ batchData, app })=> {
+const TestFailPanel = ({ app })=> {
   
   const [ fails, failsSet ] = useState(false);
   const [ cycleCount, cycleCountSet ] = useState(2);

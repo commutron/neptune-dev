@@ -54,17 +54,86 @@ Meteor.methods({
     }
   },
   
-  rapidLookup(orb) {
+  newBatchLookup(daysBack) {
+    const ystrday = ( d => new Date(d.setDate(d.getDate()-Number(daysBack))) )(new Date);
+
+    let newList = [];
+    
+    XBatchDB.find({
+      createdAt: { $gte: ystrday }
+    },
+    {fields:{ 'batch':1,'salesOrder':1,'live':1 }}
+    ).forEach( x => {
+      const is = whatIsBatchX(x.batch);
+      newList.push([
+        x.batch,
+        x.salesOrder || 'n/a',
+        is[0][0],
+        is[0][1],
+        is[0][2],
+        x.live
+      ]);
+    });
+    
+    return newList;
+  },
+  
+  batchExtraLookup(orb) {
     this.unblock();
-    const rapid = XRapidsDB.find({
+    let newList = [];
+    
+    const enterLine = (x)=> {
+      const is = whatIsBatchX(x.batch);
+      newList.push([
+        x.batch,
+        x.salesOrder || 'n/a',
+        is[0][0],
+        is[0][1],
+        is[0][2],
+        x.live
+      ]);
+    };
+    
+    XBatchDB.find({
       $or: [ 
-        { rapid: { $regex: new RegExp( orb ), $options: 'i' } },
-        { issueOrder: { $regex: new RegExp( orb ), $options: 'i' } }
+        { batch: { $regex: new RegExp( orb ) } },
+        { salesOrder: { $regex: new RegExp( orb ) } },
+        { tags: { $in: [ orb ] } }
+      ]
+    },{fields:{'batch':1,'salesOrder':1,'live':1}}
+    ).forEach( x => enterLine(x) );
+    
+    GroupDB.find({
+      alias: { $regex: new RegExp( orb ) }
+    },{fields:{'_id':1}}
+    ).forEach( g => {
+      XBatchDB.find({groupId: g._id},{fields:{'batch':1,'salesOrder':1,'live':1}})
+        .forEach( x => enterLine(x) );
+    });
+    
+    WidgetDB.find({
+      $or: [ 
+        { widget: { $regex: new RegExp( orb ) } },
+        { describe: { $regex: new RegExp( orb ) } },
+      ]
+    },{fields:{'_id':1}}
+    ).forEach( w => {
+      XBatchDB.find({widgetId: w._id},{fields:{'batch':1,'salesOrder':1,'live':1}})
+        .forEach( x => enterLine(x) );
+    });
+    
+    XRapidsDB.find({
+      $or: [ 
+        { rapid: { $regex: new RegExp( orb ) } },
+        { issueOrder: { $regex: new RegExp( orb ) } }
       ]},
       {fields:{'extendBatch':1}}
-    ).fetch();
-    const rBatch = Array.from(rapid, r => r.extendBatch);
-    return rBatch;
+    ).forEach( r => {
+      XBatchDB.find({batch: r.extendBatch},{fields:{'batch':1,'salesOrder':1,'live':1}})
+        .forEach( x => enterLine(x) );
+    });
+
+    return newList;
   },
   
   serialLookup(orb) {

@@ -62,7 +62,7 @@ const DataRepair = ({ app, users })=> {
   
   return(
     <div className='space3v autoFlex'>
-      
+
       <DoCard
         title='Force Randomize Org PIN'
         sub='Runs every day at 12:00am (CST)'

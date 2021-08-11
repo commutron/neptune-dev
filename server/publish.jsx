@@ -456,10 +456,8 @@ Meteor.publish('skinnyData', function(){
             'groupId': 1,
             'widgetId': 1,
             'versionKey': 1,
-            'tags': 1,
             'createdAt': 1,
             'live': 1,
-            'lock': 1,
             'salesOrder': 1,
             'completed': 1,
             'completedAt': 1

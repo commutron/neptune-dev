@@ -17,11 +17,8 @@ const WidgetsList = ({ active, widgetData, groupAlias })=> {
   
   useEffect( ()=> {
     const a = active;
-    const w = widgetData.sort((w1, w2)=> {
-                if (w1.widget < w2.widget) { return -1 }
-                if (w1.widget > w2.widget) { return 1 }
-                return 0;
-              });
+    const w = widgetData.sort((w1, w2)=>
+                w1.widget < w2.widget ? -1 : w1.widget > w2.widget ? 1 : 0 );
     const f = filter;
   
     let basicFilter = 
