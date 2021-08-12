@@ -1248,6 +1248,26 @@ n-col-table-head > span {
   text-transform: capitalize;
 }
 
+.settingColumn {
+  margin: 48px auto;
+  min-width: 300px;
+  width: 100%;
+  max-width: 750px;
+  
+}
+.settingColumn > div {
+  margin: 0;
+  width: 100%;
+  border-bottom: 1px inset rgb(150,150,150);
+  padding: 48px 24px;
+}
+.settingColumn > div:first-child {
+  padding: 24px 24px 48px 24px;
+}
+.settingColumn > div:last-child {
+  border-bottom: none
+}
+
 .max1200 { max-width: 1200px; }
 .max1000 { max-width: 1000px; }
 .max875 { max-width: 875px; }

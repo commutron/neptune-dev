@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 
 import ModelLarge from '/client/components/smallUi/ModelLarge';
 import ModelSmall from '/client/components/smallUi/ModelSmall';
-import Tabs from '/client/components/smallUi/Tabs/Tabs.jsx';
+import Tabs from '/client/components/smallUi/Tabs/Tabs';
 
 import YMDItemForm from './YMDItemForm';
 import YrWkPnItemFormX from './YrWkPnItemFormX';
@@ -13,6 +13,11 @@ import NSYrWkSqItemFormX from './NSYrWkSqItemFormX';
 const ItemSerialsWrapX = ({ 
   bID, quantity, seriesId, itemsQ, unit, app, lock, lgIcon
 })=> {
+  
+  const quantityCheck = (tryLength, quantity, start, stop)=>
+    tryLength > 0 && tryLength <= Pref.seriesLimit && tryLength <= quantity ? 
+    false : 
+    `${start} to ${stop} is an Invalid Range`;
   
   function showToast() {
     toast.warn('Please Wait For Confirmation...', {
@@ -84,6 +89,7 @@ const ItemSerialsWrapX = ({
         quantity={quantity}
         app={app}
         isDebug={isDebug}
+        quantityCheck={quantityCheck}
         showToast={showToast}
         updateToast={updateToast}
       />
@@ -95,7 +101,7 @@ export default ItemSerialsWrapX;
 
 const ItemSerialsTabs = ({ 
   bID, seriesId, unit, quantity,
-  app, isDebug, showToast, updateToast
+  app, isDebug, quantityCheck, showToast, updateToast
 })=> (
   <Tabs
     tabs={['Year-Month-Day', 'Year-Week-Panel', 'NorthStar Complex']}
@@ -109,6 +115,7 @@ const ItemSerialsTabs = ({
       quantity={quantity}
       app={app}
       isDebug={isDebug}
+      quantityCheck={quantityCheck}
       showToast={showToast}
       updateToast={updateToast} />
       
@@ -118,6 +125,7 @@ const ItemSerialsTabs = ({
       quantity={quantity}
       app={app}
       isDebug={isDebug}
+      quantityCheck={quantityCheck}
       showToast={showToast}
       updateToast={updateToast} />
       
@@ -127,6 +135,7 @@ const ItemSerialsTabs = ({
       quantity={quantity}
       app={app}
       isDebug={isDebug}
+      quantityCheck={quantityCheck}
       showToast={showToast}
       updateToast={updateToast} />
     

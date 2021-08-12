@@ -1,12 +1,11 @@
 import React, { useRef, useState, useEffect } from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
-import { toast } from 'react-toastify';
 
 
 const YrWkPnItemFormX = ({ 
   bID, seriesId, quantity, 
-  app, isDebug, showToast, updateToast
+  app, isDebug, quantityCheck, showToast, updateToast
 })=> {
   
   const thingMounted = useRef(true);
@@ -56,40 +55,43 @@ const YrWkPnItemFormX = ({
     let itemLoop = [];
     let tryData = [];
     
-    if(isPnl) {
-      for(let it = 1; it <= itemPerNum; it++) {
-        itemLoop.push(it.toString());
-      }
-      for(let tick = startLoopNum; tick <= stopLoopNum; tick++) {
-        for( let tock of itemLoop ) {
-          const serial = tick.toString() + tock.toString();
+    if(stopLoop.length !== (isPnl ? 7 : 8)) {
+      previewSet([]);
+      flrWarnSet(`Sequence maximum (${isPnl ? "999" : "9999"}) exceeded`);
+      quWarnSet(`${startLoop + (isPnl ? '1' : '')} to 
+                 ${stopLoop + (isPnl ? itemPerNum : '')} is an Invalid Range`);       
+      lockSet(true);
+    }else{
+      
+      if(isPnl) {
+        for(let it = 1; it <= itemPerNum; it++) {
+          itemLoop.push(it.toString());
+        }
+        for(let tick = startLoopNum; tick <= stopLoopNum; tick++) {
+          for( let tock of itemLoop ) {
+            const serial = tick.toString() + tock.toString();
+            tryData.push(serial);
+          }
+        }
+    	}else{
+    	  for(let tick = startLoopNum; tick <= stopLoopNum; tick++) {
+          const serial = tick.toString();
           tryData.push(serial);
         }
-      }
-  	}else{
-  	  for(let tick = startLoopNum; tick <= stopLoopNum; tick++) {
-        const serial = tick.toString();
-        tryData.push(serial);
-      }
-  	}
-  	
-    previewSet(tryData);
-    
-    const firstInSqu = tryData.length > 0 ? tryData[0] : 10000000;
-    const floor = app.latestSerial.eightDigit;
-                          
-    const flrChk = firstInSqu > floor ? false :
-                   `Not in sequence (Below ${floor})`;
-                   
-    flrWarnSet(flrChk);
-    
-    const quChk = tryData.length > 0 && 
-                  tryData.length <= Pref.seriesLimit &&
-                  tryData.length <= quantity ? 
-                  false : 'Invalid Range';
-    quWarnSet(quChk);       
-                   
-    lockSet(!!quChk);
+    	}
+      previewSet(tryData);
+      
+      const firstInSqu = tryData.length > 0 ? tryData[0] : 10000000;
+      const floor = app.latestSerial.eightDigit;
+                            
+      const flrChk = firstInSqu > floor ? false :
+                     `Not in sequence (Below ${floor})`;
+      flrWarnSet(flrChk);
+      
+      const quChk = quantityCheck(tryData.length, quantity, startLoop, stopLoop);
+      quWarnSet(quChk);       
+      lockSet(!!quChk);
+    }
     
     isDebug && console.log({ 
         year_week, itemPerVal, panelQuVal,
@@ -120,7 +122,7 @@ const YrWkPnItemFormX = ({
                             previewData.slice(-3) : [];
     
   return(
-    <div className='balance'>
+    <div className='balance gapsC'>
         <form 
           className='fill'
           onSubmit={(e)=>handleCheck(e)} 
@@ -170,7 +172,7 @@ const YrWkPnItemFormX = ({
               defaultChecked={isPnl === false}
               onChange={()=>isPnlSet(false)}
               required
-            />NO Panels</label>
+            />Singles</label>
           </p>
           
           <p>
@@ -231,8 +233,8 @@ const YrWkPnItemFormX = ({
           </p>
         </form>
         
-      <div className='centre vspace'>
-        <dl className='numFont letterSpaced noindent'>
+      <div className='centre vspace numFont'>
+        <dl className='letterSpaced noindent'>
           {previewListStart.map( (ent, ix)=>{
             return(<dd key={ix+'s'}>{ent}</dd>);
           })}
@@ -245,7 +247,7 @@ const YrWkPnItemFormX = ({
         {flrWarn && <p>{flrWarn}</p>}
         {quWarn && <p>{quWarn}</p>}
         
-        <p className='medBig'><i className='numFont big'>{previewData.length}</i> {Pref.itemSerial}s</p>
+        <p className='medBig'><i className='big'>{previewData.length}</i> {Pref.itemSerial}s</p>
         <p className='centreText'><em>duplicate checking is done on the server</em></p>
         <p className='centre'>
           <button

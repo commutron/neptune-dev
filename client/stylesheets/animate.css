@@ -5,12 +5,10 @@
   100% { opacity: 1; }
 }
 
-
 @keyframes fadeAway {
   0% { opacity: 1; }
   100% { opacity: 0.01; }
 }
-
 
 /******** proper ones **********/
 @keyframes slideInRight {

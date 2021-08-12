@@ -1,12 +1,11 @@
 import React, { useRef, useState, useEffect } from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
-import { toast } from 'react-toastify';
 
 
 const YMDItemForm = ({ 
   bID, seriesId, unit, quantity, 
-  app, isDebug, showToast, updateToast
+  app, isDebug, quantityCheck, showToast, updateToast
 })=> {
   
   const thingMounted = useRef(true);
@@ -34,7 +33,6 @@ const YMDItemForm = ({
     resultSet(false);
     
     const tenDg = digitState === 10;
-    
     const padSqu = (v)=> tenDg ? v.padStart(4, 0) : v.padStart(3, 0);
   
     const yearVal = this.yrDigits.value;
@@ -56,27 +54,30 @@ const YMDItemForm = ({
     
     let tryData = [];
     
-  	for(let tick = startLoopNum; tick <= stopLoopNum; tick++) {
-      const serial = tick.toString();
-      tryData.push(serial);
+    if(stopLoop.length !== digitState) {
+      previewSet([]);
+      flrWarnSet(`Sequence maximum (${tenDg ? "9999" : "999"}) exceeded`);
+      quWarnSet(`${startLoop} to ${stopLoop} is an Invalid Range`);       
+      lockSet(true);
+    }else{
+      
+    	for(let tick = startLoopNum; tick <= stopLoopNum; tick++) {
+        const serial = tick.toString();
+        tryData.push(serial);
+      }
+      previewSet(tryData);
+  
+      const floor = tenDg ? app.latestSerial.tenDigit :
+                            app.latestSerial.nineDigit;
+           
+      const flrChk = startLoopNum > floor ? false :
+                     `Not in sequence (Below ${floor})`;
+      flrWarnSet(flrChk);
+      
+      const quChk = quantityCheck(tryData.length, quantity, startLoop, stopLoop);
+      quWarnSet(quChk);       
+      lockSet(!!quChk);
     }
-  	
-    previewSet(tryData);
-
-    const floor = tenDg ? app.latestSerial.tenDigit :
-                          app.latestSerial.nineDigit;
-                          
-    const flrChk = startLoopNum > floor ? false :
-                   `Not in sequence (Below ${floor})`;
-    flrWarnSet(flrChk);
-    
-    const quChk = tryData.length > 0 && 
-                  tryData.length <= Pref.seriesLimit &&
-                  tryData.length <= quantity ? 
-                  false : 'Invalid Range';
-    quWarnSet(quChk);       
-                   
-    lockSet(!!quChk);
     
     isDebug && console.log({ 
       year_month_day, quVal, startLoopNum, stopLoopNum, tryData
@@ -109,7 +110,7 @@ const YMDItemForm = ({
                             previewData.slice(-3) : [];
     
   return(
-    <div className='balance'>
+    <div className='balance gapsC'>
         <form 
           className='fill'
           onSubmit={(e)=>handleCheck(e)} 
@@ -236,8 +237,8 @@ const YMDItemForm = ({
           </p>
         </form>
         
-      <div className='centre vspace'>
-        <dl className='numFont letterSpaced noindent'>
+      <div className='centre vspace numFont'>
+        <dl className='letterSpaced noindent'>
           {previewListStart.map( (ent, ix)=>{
             return(<dd key={ix+'s'}>{ent}</dd>);
           })}
@@ -250,7 +251,7 @@ const YMDItemForm = ({
         {flrWarn && <p>{flrWarn}</p>}
         {quWarn && <p>{quWarn}</p>}
         
-        <p className='medBig'><i className='numFont big'>{previewData.length}</i> {Pref.itemSerial}s</p>
+        <p className='medBig'><i className='big'>{previewData.length}</i> {Pref.itemSerial}s</p>
         <p className='centreText'><em>duplicate checking is done on the server</em></p>
         <p className='centre'>
           <button

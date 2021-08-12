@@ -22,7 +22,7 @@ import WProbTab from './WProbTab';
 const WidgetPanel = ({ 
   groupData, widgetData, variantData,
   batchRelated, 
-  app, user
+  app, user, users
 })=> {
 
   const w = widgetData;
@@ -54,6 +54,7 @@ const WidgetPanel = ({
           <VariantForm
             widgetData={widgetData}
             variantData={false}
+            users={users}
             app={app}
             rootWI={groupData.wiki}
             lockOut={groupData.hibernate} />

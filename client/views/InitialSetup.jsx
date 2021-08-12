@@ -20,12 +20,15 @@ const InitialSetup = ({ ready, option })=> {
   }
   
   function hndlFirstUser() {
-    let options = {username: 'devMaster', password: 'firefly'};
-    	Accounts.createUser(options, (error)=>{
-    		if(error) {
-    			console.log(error);
-    		}
-    	});
+    let options = {
+      username: 'administrator', 
+      password: 'theonlywaterintheforestistheriver'
+    };
+  	Accounts.createUser(options, (error)=>{
+  		if(error) {
+  			console.log(error);
+  		}
+  	});
   }
   
   if( !ready ) {
@@ -46,7 +49,7 @@ const InitialSetup = ({ ready, option })=> {
         <button
           className='clear whiteT'
           onClick={()=>hndlFirstUser()}
-        >First User</button>
+        >First Account</button>
         <br /><br /><br /><br /><br />  
         <form onSubmit={()=>hndlSet()}>
           <button
@@ -64,8 +67,7 @@ export default withTracker( () => {
   let login = Meteor.userId() ? true : false;
   let user = login ? Meteor.user() : false;
   let org = user ? user.org : false;
-  //let active = user ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
-     
+
     if(!org) {
       if(Pref.InitialAppSetup) {
         return {

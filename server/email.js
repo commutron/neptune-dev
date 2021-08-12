@@ -1,6 +1,7 @@
 Meteor.methods({
   
-  sendEmail(to, from, subject) {
+  sendEmail(to, subject) {
+    const from = 'no-reply@commutron.ca';
     const check = (val)=> typeof val === 'string';
     if(check(to) && check(from) && check(subject)) {
       this.unblock();

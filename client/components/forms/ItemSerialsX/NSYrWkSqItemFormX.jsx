@@ -1,12 +1,11 @@
 import React, { useRef, useState, useEffect } from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
-import { toast } from 'react-toastify';
 
 
 const NSYrWkSqItemFormX = ({ 
   bID, seriesId, quantity,
-  app, isDebug, showToast, updateToast
+  app, isDebug, quantityCheck, showToast, updateToast
 })=> {
   
   const thingMounted = useRef(true);
@@ -18,6 +17,7 @@ const NSYrWkSqItemFormX = ({
   const thisYear = moment().weekYear().toString().slice(-2);
   const thisWeek = moment().week().toString().padStart(2, 0);
   
+  const [ flrWarn, flrWarnSet ] = useState(false);
   const [ quWarn, quWarnSet ] = useState(false);
   
   const [ createLock, lockSet ] = useState(true);
@@ -51,23 +51,28 @@ const NSYrWkSqItemFormX = ({
     const stopLoopNum = parseInt(stopLoop, 10);
     
     let tryData = [];
-    for(let tick = startLoopNum; tick <= stopLoopNum; tick++) {
+    
+    if(stopLoop.length !== 3) {
+      previewSet([]);
+      flrWarnSet(`Sequence maximum (999) exceeded`);
+      quWarnSet(`${man_lot_year_week + startLoop} to 
+                 ${man_lot_year_week + stopLoop} is an Invalid Range`);       
+      lockSet(true);
+    }else{
+      
+      for(let tick = startLoopNum; tick <= stopLoopNum; tick++) {
         const serial = man_lot_year_week + tick.toString().padStart(3, 0);
         tryData.push(serial);
+      }
+      
+      previewSet(tryData);
+      
+      const quChk = quantityCheck(tryData.length, quantity, startLoop, stopLoop);
+      quWarnSet(quChk);
+      lockSet(!!quChk);
     }
     
-    previewSet(tryData);
-    
-    const quChk = tryData.length > 0 && 
-                  tryData.length <= Pref.seriesLimit &&
-                  tryData.length <= quantity ? 
-                  false : 'Invalid Range';
-    quWarnSet(quChk);       
-                   
-    lockSet(!!quChk);
-    
     // const regexNS = RegExp(/^(\d{6}\-\d{7})$/);
-    // const found = regexNS.test(tryData[0]);
     isDebug && console.log({ 
         man_lot_year_week, seqStVal, weekQuVal,
         startLoopNum, stopLoopNum, tryData
@@ -97,7 +102,7 @@ const NSYrWkSqItemFormX = ({
                             previewData.slice(-3) : [];
     
   return(
-    <div className='balance'>
+    <div className='balance gapsC'>
       <form 
         className='fill'
         onSubmit={(e)=>handleCheck(e)} 
@@ -194,8 +199,8 @@ const NSYrWkSqItemFormX = ({
         </p>
       </form>
         
-      <div className='centre vspace'>
-        <dl className='numFont letterSpaced noindent'>
+      <div className='centre vspace numFont'>
+        <dl className='letterSpaced noindent'>
           {previewListStart.map( (ent, ix)=>{
             return(<dd key={ix+'s'}>{ent}</dd>);
           })}
@@ -205,9 +210,10 @@ const NSYrWkSqItemFormX = ({
           })}
         </dl>
         
-        {quWarn && <p className='medBig'>{quWarn}</p>}
+        {flrWarn && <p>{flrWarn}</p>}
+        {quWarn && <p>{quWarn}</p>}
         
-        <p className='medBig'><i className='numFont big'>{previewData.length}</i> {Pref.itemSerial}s</p>
+        <p className='medBig'><i className='big'>{previewData.length}</i> {Pref.itemSerial}s</p>
         <p className='centreText'><em>duplicate checking is done on the server</em></p>
         <p className='centre'>
           <button

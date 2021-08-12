@@ -41,7 +41,6 @@ const AllGroups = ({
     
       {sortList.map( (entry, index)=> {
         let widgetsList = widgetData.filter(x => x.groupId === entry._id);
-        /*address={'/data/group?request=' + entry.alias}*/
         return(
           <GroupSlide
             key={index+entry._id}

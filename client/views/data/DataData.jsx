@@ -89,7 +89,7 @@ export default withTracker( ({ view, request, specify }) => {
   const hotXRapids = XRapidsDB.find({ extendBatch: request }).fetch() || false;
   const hotWidget = view === 'widget' ? request : false;
   
-  const hotSubEx = Meteor.subscribe('hotDataEx', request, hotWidget);
+  const hotSubEx = Meteor.subscribe('hotDataEx', view, request, hotWidget);
 
   if( !login || !active ) {
     return {

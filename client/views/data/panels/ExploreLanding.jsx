@@ -15,7 +15,7 @@ const ExploreLanding = ({ app, isDebug }) => {
   const [ queryState, querySet ] = useState( null );
 	const [ resultState, resultSet ] = useState( null );
 	
-	const [ xtop, xtopSet ] = useState( [ 0, 0, 0, 0 ] );
+	const [ xtop, xtopSet ] = useState( [ null, null, null, null ] );
   
   useLayoutEffect( ()=>{
     Meteor.call('exploreTops', (err, re)=>{
@@ -95,27 +95,28 @@ const ExploreLanding = ({ app, isDebug }) => {
         
         <div className='centreRow vspacehalf'>
           <NumStatBox
-            number={xlive}
+            number={xlive || "\u2800"}
             name={Pref.live}
             borderColour='blue'
           />
-          {xlive - xProcess > 0 &&
+          
           <NumStatBox
-            number={xlive - xProcess}
+            number={xlive ? xlive - xProcess : "\u2800"}
             name={`${Pref.live} ${Pref.rapidEx}`}
             borderColour='orange'
-          />}
+          />
+          
           <NumStatBox
-            number={xTotal - xProcess}
+            number={xTotal ? xTotal - xProcess : "\u2800"}
             name='Completed'
             borderColour='green'
           />
            <NumStatBox
-            number={xTotal}
+            number={xTotal || "\u2800"}
             name='Total'
           />
           <NumStatBox
-            number={xlocked}
+            number={xlocked || "\u2800"}
             name='Locked'
             borderColour='rgb(155, 89, 182)'
           />

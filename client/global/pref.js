@@ -10,7 +10,7 @@ class Pref {
     
     this.InitialAppSetup = false;
     
-    this.neptuneVersion = '3.5.5';
+    this.neptuneVersion = '3.5.6';
     this.neptuneIs = 'Neptune Process Tracking';
 
     this.prefName = 'default';
@@ -72,7 +72,7 @@ class Pref {
     this.instruct = 'instructions';
     this.docs = 'Pisces';
     this.helpDocs = 'help';
-    this.timeClock = 'Fishbowl';
+    this.timeClock = 'Timeclock';
     this.user = 'employees';
     
     // terminology
@@ -181,9 +181,6 @@ class Pref {
     this.Scrap = 'Scrap';
     this.scraps = 'scraps';
     this.scrapped = 'scrapped';
-    // rma
-    this.rma = 'legacy RMA';
-    this.rmaProcess = 'legacy RMA process';
     // blocker tracking
     this.block = 'caution';
     this.solve = 'solution';

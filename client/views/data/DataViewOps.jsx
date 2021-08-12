@@ -166,7 +166,6 @@ const DataViewOps = ({
         base={true}
       >
         <BuildHistory
-          allXBatch={allXBatch}
           allVariant={allVariant}
           allWidget={allWidget}
           allGroup={allGroup} 
@@ -482,6 +481,7 @@ const DataViewOps = ({
             batchRelated={allBatches}
             app={app}
             user={user}
+            users={users}
           />
           <BatchesList
             batchData={allBatches}

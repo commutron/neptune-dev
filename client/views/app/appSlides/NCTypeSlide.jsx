@@ -1,10 +1,9 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
-//import AppSetSimple from '/client/components/forms/AppSetSimple';
 
-import SlidesNested from '/client/components/smallUi/SlidesNested.jsx';
-import NCSupportChunk from './NCSupportChunk';
+import SlidesNested from '/client/components/smallUi/SlidesNested';
+import AppSetSimple from '/client/components/forms/AppSetSimple';
 
 const NCTypeSlide = ({ app })=> {
   
@@ -36,7 +35,6 @@ const NCTypeSlide = ({ app })=> {
       menuTitle='Defect Type Collections'
       menu={listMenu}
       filter={false}
-      //disableAll={!isAdmin}
       topPage={
         <TopNCSlide app={app} />
       }>
@@ -206,17 +204,29 @@ const TopNCSlide = ({ app })=> {
         </form>
       </div>
       
-      <NCSupportChunk app={app} />
+      <hr className='vmargin' />
       
-      <div>
-        <h3>Legacy List</h3>
-        <ol>
-          {app.nonConOption.map( (entry, index)=>{
-            return( 
-              <li key={index}>{entry}</li>
-          )})}
-        </ol>
-      </div>
+      <h3 className='cap'>missing type</h3>
+      <i>Type of {Pref.nonCon} that can be converted into a shortfall</i>
+      <AppSetSimple
+        title='type'
+        action='addMissingType'
+        rndmKey={Math.random().toString(36).substr(2, 5)} />
+      <i><em>currently set to: </em>{app.missingType || ''}</i>
+      
+      <hr className='vmargin' />
+      
+      {app.nonConOption &&
+        <div>
+          <h3>Legacy List</h3>
+          <ol>
+            {app.nonConOption.map( (entry, index)=>{
+              return( 
+                <li key={index}>{entry}</li>
+            )})}
+          </ol>
+        </div>
+      }
       
     </div>
   );

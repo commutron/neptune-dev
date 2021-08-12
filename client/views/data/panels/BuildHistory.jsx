@@ -6,7 +6,7 @@ import ReportStatsTable from '/client/components/tables/ReportStatsTable';
 import NumLine from '/client/components/tinyUi/NumLine';
 
 
-const BuildHistory = ({ allXBatch, allVariant, allWidget, allGroup })=> {
+const BuildHistory = ({ allVariant, allWidget, allGroup })=> {
   
   const [ vPack, vPackSet ] = useState([]);
 
@@ -32,20 +32,10 @@ const BuildHistory = ({ allXBatch, allVariant, allWidget, allGroup })=> {
 	                    x1.alias > x2.alias ? 1 : x1.alias < x2.alias ? -1 : 0 );
   
   useEffect( ()=> {
-    
-    let orderDates = [];
-    for( let v of allVariant ) {
-      const btchsX = allXBatch.filter( b => b.versionKey === v.versionKey);
-      const datesX = Array.from(btchsX, b => !b.completedAt ? new Date() : b.completedAt);
-      orderDates.push({
-        variant: v.variant,
-        widgetId: v.widgetId,
-        groupId: v.groupId,
-        dates: datesX
-      });
-    }
-    vPackSet( orderDates );
-    
+    Meteor.call('getVariantOrderDates', (err, re)=> {
+      err && console.log(err);
+      re && vPackSet( re );
+    });
   }, []);
   
   useEffect( ()=> {

@@ -58,7 +58,7 @@ Meteor.methods({
     
       if(Array.isArray(serialArr) && serialArr.length > 0) {
         const doc = XBatchDB.findOne({_id: batchId, orgKey: accessKey},{fields:{'completed':1,'quantity':1}});
-        const srs = XSeriesDB.findOne({_id: seriesId, orgKey: accessKey},{fields:{'items':1}});
+        const srs = XSeriesDB.findOne({_id: seriesId, orgKey: accessKey},{fields:{'items.serial':1}});
         const open = doc.completed === false;
         
         if(open && srs) {
@@ -135,14 +135,14 @@ Meteor.methods({
   addYearWeekPanelItemsX(batchId, seriesId, serialArr) {
     const accessKey = Meteor.user().orgKey;
     
-    const appSetting = AppDB.findOne({orgKey: accessKey});
+    const appSetting = AppDB.findOne({orgKey: accessKey},{fields:{'latestSerial':1}});
     const floor = appSetting.latestSerial.eightDigit;
     
     if(Roles.userIsInRole(Meteor.userId(), 'create')) {
     
       if(Array.isArray(serialArr) && serialArr.length > 0) {
         const doc = XBatchDB.findOne({_id: batchId, orgKey: accessKey},{fields:{'completed':1,'quantity':1}});
-        const srs = XSeriesDB.findOne({_id: seriesId, orgKey: accessKey},{fields:{'latestSerial':1}});
+        const srs = XSeriesDB.findOne({_id: seriesId, orgKey: accessKey},{fields:{'items.serial':1}});
         const open = doc.completed === false;
         
         if(open && srs) {
@@ -215,7 +215,7 @@ Meteor.methods({
     
       if(Array.isArray(serialArr) && serialArr.length > 0) {
         const doc = XBatchDB.findOne({_id: batchId, orgKey: accessKey},{fields:{'completed':1,'quantity':1}});
-        const srs = XSeriesDB.findOne({_id: seriesId, orgKey: accessKey},{fields:{'latestSerial':1}});
+        const srs = XSeriesDB.findOne({_id: seriesId, orgKey: accessKey},{fields:{'items.serial':1}});
         const open = doc.completed === false;
         
         if(open && srs) {

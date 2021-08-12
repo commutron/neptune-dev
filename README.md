@@ -11,8 +11,6 @@ A Commutron Industries project.
 
 Built with ReactJS, MeteorJS, and MongoDB.
 
-Potentialy unstable.
-
 Copyright (c) 2016-present Commutron Industries, https://www.commutron.ca
 
 Author 2016-2021 Matthew Andreas https://github.com/mattandwhatnot

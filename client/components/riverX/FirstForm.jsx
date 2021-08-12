@@ -140,7 +140,7 @@ const FirstForm = ({
             <MultiSelect
               options={userCombo}
               value={whoBState}
-              onChange={whoBSet}
+              onChange={(e)=>whoBSet(e.length > 0 ? e : false)}
               labelledBy={"Builder"}
               hasSelectAll={false}
               disableSearch={true}
@@ -152,7 +152,7 @@ const FirstForm = ({
             <MultiSelect
               options={buildCombo}
               value={howBState}
-              onChange={howBSet}
+              onChange={(e)=>howBSet(e.length > 0 ? e : false)}
               labelledBy={"Method"}
               hasSelectAll={false}
               disableSearch={true}

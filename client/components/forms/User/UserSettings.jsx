@@ -11,8 +11,7 @@ import IdCardCard from '/client/views/user/IdCardCard';
 const UserSettings = ({ app, user, isAdmin, brancheS })=> {
   
   const speedOps = [
-    // {value: 100, lock: !sup, name: 'Too Fast' },
-    // {value: 250, lock: !sup, name: 'Crazy Fast' },
+    // {value: 250, lock: !isAdmin, name: 'Crazy Fast' },
     {value: 500, name: 'Very Fast' },
     {value: 1000, name: 'Fast' },
     {value: 1500, name: 'Medium' },
@@ -27,16 +26,20 @@ const UserSettings = ({ app, user, isAdmin, brancheS })=> {
   
   return(
     <div>
-      <span className='noPrint readPs'>
-        <p><b>Username:</b> {user.username}</p>
-        <p><b>ID:</b> {Meteor.user()._id}</p>
-        <p><b>Organization:</b> <i className='blueT bold'>{Meteor.user().org}</i></p>
-        <p><b>Joined:</b> {user.createdAt.toLocaleString()}</p>
-      </span>
-      
-      <div className='autoFlex'>  
+      <div className='comfort cardify'>
+        <span className='noPrint readPs medBig'>
+          <p><b>Username:</b> {user.username}</p>
+          <p><b>ID:</b> {Meteor.user()._id}</p>
+          <p><b>Organization:</b> <i className='blueT bold'>{Meteor.user().org}</i></p>
+          <p><b>Joined:</b> {user.createdAt.toLocaleString()}</p>
+        </span>
         
-        <div className='noPrint'>
+        <IdCardCard user={user} />
+      </div>
+      
+      <div className='cardSelf settingColumn noPrint'>  
+        
+        <div>
           <h3><i className='fas fa-sliders-h fa-fw'></i> Interface Preferences</h3>
           <div>
         
@@ -115,23 +118,20 @@ const UserSettings = ({ app, user, isAdmin, brancheS })=> {
           </div>
         </div>
         
-        <div className='noPrint minHeight'>
+        <div className='minHeight'>
           <h3><i className='fas fa-user-edit fa-fw'></i> Change Username</h3>
           <UsernameChange />
           
           <h3 className='dropCeiling'><i className='fas fa-key fa-fw'></i> Change Password</h3>
           <PasswordChange />
         </div>
-        
-        <IdCardCard user={user} />
-        
+
         {isAdmin ?
-          <div className='noPrint minHeight'>
+          <div className='minHeight'>
             <h3><i className='fas fa-user-secret fa-fw'></i> Admin Status</h3>
              <AdminDown />
           </div>
-          : null
-        }
+        : null}
         
       </div>
       
@@ -181,7 +181,7 @@ export const UserSelectSetting = ({
       <div>
         <select
           id='speedSetting'
-          className='tableAction'
+          className='miniIn18'
           onChange={(e)=>handleUpdate(e.target.value)}
           defaultValue={userSetting}
           required>

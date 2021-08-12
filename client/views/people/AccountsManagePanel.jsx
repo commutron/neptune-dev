@@ -167,9 +167,8 @@ export const PermissionHelp = ({ auths, admin })=> {
         <ul>
           <li><b>QA</b></li>
           <ul>
-            <li>Create and edit {Pref.rmaProcess}es</li>
+            <li>Create and edit {Pref.rapidExs}</li>
             <li><i className='cap'>{Pref.scrap}</i> a {Pref.item}</li>
-            <li>Add {Pref.escape}</li>
           </ul>
         </ul>
       : null}
@@ -179,7 +178,7 @@ export const PermissionHelp = ({ auths, admin })=> {
           <li><b>Remove</b></li>
           <ul>
             <li>Remove a {Pref.group}, {Pref.widget}, {Pref.version} *</li>
-            <li>Remove a {Pref.batch}, {Pref.item}, or nonconformace *</li>
+            <li>Remove a {Pref.xBatch}, {Pref.item}, or nonconformace *</li>
             <p className='small'>* subject to "in-use" checks</p> 
           </ul>
         </ul>
@@ -192,8 +191,7 @@ export const PermissionHelp = ({ auths, admin })=> {
             <li>Create a new {Pref.group}</li>
             <li>Create a new {Pref.widget} notes</li>
             <li>Create a new {Pref.version}</li>
-            <li>Create a new {Pref.batch}</li>
-            <li>Create a new batch+</li>
+            <li>Create a new {Pref.xBatch}</li>
             <li>Create new {Pref.itemSerial}s</li>
           </ul>
         </ul>
@@ -217,27 +215,18 @@ export const PermissionHelp = ({ auths, admin })=> {
         <ul>
           <li><b>Run</b></li>
           <ul>
-            <li>Edit {Pref.batch} name or dates</li>
+            <li>Edit {Pref.xBatch} name or dates</li>
             <li>Add or Remove {Pref.tag}s</li>
-            <li>Edit {Pref.batch} notes</li>
+            <li>Edit {Pref.xBatch} notes</li>
             <li>Change {Pref.unit}</li>
-            <li>Set a {Pref.batch} {Pref.flow}</li>
+            <li>Set a {Pref.xBatch} {Pref.flow}</li>
             <li>Add {Pref.block}s</li>
             <li>Skip/ship nonconformaces</li>
-            <li>Add {Pref.escape}</li>
-            <li>Add, Edit or Remove {Pref.omit}s</li>
           </ul>
         </ul>
       : null}
       
-      {r.includes('finish') ?
-        <ul>
-          <li><b>Finish</b></li>
-          <ul>
-            <li><i className='cap'>{Pref.trackLast}</i> a {Pref.item}</li>
-          </ul>
-        </ul>
-      : null}
+      
         
       {r.includes('test') ?
         <ul>
@@ -267,8 +256,8 @@ export const PermissionHelp = ({ auths, admin })=> {
             <li>Edit nonconformaces</li>
             <li>Edit {Pref.shortfall}s</li>
             <li>Resolve {Pref.shortfall}s</li>
-            <li>Snooze and re-activate nonconformaces</li>
-            <li>Active an {Pref.rmaProcess} on a {Pref.item}</li>
+            <li>Trash and re-activate nonconformaces</li>
+            <li>Active an {Pref.rapidExd} on a {Pref.item}</li>
           </ul>
         </ul>
       : null}
@@ -277,7 +266,7 @@ export const PermissionHelp = ({ auths, admin })=> {
         <ul>
           <li><b>Active</b></li>
           <ul>
-            <li>View {Pref.group} and {Pref.batch} information</li>
+            <li>View {Pref.group} and {Pref.xBatch} information</li>
             <li>Record "Build" steps</li>
             <li>Record nonconformaces</li>
             <li>Record {Pref.shortfall}s</li>

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 
 import './style.css';
-import AnimateOnChange from 'react-animate-on-change';
 
 import { 
   branchOptions,

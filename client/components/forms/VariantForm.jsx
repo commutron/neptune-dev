@@ -3,6 +3,7 @@ import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
 import ModelLarge from '../smallUi/ModelLarge';
+// import MultiSelect from "react-multi-select-component";
 
 const VariantModel = ({ widgetData, app, rootWI, lockOut })=> {
   
@@ -31,17 +32,22 @@ const VariantModel = ({ widgetData, app, rootWI, lockOut })=> {
   
 export default VariantModel;
 
-const VariantForm = ({ widgetData, app, rootWI, selfclose })=> {
-
+const VariantForm = ({ widgetData, users, app, rootWI, selfclose })=> {
+  
+  // const [ howBState, howBSet ] = useState( false );
+  
   function save(e) {
     e.preventDefault();
     this.go.disabled = true;
+    
     const wId = widgetData._id;
     const gId = widgetData.groupId;
     
     const variant = this.rev.value.trim();
     const wiki = this.wikdress.value.trim();
     const unit = this.unit.value.trim();
+    
+    // const howB = Array.from(howBState, u => u.value);
     
     Meteor.call('addNewVariant', wId, gId, variant, wiki, unit, (error, reply)=>{
       error && console.log(error);
@@ -112,6 +118,25 @@ const VariantForm = ({ widgetData, app, rootWI, selfclose })=> {
           height='600'
           width='100%' />
       </div>
+      
+      {/*
+      
+      {buildCombo ?
+      const ueCombo = Array.from(users, x => { return { label: x.username, value: x.email } } );
+      
+          <label htmlFor='Method'>
+            <MultiSelect
+              options={ueCombo}
+              value={howBState}
+              onChange={(e)=>howBSet(e.length > 0 ? e : false)}
+              labelledBy={"Method"}
+              hasSelectAll={false}
+              disableSearch={true}
+          />{Pref.method}</label>
+        : null}
+        
+        
+        */}
       
     </div>
   );

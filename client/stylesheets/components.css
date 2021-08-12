@@ -186,7 +186,7 @@ n-timeline-item:last-child n-timeline-marker:after {
   position: relative;
   cursor: default;
   padding: 1rem 0.5rem;
-  border-bottom: 1px solid rgb(100,100,100);
+  border-bottom: 1px inset rgb(200,200,200);
   width: 100%;
   display: flex;
   flex-flow: row nowrap;
@@ -223,6 +223,9 @@ n-timeline-item:last-child n-timeline-marker:after {
 .bigInfoBox:focus::after {
   opacity: 1;
   top: 90%;
+}
+.bigInfoBox.no::after {
+  display: none;
 }
 
 .miniStack {

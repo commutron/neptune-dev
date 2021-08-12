@@ -5,7 +5,7 @@ AppDB = new Mongo.Collection('appdb');
 GroupDB = new Mongo.Collection('groupdb');
 WidgetDB = new Mongo.Collection('widgetdb');
 VariantDB = new Mongo.Collection('variantdb');
-BatchDB = new Mongo.Collection('batchdb');//XXXX\\
+BatchDB = new Mongo.Collection('batchdb');//X.LEGACY.X\\
 XBatchDB = new Mongo.Collection('xbatchdb');
 XSeriesDB = new Mongo.Collection('xseriesdb');
 XRapidsDB = new Mongo.Collection('xrapidsdb');
@@ -58,7 +58,7 @@ Meteor.publish('appData', function(){
       AppDB.find({orgKey: orgKey}, 
         {fields: { 
           'orgKey': 0,
-          'orgPIN': 0,
+          'orgPIN': 0
         }}),
       Meteor.users.find({},
         {fields: {
@@ -447,26 +447,12 @@ Meteor.publish('skinnyData', function(){
           'versionKey': 1,
           'variant': 1,
           'createdAt': 1
-        }}),
-    
-      XBatchDB.find({orgKey: orgKey}, {
-        sort: {batch:-1},
-        fields: {
-            'batch': 1,
-            'groupId': 1,
-            'widgetId': 1,
-            'versionKey': 1,
-            'createdAt': 1,
-            'live': 1,
-            'salesOrder': 1,
-            'completed': 1,
-            'completedAt': 1
         }})
     ];
   }
 });
 
-Meteor.publish('hotDataEx', function(dataRequest, hotWidget){
+Meteor.publish('hotDataEx', function(dataView, dataRequest, hotWidget){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
   
@@ -510,8 +496,15 @@ Meteor.publish('hotDataEx', function(dataRequest, hotWidget){
           fields: {
             'createdAt': 1
         }}),
+        XBatchDB.find({orgKey: orgKey, completed: false }, {
+          sort: {batch:-1},
+          fields: {
+            'batch': 1,
+            'widgetId': 1,
+            'completed': 1,
+        }})
       ];
-    }else if( dataRequest === 'widget' ) {
+    }else if( dataView === 'widget' ) {
       return [
         WidgetDB.find({_id: hothotWidgetID, orgKey: orgKey}, {
           fields: {
@@ -520,10 +513,23 @@ Meteor.publish('hotDataEx', function(dataRequest, hotWidget){
             'turnStats': 0,
             'ncRate': 0
           }}),
-        VariantDB.find({widgetId: hothotWidgetID, orgKey: orgKey}, {
+        VariantDB.find({orgKey: orgKey, widgetId: hothotWidgetID}, {
           fields: {
             'orgKey': 0,
           }}),
+        XBatchDB.find({orgKey: orgKey, widgetId: hothotWidgetID}, {
+          sort: {batch:-1},
+          fields: {
+            'batch': 1,
+            'groupId': 1,
+            'widgetId': 1,
+            'versionKey': 1,
+            'createdAt': 1,
+            'live': 1,
+            'salesOrder': 1,
+            'completed': 1,
+            'completedAt': 1
+        }})
       ];
     }else {
       return [

@@ -27,31 +27,40 @@ const UsernameChange = (props)=> {
 		<div>
       <form 
         onSubmit={(e)=>doChange(e)}>
-        <p>
-          <label htmlFor='chPass'>Current Password<br />
+        
+        <div className='bigInfoBox' 
+          data-describe='If you have forgotten your current password, contact an administrator.'>
+          <div><label htmlFor='nowPassUser'>Current Password</label></div>
+          <div>
             <input
               type='password'
               id='nowPassUser'
               onChange={()=>passStateSet(nowPassUser.value)}
               autoComplete="new-password" 
               required
-          /></label>
-        </p>
-        <p>
-          <label htmlFor='chPass'>New Username</label>
-          <br />
-          <input
-            type='text'
-            id='unPass'
-            className='showValid'
-            minLength='4'
-	          pattern='[A-Za-z0-9\._-]*'
-            onChange={()=>choiceNameSet(unPass.value)}
-            placeholder={Meteor.user().username}
-            required
-            autoComplete="false" />
-        </p>
-        <p>
+            />
+          </div>
+        </div>
+        
+        <div className='bigInfoBox' 
+          data-describe='Letters, numbers, uppercase, lowercase and the symbols . _ - are all acceptable; a minimum of 4 characters are required.'>
+          <div><label htmlFor='chPass'>New Username</label></div>
+          <div>
+            <input
+              type='text'
+              id='unPass'
+              className='showValid'
+              minLength='4'
+  	          pattern='[A-Za-z0-9\._-]*'
+              onChange={()=>choiceNameSet(unPass.value)}
+              placeholder={Meteor.user().username}
+              required
+              autoComplete="false" 
+            />
+          </div>
+        </div>
+        
+        <p className='rightRow'>
           <button
             type='submit'
             id='changeUsrNmSubmit'

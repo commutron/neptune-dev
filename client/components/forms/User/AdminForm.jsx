@@ -9,7 +9,7 @@ export const AdminUp = ({ userId })=> {
     Meteor.call('adminUpgrade', userId, pIn, (err, reply)=>{
       if(err)
         console.log(err);
-      reply ? window.location.reload(true) : alert('Incorrect PIN');
+      reply ? null : alert('Incorrect PIN');
     });
   }
 
@@ -62,17 +62,22 @@ export const AdminDown = ()=> {
   const self = Roles.userIsInRole(Meteor.userId(), 'admin');
   const adminOther = Roles.getUsersInRole( 'admin' ).fetch();
   
-  return(
-    <div>
-    {self && adminOther.length > 1 ?
-      <fieldset>
-        <legend>Give up being an Admin</legend>
-        <button
-          className='action clearRed'
-          onClick={(e)=>down(e)}
-        >Downgrade</button>
-      </fieldset>
-    : null}
-    </div>
-  );
+  if(self) {
+    return(
+      <div className='bigInfoBox' 
+        data-describe='Only possible if there is another administrator as one administrator is always required.'>
+        <div><label htmlFor='adminnomore'>Give up being an Admin</label></div>
+        <div>
+          <button
+            id='adminnomore'
+            className='action clearRed'
+            onClick={(e)=>down(e)}
+            disabled={adminOther.length === 1}
+          >Downgrade</button>
+        </div>
+      </div>
+    );
+  }
+  
+  return null;
 };

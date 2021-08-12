@@ -232,6 +232,33 @@ Meteor.methods({
     return first.tz(Config.clientTZ).format();
   },
   
+  getVariantOrderDates() {
+
+    const allXBatch = XBatchDB.find({},{
+      fields:{
+        'versionKey':1,'completedAt':1,'live':1
+    }}).fetch();
+    
+    let orderDates = [];
+    
+    VariantDB.find({orgKey: Meteor.user().orgKey},{
+      fields:{
+        'versionKey':1, 'variant':1,
+        'groupId':1, 'widgetId':1, 
+      }}).forEach( v => {
+        const btchsX = allXBatch.filter( b => b.versionKey === v.versionKey);
+        const datesX = Array.from(btchsX, b => !b.completedAt ? new Date() : b.completedAt);
+        orderDates.push({
+          variant: v.variant,
+          widgetId: v.widgetId,
+          groupId: v.groupId,
+          dates: datesX
+        });
+      });
+    
+    return orderDates;
+  },
+  
      /////////////////////////////////////////////////////////////////////////
    // Shortfall Items
   ///////////////////////////////////////////////////////////////////////////

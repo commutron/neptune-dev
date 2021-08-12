@@ -24,6 +24,7 @@ Meteor.methods({
       orgKey: orgKey,
       orgPIN: '0000',
       createdAt: new Date(),
+      tideWall: new Date(),
       branches: [
         {
           brKey: 't3rm1n2t1ng8r2nch',
@@ -50,15 +51,9 @@ Meteor.methods({
       },
       countOption: [],
       nonConTypeLists: [],
-      ncScale: {
-        low: Number(5),
-        high: Number(10),
-        max: Number(25)
-      },
       onScale: {
         low: Number(50),
-        high: Number(70),
-        max: Number(90)
+        high: Number(70)
       },
       missingType: 'missing',
       ancillaryOption: [],
@@ -79,7 +74,25 @@ Meteor.methods({
         max: Number(0),
       },
       lockType: 'timer',
-      nonWorkDays: []
+      nonWorkDays: [],
+      shippingHours {
+        0: null,
+        1: null,
+        2: null,
+        3: null,
+        4: null,
+        5: null,
+        6: null
+      },
+      workingHours {
+        0: null,
+        1: null,
+        2: null,
+        3: null,
+        4: null,
+        5: null,
+        6: null
+      }
     });
     Meteor.users.update(Meteor.userId(), {
       $set: {
@@ -549,15 +562,12 @@ Meteor.methods({
     }
   },
   
-  addNCScale(low, high, max) {
+  removeNCScale() {
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
       AppDB.update({orgKey: Meteor.user().orgKey}, {
-        $set : { 
-          ncScale : {
-            low: Number(low),
-            high : Number(high),
-            max : Number(max)
-          }
+        $unset : {
+          ncScale : "",
+          ndaMode : ""
       }});
       return true;
     }else{

@@ -27,40 +27,52 @@ const PasswordChange = (props)=> {
 		<div>
       <form 
         onSubmit={(e)=>doChange(e)}>
-        <p>
-          <label htmlFor='chPass'>Current Password<br />
+        
+        <div className='bigInfoBox' 
+          data-describe='If you have forgotten your current password, contact an administrator.'>
+          <div><label htmlFor='nowPassPass'>Current Password</label></div>
+          <div>
             <input
               type='password'
               id='nowPassPass'
               onChange={()=>nowPasswordSet(nowPassPass.value)}
               required
               autoComplete="password" 
-          /></label>
-        </p>
-        <p>
-          <label htmlFor='chPass'>New Password<br />
-          <input
-            type='password'
-            id='chPass'
-            className='showValid'
-            onChange={()=>choicePasswordSet(chPass.value)}
-            pattern='[A-Za-z0-9\.!@#$%^&*()_\-,?`<>[\]{}~=/\\]*'
-	          minLength='6'
-            required
-            autoComplete="new-password" 
-          /></label>
-          <br />
-          <label htmlFor='coPass'>New Password Again<br />
-          <input
-            type='password'
-            id='coPass'
-            className='showValid'
-            onChange={()=>confirmPasswordSet(coPass.value)}
-            pattern='[A-Za-z0-9\.!@#$%^&*()_\-,?`<>[\]{}~=/\\]*'
-            required
-            autoComplete="new-password" /></label>
-        </p>
-        <p>
+            />
+          </div>
+        </div>
+        <div className='bigInfoBox' 
+          data-describe='Letters, numbers, uppercase, lowercase and the symbols . ! @ # $ % ^ & * ( ) _ - , ? ` < > \ { } ~ = / are all acceptable; a minimum of 6 characters are required.'>
+          <div><label htmlFor='chPass'>New Password</label></div>
+          <div>
+            <input
+              type='password'
+              id='chPass'
+              className='showValid'
+              onChange={()=>choicePasswordSet(chPass.value)}
+              pattern='[A-Za-z0-9\.!@#$%^&*()_\-,?`<>[\]{}~=/\\]*'
+  	          minLength='6'
+              required
+              autoComplete="new-password" 
+            />
+          </div>
+        </div>
+        <div className='bigInfoBox no'>
+          <div><label htmlFor='coPass'>New Password Again</label></div>
+          <div>
+            <input
+              type='password'
+              id='coPass'
+              className='showValid'
+              onChange={()=>confirmPasswordSet(coPass.value)}
+              pattern='[A-Za-z0-9\.!@#$%^&*()_\-,?`<>[\]{}~=/\\]*'
+              required
+              autoComplete="new-password" 
+            />
+          </div>
+        </div>
+    
+        <p className='rightRow'>
           <button
             type='submit'
             id='changePassSubmit'

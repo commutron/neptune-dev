@@ -33,7 +33,6 @@ const NotifySlide = ({app})=> {
     Meteor.call(
       'sendEmail',
       to,
-      'matt@commutron.ca',
       'TEST - Hello from Neptune!',
       (err, re)=> {
         err && console.log(err);
