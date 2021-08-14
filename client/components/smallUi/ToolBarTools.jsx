@@ -116,7 +116,7 @@ export const ThemeSwitch = ({ themeState, changeFunc })=> (
 );
 
 export const ToggleSwitch = ({ 
-  tggID, toggleLeft, toggleRight, toggleVal, toggleSet 
+  tggID, toggleLeft, toggleRight, toggleVal, toggleSet, lockout
 })=> (
   <label className='beside' style={{margin: '0 20px'}}>{toggleLeft}
     <input
@@ -130,6 +130,7 @@ export const ToggleSwitch = ({
       inputMode='numeric'
       defaultValue={toggleVal ? 1 : 0}
       onChange={(e)=>toggleSet(e.target.value == 1 ? true : false)} 
+      disabled={lockout}
     />{toggleRight}
   </label>
 );

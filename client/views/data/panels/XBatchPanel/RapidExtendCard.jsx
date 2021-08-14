@@ -11,6 +11,7 @@ import { FlowStepsWrap } from '/client/components/forms/Rapid/AddFlowSteps';
 import { AddAutoNCwrap } from '/client/components/forms/Rapid/AddAutoNC';
 import { AddAutoSHwrap } from '/client/components/forms/Rapid/AddAutoSH';
 import AddFall from '/client/components/forms/Rapid/AddFall';
+import RemoveRapid from '/client/components/forms/Rapid/RemoveRapid';
 
 
 const RapidExtendCard = ({ 
@@ -34,17 +35,6 @@ const RapidExtendCard = ({
           re ? toast.success('success') : toast.error('unsuccessful');
         });
       }
-    }
-  }
-  
-  function handleRemove() {
-    const check = window.prompt('Enter Org PIN to permanently delete this extension');
-    if(check) {
-      Meteor.call('deleteExtendRapid', rapid._id, batchData._id, check,
-      (error, re)=>{
-        error && console.log(error);
-        re ? toast.success('success') : toast.error('unsuccessful');
-      });
     }
   }
   
@@ -88,12 +78,11 @@ const RapidExtendCard = ({
             color='blackT gap'
             lockOut={!editAuth || !rapid.live} />  
           
-          <ActionFunc
-            doFunc={handleRemove}
-            title='Delete'
-            icon='fas fa-trash'
-            color='redT gap'
-            lockOut={!editAuth || !rapid.live || rSetItems > 0} />
+          <RemoveRapid
+            batchId={batchData._id}
+            rapidId={rapid._id}
+            lockOut={!editAuth || !rapid.live || rSetItems > 0} 
+          />
 
         </div>
         

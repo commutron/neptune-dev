@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 import Pref from '/client/global/pref.js';
@@ -6,6 +6,8 @@ import Pref from '/client/global/pref.js';
 
 const TagsModule = ({ action, id, vKey, tags, tagOps, truncate })=>	{
 
+  const [ newOption, newOptionSet ] = useState(false);
+  
   function addTag(tag) {
     const cleanTag = !tag ? false : tag.trim();
     if(!cleanTag || cleanTag == '' || tags.includes(cleanTag)) {
@@ -34,29 +36,24 @@ const TagsModule = ({ action, id, vKey, tags, tagOps, truncate })=>	{
   }
   
   function removeTag(tag) {
-    const yes = window.confirm('Remove ' + Pref.tag + ': ' + tag);
-    if(!yes) {
-      null;
-    }else{
-      switch(action) {
-      case Pref.xBatch:
-        Meteor.call('pullBTagX', id, tag, (err)=>{
-          err && console.log(err);
-        });
-        break;
-      case 'variant':
-        Meteor.call('pullVTag', id, tag, (err)=>{
-          err && console.log(err);
-        });
-        break;
-      case 'group':
-        Meteor.call('pullGTag', id, tag, (err)=>{
-          err && console.log(err);
-        });
-        break;
-      default:
-        console.log('this component is not wired properly');
-      }
+    switch(action) {
+    case Pref.xBatch:
+      Meteor.call('pullBTagX', id, tag, (err)=>{
+        err && console.log(err);
+      });
+      break;
+    case 'variant':
+      Meteor.call('pullVTag', id, tag, (err)=>{
+        err && console.log(err);
+      });
+      break;
+    case 'group':
+      Meteor.call('pullGTag', id, tag, (err)=>{
+        err && console.log(err);
+      });
+      break;
+    default:
+      console.log('this component is not wired properly');
     }
   }
   
@@ -94,9 +91,18 @@ const TagsModule = ({ action, id, vKey, tags, tagOps, truncate })=>	{
               </MenuItem>
         )})}
         <MenuItem divider />
-        <MenuItem onClick={()=>addTag(window.prompt('Add a new ' + Pref.tag))}>
-          Custom
+        <MenuItem onClick={null} disabled={true} className='noFade'>
+          <input 
+            type='text' 
+            id='addnewtag'
+            maxLength='24'
+            className='wide black whiteT' 
+            onChange={(e)=>newOptionSet(addnewtag.value)} />
         </MenuItem>
+        <MenuItem onClick={()=>addTag(newOption)} disabled={!newOption}>
+          Add Custom
+        </MenuItem>
+        
       </ContextMenu>
     </div>
   );
@@ -107,9 +113,16 @@ export default TagsModule;
 const IndieTag = ({ tagText, removeTag, lock }) => (
   <div className='tagFlag'>
     <i>{tagText}</i>
-    <button
-      onClick={removeTag}
-      disabled={lock}
-    ><i className='fas fa-times' data-fa-transform='up-2'></i></button>
+    
+    <ContextMenuTrigger
+      id={tagText+'tagcut'}
+      holdToDisplay={1}
+      renderTag='span'>
+      <i className='fas fa-times' data-fa-transform='up-2'></i>
+    </ContextMenuTrigger>
+        
+    <ContextMenu id={tagText+'tagcut'} className='noCopy'>
+      <MenuItem onClick={()=>removeTag()}>Remove {Pref.tag}</MenuItem>
+    </ContextMenu>
   </div>
 );

@@ -71,7 +71,7 @@ const AppWrap = ({ isAdmin, isDebug, users, app })=> {
           <ScalesTagsSlide key={5} app={app} />
           <AddressSlide key={6} app={app} />
           <DataRepair key={7} app={app} users={users} />
-          <NotifySlide key={8} />
+          <NotifySlide key={8} app={app} />
           <CRONSlide key={9} />
           <MetaSlide key={10} />
           

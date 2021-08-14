@@ -4,9 +4,11 @@ import TabsLite from '/client/components/smallUi/Tabs/TabsLite';
 import ProgLayerBurndown from '/client/components/charts/BatchBurn/ProgLayerBurndown';
 import PeopleScatter from '/client/components/charts/BatchBurn/PeopleScatter';
 import ItemsOnTime from '/client/components/charts/BatchBurn/ItemsOnTime';
-import TimeBudgetsChunk from '/client/views/data/panels/XBatchPanel/TimeBudgetsChunk';
-import TimeExtendChunk from '/client/views/data/panels/XBatchPanel/TimeExtendChunk';
-import TimeNextChunk from './TimeNextChunk';
+import TimeBudgetsChunk from './time/TimeBudgetsChunk';
+import TimeExtendChunk from './time/TimeExtendChunk';
+import TimeNextChunk from './time/TimeNextChunk';
+
+import TimeCycleChunk from './time/TimeCycleChunk';
 
 const TimeTab = ({
   batchData, seriesData, rapidsData, widgetData,
@@ -96,7 +98,14 @@ const TimeTab = ({
         floorRelease={floorRelease}
         done={done}
         app={app} />
-              
+        
+        
+      <TimeCycleChunk
+        batchData={batchData}
+        seriesData={seriesData}
+        
+      />
+      
     </div>
   );
 };

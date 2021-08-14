@@ -62,13 +62,6 @@ const DataRepair = ({ app, users })=> {
   
   return(
     <div className='space3v autoFlex'>
-<DoCard
-  title='Remove NC Scale'
-  icon='trash'
-  color='clearBlack'
-  button='Removve Key'
-  action={()=>doCallThing('removeNCScale')}
-/>
       
       <DoCard
         title='Force Randomize Org PIN'

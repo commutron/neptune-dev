@@ -133,5 +133,79 @@ Meteor.methods({
       null;
     }
   },
+  
+  groupEmailOptIn(groupId, option) {
+    let setOp = !option || option === 'false' ? false : true;
+    
+    if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
+      GroupDB.update({_id: groupId, orgKey: Meteor.user().orgKey}, {
+        $set : { 
+          emailOptIn: setOp
+        }});
+        return true;
+    }else{
+      return false;
+    }
+  },
+  
+  groupPrimeEmailSet(groupId, address) {
+    if(typeof address === 'string') {
+      if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
+        GroupDB.update({_id: groupId, orgKey: Meteor.user().orgKey}, {
+          $set : { 
+            emailPrime: address
+          }});
+          return true;
+      }else{
+        return false;
+      }
+    }else{
+      throw new Meteor.Error(403, 'Input is not a string');
+    }
+  },
+  groupPrimeEmailRemove(groupId) {
+    if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
+      GroupDB.update({_id: groupId, orgKey: Meteor.user().orgKey}, {
+        $set : { 
+          emailPrime: false
+        }});
+        return true;
+    }else{
+      return false;
+    }
+  },
+  
+  groupSecondEmailSet(groupId, address) {
+    if(typeof address === 'string') {
+      if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
+        GroupDB.update({_id: groupId, orgKey: Meteor.user().orgKey}, {
+          $push : { 
+            emailSecond: address
+          }});
+          return true;
+      }else{
+        return false;
+      }
+    }else{
+      throw new Meteor.Error(403, 'Input is not a string');
+    }
+  },
+  groupSecondEmailCut(groupId, address) {
+    if(typeof address === 'string') {
+      if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
+        GroupDB.update({_id: groupId, orgKey: Meteor.user().orgKey}, {
+          $pull : {
+            emailSecond: address
+          }});
+          return true;
+      }else{
+        return false;
+      }
+    }else{
+      throw new Meteor.Error(403, 'Input is not a string');
+    }
+  },
+  
+  
 
 });

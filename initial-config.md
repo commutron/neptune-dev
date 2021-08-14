@@ -27,6 +27,6 @@ The first account will be created as:
 
 To enable email add enviroment variable:
 
-MAIL_URL="smtps://[email@amil.com]:[password]@[email server]:[outgoing port]"
+MAIL_URL="smtps://[email address]:[password]@[email server]:[outgoing port]"
 
-and enable "Send Email" in Neptune Settings/Notifications
+and enable "Enable Email" in Neptune Settings/Notifications

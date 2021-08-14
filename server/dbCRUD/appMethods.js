@@ -562,19 +562,6 @@ Meteor.methods({
     }
   },
   
-  removeNCScale() {
-    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
-      AppDB.update({orgKey: Meteor.user().orgKey}, {
-        $unset : {
-          ncScale : "",
-          ndaMode : ""
-      }});
-      return true;
-    }else{
-      return false;
-    }
-  },
-  
   addOnTargetScale(low, high) {
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
       AppDB.update({orgKey: Meteor.user().orgKey}, {
@@ -631,6 +618,20 @@ Meteor.methods({
       AppDB.update({orgKey: Meteor.user().orgKey}, {
         $push : { 
           tagOption : value
+      }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  setEmailGlobal(option) {
+    let setOp = !option || option === 'false' ? false : true;
+    
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      AppDB.update({orgKey: Meteor.user().orgKey}, {
+        $set : { 
+          emailGlobal : setOp
       }});
       return true;
     }else{

@@ -2,6 +2,7 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 
 import UsernameChange from './UsernameChange';
+import EmailForm from './EmailForm';
 import PasswordChange from './PasswordChange';
 
 import { AdminDown } from './AdminForm.jsx';
@@ -40,7 +41,7 @@ const UserSettings = ({ app, user, isAdmin, brancheS })=> {
       <div className='cardSelf settingColumn noPrint'>  
         
         <div>
-          <h3><i className='fas fa-sliders-h fa-fw'></i> Interface Preferences</h3>
+          <h3><i className='fas fa-sliders-h fa-fw gapR'></i>Interface Preferences</h3>
           <div>
         
             <UserToggleSetting
@@ -119,16 +120,23 @@ const UserSettings = ({ app, user, isAdmin, brancheS })=> {
         </div>
         
         <div className='minHeight'>
-          <h3><i className='fas fa-user-edit fa-fw'></i> Change Username</h3>
+          <h3><i className='fas fa-user-edit fa-fw gapR'></i>Username</h3>
           <UsernameChange />
-          
-          <h3 className='dropCeiling'><i className='fas fa-key fa-fw'></i> Change Password</h3>
+        </div>
+        
+        <div className='minHeight'>
+          <h3><i className='fas fa-at fa-fw gapR'></i>Email Address</h3>
+          <EmailForm user={user} />
+        </div>
+        
+        <div className='minHeight'>
+          <h3><i className='fas fa-key fa-fw gapR'></i>Password</h3>
           <PasswordChange />
         </div>
 
         {isAdmin ?
           <div className='minHeight'>
-            <h3><i className='fas fa-user-secret fa-fw'></i> Admin Status</h3>
+            <h3><i className='fas fa-meteor fa-fw'></i> Admin Status</h3>
              <AdminDown />
           </div>
         : null}

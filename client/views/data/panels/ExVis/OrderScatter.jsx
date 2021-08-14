@@ -20,6 +20,7 @@ const OrderScatter = ({ app })=> {
   
   const [ tickXY, tickXYSet ] = useState(false);
   const [ tggl, tgglSet ] = useState(false);
+  const [ perQty, perQtySet ] = useState(false);
   
   useEffect( ()=> {
     Meteor.call('getAllOrders', (err, re)=>{
@@ -49,6 +50,16 @@ const OrderScatter = ({ app })=> {
           toggleVal={tggl}
           toggleSet={tgglSet}
         />
+        
+        <ToggleSwitch 
+          tggID='toggleType'
+          toggleLeft='Total'
+          toggleRight='Per Item'
+          toggleVal={perQty}
+          toggleSet={perQtySet}
+          lockout={!tggl}
+        />
+        
         <PrintThis />
       </div>
       
@@ -85,7 +96,7 @@ const OrderScatter = ({ app })=> {
         <VictoryArea
           data={tickXY || []}
           x={(d)=> tggl ? d.x2 : d.x1}
-          y={(d)=> tggl ? d.y2 : d.y1}
+          y={(d)=> tggl ? perQty ? d.y2 / (d.y1 || 1) : d.y2 : d.y1}
           interpolation='basis'
           style={{
             data: { 
@@ -96,7 +107,7 @@ const OrderScatter = ({ app })=> {
         <VictoryScatter
           data={tickXY || []}
           x={(d)=> tggl ? d.x2 : d.x1}
-          y={(d)=> tggl ? d.y2 : d.y1}
+          y={(d)=> tggl ? perQty ? Math.round(d.y2 / (d.y1 || 1)) : d.y2 : d.y1}
           style={{
             data: {
               fill: 'rgb(41, 128, 185)'
@@ -106,7 +117,10 @@ const OrderScatter = ({ app })=> {
             } 
           }}
           symbol={(d) => tggl ? d.s2 : d.s1}
-          labels={(d)=> d.z + (tggl ? d.y2 : d.y1)}
+          labels={(d)=> d.z + ' Qty: '+ d.y1 + '\n' 
+                        + 'Workdays: ' + d.y2
+                        + ' (' + Math.round(d.y2 / (d.y1 || 1)) + ' per item)'
+          }
           labelComponent={
             <VictoryTooltip 
               style={{ fontSize: '6px' }}

@@ -154,6 +154,47 @@ Meteor.methods({
     }
   },
   
+  userEmailSet(pass, newEmail) {
+    if(typeof pass === 'string' && typeof newEmail === 'string') {
+      
+      const password = Meteor.call('dbblCheckPassword', pass);
+      if(password) {
+      
+        const check = Config.regexEmail.test(newEmail);
+        if(check) {
+          Accounts.addEmail(Meteor.userId(), newEmail, true);
+          return true;
+        }else{
+          throw new Meteor.Error(403, 'Invalid email format');
+        }
+      }else{
+        throw new Meteor.Error(403, 'Incorrect Password');
+      }
+    }else{
+      throw new Meteor.Error(403, 'Input is not strings');
+    }
+  },
+  
+  userEmailRemove(pass, email) {
+    if(typeof pass === 'string' && typeof email === 'string') {
+      
+      const password = Meteor.call('dbblCheckPassword', pass);
+      if(password) {
+        
+        if(Roles.userIsInRole(Meteor.userId(), 'active')) {
+          Accounts.removeEmail(Meteor.userId(), email);
+          return true;
+        }else{
+          throw new Meteor.Error(403, 'Invalid email');
+        }
+      }else{
+        throw new Meteor.Error(403, 'Incorrect Password');
+      } 
+    }else{
+      throw new Meteor.Error(403, 'Input is not strings');
+    }
+  },
+  
   deleteUserForever(userId, pin) {
     const auth = Roles.userIsInRole(Meteor.userId(), 'admin');
     const org = AppDB.findOne({ orgKey: Meteor.user().orgKey });
@@ -178,12 +219,6 @@ Meteor.methods({
       return false;
     }
   },
-  
-  // emailRemove(email) {
-  // Accounts.removeEmail(Meteor.userId(), email)
-  
-  // emailSet(newEmail) {
-  // Accounts.addEmail(Meteor.userId(), newEmail)
   
   permissionSet(user, role) {
     const dev = Roles.userIsInRole(Meteor.userId(), 'devMaster');

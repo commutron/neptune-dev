@@ -204,17 +204,15 @@ const TopNCSlide = ({ app })=> {
         </form>
       </div>
       
-      <hr className='vmargin' />
-      
-      <h3 className='cap'>missing type</h3>
-      <i>Type of {Pref.nonCon} that can be converted into a shortfall</i>
-      <AppSetSimple
-        title='type'
-        action='addMissingType'
-        rndmKey={Math.random().toString(36).substr(2, 5)} />
-      <i><em>currently set to: </em>{app.missingType || ''}</i>
-      
-      <hr className='vmargin' />
+      <div>
+        <h3 className='cap'>missing type</h3>
+        <i>Type of {Pref.nonCon} that can be converted into a shortfall</i>
+        <AppSetSimple
+          title='type'
+          action='addMissingType'
+          rndmKey={Math.random().toString(36).substr(2, 5)} />
+        <i><em>currently set to: </em>{app.missingType || ''}</i>
+      </div>
       
       {app.nonConOption &&
         <div>

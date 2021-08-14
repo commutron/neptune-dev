@@ -13,7 +13,8 @@ const RedoStep = ({
   const [ lock, lockSet ] = useState(false);
   
   const reSteps = itemData.history.filter( x => x.good === true &&
-              x.type !== 'finish' && x.type !== 'nest' && x.type !== 'first' );
+                    ( x.type === 'build' || x.type === 'inspect' || 
+                      x.type === 'test' || x.type === 'checkpoint' ));
   
   function passT(sKey, step, type, pass, shipFail) {
     lockSet(true);

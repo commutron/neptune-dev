@@ -23,14 +23,7 @@ Meteor.methods({
             <tr><td colspan='2' style="background-color:#2769ac;width:100%;height:15px"></td></tr>
             <tr>
               <td colspan='2' style="padding:20px 10%;text-align:center;line-height: 1.5">
-                <table style="height:10px;width:100%;table-layout:auto;border-collapse:separate">
-                  <tr>
-                    <td style="background-color: #2878ba"></td>
-                    <td style="background-color: #D3D3D3"></td>
-                    <td style="background-color: #D3D3D3"></td>
-                    <td style="background-color: #D3D3D3"></td> 
-                  </tr>
-                </table>
+                
                 <p style="color:black;margin:1em 0">Automated message for [[ YOUR CUSTOMER NAME ]].</p>
                 <p style="color:black;margin:1em 0">Your product <i>[[ XXXXXXX v.XX ]]</i> of sales order <i>[[ XXXXX ]]</i> was <b>released to the floor</b> on Wednesday July 14th 2021 at 2:53pm (CST).</p>
                 <p style="color:black;margin:1em 0">Do not reply to this email.</p>

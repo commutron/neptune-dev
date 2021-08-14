@@ -7,6 +7,7 @@ import TagsModule from '/client/components/bigUi/TagsModule';
 import GroupForm from '/client/components/forms/GroupForm';
 import GroupHibernate from '/client/components/forms/GroupHibernate';
 import GroupInternal from '/client/components/forms/GroupInternal';
+import GroupEmails from '/client/components/forms/GroupEmails';
 import WidgetNewForm from '/client/components/forms/WidgetNewForm';
 import Remove from '/client/components/forms/Remove';
 
@@ -75,6 +76,11 @@ const GroupSlide = ({ groupData, widgetsList, batchDataX, app, inter })=>{
           <WidgetNewForm
             groupId={g._id}
             lock={g.hibernate} />
+            
+          <GroupEmails
+            groupData={g}
+          />
+          
           {inter &&
             <GroupInternal
               id={g._id}

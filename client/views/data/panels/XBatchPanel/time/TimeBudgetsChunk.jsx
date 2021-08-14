@@ -10,7 +10,7 @@ import QuoteTimeBudget from '/client/components/forms/QuoteTimeBudget';
 import TimeBudgetBar from '/client/components/charts/Tides/TimeBudgetBar';
 import TimeSplitBar from '/client/components/charts/Tides/TimeSplitBar';
 
-import TimeBlocksRaw from '/client/views/data/panels/XBatchPanel/TimeBlocksRaw';
+import TimeBlocksRaw from './TimeBlocksRaw';
 
 import { splitTidebyPeople } from '/client/utility/WorkTimeCalc';
 import { min2hr, percentOf, percentOverUnder } from '/client/utility/Convert';

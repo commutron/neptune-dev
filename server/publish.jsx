@@ -458,6 +458,7 @@ Meteor.publish('hotDataEx', function(dataView, dataRequest, hotWidget){
   
   let hothotWidgetID = false;
   let hothotWidget = hotWidget || false;
+  // let hothotGroup = false;
   
   if(!hothotWidget) {
     const hotXBatch = XBatchDB.findOne({ batch: dataRequest });
@@ -466,6 +467,7 @@ Meteor.publish('hotDataEx', function(dataView, dataRequest, hotWidget){
       if(maybe) {
         hothotWidgetID = maybe._id;
         hothotWidget = maybe.widget;
+        // hothotGroup = maybe.groupId;
       }
     }
   }else{
@@ -474,6 +476,7 @@ Meteor.publish('hotDataEx', function(dataView, dataRequest, hotWidget){
     if(otherwise) {
       hothotWidgetID = otherwise._id;
       hothotWidget = otherwise.widget;
+      // hothotGroup = otherwise.groupId;
     }
   }
                     
@@ -506,6 +509,12 @@ Meteor.publish('hotDataEx', function(dataView, dataRequest, hotWidget){
       ];
     }else if( dataView === 'widget' ) {
       return [
+        // GroupDB.find({_id: hothotGroup, orgKey: orgKey}, {
+        //   fields: {
+        //     'orgKey': 0,
+        //     'shareKey': 0,
+        //     'topStats': 0
+        // }}),
         WidgetDB.find({_id: hothotWidgetID, orgKey: orgKey}, {
           fields: {
             'orgKey': 0,
@@ -533,6 +542,12 @@ Meteor.publish('hotDataEx', function(dataView, dataRequest, hotWidget){
       ];
     }else {
       return [
+        // GroupDB.find({_id: hothotGroup, orgKey: orgKey}, {
+        //   fields: {
+        //     'orgKey': 0,
+        //     'shareKey': 0,
+        //     'topStats': 0
+        // }}),
         WidgetDB.find({widget: hothotWidget, orgKey: orgKey}, {
           fields: {
             'orgKey': 0,

@@ -3,13 +3,13 @@ import { toast } from 'react-toastify';
 
 const UsernameChange = (props)=> {
 	
-	const [ passState, passStateSet ] = useState( false );
+	const [ namepassState, namepassStateSet ] = useState( false );
 	const [ choiceName, choiceNameSet ] = useState( false );
 
 	function doChange(e) {
 	  e.preventDefault();
 	  
-		Meteor.call('selfUsernameChange', passState, choiceName, (error, reply)=>{
+		Meteor.call('selfUsernameChange', namepassState, choiceName, (error, reply)=>{
 			if(error) {
 			  console.log(error);
 			  toast.error( error.reason || 'Undefined' );
@@ -28,14 +28,13 @@ const UsernameChange = (props)=> {
       <form 
         onSubmit={(e)=>doChange(e)}>
         
-        <div className='bigInfoBox' 
-          data-describe='If you have forgotten your current password, contact an administrator.'>
-          <div><label htmlFor='nowPassUser'>Current Password</label></div>
+        <div className='bigInfoBox no'>
+          <div><label htmlFor='namenowPassUser'>Current Password</label></div>
           <div>
             <input
               type='password'
-              id='nowPassUser'
-              onChange={()=>passStateSet(nowPassUser.value)}
+              id='namenowPassUser'
+              onChange={()=>namepassStateSet(namenowPassUser.value)}
               autoComplete="new-password" 
               required
             />
@@ -44,15 +43,15 @@ const UsernameChange = (props)=> {
         
         <div className='bigInfoBox' 
           data-describe='Letters, numbers, uppercase, lowercase and the symbols . _ - are all acceptable; a minimum of 4 characters are required.'>
-          <div><label htmlFor='chPass'>New Username</label></div>
+          <div><label htmlFor='newusername'>New Username</label></div>
           <div>
             <input
               type='text'
-              id='unPass'
+              id='newusername'
               className='showValid'
               minLength='4'
   	          pattern='[A-Za-z0-9\._-]*'
-              onChange={()=>choiceNameSet(unPass.value)}
+              onChange={()=>choiceNameSet(newusername.value)}
               placeholder={Meteor.user().username}
               required
               autoComplete="false" 

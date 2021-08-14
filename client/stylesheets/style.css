@@ -608,7 +608,7 @@ n-prog-bar progress {
   word-wrap: normal;
   
 }
-.tagFlag > button {
+.tagFlag > span {
   height: 1rem;
   width: 1rem;
   margin-left: 5px;
@@ -617,8 +617,10 @@ n-prog-bar progress {
   background-color: transparent;
   color: white;
   font-size: 0.8rem;
+  text-align: center;
+  cursor: pointer;
 }
-.tagFlag > button:hover {
+.tagFlag > span:hover {
   background-color: white;
   color: var(--peterriver);
 }
