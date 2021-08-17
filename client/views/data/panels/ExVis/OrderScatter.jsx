@@ -132,7 +132,7 @@ const OrderScatter = ({ app })=> {
       >{tggl ? 'Workdays Duration. From Sales Start to Completed' : 
                'Created Order Quantity'}
       </p>
-      <p className='lightgray fade'>
+      <p className='grayT small'>
         Scroll to Zoom. Click and Drag to Pan.<br />
         Data curve is smoothed by a basis spline function<br />
         Data begins {moment(app.createdAt).format('MMMM YYYY')}

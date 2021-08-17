@@ -89,7 +89,7 @@ const ProgLayerBurndown = ({
       </div>
     }
     
-      <details className='footnotes wide'>
+      <details className='footnotes grayT small wide'>
         <summary>Chart Details</summary>
         <p className='footnote'>
           The X axis is the percentage of counters and serialized items remaining.

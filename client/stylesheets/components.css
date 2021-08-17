@@ -116,7 +116,7 @@
 /* TIMELINE */
 n-timeline {
   display: block;
-  line-height: 1.4em;
+  line-height: 1.2;
   list-style: none;
   margin: 0 0 0 15px;
   padding: 0;
@@ -142,8 +142,8 @@ n-timeline-info {
 n-timeline-title {
   display: block;
   line-height: inherit;
-  font-size: 1.15rem;
-  padding-bottom: 40px;
+  font-size: 1.1rem;
+  padding-bottom: 30px;
 }
 
 n-timeline-marker {

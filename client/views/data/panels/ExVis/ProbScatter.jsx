@@ -154,7 +154,7 @@ const ProbScatter = ({ fetchFunc, fill, fillfade, title, brancheS, app })=> {
       </VictoryChart>
       
       <p className='centreText cap small'>{title}</p>
-      <p className='lightgray fade'>
+      <p className='grayT small'>
         Scroll to Zoom. Click and Drag to Pan.<br />
         Data curve is smoothed by a basis spline function<br />
         Data begins {moment(app.createdAt).format('MMMM YYYY')}

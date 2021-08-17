@@ -42,7 +42,7 @@ const PerfScatter = ({ app })=> {
       />
       
       <p className='centreText cap small'>Performance</p>
-      <p className='lightgray fade'>
+      <p className='grayT small'>
         ◆ = Completed <br />
         ★ = WIP <br />
         Scroll to Zoom. Click and Drag to Pan.<br />

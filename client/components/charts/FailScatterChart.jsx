@@ -118,7 +118,7 @@ const FailScatterChart = ({
 
       </VictoryChart>
       <p className='centreText small'>Test Failures</p>
-      <p className='lightgray fade'>
+      <p className='grayT small'>
         Y axis is number of items that failed<br />
         Datapoint size is scaled by how many failures<br /> 
         Scroll to Zoom. Click and Drag to Pan.<br />

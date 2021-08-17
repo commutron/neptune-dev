@@ -57,24 +57,31 @@ export const FocusSelect = ({ gList, focusState, changeFunc })=> (
 );
 
 export const FilterSelect = ({ 
-  unqID, title, selectList, selectState, falsey, changeFunc 
+  unqID, title, selectList, selectState, falsey, changeFunc, extraClass
 })=> (
   <span>
     <i className='fas fa-filter fa-fw darkgrayT'></i>
     <select
       id={'filterSelect'+unqID}
       title={title}
-      className='overToolSort liteToolOn'
+      className={'overToolSort liteToolOn ' + extraClass || ''}
       defaultValue={selectState}
       onChange={(e)=>changeFunc(e)}
       disabled={selectList.length === 0}>
-      {falsey &&
+      {falsey !== undefined &&
         <option value={false}>{falsey}</option>
       }
       {selectList.map( (op, ix)=> {
-        return(
-          <option key={op+'x'+ix}>{op}</option>
-      )})}
+        if(Array.isArray(op)) {
+          return(
+            <option key={op[0]+'x'+ix} value={op[0]}>{op[1]}</option>
+          );
+        }else{
+          return(
+            <option key={op+'x'+ix}>{op}</option>
+          );
+        }
+      })}
     </select>
   </span>
 );
@@ -118,7 +125,8 @@ export const ThemeSwitch = ({ themeState, changeFunc })=> (
 export const ToggleSwitch = ({ 
   tggID, toggleLeft, toggleRight, toggleVal, toggleSet, lockout
 })=> (
-  <label className='beside' style={{margin: '0 20px'}}>{toggleLeft}
+  <label className='beside' style={{margin: '0 20px',textAlign: 'center'}}
+    >{toggleLeft}
     <input
       type='range'
       id={tggID}

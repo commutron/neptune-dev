@@ -61,7 +61,7 @@ const ItemsOnTime = ({ items, salesEnd, isDebug })=> {
       
       <p className='centreText small cap'>Items Completed On Time</p>
       
-      <details className='footnotes wide'>
+      <details className='footnotes wide grayT small'>
         <summary>Chart Details</summary>
         <p className='footnote'>
           If no time was recorded the day is skipped 

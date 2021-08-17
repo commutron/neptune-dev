@@ -91,6 +91,12 @@ const TimeTab = ({
         </TabsLite>
       </div>
       
+      <TimeCycleChunk
+        batchData={batchData}
+        seriesData={seriesData}
+        isDebug={isDebug}
+      />
+      
       <TimeNextChunk
         batchData={batchData}
         seriesData={seriesData}
@@ -98,13 +104,7 @@ const TimeTab = ({
         floorRelease={floorRelease}
         done={done}
         app={app} />
-        
-        
-      <TimeCycleChunk
-        batchData={batchData}
-        seriesData={seriesData}
-        
-      />
+
       
     </div>
   );

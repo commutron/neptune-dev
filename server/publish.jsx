@@ -408,7 +408,7 @@ Meteor.publish('hotDataPlus', function(scanOrb, keyMatch){
         fields: {
           'orgKey': 0,
           'quoteStats': 0,
-          'turnStats': 0
+          'turnStats': 0,
         }}),
       VariantDB.find({widgetId: wID, orgKey: orgKey}, {
         fields: {

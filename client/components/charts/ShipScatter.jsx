@@ -46,7 +46,7 @@ const ShipScatter = ({
       />
       
       <p className='centreText small'>Fulfill On Time</p>
-      <p className='lightgray fade'>
+      <p className='grayT small'>
         ◆ = Completed <br />
         ★ = WIP <br />
         Y-axis data is in workdays<br />

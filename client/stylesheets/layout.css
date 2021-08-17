@@ -645,6 +645,7 @@ n-sm-model-content {
 .space3v { padding: 3vh 3vw; }
 .space36v { padding: 3vh 6vw; }
 .space { padding: 24px; }
+.spacehalf { padding: 12px; }
 .espace { padding: 0.5rem; }
 .vspace { padding: 24px 0; }
 .vspacehalf { padding: 12px 0; }
@@ -802,6 +803,7 @@ n-sm-model-content {
 .autoFlex > div {
   padding: 1vmin 2vmin 2vmin 2vmin;
   box-shadow: var(--dropShadow00);
+  overflow: hidden;
 }
 .cardify > div,
 .cardify > span > div,

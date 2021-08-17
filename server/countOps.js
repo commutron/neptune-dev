@@ -168,6 +168,71 @@ Meteor.methods({
       return JSON.stringify(avgArrays);
     }
   },
+  
+  countMultiBatchCycleTimes(widgetId, opKey) {
+    this.unblock();
+    
+    const cutoff = ( d => new Date(d.setDate(d.getDate()-Config.avgSpan)) )(new Date);
+    
+    const srses = XSeriesDB.find({ 
+      widgetId: widgetId, 
+      createdAt: { 
+        $gte: new Date(cutoff)
+      }},{ fields:{'items': 1}}
+    ).fetch();
+      
+    let historyFlat = [];
+    for(let srs of srses) {
+      for( let i of srs.items ) { 
+        for( let h of i.history ) {
+          if(h.good === true && 
+             h.key === opKey
+          ) {
+            historyFlat.push( h );
+          }
+        }
+      }
+    }
+    const historyFlatS = historyFlat.sort( (a, b)=> 
+                          a.time > b.time ? 1 : a.time < b.time ? -1 : 0 );
+  
+    const chunkedStepTypes = _.groupBy(historyFlatS, (e)=> e.step + ' ' + e.type);
+
+    const batches = XBatchDB.find({ 
+      widgetId: widgetId, 
+      createdAt: { 
+        $gte: new Date(cutoff)
+      }},{ fields:{'waterfall': 1}}
+    ).fetch();
+    
+    let waterfallFlat = [];
+    for(let batch of batches) {
+      for( let f of batch.waterfall ) {
+        if(f.wfKey === opKey) {
+          for( let c of f.counts ) { 
+            if(c.tick > 0) {
+              waterfallFlat.push({
+                type: f.gate + ' ' + f.type,
+                time: c.time,
+                who: c.who
+              });
+            }
+          }
+        }
+      }
+    }
+    const waterfallFlatS = waterfallFlat.sort( (a, b)=> 
+                        a.time > b.time ? 1 : a.time < b.time ? -1 : 0 );
+  
+    const chunkedFallTypes = _.groupBy(waterfallFlatS, (e)=> e.type );
+    
+    const flowgroups = chunkedStepTypes;
+    const fallgroups = chunkedFallTypes;
+    
+    const thinflow = JSON.stringify(flowgroups);
+    const thinfall = JSON.stringify(fallgroups);
+    return [ thinflow, thinfall ];
+  },
 
      ///////////////////////////////////////////
     // Counts Of Each NonConformance Type /////

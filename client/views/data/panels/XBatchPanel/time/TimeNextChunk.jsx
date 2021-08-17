@@ -49,9 +49,9 @@ const TimeNextChunk = ({
   const comp = batchData.completed ? batchData.completedAt : false;
   
   return(
-    <div className='space'>
-      <h3>Benchmarks</h3>
-      
+    <div className='cardSelf dropCeiling'>
+      <p className='medBig bold'>Benchmarks</p>
+        
       <n-timeline>
         {!batchData.completed || flrRel ?
           <n-timeline-item>

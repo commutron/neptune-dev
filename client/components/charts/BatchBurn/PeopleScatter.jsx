@@ -90,7 +90,7 @@ const PeopleScatter = ({ tide, period, xlabel, app, isDebug })=> {
       
       <p className='centreText small cap'>People Distribution</p>
       
-      <details className='footnotes wide'>
+      <details className='footnotes wide grayT small'>
         <summary>Chart Details</summary>
         <p className='footnote'>
           If no time was recorded the day is skipped 
