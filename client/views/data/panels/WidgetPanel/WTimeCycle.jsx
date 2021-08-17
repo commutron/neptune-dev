@@ -32,8 +32,8 @@ const WTimeCycle = ({ wID, app })=> {
                 
     const cList = _.uniq( Array.from(app.countOption, o => 
                           [ o.key, o.gate + ' ' + o.type + ' (count)' ] ) );
-                
-    fListSet( [...tList, ...cList]
+    
+    fListSet( [...tList, ...cList, [ app.lastTrack.key, 'Finish (All Types)' ]]
                 .filter(f=>f)
                   .sort((a,b)=> 
                     a[1].toLowerCase() > b[1].toLowerCase() ? 1 :
@@ -56,11 +56,11 @@ const WTimeCycle = ({ wID, app })=> {
   useEffect( ()=>{
     if(serverData) {
       const chunkedStepTypes = JSON.parse(serverData[0]);
-      const stepCycles = cyclyPaceCalc( chunkedStepTypes, range, 1 );
+      const stepCycles = cyclyPaceCalc( chunkedStepTypes, range );
       stepCycleTimesSet(stepCycles);
           
       const chunkedFallTypes = JSON.parse(serverData[1]);
-      const fallCycles = cyclyPaceCalc( chunkedFallTypes, range, 2 );
+      const fallCycles = cyclyPaceCalc( chunkedFallTypes, range );
       fallCycleTimesSet(fallCycles);
     }
   }, [serverData, range]);
@@ -75,7 +75,7 @@ const WTimeCycle = ({ wID, app })=> {
         }
         <span className='gapL centre centreText'>
           <i className='medBig bold margin5'>Cycle Time</i>
-          <i className='small'>In Minutes</i>
+          <i className='small'>In Minutes:Seconds</i>
         </span>
         
         <span className='flexSpace' />

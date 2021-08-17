@@ -32,7 +32,7 @@ const TimeCycleChunk = ({ batchData, seriesData, isDebug })=> {
       
       const chunkedStepTypes = _.groupBy(historyFlatS, (e)=> e.step + ' ' + e.type);
       
-      let stepCycles = cyclyPaceCalc( chunkedStepTypes, range, 1, isDebug );
+      let stepCycles = cyclyPaceCalc( chunkedStepTypes, range, isDebug );
       
       stepCycleTimesSet(stepCycles);
     }else{
@@ -56,7 +56,7 @@ const TimeCycleChunk = ({ batchData, seriesData, isDebug })=> {
       
       const chunkedFallTypes = _.groupBy(waterfallFlatS, (e)=> e.type );
       
-      let fallCycles = cyclyPaceCalc( chunkedFallTypes, range, 2, isDebug );
+      let fallCycles = cyclyPaceCalc( chunkedFallTypes, range, isDebug );
       
       fallCycleTimesSet(fallCycles);
     
@@ -72,7 +72,7 @@ const TimeCycleChunk = ({ batchData, seriesData, isDebug })=> {
         }
         <span className='gapL centre centreText'>
           <i className='medBig bold margin5'>Cycle Time</i>
-          <i className='small'>In Minutes</i>
+          <i className='small'>In Minutes:Seconds</i>
         </span>
         
         <span className='flexSpace' />

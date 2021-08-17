@@ -8,6 +8,17 @@ export function min2hr(minutes) {
   return trunc;
 }
 
+export function minsec(minutes) {
+  const min = Math.floor(minutes);
+  const sec = parseFloat( minutes - min );
+  
+  const minStr = ( min ).toString().padStart(2, 0);
+  const secStr = ( Math.floor( moment.duration(sec, "minutes").asSeconds() ) ).toString().padStart(2, 0);
+
+  const nice = minStr + ":" + secStr;
+  return nice;
+}
+
 export function round1Decimal(thrtytw) {
   const trunc = Math.round((thrtytw + Number.EPSILON) * 10) / 10;
   // exactly rounding to 1 decimal points

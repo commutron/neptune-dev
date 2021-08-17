@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { avgOfArray, round1Decimal, round2Decimal } from '/client/utility/Convert.js';
+import { avgOfArray, round1Decimal, round2Decimal, minsec } from '/client/utility/Convert.js';
 
 export function timeRanges(collected, counterFunc, cycles, bracket) {
   const nowLocal = moment();
@@ -23,7 +23,7 @@ export function timeRanges(collected, counterFunc, cycles, bracket) {
   return runLoop();
 }
 
-export function cyclyPaceCalc( chunkedTypes, widerange, round, debug) {
+export function cyclyPaceCalc( chunkedTypes, widerange, debug) {
   const stdDv = 3; // Standard Deviation
   const orMag = 10; // Order of Magnitude
   const paRng = widerange ? orMag : stdDv;
@@ -62,8 +62,8 @@ export function cyclyPaceCalc( chunkedTypes, widerange, round, debug) {
       }
     }
     
-    const avgPace = round === 2 ? round2Decimal( avgOfArray(sample) ) : round1Decimal( avgOfArray(sample) );
-    const avgBest = round === 2 ? round2Decimal( avgOfArray(ideals) ) : round1Decimal( avgOfArray(ideals) );
+    const avgPace = minsec( avgOfArray(sample) );
+    const avgBest = minsec( avgOfArray(ideals) );
     
     clickCycles.push({ type, avgBest, avgPace });
   }
