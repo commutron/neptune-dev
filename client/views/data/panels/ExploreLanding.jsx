@@ -1,6 +1,8 @@
 import { Meteor } from 'meteor/meteor';
 import React, { useState, useLayoutEffect } from 'react';
+import moment from 'moment';
 import Pref from '/client/global/pref.js';
+
 import TrendLine from '/client/components/charts/Trends/TrendLine';
 import { TrendBarCache } from '/client/components/charts/Trends/TrendBar';
 import NumStatBox from '/client/components/charts/Dash/NumStatBox';
@@ -26,8 +28,12 @@ const ExploreLanding = ({ app, isDebug }) => {
   
   const xTotal = xtop[0];
   const xlive = xtop[1];
-  const xProcess = xtop[2];
+  const xDone = xtop[2];
   const xlocked = xtop[3];
+  const xRapid = xtop[4];
+  
+  const start = `Since records began on ${moment(app.createdAt).format('MMM Do YYYY')}`;
+  const now = `As of ${moment().format('hh:mm a on MMM Do YYYY')}`;
   
   return(
     <section className='space1v'>
@@ -97,31 +103,36 @@ const ExploreLanding = ({ app, isDebug }) => {
           <NumStatBox
             number={xlive || "\u2800"}
             name={Pref.live}
+            title={now}
             borderColour='blue'
           />
           
           <NumStatBox
-            number={xlive ? xlive - xProcess : "\u2800"}
+            number={xlive ? xRapid : "\u2800"}
             name={`${Pref.live} ${Pref.rapidEx}`}
+            title={now}
             borderColour='orange'
           />
           
           <NumStatBox
-            number={xTotal ? xTotal - xProcess : "\u2800"}
+            number={xTotal ? xDone : "\u2800"}
             name='Completed'
+            title={start}
             borderColour='green'
           />
            <NumStatBox
             number={xTotal || "\u2800"}
             name='Total'
+            title={start}
           />
           <NumStatBox
             number={xlocked || "\u2800"}
             name='Locked'
+            title={start}
             borderColour='rgb(155, 89, 182)'
           />
         </div>
-       
+        
         <div className='wide max875 vspacehalf'>
           <h3>New from the Last 7 Days</h3>
           <BatchNewList daysBack={7} />

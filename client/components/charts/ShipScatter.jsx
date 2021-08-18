@@ -6,7 +6,7 @@ import PrintThis from '/client/components/tinyUi/PrintThis';
 
 const ShipScatter = ({ 
   fetchFunc, idLimit, 
-  print, height, leftpad, extraClass, dtStart
+  print, height, leftpad, extraClass
 })=> {
   
   const mounted = useRef(true);
@@ -52,7 +52,6 @@ const ShipScatter = ({
         Y-axis data is in workdays<br />
         Scroll to Zoom. Click and Drag to Pan.<br />
         Data curve is smoothed by a basis spline function<br />
-        {dtStart && `X-axis data begins ${moment(dtStart).format('MMMM YYYY')}`}
       </p>
     </div>
   );

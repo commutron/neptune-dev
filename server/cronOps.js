@@ -72,10 +72,12 @@ function goDo(goFunc) {
   }
 }
 
-const getRanges = (createdAt, period)=> {
+const getRanges = (period)=> {
   const nowLocal = moment().tz(Config.clientTZ).startOf(period);
-    
-  const dur = moment.duration(nowLocal.diff(moment(createdAt)));
+  
+  const cutoff = ( d => new Date(d.setDate(d.getDate()-Config.avgSpan)) )(new Date);
+      
+  const dur = moment.duration(nowLocal.diff(moment(cutoff)));
   const cycles = period == 'week' ?
                   parseInt( dur.asWeeks(), 10 ) :
                  period == 'month' ?
@@ -92,68 +94,11 @@ const getRanges = (createdAt, period)=> {
   return ranges;
 };
 
-function countDoneUnits(accessKey, createdAt, dataName, period) {
-  return new Promise(function(resolve) {
-    const xid = noIg();
-    const ranges = getRanges(createdAt, period);
-    
-    const serieses = XSeriesDB.find({
-      orgKey: accessKey,
-      groupId: { $ne: xid },
-    },{
-      fields:{'items.completed':1,'items.completedAt':1,'items.units':1}
-    }).fetch();
-    
-    let totals = [];
-    for(let srs of serieses) {
-      let periods = new Set();
-      
-      for(let i of srs.items) {
-        if(i.completed) {
-          periods.add( 
-            moment(i.completedAt).tz(Config.clientTZ).startOf(period).format() 
-          );
-        }
-      }
-      
-      for(let p of periods) {
-        const itotal = srs.items.filter( u => u.completedAt &&
-                        moment(u.completedAt).isSame(p, period) )
-                          .reduce((w,v)=> w + v.units, 0 );
-        totals.push({
-          a: p,
-          b: itotal
-        });
-      }
-    }
-    
-    let xy = [];
-    for(let r of ranges) {
-      const tototal = totals.filter( t => moment(t.a).isSame(r, period) )
-                        .reduce((w,v)=> w + v.b, 0 );
-      xy.push({ 
-        x: r,
-        y: tototal
-      });
-    }
-  
-    CacheDB.upsert({orgKey: accessKey, dataName: dataName}, {
-      $set : {
-        orgKey: accessKey,
-        lastUpdated: new Date(),
-        dataName: dataName,
-        dataSet: xy
-    }});
-    
-    resolve(true);
-  });
-}
-
-async function countDoneBatchTarget(accessKey, createdAt, dataName, period) {
+async function countDoneBatchTarget(accessKey, dataName, period) {
   return new Promise(function(resolve) {
     syncLocale(accessKey);
     const xid = noIg();
-    const ranges = getRanges(createdAt, period);
+    const ranges = getRanges(period);
     
     const batches = XBatchDB.find({
       orgKey: accessKey, 
@@ -217,11 +162,8 @@ async function runRanges() {
   try {
     const apps = AppDB.find({},{fields:{'orgKey':1, 'createdAt':1}}).fetch();
     for(let app of apps) {
-      await countDoneUnits(app.orgKey, app.createdAt, 'doneUnitLiteMonths', 'month');
-      await countDoneUnits(app.orgKey, app.createdAt, 'doneUnitLiteWeeks', 'week');
-      
-      await countDoneBatchTarget(app.orgKey, app.createdAt, 'doneBatchLiteMonths', 'month');
-      await countDoneBatchTarget(app.orgKey, app.createdAt, 'doneBatchLiteWeeks', 'week');
+      await countDoneBatchTarget(app.orgKey, 'doneBatchLiteMonths', 'month');
+      await countDoneBatchTarget(app.orgKey, 'doneBatchLiteWeeks', 'week');
     }
     return true;
   }catch (error) {

@@ -47,7 +47,6 @@ const PerfScatter = ({ app })=> {
         ★ = WIP <br />
         Scroll to Zoom. Click and Drag to Pan.<br />
         Data curve is smoothed by a basis spline function<br />
-        Reliable data begins {moment(app.tideWall).format('MMMM YYYY')}
       </p>
     </div>
   );

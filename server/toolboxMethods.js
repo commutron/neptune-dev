@@ -204,6 +204,18 @@ Meteor.methods({
         }
       }
     }
+  },
+  
+  
+  
+  cleanupcacheItemDone() {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      CacheDB.remove({dataName: 'doneUnitLiteMonths'});
+      CacheDB.remove({dataName: 'doneUnitLiteWeeks'});
+      return true;
+    }else{
+      return false;
+    }
   }
   
 });

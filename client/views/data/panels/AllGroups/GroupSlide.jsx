@@ -113,7 +113,7 @@ const GroupSlide = ({ groupData, widgetsList, batchDataX, app, inter })=>{
         {Pref.instruct} index: <a className='clean wordBr' href={g.wiki} target='_blank'>{g.wiki}</a>
       </p>
       
-      <GroupTops groupId={g._id} app={app} />
+      <GroupTops groupId={g._id} alias={g.alias} app={app} />
         
       <WidgetsDepth
         groupAlias={g.alias}

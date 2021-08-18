@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { avgOfArray, round1Decimal, round2Decimal, minsec } from '/client/utility/Convert.js';
+import { avgOfArray, minsec } from '/client/utility/Convert.js';
 
 export function timeRanges(collected, counterFunc, cycles, bracket) {
   const nowLocal = moment();

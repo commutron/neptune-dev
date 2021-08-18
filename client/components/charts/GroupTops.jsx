@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
+import moment from 'moment';
+import Pref from '/client/global/pref.js';
 import NumStatRing from '/client/components/charts/Dash/NumStatRing';
 
-const GroupTops = ({ groupId, app })=> {
+const GroupTops = ({ groupId, alias, app })=> {
   
   const thingMounted = useRef(true);
   
@@ -26,6 +28,10 @@ const GroupTops = ({ groupId, app })=> {
     });
   }, []);
   
+  const title = `
+    Averages of ${alias.toUpperCase()} ${Pref.xBatchs}\ngoing back ${Pref.avgSpan} days to ${moment().subtract(Pref.avgSpan, 'days').format('MMMM D YYYY')}
+    `;
+  
   const trendIcon =  trend === false ?
     <n-fa0><i className='fas fa-spinner fa-spin'></i></n-fa0> :
     trend === 'up' ?
@@ -35,13 +41,12 @@ const GroupTops = ({ groupId, app })=> {
     <n-fa3><i className='fas fa-minus'></i></n-fa3>;
         
   return(
-    <div className='balancer'>
+    <div className='balancer' title={title}>
       
       <NumStatRing
         total={total !== false ? `${total}%` :
           <n-fa0><i className='fas fa-spinner fa-spin'></i></n-fa0>}
         nums={tickXY || []}
-        title="Average On Time"
         name='On Time'
         colour={["rgb(46, 204, 113)", "rgb(241, 196, 15)"]}
         maxSize='chart10Shrink'
@@ -51,7 +56,6 @@ const GroupTops = ({ groupId, app })=> {
         total={avgPf !== false ? avgPf :
           <n-fa1><i className='fas fa-spinner fa-spin'></i></n-fa1>}
         nums={[{x:1,y:1}]}
-        title='Average Performance'
         name='Performance'
         colour={['#000']}
         noGap={true}
@@ -63,7 +67,6 @@ const GroupTops = ({ groupId, app })=> {
           <n-fa2><i className='fas fa-spinner fa-spin'></i></n-fa2>}
         nums={[{x:1,y:1}]}
         name='NonCon Rate'
-        title='Average NonConformance Rate'
         colour='redTri'
         noGap={true}
         maxSize='chart10Shrink'
@@ -73,7 +76,7 @@ const GroupTops = ({ groupId, app })=> {
         total={trendIcon}
         nums={[{x:1,y:1}]}
         name='Trending'
-        title={`Metrics are trending ${trend || 'flat'}`}
+        title={`Metrics are trending ${trend || 'flat'}.\nTrend is a messure of the 3 other stats.`}
         colour={
           !trend || trend == 'flat' ? ['#000'] : 
           trend == 'down' ? 'redTri' : 'greenBi'}

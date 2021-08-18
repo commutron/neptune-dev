@@ -61,7 +61,7 @@ const ProgLayerBurndown = ({
               axis: { stroke: 'grey' },
               grid: { stroke: '#5c5c5c' },
               ticks: { stroke: '#5c5c5c' },
-              tickLabels: { fontSize: '4px' }
+              tickLabels: { fontSize: '5px' }
             } }
           />
         

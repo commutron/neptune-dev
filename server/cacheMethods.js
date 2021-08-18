@@ -83,14 +83,13 @@ Meteor.methods({
     const stale = !preftime ? true :
               moment.duration(moment().diff(moment(preftime))).as('hours') > Config.freche;
     if(stale) {
-      const app = AppDB.findOne({ orgKey: accessKey });
-      const tideWall = app && app.tideWall;
-
+      const cutoff = ( d => new Date(d.setDate(d.getDate()-Config.avgSpan)) )(new Date);
+      
       const batches = XBatchDB.find({
         orgKey: accessKey,
         groupId: { $ne: xid },
         createdAt: { 
-          $gte: new Date(tideWall)
+          $gte: new Date(cutoff)
         }
       },
         {fields:{'batch':1,'completedAt':1}}
@@ -123,10 +122,14 @@ Meteor.methods({
               moment.duration(moment().diff(moment(ontime))).as('hours') > Config.freche;
     if(stale) {
       syncLocale(accessKey);
+      const cutoff = ( d => new Date(d.setDate(d.getDate()-Config.avgSpan)) )(new Date);
       
       const batches = XBatchDB.find({
         orgKey: accessKey,
-        groupId: { $ne: xid }
+        groupId: { $ne: xid },
+        createdAt: { 
+          $gte: new Date(cutoff)
+        }
       },
         {fields:{'batch':1,'completedAt':1, 'salesEnd':1}}
       ).fetch();
@@ -157,9 +160,14 @@ Meteor.methods({
     const stale = !nctime ? true :
               moment.duration(moment().diff(moment(nctime))).as('hours') > Config.freche;
     if(stale) {
+      const cutoff = ( d => new Date(d.setDate(d.getDate()-Config.avgSpan)) )(new Date);
+      
       const batches = XBatchDB.find({
         orgKey: accessKey,
         groupId: { $ne: xid },
+        createdAt: { 
+          $gte: new Date(cutoff)
+        }
       },
         {fields:{'batch':1,'completedAt':1}}
       ).fetch();
@@ -190,9 +198,14 @@ Meteor.methods({
     const stale = !shtime ? true :
               moment.duration(moment().diff(moment(shtime))).as('hours') > Config.freche;
     if(stale) {
+      const cutoff = ( d => new Date(d.setDate(d.getDate()-Config.avgSpan)) )(new Date);
+      
       const batches = XBatchDB.find({
         orgKey: accessKey,
         groupId: { $ne: xid },
+        createdAt: { 
+          $gte: new Date(cutoff)
+        }
       },
         {fields:{'batch':1,'completedAt':1}}
       ).fetch();
@@ -223,9 +236,14 @@ Meteor.methods({
     const stale = !tftime ? true :
               moment.duration(moment().diff(moment(tftime))).as('hours') > Config.freche;
     if(stale) {
+      const cutoff = ( d => new Date(d.setDate(d.getDate()-Config.avgSpan)) )(new Date);
+      
       const batches = XBatchDB.find({
         orgKey: accessKey,
         groupId: { $ne: xid },
+        createdAt: { 
+          $gte: new Date(cutoff)
+        }
       },
         {fields:{'batch':1,'completedAt':1}}
       ).fetch();
@@ -257,10 +275,14 @@ Meteor.methods({
               moment.duration(moment().diff(moment(bchtime))).as('hours') > Config.freche;
     if(stale) {
       syncLocale(accessKey);
+      const cutoff = ( d => new Date(d.setDate(d.getDate()-Config.avgSpan)) )(new Date);
       
       const batches = XBatchDB.find({
         orgKey: accessKey,
-        groupId: { $ne: xid }
+        groupId: { $ne: xid },
+        createdAt: { 
+          $gte: new Date(cutoff)
+        }
       },
         {fields:{
           'batch':1,'createdAt':1,'quantity':1,

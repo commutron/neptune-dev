@@ -65,13 +65,13 @@ const OrderScatter = ({ app })=> {
       
       <VictoryChart
         theme={Theme.NeptuneVictory}
-        padding={{top: 5, right: 25, bottom: 25, left: 30}}
+        padding={{top: 10, right: 25, bottom: 25, left: 30}}
         domainPadding={25}
-        height={250}
+        height={200}
         containerComponent={<VictoryZoomContainer />}
       >
         <VictoryAxis
-          tickFormat={(t) => moment(t).format('MMM D YYYY')}
+          tickFormat={(t) => !tickXY ? '*' : moment(t).format('MMM D YYYY')}
           fixLabelOverlap={true}
           style={ {
             axis: { stroke: 'grey' },
@@ -135,7 +135,6 @@ const OrderScatter = ({ app })=> {
       <p className='grayT small'>
         Scroll to Zoom. Click and Drag to Pan.<br />
         Data curve is smoothed by a basis spline function<br />
-        Data begins {moment(app.createdAt).format('MMMM YYYY')}
       </p>
     </div>
   );

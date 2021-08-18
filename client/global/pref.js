@@ -48,6 +48,7 @@ class Pref {
     this.breakMin = 15; // fixed break minutes
     this.statisticalStartHour = 6; // 6am
     this.statisticalEndHour = 20; // 8pm
+    this.avgSpan = 1000; // Also in server hardConfig
     this.stepUndoWindow = 1000*30; // remember to match ".spinRe"
     this.timeAfterGrace = 48; // keep the tideControl unlocked for how many hours
     this.seriesLimit = 5000;

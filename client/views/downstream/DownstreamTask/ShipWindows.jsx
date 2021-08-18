@@ -19,7 +19,7 @@ const ShipWindows = ({
   const [ traceDTSort, traceDTSSet ] = useState([]);
   
   const addUpTime = (wipArr)=> Array.from(wipArr, 
-        x => typeof x.quote2tide === 'number' && x.quote2tide )
+        x => typeof x.quote2tide === 'number' && Math.max(x.quote2tide, 0) )
               .reduce( (arr, x)=> arr + x, 0);
         
   useLayoutEffect( ()=>{
@@ -69,7 +69,7 @@ const ShipWindows = ({
         wipTime = addUpTime(shipIn);
       }
       
-      const timeBucket = dayTime * day[1];
+      const timeBucket = dayTime * Math.max(0, day[1]);
       
       const remain = timeBucket + overflow - wipTime;
       overflow = remain;
@@ -78,7 +78,7 @@ const ShipWindows = ({
               remain < 0 ? 
                 [ Math.ceil(Math.abs(wipTime) / timeBucket)+'pts', 'heavy' ] :
                 [ Math.ceil(timeBucket / Math.abs(wipTime))+'pts', 'light' ];
-
+      
       windowChunks.push({
         windowMoment: day[0],
         loaded: loaded,

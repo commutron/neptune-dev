@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import Tabs from '/client/components/smallUi/Tabs/Tabs';
 
@@ -60,6 +61,11 @@ const TrendWrap = ({ brancheS, app })=> (
       />
      
     </Tabs>
+    
+    
+    <p className='grayT small nomargin'>
+      Relevant data goes back {Pref.avgSpan} days to {moment().subtract(Pref.avgSpan, 'days').format('MMMM D YYYY')}
+    </p>
   </div>
 );
   

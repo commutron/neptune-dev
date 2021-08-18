@@ -17,9 +17,9 @@ const ZeroLineScatterChart = ({ xy, fade, fill, height, leftpad })=> {
   return(
     <VictoryChart
       theme={Theme.NeptuneVictory}
-      padding={{top: 5, right: 25, bottom: 10, left: leftpad || 25}}
+      padding={{top: 10, right: 25, bottom: 10, left: leftpad || 25}}
       domainPadding={25}
-      height={height || 250}
+      height={height || 200}
       containerComponent={
         <VictoryZoomContainer
           zoomDimension="x"
@@ -27,7 +27,7 @@ const ZeroLineScatterChart = ({ xy, fade, fill, height, leftpad })=> {
         />}
     >
       <VictoryAxis
-        tickFormat={(t) => moment(t).format('MMM D YYYY')}
+        tickFormat={(t) => !xy ? '*' : moment(t).format('MMM D YYYY')}
         fixLabelOverlap={true}
         offsetY={15}
         style={ {

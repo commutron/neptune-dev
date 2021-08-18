@@ -59,6 +59,7 @@ const UserManageForm = ({
           userSetting={proTime.timeAsDecimal}
           optionObjArr={proTimeOps}
           labelText='Production Time in a Day'
+          yesText='The expected percentage on a "regular" day based on role. Used to messure potential capacity.'
           callMethod='updateProductionPercent'
           userID={id} />
       }

@@ -15,7 +15,7 @@ import PrintThis from '/client/components/tinyUi/PrintThis';
 
 const FailScatterChart = ({ 
   fetchFunc, idLimit,
-  print, height, leftpad, dtst, extraClass 
+  print, height, leftpad, extraClass 
 })=> {
   
   const mounted = useRef(true);
@@ -58,13 +58,13 @@ const FailScatterChart = ({
 
       <VictoryChart
         theme={Theme.NeptuneVictory}
-        padding={{top: 5, right: 25, bottom: 25, left: leftpad || 30}}
+        padding={{top: 10, right: 25, bottom: 25, left: leftpad || 30}}
         domainPadding={25}
-        height={height || 250}
+        height={height || 200}
         containerComponent={<VictoryZoomContainer />}
       >
         <VictoryAxis
-          tickFormat={(t) => moment(t).format('MMM D YYYY')}
+          tickFormat={(t) => !tickXY ? '*' : moment(t).format('MMM D YYYY')}
           fixLabelOverlap={true}
           style={ {
             axis: { stroke: 'grey' },
@@ -122,7 +122,6 @@ const FailScatterChart = ({
         Y axis is number of items that failed<br />
         Datapoint size is scaled by how many failures<br /> 
         Scroll to Zoom. Click and Drag to Pan.<br />
-        {dtst && `Data begins ${moment(dtst).format('MMMM YYYY')}`}
       </p>
     </div>
   );

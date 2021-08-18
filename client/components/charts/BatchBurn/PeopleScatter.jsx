@@ -52,7 +52,7 @@ const PeopleScatter = ({ tide, period, xlabel, app, isDebug })=> {
           />}
       >
         <VictoryAxis
-          tickFormat={(t) => moment(t).format(xlabel || 'MMM D YYYY')}
+          tickFormat={(t) => series.length === 0 ? '*' : moment(t).format(xlabel || 'MMM D YYYY')}
           fixLabelOverlap={true}
           style={ {
             axis: { stroke: 'grey' },

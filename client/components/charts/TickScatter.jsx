@@ -54,7 +54,7 @@ const TickScatter = ({ waterfall, rapidsData, app })=> {
         height={200}
       >
         <VictoryAxis
-          tickFormat={(t) => moment(t).format('MMM D')}
+          tickFormat={(t) => tickXY.length === 0 ? '*' : moment(t).format('MMM D')}
           style={ {
             axis: { stroke: 'grey' },
             grid: { stroke: '#5c5c5c' },

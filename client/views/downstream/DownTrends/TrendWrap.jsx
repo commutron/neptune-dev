@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import Tabs from '/client/components/smallUi/Tabs/Tabs.jsx';
+
 import PrintThis from '/client/components/tinyUi/PrintThis';
 import OnTargetTrend from './OnTargetTrend'; 
-import DoneItemsTrend from './DoneItemsTrend';
 import AvgStat from '/client/components/tinyUi/AvgStat';
 
 const TrendWrap = ({ app, isDebug })=> {
@@ -26,28 +25,11 @@ const TrendWrap = ({ app, isDebug })=> {
         <PrintThis />
       </div>
       
-      <Tabs
-        tabs={[
-          <b><i className='fas fa-bullseye fa-fw'></i> On Target</b>,
-          <b><i className='fas fa-flag-checkered fa-fw'></i> Completed</b>,
-        ]}
-        wide={true}
-        stick={false}
-        hold={true}
-        sessionTab='trendDownPanelTabs'>
-        
-        <OnTargetTrend
-          app={app}
-          isDebug={isDebug}
-        />
+      <OnTargetTrend
+        app={app}
+        isDebug={isDebug}
+      />
           
-        <DoneItemsTrend
-          app={app}
-          isDebug={isDebug}
-        />
-          
-      </Tabs> 
-
       <div className='rowWrapR noPrint'>
         <span>
           <p className='small rightText'>Gaps in the data are intentional. Indicate when no orders were completed</p>

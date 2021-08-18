@@ -75,10 +75,16 @@ Meteor.methods({
     
     const xTotal = allB.length;
     const xlive = allB.filter( x => x.live === true ).length;
-    const xProcess = allB.filter( x => x.completed === false ).length;
+    const xDone = allB.filter( x => x.completed === true ).length;
     const xlocked = allB.filter( x => x.lock === true ).length;
-  
-    return [ xTotal, xlive, xProcess, xlocked ];
+    
+    const xRapid = XRapidsDB.find({
+      orgKey: Meteor.user().orgKey,
+      groupId: { $ne: xid },
+      live: true
+    },{fields:{'_id':1}}).count();
+    
+    return [ xTotal, xlive, xDone, xlocked, xRapid ];
   },
 
   widgetTops(wID) {
@@ -106,10 +112,14 @@ Meteor.methods({
             moment.duration(moment().diff(moment(statime))).as('hours') > Config.freche;
     if(stale) {
       syncLocale(Meteor.user().orgKey);
+      const cutoff = ( d => new Date(d.setDate(d.getDate()-Config.avgSpan)) )(new Date);
       
       const batches = XBatchDB.find({
         orgKey: Meteor.user().orgKey,
-        groupId: gID
+        groupId: gID,
+        createdAt: { 
+          $gte: new Date(cutoff)
+        }
       },{fields:{'batch':1,'salesEnd':1,'completedAt':1,'lockTrunc.performTgt':1}}
       ).fetch();
       
@@ -153,8 +163,8 @@ Meteor.methods({
       let tt = !last || ontime == last.ontime ? 0 : ontime > last.ontime ? 1 : -1;
       let nt = !last || avgNC == last.avgNC ? 0 : avgNC < last.avgNC ? 1 : -1;
       let tp = !last || avgPf == last.avgPf ? 0 : avgPf > last.avgPf ? 1 : -1;
-      const trend = tt + nt + tp === 3 ? 'up' :
-                    tt + nt + tp === -3 ? 'down' : 'flat';
+      const trend = tt + nt + tp >= 2 ? 'up' :
+                    tt + nt + tp <= -2 ? 'down' : 'flat';
       
       const top = {
         ontime: ontime,

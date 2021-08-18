@@ -65,7 +65,7 @@ const CRONSlide = ()=> {
             <td>Weekdays</td>
             <td>6:06</td>
             <td>{isLocal('6:06')}</td>
-            <td>Done Target By Month, Done Target By Week, Done Units By Month, Done Units By Week</td>
+            <td>Done Target By Month, Done Target By Week</td>
           </tr>
         </tbody>
       </table>

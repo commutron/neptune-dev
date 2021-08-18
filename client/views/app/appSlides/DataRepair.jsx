@@ -62,6 +62,14 @@ const DataRepair = ({ app, users })=> {
   
   return(
     <div className='space3v autoFlex'>
+      <DoCard
+        title='Clean Item Fin Cache'
+        icon='eraser'
+        color='clearBlack'
+        button='Clean'
+        action={()=>doCallThing('cleanupcacheItemDone')}
+      />
+      
       
       <DoCard
         title='Force Randomize Org PIN'
