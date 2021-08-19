@@ -15,7 +15,6 @@ Meteor.methods({
   countMultiBatchTideTimes(batchIDs) {
     this.unblock();
     
-    let batchQT = [];
     let batchTides = [];
     let batchLeftBuffer = [];
     let batchOverBuffer = [];
@@ -38,18 +37,20 @@ Meteor.methods({
         const totalLeftMinutes = quote2tide < 0 ? 0 : bufferNice;
         const totalOverMinutes = quote2tide < 0 ? bufferNice : 0;
         
-        batchQT.push(totalQuoteMinutes);
         batchTides.push({
           x: batch.batch,
-          y: totalTime
+          y: totalTime,
+          z: batch.quantity
         });
         batchLeftBuffer.push({
           x: batch.batch,
-          y: totalLeftMinutes
+          y: totalLeftMinutes,
+          z: batch.quantity
         });
         batchOverBuffer.push({
           x: batch.batch,
-          y: totalOverMinutes
+          y: totalOverMinutes,
+          z: batch.quantity
         });
       }
     };
@@ -63,7 +64,6 @@ Meteor.methods({
       }
     }
     return { 
-      batchQT,
       batchTides, 
       batchLeftBuffer, 
       batchOverBuffer
@@ -169,10 +169,11 @@ Meteor.methods({
     }
   },
   
-  countMultiBatchCycleTimes(widgetId, opKey) {
+  countMultiBatchCycleTimes(widgetId, opKey, year) {
     this.unblock();
     
-    const cutoff = ( d => new Date(d.setDate(d.getDate()-Config.avgSpan)) )(new Date);
+    const cutoff = year ? new Date ( moment().year(Number(year)).startOf('year').format() ) : 
+      ( d => new Date(d.setDate(d.getDate()-Config.avgSpan)) )(new Date);
     
     const srses = XSeriesDB.find({ 
       widgetId: widgetId, 

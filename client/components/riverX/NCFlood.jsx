@@ -25,13 +25,13 @@ const NCFlood = ({ seriesId, live, user, app, ncTypesCombo })=> {
       this.ncType.reportValidity();
       this.go.disabled = false;
     }else{
+      toast.warn('Please Wait For Confirmation...', {
+        toastId: ( 'floodpOp' ),
+        position: toast.POSITION.BOTTOM_CENTER,
+        autoClose: false
+      });
       for(let ref of refSplit) {
         if(ref.length < 8) {
-          toast.warn('Please Wait For Confirmation...', {
-            toastId: ( 'floodpOp' ),
-            position: toast.POSITION.BOTTOM_CENTER,
-            autoClose: false
-          });
           Meteor.call('floodNCX', seriesId, ref, type, (error, reply)=>{
             error && console.log(error);
             if(reply) {
@@ -40,8 +40,8 @@ const NCFlood = ({ seriesId, live, user, app, ncTypesCombo })=> {
                 type: toast.TYPE.SUCCESS,
                 autoClose: 3000
               });
-              this.ncRefs.value = '';
-              this.go.disabled = false;
+              this.ncRefs ? this.ncRefs.value = '' : null;
+              this.go ? this.go.disabled = false : null;
             }
           });
         }else{
@@ -53,8 +53,6 @@ const NCFlood = ({ seriesId, live, user, app, ncTypesCombo })=> {
           this.go.disabled = false;
         }
       }
-      // const findBox = document.getElementById('lookup');
-      // findBox.focus();
     }
   }
 

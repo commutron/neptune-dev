@@ -45,7 +45,7 @@ const WidgetMultiBatchBar = ({ fetchFunc, widgetId, leftpad })=> {
           theme={Theme.NeptuneVictory}
           padding={{top: 25, right: 20, bottom: 20, left: leftpad || 120}}
           domainPadding={{x: 10, y: 40}}
-          height={50 + ( yCount * 15 )}
+          height={50 + ( yCount * 20 )}
         >
           <VictoryAxis
             dependentAxis

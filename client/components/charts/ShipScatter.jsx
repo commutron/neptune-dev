@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import moment from 'moment';
 import ZeroLineScatterChart from '/client/components/charts/ZeroLineScatterChart';
 import PrintThis from '/client/components/tinyUi/PrintThis';
 

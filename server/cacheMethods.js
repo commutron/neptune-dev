@@ -16,25 +16,29 @@ Meteor.methods({
     this.unblock();
     const accessKey = internalKey || Meteor.user().orgKey;
     
-    const variants = VariantDB.find({orgKey: accessKey, live: true}).fetch();
+    const app = AppDB.find({orgKey: accessKey},{fields:{'partsGlobal':1}}).fetch();
     
-    let allParts = [];
-    for(let v of variants) {
-      const locations = Array.from(v.assembly, pt => pt.component);
-      const parts = [...new Set(locations) ];
-      allParts.push(parts);
-    }
-    const allPartsFlat = [].concat(...allParts);
-    const allPartsClean = [...new Set(allPartsFlat) ];
+    if( app && app.partsGlobal ) {
+      const variants = VariantDB.find({orgKey: accessKey, live: true}).fetch();
       
-    CacheDB.upsert({orgKey: accessKey, dataName: 'partslist'}, {
-      $set : {
-        orgKey: accessKey,
-        lastUpdated: new Date(),
-        dataName: 'partslist',
-        dataSet: allPartsClean,
-        minified: true
-    }});
+      let allParts = [];
+      for(let v of variants) {
+        const locations = Array.from(v.assembly, pt => pt.component);
+        const parts = [...new Set(locations) ];
+        allParts.push(parts);
+      }
+      const allPartsFlat = [].concat(...allParts);
+      const allPartsClean = [...new Set(allPartsFlat) ];
+        
+      CacheDB.upsert({orgKey: accessKey, dataName: 'partslist'}, {
+        $set : {
+          orgKey: accessKey,
+          lastUpdated: new Date(),
+          dataName: 'partslist',
+          dataSet: allPartsClean,
+          minified: true
+      }});
+    }
   },
   
   lockingCacheUpdate(internalKey, force) {

@@ -35,7 +35,7 @@ const StreamLayout = ({
       <aside className='taskBarEx noPrint'>
         {navBar === 'down' ?
           <DownTaskBar subLink={subLink} /> :
-          <UpTaskBar subLink={subLink} />}
+          <UpTaskBar subLink={subLink} showParts={app.partsGlobal} />}
       </aside>
       
       <div className='contentAreaEx'>

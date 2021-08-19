@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 
 const ModelSmall = ({ 
   button, title, cleanIcon,
-  icon, color, noText, inLine, lgIcon, 
+  icon, color, textcolor, 
+  noText, inLine, lgIcon, overrideStyle,
   lock, children 
 })=> {
   
@@ -16,7 +17,7 @@ const ModelSmall = ({
   let iSize = lgIcon ? ' fa-2x ' : ' fa-lg ';
   
   return(
-    <span>
+    <span style={overrideStyle}>
       {cleanIcon ?
         <button
           title={title}
@@ -24,7 +25,7 @@ const ModelSmall = ({
           disabled={lock}>
           <label>
             <n-fa1><i className={`${icon} fa-fw ${color}`}></i></n-fa1>
-            {!noText && <span className='blackT'>{button}</span>}
+            {!noText && <span className={textcolor || 'blackT'}>{button}</span>}
           </label>
         </button>
       :
@@ -35,7 +36,7 @@ const ModelSmall = ({
           disabled={lock}>
           <label className={`navIcon actionIconWrap ${inLine ? 'middle' : ''}`}>
             <i className={`fas ${icon} ${iSize} fa-fw ${color}`}></i>
-            {!noText && <span className={'actionIconText ' + color}>{button}</span>}
+            {!noText && <span className={`actionIconText ${textcolor || color}`}>{button}</span>}
           </label>
         </button>
       }

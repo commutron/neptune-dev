@@ -12,6 +12,7 @@ XRapidsDB = new Mongo.Collection('xrapidsdb');
 TraceDB = new Mongo.Collection('tracedb');
 
 CacheDB = new Mongo.Collection('cachedb');
+EmailDB = new Mongo.Collection('emaildb');
 
 
 Meteor.publish('loginData', function(){
@@ -509,12 +510,6 @@ Meteor.publish('hotDataEx', function(dataView, dataRequest, hotWidget){
       ];
     }else if( dataView === 'widget' ) {
       return [
-        // GroupDB.find({_id: hothotGroup, orgKey: orgKey}, {
-        //   fields: {
-        //     'orgKey': 0,
-        //     'shareKey': 0,
-        //     'topStats': 0
-        // }}),
         WidgetDB.find({_id: hothotWidgetID, orgKey: orgKey}, {
           fields: {
             'orgKey': 0,
@@ -537,17 +532,12 @@ Meteor.publish('hotDataEx', function(dataView, dataRequest, hotWidget){
             'live': 1,
             'salesOrder': 1,
             'completed': 1,
-            'completedAt': 1
+            'completedAt': 1,
+            'quantity': 1
         }})
       ];
     }else {
       return [
-        // GroupDB.find({_id: hothotGroup, orgKey: orgKey}, {
-        //   fields: {
-        //     'orgKey': 0,
-        //     'shareKey': 0,
-        //     'topStats': 0
-        // }}),
         WidgetDB.find({widget: hothotWidget, orgKey: orgKey}, {
           fields: {
             'orgKey': 0,

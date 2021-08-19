@@ -2,7 +2,7 @@ import React from "react";
 // import ReactDOM from 'react-dom';
 import { VictoryBar, VictoryStack } from 'victory';
 
-const TimeBudgetBar = ({ title, a, b, c, thin})=> {
+const TimeBudgetBar = ({ title, a, b, c, thin })=> {
   
   const B = a === 0 && b === 0 && c === 0 ? 1 : b;
   
@@ -15,10 +15,6 @@ const TimeBudgetBar = ({ title, a, b, c, thin})=> {
         horizontal={true}
         padding={0}
         height={45}
-        // animate={{
-        //   duration: 500,
-        //   onLoad: { duration: 250 }
-        // }}
       >
         <VictoryBar 
           data={[{x: "a", y: a}]}

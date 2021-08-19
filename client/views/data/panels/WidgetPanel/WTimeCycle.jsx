@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
+import moment from 'moment';
 import Pref from '/client/global/pref.js';
 
-import { FilterSelect } from '/client/components/smallUi/ToolBarTools';
+import { FilterSelect, YearSelect } from '/client/components/smallUi/ToolBarTools';
 import { cyclyPaceCalc } from '/client/utility/CycleCalc.js';
 import { ToggleSwitch } from '/client/components/smallUi/ToolBarTools';
 import CyclePaceTable from '/client/components/tables/CyclePaceTable';
@@ -17,12 +18,22 @@ const WTimeCycle = ({ wID, app })=> {
   
   const [ fList, fListSet ] = useState([]);
   const [ typeState, typeSet ] = useState(false);
+  const [ yList, yListSet ] = useState([]);
+  const [ yearState, yearSet ] = useState(false);
   const [ range, rangeSet ] = useState(false);
+  
   const [ serverData, serverDataSet ] = useState(false);
   const [ stepCycleTimes, stepCycleTimesSet ] = useState(false);
   const [ fallCycleTimes, fallCycleTimesSet ] = useState(false);
   
   useEffect( ()=>{
+    const years = Math.ceil( moment().diff(moment(app.createdAt), 'years', true) );
+    let yearsList = [];
+    for(let tick = 0; tick < years; tick++) {
+      yearsList.push( moment().subtract(tick, 'years').year() );
+    }
+    yListSet(yearsList);
+    
     const tList = _.uniq( Array.from(app.trackOption, o =>
                           o.type !== 'first' && 
                           o.type !== 'scrap' && 
@@ -44,14 +55,15 @@ const WTimeCycle = ({ wID, app })=> {
   
   useEffect( ()=>{
     if(typeState) {
-      Meteor.call('countMultiBatchCycleTimes', wID, typeState, (err, reply)=>{
+      Meteor.call('countMultiBatchCycleTimes', wID, typeState, yearState,
+      (err, reply)=>{
         err && console.log(err);
         if(reply && mounted.current) {
           serverDataSet(reply);
         }
       });
     }
-  }, [typeState]);
+  }, [typeState, yearState]);
   
   useEffect( ()=>{
     if(serverData) {
@@ -64,7 +76,6 @@ const WTimeCycle = ({ wID, app })=> {
       fallCycleTimesSet(fallCycles);
     }
   }, [serverData, range]);
-  
   
   return(
     <div className='cardSelf dropCeiling'>
@@ -79,6 +90,15 @@ const WTimeCycle = ({ wID, app })=> {
         </span>
         
         <span className='flexSpace' />
+        
+        <YearSelect
+          yearsList={yList}
+          append=' to Present'
+          falsey={`Std ${Pref.avgSpan} Days`}
+          filterState={yearState}
+          changeFunc={(e)=>yearSet(e)}
+          extraClass='miniIn18'
+        />
         
         <FilterSelect
           unqID='fltrTYPE'

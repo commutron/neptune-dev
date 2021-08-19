@@ -1,4 +1,6 @@
 import moment from 'moment';
+import Pref from '/client/global/pref.js';
+
 import { avgOfArray, minsec } from '/client/utility/Convert.js';
 
 export function timeRanges(collected, counterFunc, cycles, bracket) {
@@ -49,7 +51,7 @@ export function cyclyPaceCalc( chunkedTypes, widerange, debug) {
         const par = cycles.slice(parslice)[0];
         const out = par * paRng;
         
-        const rhythm = cycles.filter( c => c < out );
+        const rhythm = cycles.filter( c => c < out && c < Pref.tooManyMin );
         
         const pace = avgOfArray(rhythm);
         

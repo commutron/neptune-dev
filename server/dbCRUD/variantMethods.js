@@ -134,11 +134,11 @@ Meteor.methods({
         VariantDB.update({_id: vId, orgKey: Meteor.user().orgKey}, {
           $push : { 
             assembly: { 
-              ref: false,
+              // ref: false,
               component: c,
-              location: false,
-              theta: false,
-              bSide: false
+              // location: false,
+              // theta: false,
+              // bSide: false
             }
         }});
       }

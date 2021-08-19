@@ -1,16 +1,12 @@
 import React from 'react';
 
-// requires props
-// title as text
-// sub as text incuding any joiner
-// sty as className text
-// address as string
-
-const LeapButton = ({ title, sub, sty, address })=> {
+const LeapButton = ({ title, sub, sty, address, bonusFloat, bonusColor })=> {
   let cssStyle = sty || 'action clear';
   return (
     <button
-      className={cssStyle}
+      data-bonus={bonusFloat}
+      data-color={bonusColor}
+      className={cssStyle + ' ' + ( bonusFloat ? 'leapBonus' : '')}
       onClick={()=>FlowRouter.go(address)}
       value={title}>
       <i className='up'>{title}</i>

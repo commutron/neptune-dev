@@ -49,7 +49,7 @@ const AppWrap = ({ isAdmin, isDebug, users, app })=> {
             <b><i className='fas fa-stopwatch fa-fw gapR'></i>Counter Steps</b>,
             <b><i className='fas fa-times-circle fa-fw gapR'></i>NonCon Types</b>,
             <b><i className='fas fa-ruler-horizontal fa-fw gapR'></i>Scales & Tags</b>,
-            <b><i className='fas fa-link fa-fw gapR'></i>Addresses</b>,
+            <b><i className='fas fa-link fa-fw gapR'></i>Page Links</b>,
             <b><i className='fas fa-toolbox fa-fw gapR'></i>Data Repair</b>,
             <b><i className='fas fa-bell fa-fw gapR'></i>Notifications</b>,
             <b><i className='fas fa-robot fa-fw gapR'></i>CRON Jobs</b>,

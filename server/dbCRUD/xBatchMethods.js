@@ -276,6 +276,24 @@ Meteor.methods({
     }});
   },
   
+  pushCustomEvent(batchId, eventTitle, eventDetail) {
+    if(Roles.userIsInRole(Meteor.userId(), 'run')) {
+      const orgKey = Meteor.user().orgKey;
+      const username = Meteor.user().username;
+      const sub = 'custom event by ' + username;
+      
+      XBatchDB.update({_id: batchId, orgKey: orgKey}, {
+        $push : { events : { 
+          title: eventTitle,
+          detail: eventDetail,
+          time: new Date(),
+          sub: sub
+        }
+      }});
+      return true;
+    }
+  },
+  
   // push a tag
   pushBTagX(batchId, tag) {
     if(Roles.userIsInRole(Meteor.userId(), 'run')) {

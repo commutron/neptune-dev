@@ -155,16 +155,15 @@ Meteor.methods({
       }];
       const avgPf = Math.round( avgOfArray(pftargets, true) );
         
-      const widgets = WidgetDB.find({ groupId: gID 
-      },{fields:{'ncRate':1}}).fetch();
+      const widgets = WidgetDB.find({ groupId: gID},{fields:{'ncRate':1}}).fetch();
       const avgNC = avgOfArray(Array.from(widgets, x=> x.ncRate ? x.ncRate.rate : 0), true);
       
       const last = topStats ? topStats.stats : null;
       let tt = !last || ontime == last.ontime ? 0 : ontime > last.ontime ? 1 : -1;
       let nt = !last || avgNC == last.avgNC ? 0 : avgNC < last.avgNC ? 1 : -1;
       let tp = !last || avgPf == last.avgPf ? 0 : avgPf > last.avgPf ? 1 : -1;
-      const trend = tt + nt + tp >= 2 ? 'up' :
-                    tt + nt + tp <= -2 ? 'down' : 'flat';
+      const trend = tt + nt + tp >= 1 ? 'up' :
+                    tt + nt + tp <= -1 ? 'down' : 'flat';
       
       const top = {
         ontime: ontime,

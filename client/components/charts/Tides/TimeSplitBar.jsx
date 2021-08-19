@@ -2,7 +2,7 @@ import React from "react";
 // import ReactDOM from 'react-dom';
 import { VictoryBar, VictoryStack } from 'victory';
 
-const TimeSplitBar = ({ title, nums, colour})=> {
+const TimeSplitBar = ({ title, nums, colour })=> {
   
   const colours =
     colour === 'blue' ? ["#4181cb","#044289","#499eff","#0579ff","#7b9dc4"] :
@@ -10,22 +10,15 @@ const TimeSplitBar = ({ title, nums, colour})=> {
     colour === 'red' ? ["#e74c46","#a30500","#720300","#8c0c08","#9b0500"] :
     colour === 'pale' ? ["#b4b3a8", "#807f6b", "#97957f", "#bdbca3", "#efeed4"] :
     null;
-  
-  Roles.userIsInRole(Meteor.userId(), 'debug') && 
-    console.log(nums);
-  
+
   return(
-    <div className='noCopy horizontalBarContain' title={title}>
+    <div className='noCopy hzBarContain25' title={title}>
     
       <VictoryStack
         colorScale={colours}
         horizontal={true}
         padding={0}
         height={45}
-        // animate={{
-        //   duration: 500,
-        //   onLoad: { duration: 250 }
-        // }}
       >
         {nums.map((ph, ix)=>{
           return(

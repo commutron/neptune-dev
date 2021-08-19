@@ -78,7 +78,7 @@ export const ExTaskBar = ({ subLink }) => (
   </div>
 );
 
-export const UpTaskBar = ({ subLink }) => (
+export const UpTaskBar = ({ subLink, showParts }) => (
   <div className='taskColumn'>
   
     <TaskElement
@@ -89,13 +89,15 @@ export const UpTaskBar = ({ subLink }) => (
       iconAdj='shrink-2'
     />
     
-    <TaskElement
-      title='Parts Search'
-      subON={subLink === 'parts'}
-      goLink='/upstream/parts'
-      icon='fas fa-microchip'
-      iconAdj=''
-    />
+    {showParts &&
+      <TaskElement
+        title='Parts Search'
+        subON={subLink === 'parts'}
+        goLink='/upstream/parts'
+        icon='fas fa-microchip'
+        iconAdj=''
+      />
+    }
     
     <TaskElement
       title={Pref.shortfalls}

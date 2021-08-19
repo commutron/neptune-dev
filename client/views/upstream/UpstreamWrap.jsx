@@ -15,7 +15,7 @@ const UpstreamWrap = ({
   isDebug
 })=> {
 
-  if(view === 'parts') {
+  if( view === 'parts' && app.partsGlobal) {
     return (
       <StreamLayout
         user={user}

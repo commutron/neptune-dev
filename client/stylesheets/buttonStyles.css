@@ -279,6 +279,45 @@
 .leapBar:hover, .leapBar:focus, .leapBar:active {
   background-color: var(--silverfade);
 }
+
+/*.leapBonus {*/
+/*  position: relative;*/
+/*}*/
+.leapBonus::before {
+  content: attr(data-bonus);
+  position: absolute;
+  top: calc(8.25 * var(--vh));
+  right: 15.2vmax;
+  z-index: 11;
+  padding: 0.5em 1ch;
+  background-color: rgb(245,245,245);
+  color: black;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  min-height: 3em;
+  width: auto;
+  border: 0.3em solid;
+  border-radius: 0 0 0 10px;
+  box-shadow: var(--dropShadow00);
+  white-space: pre-wrap;
+  pointer-events: none;
+  opacity: 0;
+}
+.leapBonus[data-color=orange]::before { border-color: var(--pumpkinfrost)}
+.leapBonus[data-color=green]::before { border-color: var(--emerald) }
+.leapBonus[data-color=blue]::before { border-color: var(--peterriver); }
+
+@media (orientation: portrait) {
+  .leapBonus::before {
+    top: 8.25vmin;
+    right: minmax(11.2vmin, 15.2vmax);
+  }
+}
+@media screen and (prefers-reduced-motion: no-preference) { 
+  .leapBonus::before {
+    transition: opacity 250ms ease-in-out;
+  }
+}
   
 .leapLine {
   display: grid;

@@ -86,6 +86,24 @@ export const FilterSelect = ({
   </span>
 );
 
+export const YearSelect = ({ 
+  yearsList, append, falsey, filterState, changeFunc, extraClass
+})=> (
+  <span>
+    <i className='fas fa-calendar-alt fa-fw darkgrayT'></i>
+    <select
+      id='yearSelect'
+      title='Filter by Year'
+      className={`overToolSort liteToolOn ${extraClass || ''}`}
+      defaultValue={filterState}
+      onChange={(e)=>changeFunc(e.target.value)}>
+      <option value={false} className='clean'>{falsey}</option>
+      {yearsList.map( (yr, ix)=> (
+        <option key={yr+'-'+ix} value={yr}>{yr}{append}</option>
+      ))}
+    </select>
+  </span>
+);
 
 export const LayoutSwitch = ({ denseState, changeFunc })=> (
   <span>

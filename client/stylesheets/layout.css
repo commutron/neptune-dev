@@ -513,7 +513,8 @@ n-sm-model-content {
 .taskTip::before, 
 .auxTip::before, 
 .auxTipScale::before,
-.firstBadge::after {
+.firstBadge::after,
+.leapBonus::after {
   font-size: calc(1.5 * var(--vh));
   border-radius: 25px;
   width: auto;
@@ -526,7 +527,8 @@ n-sm-model-content {
 .auxTip::before, 
 .auxTipScale::before,
 .miniStack::after,
-.firstBadge::after {
+.firstBadge::after,
+.leapBonus::before {
   font-family: 'VarelaLocal';
   letter-spacing: 0.1ch;
   text-transform: capitalize;
@@ -534,6 +536,7 @@ n-sm-model-content {
   opacity: 0;
   visibility: hidden;
 }
+.leapBonus:focus::before, .leapBonus:hover::before,
 .firstBadge:focus::after, .firstBadge:hover::after,
 .miniStack:focus::after, .miniStack:hover::after,
 .taskTip:focus::before, .taskTip:hover::before,
@@ -991,7 +994,7 @@ button.numberSet {
 }
 .navIcon.middle {
   display: flex;
-  align-items: baseline;
+  align-items: center;
 }
 .icontext {
   display: block;

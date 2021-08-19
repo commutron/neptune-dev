@@ -1,4 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react';
+import Pref from '/client/global/pref.js';
 
 import LeapButton from '/client/components/tinyUi/LeapButton';
 import FilterActive from '/client/components/bigUi/FilterActive';
@@ -49,6 +50,7 @@ const BatchesList = ({ batchData, widgetData, variantData })=> {
                           'leapBar numFont exMark' :
                         'leapBar numFont gMark' :
                       'leapBar numFont activeMark';
+        const colour = entry.completed ? entry.live ? 'orange' : 'green' : 'blue';
         const subW = w.find( x => x._id === entry.widgetId);
         const subV = variantData.find( x => x.versionKey === entry.versionKey);
           return(
@@ -58,6 +60,8 @@ const BatchesList = ({ batchData, widgetData, variantData })=> {
               sub={<i><i className='up'>{subW.widget}</i> v.{subV.variant}</i>}
               sty={style}
               address={'/data/batch?request=' + entry.batch}
+              bonusFloat={`${entry.batch}\n${subW.widget.toUpperCase()}\n${Pref.variant}: ${subV.variant}\n${Pref.salesOrder}: ${entry.salesOrder}\nQuantity: ${entry.quantity}\n${entry.completed ? entry.live ? 'Completed and ' + Pref.rapidExd : 'Completed' : 'Work In Progress'}`}
+              bonusColor={colour}
             />
       )})}
       

@@ -27,7 +27,8 @@ const ZeroLineScatterChart = ({ xy, fade, fill, height, leftpad })=> {
         />}
     >
       <VictoryAxis
-        tickFormat={(t) => !xy ? '*' : moment(t).format('MMM D YYYY')}
+        tickFormat={(t) => !xy || xy.length === 0 ? '*' : 
+                            moment(t).format('MMM D YYYY')}
         fixLabelOverlap={true}
         offsetY={15}
         style={ {
@@ -59,7 +60,7 @@ const ZeroLineScatterChart = ({ xy, fade, fill, height, leftpad })=> {
         } }
       />
       <VictoryArea
-        data={xy || []}
+        data={xy && xy.length > 0 ? xy : []}
         interpolation='basis'
         style={{
           data: { 
@@ -68,7 +69,7 @@ const ZeroLineScatterChart = ({ xy, fade, fill, height, leftpad })=> {
         }}
       />
       <VictoryScatter
-        data={xy || []}
+        data={xy && xy.length > 0 ? xy : []}
         style={{
           data: { 
             fill: fill,

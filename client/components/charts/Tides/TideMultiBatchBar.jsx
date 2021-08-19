@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { CalcSpin } from '/client/components/tinyUi/Spin.jsx';
-// import moment from 'moment';
+import { CalcSpin } from '/client/components/tinyUi/Spin';
 
+import { ToggleSwitch } from '/client/components/smallUi/ToolBarTools';
 import { min2hr } from '/client/utility/Convert';
 
 import { 
@@ -9,7 +9,6 @@ import {
   VictoryChart, 
   VictoryAxis,
   VictoryLabel,
-  // VictoryTooltip,
   VictoryStack
 } from 'victory';
 import Pref from '/client/global/pref.js';
@@ -18,6 +17,7 @@ import Theme from '/client/global/themeV.js';
 const TideMultiBatchBar = ({ batchIDs, app, extraClass })=> {
   
   const [ batchTimes, storeTimes ] = useState(false);
+  const [ tggl, tgglSet ] = useState(false);
   
   useEffect( ()=>{
     Meteor.call('countMultiBatchTideTimes', batchIDs, (error, reply)=>{
@@ -35,11 +35,22 @@ const TideMultiBatchBar = ({ batchIDs, app, extraClass })=> {
   if(batchTimes.batchTides.length > 0) {
     return(
       <div className={'chartNoHeightContain ' + extraClass || ''}>
+      <div className='rowWrap noPrint'>
+        <span className='flexSpace' />
+        <ToggleSwitch 
+          tggID='toggleQty'
+          toggleLeft='Total Hours'
+          toggleRight='Hours Per Item'
+          toggleVal={tggl}
+          toggleSet={tgglSet}
+        />
+      </div>
+      
         <VictoryChart
           theme={Theme.NeptuneVictory}
-          padding={{top: 25, right: 25, bottom: 25, left: 50}}
+          padding={{top: 25, right: 50, bottom: 25, left: 25}}
           domainPadding={{x: 10, y: 40}}
-          height={50 + ( batchTimes.batchTides.length * 30 )}
+          height={50 + ( batchTimes.batchTides.length * 25 )}
         >
           <VictoryAxis 
             dependentAxis 
@@ -55,6 +66,7 @@ const TideMultiBatchBar = ({ batchIDs, app, extraClass })=> {
                 fontSize: '6px' }
             } }
           />
+          
           <VictoryStack
             theme={Theme.NeptuneVictory}
             colorScale={["rgb(52, 152, 219)", "rgb(149, 165, 166)", "rgb(241, 196, 15)"]}
@@ -63,9 +75,13 @@ const TideMultiBatchBar = ({ batchIDs, app, extraClass })=> {
           >
             <VictoryBar
               data={batchTimes.batchTides}
+              y={(d)=> tggl ? d.y / (d.z || 1) : d.y}
               horizontal={true}
-              labels={(l) => `${min2hr(l.y)} logged`}
-              style={{ labels: {   fontSize: '7px' } }}
+              labels={(l) => tggl ? 
+                l.y > 0 ? `${min2hr(l.y / (l.z || 1))} logged` : null :
+                l.y > 0 ? `${min2hr(l.y)} logged` : null
+              }
+              style={{ labels: { fontSize: '6px' } }}
               labelComponent={
                 <VictoryLabel
                   verticalAnchor="end"
@@ -74,9 +90,13 @@ const TideMultiBatchBar = ({ batchIDs, app, extraClass })=> {
             />
             <VictoryBar
               data={batchTimes.batchLeftBuffer}
+              y={(d)=> tggl ? d.y / (d.z || 1) : d.y}
               horizontal={true}
-              labels={(l) => l.y > 0 ? `${min2hr(l.y)} Remaining` : null}
-              style={{ labels: { fill: "#969696",  fontSize: '7px' } }}
+              labels={(l) => tggl ? 
+                l.y > 0 ? `${min2hr(l.y / (l.z || 1))} Remaining` : null :
+                l.y > 0 ? `${min2hr(l.y)} Remaining` : null
+              }
+              style={{ labels: { fill: "#969696", fontSize: '6px' } }}
               labelComponent={
                 <VictoryLabel
                   verticalAnchor="start"
@@ -85,9 +105,13 @@ const TideMultiBatchBar = ({ batchIDs, app, extraClass })=> {
             />
             <VictoryBar
               data={batchTimes.batchOverBuffer}
+              y={(d)=> tggl ? d.y / (d.z || 1) : d.y}
               horizontal={true}
-              labels={(l) => l.y > 0 ? `${min2hr(l.y)} Over` : null}
-              style={{ labels: { fill: "dimgrey",  fontSize: '7px' } }}
+              labels={(l) => tggl ? 
+                l.y > 0 ? `${min2hr(l.y / (l.z || 1))} Over` : null :
+                l.y > 0 ? `${min2hr(l.y)} Over` : null
+              }
+              style={{ labels: { fill: "dimgrey", fontSize: '6px' } }}
               labelComponent={
                 <VictoryLabel
                   verticalAnchor="start"

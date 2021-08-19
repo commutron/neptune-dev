@@ -90,7 +90,7 @@ const CompSearchWrap = ({ plCache, user, app })=> {
           <button
             type='button'
             title='Download All Parts'
-            className='taskLink'
+            className='taskLink gapR'
             onClick={(e)=>dataExport(e)}>
           <i className='fas fa-download'></i>
           </button>
@@ -99,11 +99,11 @@ const CompSearchWrap = ({ plCache, user, app })=> {
           <button
             id='cachePLupdate'
             type='button'
-            title='Rebuild Autocomplete'
+            title='Refresh Autocomplete Cache'
             onClick={(e)=>requestRefresh(e)}
-            className='taskLink'
+            className='taskLink gapR'
             disabled={!Roles.userIsInRole(Meteor.userId(), 'admin')}>
-          <i className='fas fa-cogs'></i>
+          <i className='fas fa-sync'></i>
           </button>
         </div>
       </div>

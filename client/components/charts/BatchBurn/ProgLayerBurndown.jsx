@@ -6,8 +6,6 @@ import {
   VictoryZoomContainer } from 'victory';
 import Theme from '/client/global/themeV.js';
 
-import { CalcSpin } from '/client/components/tinyUi/Spin.jsx';
-
 const ProgLayerBurndown = ({ 
   batchId, seriesId, batchNum, start, floorRelease, end, riverFlow, 
   itemData, title, isDebug
@@ -29,8 +27,14 @@ const ProgLayerBurndown = ({
   }, []);
   
   return(
-    <div className='burndownFill centre'>
-    {!countState ? <CalcSpin /> :
+    <div className='burndownFill'>
+    <div className='rowWrap noPrint'>
+      {!countState ?
+        <n-fa1><i className='fas fa-spinner fa-lg fa-spin gapR'></i>Loading</n-fa1> :
+        <n-fa0><i className='fas fa-spinner fa-lg'></i></n-fa0>
+      }
+    </div>
+    {countState &&
       
       <div className='wide balance cap'>
       

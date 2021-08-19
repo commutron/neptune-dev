@@ -17,6 +17,8 @@ const EventBlock = ({ dt, cal })=> {
           <span></span>
           <span>{cal(dt.time)}</span>
         </n-feed-info-title>
+        
+        {dt.sub && <dd className='small'>{dt.sub}</dd>}
       </n-feed-info-center>
       <n-feed-right-anchor></n-feed-right-anchor>
     </n-feed-info-block>
