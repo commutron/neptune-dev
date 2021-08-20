@@ -401,6 +401,9 @@ input::-webkit-calendar-picker-indicator {
   vertical-align: middle;
 }
 
+.contrast {
+  background-color: whitesmoke; 
+}
 .contrastList:nth-child(odd) {
   background-color: rgba(50,50,50,0.3);
 }

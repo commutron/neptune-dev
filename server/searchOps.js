@@ -212,6 +212,35 @@ Meteor.methods({
     return next;
   },
   
+  getPastBatch(wID, vKey) {
+    const distile = (arrArr)=> Math.floor( 
+                      arrArr.sort( (a,b)=> a[0] > b[0] ? -1 : a[0] < b[0] ? 1 : 0 )
+                      .slice(0, 3)
+                      .reduce((c,d)=> c + d[1], 0) / 3 );
+                    
+    const batches = XBatchDB.find({widgetId: wID, versionKey: vKey},{fields:{'batch':1}}).fetch();
+    
+    const perfCache = CacheDB.findOne({orgKey: Meteor.user().orgKey, dataName: 'performShadow'});
+    const perfData = perfCache ? perfCache.dataArray : [];
+    
+    const shipCache = CacheDB.findOne({orgKey: Meteor.user().orgKey, dataName: 'ontimeShadow'});
+    const shipData = shipCache ? shipCache.dataArray : [];
+    
+    let perfs = [];
+    let ships = [];
+    for(let b of batches) {
+      const perf = perfData.find( x => x.z.includes(b.batch) );
+      perf && perfs.push([perf.x, perf.y]);
+      const ship = shipData.find( x => x.z.includes(b.batch) );
+      ship && ships.push([ship.x, ship.y]);
+    }
+    
+    const perfS = distile(perfs);
+    const shipS = distile(ships);
+    
+    return [ perfS, shipS ];
+  },
+  
       /////////////////////////////////////////////////////////////////////////
     // First Firsts
    ///////////////////////////////////////////////////////////////////////////

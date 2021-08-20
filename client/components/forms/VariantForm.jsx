@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
 import ModelLarge from '../smallUi/ModelLarge';
-// import MultiSelect from "react-multi-select-component";
+import MultiSelect from "react-multi-select-component";
 
-const VariantModel = ({ widgetData, app, rootWI, lockOut })=> {
+const VariantModel = ({ widgetData, users, app, rootWI, lockOut })=> {
   
   let name = `new ${Pref.variant}`;
   const access = Roles.userIsInRole(Meteor.userId(), ['create', 'edit']);
@@ -23,6 +23,7 @@ const VariantModel = ({ widgetData, app, rootWI, lockOut })=> {
     >
       <VariantForm
         widgetData={widgetData}
+        users={users}
         app={app}
         rootWI={rootWI}
       />
@@ -34,11 +35,20 @@ export default VariantModel;
 
 const VariantForm = ({ widgetData, users, app, rootWI, selfclose })=> {
   
-  // const [ howBState, howBSet ] = useState( false );
+  const [ eList, eListSet ] = useState( [] );
+  const [ emailState, emailSet ] = useState( [] );
+  
+  useEffect( ()=>{
+    const liveUsers = users.filter( x => Roles.userIsInRole(x._id, 'active') && 
+                                        !Roles.userIsInRole(x._id, 'readOnly') );
+    
+    const listUsers = Array.from(liveUsers, x => { return { label: x.username, value: x._id } } );
+    eListSet(listUsers);
+  }, []);
   
   function save(e) {
     e.preventDefault();
-    this.go.disabled = true;
+    this.gonewvar.disabled = true;
     
     const wId = widgetData._id;
     const gId = widgetData.groupId;
@@ -47,9 +57,10 @@ const VariantForm = ({ widgetData, users, app, rootWI, selfclose })=> {
     const wiki = this.wikdress.value.trim();
     const unit = this.unit.value.trim();
     
-    // const howB = Array.from(howBState, u => u.value);
+    const emailUsers = app.emailGlobal ? Array.from(emailState, u => u.value) : [];
     
-    Meteor.call('addNewVariant', wId, gId, variant, wiki, unit, (error, reply)=>{
+    Meteor.call('addNewVariant', wId, gId, variant, wiki, unit, emailUsers,
+    (error, reply)=>{
       error && console.log(error);
       if(reply) {
         toast.success('Saved');
@@ -60,41 +71,45 @@ const VariantForm = ({ widgetData, users, app, rootWI, selfclose })=> {
       }
     });
   }
+  
 
   return(
-    <div className='split'>
+    <div className='split overscroll'>
 
-      <div className='half space edit'>
+      <div className='half space'>
         <h2 className='up'>{widgetData.widget}</h2>
         <h3>{widgetData.describe}</h3>
         
         <form onSubmit={(e)=>save(e)}>
-          <p>
-            <input
-              type='text'
-              id='rev'
-              placeholder='1a'
-              pattern='[A-Za-z0-9 \._-]*'
-              className='wide'
-              required />
-            <label htmlFor='rev'>{Pref.variant}</label>
+          <p className='rowWrap gapsC'>
+            <label htmlFor='rev'>
+              <input
+                type='text'
+                id='rev'
+                placeholder='1a'
+                pattern='[A-Za-z0-9 \._-]*'
+                className='miniIn18'
+                required 
+              /><br />{Pref.variant}
+            </label>
+          
+            <label htmlFor='unit'>
+              <input
+                type='number'
+                id='unit'
+                pattern='[0-999]*'
+                maxLength='3'
+                minLength='1'
+                max='100'
+                min='1'
+                placeholder='1-100'
+                inputMode='numeric'
+                className='miniIn12'
+                required 
+              /><br />{Pref.unit} Quantity
+            </label>
           </p>
-          <p>
-            <input
-              type='number'
-              id='unit'
-              pattern='[0-999]*'
-              maxLength='3'
-              minLength='1'
-              max='100'
-              min='1'
-              placeholder='1-100'
-              inputMode='numeric'
-              className='wide'
-              required />
-            <label htmlFor='unit'>{Pref.unit} Quantity</label>
-          </p>
-          <hr />
+          
           <p>
             <input
               type='url'
@@ -103,11 +118,37 @@ const VariantForm = ({ widgetData, users, app, rootWI, selfclose })=> {
               className='wide' />
             <label htmlFor='wikdress'>Work Instructions</label>
           </p>
-          <button
-            type='submit'
-            className='action clearBlue'
-            id='go'
-            disabled={false}>SAVE</button>
+          
+          {app.emailGlobal &&
+            <span>
+              <div className='vmargin'>
+                <label htmlFor='userNotify' className='emailForm'>
+                  <MultiSelect
+                    id='userNotify'
+                    options={eList}
+                    value={emailState}
+                    onChange={(e)=>emailSet(e)}
+                    labelledBy='Select people to email'
+                    className='multi-select'
+                    hasSelectAll={false}
+                    disableSearch={false}
+                />Notify People by Email</label>
+              </div>
+              
+              <p className='small grayT nospace'
+                >If a person does not have a email address set, they will be sent an internal Neptune message.
+              </p>
+            </span>
+          }
+          
+          <p>
+            <button
+              type='submit'
+              className='action clearBlue'
+              id='gonewvar'
+              disabled={false}
+            >SAVE</button>
+          </p>
         </form>
       </div>
 
@@ -118,25 +159,6 @@ const VariantForm = ({ widgetData, users, app, rootWI, selfclose })=> {
           height='600'
           width='100%' />
       </div>
-      
-      {/*
-      
-      {buildCombo ?
-      const ueCombo = Array.from(users, x => { return { label: x.username, value: x.email } } );
-      
-          <label htmlFor='Method'>
-            <MultiSelect
-              options={ueCombo}
-              value={howBState}
-              onChange={(e)=>howBSet(e.length > 0 ? e : false)}
-              labelledBy={"Method"}
-              hasSelectAll={false}
-              disableSearch={true}
-          />{Pref.method}</label>
-        : null}
-        
-        
-        */}
       
     </div>
   );

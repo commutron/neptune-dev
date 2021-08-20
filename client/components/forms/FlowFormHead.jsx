@@ -110,7 +110,7 @@ const FlowFormHead = ({ id, existFlows, preFill, app, selfclose })=> {
   const eN = e ? e.title : '';
 
   return(
-    <div className='overscroll2x'>
+    <div className='overscroll2x space'>
       <form
         id='flowSave'
         className='centre'
@@ -144,12 +144,13 @@ const FlowFormHead = ({ id, existFlows, preFill, app, selfclose })=> {
       </form>
       
       <div className='centre'>
-        <label htmlFor='List Options' className='multiSelectContain'>
+        <label htmlFor='List Options' className='multiSelectContain flowForm'>
           <MultiSelect
             options={ncOptions}
             value={ncLists}
             onChange={ncListSet}
             labelledBy={"List Options"}
+            className='multi-select'
             hasSelectAll={false}
             disableSearch={true}
         />{Pref.nonCon} List Options</label>

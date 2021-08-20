@@ -32,6 +32,16 @@ const NotifySlide = ({ app })=> {
     });
   }
   
+  function handleBCCEmail(e) {
+    e.preventDefault();
+    const val = this.toEmailBCC.value;
+    
+    Meteor.call('setEmailBCC', val, (error, reply)=>{
+      error && console.log(error);
+      reply && toast.success('Saved');
+    });
+  }
+  
   function sendTestEmail(e) {
     e.preventDefault();
     
@@ -96,13 +106,37 @@ const NotifySlide = ({ app })=> {
           />
           <label htmlFor='appEmailDo'>Enable Email</label>
         </p>
-      
+        
+        <hr className='vmargin' />
+        
+        <h3 className='cap'>Email BCC Address</h3>
+        <form onSubmit={(e)=>handleBCCEmail(e)}>
+          <p>
+            <label htmlFor='toEmailBCC'>BCC Email Address<br />
+              <input
+                id='toEmailBCC'
+                type='email'
+                required
+              />
+            </label>
+          </p>
+          <p className='small'
+            >If set, all external emails will be Blind-Carbon-Copy to this address.
+          </p>
+          <p>
+            <button
+              className='action clearBlue'
+              type='submit'
+            >Set Address</button>
+          </p>
+        </form>
+        
         <hr className='vmargin' />
         
         <h3 className='cap'>Email Test</h3>
         <form onSubmit={(e)=>sendTestEmail(e)}>
           <p>
-            <label>To email address<br />
+            <label htmlFor='toEmail'>To email address<br />
               <input
                 id='toEmail'
                 type='email'

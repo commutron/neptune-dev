@@ -81,3 +81,11 @@ export function getEst(widgetId, quantity) {
   const mEst = perQ * quantity;
   return mEst;
 }
+
+export function toCap(str, all) { 
+  if(all) {
+    return str.replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase())));
+  }else{
+    return str.trim().replace(/^\w/, (c) => c.toUpperCase());
+  }
+}/* joshtronic of Digital Ocean Community Tutorials */

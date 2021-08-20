@@ -82,7 +82,7 @@ const MonthlyReport = ({ app })=> {
           title='Filter Year'
           selectList={yrsState}
           selectState={yearState}
-          falsey={false}
+          // falsey={false}
           changeFunc={(e)=>yearSet(e.target.value)} 
         />
         <PrintThis />

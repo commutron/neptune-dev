@@ -663,6 +663,8 @@ n-trib-action-all {
   color: var(--peterriver);
 }
 
+.flowForm .dropdown-container,
+.emailForm .dropdown-container,
 .stoneForm .dropdown-container {
   --rmsc-primary: var(--peterriver);
   --rmsc-hover: var(--peterriverfade);
@@ -672,9 +674,14 @@ n-trib-action-all {
   --rmsc-border-radius: 0px;
   --rmsc-height: 2rem;
   color: black;
+  border: 1px solid black;
+}
+.stoneForm .dropdown-container {
   min-width: 11vmax;
   max-width: 11vmax;
 }
+.flowForm .item-renderer,
+.emailForm .item-renderer,
 .stoneForm .item-renderer {
   display: flex;
   align-items: center;

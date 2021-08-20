@@ -50,12 +50,21 @@ Meteor.methods({
         how: 'finish'
       },
       countOption: [],
+      nonConOption: [
+        'not installed',
+        'misaligned'
+        'misoriented',
+        'misattached',
+        'incorrect part',
+        'damaged part'.
+        'faulty part'
+      ],
       nonConTypeLists: [],
       onScale: {
         low: Number(50),
         high: Number(70)
       },
-      missingType: 'missing',
+      missingType: 'not installed'',
       ancillaryOption: [],
       repeatOption: [],
       alterFulfillReasons: [],
@@ -646,6 +655,17 @@ Meteor.methods({
       AppDB.update({orgKey: Meteor.user().orgKey}, {
         $set : { 
           emailGlobal : setOp
+      }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  setEmailBCC(emailoption) {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      AppDB.update({orgKey: Meteor.user().orgKey}, {
+        $set : { 
+          emailBCC : emailoption
       }});
       return true;
     }else{

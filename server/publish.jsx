@@ -77,6 +77,7 @@ Meteor.publish('appData', function(){
         {fields: { 
           'orgKey': 0,
           'orgPIN': 0,
+          'emailBCC': 0
         }}),
       Meteor.users.find({orgKey: orgKey},
         {fields: {

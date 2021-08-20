@@ -91,7 +91,7 @@ n-print {
   .balance { 
     display: block; 
   }
-  .contentAreaEx {
+  .contentAreaEx, .traverseContent {
     background-color: transparent; 
   }
   .slidesSlide { padding: 0; }
@@ -112,6 +112,14 @@ n-print {
   .space3v, 
   .space36v { 
     padding: 0;
+  }
+  .redGlow { background-color: var(--alizarintrans); }
+  .yellowGlow { background-color: var(--sunflowerfade); }
+  .greenGlow { background-color: var(--emeraldtrans); }
+
+  .redGlow, .yellowGlow, .greenGlow {
+    -webkit-print-color-adjust: exact;
+    color-adjust: exact;
   }
 }
 

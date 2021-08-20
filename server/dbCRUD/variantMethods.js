@@ -2,12 +2,15 @@ Meteor.methods({
   
 //// Variants \\\\
   
-  addNewVariant(widgetId, groupId, variant, wiki, unit) {
+  addNewVariant(widgetId, groupId, variant, wiki, unit, emailUsers) {
+    const accessKey = Meteor.user().orgKey;
+    const name = Meteor.user().username.replace('.', ' ').replace('_', ' ');
+    
     const duplicate = VariantDB.findOne({widgetId: widgetId, variant: variant},{fields:{'_id':1}});
     if(!duplicate && Roles.userIsInRole(Meteor.userId(), 'create')) {
           
       VariantDB.insert({
-        orgKey: Meteor.user().orgKey,
+        orgKey: accessKey,
         groupId: groupId,
         widgetId: widgetId,
         versionKey: new Meteor.Collection.ObjectID().valueOf(),
@@ -24,6 +27,17 @@ Meteor.methods({
 		    assembly: [],
 		    npiTime: []
       });
+      
+      if(emailUsers && emailUsers.length > 0) {
+        Meteor.defer( ()=>{
+          const widget = WidgetDB.findOne({_id: widgetId},{fields:{'widget':1,'describe':1}});
+          const isW = widget.widget.toUpperCase() + ' ' + widget.describe;
+          const group = GroupDB.findOne({_id: groupId},{fields:{'group':1,'alias':1}});
+          const isG = group.group + ' (' + group.alias.toUpperCase() + ')';
+
+          Meteor.call('handleInternalEmail', accessKey, emailUsers, name, isG, isW, variant );
+        });
+      }
       return true;
     }else{
       return false;
