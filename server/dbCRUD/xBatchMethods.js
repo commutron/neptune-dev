@@ -341,7 +341,7 @@ Meteor.methods({
             const isG = group.group; 
             const wig = WidgetDB.findOne({_id: batch.widgetId},{fields:{'widget':1,'describe':1}});
             const ver = VariantDB.findOne({versionKey: batch.versionKey},{fields:{'variant':1}});
-            const isW = wig.widget.toUpperCase() + ' ' + ver + ' - ' + wig.describe;
+            const isW = wig.widget.toUpperCase() + ' ' + ver.variant + ' - ' + wig.describe;
           
             Meteor.call('handleExternalEmail', 
               accessKey, group.emailPrime, group.emailSecond, 

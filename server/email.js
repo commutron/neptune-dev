@@ -56,7 +56,6 @@ function sendExternalEmail(to, cc, bcc, subject, date, body, plainbody) {
         <tr><td colspan='2' style="background-color:#2769ac;width:100%;height:15px"></td></tr>
         <tr>
           <td colspan='2' style="padding:20px 10%;text-align:center;line-height: 1.5">
-            
             <p style="color:black;margin:1rem 0">${date}</p>
             <p style="color:black;margin:1rem 0">${body}</p>
             <p style="color:black;margin:1em 0">Do not reply to this email address. If you have any questions, please contact a member of our customer service team directly.</p>
@@ -102,41 +101,37 @@ Meteor.methods({
   
   handleExternalEmail(accessKey, emailPrime, emailSecond, isG, isW, salesOrder) {
     this.unblock();
-    const doc = AppDB.findOne({orgKey: accessKey},{fields:{'emailGlobal':1,'describe':1}});
-    const emailGlobal = doc && doc.emailGlobal;
+    const app = AppDB.findOne({orgKey: accessKey},{fields:{'emailGlobal':1,'describe':1}});
+    const emailGlobal = app && app.emailGlobal;
     
     if(emailGlobal) {
       
-      const check = (val)=> typeof val === 'string';
+      const to = emailPrime;
+        
+      const cc = emailSecond || undefined;
       
-      if(check(to) && check(subject)) {
+      const bcc = app.emailBCC || undefined;
       
-        const to = emailPrime;
-        
-        const cc = emailSecond || undefined;
-        
-        const bcc = emailBCC || undefined;
-        
-        const subject = `Production Notice For Order ${salesOrder}`;
-        
-        const date = moment().tz(Config.clientTZ).format('hh:mm a, dddd, MMM Do YYYY');
-        
-        const body = `Your order <i>${salesOrder}</i> of <i>${toCap(isW, true)}</i> has <b>Entered Production</b>`;
-        // const foot = 'Once your order is completed, a packing slip may be provided.';
-        
-        const plainbody = `Your order — ${salesOrder} — of — ${toCap(isW, true)} — has Entered Production`;
-        
-        sendExternalEmail( to, cc, bcc, subject, date, body, plainbody );
-        
-        EmailDB.insert({
-          sentTime: new Date(),
-          subject: 'Production Release',
-          to: to.toString(),
-          cc: cc.toString(),
-          bcc: bcc,
-          text: plainbody
-        });
-      }
+      const subject = `Production Notice For Order ${salesOrder}`;
+      
+      const date = moment().tz(Config.clientTZ).format('hh:mm a, dddd, MMM Do YYYY');
+      
+      const body = `Your order ${'<i>'}${salesOrder}${'</i>'} of ${'<i>'}${toCap(isW, true)}${'</i>'} has ${'<b>'}Entered Production${'</b>'}`;
+      // const foot = 'Once your order is completed, a packing slip may be provided.';
+      
+      const plainbody = `Your order — ${salesOrder} — of — ${toCap(isW, true)} — has Entered Production`;
+      
+      sendExternalEmail( to, cc, bcc, subject, date, body, plainbody );
+      
+      EmailDB.insert({
+        sentTime: new Date(),
+        subject: 'Production Release',
+        to: to.toString(),
+        cc: cc.toString(),
+        bcc: bcc,
+        text: plainbody
+      });
+      
       return true;
     }else{
       return false;
