@@ -1,5 +1,5 @@
 import React from 'react';
-import Pref from '/client/global/pref.js';
+// import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
 const NotifySlide = ({ app })=> {
@@ -48,9 +48,7 @@ const NotifySlide = ({ app })=> {
     const to = this.toEmail.value;
     
     Meteor.call(
-      'sendEmail',
-      to,
-      'TEST - Hello from Neptune!',
+      'sendTestEmail', to, 'TEST - Hello from Neptune!',
       (err, re)=> {
         err && console.log(err);
         re ? toast('Email Sent') : toast.warn('Invalid Email');

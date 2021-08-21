@@ -31,11 +31,11 @@ Meteor.methods({
       if(emailUsers && emailUsers.length > 0) {
         Meteor.defer( ()=>{
           const widget = WidgetDB.findOne({_id: widgetId},{fields:{'widget':1,'describe':1}});
-          const isW = widget.widget.toUpperCase() + ' ' + widget.describe;
+          const isW = widget.widget.toUpperCase() + ' - ' + widget.describe;
           const group = GroupDB.findOne({_id: groupId},{fields:{'group':1,'alias':1}});
           const isG = group.group + ' (' + group.alias.toUpperCase() + ')';
-
-          Meteor.call('handleInternalEmail', accessKey, emailUsers, name, isG, isW, variant );
+          
+          Meteor.call('handleInternalEmail', accessKey, emailUsers, name, isG, isW, variant, wiki);
         });
       }
       return true;

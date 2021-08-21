@@ -329,6 +329,28 @@ Meteor.methods({
           }
       }});
       Meteor.defer( ()=>{ Meteor.call('updateOneNoise', batchId, accessKey); });
+      
+      if(rType === 'floorRelease') {
+        Meteor.defer( ()=>{
+          const batch = XBatchDB.findOne({_id: batchId},{fields:{'groupId':1,'widgetId':1,'salesOrder':1}});
+          const group = GroupDB.findOne({_id: batch.groupId},
+                          {fields:{'group':1,'alias':1,'emailOptIn':1, 'emailPrime':1, 'emailSecond':1
+                        }});
+                        
+          if(group.emailOptIn && group.emailPrime) {
+            const isG = group.group; 
+            const wig = WidgetDB.findOne({_id: batch.widgetId},{fields:{'widget':1,'describe':1}});
+            const ver = VariantDB.findOne({versionKey: batch.versionKey},{fields:{'variant':1}});
+            const isW = wig.widget.toUpperCase() + ' ' + ver + ' - ' + wig.describe;
+          
+            Meteor.call('handleExternalEmail', 
+              accessKey, group.emailPrime, group.emailSecond, 
+              isG, isW, batch.salesOrder
+            );
+          }
+        });
+      }
+      
       return true;
     }else{
       return false;
