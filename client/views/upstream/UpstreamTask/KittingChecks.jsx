@@ -9,11 +9,11 @@ const KittingChecks = ({
   batchID, batchNum, tBatch,
   isDone, releasedToFloor, releases,
   app, branchClear, 
-  kitCols, dense, isDebug
+  kitCols, dense, isAuth, isDebug
 })=> {
   
   const isRO = Roles.userIsInRole(Meteor.userId(), 'readOnly');
-
+  
   if( Array.isArray(releases) ) {
     
     const floorRelease = !releasedToFloor ? false :
@@ -51,7 +51,8 @@ const KittingChecks = ({
                 unholdText={`Ready ${br.common}`}
                 undoText='Clear'
                 contextText={`for ${br.common}`}
-                lockout={isDone || isRO}>
+                lockout={isDone || isRO}
+                isAuth={isAuth}>
                 <TrinaryStat
                   status={releasedBool ? !releaseObj.caution ? true : false : null}
                   name={br.common}
@@ -86,7 +87,8 @@ const KittingChecks = ({
             unholdText={`Ready without ${Pref.shortfall}`}
             undoText='Clear'
             contextText={`${Pref.baseSerialPart}s`}
-            lockout={isDone || isRO}>
+            lockout={isDone || isRO}
+            isAuth={isAuth}>
             <TrinaryStat
               status={!serialRelease ? null : !serialRelease.caution ? true : false}
               name={`${Pref.baseSerialPart}s`}
@@ -110,7 +112,8 @@ const KittingChecks = ({
           unholdText={`Released without ${Pref.shortfall}`}
           undoText='Cancel Release'
           contextText='to the floor'
-          lockout={isDone || isRO}>
+          lockout={isDone || isRO}
+          isAuth={isAuth}>
           <TrinaryStat
             status={releasedToFloor ? !floorRelease.caution ? true : false : null}
             name={Pref.kitting}

@@ -78,7 +78,7 @@ export const ExTaskBar = ({ subLink }) => (
   </div>
 );
 
-export const UpTaskBar = ({ subLink, showParts }) => (
+export const UpTaskBar = ({ subLink, showParts, isAuth }) => (
   <div className='taskColumn'>
   
     <TaskElement
@@ -114,6 +114,16 @@ export const UpTaskBar = ({ subLink, showParts }) => (
       icon='fas fa-calculator'
       iconAdj=''
     />
+    
+    {isAuth &&
+      <TaskElement
+        title='Email Log'
+        subON={subLink === 'emaillog'}
+        goLink='/upstream/emaillog'
+        icon='fas fa-envelope'
+        iconAdj=''
+      />
+    }
       
   </div>
 );

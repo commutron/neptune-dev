@@ -661,17 +661,6 @@ Meteor.methods({
       return false;
     }
   },
-  setEmailBCC(emailoption) {
-    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
-      AppDB.update({orgKey: Meteor.user().orgKey}, {
-        $set : { 
-          emailBCC : emailoption
-      }});
-      return true;
-    }else{
-      return false;
-    }
-  },
   
   setHelpDocs(go) {
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {

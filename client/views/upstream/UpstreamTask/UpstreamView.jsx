@@ -9,7 +9,7 @@ import UpstreamHeaders from './UpstreamHeaders';
 import UpstreamDetails from './UpstreamDetails';
 
 
-const UpstreamView = ({ batchX, traceDT, user, app, brancheS, isDebug })=> {
+const UpstreamView = ({ batchX, traceDT, user, app, brancheS, isAuth, isDebug })=> {
   
   const sessionSticky = 'overviewUpstream';
   
@@ -188,6 +188,7 @@ const UpstreamView = ({ batchX, traceDT, user, app, brancheS, isDebug })=> {
             user={user}
             app={app}
             brancheS={brancheS}
+            isAuth={isAuth}
             isDebug={isDebug}
             dense={dense}
             focusBy={focusBy}

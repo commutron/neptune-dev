@@ -10,7 +10,7 @@ import ProJump from '/client/components/smallUi/ProJump';
 const UpstreamDetails = ({
   oB, traceDT,
   user, app, brancheS,
-  isDebug,
+  isAuth, isDebug,
   dense, focusBy
 })=> {
   
@@ -53,6 +53,7 @@ const UpstreamDetails = ({
               app={app}
               brancheS={brancheS}
               branchClear={branchClear}
+              isAuth={isAuth}
               isDebug={isDebug}
               statusCols={statusCols}
               kitCols={kitCols}
@@ -71,7 +72,7 @@ const UpstreamDetailChunk = ({
   rowIndex, oB, tBatch, user,
   app, 
   brancheS, branchClear,
-  isDebug,
+  isAuth, isDebug,
   statusCols, kitCols, 
   dense, focusBy
 })=> {
@@ -116,6 +117,7 @@ const UpstreamDetailChunk = ({
         branchClear={branchClear}
         kitCols={kitCols}
         dense={dense}
+        isAuth={isAuth}
         isDebug={isDebug} />
     
       <PrintJump

@@ -71,7 +71,7 @@ export const ReleaseWrapper = ({
   releasedBool, releaseObj, 
   actionKeyword, actionText, 
   holdText, unholdText, undoText, contextText,
-  lockout, children
+  lockout, isAuth, children
 })=> {
   
   const clear = releasedBool === true;
@@ -97,7 +97,6 @@ export const ReleaseWrapper = ({
     });
   }
   
-  const isAuth = Roles.userIsInRole(Meteor.userId(), ['run', 'kitting']);
   const extraClass = isAuth ? 'noCopy overAction' : 'noCopy';
                       
   return(

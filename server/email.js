@@ -38,7 +38,7 @@ function sendInternalEmail(to, subject, date, title, body, foot, link) {
 
 }
 
-function sendExternalEmail(to, cc, bcc, subject, date, body, plainbody) {
+function sendExternalEmail(to, cc, subject, date, body, plainbody) {
   const from = Config.sendEmail;
     
   const html = `
@@ -74,19 +74,21 @@ function sendExternalEmail(to, cc, bcc, subject, date, body, plainbody) {
     
   const text = `COMMUTRON Industries Ltd.\n\nAutomated message\n\n${date}(CST)\n\n${plainbody}\n\ndo not reply to this email\n\nCustomer Service: ${Config.orgPhone}\n${Config.orgStreet}`;
   
-  Email.send({ to, bcc, from, subject, html, text });
+  Email.send({ to, cc, from, subject, html, text });
 }
   
   
 Meteor.methods({
   
   sendTestEmail(to, subject) {
+    this.unblock();
+    
     const from = Config.sendEmail;
     
     const name = Meteor.user().username.replace('.', ' ').replace('_', ' ');
     
+    const check = (val)=> typeof val === 'string';
     if(check(to) && check(from) && check(subject)) {
-      this.unblock();
       
       const date = new Date().toLocaleString();
       const title = "Email Test";
@@ -95,6 +97,14 @@ Meteor.methods({
       const link = '';
       
       sendInternalEmail(to, subject, date, title, body, foot, link);
+      
+      EmailDB.insert({
+        sentTime: new Date(),
+        subject: title,
+        to: to,
+        cc: undefined,
+        text: body
+      });
     }
   },
   
@@ -110,25 +120,22 @@ Meteor.methods({
         
       const cc = emailSecond || undefined;
       
-      const bcc = app.emailBCC || undefined;
-      
       const subject = `Production Notice For Order ${salesOrder}`;
       
-      const date = moment().tz(Config.clientTZ).format('hh:mm a, dddd, MMM Do YYYY');
+      const date = moment().tz(Config.clientTZ).format('h:mm a, dddd, MMM Do YYYY');
       
-      const body = `Your order ${'<i>'}${salesOrder}${'</i>'} of ${'<i>'}${toCap(isW, true)}${'</i>'} has ${'<b>'}Entered Production${'</b>'}`;
+      const body = `Your order ${'<b>'}${salesOrder}${'</b>'} of ${'<b>'}${toCap(isW, true)}${'</b>'} has ${'<b>'}Entered Production${'</b>'}`;
       // const foot = 'Once your order is completed, a packing slip may be provided.';
       
       const plainbody = `Your order — ${salesOrder} — of — ${toCap(isW, true)} — has Entered Production`;
       
-      sendExternalEmail( to, cc, bcc, subject, date, body, plainbody );
+      sendExternalEmail( to, cc, subject, date, body, plainbody );
       
       EmailDB.insert({
         sentTime: new Date(),
         subject: 'Production Release',
-        to: to.toString(),
-        cc: cc.toString(),
-        bcc: bcc,
+        to: to ? to.toString() : undefined,
+        cc: cc ? cc.toString() : undefined,
         text: plainbody
       });
       
@@ -145,9 +152,9 @@ Meteor.methods({
     const emailGlobal = doc && doc.emailGlobal;
     
     if(emailGlobal) {
-      const subject = `New Product - ${variant} - automated email from Neptune`;
+      const subject = `New Product Variant - ${variant} - automated email from Neptune`;
       
-      const date = moment().tz(Config.clientTZ).format('hh:mm a, dddd, MMM Do YYYY');
+      const date = moment().tz(Config.clientTZ).format('h:mm a, dddd, MMM Do YYYY');
       
       const title = `Concerning ${toCap(isG, true)}`;
       const body = `${toCap(name, true)} has created variant ${variant} of ${toCap(isW, true)}`;
@@ -177,7 +184,6 @@ Meteor.methods({
           subject: 'New Product Variant',
           to: addresses.toString(),
           cc: undefined,
-          bcc: undefined,
           text: body
         });
       }
@@ -212,9 +218,9 @@ Meteor.methods({
     }
   },
   
-  removeEmailLog(logID) {
+  removeEmailLog() {
     if(Roles.userIsInRole(Meteor.userId(), 'run')) {
-      EmailDB.remove(logID);
+      EmailDB.remove({});
       return true;
     }
   }
