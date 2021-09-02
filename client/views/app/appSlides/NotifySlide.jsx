@@ -39,9 +39,9 @@ const NotifySlide = ({ app })=> {
     
     Meteor.call(
       'sendTestEmail', to, 'TEST - Hello from Neptune!',
-      (err, re)=> {
+      (err)=> {
         err && console.log(err);
-        re ? toast('Email Sent') : toast.warn('Invalid Email');
+        toast('Email Request Sent');
       }
     );
   }

@@ -91,7 +91,7 @@ Meteor.methods({
     const check = (val)=> typeof val === 'string';
     if(check(to) && check(from) && check(subject)) {
       
-      const date = new Date().toLocaleString();
+      const date = moment().tz(Config.clientTZ).format('h:mm:ss a, dddd, MMM Do YYYY');
       const title = "Email Test";
       const body = `Sent by ${name}`;
       const foot = "no action required";
