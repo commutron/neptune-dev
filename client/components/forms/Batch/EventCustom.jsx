@@ -1,5 +1,4 @@
 import React from 'react';
-import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
 import ModelSmall from '/client/components/smallUi/ModelSmall';
@@ -7,7 +6,7 @@ import ModelSmall from '/client/components/smallUi/ModelSmall';
 
 const EventCustom = ({ batchId })=> {
   
-  const access = Roles.userIsInRole(Meteor.userId(), 'edit');
+  const access = Roles.userIsInRole(Meteor.userId(), ['edit','run']);
 
   return(
     <ModelSmall

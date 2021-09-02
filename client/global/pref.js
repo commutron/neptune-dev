@@ -10,7 +10,7 @@ class Pref {
     
     this.InitialAppSetup = false;
     
-    this.neptuneVersion = '3.6.0';
+    this.neptuneVersion = '3.7.1';
     this.neptuneIs = 'Neptune Process Tracking';
 
     this.prefName = 'default';
@@ -50,6 +50,7 @@ class Pref {
     this.statisticalEndHour = 20; // 8pm
     this.avgSpan = 1000; // Also in server hardConfig
     this.stepUndoWindow = 1000*30; // remember to match ".spinRe"
+    this.completeGrace = 24; // allow complete undo for lower permission for how many hours
     this.timeAfterGrace = 48; // keep the tideControl unlocked for how many hours
     this.seriesLimit = 5000;
     this.unitLimit = 1000;

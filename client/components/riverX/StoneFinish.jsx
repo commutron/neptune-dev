@@ -1,6 +1,5 @@
 import React from 'react';
 import { toast } from 'react-toastify';
-// import Pref from '/client/global/pref.js';
 import StoneProgRing from './StoneProgRing.jsx';
 
 const StoneFinish = ({ 

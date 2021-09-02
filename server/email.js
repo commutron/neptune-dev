@@ -38,7 +38,7 @@ function sendInternalEmail(to, subject, date, title, body, foot, link) {
 
 }
 
-function sendExternalEmail(to, cc, subject, date, body, plainbody) {
+function sendExternalEmail(to, cc, subject, date, body, foot, plainbody) {
   const from = Config.sendEmail;
     
   const html = `
@@ -58,6 +58,7 @@ function sendExternalEmail(to, cc, subject, date, body, plainbody) {
           <td colspan='2' style="padding:20px 10%;text-align:center;line-height: 1.5">
             <p style="color:black;margin:1rem 0">${date}</p>
             <p style="color:black;margin:1rem 0">${body}</p>
+            <p style="color:black;margin:1rem 0">${foot}</p>
             <p style="color:black;margin:1em 0">Do not reply to this email address. If you have any questions, please contact a member of our customer service team directly.</p>
           </td>
         </tr>
@@ -125,11 +126,11 @@ Meteor.methods({
       const date = moment().tz(Config.clientTZ).format('h:mm a, dddd, MMM Do YYYY');
       
       const body = `Your order ${'<b>'}${salesOrder}${'</b>'} of ${'<b>'}${toCap(isW, true)}${'</b>'} has ${'<b>'}Entered Production${'</b>'}`;
-      // const foot = 'Once your order is completed, a packing slip may be provided.';
+      const foot = 'Once your order is completed, a packing slip will be provided.';
       
       const plainbody = `Your order — ${salesOrder} — of — ${toCap(isW, true)} — has Entered Production`;
       
-      sendExternalEmail( to, cc, subject, date, body, plainbody );
+      sendExternalEmail( to, cc, subject, date, body, foot, plainbody );
       
       EmailDB.insert({
         sentTime: new Date(),

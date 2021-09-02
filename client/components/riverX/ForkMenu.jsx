@@ -1,5 +1,4 @@
 import React from 'react';
-// import Pref from '/client/global/pref.js';
 import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 
 

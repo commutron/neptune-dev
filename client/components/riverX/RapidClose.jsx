@@ -1,5 +1,4 @@
 import React from 'react';
-import Pref from '/client/global/pref.js';
 
 
 const RapidClose = ({ rapidData, seriesId })=> {

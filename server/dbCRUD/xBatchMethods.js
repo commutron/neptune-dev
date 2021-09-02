@@ -277,7 +277,7 @@ Meteor.methods({
   },
   
   pushCustomEvent(batchId, eventTitle, eventDetail) {
-    if(Roles.userIsInRole(Meteor.userId(), 'run')) {
+    if(Roles.userIsInRole(Meteor.userId(), ['edit','run'])) {
       const orgKey = Meteor.user().orgKey;
       const username = Meteor.user().username;
       const sub = 'custom event by ' + username;

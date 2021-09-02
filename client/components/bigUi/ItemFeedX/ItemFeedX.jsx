@@ -34,7 +34,6 @@ const ItemFeedX = ({
                                   x.key ? x.live === true && x.typeText : x);
   
   const canQA = Roles.userIsInRole(Meteor.userId(), ['remove', 'qa']);
-  const canRun = Roles.userIsInRole(Meteor.userId(), ['qa', 'remove', 'run']);
   const canEdit = Roles.userIsInRole(Meteor.userId(), ['edit', 'run']);
   const canVerify = Roles.userIsInRole(Meteor.userId(), 'verify');
   const canInspect = Roles.userIsInRole(Meteor.userId(), 'inspect');

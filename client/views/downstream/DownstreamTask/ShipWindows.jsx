@@ -76,8 +76,8 @@ const ShipWindows = ({
       const loaded = index === 0 || wipTime === 0 ? [ '', false ] :
               Math.abs(remain) <= (timeBucket * 0.10) ? ['', 'balanced'] :
               remain < 0 ? 
-                [ Math.ceil(Math.abs(wipTime) / timeBucket)+'pts', 'heavy' ] :
-                [ Math.ceil(timeBucket / Math.abs(wipTime))+'pts', 'light' ];
+                [ Math.ceil(Math.abs(wipTime) / (timeBucket || 1))+'pts', 'heavy' ] :
+                [ Math.ceil(timeBucket / Math.abs(wipTime || 1))+'pts', 'light' ];
       
       windowChunks.push({
         windowMoment: day[0],

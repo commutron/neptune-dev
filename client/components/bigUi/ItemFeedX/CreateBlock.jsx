@@ -1,6 +1,5 @@
 import React from 'react';
 import './style.css';
-//import Pref from '/client/global/pref.js';
 import UserNice from '/client/components/smallUi/UserNice.jsx';
 
 const CreateBlock = ({ title, user, datetime, cal })=> (

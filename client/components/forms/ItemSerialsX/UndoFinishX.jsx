@@ -70,7 +70,7 @@ const UndoFinishForm = ({
   };
   
   const howLong = moment().diff(moment(finishedAtI), 'hours');
-  const grace = howLong < 24 || Roles.userIsInRole(Meteor.userId(), 'run');
+  const grace = howLong < Pref.completeGrace || Roles.userIsInRole(Meteor.userId(), 'run');
   
   const completedRapids = rapids.filter(r=> r.completed);
   

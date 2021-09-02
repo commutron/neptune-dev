@@ -12,7 +12,8 @@ const GroupFormWrapper = ({
   const bttn = name ? `edit ${Pref.group}` : `new ${Pref.group}`;
   const otitle = name ? 'edit ' + Pref.group : 'create new ' + Pref.group;
   
-  const access = Roles.userIsInRole(Meteor.userId(), ['create', 'edit']);
+  const access = name ? Roles.userIsInRole(Meteor.userId(), 'edit') :
+                        Roles.userIsInRole(Meteor.userId(), 'create');
   const aT = !access ? Pref.norole : '';
   const lT = lockOut ? `${Pref.group} is hibernated` : '';
   const title = access && !lockOut ? otitle : `${aT}\n${lT}`;

@@ -71,8 +71,8 @@ const EmailLogSlide = ({ app })=> {
             <tr className='clean'>
               <td className='numFont'>{moment(entry.sentTime).format('hh:mm a, MMM DD YYYY')}</td>
               <td>{entry.subject}</td>
-              <td>{entry.to}</td>
-              <td>{entry.cc}</td>
+              <td className='wordBr'>{entry.to}</td>
+              <td className='wordBr'>{entry.cc}</td>
               <td className='noRightBorder'>{entry.text}</td>
             </tr>
           </tbody>
