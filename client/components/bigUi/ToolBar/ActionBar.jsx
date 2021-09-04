@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import Pref from '/client/global/pref.js';
 import './style.css';
 
-import ActionLink from '/client/components/tinyUi/ActionLink.jsx';
+import ActionLink from '/client/components/tinyUi/ActionLink';
 
 import BatchXEdit from '/client/components/forms/Batch/BatchXEdit';
 import BatchXIncomplete from '/client/components/forms/Batch/BatchXIncomplete';
@@ -18,7 +18,7 @@ import ItemIncompleteX from '/client/components/forms/ItemSerialsX/ItemIncomplet
 import ScrapItemX from '/client/components/forms/ItemSerialsX/ScrapItemX';
 import RemoveItem from '/client/components/forms/ItemSerialsX/RemoveItem';
 
-import CounterAssign from '/client/components/bigUi/ArrayBuilder/CounterAssign.jsx';
+import CounterAssign from '/client/components/bigUi/ArrayBuilder/CounterAssign';
 
 const ActionBar = ({
   batchData, seriesData, rapidData, itemData, 
@@ -107,7 +107,8 @@ const ActionBar = ({
                         batchData.batch + 
                         '?group=' + groupData.alias +
                         '&widget=' + widgetData.widget + 
-                        '&ver=' + variantData.variant +
+                        '&ver=' + variantData.variant + 
+                        ( variantData.radioactive ? '☢' : ''  ) +
                         '&desc=' + widgetData.describe +
                         '&sales=' + (batchData.salesOrder || '') +
                         '&quant=' + batchData.quantity }

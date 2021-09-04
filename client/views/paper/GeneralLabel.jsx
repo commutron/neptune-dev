@@ -1,7 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-// import moment from 'moment';
-// import Pref from '/client/global/pref.js';
 
 const GeneralLabel = ({ batch, data })=> (
   <div className='noCopy'>

@@ -111,6 +111,7 @@ const HistorySlide = ({ app, user, users, traceDT, isDebug })=> {
             const keyword = blk.batch;
             const moreInfo = traceDT ? traceDT.find( x => x.batch === blk.batch) : false;
             const what = moreInfo ? moreInfo.isWhat.join(' ') : 'unavailable';
+            const rad = moreInfo ? moreInfo.rad : null;
             
             const lastStart = dayData[index-1] && dayData[index-1].startTime;
             
@@ -124,6 +125,7 @@ const HistorySlide = ({ app, user, users, traceDT, isDebug })=> {
                     key={blk.tKey}
                     batch={keyword}
                     describe={what}
+                    rad={rad}
                     tBlock={blk} />
                 </Fragment>
               );
@@ -133,6 +135,7 @@ const HistorySlide = ({ app, user, users, traceDT, isDebug })=> {
                   key={blk.tKey}
                   batch={keyword}
                   describe={what}
+                  rad={rad}
                   tBlock={blk} />
               );
           }})}
@@ -215,9 +218,10 @@ const TideTaskCols = ({ tide, traceDT })=> {
           {batchList.map( (ent, ix)=>{
             const moreInfo = traceDT ? traceDT.find( x => x.batch === ent) : false;
             const what = moreInfo ? moreInfo.isWhat.join(' ') : 'unavailable';
+            const rad = moreInfo ? moreInfo.rad : null;
             return(
               <dt key={ent+ix} className='rightRow doJustWeen'>
-                <ExploreLinkBlock type='batch' keyword={ent} /> 
+                <ExploreLinkBlock type='batch' keyword={ent} rad={rad} /> 
                 <em className='rightText'>{what}</em>
               </dt>
           )})}
@@ -238,7 +242,7 @@ const TideTaskCols = ({ tide, traceDT })=> {
 };
 
 const TidePlainRow = ({ 
-  batch, describe, tBlock
+  batch, describe, rad, tBlock
 })=> {
   
   const tideWho = tBlock.who;
@@ -252,7 +256,7 @@ const TidePlainRow = ({
       <td className='noRightBorder'><UserNice id={tideWho} /></td>
       
       <td className='noRightBorder'>
-        <ExploreLinkBlock type='batch' keyword={batch} />
+        <ExploreLinkBlock type='batch' keyword={batch} rad={rad} />
       </td>
       
       <td className='noRightBorder'>{describe}</td>

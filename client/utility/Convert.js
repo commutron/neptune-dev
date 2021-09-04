@@ -95,3 +95,11 @@ export function chunkArray(input, size) {
       : [...arr.slice(0, -1), [...arr.slice(-1)[0], item]];
   }, []);
 } // https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore
+
+export function toCap(str, all) { 
+  if(all) {
+    return str.replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase())));
+  }else{
+    return str.trim().replace(/^\w/, (c) => c.toUpperCase());
+  }
+}/* joshtronic of Digital Ocean Community Tutorials */

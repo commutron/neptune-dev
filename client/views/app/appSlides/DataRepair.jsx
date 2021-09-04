@@ -62,6 +62,14 @@ const DataRepair = ({ app, users })=> {
   
   return(
     <div className='space3v autoFlex'>
+     <DoCard
+        title='Clear npiTime key'
+        icon='eraser'
+        color='clearBlack'
+        button='Unset Key'
+        action={()=>doCallThing('UNSETnpi')}
+      />
+      
       
       <DoCard
         title='Force Randomize Org PIN'

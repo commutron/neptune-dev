@@ -47,6 +47,7 @@ const BatchPanelX = ({
           b={batchData}
           hasSeries={!seriesData ? false : true}
           widgetData={widgetData}
+          radioactive={variantData.radioactive}
           riverTitle={flowData.riverTitle}
           srange={flowData.srange}
           flowCounts={flowData.flowCounts}
@@ -114,6 +115,7 @@ const BatchPanelX = ({
             '?group=' + groupData.alias +
             '&widget=' + widgetData.widget + 
             '&ver=' + variantData.variant +
+            ( variantData.radioactive ? '☢' : ''  ) +
             '&desc=' + widgetData.describe
           }
           released={released}

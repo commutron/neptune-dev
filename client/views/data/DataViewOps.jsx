@@ -17,6 +17,7 @@ import WidgetPanel from './panels/WidgetPanel/WidgetPanel';
 import RextendPanel from './panels/RextendPanel';
 import TestFailPanel from './panels/TestFailPanel';
 
+import RadioPanel from './panels/RadioPanel';
 import ScrapPanel from './panels/ScrapPanel';
 
 import BatchesList from './lists/BatchesList';
@@ -243,6 +244,24 @@ const DataViewOps = ({
             groupData={allGroup} 
             app={app}
             specify={specify} />
+        </TraverseWrap>
+      );
+    }else if(request === 'radioactive') {
+      return(
+        <TraverseWrap
+		      batchData={false}
+          widgetData={false}
+          variantData={false}
+          groupData={false}
+          user={user}
+          app={app}
+          title={Pref.widget + ' ' + Pref.radioactive + 's'}
+          subLink={subLink}
+          action={false}
+          base={true}
+        >
+          <RadioPanel 
+            app={app} />
         </TraverseWrap>
       );
     }else if(request === 'rapidex') {

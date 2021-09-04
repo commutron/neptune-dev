@@ -8,7 +8,7 @@ import NCFlood from '/client/components/riverX/NCFlood.jsx';
 import ShortAdd from '/client/components/riverX/ShortAdd.jsx';
 
 const XFormBar = ({ 
-  batchData, seriesData, itemData, rapIs, widgetData,
+  batchData, seriesData, itemData, rapIs, widgetData, radioactive,
   tideFloodGate, ncTypesCombo, 
   action, showVerifyState, handleVerify, 
   user, users, app 
@@ -87,7 +87,11 @@ const XFormBar = ({
         </div>
       : null}
       <div className='footFill'>
-        <TideLock currentLive={tideFloodGate && b.live} message={true} caution={caution}>
+        <TideLock 
+          currentLive={tideFloodGate && b.live} 
+          message={true} 
+          caution={caution}
+          radioactive={radioactive}>
         {!srs ?
           <p className='whiteT centreText wide'>
             <em>{Pref.nonCon}, {Pref.shortfall}, and {Pref.trackFirst} require a {Pref.series}</em>

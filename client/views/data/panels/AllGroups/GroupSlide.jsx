@@ -52,8 +52,8 @@ const GroupSlide = ({ groupData, widgetsList, batchDataX, app, inter })=>{
         {g.hibernate &&
           <div className='centreText comfort middle w100 vmargin wetasphaltBorder cap'>
             <i className='fas fa-archive fa-fw fa-2x wetasphaltT gapL'></i>
-            <h3>Hibernated {Pref.group}</h3>
-            <i className='fas fa-bed fa-fw fa-2x wetasphaltT gapR'></i>
+            <h3>{Pref.hibernatated} {Pref.group}</h3>
+            <i className='fas fa-archive fa-fw fa-2x wetasphaltT gapR'></i>
           </div>}
         
         <div className='centreRow'>

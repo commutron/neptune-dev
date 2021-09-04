@@ -25,7 +25,7 @@ Meteor.methods({
         runUnits: Number(unit),
 		    notes: false,
 		    assembly: [],
-		    npiTime: []
+		    radioactive: false
       });
       
       if(emailUsers && emailUsers.length > 0) {
@@ -136,6 +136,49 @@ Meteor.methods({
         $pull : {
           tags: tag
         }});
+    }else{
+      null;
+    }
+  },
+  
+  setVRad(vKey, rad) {
+    if(Roles.userIsInRole(Meteor.userId(), 'run')) {
+      VariantDB.update({versionKey: vKey, orgKey: Meteor.user().orgKey}, {
+        $set : {
+          radioactive: rad
+        }});
+        
+      Meteor.defer( ()=>{
+        XBatchDB.find({versionKey: vKey},{fields:{'batch':1}})
+          .forEach( b => {
+            TraceDB.update({batch: b.batch}, {
+              $set : { 
+                rad: rad
+              }
+            });
+          });
+      });
+    }else{
+      null;
+    }
+  },
+  cutVRad(vKey) {
+    if(Roles.userIsInRole(Meteor.userId(), 'run')) {
+      VariantDB.update({versionKey: vKey, orgKey: Meteor.user().orgKey}, {
+        $set : {
+          radioactive: false
+        }});
+        
+      Meteor.defer( ()=>{
+        XBatchDB.find({versionKey: vKey},{fields:{'batch':1}})
+          .forEach( b => {
+            TraceDB.update({batch: b.batch}, {
+              $set : { 
+                rad: false
+              }
+            });
+          });
+      });
     }else{
       null;
     }

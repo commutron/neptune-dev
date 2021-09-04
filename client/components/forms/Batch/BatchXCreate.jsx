@@ -37,12 +37,15 @@ const BXCreateForm = ({ groupId, widgetId, allVariants })=> {
   
   const [ tempver, tempverSet ] = useState(liveVs[0] ? liveVs[0].versionKey : false);
   const [ pstState, pstSet ] = useState(false);
+  const [ radState, radSet ] = useState(false);
   
   useEffect( ()=>{
     Meteor.call('getPastBatch', widgetId, tempver, (err, re)=>{
       err && console.log(err);
       re && pstSet(re);
-     }); 
+     });
+     
+     radSet( liveVs.find( v => v.versionKey === tempver ).radioactive );
    }, [tempver]);
    
   const [ nxtNum, nxtSet ] = useState(false);
@@ -127,6 +130,15 @@ const BXCreateForm = ({ groupId, widgetId, allVariants })=> {
           >The last 3 {Pref.xBatchs} averaged <b>{pstState && 
             pstState[0] > 0 && '+'}{pstState[0]}</b> Performance and <b>{Math.abs(pstState[1] || 0)}</b> workdays <b>{pstState[1] < 0 ? 'Late' : 'Early'}</b>
         </p>
+        
+        {radState &&
+          <p className='nospace vmarginquarter cap centreText contrast'
+            ><n-fa1>
+              <i className='fas fa-radiation-alt fa-fw fa-lg darkOrangeT gapR'></i>
+            </n-fa1>{Pref.variant} {Pref.radioactive} <b>{radState}</b>
+          </p>
+        }
+        
       </span>
       
       <span className='overscroll'>

@@ -54,6 +54,7 @@ function shrinkWhole(bData, now, shipLoad, accessKey) {
         salesOrder: bData.salesOrder,
         isWhat: isWhat.isWhat,
         describe: isWhat.more,
+        rad: isWhat.rad,
         quantity: Number(quantity),
         serialize: serialize,
         riverChosen: rFlow,
@@ -96,6 +97,7 @@ function checkMinify(bData, accessKey) {
         salesOrder: bData.salesOrder,
         isWhat: isWhat.isWhat,
         describe: isWhat.more,
+        rad: isWhat.rad,
         quantity: Number(quantity),
         serialize: serialize,
         riverChosen: rFlow

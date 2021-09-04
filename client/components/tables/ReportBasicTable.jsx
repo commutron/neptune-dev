@@ -1,10 +1,9 @@
 import React from 'react';
 import moment from 'moment';
 import './style.css';
-import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock.jsx';
+import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock';
 import { toast } from 'react-toastify';
 
-//import Alert from '/client/global/alert.js';
 
 const ReportBasicTable = ({ title, dateString, rows })=> {
   
@@ -64,7 +63,9 @@ const ReportBasicTable = ({ title, dateString, rows })=> {
                             <td key={ix+rndm}>
                               <ExploreLinkBlock 
                                 type='batch'
-                                keyword={sub} />
+                                keyword={Array.isArray(sub) ? sub[0] : sub}
+                                rad={Array.isArray(sub) ? sub[1] : false}
+                              />
                             </td>
                           );
                         }else if(sub.length >= 24 & moment(sub, moment.ISO_8601).isValid()){

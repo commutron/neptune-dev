@@ -3,7 +3,7 @@ import moment from 'moment';
 import 'moment-business-time';
 import Pref from '/client/global/pref.js';
 
-import { min2hr } from '/client/utility/Convert.js';
+import { min2hr, toCap } from '/client/utility/Convert.js';
 
 import TagsModule from '/client/components/bigUi/TagsModule';
 
@@ -21,7 +21,7 @@ import BatchXStatus from '/client/components/forms/Batch/BatchXStatus';
 import StepsProgressX from '/client/components/bigUi/StepsProgress/StepsProgressX';
 
 const InfoTab = ({
-  b, hasSeries, widgetData, user, isDebug,
+  b, hasSeries, widgetData, radioactive, user, isDebug,
   released, done, allFlow, allFall, nowater,
   flowCounts, fallCounts, rapidsData, riverTitle, srange,
   app, brancheS
@@ -105,6 +105,16 @@ const InfoTab = ({
           id={b._id}
           tags={b.tags}
           tagOps={app.tagOption} />
+        
+        {radioactive &&
+          <div 
+            className='centreRow medBig max250 vmarginhalf' 
+            title={`${toCap(Pref.widget)} ${Pref.radio.toUpperCase()}`}
+          >
+            <n-faX><i className='fas fa-radiation-alt fa-fw fa-lg darkOrangeT'></i></n-faX>
+            <i>{radioactive}</i>
+          </div>
+        }
       </div>
         
       <SalesSegment 

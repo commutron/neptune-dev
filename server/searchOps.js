@@ -8,7 +8,7 @@ export function whatIsBatchX(keyword, labelString) {
   const group = GroupDB.findOne({_id: batch.groupId},{fields:{'alias':1,'hibernate':1}});
   const groupH = group.hibernate ? "."+group.alias : group.alias;
   const widget = WidgetDB.findOne({_id: batch.widgetId},{fields:{'widget':1,'describe':1}});
-  const variant = VariantDB.findOne({versionKey: batch.versionKey},{fields:{'variant':1}});
+  const variant = VariantDB.findOne({versionKey: batch.versionKey},{fields:{'variant':1,'radioactive':1}});
   const more = widget.describe;
   
   if(labelString) {
@@ -16,6 +16,7 @@ export function whatIsBatchX(keyword, labelString) {
                   '?group=' + group.alias +
                   '&widget=' + widget.widget +
                   '&ver=' + variant.variant +
+                  ( variant.radioactive ? '☢' : ''  ) +
                   '&desc=' + more +
                   '&sales=' + batch.salesOrder +
                   '&quant=' + batch.quantity; 
@@ -23,7 +24,8 @@ export function whatIsBatchX(keyword, labelString) {
   }else{
     const vNice = `v.${variant.variant}`;
     const nice = [ groupH.toUpperCase(), widget.widget.toUpperCase(), vNice ];
-    return [ nice, more ];
+    const rad = variant.radioactive ? variant.radioactive : false;
+    return [ nice, more, rad ];
   }
 }
 
@@ -36,6 +38,7 @@ Meteor.methods({
       batch: keyword, 
       isWhat: niceString[0],
       more: niceString[1],
+      rad: niceString[2]
     };
     return niceObj;
   },
@@ -71,7 +74,8 @@ Meteor.methods({
         is[0][0],
         is[0][1],
         is[0][2],
-        x.live
+        x.live,
+        is[2]
       ]);
     });
     
@@ -90,7 +94,7 @@ Meteor.methods({
         is[0][0],
         is[0][1],
         is[0][2],
-        x.live
+        x.live,
       ]);
     };
     
@@ -119,6 +123,14 @@ Meteor.methods({
     },{fields:{'_id':1}}
     ).forEach( w => {
       XBatchDB.find({widgetId: w._id},{fields:{'batch':1,'salesOrder':1,'live':1}})
+        .forEach( x => enterLine(x) );
+    });
+    
+    VariantDB.find({
+      radioactive: { $regex: new RegExp( orb ) }
+    },{fields:{'versionKey':1}}
+    ).forEach( v => {
+      XBatchDB.find({versionKey: v.versionKey},{fields:{'batch':1,'salesOrder':1,'live':1}})
         .forEach( x => enterLine(x) );
     });
     
@@ -154,9 +166,9 @@ Meteor.methods({
 
     let results = [];
     for(let iS of itemsSeries) {
-      const describe = whatIsBatchX(iS.batch)[0];
+      const whatIs = whatIsBatchX(iS.batch);
       const exact = !single ? false : iS.items.findIndex( x => x.serial === orb ) >= 0;
-      results.push([ iS.batch, ...describe, exact ]);
+      results.push([ iS.batch, ...whatIs[0], exact ]);
     }
     return results;
   },
@@ -168,8 +180,8 @@ Meteor.methods({
       "items.serial": { $regex: new RegExp( orb ) }
     },{fields:{'batch':1}})
     .forEach( (srs)=> {
-      const describe = whatIsBatchX(srs.batch)[0];
-      results.push([ srs.batch, describe ]);
+      const whatIs = whatIsBatchX(srs.batch);
+      results.push([ srs.batch, whatIs[0] ]);
     });
     
     return results;
@@ -189,8 +201,8 @@ Meteor.methods({
 
     const results = [];
     for(let iS of itemsSeries) {
-      const describe = whatIsBatchX(iS.batch)[0];
-      results.push([ iS.batch, ...describe, false ]);
+      const whatIs = whatIsBatchX(iS.batch);
+      results.push([ iS.batch, ...whatIs[0], false ]);
     }
   
     return results;
@@ -294,12 +306,7 @@ Meteor.methods({
   fetchShortfallParts() {
     
     let sMatch = [];
-    /* All, Complete or Not
-      XSeriesDB.find({
-      shortfall: { $elemMatch: { inEffect: { $ne: true }, reSolve: { $ne: true } } }
-    }); // s.inEffect !== true && s.reSolve !== true
-    */
-    // Complete Only
+    
     XBatchDB.find({
       orgKey: Meteor.user().orgKey,
       completed: false
@@ -309,14 +316,15 @@ Meteor.methods({
         const mShort = srs.shortfall.filter( s => !(s.inEffect || s.reSolve) );
           
         if(mShort.length > 0) {
-          const describe = whatIsBatchX(bx.batch)[0].join(' ');
+          const whatIs = whatIsBatchX(bx.batch);
+          const describe = whatIs[0].join(' ');
           
           const unqShort = _.uniq(mShort, false, n=> n.partNum );
   
           let bsMatch = [];
           for(let mS of unqShort) {
             bsMatch.push([
-              bx.batch, bx.salesOrder, describe, mS.partNum
+              [ bx.batch, whatIs[2] ], bx.salesOrder, describe, mS.partNum,
             ]);
           }
     	    bsMatch.map((ent, ix)=>{
@@ -331,6 +339,35 @@ Meteor.methods({
       }
     });
     return sMatch;
+  },
+  
+  //////////////////////////////////////////////////////////////////////////
+   // Radioactive Lite
+  ///////////////////////////////////////////////////////////////////////////
+  fetchRadioactiveThin() {
+    let compactData = [];
+    
+    VariantDB.find({
+      orgKey: Meteor.user().orgKey, 
+      radioactive: { $exists: true, $ne: false }
+    }).forEach( v => {
+      const w = WidgetDB.findOne({_id: v.widgetId},{fields:{'widget':1}});
+      const g = GroupDB.findOne({_id: v.groupId},{fields:{'alias':1}});
+      const b = XBatchDB.find({versionKey: v.versionKey, live: true},{fields:{'_id':1}}).count();
+      
+      compactData.push({
+        vKey: v.versionKey,
+        group: g.alias,
+        widget: w.widget,
+        variant: v.variant,
+        live: v.live,
+        rad: v.radioactive,
+        liveBatch: b
+      });
+    });
+    
+    const thin = JSON.stringify(compactData);
+    return thin;
   },
   
   //////////////////////////////////////////////////////////////////////////

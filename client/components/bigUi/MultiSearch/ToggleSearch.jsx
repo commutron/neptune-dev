@@ -108,7 +108,7 @@ const ToggleSearch = ({
         />
       </p>
       
-      <p>{tggl ? `Find by number, ${Pref.group}, ${Pref.widget}, sales order, tag, ${Pref.rapidEx} ID or issue.` : 
+      <p>{tggl ? `Find by number, ${Pref.group}, ${Pref.widget}, sales order, tag, ${Pref.radio}, ${Pref.rapidEx} ID or issue.` : 
           tggl === false ? 'Find an item by whole or partial serial number' :
           `Find by ${Pref.trackFirst}, ${Pref.method}, ${Pref.consume} or `}
           {tggl === null && <abbr title="only by exact user ID">{Pref.builder}</abbr>}

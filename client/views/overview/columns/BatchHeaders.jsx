@@ -48,13 +48,18 @@ const BatchHeaderChunk = ({ ck, tBatch, app, isDebug, focusBy })=> {
         batchID={ck._id}
         ptData={tBatch}
         isDone={isDone}
-        oRapid={tBatch.oRapid}
+        oRapid={tBatch ? tBatch.oRapid : null}
         app={app}
         isDebug={isDebug}
         showLess={true}
       />
       <div>
-        <ExploreLinkBlock type='batch' keyword={ck.batch} wrap={false} />
+        <ExploreLinkBlock 
+          type='batch' 
+          keyword={ck.batch} 
+          wrap={false} 
+          rad={tBatch ? tBatch.rad : null}
+        />
       </div>
       <div title={tBatch.describe}
         >{whaT.length <= 50 ? whaT : whaT.substring(0, 50) + '...'}</div>

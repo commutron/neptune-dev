@@ -56,9 +56,9 @@ const RapidExtendCard = ({
         <div className='centreRow vmarginhalf'>
             
           <ActionLink
-            address={'/print/generallabel/' + 
+            address={'/print/generallabel/' +
                       rapid.rapid + urlString +
-                      '&sales=' + 'Issue: ' + rapid.issueOrder +
+                      '&sales=' + 'Issue: 🗲' + rapid.issueOrder +
                       '&quant=' + rapid.quantity }
             title='Print Label'
             icon='fas fa-print'

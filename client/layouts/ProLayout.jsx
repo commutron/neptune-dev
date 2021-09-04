@@ -14,7 +14,7 @@ import { NonConMerge } from '/client/utility/NonConOptions';
 
 export const ProWrap = ({ 
   itemSerial, itemData, batchData, seriesData, rapidsData,
-  widgetData, groupAlias, 
+  widgetData, radioactive, groupAlias, 
   user, users, app,
   action, tideLockOut, standAlone,
   children
@@ -204,6 +204,7 @@ export const ProWrap = ({
           itemData={itemData}
           rapIs={rapIs}
           widgetData={widgetData}
+          radioactive={radioactive}
           
           tideFloodGate={tideFloodGate}
           ncTypesCombo={ncTypesComboFlat}

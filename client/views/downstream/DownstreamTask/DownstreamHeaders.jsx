@@ -68,7 +68,9 @@ const DownstreamFixedChunk = ({
           type='batch' 
           keyword={ck.batch}
           altName={topRapid ? tBatch.oRapid : false}
-          wrap={false} />
+          wrap={false}
+          rad={tBatch ? tBatch.rad : null}
+        />
         </div>
       <div title={describe}
         >{what.length <= 75 ? what : what.substring(0, 75) + '...'}</div>

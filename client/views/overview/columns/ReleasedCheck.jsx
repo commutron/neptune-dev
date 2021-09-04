@@ -6,10 +6,9 @@ import { ReleaseWrapper } from '/client/components/bigUi/ReleasesModule';
 
 
 const ReleasedCheck = ({ 
-  batchID, batchNum, 
-  isX, isDone,
+  batchID, batchNum, isDone,
   releasedToFloor, releases,
-  app, dense, isRO, isDebug
+  app, dense, isAuth, isRO, isDebug
 })=> {
   
   if( Array.isArray(releases) ) {
@@ -30,7 +29,7 @@ const ReleasedCheck = ({
         undoText='Cancel Release'
         contextText='to the floor'
         lockout={isDone || isRO}
-        isX={isX}>
+        isAuth={isAuth}>
         <TrinaryStat
           status={releasedToFloor ? !floorRelease.caution ? true : false : null}
           name={Pref.kitting}

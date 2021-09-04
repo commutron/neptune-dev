@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import moment from 'moment';
 import 'moment-business-time';
-// import Pref from '/client/global/pref.js';
+
 import { HolidayCheck } from '/client/utility/WorkTimeCalc.js';
 import { min2hr } from '/client/utility/Convert';
 import DayPieceBar from '/client/components/charts/Tides/DayPieceBar.jsx';
@@ -84,6 +84,7 @@ const TideEditWrap = ({
         const keyword = blk.batch;
         const moreInfo = traceDT ? traceDT.find( x => x.batch === blk.batch) : false;
         const what = moreInfo ? moreInfo.isWhat.join(' ') : 'unavailable';
+        const rad = moreInfo ? moreInfo.rad : null;
         
         const lastStart = weekData[index-1] && weekData[index-1].startTime;
         const lastStop = weekData[index+1] && weekData[index+1].stopTime;
@@ -123,6 +124,7 @@ const TideEditWrap = ({
                 key={blk.tKey}
                 batch={keyword}
                 describe={what}
+                rad={rad}
                 tideObj={blk}
                 lastStop={lastStop}
                 nextStart={nextStart}
@@ -145,6 +147,7 @@ const TideEditWrap = ({
               key={blk.tKey}
               batch={keyword}
               describe={what}
+              rad={rad}
               tideObj={blk}
               lastStop={lastStop}
               nextStart={nextStart}

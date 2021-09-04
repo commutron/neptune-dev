@@ -10,7 +10,7 @@ class Pref {
     
     this.InitialAppSetup = false;
     
-    this.neptuneVersion = '3.7.1';
+    this.neptuneVersion = '3.8.0';
     this.neptuneIs = 'Neptune Process Tracking';
 
     this.prefName = 'default';
@@ -99,6 +99,9 @@ class Pref {
     this.rapidExd = 'extended';
     this.rapidExs = 'extensions';
     
+    this.radioactive = 'nonconformace report';
+    this.radio = 'ncr';
+    
     this.group = 'customer';//customer
     this.Group = 'Customer';//Customer
     this.groups = 'customers';//customer
@@ -110,6 +113,8 @@ class Pref {
     this.version = 'version';// version, revision
     this.live = 'live'; // live / active in context of a product
     this.notlive = 'not live';
+    this.hibernatate = 'archive';
+    this.hibernatated = 'archived';
     
     this.unit = 'unit';// how many in a panel/set
     this.panel = 'set of items';

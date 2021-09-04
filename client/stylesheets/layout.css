@@ -528,7 +528,8 @@ n-sm-model-content {
 .auxTipScale::before,
 .miniStack::after,
 .firstBadge::after,
-.leapBonus::before {
+.leapBonus::before,
+.smplTip::after {
   font-family: 'VarelaLocal';
   letter-spacing: 0.1ch;
   text-transform: capitalize;
@@ -543,7 +544,8 @@ n-sm-model-content {
 .auxTip:focus::before, .auxTip:hover::before,
 .auxTipScale:focus::before, .auxTipScale:hover::before,
 .tideOut:enabled:focus::before, .tideOut:enabled:hover::before, 
-.tideFollowTip:focus::before, .tideFollowTip:hover::before {
+.tideFollowTip:focus::before, .tideFollowTip:hover::before,
+.smplTip:focus::after, .smplTip:hover::after {
   visibility: visible;
   opacity: 1;
 }

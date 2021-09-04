@@ -128,6 +128,7 @@ Meteor.publish('bNameData', function(){
           'batch': 1,
           'batchID': 1,
           'isWhat': 1,
+          'rad': 1
         }
       })
     ];
@@ -169,6 +170,7 @@ Meteor.publish('traceDataLive', function(){
           'salesOrder': 1,
           'isWhat': 1,
           'describe': 1,
+          'rad': 1,
           'quantity': 1,
           'serialize': 1,
           'riverChosen': 1,
@@ -206,6 +208,7 @@ Meteor.publish('traceDataActive', function(){
           'salesOrder': 1,
           'isWhat': 1,
           'describe': 1,
+          'rad': 1,
           'quantity': 1,
           'serialize': 1,
           'riverChosen': 1,
@@ -249,6 +252,7 @@ Meteor.publish('traceDataOpen', function(){
           'salesOrder': 1,
           'isWhat': 1,
           'describe': 1,
+          'rad': 1,
           'quantity': 1,
           'serialize': 1,
           'live': 1,

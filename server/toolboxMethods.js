@@ -204,6 +204,22 @@ Meteor.methods({
         }
       }
     }
-  }
+  },
+  
+  UNSETnpi() {
+    try{
+      if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+        VariantDB.update({orgKey: Meteor.user().orgKey}, {
+          $unset : { 
+            'npiTime': ""
+        }},{multi: true});
+        return true;
+      }else{
+        null;
+      }
+    }catch (err) {
+      throw new Meteor.Error(err);
+    }
+  },
   
 });

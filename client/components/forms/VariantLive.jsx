@@ -38,7 +38,7 @@ const VariantLive = ({ vId, vKey, vState, selfclose })=> {
       onClick={(e)=>handleVive(e)}
       disabled={!Roles.userIsInRole(Meteor.userId(), ['edit'])}
     ><b><i className='fas fa-folder grayT fa-2x fa-fw'></i></b>
-    <br /><small>Archived</small>
+    <br /><small>Closed</small>
     </button>
   );
 };

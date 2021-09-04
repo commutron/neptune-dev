@@ -126,7 +126,8 @@ function weekDoneAnalysis(rangeStart, rangeEnd) {
   
   for(let gf of generalFindX) {
     const batchNum = gf.batch;
-    const describe = whatIsBatchX(batchNum)[0].join(' ');
+    const whatIs = whatIsBatchX(batchNum);
+    const describe = whatIs[0].join(' ');
     const salesOrder = gf.salesOrder;
     const allQuantity = gf.quantity;
     
@@ -152,7 +153,7 @@ function weekDoneAnalysis(rangeStart, rangeEnd) {
                       `${Math.abs(distTB[2])} hours (${Math.abs(distTB[3])}%) under`;
     
     batchMetrics.push([
-      batchNum, describe, 
+      [ batchNum, whatIs ], describe, 
       salesOrder, allQuantity, ncRate,
       salesEnd, shipDue, endAlter, localComplete,
       fillOnTime, shipOnTime, overQuote
@@ -252,7 +253,8 @@ function weekDoneAnalysis(rangeStart, rangeEnd) {
     
     for(let srs of touchedSRS) {
       const items = srs.items.filter( i => i.completed && localDate.isSame(i.completedAt, 'day') );
-      const describe = whatIsBatchX(srs.batch)[0].join(' ');
+      const whatIs = whatIsBatchX(srs.batch);
+      const describe = whatIs[0].join(' ');
       const batchX = XBatchDB.findOne({batch: srs.batch},{fields:{'salesOrder':1}});
       const salesOrder = batchX ? batchX.salesOrder : '';
       
@@ -260,7 +262,7 @@ function weekDoneAnalysis(rangeStart, rangeEnd) {
         const time = moment.tz(ic.completedAt, Config.clientTZ).format('HH:mm:ss');
         
         itemsMatch.push([ 
-          srs.batch, salesOrder, describe, ic.serial, time
+          [ srs.batch, whatIs[2] ], salesOrder, describe, ic.serial, time
         ]);
       }
     }

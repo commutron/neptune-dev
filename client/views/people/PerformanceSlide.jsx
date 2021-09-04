@@ -190,9 +190,10 @@ const PerformanceSlide = ({ app, user, users, traceDT, isDebug })=> {
                 {batchList.map( (ent, ix)=>{
                   const moreInfo = traceDT ? traceDT.find( x => x.batch === ent) : false;
                   const what = moreInfo ? moreInfo.isWhat.join(' ') : 'unavailable';
+                  const rad = moreInfo ? moreInfo.rad : null;
                   return(
                     <dt key={ent+ix} className='rightRow doJustWeen'>
-                      <ExploreLinkBlock type='batch' keyword={ent} /> 
+                      <ExploreLinkBlock type='batch' keyword={ent} rad={rad} /> 
                       <em className='rightText'>{what}</em>
                     </dt>
                 )})}

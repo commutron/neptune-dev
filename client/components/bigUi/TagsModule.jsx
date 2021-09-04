@@ -4,9 +4,10 @@ import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 import Pref from '/client/global/pref.js';
 
 
-const TagsModule = ({ action, id, vKey, tags, tagOps, truncate })=>	{
+const TagsModule = ({ action, id, vKey, tags, tagOps, truncate, rad })=>	{
 
   const [ newOption, newOptionSet ] = useState(false);
+  const [ newRad, newRadSet ] = useState(false);
   
   function addTag(tag) {
     const cleanTag = !tag ? false : tag.trim();
@@ -57,11 +58,17 @@ const TagsModule = ({ action, id, vKey, tags, tagOps, truncate })=>	{
     }
   }
   
+  function addRadFlag(rad) {
+    Meteor.call('setVRad', vKey, rad, (err)=>{
+      err && console.log(err);
+    });
+  }
+  
   const auth = Roles.userIsInRole(Meteor.userId(), 'run');
   const currTags = tags || [];
   
   return(
-    <div className='rowWrap'>
+    <div className='rowWrap margin5'>
       {currTags.map( (entry, index)=>{
         return(
           <IndieTag
@@ -94,14 +101,33 @@ const TagsModule = ({ action, id, vKey, tags, tagOps, truncate })=>	{
         <MenuItem onClick={null} disabled={true} className='noFade'>
           <input 
             type='text' 
-            id='addnewtag'
+            id={vKey+'addnewtag'}
             maxLength='24'
             className='wide black whiteT' 
-            onChange={(e)=>newOptionSet(addnewtag.value)} />
+            onChange={(e)=>newOptionSet(this[vKey+'addnewtag'].value)} />
         </MenuItem>
         <MenuItem onClick={()=>addTag(newOption)} disabled={!newOption}>
           Add Custom
         </MenuItem>
+        
+        {action === 'variant' && !rad ?
+        <span>
+          <MenuItem divider />
+          <MenuItem onClick={null} disabled={true} className='noFade'>
+            <input 
+              type='text' 
+              id={vKey+'addnewrad'}
+              maxLength='24'
+              className='wide black whiteT' 
+              onChange={(e)=>newRadSet(this[vKey+'addnewrad'].value)} />
+          </MenuItem>
+          <MenuItem onClick={()=>addRadFlag(newRad)} disabled={!newRad} className='cap'>
+            <n-faX>
+              <i className='fas fa-radiation-alt fa-fw fa-lg gapR darkOrangeT'></i>
+            </n-faX>Add {Pref.radio.toUpperCase()}
+          </MenuItem>
+          </span>
+        : null}
         
       </ContextMenu>
     </div>
@@ -126,3 +152,33 @@ const IndieTag = ({ tagText, removeTag, lock }) => (
     </ContextMenu>
   </div>
 );
+
+export const RadFlag = ({ vKey, rad })=> {
+
+  function removeRadFlag() {
+    Meteor.call('cutVRad', vKey, (err)=>{
+      err && console.log(err);
+    });
+  }
+  
+  return(
+    <span>
+      <ContextMenuTrigger
+        id={vKey+'radcut'}
+        holdToDisplay={1}
+        attributes={{ 
+          className: 'centre max100',
+          style: { cursor: 'pointer' }
+        }}
+        renderTag='div'
+      >
+        <n-faX><i className='fas fa-radiation-alt fa-fw fa-2x darkOrangeT'></i></n-faX>
+        <i>{rad}</i>
+      </ContextMenuTrigger>
+        
+      <ContextMenu id={vKey+'radcut'} className='noCopy cap'>
+        <MenuItem onClick={()=>removeRadFlag()}>Remove {Pref.radio.toUpperCase()}</MenuItem>
+      </ContextMenu>
+    </span>
+  );
+};

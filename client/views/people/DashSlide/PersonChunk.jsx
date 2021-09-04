@@ -3,7 +3,7 @@ import moment from 'moment';
 
 import UserNice from '/client/components/smallUi/UserNice';
 import TaskTag from '/client/components/tinyUi/TaskTag';
-import { LeapTextLink } from '/client/components/tinyUi/LeapText';
+import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock';
 
 const PersonChunk = ({ 
   userChunk, traceDT, app,
@@ -41,7 +41,8 @@ const PersonChunk = ({
   
   const moreInfo = traceDT ? traceDT.find( x => x.batch === uC.batch) : false;
   const what = moreInfo ? moreInfo.isWhat.join(' ') : 'unavailable';
-            
+  const rad = moreInfo ? moreInfo.rad : null;
+  
   return(
     <tr className='leftText line2x numFont'>
       <td className='noRightBorder medBig'><UserNice id={uC.uID} /></td>
@@ -49,11 +50,7 @@ const PersonChunk = ({
         <TaskTag task={branchGuess[1]} guess={branchGuess[0] === 'fromUserInput'} />
       </td>
       <td className='noRightBorder'>
-        <LeapTextLink
-          title={uC.batch} 
-          sty='numFont noWrap blackT'
-          address={'/data/batch?request=' + uC.batch}
-        />
+        <ExploreLinkBlock type='batch' keyword={uC.batch} rad={rad} />
       </td>
       <td className='noRightBorder'>{what}</td>
       <td className='noRightBorder centreText'>

@@ -167,6 +167,7 @@ input::-webkit-calendar-picker-indicator {
 }
 
 .darkOrange { background-color:  var(--pumpkin); }
+.darkOrangeI { background-color:  var(--pumpkin) !important; }
 .darkOrangeT { color:  var(--pumpkin); }
 .orangeList:nth-child(odd) {
   background-color: rgb(230, 126, 34);
@@ -635,7 +636,7 @@ n-prog-bar progress {
   vertical-align: middle;
   color: var(--peterriver);
   background-color: transparent;
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   border-radius: 25%;
   transition: all 150ms ease-in-out;
   cursor: pointer;

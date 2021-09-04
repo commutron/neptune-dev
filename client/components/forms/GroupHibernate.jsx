@@ -3,10 +3,11 @@ import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
 import ModelSmall from '../smallUi/ModelSmall';
+import { toCap } from '/client/utility/Convert';
 
 const GroupHibernateWrapper = ({ id, hState, noText, primeTopRight })=> {
-  const actTtl = !hState ? `Hibernate ${Pref.group}` : 
-                           `Wake Up ${Pref.group} from hibernation`;
+  const actTtl = !hState ? toCap(Pref.hibernatate) + ' ' + Pref.group : 
+                           'Un' + Pref.hibernatate + ' ' + Pref.group;
   
   const access = Roles.userIsInRole(Meteor.userId(), 'edit');
   const aT = !access ? Pref.norole : '';
@@ -14,7 +15,7 @@ const GroupHibernateWrapper = ({ id, hState, noText, primeTopRight })=> {
   
   return(
     <ModelSmall
-      button='Hibernation'
+      button={Pref.hibernatate}
       title={title}
       color='grayT'
       icon='fa-archive'
@@ -40,7 +41,7 @@ const GroupHibernate = ({ id, hState, selfclose })=> {
         toast.success('Saved');
         selfclose();
       }else{
-        toast.warning(`Not hibernated. Live ${Pref.variants} found`);
+        toast.warning(`Not ${Pref.hibernatated}. Live ${Pref.variants} found`);
       }
     });
   }
@@ -48,13 +49,13 @@ const GroupHibernate = ({ id, hState, selfclose })=> {
   if(!hState) {
     return(
       <div className='centre'>
-        <p>Hibernatation will disable some actions and hide the {Pref.group} from some lists.</p>
+        <p>{toCap(Pref.hibernatated)} {Pref.group} will be hidden from some lists and some actions will be disabled.</p>
         <p>NO {Pref.group} data will be deleted.</p>
         <p>
           <button
             className='action clearBlack'
             onClick={(e)=>handleHibernate(e)}
-          >Hibernatate {Pref.group}</button>
+          >{Pref.hibernatate} {Pref.group}</button>
         </p>
       </div>
     );
@@ -62,12 +63,12 @@ const GroupHibernate = ({ id, hState, selfclose })=> {
   
   return(
     <div className='centre'>
-      <p>Hibernatation flag will be removed from {Pref.group}</p>
+      <p>{toCap(Pref.hibernatate)} flag will be removed from {Pref.group}</p>
       <p>
         <button
           className='action clearBlue'
           onClick={(e)=>handleHibernate(e)}
-        >Wakeup {Pref.group}</button>
+        >Un{Pref.hibernatate} {Pref.group}</button>
       </p>
     </div>
   );

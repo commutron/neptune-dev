@@ -59,7 +59,6 @@ const GroupLanding = ({ groupData, widgetData, variantData, app })=> {
         <TrendLine 
           title={`new ${Pref.groups}`}
           localXY={xyG}
-          //statType='newGroup'
           cycleCount={12}
           cycleBracket='month'
           lineColor='rgb(52, 152, 219)' />
@@ -67,7 +66,6 @@ const GroupLanding = ({ groupData, widgetData, variantData, app })=> {
         <TrendLine 
           title={`new ${Pref.widgets}`}
           localXY={xyW}
-          //statType='newWidget'
           cycleCount={12}
           cycleBracket='month'
           lineColor='rgb(52, 152, 219)' />
@@ -75,7 +73,6 @@ const GroupLanding = ({ groupData, widgetData, variantData, app })=> {
         <TrendLine 
           title={`new ${Pref.variants}`}
           localXY={xyV}
-          //statType='newVariant'
           cycleCount={12}
           cycleBracket='month'
           lineColor='rgb(52, 152, 219)' />

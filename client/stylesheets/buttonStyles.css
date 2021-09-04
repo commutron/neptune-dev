@@ -243,6 +243,17 @@
   opacity: 1;
 }
 
+.smplTip::after {
+  content: attr(data-tip);
+  position: absolute;
+  margin-left: 2px;
+  padding: 0.25em 0.5em;
+  background-color: rgb(230,230,230);
+  color: black;
+  font-size: 0.7rem;
+  border-radius: 1px;
+}
+
 .leapText {
   min-width: 1rem;
 	min-height: 1rem;

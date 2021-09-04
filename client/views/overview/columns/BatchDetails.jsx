@@ -31,6 +31,9 @@ const BatchDetails = ({
   
   const headersArr = branchArea ? brchHead : fullHead;
   
+  const isAuth = Roles.userIsInRole(Meteor.userId(), ['run', 'kitting']);
+  const isRO = Roles.userIsInRole(Meteor.userId(), 'readOnly');
+  
   return(
     <div className={`overGridScroll forceScrollStyle ${dense ? 'dense' : ''}`} tabIndex='1'>
       
@@ -60,6 +63,8 @@ const BatchDetails = ({
               app={app}
               brancheS={brancheS}
               branchClear={branchClear}
+              isAuth={isAuth}
+              isRO={isRO}
               isDebug={isDebug}
               statusCols={statusCols}
               progCols={progCols}
@@ -82,7 +87,7 @@ const BatchDetailChunk = ({
   rowIndex, oB, tBatch,
   user, app, 
   brancheS, branchClear,
-  isDebug,
+  isAuth, isRO, isDebug,
   statusCols, progCols, ncCols, 
   dense, filterBy, focusBy, branchArea,
   updateTrigger
@@ -97,8 +102,6 @@ const BatchDetailChunk = ({
                             x => x.type === 'floorRelease') >= 0;
   const rTFghostC = releasedToFloor ? '' : 'ghostState';
   const rTFghostT = releasedToFloor ? '' : `Not released from ${Pref.kitting}`;
-  
-  const isRO = Roles.userIsInRole(Meteor.userId(), 'readOnly');
   
   return(
     <div className={`overGridRowScroll ${highG} ${rTFghostC}`} title={rTFghostT}>
@@ -134,12 +137,12 @@ const BatchDetailChunk = ({
         <ReleasedCheck
           batchID={oB._id}
           batchNum={oB.batch}
-          isX={isX}
           isDone={isDone}
           releasedToFloor={releasedToFloor}
           releases={oB.releases}
           app={app}
           dense={dense}
+          isAuth={isAuth}
           isRO={isRO}
           isDebug={isDebug} />
       : null}

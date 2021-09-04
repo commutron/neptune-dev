@@ -4,7 +4,7 @@ import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
 import CreateTag from '/client/components/tinyUi/CreateTag';
-import TagsModule from '/client/components/bigUi/TagsModule';
+import TagsModule, { RadFlag } from '/client/components/bigUi/TagsModule';
 import NotesModule from '/client/components/bigUi/NotesModule';
 
 import VariantLive from '/client/components/forms/VariantLive';
@@ -40,6 +40,14 @@ const VariantCard = ({
         </div>
       
         <div className='centreRow vmarginhalf'>
+        
+          {v.radioactive ?
+            <RadFlag
+              vKey={v.versionKey}
+              rad={v.radioactive}
+            />
+          : null}
+          
           {batchRelated.length === 0 ?
             <Remove
               action='variant'
@@ -59,11 +67,14 @@ const VariantCard = ({
         <span className='min200'>   
           
           <TagsModule
+            key={v.id+v.versionKey}
             action='variant'
             id={v._id}
             tags={v.tags}
             vKey={v.versionKey}
-            tagOps={app.tagOption} />
+            tagOps={app.tagOption}
+            rad={v.radioactive}
+          />
           
           <InlineForm
             widgetData={widgetData}

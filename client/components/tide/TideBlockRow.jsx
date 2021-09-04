@@ -2,12 +2,12 @@ import React, { Fragment, useState } from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
-import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock.jsx';
+import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock';
 import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/themes/airbnb.css';
 
 const TideBlockRow = ({ 
-  batch, describe, tideObj,
+  batch, describe, rad, tideObj,
   lastStop, nextStart,
   editKey, editMode,
   splitKey, splitMode,
@@ -82,7 +82,7 @@ const TideBlockRow = ({
     return(
       <tr className={`smTxt ${editOn ? 'pop' : ''}`}>
         <td className='noRightBorder med'>
-          <ExploreLinkBlock type='batch' keyword={batch} />
+          <ExploreLinkBlock type='batch' keyword={batch} rad={rad} />
         </td>
         <td className='noRightBorder'>{describe}</td>
         

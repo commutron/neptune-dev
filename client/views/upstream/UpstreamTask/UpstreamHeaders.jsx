@@ -50,7 +50,12 @@ const UpstreamHeaderChunk = ({ck, tBatch, app, isDebug, focusBy })=> {
         showLess={true}
       />
       <div>
-        <ExploreLinkBlock type='batch' keyword={ck.batch} wrap={false} />
+        <ExploreLinkBlock 
+          type='batch' 
+          keyword={ck.batch} 
+          wrap={false}
+          rad={tBatch ? tBatch.rad : null}
+        />
       </div>
       <div title={tBatch ? tBatch.describe : 'unavailable'}
       >{whaT.length <= 50 ? whaT : whaT.substring(0, 50) + '...'}</div>

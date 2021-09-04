@@ -2,7 +2,11 @@ import React, { useEffect, Fragment } from 'react';
 import { toast } from 'react-toastify';
 import Pref from '/client/global/pref.js';
         
-const TideLock = ({ currentLive, classSty, children, message, caution })=> {
+const TideLock = ({ 
+  currentLive, classSty, children, 
+  message, caution, radioactive
+})=> {
+  
   useEffect(() => {
     if(!currentLive && message) {
       toast(`Click 'START' to unlock.
@@ -10,6 +14,7 @@ const TideLock = ({ currentLive, classSty, children, message, caution })=> {
       (Only one ${Pref.xBatch} can be ${Pref.engaged} at a time).`, 
         {
           autoClose: false,
+          className: 'medSm',
           position: toast.POSITION.BOTTOM_CENTER
       });
       if(caution) {
@@ -17,7 +22,15 @@ const TideLock = ({ currentLive, classSty, children, message, caution })=> {
         {
           autoClose: false,
           position: toast.POSITION.BOTTOM_CENTER
-      });
+        });
+      }
+      if(radioactive) {
+        toast.warn(`${Pref.widget} ${Pref.variant} ${Pref.radio.toUpperCase()} ☢`, 
+        {
+          autoClose: false,
+          className: 'cap darkOrangeI',
+          position: toast.POSITION.BOTTOM_CENTER
+        });
       }
     }
   }, []);

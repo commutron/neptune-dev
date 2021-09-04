@@ -52,6 +52,14 @@ export const ExTaskBar = ({ subLink }) => (
     />
     
     <TaskElement
+      title={Pref.widget + ' ' + Pref.radio.toUpperCase() + 's'}
+      subON={subLink === 'overviewradioactive'}
+      goLink='/data/overview?request=radioactive'
+      icon='fas fa-radiation-alt'
+      iconAdj='down-1'
+    />
+    
+    <TaskElement
       title={`${Pref.rapidExd} ${Pref.xBatchs}`}
       subON={subLink === 'overviewrapidex'}
       goLink='/data/overview?request=rapidex'
