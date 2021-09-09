@@ -153,7 +153,7 @@ function weekDoneAnalysis(rangeStart, rangeEnd) {
                       `${Math.abs(distTB[2])} hours (${Math.abs(distTB[3])}%) under`;
     
     batchMetrics.push([
-      [ batchNum, whatIs ], describe, 
+      [ batchNum, whatIs[2] ], describe,
       salesOrder, allQuantity, ncRate,
       salesEnd, shipDue, endAlter, localComplete,
       fillOnTime, shipOnTime, overQuote
