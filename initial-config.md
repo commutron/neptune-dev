@@ -14,10 +14,11 @@ This setup can be initiated with Neptune.
 
 1. Un-comment 'addFirstSetting' in 'server/dbCRUD/appMethods'.
 2. Un-comment 'initialsetup' in 'client/components/routes'.
-3. Deploy
-4. Navigate to [host]/initialsetup
-5. Click "First Account"
-6. Click "Setup"
+3. Set Pref.InitialAppSetup to true
+4. Deploy
+5. Navigate to [host]/initialsetup
+6. Click "First Account"
+7. Click "Setup"
 
 The first account will be created as:
 - username: 'administrator'

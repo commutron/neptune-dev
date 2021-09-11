@@ -53,14 +53,13 @@ export const TrendBarCache = ({ title, statType, cycleCount, cycleBracket, isDeb
 
   const thingMounted = useRef(true);
   const blank =  [ {x:1,y:0} ];
-  // const blank = Array(cycleCount);
   const [ dataG, dataGSet ] = useState( blank );
   const [ dataNG, dataNGSet ] = useState( blank );
   
   useEffect( ()=>{
     Meteor.call('cycleLiteRate', statType, cycleCount, (err, re)=>{
       err && console.log(err);
-      if(re) {
+      if(re && re.length > 0) {
         if(thingMounted.current) {
           isDebug && console.log(`${title}: ${JSON.stringify(re)}`);
           const barOne = Array.from(re, w => { return { x: w.x, y: w.y[0] } } );

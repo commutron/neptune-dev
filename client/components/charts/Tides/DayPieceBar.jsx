@@ -51,7 +51,7 @@ const DayPieceBar = ({ tideTimes, dateTime, regDayStart, regDayEnd, app, user })
   
   
   useEffect( ()=> {
-    const dayHours = TimeInDay( app.nonWorkDays, dateTime );
+    const dayHours = TimeInDay( app, dateTime );
     const proHours = UserTime( user, dateTime, 'day', dayHours );
     maxHoursSet(proHours);
   }, [dateTime]);

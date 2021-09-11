@@ -8,7 +8,7 @@ const MonthsTable = ({
   app, extraClass, miss 
 })=> {
 
-  if(data === false) {
+  if(!data) {
     return null;
   }
 

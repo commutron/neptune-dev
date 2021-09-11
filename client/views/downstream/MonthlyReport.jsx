@@ -93,7 +93,12 @@ const MonthlyReport = ({ app })=> {
             <p className='centreText'>Looking for those numbers...</p>
             <CalcSpin />
           </div>
-        :   
+        : 
+        dataState === null ? 
+          <div>
+            <p className='centreText'>No Data Yet</p>
+          </div>
+        : 
         <div>
         
           <MonthsTable 

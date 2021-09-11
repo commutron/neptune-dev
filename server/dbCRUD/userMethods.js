@@ -27,11 +27,12 @@ Accounts.validateNewUser(function(attempt) {
 Accounts.onCreateUser((options, user) => {
   const orgName = options.org;
   const orgIs = AppDB.findOne({ org: orgName });
+  const roles = Meteor.users.find({}).count() === 0 ? ['active', 'admin'] : ['active'];
   if(orgIs) {
     const customizedUser = Object.assign({
       org: orgIs.org,
       orgKey: orgIs.orgKey,
-      roles: ['active'],
+      roles: roles,
       inbox: [],
       autoScan: true,
       unlockSpeed: 2000,

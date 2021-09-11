@@ -25,12 +25,17 @@ export function listShipDays( app, qty, withLast ) {
   localeUpdate(app);
   
   const loops = withLast ? qty + 1 : qty;
-  const last = moment().lastShipDay().startOf('day').nextShippingTime();
-
+  const last = moment().lastShipDay();
+  
+  if(!last) {
+    return [];
+  }else{
+  const lastTime = last.startOf('day').nextShippingTime();
+  
   let sArr = [];
   for(let s = 0; s < loops; s++) {
     const newDay = s === 0 ? 
-                    withLast ? last : last.nextShipDay().startOf('day').nextShippingTime() :
+                    withLast ? lastTime : lastTime.nextShipDay().startOf('day').nextShippingTime() :
                     sArr[s - 1][0].nextShipDay().startOf('day').nextShippingTime();
     
     const gap = s === 0 && withLast ? 0 : 
@@ -41,6 +46,7 @@ export function listShipDays( app, qty, withLast ) {
     sArr.push([newDay, gap]);
   }
   return sArr;
+  }
 }
 
 export function TimeInWeek( app, weekStart ) {
@@ -53,19 +59,23 @@ export function TimeInWeek( app, weekStart ) {
     let weekTotal = 0;
     
     for(let n = 0; n < 7; n++) {
-      const dayStart = moment(begin).add(n, 'd');
-      const dayEnd = moment(begin).add(n, 'd').endOf('day');
-      const dayTotal = dayEnd.workingDiff(dayStart, 'hours', true);
-      
-      const breakTime = dayTotal <= 5 ? Pref.breakMin : Pref.breakMin * 2;
-      const idleTime = breakTime + Pref.idleMinutes;
-      const minusTime = ( dayTotal * 60 ) < breakTime ? 0 :
-                        ( dayTotal * 60 ) < idleTime ? breakTime : idleTime;
+      if(!moment(n).isWorkingDay()) {
+        continue;
+      }else{
+        const dayStart = moment(begin).add(n, 'd');
+        const dayEnd = moment(begin).add(n, 'd').endOf('day');
+        const dayTotal = dayEnd.workingDiff(dayStart, 'hours', true);
         
-      const workTime = moment.duration(dayTotal, 'hours')
-                        .subtract(minusTime, 'minutes').asHours();
-
-      weekTotal = weekTotal + workTime;
+        const breakTime = dayTotal <= 5 ? Pref.breakMin : Pref.breakMin * 2;
+        const idleTime = breakTime + Pref.idleMinutes;
+        const minusTime = ( dayTotal * 60 ) < breakTime ? 0 :
+                          ( dayTotal * 60 ) < idleTime ? breakTime : idleTime;
+          
+        const workTime = moment.duration(dayTotal, 'hours')
+                          .subtract(minusTime, 'minutes').asHours();
+  
+        weekTotal = weekTotal + workTime;
+      }
     }
     return weekTotal;
   }else{
@@ -78,20 +88,23 @@ export function TimeInDay( app, dayStart ) {
   localeUpdate(app);
   
   if(moment(dayStart, ["YYYY", moment.ISO_8601]).isValid()) {
+    if(!moment(dayStart).isWorkingDay()) {
+      return 0;
+    }else{
+      const begin = moment(dayStart).startOf('day').format(); 
+      const end = moment(dayStart).endOf('day').format();
+      const dayTotal = moment(end).workingDiff(begin, 'hours', true);
   
-    const begin = moment(dayStart).startOf('day').format(); 
-    const end = moment(dayStart).endOf('day').format();
-    const dayTotal = moment(end).workingDiff(begin, 'hours', true);
-
-    const breakTime = dayTotal <= 5 ? Pref.breakMin : Pref.breakMin * 2;
-    const idleTime = breakTime + Pref.idleMinutes;
-    const minusTime = ( dayTotal * 60 ) < breakTime ? 0 :
-                      ( dayTotal * 60 ) < idleTime ? breakTime : idleTime;
-    
-    const workTime = moment.duration(dayTotal, 'hours')
-                      .subtract(minusTime, 'minutes').asHours();
-                      
-    return workTime;
+      const breakTime = dayTotal <= 5 ? Pref.breakMin : Pref.breakMin * 2;
+      const idleTime = breakTime + Pref.idleMinutes;
+      const minusTime = ( dayTotal * 60 ) < breakTime ? 0 :
+                        ( dayTotal * 60 ) < idleTime ? breakTime : idleTime;
+      
+      const workTime = moment.duration(dayTotal, 'hours')
+                        .subtract(minusTime, 'minutes').asHours();
+                        
+      return workTime;
+    }
   }else{
     return 0;
   }

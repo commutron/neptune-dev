@@ -52,11 +52,11 @@ Meteor.methods({
       countOption: [],
       nonConOption: [
         'not installed',
-        'misaligned'
+        'misaligned',
         'misoriented',
         'misattached',
         'incorrect part',
-        'damaged part'.
+        'damaged part',
         'faulty part'
       ],
       nonConTypeLists: [],
@@ -64,7 +64,7 @@ Meteor.methods({
         low: Number(50),
         high: Number(70)
       },
-      missingType: 'not installed'',
+      missingType: 'not installed',
       ancillaryOption: [],
       repeatOption: [],
       alterFulfillReasons: [],
@@ -84,7 +84,7 @@ Meteor.methods({
       },
       lockType: 'timer',
       nonWorkDays: [],
-      shippingHours {
+      shippingHours: {
         0: null,
         1: null,
         2: null,
@@ -93,7 +93,7 @@ Meteor.methods({
         5: null,
         6: null
       },
-      workingHours {
+      workingHours: {
         0: null,
         1: null,
         2: null,
@@ -103,13 +103,6 @@ Meteor.methods({
         6: null
       }
     });
-    Meteor.users.update(Meteor.userId(), {
-      $set: {
-        org: 'crew',
-        orgKey: orgKey
-      }
-    });
-    Roles.addUsersToRoles(Meteor.userId(), ['active', 'admin']);
     return true;
   },
   */

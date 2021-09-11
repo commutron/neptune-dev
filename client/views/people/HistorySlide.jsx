@@ -42,7 +42,7 @@ const HistorySlide = ({ app, user, users, traceDT, isDebug })=> {
   
   const localDate = moment.tz(dateString, moment.tz.guess());
   const isHoliday = HolidayCheck( app, moment(dateString, 'YYYY-MM-DD').format());
-       
+  
   return(
     <div className='space5x5 overscroll'>
       <div className='med vbreak comfort middle'>

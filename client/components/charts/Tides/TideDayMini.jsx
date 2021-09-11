@@ -16,7 +16,7 @@ const TideDayMini = ({ tideTimes, dateTime, showUser, app, users })=> {
   const [ userHours, userHoursSet ] = useState(0);
   
   useEffect( ()=> {
-    const getDayHours = TimeInDay( app.nonWorkDays, dateTime );
+    const getDayHours = TimeInDay( app, dateTime );
     dayHoursSet(getDayHours);
   }, [dateTime]);
   

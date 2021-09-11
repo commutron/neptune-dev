@@ -373,7 +373,7 @@ Meteor.methods({
         
         const lite = CacheDB.findOne({ orgKey: accessKey, dataName: cName });
         
-        const liteSet = lite.dataSet || [];
+        const liteSet = lite ? lite.dataSet : [];
         
         const cut = -Math.abs(cycles);
   

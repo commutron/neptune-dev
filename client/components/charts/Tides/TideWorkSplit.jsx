@@ -16,7 +16,7 @@ const TideWorkSplit = ({ tideTimes, dateTime, app, user })=> {
   const [ maxHours, maxHoursSet ] = useState(0);
   
   useEffect( ()=> {
-    const weekHours = TimeInWeek( app.nonWorkDays, dateTime );
+    const weekHours = TimeInWeek( app, dateTime );
     
     const proHours = UserTime( user, dateTime, 'week', weekHours );
       

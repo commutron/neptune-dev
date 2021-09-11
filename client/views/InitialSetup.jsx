@@ -7,7 +7,8 @@ import Spin from '../components/tinyUi/Spin.jsx';
 
 const InitialSetup = ({ ready, option })=> {
   
-  function hndlSet() {
+  function hndlSet(e) {
+    e.preventDefault();
     Meteor.call('addFirstSetting', (err, reply)=>{
       if (err)
         console.log(err);
@@ -21,8 +22,9 @@ const InitialSetup = ({ ready, option })=> {
   
   function hndlFirstUser() {
     let options = {
-      username: 'administrator', 
-      password: 'theonlywaterintheforestistheriver'
+      username: "administrator", 
+      password: "theonlywaterintheforestistheriver",
+      org: "crew"
     };
   	Accounts.createUser(options, (error)=>{
   		if(error) {
@@ -46,16 +48,21 @@ const InitialSetup = ({ ready, option })=> {
   return(
     <div className='space'>
       <div className=''>
-        <button
-          className='clear whiteT'
-          onClick={()=>hndlFirstUser()}
-        >First Account</button>
-        <br /><br /><br /><br /><br />  
-        <form onSubmit={()=>hndlSet()}>
+        <form onSubmit={(e)=>hndlSet(e)}>
           <button
-            className='clear whiteT'
-          >Setup</button>
+            className='action clear whiteT'
+          >Setup App First</button>
         </form>
+        <br /><br /><br /><br />
+        <button
+          className='action clear whiteT'
+          onClick={(e)=>hndlFirstUser(e)}
+        >Create Admin Account Second</button>
+        <br /><br /><br /><br />
+        <button
+          className='action clear whiteT'
+          onClick={()=>FlowRouter.go('/')}
+        >Go Home Third</button>
       </div>
     </div>
   );

@@ -185,55 +185,58 @@ function weekDoneAnalysis(rangeStart, rangeEnd) {
                       orgKey: Meteor.user().orgKey, 
                       dataName: 'doneBatchLiteWeeks'
                     });
-    
-    const yearCache = allCache.dataSet.filter( c => moment(c.x).year() === yearNum );
-    
-    let yearSet = [];
-    
-    for( let m = 0; m < 12; m++) {
-    
-      const monthCache = yearCache.filter( c => moment(c.x).month() === m );
+    if(!allCache) {
+      return null;
+    }else{
+      const yearCache = allCache.dataSet.filter( c => moment(c.x).year() === yearNum );
       
-      let monthSet = [];
+      let yearSet = [];
       
-      let totalOnTime = 0;
+      for( let m = 0; m < 12; m++) {
       
-      let totalOnBdgt = 0;
-      
-      let totalIsDone = 0;
-      
-      for( let week of monthCache ) {
+        const monthCache = yearCache.filter( c => moment(c.x).month() === m );
         
-        totalOnTime += week.y[0];
-        totalOnBdgt += week.y[4];
-        totalIsDone += ( week.y[0] + week.y[1] );
+        let monthSet = [];
         
-        monthSet.push({
-          onTime : week.y[0],
-          missed : week.y[0] > week.y[2],
-          onBdgt : week.y[4],
-          isDone : week.y[0] + week.y[1]
+        let totalOnTime = 0;
+        
+        let totalOnBdgt = 0;
+        
+        let totalIsDone = 0;
+      
+        for( let week of monthCache ) {
+          
+          totalOnTime += week.y[0];
+          totalOnBdgt += week.y[4];
+          totalIsDone += ( week.y[0] + week.y[1] );
+          
+          monthSet.push({
+            onTime : week.y[0],
+            missed : week.y[0] > week.y[2],
+            onBdgt : week.y[4],
+            isDone : week.y[0] + week.y[1]
+          });
+          
+        }
+  
+        const percentOnTime = percentOf(totalIsDone, totalOnTime);
+        
+        const percentOnBdgt = percentOf(totalIsDone, totalOnBdgt);
+        
+        yearSet.push({
+          monthNum : m,
+          monthSet,
+          totalOnTime,
+          totalOnBdgt,
+          totalIsDone,
+          percentOnTime,
+          percentOnBdgt
         });
-        
+      
       }
 
-      const percentOnTime = percentOf(totalIsDone, totalOnTime);
-      
-      const percentOnBdgt = percentOf(totalIsDone, totalOnBdgt);
-      
-      yearSet.push({
-        monthNum : m,
-        monthSet,
-        totalOnTime,
-        totalOnBdgt,
-        totalIsDone,
-        percentOnTime,
-        percentOnBdgt
-      });
-      
+      return yearSet;
     }
-
-    return yearSet;
   },
   
   fetchFinishOnDay(dateString) {
