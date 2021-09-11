@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import Pref from '/client/global/pref.js';
 import moment from 'moment';
 
@@ -7,7 +7,7 @@ const MiniHistory = ({ history, iAlt, altitle })=> {
   const extended = iAlt ? iAlt.filter( x => x.rapId !== false ) : [];
 
   return(
-    <Fragment>
+    <div>
       
       {altitle && 
         <div className='altBanner cap'>Alt Flow: {altitle}</div> }
@@ -33,7 +33,7 @@ const MiniHistory = ({ history, iAlt, altitle })=> {
           )})}
         </n-mock-table>
         : <h3 className='centreText'>{Pref.Item} Unstarted</h3> }
-    </Fragment>
+    </div>
   );
 };
   
