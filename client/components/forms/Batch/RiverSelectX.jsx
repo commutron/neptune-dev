@@ -3,7 +3,7 @@ import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
 
-const RiverSelect = ({ bID, wFlows, river, riverTitle, lock })=> {
+const RiverSelect = ({ bID, wFlows, river, riverTitle, lock, access })=> {
 
   function handleChange(e) {
     let flow = this.riverchoice.value;
@@ -17,7 +17,6 @@ const RiverSelect = ({ bID, wFlows, river, riverTitle, lock })=> {
     });
   }
   
-  const access = Roles.userIsInRole(Meteor.userId(), 'run');
   const aT = !access ? Pref.norole : '';
   const lT = lock ? lock : '';
   const title = access && !lock ? `Set ${Pref.flow}` : `${aT}\n${lT}`;

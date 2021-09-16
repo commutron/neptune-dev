@@ -4,7 +4,7 @@ import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 import Pref from '/client/global/pref.js';
 
 
-const TagsModule = ({ action, id, vKey, tags, tagOps, truncate, rad })=>	{
+const TagsModule = ({ action, id, vKey, tags, tagOps, truncate, rad, canRun })=>	{
 
   const [ newOption, newOptionSet ] = useState(false);
   const [ newRad, newRadSet ] = useState(false);
@@ -64,7 +64,6 @@ const TagsModule = ({ action, id, vKey, tags, tagOps, truncate, rad })=>	{
     });
   }
   
-  const auth = Roles.userIsInRole(Meteor.userId(), 'run');
   const currTags = tags || [];
   
   return(
@@ -75,9 +74,9 @@ const TagsModule = ({ action, id, vKey, tags, tagOps, truncate, rad })=>	{
             key={index}
             tagText={entry}
             removeTag={()=>removeTag(entry)} 
-            lock={!auth} />
+            lock={!canRun} />
       )})}
-      {auth && !truncate ?
+      {canRun && !truncate ?
         <ContextMenuTrigger
           id={id+'tagnew'}
           holdToDisplay={1}
@@ -126,7 +125,7 @@ const TagsModule = ({ action, id, vKey, tags, tagOps, truncate, rad })=>	{
               <i className='fas fa-radiation-alt fa-fw fa-lg gapR darkOrangeT'></i>
             </n-faX>Add {Pref.radio.toUpperCase()}
           </MenuItem>
-          </span>
+        </span>
         : null}
         
       </ContextMenu>
@@ -140,12 +139,14 @@ const IndieTag = ({ tagText, removeTag, lock }) => (
   <div className='tagFlag'>
     <i>{tagText}</i>
     
-    <ContextMenuTrigger
-      id={tagText+'tagcut'}
-      holdToDisplay={1}
-      renderTag='span'>
-      <i className='fas fa-times' data-fa-transform='up-2'></i>
-    </ContextMenuTrigger>
+    {!lock &&
+      <ContextMenuTrigger
+        id={tagText+'tagcut'}
+        holdToDisplay={1}
+        renderTag='span'>
+        <i className='fas fa-times' data-fa-transform='up-2'></i>
+      </ContextMenuTrigger>
+    }
         
     <ContextMenu id={tagText+'tagcut'} className='noCopy'>
       <MenuItem onClick={()=>removeTag()}>Remove {Pref.tag}</MenuItem>
@@ -153,7 +154,7 @@ const IndieTag = ({ tagText, removeTag, lock }) => (
   </div>
 );
 
-export const RadFlag = ({ vKey, rad })=> {
+export const RadFlag = ({ vKey, rad, canRun })=> {
 
   function removeRadFlag() {
     Meteor.call('cutVRad', vKey, (err)=>{
@@ -177,7 +178,8 @@ export const RadFlag = ({ vKey, rad })=> {
       </ContextMenuTrigger>
         
       <ContextMenu id={vKey+'radcut'} className='noCopy cap'>
-        <MenuItem onClick={()=>removeRadFlag()}>Remove {Pref.radio.toUpperCase()}</MenuItem>
+        <MenuItem onClick={()=>removeRadFlag()} disabled={!canRun}
+        >Remove {Pref.radio.toUpperCase()}</MenuItem>
       </ContextMenu>
     </span>
   );

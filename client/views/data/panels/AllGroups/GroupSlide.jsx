@@ -26,7 +26,7 @@ function groupActiveWidgets(gId, widgetsList, allXBatch) {
 }
 
 
-const GroupSlide = ({ groupData, widgetsList, batchDataX, app, inter })=>{
+const GroupSlide = ({ groupData, widgetsList, batchDataX, app, inter, isERun })=>{
   
   const g = groupData;
   const active = groupActiveWidgets(g._id, widgetsList, batchDataX);
@@ -61,7 +61,9 @@ const GroupSlide = ({ groupData, widgetsList, batchDataX, app, inter })=>{
             action='group'
             id={g._id}
             tags={g.tags}
-            tagOps={app.tagOption} />
+            tagOps={app.tagOption}
+            canRun={isERun} 
+          />
         </div>
           
         <div className='centreRow'>
@@ -87,6 +89,7 @@ const GroupSlide = ({ groupData, widgetsList, batchDataX, app, inter })=>{
               iState={g.internal}
               noText={false}
               primeTopRight={false}
+              access={isERun}
             />
           }
           <GroupHibernate

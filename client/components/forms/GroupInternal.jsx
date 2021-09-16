@@ -4,11 +4,10 @@ import { toast } from 'react-toastify';
 
 import ModelSmall from '../smallUi/ModelSmall';
 
-const GroupInternalWrapper = ({ id, iState, noText, primeTopRight })=> {
+const GroupInternalWrapper = ({ id, iState, noText, primeTopRight, access })=> {
   const actTtl = !iState ? `Set Internal ${Pref.group}` : 
                            `Unset Internal ${Pref.group}`;
   
-  const access = Roles.userIsInRole(Meteor.userId(), ['edit','run']);
   const aT = !access ? Pref.norole : '';
   const title = access ? actTtl : aT;
   

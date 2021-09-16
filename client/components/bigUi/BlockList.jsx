@@ -5,7 +5,7 @@ import UserNice from '../smallUi/UserNice.jsx';
 import BlockForm from '../forms/BlockForm.jsx';
 import { SolveBlock } from '../forms/BlockForm.jsx';
 
-const BlockList = ({ id, data, doneLock, truncate })=> {
+const BlockList = ({ id, data, doneLock, truncate, canRun })=> {
   let blocks = data.sort((s1, s2) => s1.time < s2.time);
   if(blocks.length > 0) {
     return (
@@ -17,19 +17,21 @@ const BlockList = ({ id, data, doneLock, truncate })=> {
                 entry={entry}
                 id={id}
                 doneLock={doneLock} 
-                truncate={truncate} />
+                truncate={truncate}
+                canRun={canRun}
+              />
           )})}
       </div>
     );
   }
-  return (
+  return(
     null
   );
 };
 
-const BlockRow = ({ entry, id, doneLock, truncate })=> {
+const BlockRow = ({ entry, id, doneLock, truncate, canRun })=> {
   let dt = entry;
-  let unlock = Roles.userIsInRole(Meteor.userId(), 'run');
+  let unlock = canRun;
   let solved = dt.solve && typeof dt.solve === 'object';
     
   return(
@@ -40,14 +42,23 @@ const BlockRow = ({ entry, id, doneLock, truncate })=> {
   		    {!truncate &&
     		    <span className='middle'>
       		    {unlock && !solved &&
-                <SolveBlock id={id} blKey={dt.key} noText={true} />}
+                <SolveBlock 
+                  id={id} 
+                  blKey={dt.key} 
+                  noText={true} 
+                  canRun={canRun}
+                />
+      		    }
               {unlock &&
                 <BlockForm 
                   id={id} 
                   edit={dt} 
                   smIcon={true} 
                   noText={true}
-                  doneLock={doneLock} />}
+                  doneLock={doneLock}
+                  canRun={canRun}
+                />
+              }
             </span>}
             <span>{moment(dt.time).calendar()} - <UserNice id={dt.who} /></span>
   		  </legend>

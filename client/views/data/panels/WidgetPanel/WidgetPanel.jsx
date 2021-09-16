@@ -35,6 +35,8 @@ const WidgetPanel = ({
   const bS = b.sort((b1, b2)=> b1.batch < b2.batch ? -1 : b1.batch > b2.batch ? 1 : 0 );
   const batchIDs = Array.from( bS, x => x._id );
   const batches = Array.from( bS, x => x.batch );
+  
+  const canRun = Roles.userIsInRole(Meteor.userId(), 'run');
 
   return(
     <div className='space' key={w.widget}>
@@ -115,6 +117,7 @@ const WidgetPanel = ({
                 batchRelated={batchRelated.filter(b=> b.versionKey === ventry.versionKey)} 
                 app={app}
                 user={user}
+                canRun={canRun}
               />
           )})}
   

@@ -73,7 +73,7 @@ const UpstreamWrap = ({
     );
   }
   
-  if(isAuth && view === 'emaillog') {
+  if(view === 'emaillog' && (isAuth || Roles.userIsInRole(Meteor.userId(), 'admin')) ) {
     return (
       <StreamLayout
         user={user}

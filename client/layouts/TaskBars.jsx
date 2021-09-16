@@ -123,7 +123,7 @@ export const UpTaskBar = ({ subLink, showParts, isAuth }) => (
       iconAdj=''
     />
     
-    {isAuth &&
+    {isAuth || Roles.userIsInRole(Meteor.userId(), 'admin') ?
       <TaskElement
         title='Email Log'
         subON={subLink === 'emaillog'}
@@ -131,7 +131,7 @@ export const UpTaskBar = ({ subLink, showParts, isAuth }) => (
         icon='fas fa-envelope'
         iconAdj=''
       />
-    }
+    : null}
       
   </div>
 );

@@ -4,12 +4,12 @@ import { toast } from 'react-toastify';
 
 import ModelSmall from '/client/components/smallUi/ModelSmall';
 
-const BlockAdd = ({ id, edit, noText, smIcon, lgIcon, doneLock })=> {
+const BlockAdd = ({ id, edit, noText, smIcon, lgIcon, doneLock, canRun })=> {
   
   const bttn = edit ? 'edit' : 'Add ' + Pref.block;
   const title = edit ? 'edit ' + Pref.block : 'add ' + Pref.block;
   
-  if(!Roles.userIsInRole(Meteor.userId(), 'run')) { 
+  if(!canRun) { 
     return null;
   }
   return(
@@ -93,24 +93,21 @@ const BlockAddForm = ({ id, edit, doneLock, selfclose })=> {
 
 export default BlockAdd;
 
-export const SolveBlock = ({ id, blKey, noText })=> {
-  const access = Roles.userIsInRole(Meteor.userId(), 'run');
-  return(
-    <ModelSmall
-      button='Solve'
-      title={access ? 'Solve this ' + Pref.block : Pref.norole}
-      color='greenT'
-      icon='fas fa-reply'
-      lock={!access}
-      noText={noText}
-    >
-      <SolveBlockForm
-        id={id}
-        blKey={blKey}
-     />
-    </ModelSmall>
-  );
-};
+export const SolveBlock = ({ id, blKey, noText, canRun })=> (
+  <ModelSmall
+    button='Solve'
+    title={canRun ? 'Solve this ' + Pref.block : Pref.norole}
+    color='greenT'
+    icon='fas fa-reply'
+    lock={!canRun}
+    noText={noText}
+  >
+    <SolveBlockForm
+      id={id}
+      blKey={blKey}
+   />
+  </ModelSmall>
+);
 
 const SolveBlockForm = ({ id, blKey, selfclose })=> {
   

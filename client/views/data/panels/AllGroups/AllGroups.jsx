@@ -25,6 +25,8 @@ const AllGroups = ({
   
   const defaultSlide = specify ? 
     sortList.findIndex( x => x.alias === specify ) : false;
+    
+  const isERun = Roles.userIsInRole(Meteor.userId(), ['edit','run']);
                                   
   return(
     <SlidesNested
@@ -49,6 +51,7 @@ const AllGroups = ({
             batchDataX={batchDataX}
             app={app}
             inter={!inter || inter._id === entry._id}
+            isERun={isERun}
           />
         )})} 
     </SlidesNested>

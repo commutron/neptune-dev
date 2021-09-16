@@ -24,6 +24,8 @@ const BatchCardX = ({
                       .sort((r1, r2)=> r1.createdAt > r2.createdAt ? 1 :
                                        r1.createdAt < r2.createdAt ? -1 : 0 );
   
+  const canRun = Roles.userIsInRole(Meteor.userId(), 'run');
+  
   const insertTideBump = 
           <TideBump
             bID={batchData._id}
@@ -40,7 +42,9 @@ const BatchCardX = ({
             flowCounts={flowCounts}
             rapidMerge={rapidMerge}
             bClosed={bClosed}
-            app={app} />;
+            app={app}
+            canRun={canRun}
+          />;
             
   const insertProgress = 
           <div className='space1v'>
@@ -104,7 +108,7 @@ const BatchCardX = ({
 
 export default BatchCardX;
 
-const MiniInfo = ({ batchData, srange, flowCounts, rapidMerge, bClosed, app })=> (
+const MiniInfo = ({ batchData, srange, flowCounts, rapidMerge, bClosed, app, canRun })=> (
   <div className='space1v cap'>
     
     {bClosed &&
@@ -148,17 +152,20 @@ const MiniInfo = ({ batchData, srange, flowCounts, rapidMerge, bClosed, app })=>
       id={batchData._id}
       tags={batchData.tags}
       tagOps={app.tagOption}
-      truncate={true} />
+      truncate={true}
+      canRun={canRun} />
     <BlockForm
       id={batchData._id}
       edit={false}
       doneLock={batchData.completed}
       noText={true}
-      lgIcon={true} />
+      lgIcon={true}
+      canRun={canRun} />
     <BlockList 
       id={batchData._id} 
       data={batchData.blocks}
       doneLock={batchData.completed} 
-      truncate={true} />
+      truncate={true}
+      canRun={canRun} />
   </div>
 );

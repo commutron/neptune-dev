@@ -38,6 +38,8 @@ const InfoTab = ({
                     
   const rOpen = rapidsData && rapidsData.some( r => r.live === true );
   
+  const canRun = Roles.userIsInRole(Meteor.userId(), 'run');
+  
   return(
     <div className='cardify oneTwoThreeContainer'>
       <span className='oneThirdContent'>
@@ -95,7 +97,7 @@ const InfoTab = ({
             rType='floorRelease'
             actionText='release'
             contextText='to the floor'
-            isX={true} />
+          />
         :null}  
       </div>
       
@@ -104,7 +106,9 @@ const InfoTab = ({
           action={Pref.xBatch}
           id={b._id}
           tags={b.tags}
-          tagOps={app.tagOption} />
+          tagOps={app.tagOption}
+          canRun={canRun}
+        />
         
         {radioactive &&
           <div 
@@ -138,7 +142,8 @@ const InfoTab = ({
             rapidsData={rapidsData}
             riverTitle={riverTitle}
             brancheS={brancheS}
-            truncate={false} />
+            truncate={false}
+            canRun={canRun} />
         </div>
             
         <div className='flxGrow startSelf'>
@@ -149,13 +154,15 @@ const InfoTab = ({
             edit={false}
             doneLock={b.lock}
             noText={true}
-            lgIcon={true} />
+            lgIcon={true}
+            canRun={canRun} />
             
           <BlockList 
             id={b._id} 
             data={b.blocks} 
             doneLock={b.lock} 
-            truncate={false} />
+            truncate={false}
+            canRun={canRun} />
         </div>
      
     </span>

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-//import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import './style.css';
 
@@ -7,13 +6,13 @@ import RiverSelect from '/client/components/forms/Batch/RiverSelectX';
 
 import ToggleBar from '/client/components/smallUi/Tabs/ToggleBar';
 import StepRateDisplay from './StepRateDisplay';
-import MiniStack from '/client/components/charts/MiniScales/MiniStack.jsx';
+import MiniStack from '/client/components/charts/MiniScales/MiniStack';
 import NumBox from '/client/components/tinyUi/NumBox.jsx';
 import { round2Decimal } from '/client/utility/Convert';
 
 const StepsProgressX  = ({ 
   b, widgetData, hasSeries, flowCounts, fallCounts, rapidsData,
-  riverTitle, brancheS, truncate 
+  riverTitle, brancheS, truncate, canRun
 })=> {
   
   const [ countCalc, countSet ] = useState('items');
@@ -88,7 +87,8 @@ const StepsProgressX  = ({
             river={b.river}
             riverTitle={riverTitle}
             lock={b.completed ? Pref.isDone :
-                 !hasSeries ? `No ${Pref.series}` : false} />
+                 !hasSeries ? `No ${Pref.series}` : false}
+            access={canRun} />
         }
         {unitsExist &&
           <ToggleBar

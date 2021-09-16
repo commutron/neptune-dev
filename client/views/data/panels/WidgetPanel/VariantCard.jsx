@@ -15,7 +15,7 @@ import AssemblyList from './AssemblyList';
 const VariantCard = ({ 
   variantData, widgetData, 
   groupData, batchRelated, 
-  app, user
+  app, user, canRun
 })=> {
   
   const v = variantData;
@@ -45,6 +45,7 @@ const VariantCard = ({
             <RadFlag
               vKey={v.versionKey}
               rad={v.radioactive}
+              canRun={canRun}
             />
           : null}
           
@@ -74,6 +75,7 @@ const VariantCard = ({
             vKey={v.versionKey}
             tagOps={app.tagOption}
             rad={v.radioactive}
+            canRun={canRun}
           />
           
           <InlineForm

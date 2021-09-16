@@ -113,7 +113,7 @@ Meteor.methods({
   
   // push a tag
   pushGTag(groupId, tag) {
-    if(Roles.userIsInRole(Meteor.userId(), 'run')) {
+    if(Roles.userIsInRole(Meteor.userId(), ['edit','run'])) {
       GroupDB.update({_id: groupId, orgKey: Meteor.user().orgKey}, {
         $push : { 
           tags: tag
@@ -124,7 +124,7 @@ Meteor.methods({
   },
   // pull a tag
   pullGTag(groupId, tag) {
-    if(Roles.userIsInRole(Meteor.userId(), 'run')) {
+    if(Roles.userIsInRole(Meteor.userId(), ['edit','run'])) {
       GroupDB.update({_id: groupId, orgKey: Meteor.user().orgKey}, {
         $pull : {
           tags: tag
