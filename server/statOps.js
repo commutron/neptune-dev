@@ -162,8 +162,11 @@ Meteor.methods({
       let tt = !last || ontime[0].y == last.ontime[0].y ? 0 : ontime[0].y > last.ontime[0].y ? 1 : -1;
       let nt = !last || avgNC == last.avgNC ? 0 : avgNC < last.avgNC ? 1 : -1;
       let tp = !last || avgPf == last.avgPf ? 0 : avgPf > last.avgPf ? 1 : -1;
-      const trend = tt + nt + tp >= 1 ? 'up' :
-                    tt + nt + tp <= -1 ? 'down' : 'flat';
+      const trend = !last ? 'flat' :
+                    ( tt == 0 && nt == 0 && tp == 0 ) ? last.trend :
+                    tt + nt + tp >= 1 ? 'up' :
+                    tt + nt + tp <= -1 ? 'down' : 
+                    /* tt + nt + tp == 0 ? */ 'flat';
       
       const top = {
         ontime: ontime,
