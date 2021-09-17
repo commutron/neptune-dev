@@ -159,7 +159,7 @@ Meteor.methods({
       const avgNC = avgOfArray(Array.from(widgets, x=> x.ncRate ? x.ncRate.rate : 0), true);
       
       const last = topStats ? topStats.stats : null;
-      let tt = !last || ontime == last.ontime ? 0 : ontime > last.ontime ? 1 : -1;
+      let tt = !last || ontime[0].y == last.ontime[0].y ? 0 : ontime[0].y > last.ontime[0].y ? 1 : -1;
       let nt = !last || avgNC == last.avgNC ? 0 : avgNC < last.avgNC ? 1 : -1;
       let tp = !last || avgPf == last.avgPf ? 0 : avgPf > last.avgPf ? 1 : -1;
       const trend = tt + nt + tp >= 1 ? 'up' :

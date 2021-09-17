@@ -436,8 +436,7 @@ Meteor.publish('skinnyData', function(){
           'group': 1,
           'alias': 1,
           'hibernate': 1,
-          'internal': 1,
-          'topStats': 1
+          'internal': 1
         }}),
       WidgetDB.find({orgKey: orgKey}, {
         fields: {

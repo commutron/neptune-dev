@@ -73,25 +73,29 @@ const WidgetIndexCard = ({ data, barStyle })=>{
             name={Pref.variants}
             title={`Total ${Pref.variants}`}
             color='blueT'
-            size='medBig' />
+            size='medBig'
+            moreClass='gapR' />
           <NumStat
             num={totalBatches}
             name={Pref.xBatchs}
             title={`Total ${Pref.xBatchs}`}
             color='blueT'
-            size='medBig' />
+            size='medBig'
+            moreClass='gapR' />
           <NumStat
             num={totalItems}
             name='Total Quantity'
             title={`Total quantities of all ${Pref.xBatchs}`}
             color='blueT'
-            size='medBig' />
+            size='medBig'
+            moreClass='gapR' />
           <NumStat
             num={moreData[2]}
             name='NC Rate'
             title={`Average ${Pref.nonCon} rate`}
             color='redT'
-            size='medBig' />
+            size='medBig'
+            moreClass='gapR' />
         </span>
       }
       sty={barStyle}
