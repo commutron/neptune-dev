@@ -23,7 +23,7 @@ const InitialSetup = ({ ready, option })=> {
   function hndlFirstUser() {
     let options = {
       username: "administrator", 
-      password: "theonlywaterintheforestistheriver",
+      password: "riversserenity",
       org: "crew"
     };
   	Accounts.createUser(options, (error)=>{
