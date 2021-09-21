@@ -153,11 +153,18 @@ const runMonthWeeks = (bStats, ranges)=> {
     
     const month = bStats.filter( b => moment(b.finish).isSame(r, 'month') );
     
-    const dur = moment.duration(rend.diff(moment(r)));
-    const weekcycles = Math.ceil(dur.asWeeks()); //parseInt( dur.asWeeks(), 10 );
+    let weekdays = new Set();
+    for(let l = moment(r); l.isAfter(rend); l.add(1, 'day') ) {
+      weekdays.add( loop );
+    }
     
-    const weekdays = loopBack(rend, weekcycles, 'week');
-    const weeks = Array.from(weekdays, x => moment(x).week() );
+    // const dur = moment.duration(rend.diff(moment(r)));
+    // const weekcycles = Math.ceil(dur.asWeeks()); //parseInt( dur.asWeeks(), 10 );
+    
+    // const weekdays = loopBack(rend, weekcycles, 'week');
+    const weeks = [...weekdays];
+    
+    console.log(weeks);
     
     let wXY = [];
     
