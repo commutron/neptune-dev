@@ -155,7 +155,7 @@ const runMonthWeeks = (bStats, ranges)=> {
     
     let weekdays = new Set();
     for(let l = moment(r); l.isAfter(rend); l.add(1, 'day') ) {
-      weekdays.add( loop );
+      weekdays.add( l.week() );
     }
     
     // const dur = moment.duration(rend.diff(moment(r)));
