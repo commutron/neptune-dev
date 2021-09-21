@@ -177,7 +177,7 @@ const loopBack = (nowLocal, cycles, period)=> {
   let ranges = [];
   for(let l = 0; l < cycles; l++) {
   
-    const loop = nowLocal.clone().subtract(w, period).format(); 
+    const loop = nowLocal.clone().subtract(l, period).format(); 
 
     ranges.unshift( loop );
   }
@@ -212,10 +212,10 @@ const addRanges = (bStats, ranges, period)=> {
 
     const rset = bStats.filter( b => moment(b.finish).isSame(r, period) );
     
-    rset.map( (w)=> {
-      w.fillOn ? doneOnTime++ : doneLate++;
-      w.shipOn ? shipOnTime++ : shipLate++;
-      w.qbgtOn ? doneUnderQ++ : doneOverQ++;
+    rset.map( (b)=> {
+      b.fillOn ? doneOnTime++ : doneLate++;
+      b.shipOn ? shipOnTime++ : shipLate++;
+      b.qbgtOn ? doneUnderQ++ : doneOverQ++;
     });
   
     xy.push({ 
