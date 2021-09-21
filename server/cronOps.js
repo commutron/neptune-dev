@@ -86,7 +86,7 @@ async function runRanges() {
 
 const loopBack = (nowLocal, cycles, period)=> {
   let ranges = [];
-  for(let l = 0; l < cycles + 1; l++) {
+  for(let l = 0; l < cycles; l++) {
   
     const loop = nowLocal.clone().subtract(l, period).format(); 
 
