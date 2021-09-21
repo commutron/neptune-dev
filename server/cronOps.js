@@ -325,7 +325,7 @@ async function countDoneBatchTarget(accessKey) {
     
     let monthweekXY = runMonthWeeks(bStats, stdRanges[1]);
     
-    CacheDB.upsert({orgKey: accessKey, dataName: dataName}, {
+    CacheDB.upsert({orgKey: accessKey, dataName: 'doneBatchLiteWeeks'}, {
       $set : {
         orgKey: accessKey,
         lastUpdated: new Date(),
@@ -333,7 +333,7 @@ async function countDoneBatchTarget(accessKey) {
         dataSet: weekXY
     }});
     
-    CacheDB.upsert({orgKey: accessKey, dataName: dataName}, {
+    CacheDB.upsert({orgKey: accessKey, dataName: 'doneBatchLiteMonths'}, {
       $set : {
         orgKey: accessKey,
         lastUpdated: new Date(),
@@ -341,7 +341,7 @@ async function countDoneBatchTarget(accessKey) {
         dataSet: monthXY
     }});
     
-    CacheDB.upsert({orgKey: accessKey, dataName: dataName}, {
+    CacheDB.upsert({orgKey: accessKey, dataName: 'doneBatchLiteMonthsWeeks'}, {
       $set : {
         orgKey: accessKey,
         lastUpdated: new Date(),
