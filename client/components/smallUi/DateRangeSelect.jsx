@@ -19,7 +19,6 @@ const DateRangeSelect = ({ setFrom, setTo })=> (
           dateFormat: "Y-m-d",
           altInput: true,
           altFormat: "F J Y",
-          weekNumbers: true
         }} 
       />
     </span>
@@ -38,7 +37,6 @@ const DateRangeSelect = ({ setFrom, setTo })=> (
           dateFormat: "Y-m-d",
           altInput: true,
           altFormat: "F J Y",
-          weekNumbers: true
         }} 
       />
     </span>

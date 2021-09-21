@@ -60,8 +60,7 @@ const DailyReport = ({ dayIFin, app, user, isDebug })=> {
               minDate: minDate,
               maxDate: moment().format("YYYY-MM-DD"),
               altInput: true,
-              altFormat: "F J",
-              weekNumbers: true
+              altFormat: "F J"
             }} />
             <br />
             <span className='bigger breath numFont'

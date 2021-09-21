@@ -55,6 +55,8 @@ const MonthsTable = ({
               
               <WeekRows data={data} w={4} stat={stat} miss={miss} />
               
+              <WeekRows data={data} w={5} stat={stat} miss={miss} />
+              
               <tr>
                 <th>Totals</th>
                 {data.map( (tt, ttdex)=>(

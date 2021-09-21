@@ -101,10 +101,10 @@ const getRanges = ()=> {
   const cutoff = nowLocal.clone().startOf('year').subtract(Config.yrsSpan-1, 'years');
       
   const dur = moment.duration(nowLocal.diff(moment(cutoff)));
-  const weekcycles = parseInt( dur.asWeeks(), 10 );
-  const monthcycles = parseInt( dur.asMonths(), 10 );
+  const weekcycles = Math.ceil(dur.asWeeks()); // parseInt( dur.asWeeks(), 10 );
+  const monthcycles = Math.ceil(dur.asMonths()); // parseInt( dur.asMonths(), 10 );
     
-  let weekranges = loopBack(nowLocal, weekcycles, 'week');
+  const weekranges = loopBack(nowLocal, weekcycles, 'week');
   const monthranges = loopBack(nowLocal, monthcycles, 'month');
   
   return [ weekranges, monthranges ];
@@ -154,11 +154,10 @@ const runMonthWeeks = (bStats, ranges)=> {
     const month = bStats.filter( b => moment(b.finish).isSame(r, 'month') );
     
     const dur = moment.duration(rend.diff(moment(r)));
-    const weekcycles = parseInt( dur.asWeeks(), 10 );
+    const weekcycles = Math.ceil(dur.asWeeks()); //parseInt( dur.asWeeks(), 10 );
     
     const weekdays = loopBack(rend, weekcycles, 'week');
     const weeks = Array.from(weekdays, x => moment(x).week() );
-                  // .sort((a,b)=> a > b ? 1 : a < b ? -1 : 0);
     
     let wXY = [];
     
