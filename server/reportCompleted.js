@@ -164,7 +164,7 @@ function weekDoneAnalysis(rangeStart, rangeEnd) {
 }
 
   
-  Meteor.methods({
+Meteor.methods({
   
   reportOnCompleted(yearNum, weekNum) {
     try {

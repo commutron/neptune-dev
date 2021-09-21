@@ -45,15 +45,15 @@ const MonthsTable = ({
                 <td colSpan='2'></td>
               </tr>
               
-              <WeekRows data={data} w={0} stat={stat} />
+              <WeekRows data={data} w={0} stat={stat} miss={miss} />
               
-              <WeekRows data={data} w={1} stat={stat} />
+              <WeekRows data={data} w={1} stat={stat} miss={miss} />
               
-              <WeekRows data={data} w={2} stat={stat} />
+              <WeekRows data={data} w={2} stat={stat} miss={miss} />
               
-              <WeekRows data={data} w={3} stat={stat} />
+              <WeekRows data={data} w={3} stat={stat} miss={miss} />
               
-              <WeekRows data={data} w={4} stat={stat} />
+              <WeekRows data={data} w={4} stat={stat} miss={miss} />
               
               <tr>
                 <th>Totals</th>
@@ -87,14 +87,14 @@ const MonthsTable = ({
 export default MonthsTable;
 
 
-const WeekRows = ({ data, w, stat })=> (
+const WeekRows = ({ data, w, stat, miss })=> (
   <tr>
     <th className='leftThead'>Week {w+1}</th>
     {data.map( (e)=> {
       if(e.monthSet[w]) {
         return(
           <Fragment key={e.monthNum}>
-            <td className={e.monthSet[w].missed ? 'redT' : ''}
+            <td className={miss && e.monthSet[w].missed ? 'redT' : ''}
               >{e.monthSet[w][stat]}
             </td>
             <td>{e.monthSet[w].isDone}</td>

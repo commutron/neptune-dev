@@ -24,7 +24,8 @@ class Config {
     this.unitLimit = 1000; // max units per item
     
     this.freche = 12; // in hours, time limit for refreshed on-demand caches
-    this.avgSpan = 1000; // in days, how far back to count for statistics
+    this.avgSpan = 1000; // in days, how far back to count for average statistics
+    this.yrsSpan = 3; // in years, how far back to count years for statistics
     
     // Relationship between % of completed and % of tide time 
     // is expressed as a Quadratic Regression Equation
