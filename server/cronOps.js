@@ -156,8 +156,8 @@ const runMonthWeeks = (bStats, ranges)=> {
     const dur = moment.duration(rend.diff(moment(r)));
     const weekcycles = parseInt( dur.asWeeks(), 10 );
     
-    const weeks = loopBack(rend, weekcycles, 'week');
-    // const weeks = [...new Set( Array.from(month, x => moment(x.finish).week() ) )]
+    const weekdays = loopBack(rend, weekcycles, 'week');
+    const weeks = Array.from(weekdays, x => moment(x).week() );
                   // .sort((a,b)=> a > b ? 1 : a < b ? -1 : 0);
     
     let wXY = [];
