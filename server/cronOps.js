@@ -149,10 +149,16 @@ const runMonthWeeks = (bStats, ranges)=> {
   let mXY = [];
     
   for(let r of ranges) {
+    const rend = moment(r).endOf('month');
     
     const month = bStats.filter( b => moment(b.finish).isSame(r, 'month') );
     
-    const weeks = [...new Set( Array.from(month, x => moment(x.finish).week() ) )];
+    const dur = moment.duration(rend.diff(moment(r)));
+    const weekcycles = parseInt( dur.asWeeks(), 10 );
+    
+    const weeks = loopBack(rend, weekcycles, 'week');
+    // const weeks = [...new Set( Array.from(month, x => moment(x.finish).week() ) )]
+                  // .sort((a,b)=> a > b ? 1 : a < b ? -1 : 0);
     
     let wXY = [];
     
@@ -263,3 +269,12 @@ async function countDoneBatchTarget(accessKey) {
     resolve(true);
   });
 }
+
+
+Meteor.methods({
+  
+  forceRunRangeLoop() {
+    runRanges();
+  }
+  
+})

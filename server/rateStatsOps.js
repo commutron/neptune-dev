@@ -86,13 +86,7 @@ import { syncLocale, countMulti, noIg } from './utility';
       dst[1] === 'late' ? shipLate++ : shipOnTime++;
       
       const q = checkTimeBudget(tide, quoteTimeBudget, lockTrunc);
-      if( !q ) {
-        null;
-      }else if(q < 0) {
-        doneOverQ++;
-      }else{
-        doneUnderQ++;
-      }
+      !q ? null : q < 0 ? doneOverQ++ : doneUnderQ++;
     };
     
     const bx = XBatchDB.find({

@@ -62,6 +62,14 @@ const DataRepair = ({ app, users })=> {
   
   return(
     <div className='space3v autoFlex'>
+      <DoCard
+        title='Run TEST'
+        icon='meteor'
+        color='clearBlack'
+        button='Run'
+        action={()=>doCallThing('forceRunRangeLoop')}
+      />
+      
       
       <DoCard
         title='Force Randomize Org PIN'
