@@ -203,20 +203,22 @@ Meteor.methods({
         let totalOnBdgt = 0;
         
         let totalIsDone = 0;
-      
-        for( let week of monthCache.weeks ) {
-          
-          totalOnTime += week.y[0];
-          totalOnBdgt += week.y[4];
-          totalIsDone += ( week.y[0] + week.y[1] );
-          
-          monthSet.push({
-            onTime : week.y[0],
-            missed : week.y[0] > week.y[2],
-            onBdgt : week.y[4],
-            isDone : week.y[0] + week.y[1]
-          });
-          
+        
+        if(monthCache) {
+          for( let week of monthCache.weeks ) {
+            
+            totalOnTime += week.y[0];
+            totalOnBdgt += week.y[4];
+            totalIsDone += ( week.y[0] + week.y[1] );
+            
+            monthSet.push({
+              onTime : week.y[0],
+              missed : week.y[0] > week.y[2],
+              onBdgt : week.y[4],
+              isDone : week.y[0] + week.y[1]
+            });
+            
+          }
         }
   
         const percentOnTime = percentOf(totalIsDone, totalOnTime);
