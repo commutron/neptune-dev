@@ -63,18 +63,6 @@ const DataRepair = ({ app, users })=> {
   return(
     <div className='space3v autoFlex'>
       
-      
-      <DoCard
-        title='Force NEW RANGE LOOPS'
-        icon='meteor'
-        color='clearBlack'
-        button='Run'
-        action={()=>doCallThing('forceRunTrendLoops')}
-      />
-      
-      
-      
-      
       <DoCard
         title='Force Randomize Org PIN'
         sub='Runs every day at 12:00am (CST)'

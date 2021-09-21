@@ -183,18 +183,18 @@ Meteor.methods({
   reportMonthsFromCache(yearNum) {
     const allCache = CacheDB.findOne({
                       orgKey: Meteor.user().orgKey, 
-                      dataName: 'doneBatchLiteWeeks'
+                      dataName: 'doneBatchLiteMonthsWeeks'
                     });
     if(!allCache) {
       return null;
     }else{
-      const yearCache = allCache.dataSet.filter( c => moment(c.x).year() === yearNum );
+      const yearCache = allCache.dataSet.filter( c => moment(c.month).year() === yearNum );
       
       let yearSet = [];
       
       for( let m = 0; m < 12; m++) {
       
-        const monthCache = yearCache.filter( c => moment(c.x).month() === m );
+        const monthCache = yearCache.find( c => moment(c.month).month() === m );
         
         let monthSet = [];
         
@@ -204,7 +204,7 @@ Meteor.methods({
         
         let totalIsDone = 0;
       
-        for( let week of monthCache ) {
+        for( let week of monthCache.weeks ) {
           
           totalOnTime += week.y[0];
           totalOnBdgt += week.y[4];
