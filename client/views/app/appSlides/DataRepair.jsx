@@ -62,19 +62,11 @@ const DataRepair = ({ app, users })=> {
   
   return(
     <div className='space3v autoFlex'>
-      <DoCard
-        title='Run TEST'
-        icon='meteor'
-        color='clearBlack'
-        button='Run'
-        action={()=>doCallThing('forceRunRangeLoop')}
-      />
-      
       
       <DoCard
         title='Force Randomize Org PIN'
         sub='Runs every day at 12:00am (CST)'
-        icon='user-secret'
+        icon='dice'
         color='clearPurple'
         button='Randomize PIN'
         action={()=>doCallThing('randomizePIN')}
@@ -110,9 +102,18 @@ const DataRepair = ({ app, users })=> {
       />
       
       <DoCard
+        title='Run Done Target Loops Update'
+        sub='Runs every Saturday at 12:06am (CST)'
+        icon='digital-tachograph'
+        color='clearPurple'
+        button='Request Update'
+        action={()=>doCallThing('forceRunTrendLoops')}
+      />
+      
+      <DoCard
         title='FORCE Run TraceDB Rebuild'
         sub='Will freeze app while running'
-        icon='screwdriver'
+        icon='recycle'
         color='clearTeal'
         button='Rebuild TraceDB'
         action={()=>doCallThing('rebuildTrace')}
@@ -137,7 +138,7 @@ const DataRepair = ({ app, users })=> {
       
       <DoCard
         title='Delete all CacheDB Entries'
-        icon='hammer'
+        icon='snowplow'
         color='clearRed'
         button='Delete All Caches'
         action={()=>doCallThing('resetALLCacheDB')}
@@ -153,7 +154,7 @@ const DataRepair = ({ app, users })=> {
       
       <DoCard
         title='Fix XBatchDB Errors'
-        icon='snowplow'
+        icon='hammer'
         color='clearRed'
         button='Remove Damaged Batch'
         action={()=>doCallThing('fixRemoveDamagedBatch')}

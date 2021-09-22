@@ -24,12 +24,13 @@ export function HolidayCheck( app, dateTime ) {
 export function listShipDays( app, qty, withLast ) {
   localeUpdate(app);
   
+  if( Object.values(app.shippingHours).every(x=> x === null) ) {
+    return [];
+  }else{
+    
   const loops = withLast ? qty + 1 : qty;
   const last = moment().lastShipDay();
   
-  if(!last) {
-    return [];
-  }else{
   const lastTime = last.startOf('day').nextShippingTime();
   
   let sArr = [];

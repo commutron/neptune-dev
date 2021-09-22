@@ -277,7 +277,7 @@ async function countDoneBatchTarget(accessKey) {
 
 Meteor.methods({
   
-  forceRunRangeLoop() {
+  forceRunTrendLoops() {
     runRanges();
   }
   

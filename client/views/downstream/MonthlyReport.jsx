@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
+import Pref from '/client/global/pref.js';
 import { CalcSpin } from '/client/components/tinyUi/Spin';
 
 import PrintThis from '/client/components/tinyUi/PrintThis';
@@ -40,8 +41,7 @@ const MonthlyReport = ({ app })=> {
   useEffect( ()=>{
     let yrArr = [];
     let nowYr = moment().year();
-    const duration = moment.duration(moment().diff(moment(app.createdAt))).years();
-    for( let y = duration; y > -1; y--) {
+    for( let y = Pref.yrsSpan; y > 0; y--) {
       yrArr.push(nowYr);
       nowYr -= 1;
     }
