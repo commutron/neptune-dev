@@ -147,23 +147,22 @@ const addRanges = (bStats, ranges, period)=> {
 
 const runMonthWeeks = (bStats, ranges)=> {
   let mXY = [];
-    
+  
+  const now = moment();
+  const nYr = now.year();
+  const nWk = now.week();
+  
   for(let r of ranges) {
+    const thisYr = moment(r).year() === nYr;
     const rend = moment(r).endOf('month');
     
     const month = bStats.filter( b => moment(b.finish).isSame(r, 'month') );
     
     let weekdays = new Set();
-    // for(let l = moment(r); l.isSameOrBefore(rend); l.add(1, 'day') ) {
-    //   weekdays.add( l.week() );
-    // }
     for(let d = new Date(r); d <= new Date(rend.format()); d.setDate(d.getDate() + 1)) {
       weekdays.add( moment(d).week() );
     }
-
-    const weeks = [...weekdays];
-    
-    console.log(weeks);
+    const weeks = !thisYr ? [...weekdays] : [...weekdays].filter( f => f <= nWk );
     
     let wXY = [];
     
