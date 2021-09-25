@@ -17,7 +17,7 @@ import React from 'react';
     margin: '5px 0px',
   };
   const bSty = {
-    fontSize: '2em'
+    fontSize: '1.8em'
   };
   const mSty = {
     fontSize: '1.5em'
