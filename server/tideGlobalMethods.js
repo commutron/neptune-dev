@@ -373,8 +373,18 @@ Meteor.methods({
       const tooManyMin = tooVal ? Number(tooVal) : 500;
       const tooManyMsec = tooManyMin * 60000;
       
-      const screenT = (tideArr)=> {
+      const screenT = (tideArr, bID)=> {
         for( let t of tideArr ) {
+          if( t.stopTime === false ) {
+            if( !Meteor.users.findOne({_id: t.who, 'engaged.tKey': t.tKey}) ) {
+              const stopshort = moment(t.startTime).add(3, 'seconds').toISOString();
+              XBatchDB.update({ _id: bID, 'tide.tKey': t.tKey }, {
+                $set : { 
+                  'tide.$.stopTime' : new Date(stopshort)
+              }});
+            }
+          }
+          
           if( ( ( t.stopTime || now ) - t.startTime ) > tooManyMsec ) {
             badDurr.push([
               t.startTime, t.who
@@ -388,8 +398,9 @@ Meteor.methods({
         $or: [ { lock: false },
                { lock: { $exists: false } }
              ]
+      },{ fields: {'tide':1} 
       }).forEach( bx => {
-        if(bx.tide) { screenT(bx.tide) }
+        if(bx.tide) { screenT(bx.tide, bx._id) }
       });
       
       const badDurrS = badDurr.sort( (d1, d2)=> 

@@ -9,6 +9,8 @@ import SubItemLink from '/client/components/smallUi/SubItemLink';
 
 import ItemFeedX from '/client/components/bigUi/ItemFeedX/ItemFeedX';
 
+import ItemExport from '/client/views/paper/ItemExport';
+
 const ItemPanelX = ({ 
   batchData, seriesData, rapidsData, itemData,
   widgetData, variantData, groupData, 
@@ -104,6 +106,17 @@ const ItemPanelX = ({
             
         <br />
       </div>
+      
+      <ItemExport
+        group={groupData.group}
+        widget={widgetData.widget}
+        variant={variantData.variant}
+        batch={batchData.batch}
+        sales={batchData.salesOrder}
+        itemData={itemData}
+        noncon={nc}
+        short={sh}
+      />
       
       <CreateTag
         when={i.createdAt}

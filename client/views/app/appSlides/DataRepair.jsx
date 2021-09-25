@@ -103,7 +103,7 @@ const DataRepair = ({ app, users })=> {
       
       <DoCard
         title='Run Done Target Loops Update'
-        sub='Runs every Saturday at 12:06am (CST)'
+        sub='Runs Daily at 12:06am (CST)'
         icon='digital-tachograph'
         color='clearPurple'
         button='Request Update'

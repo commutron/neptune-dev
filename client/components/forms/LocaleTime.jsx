@@ -88,7 +88,7 @@ const TimeEditForm = ({ setFunc, idpre, defaultObj, closeFunc })=> {
       <ArrayText id={'5'+idpre} dayNum={5} val={t[5]} />
       <ArrayText id={'6'+idpre} dayNum={6} val={t[6]} />
       
-      <p>Times must be in pairs, seperated by commas, without spaces,<br />
+      <p>Times must be in pairs, separated by commas, without spaces,<br />
       in 24-hour time and including seconds<br />
       <em>07:00:00,11:45:00,12:30:00,16:30:00</em>
       </p>

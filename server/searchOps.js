@@ -220,7 +220,8 @@ Meteor.methods({
                   sort: { batch: -1 },
                   limit: 1
                 }).fetch();
-    const next = !last ? '00000' : ( parseInt( last[0].batch, 10 ) + 1 ).toString();
+    const next = !last || last.length === 0 ? '00000' : 
+                  ( parseInt( last[0].batch, 10 ) + 1 ).toString();
     return next;
   },
   

@@ -96,16 +96,18 @@ const loopBack = (nowLocal, cycles, period)=> {
 };
 
 const getRanges = ()=> {
-  const nowLocal = moment().tz(Config.clientTZ).startOf('month');
+  const nowLocal = moment().tz(Config.clientTZ);
+  const weklocal = nowLocal.clone().startOf('week');
+  const mthlocal = nowLocal.clone().startOf('month');
   
   const cutoff = nowLocal.clone().startOf('year').subtract(Config.yrsSpan-1, 'years');
       
   const dur = moment.duration(nowLocal.diff(moment(cutoff)));
-  const weekcycles = Math.ceil(dur.asWeeks()); // parseInt( dur.asWeeks(), 10 );
-  const monthcycles = Math.ceil(dur.asMonths()); // parseInt( dur.asMonths(), 10 );
+  const weekcycles = Math.ceil(dur.asWeeks());
+  const monthcycles = Math.ceil(dur.asMonths());
     
-  const weekranges = loopBack(nowLocal, weekcycles, 'week');
-  const monthranges = loopBack(nowLocal, monthcycles, 'month');
+  const weekranges = loopBack(weklocal, weekcycles, 'week');
+  const monthranges = loopBack(mthlocal, monthcycles, 'month');
   
   return [ weekranges, monthranges ];
 };

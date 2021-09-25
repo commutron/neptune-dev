@@ -35,7 +35,8 @@ const TimeErrorCheck = ()=> {
     <div className='overscroll wide space5x5'>
       <h3>Check for Time durations greater than {Pref.tooManyMin} minutes</h3>
       <p className='small'>aka a full day without any breaks</p>
-      <p>Resource intensive function. Run during idle times</p>
+      <p>Will automatically correct abandoned stop time blocks.</p>
+      <p><b>Resource intensive function. Run during idle times.</b></p>
       <br />
       <div className='rowWrap'>
         {working ?

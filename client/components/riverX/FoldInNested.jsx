@@ -14,7 +14,7 @@ const FoldInNested = ({
   function checkNested(e) {
     e.preventDefault();
     this.goNeck.disabled = true;
-		const subSerial = this.nestSerial.value;
+		const subSerial = this.nestSerial.value.trim();
 		
 		Meteor.call('checkNestX', subSerial, (err, re)=>{
 	    err && console.log(err);
@@ -75,8 +75,8 @@ const FoldInNested = ({
 			      type='text'
 			      className='centreText'
 			      id='nestSerial'
-			      pattern='[A-Za-z0-9_-]*'
-			      maxLength={32}
+			      pattern='[A-Za-z0-9\.()_\-\s#,:[\]/\\]*'
+			      maxLength={64}
 	          minLength={6}
 	          placeholder='serial number'
 	          inputMode='numeric'
@@ -100,23 +100,23 @@ const FoldInNested = ({
     	<p className='whiteT'><i className="fas fa-object-group fa-lg fa-fw"></i> Nest</p>
       <p className='up wordBr whiteT'>{step}</p>
   		{checkState[0] === true ? 
-  			<p><n-num>{subState}</n-num> is <b>already</b> nested</p>
+  			<p className='wordBr'><n-num>{subState}</n-num> is <b>already</b> nested</p>
   			:
   			checkState[3] === true ? 
-  				<p><n-num>{subState}</n-num> has one or more outstanding <b>nonconformaces</b>.</p>
+  				<p className='wordBr'><n-num>{subState}</n-num> has one or more outstanding <b>nonconformaces</b>.</p>
   			:
   			checkState[4] === true ? 
-  				<p><n-num>{subState}</n-num> has one or more outstanding <b>shortfalls</b>.</p>
+  				<p className='wordBr'><n-num>{subState}</n-num> has one or more outstanding <b>shortfalls</b>.</p>
   			:
   			checkState[5] === true ? 
-  				<p><n-num>{subState}</n-num> has been <b>scrapped</b>.</p>
+  				<p className='wordBr'><n-num>{subState}</n-num> has been <b>scrapped</b>.</p>
   			:
   			<div className='centre centreText'>
   				{checkState[1] === false ? 
-  					<p><n-num>{subState}</n-num> is <b>not</b> an internal serial number.</p>
+  					<p className='wordBr'><n-num>{subState}</n-num> is <b>not</b> an internal serial number.</p>
   				:
   				checkState[2] === false &&
-  					<p><n-num>{subState}</n-num> is <b>not</b> completed. Nesting now will force finish.</p>
+  					<p className='wordBr'><n-num>{subState}</n-num> is <b>not</b> completed. Nesting now will force finish.</p>
   				}
   				<button
 			      type='button'

@@ -4,6 +4,7 @@ import Pref from '/client/global/pref.js';
 
 import ReportStatsTable from '/client/components/tables/ReportStatsTable'; 
 import NumLine from '/client/components/tinyUi/NumLine';
+import PrintThis from '/client/components/tinyUi/PrintThis';
 
 
 const BuildHistory = ({ allVariant, allWidget, allGroup })=> {
@@ -166,6 +167,7 @@ const BuildHistory = ({ allVariant, allWidget, allGroup })=> {
   
   return(
     <div className='space'>
+      <div className='rowWrapR noPrint'><PrintThis /></div>
       
       <p>
         <i className='medBig line2x'>When was </i>
@@ -216,7 +218,7 @@ const BuildHistory = ({ allVariant, allWidget, allGroup })=> {
       
       <span className='overscroll minH60'>
         {answerState === undefined ? null :
-          answerState === false ? <i className='bigger smCap'>Never</i> :
+          answerState === false ? <i className='big smCap'>Never</i> :
           <NumLine
             num={moment(answerState).format("dddd, MMMM Do YYYY")}
             name=''

@@ -32,9 +32,9 @@ Meteor.methods({
       
       const user = Meteor.user();
       const spinning = user && user.engaged;
-      const activeBlock = !Roles.userIsInRole(Meteor.userId(), 'active');
+      const notactive = !Roles.userIsInRole(Meteor.userId(), 'active');
       
-      if(typeof newTkey !== 'string' || spinning || activeBlock) {
+      if(typeof newTkey !== 'string' || spinning || notactive) {
         null;
       }else{
         
