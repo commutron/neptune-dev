@@ -10,6 +10,8 @@ import CountTab from './CountTab';
 import ProblemTab from './ProblemTab';
 import RapidExtendTab from './RapidExtendTab';
 
+import BatchExport from '/client/views/paper/BatchExport';
+
 const BatchPanelX = ({ 
   batchData, seriesData, rapidsData, widgetData, variantData, groupData, 
   flowData, fallData,
@@ -130,12 +132,23 @@ const BatchPanelX = ({
         
       </Tabs>
       
-      <CreateTag
-        when={b.createdAt}
-        who={b.createdWho}
-        whenNew={b.updatedAt}
-        whoNew={b.updatedWho}
-        dbKey={b._id} />
+      <div className='rowWrap'>
+        <CreateTag
+          when={b.createdAt}
+          who={b.createdWho}
+          whenNew={b.updatedAt}
+          whoNew={b.updatedWho}
+          dbKey={b._id}
+        />
+        <span className='flexSpace' />
+        <BatchExport
+          group={groupData.group}
+          widget={widgetData.widget}
+          variant={variantData.variant}
+          batchData={batchData}
+          seriesData={seriesData}
+        />
+      </div>
     </div>
   );
 };

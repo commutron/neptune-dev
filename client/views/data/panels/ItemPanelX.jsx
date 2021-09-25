@@ -107,23 +107,26 @@ const ItemPanelX = ({
         <br />
       </div>
       
-      <ItemExport
-        group={groupData.group}
-        widget={widgetData.widget}
-        variant={variantData.variant}
-        batch={batchData.batch}
-        sales={batchData.salesOrder}
-        itemData={itemData}
-        noncon={nc}
-        short={sh}
-      />
-      
-      <CreateTag
-        when={i.createdAt}
-        who={i.createdWho}
-        whenNew={i.createdAt}
-        whoNew={i.createdWho}
-        dbKey={i.serial} />
+      <div className='rowWrap'>
+        <CreateTag
+          when={i.createdAt}
+          who={i.createdWho}
+          whenNew={i.createdAt}
+          whoNew={i.createdWho}
+          dbKey={i.serial} 
+        />
+        <span className='flexSpace' />
+        <ItemExport
+          group={groupData.group}
+          widget={widgetData.widget}
+          variant={variantData.variant}
+          batch={batchData.batch}
+          sales={batchData.salesOrder}
+          itemData={itemData}
+          noncon={nc}
+          short={sh}
+        />
+      </div>
 		</div>
   );
 };
