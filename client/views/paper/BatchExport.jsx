@@ -9,10 +9,10 @@ function getRel(brancheS, type) {
   if(type === 'floorRelease') {
     return 'Released to the Floor';
   }else if(type === 'pcbKitRelease') {
-    return `Ready ${Pref.baseSerialPart}s`;
+    return `Ready ${toCap(Pref.baseSerialPart)}s`;
   }else{
     const niceB = brancheS.find( b => ( 'BRK' + b.brKey ) === type );
-    return `Ready ${niceB.common}`;
+    return `Ready ${toCap(niceB.common)}`;
   }
 }
 
@@ -31,7 +31,7 @@ const BatchExport = ({
       ...Array.from(batchData.altered, x => 
             [ 'Alter ' + x.changeKey, x.newValue, new Date(x.changeDate).toLocaleString() ] ),
       ...Array.from(batchData.quoteTimeBudget, x => 
-            [ 'Set quote time budget', ( x.timeAsMinutes || '0' ) + ' minutes', new Date(x.updatedAt).toLocaleString() ] )
+            [ 'Set Quote Time Budget', ( x.timeAsMinutes || '0' ) + ' minutes', new Date(x.updatedAt).toLocaleString() ] )
     ];
     const eventS = eventArray.sort((a,b)=> a[2] > b[2] ? 1 : a[2] < b[2] ? -1 : 0);
         
@@ -144,10 +144,8 @@ const BatchExport = ({
           </tr>
         </tbody>
       </table>
-      
-      <div style="background-color:#007fff;width:100%;height:2px;margin:5px"></div>
-      
-      <p style="color:black;margin:1rem">Exported: ${new Date().toLocaleString()}, local time: America/Regina UTC-6</p>
+     
+      <p style="color:black;margin:1rem"><small>Exported: ${new Date().toLocaleString()}, America/Regina UTC-6</small></p>
       
       <div style="background-color:#007fff;width:100%;height:25px;margin:20px 0"></div>
       
@@ -180,7 +178,8 @@ const BatchExport = ({
         </table>
       </div>
       
-      <div style="width:100%;page-break-before:always;break-before:always">
+      ${rapidArr.length === 0 ? '' :
+      `<div style="width:100%;page-break-before:always;break-before:always">
         <table style="width:100%;table-layout:auto;border-collapse:collapse">
           <thead>
             <tr>
@@ -210,7 +209,8 @@ const BatchExport = ({
             }).join('')}
           </tbody>
         </table>
-      </div>
+      </div>`
+      }
       
       <div style="width:100%;page-break-before:always;break-before:always">
         <table style="width:100%;table-layout:auto;border-collapse:collapse">

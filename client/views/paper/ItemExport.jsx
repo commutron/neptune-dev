@@ -42,7 +42,10 @@ const ItemExport = ({ group, widget, variant, batch, sales, itemData, noncon, sh
                     x.reSolve === false ? Pref.notResolved : 
                     Pref.isResolved ]
                   );
-   
+  
+  const nsted = itemData.history.find( h => h.type === 'nested' );
+  const prntN = nsted ? nsted.info.parentSerial || null : '';
+  
   const rapid = itemData.altPath.filter( x => x.rapId !== false );
   const rtnAr = Array.from(rapid, x => new Date(x.assignedAt).toLocaleString() );
   
@@ -77,7 +80,8 @@ const ItemExport = ({ group, widget, variant, batch, sales, itemData, noncon, sh
           <tr>
             <td colspan='2' class='body' style="padding:1% 5% 2% 5%;line-height: 1.5">
               <p style="margin:1rem 0;font-size:24pt"><b>${itemData.serial}</b></p>
-              <p style="margin:1rem 0;font-size:14pt"><b>${itemData.subItems.join(', ')}</b></p>
+              ${itemData.subItems.length > 0 ? `<p style="margin:1rem 0;font-size:14pt"><b>${itemData.subItems.join(', ')}</b></p>` : ''}
+              ${nsted ? `<p style="margin:1rem 0;font-size:14pt">Parent: <b>${prntN}</b></p>` : ''}
             </td>
           </tr>
         </tbody>
@@ -118,14 +122,12 @@ const ItemExport = ({ group, widget, variant, batch, sales, itemData, noncon, sh
         </tbody>
       </table>
       
-      <div style="background-color:#007fff;width:100%;height:2px;margin:5px"></div>
-      
-      <p style="color:black;margin:1rem">Exported: ${new Date().toLocaleString()}, local time: America/Regina UTC-6</p>
+      <p style="color:black;margin:1rem"><small>Exported: ${new Date().toLocaleString()}, America/Regina UTC-6</small></p>
       
       <div style="background-color:#007fff;width:100%;height:25px;margin:20px 0"></div>
       
       ${frstAr.length === 0 ? '' :
-      `<div style="width:100%">
+      `<div style="width:100%;page-break-before:always;break-before:always">
         <table style="width:100%;table-layout:auto;border-collapse:collapse">
           <thead>
             <tr>
