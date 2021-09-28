@@ -1,6 +1,7 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
 
+import { toCap } from '/client/utility/Convert';
 import printTextThing from '/client/utility/PrintGenerator';
 
 const ItemExport = ({ group, widget, variant, batch, sales, itemData, noncon, short })=> {
@@ -91,7 +92,7 @@ const ItemExport = ({ group, widget, variant, batch, sales, itemData, noncon, sh
               <p style="margin:1rem 0">Included Units: <b>${itemData.units}</b></p>
             </td>
             <td class='body' style="padding:1% 5% 2% 5%;line-height: 1.5;vertical-align:top">
-              <p style="margin:1rem 0">Customer: <b>${group}</b></p>
+              <p style="margin:1rem 0">Customer: <b>${toCap(group, true)}</b></p>
               <p style="margin:1rem 0">Product: <b>${widget.toUpperCase()}</b></p>
               <p style="margin:1rem 0">Variation: <b>${variant}</b></p>
             </td>
@@ -105,7 +106,7 @@ const ItemExport = ({ group, widget, variant, batch, sales, itemData, noncon, sh
         <tbody>
           <tr>
             <td class='body' style="padding:1% 5% 2% 5%;line-height: 1.5;vertical-align:top">
-              <p style="margin:1rem 0">Issued: <b>${new Date(itemData.createdAt).toLocaleString()}</b></p>
+              <p style="margin:1rem 0">Created: <b>${new Date(itemData.createdAt).toLocaleString()}</b></p>
               <p style="margin:1rem 0">Completed: <b>${itemData.completedAt ? new Date(itemData.completedAt).toLocaleString() : 'NO'}</b></p>
             </td>
             <td class='body' style="padding:1% 5% 2% 5%;line-height: 1.5;vertical-align:top">
@@ -132,22 +133,25 @@ const ItemExport = ({ group, widget, variant, batch, sales, itemData, noncon, sh
         <div style="background-color:#007fff;width:100%;height:5px;margin:20px 0;clear:both"></div>
   
         <table style="width:100%;table-layout:auto;border-collapse:collapse">
-          <tr>
-            <th style="${hsty}">Time</th>
-            <th style="${hsty}">Step</th>
-            <th style="${hsty}">Method</th>
-            <th style="${hsty}">Consumables</th>
-            <th style="${hsty}">Inspection</th>
-            <th style="${hsty}">Status</th>
-          </tr>
-          ${frstAr.map(function (line, index) {
-            return `<tr>
-              ${line.map(function (cell) {
-                return `<td style="${csty}">${cell}</td>`;
-              }).join('')
-            }</tr>`;
-          }).join('')
-          }
+          <thead>
+            <tr>
+              <th style="${hsty}">Time</th>
+              <th style="${hsty}">Step</th>
+              <th style="${hsty}">Method</th>
+              <th style="${hsty}">Consumables</th>
+              <th style="${hsty}">Inspection</th>
+              <th style="${hsty}">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${frstAr.map(function (line, index) {
+              return `<tr>
+                ${line.map(function (cell) {
+                  return `<td style="${csty}">${cell}</td>`;
+                }).join('')
+              }</tr>`;
+            }).join('')}
+          </tbody>
         </table>
       
       </div>`
@@ -161,20 +165,23 @@ const ItemExport = ({ group, widget, variant, batch, sales, itemData, noncon, sh
         <div style="background-color:#007fff;width:100%;height:5px;margin:20px 0;clear:both"></div>
             
         <table style="width:100%;table-layout:auto;border-collapse:collapse">
-          <tr>
-            <th style="${hsty}">Time</th>
-            <th style="${hsty}">Step</th>
-            <th style="${hsty}"}>Type</th>
-            <th style="${hsty}">Status</th>
-          </tr>
-          ${histAr.map(function (line, index) {
-            return `<tr>
-              ${line.map(function (cell) {
-                return `<td style="${csty}">${cell}</td>`;
-              }).join('')
-            }</tr>`;
-          }).join('')
-          }
+          <thead>
+            <tr>
+              <th style="${hsty}">Time</th>
+              <th style="${hsty}">Step</th>
+              <th style="${hsty}"}>Type</th>
+              <th style="${hsty}">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${histAr.map(function (line, index) {
+              return `<tr>
+                ${line.map(function (cell) {
+                  return `<td style="${csty}">${cell}</td>`;
+                }).join('')
+              }</tr>`;
+            }).join('')}
+          </tbody>
         </table>
       
       </div>
@@ -187,23 +194,26 @@ const ItemExport = ({ group, widget, variant, batch, sales, itemData, noncon, sh
         <div style="background-color:#007fff;width:100%;height:5px;margin:20px 0;clear:both"></div>
            
         <table style="width:100%;table-layout:auto;border-collapse:collapse">
-          <tr>
-            <th style="${hsty}">Time</th>
-            <th style="${hsty}">Reference</th>
-            <th style="${hsty}">Defect</th>
-            <th style="${hsty}">Process</th>
-            <th style="${hsty}">Quantity</th>
-            <th style="${hsty}">Repair</th>
-            <th style="${hsty}">Inspection</th>
-          </tr>
-          ${ncArry.map(function (line, index) {
-            return `<tr>
-              ${line.map(function (cell) {
-                return `<td style="${csty}">${cell}</td>`;
-              }).join('')
-            }</tr>`;
-          }).join('')
-          }
+          <thead>
+            <tr>
+              <th style="${hsty}">Time</th>
+              <th style="${hsty}">Reference</th>
+              <th style="${hsty}">Defect</th>
+              <th style="${hsty}">Process</th>
+              <th style="${hsty}">Quantity</th>
+              <th style="${hsty}">Repair</th>
+              <th style="${hsty}">Inspection</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${ncArry.map(function (line, index) {
+              return `<tr>
+                ${line.map(function (cell) {
+                  return `<td style="${csty}">${cell}</td>`;
+                }).join('')
+              }</tr>`;
+            }).join('')}
+          </tbody>
         </table>
       
       </div>
@@ -216,23 +226,26 @@ const ItemExport = ({ group, widget, variant, batch, sales, itemData, noncon, sh
         <div style="background-color:#007fff;width:100%;height:5px;margin:20px 0;clear:both"></div>
         
         <table style="width:100%;table-layout:auto;border-collapse:collapse">
-          <tr>
-            <th style="${hsty}">Time</th>
-            <th style="${hsty}">Part Number</th>
-            <th style="${hsty}">References</th>
-            <th style="${hsty}">Process</th>
-            <th style="${hsty}">Quantity</th>
-            <th style="${hsty}">Resolution</th>
-          </tr>
-          <tr>
-          ${shArry.map(function (line, index) {
-            return `<tr>
-              ${line.map(function (cell) {
-                return `<td style="${csty}">${cell}</td>`;
-              }).join('')
-            }</tr>`;
-          }).join('')
-          }
+          <thead>
+            <tr>
+              <th style="${hsty}">Time</th>
+              <th style="${hsty}">Part Number</th>
+              <th style="${hsty}">References</th>
+              <th style="${hsty}">Process</th>
+              <th style="${hsty}">Quantity</th>
+              <th style="${hsty}">Resolution</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+            ${shArry.map(function (line, index) {
+              return `<tr>
+                ${line.map(function (cell) {
+                  return `<td style="${csty}">${cell}</td>`;
+                }).join('')
+              }</tr>`;
+            }).join('')}
+          </tbody>
         </table>
       
       </div>
