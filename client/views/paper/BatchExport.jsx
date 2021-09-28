@@ -7,8 +7,6 @@ import printTextThing from '/client/utility/PrintGenerator';
 
 const BatchExport = ({ group, widget, variant, batchData, seriesData, rapidsData })=> {
 
-console.log(rapidsData);
-
   const handleExport = ()=> {
     
     const eventArray = [
