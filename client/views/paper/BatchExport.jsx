@@ -5,7 +5,21 @@ import { min2hr, toCap } from '/client/utility/Convert';
 import UserName from '/client/utility/Username';
 import printTextThing from '/client/utility/PrintGenerator';
 
-const BatchExport = ({ group, widget, variant, batchData, seriesData, rapidsData })=> {
+function getRel(brancheS, type) {
+  if(type === 'floorRelease') {
+    return 'Released to the Floor';
+  }else if(type === 'pcbKitRelease') {
+    return `Ready ${Pref.baseSerialPart}s`;
+  }else{
+    const niceB = brancheS.find( b => ( 'BRK' + b.brKey ) === type );
+    return `Ready ${niceB.common}`;
+  }
+}
+
+const BatchExport = ({ 
+  group, widget, variant, brancheS,
+  batchData, seriesData, rapidsData 
+})=> {
 
   const handleExport = ()=> {
     
@@ -13,26 +27,27 @@ const BatchExport = ({ group, widget, variant, batchData, seriesData, rapidsData
       ...Array.from(batchData.events, x => 
             [ x.title, x.detail, new Date(x.time).toLocaleString() ] ),
       ...Array.from(batchData.releases, x => 
-            [ x.type, x.caution || '', new Date(x.time).toLocaleString() ] ),
+            [ getRel(brancheS, x.type), x.caution || '', new Date(x.time).toLocaleString() ] ),
       ...Array.from(batchData.altered, x => 
-            [ 'alter ' + x.changeKey, x.newValue, new Date(x.changeDate).toLocaleString() ] ),
+            [ 'Alter ' + x.changeKey, x.newValue, new Date(x.changeDate).toLocaleString() ] ),
       ...Array.from(batchData.quoteTimeBudget, x => 
-            [ 'set quote time budget', x.timeAsMinutes + ' minutes', new Date(x.updatedAt).toLocaleString() ] )
+            [ 'Set quote time budget', x.timeAsMinutes || '0' + ' minutes', new Date(x.updatedAt).toLocaleString() ] )
     ];
     const eventS = eventArray.sort((a,b)=> a[2] > b[2] ? 1 : a[2] < b[2] ? -1 : 0);
         
     const tideArr = !batchData.tide ? [] : Array.from(batchData.tide, x => 
-            [ UserName(x.who), x.task || '', 
+            [ toCap( UserName(x.who, true), true), x.task || '', 
               new Date(x.startTime).toLocaleString(),
               x.stopTime ? new Date(x.stopTime).toLocaleString() : '',
             ]
           ); 
     
-    let countArr = batchData.waterfall.map( (w)=>{
-                      Array.from(w.counts, x => 
-                        [ w.gate, w.type, x.tick, new Date(x.time).toLocaleString() ]
-                      );
-                   });
+    let countArr = [];
+    for( let w of batchData.waterfall) {
+      for( let x of w.counts ) { 
+        countArr.push( [ w.gate, w.type, x.tick, new Date(x.time).toLocaleString() ] );
+      }
+    }
     const countS = [...countArr].sort((a,b)=> a[2] > b[2] ? 1 : a[2] < b[2] ? -1 : 0);
 
     const sub = !seriesData ? false : seriesData.items.some( y => y.subItems.length > 0 ); 
@@ -50,7 +65,7 @@ const BatchExport = ({ group, widget, variant, batchData, seriesData, rapidsData
           );
     
     let rapidArr = Array.from(rapidsData, x => 
-                    [ x.rapid, x.type, x.issueOrder, x.quantity, 
+                    [ x.rapid, x.issueOrder, x.type, x.quantity, 
                       new Date(x.createdAt).toLocaleString(),
                       x.closedAt ? new Date(x.closedAt).toLocaleString() : ''
                     ]
@@ -89,7 +104,7 @@ const BatchExport = ({ group, widget, variant, batchData, seriesData, rapidsData
           <tr>
             <td colspan='2' class='body' style="padding:1% 5% 2% 5%;line-height: 1.5">
               <p style="margin:1rem 0;font-size:24pt"><b>${batchData.batch}</b></p>
-              <p style="margin:1rem 0;font-size:14pt"><b>${batchData.salesOrder}</b></p>
+              <p style="margin:1rem 0;font-size:14pt">Sales Order: <b>${batchData.salesOrder}</b></p>
             </td>
           </tr>
         </tbody>
@@ -136,7 +151,7 @@ const BatchExport = ({ group, widget, variant, batchData, seriesData, rapidsData
       
       <div style="background-color:#007fff;width:100%;height:25px;margin:20px 0"></div>
       
-      <div style="width:100%;page-break-inside:avoid;break-inside:avoid;page-break-before:always;break-before:always">
+      <div style="width:100%;page-break-before:always;break-before:always">
       
         <div style="background-color:#007fff;width:100%;height:5px;margin-top:20px"></div>
           <p style="color:black;float:left"><b>${batchData.batch}</b></p>
@@ -164,7 +179,7 @@ const BatchExport = ({ group, widget, variant, batchData, seriesData, rapidsData
       
       </div>
       
-      <div style="width:100%;page-break-inside:avoid;break-inside:avoid;page-break-before:always;break-before:always">
+      <div style="width:100%;page-break-before:always;break-before:always">
       
         <div style="background-color:#007fff;width:100%;height:5px;margin-top:20px"></div>
           <p style="color:black;float:left"><b>${batchData.batch}</b></p>
@@ -175,8 +190,8 @@ const BatchExport = ({ group, widget, variant, batchData, seriesData, rapidsData
           <thead>
             <tr>
               <th style="${hsty}">Title</th>
-              <th style="${hsty}">Type</th>
               <th style="${hsty}">Issue</th>
+              <th style="${hsty}">Type</th>
               <th style="${hsty}">Quantity</th>
               <th style="${hsty}">Created</th>
               <th style="${hsty}">Closed</th>
@@ -195,7 +210,7 @@ const BatchExport = ({ group, widget, variant, batchData, seriesData, rapidsData
       
       </div>
       
-      <div style="width:100%;page-break-inside:avoid;break-inside:avoid;page-break-before:always;break-before:always">
+      <div style="width:100%;page-break-before:always;break-before:always">
       
         <div style="background-color:#007fff;width:100%;height:5px;margin-top:20px"></div>
           <p style="color:black;float:left"><b>${batchData.batch}</b></p>
@@ -224,7 +239,7 @@ const BatchExport = ({ group, widget, variant, batchData, seriesData, rapidsData
       
       </div>
       
-      <div style="width:100%;page-break-inside:avoid;break-inside:avoid;page-break-before:always;break-before:always">
+      <div style="width:100%;page-break-before:always;break-before:always">
       
         <div style="background-color:#007fff;width:100%;height:5px;margin-top:20px"></div>
           <p style="color:black;float:left"><b>${batchData.batch}</b></p>
@@ -253,7 +268,7 @@ const BatchExport = ({ group, widget, variant, batchData, seriesData, rapidsData
       
       </div>
       
-      <div style="width:100%;page-break-inside:avoid;break-inside:avoid;page-break-before:always;break-before:always">
+      <div style="width:100%;page-break-before:always;break-before:always">
       
         <div style="background-color:#007fff;width:100%;height:5px;margin-top:20px"></div>
           <p style="color:black;float:left"><b>${batchData.batch}</b></p>

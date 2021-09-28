@@ -148,6 +148,7 @@ const BatchPanelX = ({
           batchData={batchData}
           seriesData={seriesData}
           rapidsData={rapidsData}
+          brancheS={brancheS}
         />
       </div>
     </div>
