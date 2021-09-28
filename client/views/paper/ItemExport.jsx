@@ -50,8 +50,8 @@ const ItemExport = ({ group, widget, variant, batch, sales, itemData, noncon, sh
   const csty = 'border: 1px solid lightgray;line-height:1.7;padding:0.5ch';
   
   const exportHTML =
-    `<div style="color:black;font-family:Verdana, sans-serif;-webkit-print-color-adjust:exact;color-adjust:exact">
-      <table style="width:100%;margin:0 auto;font-family:Verdana, sans-serif;line-height:1;border-collapse:separate;table-layout:fixed;background-color:white">
+    `<div style="color:black;font-family:Verdana, sans-serif;-webkit-print-color-adjust:exact;color-adjust:exact;background-color:white">
+      <table style="width:100%;margin:0 auto;font-family:Verdana, sans-serif;line-height:1;border-collapse:separate;table-layout:fixed">
         <tbody>
           <tr style="background-color:#007fff;height:50px;color:white">
             <td style="padding:0 10px">
@@ -72,7 +72,7 @@ const ItemExport = ({ group, widget, variant, batch, sales, itemData, noncon, sh
         </tbody>
       </table>     
 
-      <table style="width:100%;margin:0 auto;line-height:1;border-collapse:collapse;table-layout:fixed;background-color:white">
+      <table style="width:100%;margin:0 auto;line-height:1;border-collapse:collapse;table-layout:fixed">
         <tbody>
           <tr>
             <td colspan='2' class='body' style="padding:1% 5% 2% 5%;line-height: 1.5">
@@ -83,7 +83,7 @@ const ItemExport = ({ group, widget, variant, batch, sales, itemData, noncon, sh
         </tbody>
       </table>
       
-      <table style="width:100%;margin:0 auto;line-height:1;border-collapse:collapse;table-layout:fixed;background-color:white">
+      <table style="width:100%;margin:0 auto;line-height:1;border-collapse:collapse;table-layout:fixed">
         <tbody>
           <tr>
             <td class='body' style="padding:1% 5% 2% 5%;line-height: 1.5;vertical-align:top">
@@ -102,7 +102,7 @@ const ItemExport = ({ group, widget, variant, batch, sales, itemData, noncon, sh
       
       <div style="background-color:#007fff;width:100%;height:2px;margin:5px"></div>
       
-      <table style="width:100%;margin:0 auto;line-height:1;border-collapse:collapse;table-layout:fixed;background-color:white">
+      <table style="width:100%;margin:0 auto;line-height:1;border-collapse:collapse;table-layout:fixed">
         <tbody>
           <tr>
             <td class='body' style="padding:1% 5% 2% 5%;line-height: 1.5;vertical-align:top">
@@ -125,15 +125,17 @@ const ItemExport = ({ group, widget, variant, batch, sales, itemData, noncon, sh
       <div style="background-color:#007fff;width:100%;height:25px;margin:20px 0"></div>
       
       ${frstAr.length === 0 ? '' :
-      `<div style="width:100%;page-break-inside:avoid;break-inside:avoid">
-
-        <div style="background-color:#007fff;width:100%;height:5px;margin-top:20px"></div>
-          <p style="float:left"><b>${itemData.serial}</b></p>
-          <p style="float:right"><b>${Pref.trackFirst.toUpperCase()}</b></p>
-        <div style="background-color:#007fff;width:100%;height:5px;margin:20px 0;clear:both"></div>
-  
+      `<div style="width:100%">
         <table style="width:100%;table-layout:auto;border-collapse:collapse">
           <thead>
+            <tr>
+              <th colspan="6">
+                <div style="background-color:#007fff;width:100%;height:5px;margin-top:20px"></div>
+                  <p style="color:black;float:left"><b>${itemData.serial}</b></p>
+                  <p style="color:black;float:right"><b>${Pref.trackFirst.toUpperCase()}</b></p>
+                <div style="background-color:#007fff;width:100%;height:5px;margin:20px 0;clear:both"></div>
+              </th>
+            </tr>
             <tr>
               <th style="${hsty}">Time</th>
               <th style="${hsty}">Step</th>
@@ -153,19 +155,20 @@ const ItemExport = ({ group, widget, variant, batch, sales, itemData, noncon, sh
             }).join('')}
           </tbody>
         </table>
-      
       </div>`
       }
       
-      <div style="width:100%;page-break-inside:avoid;break-inside:avoid;page-break-before:always;break-before:always">
-      
-        <div style="background-color:#007fff;width:100%;height:5px;margin-top:20px"></div>
-          <p style="color:black;float:left"><b>${itemData.serial}</b></p>
-          <p style="color:black;float:right"><b>${Pref.buildStep.toUpperCase()}</b></p>
-        <div style="background-color:#007fff;width:100%;height:5px;margin:20px 0;clear:both"></div>
-            
+      <div style="width:100%;page-break-before:always;break-before:always">
         <table style="width:100%;table-layout:auto;border-collapse:collapse">
           <thead>
+            <tr>
+              <th colspan="4">
+                <div style="background-color:#007fff;width:100%;height:5px;margin-top:20px"></div>
+                  <p style="color:black;float:left"><b>${itemData.serial}</b></p>
+                  <p style="color:black;float:right"><b>${Pref.buildStep.toUpperCase()}</b></p>
+                <div style="background-color:#007fff;width:100%;height:5px;margin:20px 0;clear:both"></div>
+              </th>
+            </tr>
             <tr>
               <th style="${hsty}">Time</th>
               <th style="${hsty}">Step</th>
@@ -183,18 +186,19 @@ const ItemExport = ({ group, widget, variant, batch, sales, itemData, noncon, sh
             }).join('')}
           </tbody>
         </table>
-      
       </div>
       
-      <div style="width:100%;page-break-inside:avoid;break-inside:avoid;page-break-before:always;break-before:always">
-      
-        <div style="background-color:#007fff;width:100%;height:5px;margin-top:20px"></div>
-          <p style="color:black;float:left"><b>${itemData.serial}</b></p>
-          <p style="color:black;float:right"><b>${Pref.nonCons.toUpperCase()}</b></p>
-        <div style="background-color:#007fff;width:100%;height:5px;margin:20px 0;clear:both"></div>
-           
+      <div style="width:100%;page-break-before:always;break-before:always">
         <table style="width:100%;table-layout:auto;border-collapse:collapse">
           <thead>
+            <tr>
+              <th colspan="7">
+                <div style="background-color:#007fff;width:100%;height:5px;margin-top:20px"></div>
+                  <p style="color:black;float:left"><b>${itemData.serial}</b></p>
+                  <p style="color:black;float:right"><b>${Pref.nonCons.toUpperCase()}</b></p>
+                <div style="background-color:#007fff;width:100%;height:5px;margin:20px 0;clear:both"></div>
+              </th>
+            </tr>
             <tr>
               <th style="${hsty}">Time</th>
               <th style="${hsty}">Reference</th>
@@ -215,18 +219,19 @@ const ItemExport = ({ group, widget, variant, batch, sales, itemData, noncon, sh
             }).join('')}
           </tbody>
         </table>
-      
       </div>
       
-      <div style="width:100%;page-break-inside:avoid;break-inside:avoid;page-break-before:always;break-before:always">
-      
-        <div style="background-color:#007fff;width:100%;height:5px;margin-top:20px"></div>
-          <p style="color:black;float:left"><b>${itemData.serial}</b></p>
-          <p style="color:black;float:right"><b>${Pref.shortfalls.toUpperCase()}</b></p>
-        <div style="background-color:#007fff;width:100%;height:5px;margin:20px 0;clear:both"></div>
-        
+      <div style="width:100%;page-break-before:always;break-before:always">
         <table style="width:100%;table-layout:auto;border-collapse:collapse">
           <thead>
+            <tr>
+              <th colspan="7">
+                <div style="background-color:#007fff;width:100%;height:5px;margin-top:20px"></div>
+                  <p style="color:black;float:left"><b>${itemData.serial}</b></p>
+                  <p style="color:black;float:right"><b>${Pref.shortfalls.toUpperCase()}</b></p>
+                <div style="background-color:#007fff;width:100%;height:5px;margin:20px 0;clear:both"></div>
+              </th>
+            </tr>
             <tr>
               <th style="${hsty}">Time</th>
               <th style="${hsty}">Part Number</th>
@@ -247,7 +252,6 @@ const ItemExport = ({ group, widget, variant, batch, sales, itemData, noncon, sh
             }).join('')}
           </tbody>
         </table>
-      
       </div>
       
     </div>`;

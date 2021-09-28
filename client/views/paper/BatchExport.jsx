@@ -31,7 +31,7 @@ const BatchExport = ({
       ...Array.from(batchData.altered, x => 
             [ 'Alter ' + x.changeKey, x.newValue, new Date(x.changeDate).toLocaleString() ] ),
       ...Array.from(batchData.quoteTimeBudget, x => 
-            [ 'Set quote time budget', x.timeAsMinutes || '0' + ' minutes', new Date(x.updatedAt).toLocaleString() ] )
+            [ 'Set quote time budget', ( x.timeAsMinutes || '0' ) + ' minutes', new Date(x.updatedAt).toLocaleString() ] )
     ];
     const eventS = eventArray.sort((a,b)=> a[2] > b[2] ? 1 : a[2] < b[2] ? -1 : 0);
         
@@ -48,7 +48,7 @@ const BatchExport = ({
         countArr.push( [ w.gate, w.type, x.tick, new Date(x.time).toLocaleString() ] );
       }
     }
-    const countS = [...countArr].sort((a,b)=> a[2] > b[2] ? 1 : a[2] < b[2] ? -1 : 0);
+    const countS = [...countArr].sort((a,b)=> a[3] > b[3] ? 1 : a[3] < b[3] ? -1 : 0);
 
     const sub = !seriesData ? false : seriesData.items.some( y => y.subItems.length > 0 ); 
     const itemArray = !seriesData ? [] : Array.from(seriesData.items, x => 
@@ -75,10 +75,10 @@ const BatchExport = ({
   
     const hsty = 'text-align:left;border: 1px solid lightgray;padding:0.5ch';
     const csty = 'border: 1px solid lightgray;line-height:1.7;padding:0.5ch';
-  
+
   const exportHTML =
     `<div style="color:black;font-family:Verdana, sans-serif;-webkit-print-color-adjust:exact;color-adjust:exact;background-color:white">
-      <table style="width:100%;margin:0 auto;font-family:Verdana, sans-serif;line-height:1;border-collapse:separate;table-layout:fixed">
+     <table style="width:100%;margin:0 auto;font-family:Verdana, sans-serif;line-height:1;border-collapse:separate;table-layout:fixed">
         <tbody>
           <tr style="background-color:#007fff;height:50px;color:white">
             <td style="padding:0 10px">
@@ -152,14 +152,16 @@ const BatchExport = ({
       <div style="background-color:#007fff;width:100%;height:25px;margin:20px 0"></div>
       
       <div style="width:100%;page-break-before:always;break-before:always">
-      
-        <div style="background-color:#007fff;width:100%;height:5px;margin-top:20px"></div>
-          <p style="color:black;float:left"><b>${batchData.batch}</b></p>
-          <p style="color:black;float:right"><b>EVENTS</b></p>
-        <div style="background-color:#007fff;width:100%;height:5px;margin:20px 0;clear:both"></div>
-            
         <table style="width:100%;table-layout:auto;border-collapse:collapse">
           <thead>
+            <tr>
+              <th colspan="3">
+                <div style="background-color:#007fff;width:100%;height:5px;margin-top:20px"></div>
+                  <p style="color:black;float:left"><b>${batchData.batch}</b></p>
+                  <p style="color:black;float:right"><b>EVENTS</b></p>
+                <div style="background-color:#007fff;width:100%;height:5px;margin:20px 0;clear:both"></div>
+              </th>
+            </tr>
             <tr>
               <th style="${hsty}">Title</th>
               <th style="${hsty}">Detail</th>
@@ -176,18 +178,19 @@ const BatchExport = ({
             }).join('')}
           </tbody>
         </table>
-      
       </div>
       
       <div style="width:100%;page-break-before:always;break-before:always">
-      
-        <div style="background-color:#007fff;width:100%;height:5px;margin-top:20px"></div>
-          <p style="color:black;float:left"><b>${batchData.batch}</b></p>
-          <p style="color:black;float:right"><b>${Pref.rapidExs.toUpperCase()}</b></p>
-        <div style="background-color:#007fff;width:100%;height:5px;margin:20px 0;clear:both"></div>
-            
         <table style="width:100%;table-layout:auto;border-collapse:collapse">
           <thead>
+            <tr>
+              <th colspan="6">
+                <div style="background-color:#007fff;width:100%;height:5px;margin-top:20px"></div>
+                  <p style="color:black;float:left"><b>${batchData.batch}</b></p>
+                  <p style="color:black;float:right"><b>${Pref.rapidExs.toUpperCase()}</b></p>
+                <div style="background-color:#007fff;width:100%;height:5px;margin:20px 0;clear:both"></div>
+              </th>
+            </tr>
             <tr>
               <th style="${hsty}">Title</th>
               <th style="${hsty}">Issue</th>
@@ -207,18 +210,19 @@ const BatchExport = ({
             }).join('')}
           </tbody>
         </table>
-      
       </div>
       
       <div style="width:100%;page-break-before:always;break-before:always">
-      
-        <div style="background-color:#007fff;width:100%;height:5px;margin-top:20px"></div>
-          <p style="color:black;float:left"><b>${batchData.batch}</b></p>
-          <p style="color:black;float:right"><b>PRODUCTION TIME</b></p>
-        <div style="background-color:#007fff;width:100%;height:5px;margin:20px 0;clear:both"></div>
-            
         <table style="width:100%;table-layout:auto;border-collapse:collapse">
           <thead>
+            <tr>
+              <th colspan="4">
+                <div style="background-color:#007fff;width:100%;height:5px;margin-top:20px"></div>
+                  <p style="color:black;float:left"><b>${batchData.batch}</b></p>
+                  <p style="color:black;float:right"><b>PRODUCTION TIME</b></p>
+                <div style="background-color:#007fff;width:100%;height:5px;margin:20px 0;clear:both"></div>
+              </th>
+            </tr>
             <tr>
               <th style="${hsty}">Person</th>
               <th style="${hsty}">Task</th>
@@ -236,18 +240,19 @@ const BatchExport = ({
             }).join('')}
           </tbody>
         </table>
-      
       </div>
       
       <div style="width:100%;page-break-before:always;break-before:always">
-      
-        <div style="background-color:#007fff;width:100%;height:5px;margin-top:20px"></div>
-          <p style="color:black;float:left"><b>${batchData.batch}</b></p>
-          <p style="color:black;float:right"><b>COUNTERS</b></p>
-        <div style="background-color:#007fff;width:100%;height:5px;margin:20px 0;clear:both"></div>
-            
         <table style="width:100%;table-layout:auto;border-collapse:collapse">
           <thead>
+            <tr>
+              <th colspan="4">
+                <div style="background-color:#007fff;width:100%;height:5px;margin-top:20px"></div>
+                  <p style="color:black;float:left"><b>${batchData.batch}</b></p>
+                  <p style="color:black;float:right"><b>COUNTERS</b></p>
+                <div style="background-color:#007fff;width:100%;height:5px;margin:20px 0;clear:both"></div>
+              </th>
+            </tr>
             <tr>
               <th style="${hsty}">Step</th>
               <th style="${hsty}">Type</th>
@@ -265,18 +270,19 @@ const BatchExport = ({
             }).join('')}
           </tbody>
         </table>
-      
       </div>
       
       <div style="width:100%;page-break-before:always;break-before:always">
-      
-        <div style="background-color:#007fff;width:100%;height:5px;margin-top:20px"></div>
-          <p style="color:black;float:left"><b>${batchData.batch}</b></p>
-          <p style="color:black;float:right"><b>SERIALIZED ${Pref.item.toUpperCase()}S</b></p>
-        <div style="background-color:#007fff;width:100%;height:5px;margin:20px 0;clear:both"></div>
-            
         <table style="width:100%;table-layout:auto;border-collapse:collapse">
           <thead>
+            <tr>
+              <th colspan="${sub ? '8' : '7'}">
+                <div style="background-color:#007fff;width:100%;height:5px;margin-top:20px"></div>
+                  <p style="color:black;float:left"><b>${batchData.batch}</b></p>
+                  <p style="color:black;float:right"><b>SERIALIZED ${Pref.item.toUpperCase()}S</b></p>
+                <div style="background-color:#007fff;width:100%;height:5px;margin:20px 0;clear:both"></div>
+              </th>
+            </tr>
             <tr>
               <th style="${hsty}">Serial</th>
               ${sub ? `<th style="${hsty}">Sub-Serials</th>` : ''}
@@ -285,7 +291,7 @@ const BatchExport = ({
               <th style="${hsty}">Noncons</th>
               <th style="${hsty}">Shortfalls</th>
               <th style="${hsty}">Scrapped</th>
-              <th style="${hsty}"}>Completed</th>
+              <th style="${hsty}">Completed</th>
             </tr>
           </thead>
           <tbody>
@@ -298,7 +304,6 @@ const BatchExport = ({
             }).join('')}
           </tbody>
         </table>
-      
       </div>
       
     </div>`;
