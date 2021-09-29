@@ -5,7 +5,7 @@ const NavButton = ({ title, icon, link, blank, tag }) => (
   <span className='navButtonWrap'>
     <a href={link || ''} target={blank ? '_blank' : ''}>
       <i
-        className={'fas ' + (icon || 'fa-unlink') + ' fa-fw navButtonIcon'}></i>
+        className={(icon || 'fas fa-unlink') + ' fa-fw navButtonIcon'}></i>
       <i className='navButtonText'
       >{title || ''}{tag && <sup className='monoFont'><wbr />{tag}</sup>}</i>
     </a>

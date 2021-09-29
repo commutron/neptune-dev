@@ -5,7 +5,6 @@ import Pref from '/client/global/pref.js';
 import InboxToastPop from '/client/utility/InboxToastPop.js';
 import Spin from '/client/components/tinyUi/Spin.jsx';
 
-// import ErrorCatch from '/client/layouts/ErrorCatch.jsx';
 import HomeIcon from '/client/layouts/HomeIcon.jsx';
 import TideFollow from '/client/components/tide/TideFollow.jsx';
 
@@ -14,7 +13,6 @@ import { ToastContainer } from 'react-toastify';
 import HomeLogout from '/client/components/tinyUi/HomeLogout.jsx';
 import NavButton from '/client/layouts/NavButton/NavButton';
 import { NavButtonShell } from '/client/layouts/NavButton/NavButton';
-//import { NavPlaceholderShell } from '/client/components/smallUi/NavButton/NavButton.jsx';
 import { NavPlaceholder } from '/client/layouts/NavButton/NavButton';
 
 const StartView = ({user, app}) =>	{
@@ -46,12 +44,6 @@ const StartView = ({user, app}) =>	{
 	
   const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
   const isReadOnly = Roles.userIsInRole(Meteor.userId(), 'readOnly');
-  // const isNigh = Roles.userIsInRole(Meteor.userId(), 'nightly');
-  
-  // const isSales = Roles.userIsInRole(Meteor.userId(), 'sales');
-  // const isPeople = Roles.userIsInRole(Meteor.userId(), 'peopleSuper');
-  // ${isNigh ?'fa-meteor'
-  // const isPreview = isAdmin || isNigh || isSales || isPeople;
   
   return(
     <div className='splashContainer'>
@@ -89,13 +81,13 @@ const StartView = ({user, app}) =>	{
             </span>
           } />
         
-        <NavButton title='Explore' icon='fa-rocket' link='/data' />
+        <NavButton title='Explore' icon='fas fa-rocket' link='/data' />
         
-        <NavButton title={Pref.upstream} icon='fa-satellite-dish' link='/upstream' />
+        <NavButton title={Pref.upstream} icon='fas fa-satellite-dish' link='/upstream' />
         
-        <NavButton title={Pref.downstream} icon='fa-satellite' link='/downstream' />
+        <NavButton title={Pref.downstream} icon='fas fa-satellite' link='/downstream' />
         
-        <NavButton title={usernice} icon='fa-user-astronaut fa-flip-horizontal' link='/user' />
+        <NavButton title={usernice} icon='fas fa-user-astronaut fa-flip-horizontal' link='/user' />
         
         {!app.timeClock || app.timeClock.trim() === '' ?  
           <NavPlaceholder 
@@ -103,16 +95,16 @@ const StartView = ({user, app}) =>	{
             icon='fas fa-clock' /> :
           <NavButton
             title={Pref.timeClock} 
-            icon='fa-clock' 
+            icon='fas fa-clock' 
             link={app.timeClock || ''} 
             blank={true} /> }
         
-        <NavButton title={Pref.docs} icon='fa-file-invoice' link={app.instruct || ''} blank={true} />
+        <NavButton title={Pref.docs} icon='fas fa-file-invoice' link={app.instruct || ''} blank={true} />
         
-        <NavButton title='Help' icon='fa-question' link={app.helpDocs || ''} blank={true} />
+        <NavButton title='Help' icon='far fa-question-circle' link={app.helpDocs || ''} blank={true} />
         
         {isAdmin ?
-          <NavButton title='Settings' icon='fa-sliders-h' link='/app' />
+          <NavButton title='Settings' icon='fas fa-sliders-h' link='/app' />
         : <NavPlaceholder title='Settings' icon='fas fa-sliders-h'/>}
         
         <HomeLogout currentUser={user.username} />

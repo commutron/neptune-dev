@@ -80,7 +80,7 @@ const ItemExport = ({ group, widget, variant, batch, sales, itemData, noncon, sh
           <tr>
             <td colspan='2' class='body' style="padding:1% 5% 2% 5%;line-height: 1.5">
               <p style="margin:1rem 0;font-size:24pt"><b>${itemData.serial}</b></p>
-              ${itemData.subItems.length > 0 ? `<p style="margin:1rem 0;font-size:14pt"><b>${itemData.subItems.join(', ')}</b></p>` : ''}
+              ${itemData.subItems.length > 0 ? `<p style="margin:1rem 0;font-size:14pt">Children: <b>${itemData.subItems.join(', ')}</b></p>` : ''}
               ${nsted ? `<p style="margin:1rem 0;font-size:14pt">Parent: <b>${prntN}</b></p>` : ''}
             </td>
           </tr>
