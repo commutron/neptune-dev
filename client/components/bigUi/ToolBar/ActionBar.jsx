@@ -41,18 +41,23 @@ const ActionBar = ({
           seriesId={seriesData._id}
           batchNum={batchData.batch}
     	    item={itemData} />
-        <UndoFinishX
-    	    batchId={batchData._id}
-    	    finishedAtB={batchData.completedAt}
-    	    seriesId={seriesData._id}
-    	    serial={itemData.serial}
-    	    finishedAtI={itemData.completedAt}
-    	    rapidData={rapidData}
-    	    rapids={itemData.altPath.filter(x=> x.rapId !== false)} />
-        <ItemIncompleteX
-          seriesId={seriesData._id}
-          item={itemData}
-          app={app} />
+        {itemData.completed ?
+          <UndoFinishX
+      	    batchId={batchData._id}
+      	    finishedAtB={batchData.completedAt}
+      	    seriesId={seriesData._id}
+      	    serial={itemData.serial}
+      	    finishedAtI={itemData.completedAt}
+      	    rapidData={rapidData}
+      	    rapids={itemData.altPath.filter(x=> x.rapId !== false)}
+      	 />
+      	 :
+          <ItemIncompleteX
+            seriesId={seriesData._id}
+            item={itemData}
+            app={app}
+          />
+        }
         <ScrapItemX
           seriesId={seriesData._id}
           item={itemData}

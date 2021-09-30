@@ -494,7 +494,8 @@ Meteor.methods({
     if(!subSerial || serial === subSerial || !Roles.userIsInRole(Meteor.userId(), 'active')) {
       return false;
     }else{
-      XSeriesDB.update({_id: seriesId, orgKey: Meteor.user().orgKey, 'items.serial': serial}, {
+      const orgKey = Meteor.user().orgKey;
+      XSeriesDB.update({_id: seriesId, orgKey: orgKey, 'items.serial': serial}, {
         $push : { 
           'items.$.history': {
             key: key,
@@ -556,7 +557,7 @@ Meteor.methods({
           if(benchmark === 'first') {
             Meteor.call(
               'setXBatchEvent', 
-              Meteor.user().orgKey,
+              orgKey,
               batchId, 
               'Start of Process', 
               `First ${step} ${type} recorded by ${username}`
@@ -564,7 +565,7 @@ Meteor.methods({
           }else if(benchmark === 'last') {
             Meteor.call(
               'setXBatchEvent', 
-              Meteor.user().orgKey, 
+              orgKey,
               batchId, 
               'End of Process', 
               `Final ${step} ${type} recorded by ${username}`
