@@ -8,7 +8,6 @@ const PanelBreakX = ({ seriesId, batchId, batchNum, item })=> {
   
   const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
   let done = item.completed;
-  this.regex810 = RegExp(/^(\d{8,10})$/);
   
   const aT = !auth ? Pref.norole : '';
   const lock = done || item.units < 2;
@@ -74,8 +73,7 @@ const PanelBreakForm = ({ seriesId, batchId, batchNum, item })=> {
       <p className='medBig space'>
         <b>Transform this item into new individual units</b><br />
         <i>New Items are created with a copy of this item's history</i><br />
-        <i>NonConformances WILL BE LOST</i><br />
-        <i>The new serial numbers are NOT checked for duplicates</i><br />
+        <i>NonConformances & Shortfalls WILL BE LOST</i><br />
         <i>The highest serial number is NOT saved in the app settings</i><br />
         <i>The original IS deleted</i><br />
       </p>
@@ -95,7 +93,7 @@ const PanelBreakForm = ({ seriesId, batchId, batchNum, item })=> {
               required></textarea>
             <label htmlFor='con'>New serials for each new item</label>
             <br />
-            <em>{item.units} numbers, seperated by a space</em>
+            <em>{item.units} numbers, separated by a space</em>
           </p>
           <ol className='medBig'>
             {newSerials.map( (entry, index)=>{

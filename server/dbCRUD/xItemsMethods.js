@@ -280,26 +280,33 @@ Meteor.methods({
     
     const srs = XSeriesDB.findOne({_id: seriesId, orgKey: accessKey},{fields:{'items':1}});
     const item = srs ? srs.items.find( x => x.serial === bar ) : false;
+    const subs = [...item.subItems, bar];
     if(auth && item) {
+      let preCheck = [];
       for(let serialTry of newSerials) {
-        
         const dupNew = XSeriesDB.findOne({ 'items.serial': serialTry },{fields:{'_id':1}});
         const correctFormat = regexSN.test(serialTry);
         
         if(dupNew || !correctFormat) {
-          null;
+          preCheck.push(false);
         }else{
-              
+          preCheck.push(true);
+        }
+      }
+      
+      if( preCheck.length > 0 && preCheck.every( x => x === true ) ) {
+        for(let newserial of newSerials) {
+                
           XSeriesDB.update(seriesId, {
             $push : { items : {
-              serial: serialTry,
+              serial: newserial,
               createdAt: new Date(),
               createdWho: Meteor.userId(),
               completed: false,
               completedAt: false,
               completedWho: false,
               units: Number(1),
-              subItems: [bar],
+              subItems: subs,
               history: item.history,
               altPath: item.altPath
           }}});
