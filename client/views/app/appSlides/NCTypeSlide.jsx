@@ -165,66 +165,68 @@ const TopNCSlide = ({ app })=> {
   }
   
   return(
-    <div className='autoFlex'>
+    <div>
       <h2 className='cap'>{Pref.nonCon} Types</h2>
-      <h3>: Options for types of {Pref.nonCon}s</h3>
+      <h3>Options for types of {Pref.nonCon}s</h3>
       
-      <div>
-        <h3>Create A New List</h3>
-        <form 
-          id={rndmKey + 'form'} 
-          onSubmit={(e)=>newTypeList(e)}
-          className='inlineForm'>
-          <label htmlFor={rndmKey + 'inputTitle'}>List Title<br />
-            <input
-              type='text'
-              id={rndmKey + 'inputTitle'}
-              placeholder='Descriptive Name'
-              required
-            />
-          </label>
-          <label htmlFor={rndmKey + 'inputPre'}>Defect Code Prefix<br />
-            <input
-              type='text'
-              id={rndmKey + 'inputPre'}
-              maxLength={2}
-              pattern="[a-z]{1-2}"
-              placeholder='Letter Pefix'
-              required
-            />
-          </label>
-          <label htmlFor={rndmKey + 'go'}><br />
-            <button
-              type='submit'
-              id={rndmKey + 'go'}
-              className='smallAction clearGreen'
-              disabled={false}
-            >Add</button>
-          </label>
-        </form>
-      </div>
-      
-      <div>
-        <h3 className='cap'>missing type</h3>
-        <i>Type of {Pref.nonCon} that can be converted into a shortfall</i>
-        <AppSetSimple
-          title='type'
-          action='addMissingType'
-          rndmKey={Math.random().toString(36).substr(2, 5)} />
-        <i><em>currently set to: </em>{app.missingType || ''}</i>
-      </div>
-      
-      {app.nonConOption &&
+      <div className='autoFlex'>
         <div>
-          <h3>Legacy List</h3>
-          <ol>
-            {app.nonConOption.map( (entry, index)=>{
-              return( 
-                <li key={index}>{entry}</li>
-            )})}
-          </ol>
+          <h3>Create A New List</h3>
+          <form 
+            id={rndmKey + 'form'} 
+            onSubmit={(e)=>newTypeList(e)}
+            className='inlineForm'>
+            <label htmlFor={rndmKey + 'inputTitle'}>List Title<br />
+              <input
+                type='text'
+                id={rndmKey + 'inputTitle'}
+                placeholder='Descriptive Name'
+                required
+              />
+            </label>
+            <label htmlFor={rndmKey + 'inputPre'}>Defect Code Prefix<br />
+              <input
+                type='text'
+                id={rndmKey + 'inputPre'}
+                maxLength={2}
+                pattern="[a-z]{1-2}"
+                placeholder='Letter Pefix'
+                required
+              />
+            </label>
+            <label htmlFor={rndmKey + 'go'}><br />
+              <button
+                type='submit'
+                id={rndmKey + 'go'}
+                className='smallAction clearGreen'
+                disabled={false}
+              >Add</button>
+            </label>
+          </form>
         </div>
-      }
+      
+        <div>
+          <h3 className='cap'>missing type</h3>
+          <i>Type of {Pref.nonCon} that can be converted into a shortfall</i>
+          <AppSetSimple
+            title='type'
+            action='addMissingType'
+            rndmKey={Math.random().toString(36).substr(2, 5)} />
+          <i><em>currently set to: </em>{app.missingType || ''}</i>
+        </div>
+      
+        {app.nonConOption &&
+          <div>
+            <h3>Legacy List</h3>
+            <ol>
+              {app.nonConOption.map( (entry, index)=>{
+                return( 
+                  <li key={index}>{entry}</li>
+              )})}
+            </ol>
+          </div>
+        }
+      </div>
       
     </div>
   );

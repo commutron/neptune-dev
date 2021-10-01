@@ -18,9 +18,14 @@ const TrackStepSlide = ({ app, branchesS, sorted })=> {
     Meteor.call('addTrackStepOption', newOp, type, branch, (error, reply)=>{
       error && console.log(error);
       if(reply) {
-        this[rndmKey + 'input'].value = '';
-        this[rndmKey + 'type'].value = '';
-        this[rndmKey + 'branch'].value = '';
+        if(reply === 'duplicate') {
+          toast.warn('Duplicate');
+        }else{
+          toast.success('Saved');
+          this[rndmKey + 'input'].value = '';
+          this[rndmKey + 'type'].value = '';
+          this[rndmKey + 'branch'].value = '';
+        }
       }else{
         toast.error('Server Error');
       }
@@ -70,7 +75,7 @@ const TrackStepSlide = ({ app, branchesS, sorted })=> {
             </select>
           </label>
           <label htmlFor={rndmKey + 'branch'}>{Pref.branch}<br />
-            <select id={rndmKey + 'branch'} required >
+            <select id={rndmKey + 'branch'} required>
               <option></option>
               {branchesS.map( (entry, index)=>{
                 return( 
@@ -89,19 +94,6 @@ const TrackStepSlide = ({ app, branchesS, sorted })=> {
         </form>
         
         <hr />
-      
-        
-        <details>
-          <summary>no branch</summary>
-          {sorted.filter( s => !s.branchKey).map( (entry, index)=>{
-            return( 
-              <TrackStepEdit 
-                key={rndmKey + index + entry.key} 
-                app={app}
-                branchesSort={branchesS}
-                data={entry} />
-          )})}
-        </details>
         
         {branchesS.map( (bentry, bindex)=>{
           const bsteps = sorted.filter( s => s.branchKey === bentry.brKey);

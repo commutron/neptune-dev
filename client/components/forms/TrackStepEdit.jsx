@@ -15,7 +15,7 @@ const TrackStepEdit = ({app, branchesSort, data})=> {
     Meteor.call('editTrackStepOption', opKey, step, type, branch, (error, reply)=>{
       error && console.log(error);
       if(reply) {
-        toast.success('Saved');
+        reply === 'duplicate' ? toast.warn('Duplicate') : toast.success('Saved');
       }else{
         toast.warning('Server Error');
       }
@@ -53,8 +53,7 @@ const TrackStepEdit = ({app, branchesSort, data})=> {
         <select
           id={opKey + 'branch'}
           defaultValue={data.branchKey || null} 
-          required >
-          <option></option>
+          required>
           {branchesSort.map( (entry, index)=>{
             return( 
               <option

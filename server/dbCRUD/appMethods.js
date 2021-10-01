@@ -222,17 +222,24 @@ Meteor.methods({
   
   addTrackStepOption(step, type, branch) {
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
-      AppDB.update({orgKey: Meteor.user().orgKey}, {
-        $push : { 
-          trackOption : { 
-            'key' : new Meteor.Collection.ObjectID().valueOf(),
-            'step' : step,
-            'type' : type,
-            'branchKey' : branch,
-            'how' : false
-          }
-      }});
-      return true;
+      const app = AppDB.findOne({orgKey: Meteor.user().orgKey});
+      const chk = app.trackOption.find( x => x.step + x.type === step + type );
+      
+      if(!chk) {
+        AppDB.update({orgKey: Meteor.user().orgKey}, {
+          $push : { 
+            trackOption : { 
+              'key' : new Meteor.Collection.ObjectID().valueOf(),
+              'step' : step,
+              'type' : type,
+              'branchKey' : branch,
+              'how' : false
+            }
+        }});
+        return true;
+      }else{
+        return 'duplicate';
+      }
     }else{
       return false;
     }
@@ -240,14 +247,22 @@ Meteor.methods({
   
   editTrackStepOption(opKey, step, type, branch) {
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
-      AppDB.update({orgKey: Meteor.user().orgKey, 'trackOption.key' : opKey}, {
-        $set : { 
-          'trackOption.$.step' : step,
-          'trackOption.$.type' : type,
-          'trackOption.$.branchKey' : branch
-          }
-      });
-      return true;
+      const app = AppDB.findOne({orgKey: Meteor.user().orgKey});
+      const mch = app.trackOption.filter( x => x.step + x.type === step + type );
+      const chk = mch.length === 0 || mch.every( x => x.key === opKey );
+      
+      if(chk) {
+        AppDB.update({orgKey: Meteor.user().orgKey, 'trackOption.key' : opKey}, {
+          $set : { 
+            'trackOption.$.step' : step,
+            'trackOption.$.type' : type,
+            'trackOption.$.branchKey' : branch
+            }
+        });
+        return true;
+      }else{
+        return 'duplicate';
+      }
     }else{
       return false;
     }
@@ -279,30 +294,45 @@ Meteor.methods({
     const type = split[1];
     const branch = split[2];
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
-      AppDB.update({orgKey: Meteor.user().orgKey}, {
-        $push : { 
-          countOption : { 
-            key : new Meteor.Collection.ObjectID().valueOf(),
-            gate : gate,
-            type : type,
-            branchKey : branch
-          }
-      }});
-      return true;
+      const app = AppDB.findOne({orgKey: Meteor.user().orgKey});
+      const chk = app.countOption.find( x => x.gate + x.type === gate + type );
+      
+      if(!chk) {
+        AppDB.update({orgKey: Meteor.user().orgKey}, {
+          $push : { 
+            countOption : { 
+              key : new Meteor.Collection.ObjectID().valueOf(),
+              gate : gate,
+              type : type,
+              branchKey : branch
+            }
+        }});
+        return true;
+      }else{
+        return 'duplicate';
+      }
     }else{
       return false;
     }
   },
   editCountOption(opKey, gate, type, branch) {
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
-      AppDB.update({orgKey: Meteor.user().orgKey, 'countOption.key' : opKey}, {
-        $set : { 
-          'countOption.$.gate' : gate,
-          'countOption.$.type' : type,
-          'countOption.$.branchKey' : branch
-          }
-      });
-      return true;
+      const app = AppDB.findOne({orgKey: Meteor.user().orgKey});
+      const mch = app.countOption.filter( x => x.gate + x.type === gate + type );
+      const chk = mch.length === 0 || mch.every( x => x.key === opKey );
+      
+      if(chk) {
+        AppDB.update({orgKey: Meteor.user().orgKey, 'countOption.key' : opKey}, {
+          $set : { 
+            'countOption.$.gate' : gate,
+            'countOption.$.type' : type,
+            'countOption.$.branchKey' : branch
+            }
+        });
+        return true;
+      }else{
+        return 'duplicate';
+      }
     }else{
       return false;
     }

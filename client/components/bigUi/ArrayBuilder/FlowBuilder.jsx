@@ -3,10 +3,7 @@ import Pref from '/client/global/pref.js';
 
 import './style.css';
 
-import { 
-  branchOptions,
-  FinishOptions
-} from './FlowElements';
+import { branchOptions, FinishOptions } from './FlowElements';
 
 import { branchesSort } from '/client/utility/Arrays';
 
@@ -135,7 +132,7 @@ const FlowBuilder = ({ app, options, defaultEnd, baseline, onClick })=> {
               id='phasefltr' 
               onChange={(e)=>branchSet( e.target.value )} 
               required>
-              <option value='other'>No Branch</option>
+              <option value={false}></option>
               {brancheS.map( (entry, index)=>{
                 return( 
                   <option 

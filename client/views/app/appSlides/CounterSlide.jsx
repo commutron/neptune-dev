@@ -2,7 +2,7 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import CountStepEdit from '/client/components/forms/CountStepEdit.jsx';
+import CountStepEdit from '/client/components/forms/CountStepEdit';
 
 const CounterSlide = ({ app, branchesS })=> {
   
@@ -23,12 +23,16 @@ const CounterSlide = ({ app, branchesS })=> {
     const newSet = newOp + '|' + type + '|' + branch;
     
     Meteor.call('addCountOption', newSet, (error, reply)=>{
-      if(error)
-        console.log(error);
+      error && console.log(error);
       if(reply) {
-        this[rndmKey + 'input'].value = '';
-        this[rndmKey + 'type'].value = '';
-        this[rndmKey + 'branch'].value = '';
+        if(reply === 'duplicate') {
+          toast.warn('Duplicate');
+        }else{
+          toast.success('Saved');
+          this[rndmKey + 'input'].value = '';
+          this[rndmKey + 'type'].value = '';
+          this[rndmKey + 'branch'].value = '';
+        }
       }else{
         toast.warning('server error');
       }
