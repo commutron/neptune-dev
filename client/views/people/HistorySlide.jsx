@@ -164,7 +164,7 @@ const TidePeoplePlot = ({ tide, isDebug, app })=> {
     for(let t of tide) {
       const strt = moment(t.startTime).hour();
       const stop = moment(t.stopTime || new Date()).hour();
-      const dhrs = Math.abs(stop - strt);
+      const dhrs = stop >= strt ? Math.abs(stop - strt) : Math.abs((23 + stop) - strt);
       for(let i = dhrs; i > -1; i--) {
         hoursTide.push({
           startTime: moment(t.startTime).add(i, 'hours').format(),

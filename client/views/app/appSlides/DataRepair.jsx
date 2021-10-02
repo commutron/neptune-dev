@@ -180,6 +180,27 @@ const DataRepair = ({ app, users })=> {
       </div>
       
       <div>
+        <h3><i className="fas fa-stethoscope fa-lg gap"></i>
+          Ship and Quote Diagnostic
+        </h3>
+        <form onSubmit={(e)=>requestDiagnostic(e)}>
+          <p>
+            <input
+              id='inputBid'
+              placeholder='XBatch _id'
+              required
+            />
+          </p>
+          <p>
+            <button
+              className='action clearBlue'
+              type='submit'
+            >Request Log</button>
+          </p>
+        </form>
+      </div>
+      
+      <div>
         <h3><i className="fas fa-map-marker-alt fa-lg gap"></i>
           Repair NonCon "Where" Data
         </h3>
@@ -200,27 +221,6 @@ const DataRepair = ({ app, users })=> {
             type='submit'
             className='action clearBlack'
           >fix</button>
-        </form>
-      </div>
-      
-      <div>
-        <h3><i className="fas fa-stethoscope fa-lg gap"></i>
-          Ship and Quote Diagnostic
-        </h3>
-        <form onSubmit={(e)=>requestDiagnostic(e)}>
-          <p>
-            <input
-              id='inputBid'
-              placeholder='XBatch _id'
-              required
-            />
-          </p>
-          <p>
-            <button
-              className='action clearBlue'
-              type='submit'
-            >Request Log</button>
-          </p>
         </form>
       </div>
       

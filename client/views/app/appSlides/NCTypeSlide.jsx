@@ -26,7 +26,7 @@ const NCTypeSlide = ({ app })=> {
   
   
   const ncListS = app.nonConTypeLists.sort((b1, b2)=> {
-    return b1.listPrefix < b2.listPrefix ? 1 : b1.listPrefix > b2.listPrefix ? 1 : 0 });
+    return b1.listPrefix > b2.listPrefix ? 1 : b1.listPrefix < b2.listPrefix ? -1 : 0 });
             
   const listMenu = Array.from(ncListS, n => [ `${n.listPrefix}. ${n.listName}` ]);
   
@@ -111,7 +111,7 @@ const SetDefault = ({ listKey, defaultOn })=> {
         defaultChecked={defaultOn}
         onChange={()=>change()}
         readOnly />
-      <label htmlFor={listKey+'dfon'}>On By Default</label>
+      <label htmlFor={listKey+'dfon'}>Use By Default</label>
     </span>
   );
 };

@@ -50,6 +50,17 @@ const NotifySlide = ({ app })=> {
     <div className='space3v autoFlex'>
       
       <div>
+        <h2 className='cap'>Notification Styles:</h2>
+        <i>available toast notification styles</i>
+        <p>
+          <button
+            className='action clearBlue invert'
+            onClick={()=>showToast()}
+          >Test Toast Notifications</button>
+        </p>
+      </div>
+      
+      <div>
         <h2 className='cap'>Send a Notification</h2>
         <i>Causes a toast pop and a message in the user's inbox</i>
         <form>
@@ -67,17 +78,6 @@ const NotifySlide = ({ app })=> {
             onClick={(e)=>sendAtestNotify(e, true)}
           >Send Inbox Notification Test to ALL USERS</button>
         </form>
-      </div>
-      
-      <div>
-        <h2 className='cap'>Notification Styles:</h2>
-        <i>available toast notification styles</i>
-        <p>
-          <button
-            className='action clearBlue invert'
-            onClick={()=>showToast()}
-          >Test Toast Notifications</button>
-        </p>
       </div>
       
       <div>
