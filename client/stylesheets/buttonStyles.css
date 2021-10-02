@@ -298,7 +298,7 @@
   content: attr(data-bonus);
   position: absolute;
   top: calc(8.25 * var(--vh));
-  right: 15.2vmax;
+  right: 15vmax;
   z-index: 11;
   padding: 0.5em 1ch;
   background-color: rgb(245,245,245);

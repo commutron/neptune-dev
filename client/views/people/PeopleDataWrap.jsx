@@ -67,10 +67,10 @@ const PeopleDataWrap = ({
           menu={[
             <b><i className='fas fa-walking fa-fw gapR'></i>Current</b>,
             <b><i className='fas fa-history fa-fw gapR'></i>Daily History</b>,
-            <b><i className='fas fa-tachometer-alt fa-fw gapR'></i>Weekly Metrics</b>,
+            <b><i className='fas fa-tachometer-alt fa-fw gapR'></i>Weekly Utilization</b>,
             <b><i className='far fa-calendar-alt fa-fw gapR'></i>Work Schedule</b>,
             <b><i className='fas fa-hourglass-end fa-fw gapR'></i>Overtime Errors</b>,
-            <b><i className='fas fa-users-cog fa-fw gapR'></i>Account Manager</b>,
+            <b><i className='fas fa-users-cog fa-fw gapR'></i>Accounts Manager</b>,
             <b><i className='fas fa-user-lock fa-fw gapR'></i>Permissions</b>,
             <b><i className='fas fa-dice fa-fw gapR'></i>Revolving PIN</b>,
           ]}
