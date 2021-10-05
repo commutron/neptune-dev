@@ -204,22 +204,6 @@ Meteor.methods({
         }
       }
     }
-  },
-  
-  checkdeadname() {
-    const deadevents = XBatchDB.find({
-      "events.detail": { $regex: new RegExp( 'miranda' ) }
-    },{fields:{'batch':1}}).count();
-    
-    const meevents = XBatchDB.find({
-      "events.detail": { $regex: new RegExp( 'matthew' ) }
-    },{fields:{'batch':1}}).count();
-  
-    const resultstr = `${meevents} batches with Matthew, ${deadevents} batches with Gray`;
-    
-    console.log(resultstr);
-    
-    return resultstr;
   }
   
 });

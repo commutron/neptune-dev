@@ -128,11 +128,29 @@ Meteor.methods({
   selfUsernameChange(pass, newUsername) {
     const userId = Meteor.userId();
     const user = Meteor.user();
-   
+    const oldusername = user.username;
+    
     if(typeof pass === 'string' && typeof newUsername === 'string') {
       const result = Accounts._checkPassword(user, pass);
       if(result.error === undefined) {
         Accounts.setUsername(userId, newUsername);
+        
+        Meteor.defer( ()=>{
+          const deadname = XBatchDB.find({
+            "events.detail": { $regex: new RegExp( oldusername ) }
+          },{fields:{'events':1}}).fetch();
+          for(let b of deadname) {
+            for(let e of b.events) {
+              if(e.detail.includes(oldusername)) {
+                const re = e.detail.replace(oldusername, newUsername);
+                XBatchDB.update({_id: b._id, 'events.time': e.time}, {
+                  $set : { 'events.$.detail': re  }
+                });
+              }
+            }
+          }
+        });
+    
         return true;
       }else{
         return result.error;
