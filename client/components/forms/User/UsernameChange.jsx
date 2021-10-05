@@ -16,7 +16,7 @@ const UsernameChange = (props)=> {
 			}
 			if(reply === true) {
 				toast.success('Username changed corectly');
-				this.unPass.value = '';
+				this.namenowPassUser.value = '';
 			}else if(reply) {
 			  toast.error(reply.reason);
 			}

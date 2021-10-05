@@ -25,13 +25,13 @@ const BatchExport = ({
     
     const eventArray = [
       ...Array.from(batchData.events, x => 
-            [ x.title, x.detail, x.time ] ),
+            [ x.title, x.detail, new Date(x.time) ] ),
       ...Array.from(batchData.releases, x => 
-            [ getRel(brancheS, x.type), x.caution || '', x.time ] ),
+            [ getRel(brancheS, x.type), x.caution || '', new Date(x.time) ] ),
       ...Array.from(batchData.altered, x => 
-            [ 'Alter ' + x.changeKey, x.newValue, x.changeDate ] ),
+            [ 'Alter ' + x.changeKey, x.newValue, new Date(x.changeDate) ] ),
       ...Array.from(batchData.quoteTimeBudget, x => 
-            [ 'Set Quote Time Budget', ( x.timeAsMinutes || '0' ) + ' minutes', x.updatedAt ] )
+            [ 'Set Quote Time Budget', ( x.timeAsMinutes || '0' ) + ' minutes', new Date(x.updatedAt) ] )
     ];
     const eventS = eventArray.sort((a,b)=> a[2] > b[2] ? 1 : a[2] < b[2] ? -1 : 0);
         
@@ -267,7 +267,7 @@ const BatchExport = ({
             ${countS.map(function (row) {
               return `<tr>
                 ${row.map(function (cell, index) {
-                  if(index === 2) {
+                  if(index === 3) {
                     return `<td style="${csty}">${new Date(cell).toLocaleString()}</td>`;
                   }else{
                     return `<td style="${csty}">${cell}</td>`;
