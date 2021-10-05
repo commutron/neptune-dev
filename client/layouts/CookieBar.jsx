@@ -34,7 +34,7 @@ const CookieBar = ({
     {batchData && 
       <button 
         className='cookieCrumb numFont'
-        title={`${Pref.batch}: ${batchData.batch}`}
+        title={`${Pref.xBatch}: ${batchData.batch}`}
         onClick={()=>FlowRouter.go('/data/batch?request=' + batchData.batch)}
       >
         <span className='crumb'></span> {batchData.batch}

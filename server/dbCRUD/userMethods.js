@@ -137,7 +137,10 @@ Meteor.methods({
         
         Meteor.defer( ()=>{
           const deadname = XBatchDB.find({
-            "events.detail": { $regex: new RegExp( oldusername ) }
+            $or: [ 
+              { "events.detail": { $regex: new RegExp( oldusername ) } },
+              { "events.sub": { $regex: new RegExp( oldusername ) } },
+            ]
           },{fields:{'events':1}}).fetch();
           for(let b of deadname) {
             for(let e of b.events) {
@@ -145,6 +148,12 @@ Meteor.methods({
                 const re = e.detail.replace(oldusername, newUsername);
                 XBatchDB.update({_id: b._id, 'events.time': e.time}, {
                   $set : { 'events.$.detail': re  }
+                });
+              }
+              if(e.sub && e.sub.includes(oldusername)) {
+                const re = e.sub.replace(oldusername, newUsername);
+                XBatchDB.update({_id: b._id, 'events.time': e.time}, {
+                  $set : { 'events.$.sub': re  }
                 });
               }
             }

@@ -25,13 +25,13 @@ const BatchExport = ({
     
     const eventArray = [
       ...Array.from(batchData.events, x => 
-            [ x.title, x.detail, new Date(x.time).toLocaleString() ] ),
+            [ x.title, x.detail, x.time ] ),
       ...Array.from(batchData.releases, x => 
-            [ getRel(brancheS, x.type), x.caution || '', new Date(x.time).toLocaleString() ] ),
+            [ getRel(brancheS, x.type), x.caution || '', x.time ] ),
       ...Array.from(batchData.altered, x => 
-            [ 'Alter ' + x.changeKey, x.newValue, new Date(x.changeDate).toLocaleString() ] ),
+            [ 'Alter ' + x.changeKey, x.newValue, x.changeDate ] ),
       ...Array.from(batchData.quoteTimeBudget, x => 
-            [ 'Set Quote Time Budget', ( x.timeAsMinutes || '0' ) + ' minutes', new Date(x.updatedAt).toLocaleString() ] )
+            [ 'Set Quote Time Budget', ( x.timeAsMinutes || '0' ) + ' minutes', x.updatedAt ] )
     ];
     const eventS = eventArray.sort((a,b)=> a[2] > b[2] ? 1 : a[2] < b[2] ? -1 : 0);
         
@@ -45,7 +45,7 @@ const BatchExport = ({
     let countArr = [];
     for( let w of batchData.waterfall) {
       for( let x of w.counts ) { 
-        countArr.push( [ w.gate, w.type, x.tick, new Date(x.time).toLocaleString() ] );
+        countArr.push( [ w.gate, w.type, x.tick, x.time ] );
       }
     }
     const countS = [...countArr].sort((a,b)=> a[3] > b[3] ? 1 : a[3] < b[3] ? -1 : 0);
@@ -169,9 +169,12 @@ const BatchExport = ({
           <tbody>
             ${eventS.map(function (row) {
               return `<tr>
-                ${row.map(function (cell) {
-                  return `<td style="${csty}">${cell}</td>`;
-                }).join('')
+                ${row.map(function (cell, index) {
+                  if(index === 2) {
+                    return `<td style="${csty}">${new Date(cell).toLocaleString()}</td>`;
+                  }else{
+                    return `<td style="${csty}">${cell}</td>`;
+                }}).join('')
               }</tr>`;
             }).join('')}
           </tbody>
@@ -263,9 +266,12 @@ const BatchExport = ({
           <tbody>
             ${countS.map(function (row) {
               return `<tr>
-                ${row.map(function (cell) {
-                  return `<td style="${csty}">${cell}</td>`;
-                }).join('')
+                ${row.map(function (cell, index) {
+                  if(index === 2) {
+                    return `<td style="${csty}">${new Date(cell).toLocaleString()}</td>`;
+                  }else{
+                    return `<td style="${csty}">${cell}</td>`;
+                }}).join('')
               }</tr>`;
             }).join('')}
           </tbody>
