@@ -53,8 +53,11 @@
   color: rgb(30,30,30);
 }
 .navButtonPlaceHolder {
-  background-color: rgb(20,20,20);
-  filter: grayscale(100%) opacity(0.1);
+  background-color: rgb(30,30,30);
+}
+.navButtonPlaceHolder .navButtonIcon,
+.navButtonPlaceHolder .navButtonText {
+  color: rgb(50,50,50);
 }
 .navButtonLayerCorrect {
   height: 1em;

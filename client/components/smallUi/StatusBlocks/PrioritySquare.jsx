@@ -154,9 +154,7 @@ export const PrioritySquare = ({
     const soonTxt = `Soonest Complete: ${moment(pt.estSoonest).format("ddd, MMM Do, h:mm a")}`;
     
     const title = `${prTxt}\n${ovrTxt}\n\n${treTxt}\n${soonTxt}`;
-    const debugTitle = `${prTxt}\n${ovrTxt}\n\n
-                        ${treTxt}\nquote-to-tide: ${q2t}\n${soonTxt}\n\n
-                        ${bffTxt}\n${pt.bffrRel}`;
+    const debugTitle = `${prTxt}\n${ovrTxt}\n\n${treTxt}\nquote-to-tide: ${q2t}\n${soonTxt}\n\n${bffTxt}\n${pt.bffrRel}`;
     
     if(showExtra && !showLess) {
       return(

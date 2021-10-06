@@ -75,11 +75,16 @@ export function noIg() {
   return xg ? xg._id : 'n0ne';
 }
 
-export function getEst(widgetId, quantity) {
+export function getEst(widgetId, quantity, pTgt) {
   const wdjt = WidgetDB.findOne({ _id: widgetId });
   const perQ = !wdjt.quoteStats ? 0 : wdjt.quoteStats.stats.tidePerItemAvg;
   const mEst = perQ * quantity;
-  return mEst;
+  
+  let cEst = mEst;
+  for(let x = pTgt || 0; x > 0; x--) { 
+    cEst = cEst - ( cEst * 0.15 ); 
+  }
+  return cEst;
 }
 
 export function toCap(str, all) { 

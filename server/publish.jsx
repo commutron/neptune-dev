@@ -463,7 +463,6 @@ Meteor.publish('hotDataEx', function(dataView, dataRequest, hotWidget){
   
   let hothotWidgetID = false;
   let hothotWidget = hotWidget || false;
-  // let hothotGroup = false;
   
   if(!hothotWidget) {
     const hotXBatch = XBatchDB.findOne({ batch: dataRequest });
@@ -472,7 +471,6 @@ Meteor.publish('hotDataEx', function(dataView, dataRequest, hotWidget){
       if(maybe) {
         hothotWidgetID = maybe._id;
         hothotWidget = maybe.widget;
-        // hothotGroup = maybe.groupId;
       }
     }
   }else{
@@ -481,7 +479,6 @@ Meteor.publish('hotDataEx', function(dataView, dataRequest, hotWidget){
     if(otherwise) {
       hothotWidgetID = otherwise._id;
       hothotWidget = otherwise.widget;
-      // hothotGroup = otherwise.groupId;
     }
   }
                     

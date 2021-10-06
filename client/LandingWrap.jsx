@@ -89,25 +89,25 @@ const StartView = ({user, app}) =>	{
         
         <NavButton title={usernice} icon='fas fa-user-astronaut fa-flip-horizontal' link='/user' />
         
+        {isAdmin ?
+          <NavButton title='Settings' icon='fas fa-sliders-h' link='/app' />
+        : <NavPlaceholder title='Settings' icon='fas fa-sliders-h'/>}
+        
+        <NavButton title={Pref.docs} icon='fas fa-file-invoice' link={app.instruct || ''} blank={true} />
+        
+        <NavButton title='Help' icon='far fa-question-circle' link={app.helpDocs || ''} blank={true} />
+        
         {!app.timeClock || app.timeClock.trim() === '' ?  
           <NavPlaceholder 
             title={Pref.timeClock} 
-            icon='fas fa-clock' /> :
+            icon='far fa-clock' /> :
           <NavButton
             title={Pref.timeClock} 
             icon='fas fa-clock' 
             link={app.timeClock || ''} 
             blank={true} /> }
         
-        <NavButton title={Pref.docs} icon='fas fa-file-invoice' link={app.instruct || ''} blank={true} />
-        
-        <NavButton title='Help' icon='far fa-question-circle' link={app.helpDocs || ''} blank={true} />
-        
-        {isAdmin ?
-          <NavButton title='Settings' icon='fas fa-sliders-h' link='/app' />
-        : <NavPlaceholder title='Settings' icon='fas fa-sliders-h'/>}
-        
-        <HomeLogout currentUser={user.username} />
+        <HomeLogout currentUser={user} />
       
       </div>
     </div>

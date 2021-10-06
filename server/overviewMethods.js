@@ -45,7 +45,10 @@ function collectPriority(privateKey, batchID, mockDay) {
     if(!b) {
       resolve(false);
     }else{
-      const mEst = getEst(b.widgetId, b.quantity);
+      const trc = TraceDB.findOne({batchID: bData._id});
+      const tgt = trc ? trc.performTgt || 0 : 0;
+      
+      const mEst = getEst(b.widgetId, b.quantity, tgt);
 
       const oRapid = XRapidsDB.findOne({extendBatch: b.batch, live: true});
       const rapIs = oRapid ? oRapid.rapid : false;
@@ -108,8 +111,10 @@ function getFastPriority(bData, now, shipAim) {
     
     if(qtBready && bData.tide && !doneEntry) {
       const shipLoad = getShipLoad(now);
+      const trc = TraceDB.findOne({batchID: bData._id});
+      const tgt = trc ? trc.performTgt || 0 : 0;
       
-      const mEst = getEst(bData.widgetId, bData.quantity);
+      const mEst = getEst(bData.widgetId, bData.quantity, tgt);
       
       const dryCalc = dryPriorityCalc(bData.quoteTimeBudget, mEst, bData.tide, shipAim, now, shipLoad);
       
@@ -255,7 +260,7 @@ Meteor.methods({
       const tide = b.tide || [];
       const totalTideMinutes = batchTideTime(tide);
       
-      const mEst = getEst(b.widgetId, b.quantity);
+      const mEst = getEst(b.widgetId, b.quantity, 0);
       const budget = b.quoteTimeBudget || [];
       const mQuote = budget.length === 0 ? 0 : Number(budget[0].timeAsMinutes);
       const estMinutes = mQuote === 0 ? mEst :
