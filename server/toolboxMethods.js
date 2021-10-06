@@ -184,7 +184,10 @@ Meteor.methods({
       if(!b) {
         return batchID;
       }else{
-        const mEst = getEst(b.widgetId, b.quantity);
+        const trc = TraceDB.findOne({batchID: b._id});
+        const tgt = trc ? trc.performTgt || 0 : 0;
+        const mEst = getEst(b.widgetId, b.quantity, tgt);
+        
         const shipLoad = getShipLoad(now);
         
         const qtBready = !!b.quoteTimeBudget;

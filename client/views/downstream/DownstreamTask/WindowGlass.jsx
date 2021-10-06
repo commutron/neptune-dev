@@ -6,7 +6,7 @@ const WindowGlass = ({
   brancheS, app, user, isDebug, canDo, focusBy, dense, updateTrigger
 })=> {
   
-  const statCols = ['sales order','active','quote'];
+  const statCols = ['sales order','active','estimate'];
   const progCols = ['total items',...Array.from(brancheS, x => x.common)];
   const ncCols = ['NC total', 'NC remain', 'NC rate', 'NC items', 'scrap', 'RMA'];
   const headersArr = [...statCols,...progCols,'Perfomance',...ncCols,'',''];

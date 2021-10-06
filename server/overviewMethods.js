@@ -45,7 +45,7 @@ function collectPriority(privateKey, batchID, mockDay) {
     if(!b) {
       resolve(false);
     }else{
-      const trc = TraceDB.findOne({batchID: bData._id});
+      const trc = TraceDB.findOne({batchID: b._id});
       const tgt = trc ? trc.performTgt || 0 : 0;
       
       const mEst = getEst(b.widgetId, b.quantity, tgt);
