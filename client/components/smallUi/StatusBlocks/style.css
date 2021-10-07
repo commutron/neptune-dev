@@ -22,7 +22,7 @@
 .pScale4 { background-color: var(--peterriver); }
 
 .moreEphasis {
-  border: 0.5vh #720300 dashed !important;
+  border: 0.25rem #720300 solid !important;
 }
 
 .agScale1 { background-color: #AF0E36; }

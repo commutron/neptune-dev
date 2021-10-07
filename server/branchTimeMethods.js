@@ -5,7 +5,7 @@ import { sortBranches } from '/server/utility';
 
 function deriveFromHistory(history, trackOptions, branchOptions) {
   
-  const foundTrackKeys = _.pluck(history, 'key');
+  const foundTrackKeys = _.uniq( _.pluck(history, 'key') );
   
   const key2branch = (key)=> {
     const obj = trackOptions.find( x => x.key === key );
@@ -29,7 +29,7 @@ function deriveFromHistory(history, trackOptions, branchOptions) {
 function deriveFromProb(probObjs) {
   const probFlat = [].concat(...probObjs);
 
-  const foundWhere = _.pluck(probFlat, 'where');
+  const foundWhere = _.uniq( _.pluck(probFlat, 'where') );
   
   const qKeys = _.countBy(foundWhere, x => x);
   const uniqWhere = _.uniq(foundWhere);
