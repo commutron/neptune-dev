@@ -10,7 +10,7 @@ class Pref {
     
     this.InitialAppSetup = false;
     
-    this.neptuneVersion = '3.8.4';
+    this.neptuneVersion = '3.8.5';
     this.neptuneIs = 'Neptune Process Tracking';
 
     this.prefName = 'default';
@@ -47,6 +47,8 @@ class Pref {
     this.pagingSize = 25;
     this.idleMinutes = 0; // minus idle time from timeInDay calculation
     this.breakMin = 15; // fixed break minutes
+    this.noiseUpdate = 15; // over-stream update interval
+    this.noiseChill = 30; // over-stream update slower interval for read-only users
     this.statisticalStartHour = 6; // 6am
     this.statisticalEndHour = 20; // 8pm
     this.avgSpan = 1000; // Also in server hardConfig

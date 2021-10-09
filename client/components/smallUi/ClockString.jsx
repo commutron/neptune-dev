@@ -1,5 +1,6 @@
 import React, {useState, useEffect, useRef, Fragment} from 'react';
 import moment from 'moment';
+import Pref from '/client/global/pref.js';
 
 
 function useInterval(callback, delay) {
@@ -32,7 +33,7 @@ const ClockString = ({ loadTime, doThing })=> {
     clockTimeSet( moment().format(fstring) );
     tickingTimeSet( tickingTime => tickingTime.add(1, 's') );
     
-    if(doThing && tickingTime.asMinutes() > (chill ? 30 : 15)) {
+    if(doThing && tickingTime.asMinutes() > (chill ? Pref.noiseChill : Pref.noiseUpdate)) {
       tickingTimeSet( moment.duration() );
       doThing(); }
   },1000);
