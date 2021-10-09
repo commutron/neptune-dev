@@ -152,8 +152,7 @@ const SetCheckSuper = ({ user, role, roleName })=>	{
       if(reply) {
         toast.success('Saved');
       }else{
-        toast(`NOT ALLOWED. This requires authorization, \n 
-                only one user can have a "super" permission at a time`, 
+        toast(`NOT ALLOWED.\nOnly ${Pref.allowedSupers} user(s) can have a "super" permission at a time`, 
           { autoClose: false });
         console.log("BLOCKED BY SERVER");
       }

@@ -38,6 +38,7 @@ class Pref {
     
     // Config
     this.userTimePublic = true;
+    this.allowedSupers = 2; // max people supers (also in hardConfig)
     this.blurOut = 5; // minutes in background before DDP disconnects
     this.tooManyMin = 600; // minutes, warning duration
     this.groupMax = 128;

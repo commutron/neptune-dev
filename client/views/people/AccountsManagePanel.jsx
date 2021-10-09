@@ -83,7 +83,7 @@ const AccountsManagePanel = ({ app, users, traceDT, brancheS, isDebug })=> {
                         <DeleteUser userID={entry._id} />
                     :null}
                     
-                    {isAdmin && isDebug ?
+                    {isAdmin && isDebug && entry.engaged !== false ?
                       <ForceStopEngage 
                         userID={entry._id}
                         isAdmin={isAdmin}
