@@ -6,9 +6,12 @@
   box-sizing: border-box;
   font-family: inherit;
   outline-color: var(--neptuneColor);
+  accent-color: var(--neptuneColor);
    -moz-outline: none;
   /*outline: none;This is of course awfull*/
 }
+*::-moz-selection { color: var(--neptuneColor);}
+*::selection { color: var(--neptuneColor); }
 
 @font-face {
   font-family: 'NunitoLocal';
