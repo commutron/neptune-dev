@@ -61,7 +61,7 @@ const BranchProgress = ({
                calNum < 90 ? '80' :
                calNum < 100 ? '90' :
                '100';
-            let isRed = calNum >= 100 && branch.ncLeft;
+            let isRed = /* calNum >= 100 && */ branch.ncLeft;
             let redLne = isRed ? ' redRight' : '';
             let redtxt = isRed ? `\nUnresolved ${Pref.nonCons}` : '';
             

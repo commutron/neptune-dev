@@ -7,11 +7,9 @@
   font-family: inherit;
   outline-color: var(--neptuneColor);
   accent-color: var(--neptuneColor);
-   -moz-outline: none;
-  /*outline: none;This is of course awfull*/
 }
-*::-moz-selection { color: var(--neptuneColor);}
-*::selection { color: var(--neptuneColor); }
+*::-moz-selection { background-color: var(--neptuneColor);}
+*::selection { background-color: var(--neptuneColor); }
 
 @font-face {
   font-family: 'NunitoLocal';
