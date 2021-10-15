@@ -38,7 +38,7 @@ const ProblemTab = ({
   return(
     <div className='vFrameContainer space'>
       <div className='avOneContent centreSelf centreText'>
-        <p className='small'>NonCons</p>
+        <p className='small cap'>{Pref.nonCons}</p>
         {seriesData ?
           <div className='wide autoGrid topLine'>  
             <NonConStatusPie nonCons={nonConArrayClean} />
@@ -54,7 +54,7 @@ const ProblemTab = ({
       
       
       <div className='avTwoContent centreText'>
-        <p className='small'>Shortfalls</p>
+        <p className='small cap'>{Pref.shortfalls}</p>
         {seriesData ?
           <div className='wide autoGrid topLine'>  
             <ShortfallStatusPie shortfalls={srsShorts} />
@@ -83,7 +83,7 @@ const ProblemTab = ({
               'Type Bars', 
               'Referance Bars', 
               'Recorded Rate', 
-              'Shortfall Scatter'
+              Pref.shortfall + ' Scatter'
             ]}>
            
             <NonConBubble

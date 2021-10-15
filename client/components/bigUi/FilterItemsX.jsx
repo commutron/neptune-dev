@@ -1,4 +1,5 @@
 import React from 'react';
+import Pref from '/client/global/pref.js';
 
 const FilterItems = ({ 
   title,
@@ -39,12 +40,12 @@ const FilterItems = ({
           <optgroup label='Categories'>
             <option value='complete'>Complete</option>
             <option value='in progress'>In Progress</option>
-            <option value='first offs'>First Offs</option>
-            <option value='nonconformances'>Nonconformances</option>
-            <option value='shortfalls'>Shortfalls</option>
+            <option value='first offs'>{Pref.trackFirst}s</option>
+            <option value='nonconformances'>{Pref.nonCons}</option>
+            <option value='shortfalls'>{Pref.shortfalls}</option>
             <option value='alternative'>Alternative Flow</option>
-            <option value='extended'>Extended Flow</option>
-            <option value='scrap'>Scrap</option>
+            <option value='extended'>{Pref.rapidExd} Flow</option>
+            <option value='scrap'>{Pref.scrapped}</option>
           </optgroup>
           <optgroup label='Steps' className='cap'>
             {advancedList.map( (entry, index)=>{
