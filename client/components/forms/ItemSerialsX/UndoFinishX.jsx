@@ -12,7 +12,7 @@ const UndoFinishX = ({
   
   const access = Roles.userIsInRole(Meteor.userId(), 'BRKt3rm1n2t1ng8r2nch');
   const clear = !completedAtB && typeof completedAtI === 'object';
-  const title = !access ? Pref.norole : !clear ? `Cannot Undo Finish while ${Pref.xBatch} is Complete` :
+  const title = !access ? Pref.norole : !clear ? `Cannot undo finish while ${Pref.xBatch} is complete` :
   `Undo Finish and Reactivate ${Pref.item}`;
   
   return(
@@ -43,7 +43,7 @@ const UndoFinishForm = ({
   selfclose
 })=> {
   
-  const { pinOpen, pinOpenSet } = useState(false);
+  const [ pinOpen, pinOpenSet ] = useState(false);
   
   const tempPinOpen = ()=> {
 
@@ -55,7 +55,7 @@ const UndoFinishForm = ({
         pinOpenSet(true);
       }else{
         pinOpenSet(false);
-      }
+      } // 3681
     });
   };
   
@@ -121,16 +121,16 @@ const UndoFinishForm = ({
   }
   
   return(
-    <div>
-      {!grace ? <p className='centreText'>This action requires "Run" permission.</p> :
-                <p className='centreText'>This action requires "Complete" permission.</p>}
-      
+    <div className='readlines'>
       <p className='centreText'>After the {Pref.xBatch} is complete, {Pref.items} are locked and cannot be changed.</p>
       
       <p className='centreText'>This {Pref.item} was finished <b>{moment(completedAtI).fromNow()}.</b></p>
       
+      {!grace ? <p className='centreText'>This action requires "Run" permission.</p> :
+                <p className='centreText'>This action requires "Complete" permission.</p>}
+      
       {!grace ? 
-        <p>
+        <p className='centreText'>
           <input
             id='temporgPINitem'
             autoComplete="false"

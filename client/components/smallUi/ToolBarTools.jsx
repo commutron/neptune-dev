@@ -4,7 +4,7 @@ import Pref from '/client/global/pref.js';
 
 export const BranchFilterSelect = ({ brancheS, filterState, changeFunc })=> (
   <span>
-    <i className='fas fa-filter fa-fw darkgrayT'></i>
+    <i className='fas fa-code-branch fa-fw darkgrayT'></i>
     <select
       id='filterSelect'
       title={`Change ${Pref.branch} Filter`}
@@ -57,10 +57,10 @@ export const FocusSelect = ({ gList, focusState, changeFunc })=> (
 );
 
 export const FilterSelect = ({ 
-  unqID, title, selectList, selectState, falsey, changeFunc, extraClass
+  unqID, title, selectList, selectState, falsey, changeFunc, extraClass, icon
 })=> (
   <span>
-    <i className='fas fa-filter fa-fw darkgrayT'></i>
+    <i className={`${icon || 'fas fa-filter'} fa-fw darkgrayT`}></i>
     <select
       id={'filterSelect'+unqID}
       title={title}

@@ -40,14 +40,17 @@ const OverviewTools = ({
         changeFunc={changeFocusByUP}
       />
       
-      <FilterSelect
-        unqID='fltrSALES'
-        title='Filter Sales Order'
-        selectList={slList}
-        selectState={salesByUP}
-        falsey='All Sales Orders'
-        changeFunc={changeSalesUP} 
-      />
+      {focusByUP ?
+        <FilterSelect
+          unqID='fltrSALES'
+          title='Filter Sales Order'
+          selectList={slList}
+          selectState={salesByUP}
+          falsey='All Sales Orders'
+          changeFunc={changeSalesUP}
+          icon='fas fa-dollar-sign'
+        />
+      : null}
       
       <SortSelect
         sortState={sortByUP}
