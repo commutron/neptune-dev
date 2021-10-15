@@ -6,12 +6,12 @@ import { toast } from 'react-toastify';
 import ModelSmall from '/client/components/smallUi/ModelSmall';
 
 const UndoFinishX = ({ 
-  batchId, finishedAtB, seriesId, serial, finishedAtI, rapidData, rapids,
+  batchId, completedAtB, seriesId, serial, completedAtI, rapidData, rapids,
   noText 
 })=> {
   
   const access = Roles.userIsInRole(Meteor.userId(), 'BRKt3rm1n2t1ng8r2nch');
-  const clear = !finishedAtB && typeof finishedAtI === 'object';
+  const clear = !completedAtB && typeof completedAtI === 'object';
   const aT = !access ? Pref.norole : '';
   const lT = !clear ? 'unavailable' : '';
   const title = access && clear ? `Undo Finish and Reactivate ${Pref.item}` : `${aT}\n${lT}`;
@@ -27,10 +27,9 @@ const UndoFinishX = ({
     >
       <UndoFinishForm
         batchId={batchId}
-        finishedAtB={finishedAtB}
         seriesId={seriesId}
         serial={serial}
-        finishedAtI={finishedAtI}
+        completedAtI={completedAtI}
         rapidData={rapidData}
         rapids={rapids}
       />
@@ -41,7 +40,7 @@ const UndoFinishX = ({
 export default UndoFinishX;
 
 const UndoFinishForm = ({ 
-  batchId, finishedAtB, seriesId, serial, finishedAtI, rapidData, rapids,
+  batchId, seriesId, serial, completedAtI, rapidData, rapids,
   selfclose
 })=> {
   
@@ -69,7 +68,7 @@ const UndoFinishForm = ({
     });
   };
   
-  const howLong = moment().diff(moment(finishedAtI), 'hours');
+  const howLong = moment().diff(moment(completedAtI), 'hours');
   const grace = howLong < Pref.completeGrace || Roles.userIsInRole(Meteor.userId(), 'run');
   
   const completedRapids = rapids.filter(r=> r.completed);
@@ -112,7 +111,7 @@ const UndoFinishForm = ({
                 <p className='centreText'>This action requires "Complete" permission.</p>}
       <p className='centreText'>After the {Pref.xBatch} is complete, {Pref.items} are locked and cannot be changed.</p>
       <br />
-      <p className='centreText'>This {Pref.item} was finished <b>{moment(finishedAtI).fromNow()}.</b></p>
+      <p className='centreText'>This {Pref.item} was finished <b>{moment(completedAtI).fromNow()}.</b></p>
       
       <p className='centre'>
         <button

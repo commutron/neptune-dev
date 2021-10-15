@@ -198,8 +198,8 @@ class Pref {
     // non tracked, ancillary processes
     this.ancillary = 'indirect';
     // shortage tracking
-    this.shortfall = 'shortfall';
-    this.shortfalls = 'shortfalls';
+    this.shortfall = 'shortage';
+    this.shortfalls = 'shortages';
       // shortage states
       this.shortagePending = "part is missing, awaiting answer";
       this.doOmit = "finish and ship without part";

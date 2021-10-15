@@ -44,10 +44,10 @@ const ActionBar = ({
         {itemData.completed ?
           <UndoFinishX
       	    batchId={batchData._id}
-      	    finishedAtB={batchData.completedAt}
+      	    completedAtB={batchData.completedAt}
       	    seriesId={seriesData._id}
       	    serial={itemData.serial}
-      	    finishedAtI={itemData.completedAt}
+      	    completedAtI={itemData.completedAt}
       	    rapidData={rapidData}
       	    rapids={itemData.altPath.filter(x=> x.rapId !== false)}
       	 />
