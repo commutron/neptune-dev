@@ -130,6 +130,14 @@ Meteor.methods({
     }
   },
   
+  checkPIN(pinVal) {
+    const org = AppDB.findOne({ orgKey: Meteor.user().orgKey },{fields:{'orgPIN':1}});
+    const orgPIN = org ? org.orgPIN : null;
+    const pinMatch = pinVal === orgPIN;
+    
+    return pinMatch;
+  },
+  
   // / / / / / / / / / / / / / / / 
   // Branches
   addBranchOption(nameVal, commonVal) {

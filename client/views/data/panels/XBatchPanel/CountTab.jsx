@@ -107,7 +107,7 @@ const FallsHistory = ({ entry, count, quantity })=> {
       <summary className={borderColor}>
         <MiniBar
           key={entry.wfKey}
-          title={`${entry.gate} - ${entry.type}`}
+          title={`${entry.gate} - ${entry.type || null}`}
           count={count}
           total={topNum}
           barColor={barColor} />

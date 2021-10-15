@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
@@ -12,9 +12,8 @@ const UndoFinishX = ({
   
   const access = Roles.userIsInRole(Meteor.userId(), 'BRKt3rm1n2t1ng8r2nch');
   const clear = !completedAtB && typeof completedAtI === 'object';
-  const aT = !access ? Pref.norole : '';
-  const lT = !clear ? 'unavailable' : '';
-  const title = access && clear ? `Undo Finish and Reactivate ${Pref.item}` : `${aT}\n${lT}`;
+  const title = !access ? Pref.norole : !clear ? `Cannot Undo Finish while ${Pref.xBatch} is Complete` :
+  `Undo Finish and Reactivate ${Pref.item}`;
   
   return(
     <ModelSmall
@@ -43,6 +42,22 @@ const UndoFinishForm = ({
   batchId, seriesId, serial, completedAtI, rapidData, rapids,
   selfclose
 })=> {
+  
+  const { pinOpen, pinOpenSet } = useState(false);
+  
+  const tempPinOpen = ()=> {
+
+    const pinVal = this.temporgPINitem ? this.temporgPINitem.value : undefined;
+    
+    Meteor.call('checkPIN', pinVal, (err, reply)=>{
+      err && console.log(err);
+      if(reply === true) {
+        pinOpenSet(true);
+      }else{
+        pinOpenSet(false);
+      }
+    });
+  };
   
   const handleUndo = ()=> {
     Meteor.call('pullFinishX', batchId, seriesId, serial, (error, reply)=>{
@@ -109,16 +124,37 @@ const UndoFinishForm = ({
     <div>
       {!grace ? <p className='centreText'>This action requires "Run" permission.</p> :
                 <p className='centreText'>This action requires "Complete" permission.</p>}
+      
       <p className='centreText'>After the {Pref.xBatch} is complete, {Pref.items} are locked and cannot be changed.</p>
-      <br />
+      
       <p className='centreText'>This {Pref.item} was finished <b>{moment(completedAtI).fromNow()}.</b></p>
+      
+      {!grace ? 
+        <p>
+          <input
+            id='temporgPINitem'
+            autoComplete="false"
+            className='noCopy miniIn12 interSelect centreText gap clearBlack'
+            pattern='[\d\d\d\d]*'
+            maxLength='4'
+            minLength='4'
+            placeholder='PIN'
+            required 
+          />
+          <button
+            onClick={(e)=>tempPinOpen(e)}
+            className='smallAction clearBlack'
+            id='pindo'
+          >Temporary Access</button>
+        </p>
+      : null}
       
       <p className='centre'>
         <button
           id='notDone'
           className='action clearOrange'
           onClick={()=>handleUndo()}
-          disabled={!grace}
+          disabled={!grace && !pinOpen}
         >Undo Finish</button>
       </p>
     </div>

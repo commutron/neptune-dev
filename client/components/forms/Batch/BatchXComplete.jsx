@@ -51,9 +51,9 @@ const BatchXComplete = ({ batchData, allFlow, allFall, nowater, quantity, canRun
   const datesearch = canBackDate ?
     Math.max(...[
       batchData.createdAt,
-      ...Array.from(batchData.waterfall, w => 
+      ...Array.from(batchData.waterfall || [], w => 
           w.counts[w.counts.length-1].time ),
-      ...Array.from(batchData.events, e => {
+      ...Array.from(batchData.events || [], e => {
           if(e.title === 'End of Process' || e.title === 'Start of Process' ){ return e.time } })
     ].filter(f=>f)) : null;
 

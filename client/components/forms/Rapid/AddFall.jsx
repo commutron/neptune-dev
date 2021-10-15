@@ -77,7 +77,7 @@ const AddFall = ({ rapidData, editAuth })=> {
       
         <FallOption
           wID='doFinish'
-          label='Count Finshing'
+          label='Count Finishing'
           dfON={onF ? true : false}
           has={onF && onF.counts.length > 0}
           editState={editState}
