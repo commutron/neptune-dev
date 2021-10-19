@@ -10,6 +10,7 @@ import RemoveXBatch from '/client/components/forms/Batch/RemoveXBatch';
 
 import SeriesForm from '/client/components/forms/ItemSerialsX/SeriesForm';
 import ItemSerialsWrapX from '/client/components/forms/ItemSerialsX/ItemSerialsWrapX';
+import UnitSetAll from '/client/components/forms/ItemSerialsX/UnitSetAll';
 
 import UnitSetX from '/client/components/forms/ItemSerialsX/UnitSetX';
 import PanelBreakX from '/client/components/forms/ItemSerialsX/PanelBreakX';
@@ -83,21 +84,33 @@ const ActionBar = ({
                  !batchData.live ? Pref.notlive : false}
           />
           
-          <SeriesForm
-            batchData={batchData}
-            lock={!batchData.live || seriesData || batchData.completed}
-          />
-        
-          <ItemSerialsWrapX
-            bID={batchData._id}
-            quantity={batchData.quantity}
-            seriesId={seriesData._id}
-            itemsQ={!seriesData ? 0 : seriesData.items.length}
-            unit={variantData.runUnits}
-            app={app}
-            lock={batchData.completed ? Pref.isDone :
-                 !batchData.live ? Pref.notlive :
-                 !seriesData ? `No ${Pref.series}` : false} />
+          {seriesData ?
+            <ItemSerialsWrapX
+              bID={batchData._id}
+              quantity={batchData.quantity}
+              seriesId={seriesData._id}
+              itemsQ={!seriesData ? 0 : seriesData.items.length}
+              unit={variantData.runUnits}
+              app={app}
+              lock={batchData.completed ? Pref.isDone :
+                   !batchData.live ? Pref.notlive :
+                   !seriesData ? `No ${Pref.series}` : false} 
+            />
+          :
+            <SeriesForm
+              batchData={batchData}
+              lock={!batchData.live || batchData.completed}
+            />
+          }
+          
+          {seriesData && variantData.runUnits > 1 ?
+            <UnitSetAll
+        	    seriesId={seriesData._id}
+        	    block={batchData.lock}
+        	    bdone={batchData.completed}
+        	    bqty={batchData.quantity}
+        	  />
+          : null }
           
           <CounterAssign
             id={batchData._id}

@@ -34,7 +34,7 @@ export const AddAutoNCwrap = ({ rapidData, ncTypesCombo, user, editAuth })=> {
   return(
     <div className='vmargin'>
       
-      <dt className='fullline'>Auto Nonconformaces</dt>
+      <dt className='fullline'>Auto {Pref.nonCons}</dt>
       
       <AddAutoNC
         ncTypesCombo={ncTypesCombo} 

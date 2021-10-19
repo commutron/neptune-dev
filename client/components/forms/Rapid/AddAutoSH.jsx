@@ -30,7 +30,7 @@ export const AddAutoSHwrap = ({ rapidData, vassembly, editAuth })=> {
   return(
     <div className='vmargin'>
       
-      <dt className='fullline'>Auto Shortfalls</dt>
+      <dt className='fullline'>Auto {Pref.shortfalls}</dt>
       
       <AddAutoSH
         vassembly={vassembly}

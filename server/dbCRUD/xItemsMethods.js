@@ -343,6 +343,21 @@ Meteor.methods({
     }
   },
   
+  setAllItemUnits(seriesId, unit) {
+    const auth = Roles.userIsInRole(Meteor.userId(), ['edit', 'qa']);
+    if(auth && unit >= 1 && unit <= Config.unitLimit) {
+      const srs = XSeriesDB.findOne({_id: seriesId});
+      if(srs) {
+        for(let item of srs.items) {
+          Meteor.call('setItemUnitX', seriesId, item.serial, unit);
+        }
+      }
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
   //// history entries
   addHistoryX(batchId, seriesId, bar, key, step, type, com, pass, benchmark) {
     if(type === 'inspect' && !Roles.userIsInRole(Meteor.userId(), 'inspect') ||

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 
 
 const ModelSmall = ({ 
@@ -8,7 +8,13 @@ const ModelSmall = ({
   lock, children 
 })=> {
   
+  const mounted = useRef(true);
+  
   const [ show, showChange ] = useState(false);
+  
+  useEffect(() => {
+    return () => { mounted.current = false; };
+  }, []);
   
   const reveal = ()=> {
     showChange( !show );
@@ -60,7 +66,7 @@ const ModelSmall = ({
               <n-sm-model-content className='centre forceScrollStyle'>
                 {React.cloneElement(children,
                   { 
-                    selfclose: ()=>reveal()
+                    selfclose: ()=>mounted.current ? reveal() : null
                   }
                 )}
               </n-sm-model-content>

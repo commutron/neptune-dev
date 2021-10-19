@@ -97,12 +97,12 @@ const VariantForm = ({ widgetData, users, app, rootWI, selfclose })=> {
               <input
                 type='number'
                 id='unit'
-                pattern='[0-999]*'
-                maxLength='3'
+                pattern='[0000-9999]*'
+                maxLength='4'
                 minLength='1'
-                max='100'
+                max={Pref.unitLimit}
                 min='1'
-                placeholder='1-100'
+                placeholder={`1-${Pref.unitLimit}`}
                 inputMode='numeric'
                 className='miniIn12'
                 required 

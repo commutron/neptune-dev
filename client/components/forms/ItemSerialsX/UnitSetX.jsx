@@ -59,15 +59,15 @@ const UnitSetForm = ({ seriesId, item, selfclose })=> {
           pattern='[0000-9999]*'
           maxLength='4'
           minLength='1'
-          max='1000'
+          max={Pref.unitLimit}
           min='1'
           defaultValue={item.units}
-          placeholder='1-1000'
+          placeholder={`1-${Pref.unitLimit}`}
           inputMode='numeric'
           required
           onChange={(e)=>unitSet(e)}
         />
-        <label htmlFor='unit'>{Pref.unit} Quantity <em>max 1000</em></label>
+        <label htmlFor='unit'>{Pref.unit} Quantity <em>max {Pref.unitLimit}</em></label>
       </p>
     </div>
   );

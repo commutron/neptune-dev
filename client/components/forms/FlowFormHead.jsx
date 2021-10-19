@@ -2,7 +2,7 @@ import React, { useState, useLayoutEffect } from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import ModelMedium from '/client/components/smallUi/ModelMedium.jsx';
+import ModelMedium from '/client/components/smallUi/ModelMedium';
 import MultiSelect from "react-multi-select-component";
 
 const FlowFormHeadWrapper = ({
@@ -83,7 +83,6 @@ const FlowFormHead = ({ id, existFlows, preFill, app, selfclose })=> {
     const flowTitle = this.flwttl.value.trim().toLowerCase();
     const ncPlainList = Array.from(ncLists, u => u.value);
 
-    // edit existing
     const f = fill;
     const edit = f ? existFlows.find( x => x.flowKey === f ) : false;
     const editId = edit ? edit.flowKey : false;
@@ -118,17 +117,7 @@ const FlowFormHead = ({ id, existFlows, preFill, app, selfclose })=> {
       >
       {warn ?
         <div className='centre'>
-          <p><b>{eN}</b> is in used by</p>
-          {warn === 'liveRiver' ?
-            <h3>An Active {Pref.xBatch} as the {Pref.buildFlow}</h3>
-          : warn === 'liveAlt' ?
-            <h3>An Active {Pref.xBatch} as the {Pref.buildFlowAlt}</h3>
-          : warn === 'liveAlt' ?
-            <h3>An Inactive {Pref.xBatch} as the {Pref.buildFlow}</h3>
-          : warn === 'liveAlt' ?
-            <h3>An Inactive {Pref.xBatch} as the {Pref.buildFlowAlt}</h3>
-          :
-            <p>something</p>}
+          <p><b>{eN}</b> is or has been used by a {Pref.xBatch}</p>
         </div>
       : null}
         <em className='small'>duplicate {Pref.flow} names are ill advised but not blocked</em>
