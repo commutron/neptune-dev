@@ -94,7 +94,7 @@ const InfoTab = ({
         </div>
         
         {ontime === null ? null :
-          <div className='centreText'>Shipped {ontime ? 'On Time' : 'Late'}</div>}
+          <div className='centreText'><em>Shipped {ontime ? 'On Time' : 'Late'}</em></div>}
         
         {!b.completed && !released ?
           <ReleaseAction 

@@ -9,6 +9,7 @@ const BatchXEdit = ({ batchData, seriesData, allVariants, lock })=> {
   
   const canRun = Roles.userIsInRole(Meteor.userId(), 'run');
   const canEdit = Roles.userIsInRole(Meteor.userId(), 'edit');
+  const isDebug = Roles.userIsInRole(Meteor.userId(), 'debug');
   
   const aT = !(canEdit || canRun) ? Pref.norole : '';
   const lT = lock ? lock : '';
@@ -20,7 +21,7 @@ const BatchXEdit = ({ batchData, seriesData, allVariants, lock })=> {
       title={title}
       color='blueT'
       icon='fa-cubes'
-      lock={!(canEdit || canRun) || lock}
+      lock={!(canEdit || canRun) || (lock && !isDebug)}
     >
     <BXEditForm 
       batchData={batchData}
