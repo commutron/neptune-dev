@@ -90,7 +90,7 @@ const BXEditForm = ({ batchData, seriesData, allVariants, canEdit, selfclose })=
           disabled={!canEdit}
           required>
         {allVariants.map( (entry)=>{
-          if(entry.live) {
+          if(entry.live || entry.versionKey === bDt.versionKey) {
             return(
               <option value={entry.versionKey} key={entry.versionKey}>
                 {entry.variant}

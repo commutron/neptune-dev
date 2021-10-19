@@ -124,7 +124,8 @@ Meteor.methods({
       XBatchDB.update({orgKey: Meteor.user().orgKey, versionKey: vKey, live: true}, {
         $push : { 
           tags: tag
-        }});
+        }
+      },{multi: true});
     }else{
       null;
     }

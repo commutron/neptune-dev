@@ -15,7 +15,7 @@ const BatchResult = ({
             title={ent[0].toUpperCase()}
             cTwo={<i><i className='smaller'>so: </i>{ent[1].toUpperCase()}</i>}
             cThree={`${ent[2].toUpperCase()}`}
-            cFour={`${ent[3].toUpperCase()} v.${ent[4]}`}
+            cFour={`${ent[3].toUpperCase()} ${ent[4]}`}
             sty={sty}
             address={'/data/batch?request=' + ent[0]}
           />

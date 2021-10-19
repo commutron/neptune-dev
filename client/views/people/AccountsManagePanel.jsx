@@ -178,6 +178,7 @@ export const PermissionHelp = ({ auths, admin })=> {
             <li>Close {Pref.rapidExs}</li>
             <li>Active an {Pref.rapidExd} on a {Pref.item}</li>
             <li>Add nonconformances to multiple {Pref.items} at once</li>
+            <li>Change all {Pref.item} {Pref.unit}s</li>
           </ul>
         </ul>
       : null}
@@ -223,7 +224,7 @@ export const PermissionHelp = ({ auths, admin })=> {
             <li>Add a Custom Event</li>
             
             <li>Backdate {Pref.xBatch} completion**</li>
-            <li>Change {Pref.unit}</li>
+            <li>Change one or all {Pref.unit}s</li>
           
             <li>Add or edit or remove* a {Pref.flow}</li>
             <li>Set {Pref.timeBudget}s</li>

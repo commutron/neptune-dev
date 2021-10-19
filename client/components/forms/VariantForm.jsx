@@ -155,7 +155,7 @@ const VariantForm = ({ widgetData, users, app, rootWI, selfclose })=> {
       <div className='half'>
         <iframe
           id='instructMini'
-          src={app.instruct}
+          src={rootWI || app.instruct}
           height='600'
           width='100%' />
       </div>

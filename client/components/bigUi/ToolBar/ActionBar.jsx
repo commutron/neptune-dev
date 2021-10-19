@@ -108,7 +108,8 @@ const ActionBar = ({
         	    seriesId={seriesData._id}
         	    block={batchData.lock}
         	    bdone={batchData.completed}
-        	    bqty={batchData.quantity}
+        	    sqty={seriesData.items.length}
+        	    vqty={variantData.runUnits}
         	  />
           : null }
           

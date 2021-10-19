@@ -461,6 +461,7 @@ Meteor.publish('hotDataEx', function(dataView, dataRequest, hotWidget){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
   
+  let hothotGroupID = false;
   let hothotWidgetID = false;
   let hothotWidget = hotWidget || false;
   
@@ -477,6 +478,7 @@ Meteor.publish('hotDataEx', function(dataView, dataRequest, hotWidget){
     const otherwise = WidgetDB.findOne({ _id: hotWidget }) ||
                       WidgetDB.findOne({ widget: hotWidget });
     if(otherwise) {
+      hothotGroupID = otherwise.groupId;
       hothotWidgetID = otherwise._id;
       hothotWidget = otherwise.widget;
     }
@@ -511,6 +513,14 @@ Meteor.publish('hotDataEx', function(dataView, dataRequest, hotWidget){
       ];
     }else if( dataView === 'widget' ) {
       return [
+        GroupDB.find({_id: hothotGroupID, orgKey: orgKey}, {
+          fields: {
+            'group': 1,
+            'alias': 1,
+            'hibernate': 1,
+            'internal': 1,
+            'wiki': 1
+          }}),
         WidgetDB.find({_id: hothotWidgetID, orgKey: orgKey}, {
           fields: {
             'orgKey': 0,
@@ -556,7 +566,7 @@ Meteor.publish('hotDataEx', function(dataView, dataRequest, hotWidget){
             'shareKey': 0,
             'lockTrunc': 0,
             'finShipAim': 0,
-            'finShipDue': 0,
+            // 'finShipDue': 0,
             'finEndWork': 0,
             'finBffrRel': 0
         }}),

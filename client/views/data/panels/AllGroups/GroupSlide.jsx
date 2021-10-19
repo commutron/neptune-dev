@@ -77,7 +77,8 @@ const GroupSlide = ({ groupData, widgetsList, batchDataX, app, inter, isERun })=
             lockOut={g.hibernate} />
           <WidgetNewForm
             groupId={g._id}
-            lock={g.hibernate} />
+            lock={g.hibernate}
+          />
             
           <GroupEmails
             groupData={g}

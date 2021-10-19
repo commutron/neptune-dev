@@ -35,7 +35,9 @@ const InfoTab = ({
                     endDay.isShipDay() ?
                       endDay.clone().endOf('day').lastShippingTime() :
                       endDay.clone().lastShippingTime();
-                    
+  
+  const ontime = !b.completed ? null : shipDue.isSameOrAfter(b.completedAt);
+  
   const rOpen = rapidsData && rapidsData.some( r => r.live === true );
   
   const canRun = Roles.userIsInRole(Meteor.userId(), 'run');
@@ -90,6 +92,9 @@ const InfoTab = ({
             lgIcon={true}
             isDebug={isDebug} />
         </div>
+        
+        {ontime === null ? null :
+          <div className='centreText'>Shipped {ontime ? 'On Time' : 'Late'}</div>}
         
         {!b.completed && !released ?
           <ReleaseAction 

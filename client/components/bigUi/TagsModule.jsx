@@ -92,7 +92,7 @@ const TagsModule = ({ action, id, vKey, tags, tagOps, truncate, rad, canRun })=>
               <MenuItem
                 key={index}
                 onClick={()=>addTag(entry)}
-                disabled={tags.includes(entry)}>
+                disabled={tags && tags.includes(entry)}>
                 {entry}
               </MenuItem>
         )})}

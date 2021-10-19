@@ -65,7 +65,8 @@ const DataViewOps = ({
   }
   
   function widgetVariants(wId) {
-    return allVariant.filter(x => x.widgetId === wId);
+    return allVariant.filter(x => x.widgetId === wId)
+      .sort((a,b)=> a.variant > b.variant ? 1 : a.variant < b.variant ? -1 : 0);
   }
   
   function getFlowData(batchData, seriesData, widgetData, appData) {
