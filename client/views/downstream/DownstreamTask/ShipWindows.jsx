@@ -75,7 +75,7 @@ const ShipWindows = ({
       const remain = timeBucket + overflow - wipTime;
       overflow = remain;
       
-      const points = Math.ceil( remain / timeBucket );
+      const points = Math.ceil( Math.abs(remain) / timeBucket ) * Math.sign(remain);
       const hrsrem = min2hr(Math.abs(remain));
       
       isDebug && console.log({dayTime, timeBucket, overflow, wipTime, remain});
@@ -85,7 +85,7 @@ const ShipWindows = ({
                 remain < 0 ? 
                   ['', 'Past Ship Deadline', hrsrem + ' estimated hours of work remaining'] :
                   ['', 'Past Ship Deadline', 'No estimated hours of work remaining'] :
-                Math.abs(remain) <= (timeBucket * 0.10) ? 
+                Math.abs(remain) <= (timeBucket * 0.15) ? 
                   ['', 'balanced', `(${hrsrem} estimated hours)`] :
                 points < 0 ? 
                   [ Math.abs(points)+'pts', 'heavy', `(${hrsrem} estimated hours over capacity)` ] :
