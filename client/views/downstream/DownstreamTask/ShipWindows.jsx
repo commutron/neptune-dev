@@ -81,7 +81,7 @@ const ShipWindows = ({
       const points = Math.round( Math.abs(remain) / timeBucket ) * Math.sign(remain);
       const hrsrem = min2hr(Math.abs(remain));
       
-      const loaded = index === 0 || wipTime === 0 || dayTime === 0 ? [ '', false, '' ] :
+      const loaded = index === 0 || dayTime === 0 ? [ '', false, '' ] :
               timeBucket === 0 ?
                 remain < 0 ? 
                   ['', 'Past Ship Deadline', hrsrem + ' estimated hours of work remaining'] :
