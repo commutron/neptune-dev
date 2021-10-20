@@ -73,20 +73,21 @@ const ShipWindows = ({
       const timeBucket = dayTime * Math.max(0, day[1]);
       
       const remain = timeBucket + overflow - wipTime;
-      overflow = remain;
-      
-      const points = Math.ceil( Math.abs(remain) / timeBucket ) * Math.sign(remain);
-      const hrsrem = min2hr(Math.abs(remain));
       
       isDebug && console.log({dayTime, timeBucket, overflow, wipTime, remain});
+      
+      overflow = remain;
+      
+      const points = Math.round( Math.abs(remain) / timeBucket ) * Math.sign(remain);
+      const hrsrem = min2hr(Math.abs(remain));
       
       const loaded = index === 0 || wipTime === 0 || dayTime === 0 ? [ '', false, '' ] :
               timeBucket === 0 ?
                 remain < 0 ? 
                   ['', 'Past Ship Deadline', hrsrem + ' estimated hours of work remaining'] :
                   ['', 'Past Ship Deadline', 'No estimated hours of work remaining'] :
-                Math.abs(remain) <= (timeBucket * 0.15) ? 
-                  ['', 'balanced', `(${hrsrem} estimated hours)`] :
+                Math.abs(points) === 0 ?
+                  ['', 'balanced', `(within ${hrsrem} estimated hours of capacity)`] :
                 points < 0 ? 
                   [ Math.abs(points)+'pts', 'heavy', `(${hrsrem} estimated hours over capacity)` ] :
                   [ Math.abs(points)+'pts', 'light', `(${hrsrem} estimated hours under capacity)` ];
