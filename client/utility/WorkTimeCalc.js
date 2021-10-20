@@ -46,6 +46,9 @@ export function listShipDays( app, qty, withLast ) {
                   
     sArr.push([newDay, gap]);
   }
+  
+  console.log(sArr);
+  
   return sArr;
   }
 }

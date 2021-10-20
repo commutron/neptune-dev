@@ -43,23 +43,29 @@ const BatchXStatus = ({ batchData, allFlow, allFall, nowater, rapid })=>	{
             <button
               id='isDone'
               title={canRun ? 'Turn ON' : Pref.norole}
-              className='miniAction noFade medBig'
+              className='miniAction noFade medBig gapR'
               onClick={()=>handleLive(true)}
               disabled={!canRun}
             ><n-fa1><i className='fas fa-power-off grayT fa-lg fa-fw'></i></n-fa1>
-            </button>   {Pref.xBatch} is {Pref.notlive}
+            </button>{Pref.xBatch} is {Pref.notlive}
           </p>
-          {canRun && batchData.lock &&
-            <p>
-              <button
-                id='doUnLock'
-                title={canRun ? 'Disable Lock' : Pref.norole}
-                className='miniAction noFade medBig'
-                onClick={(e)=>handleUnLock(e)}
-                disabled={!canRun}
-              ><n-fa2><i className='fas fa-lock purpleT fa-lg fa-fw'></i></n-fa2>
-              </button>   Locked
-            </p>
+          {batchData.lock ?
+            canRun ?
+              <p>
+                <button
+                  id='doUnLock'
+                  title={canRun ? 'Disable Lock' : Pref.norole}
+                  className='miniAction noFade medBig gapR'
+                  onClick={(e)=>handleUnLock(e)}
+                  disabled={!canRun}
+                ><n-fa2><i className='fas fa-lock purpleT fa-lg fa-fw'></i></n-fa2>
+                </button>Locked
+              </p>
+            :
+              <p>
+                <n-fa2><i className='fas fa-lock purpleT fa-lg fa-fw gapR'></i></n-fa2>Locked
+              </p>
+            : null
           }
         </Fragment>
       : isAdmin || batchData.completed ?

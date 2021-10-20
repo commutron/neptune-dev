@@ -36,7 +36,9 @@ const ActionBar = ({
   	  <Fragment> 
     	  <UnitSetX
     	    seriesId={seriesData._id}
-    	    item={itemData} />
+    	    item={itemData}
+    	    block={batchData.lock}
+    	  />
     	  <PanelBreakX
           batchId={batchData._id}
           seriesId={seriesData._id}
