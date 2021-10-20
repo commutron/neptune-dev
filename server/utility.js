@@ -2,7 +2,7 @@ import moment from 'moment';
 
 export function syncLocale(accessKey) {
   const app = AppDB.findOne({orgKey:accessKey}, 
-                {fields:{'nonWorkDays':1,'workinghours':1,'shippinghours':1}});
+                {fields:{'nonWorkDays':1,'workingHours':1,'shippingHours':1}});
   if( app ) { 
     moment.updateLocale('en', { 
       holidays: app.nonWorkDays,

@@ -246,6 +246,7 @@ Meteor.publish('traceDataOpen', function(){
         fields: {
           'lastUpserted': 1,
           'lastUpdated': 1,
+          'lastRefreshed': 1,
           'batch': 1,
           'batchID': 1,
           'createdAt': 1,

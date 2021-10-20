@@ -159,7 +159,7 @@ function checkNoise(bData, accessKey) {
     
     TraceDB.update({batchID: bData._id}, {
       $set : { 
-        lastUpdated: new Date(),
+        lastRefreshed: new Date(),
         live: bData.live,
         isActive: actvLvl.isActive,
         onFloor: brchCnd.onFloor,
@@ -368,7 +368,7 @@ Meteor.methods({
         await Promise.all(fetchX.map(async (x) => {
           const t = TraceDB.find({
               batchID: x._id, 
-              lastUpdated: { $gte: new Date(hot) }
+              lastRefreshed: { $gte: new Date(hot) }
             },{fields:{'batchID':1},limit:1}).count();
           if(!t) {
             await checkNoise( x, accessKey );

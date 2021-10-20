@@ -5,6 +5,7 @@ import WindowFrame from './WindowFrame';
 import WindowGlass from './WindowGlass';
 
 import { listShipDays } from '/client/utility/WorkTimeCalc';
+import { min2hr } from '/client/utility/Convert';
 
 const ShipWindows = ({ 
   calcFor, traceDT, dayTime,
@@ -69,15 +70,28 @@ const ShipWindows = ({
         wipTime = addUpTime(shipIn);
       }
       
-      const timeBucket = dayTime * Math.max(0, day[1]);
+      const timeBucket = /* dayTime */ (239 * 60) * Math.max(0, day[1]);
       
       const remain = timeBucket + overflow - wipTime;
       overflow = remain;
-      const loaded = index === 0 || wipTime === 0 ? [ '', false ] :
-              Math.abs(remain) <= (timeBucket * 0.10) ? ['', 'balanced'] :
-              remain < 0 ? 
-                [ Math.ceil(Math.abs(wipTime) / (timeBucket || 1))+'pts', 'heavy' ] :
-                [ Math.ceil(timeBucket / Math.abs(wipTime || 1))+'pts', 'light' ];
+      
+      const points = Math.ceil( remain / (timeBucket * 0.10) );
+      const hrsrem = min2hr(Math.abs(remain));
+      
+      console.log({daygap: Math.max(0, day[1]), timeBucket, overflow, wipTime, remain, points});
+      
+      const loaded = index === 0 || wipTime === 0 ? [ '', false, '' ] :
+              timeBucket === 0 ?
+                remain < 0 ? 
+                  ['Workday is over', '', hrsrem + ' estimated hours of work remaining'] :
+                  ['Workday is over', '', 'No estimated hours of work remaining'] :
+              
+                Math.abs(remain) <= (timeBucket * 0.10) ? 
+                  ['', 'balanced', `(${hrsrem} estimated hours)`] :
+              
+                points < 0 ? 
+                  [ Math.abs(points)+'pts', 'heavy', `(${hrsrem} estimated hours over)` ] :
+                  [ Math.abs(points)+'pts', 'light', `(${hrsrem} estimated hours under)` ];
       
       windowChunks.push({
         windowMoment: day[0],

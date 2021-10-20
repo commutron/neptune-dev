@@ -17,11 +17,12 @@ const WindowFrame = ({
       }
     </div>
     
-    <div className='downHeadFixed grayT cap'
+    <div className='downHeadFixed grayT cap' title={loaded[2] || ''}
     >{loaded[1] === 'heavy' ? <n-fa2><i className='fas fa-circle fa-fw gapR'></i></n-fa2> :
       loaded[1] === 'light' ? <n-fa1><i className='far fa-circle fa-fw gapR'></i></n-fa1> :
-      loaded[1] && <n-fa0><i className='fas fa-adjust fa-fw gapR'></i></n-fa0>}
-    {loaded[0] + ' ' + (loaded[1] || '')}
+      loaded[1] === 'balanced' ? <n-fa3><i className='fas fa-adjust fa-fw gapR'></i></n-fa3> :
+      loaded[1] && <n-fa0><i className='fas fa-bullseye fa-fw gapR'></i></n-fa0>}
+    {`${loaded[0]} ${loaded[1] || ''}`}
     </div>
       
     <div className='downOrdersFixed'>
