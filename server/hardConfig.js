@@ -20,7 +20,7 @@ class Config {
     this.dropShipBffr = 5; // number of hours late is allowed
                           // compensating for out of hours hand delivery
     
-    this.seriesLimit = 5000; // max items in a series
+    this.seriesLimit = 10000; // max items in a series
     this.unitLimit = 1000; // max units per item
     
     this.freche = 12; // in hours, time limit for refreshed on-demand caches

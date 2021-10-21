@@ -56,8 +56,8 @@ class Pref {
     this.stepUndoWindow = 1000*30; // remember to match ".spinRe"
     this.completeGrace = 24; // allow complete undo for lower permission for how many hours
     this.timeAfterGrace = 48; // keep the tideControl unlocked for how many hours
-    this.seriesLimit = 5000;
-    this.unitLimit = 1000;
+    this.seriesLimit = 10000; // max items in a series, Also in server hardConfig
+    this.unitLimit = 1000; // max units per item, Also in server hardConfig
     this.clusterMin = 2; // noncon sets
     
     this.regex5 = RegExp(/^(\d{5})$/); // batch number
