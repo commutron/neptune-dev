@@ -41,7 +41,7 @@ const MonthKPIReport = ({ start, end, dataset, isDebug })=> {
   return(
     <div className='wide'>
       
-      <div className='vmargin centreText noPrint'>
+      <div className='vmarginhalf noPrint'>
         <button 
           className='action clearBlack'
           onClick={(e)=>handleRun(e)} 
@@ -50,16 +50,14 @@ const MonthKPIReport = ({ start, end, dataset, isDebug })=> {
       </div>
       
       {working ?
-        <div className='centreText'>
-          <p>This may take a while...</p>
-          <n-fa0><i className='fas fa-spinner fa-lg fa-spin'></i></n-fa0>
-        </div>
+        <p>This may take a while...<n-fa0><i className='fas fa-spinner fa-lg fa-spin gapL'></i></n-fa0></p>
       :   
         <ReportStatsTable 
-          title='monthly report'
+          title='Overall report'
           dateString={`${start} to ${end}`}
           rows={dataState}
-          extraClass='max500' />
+          extraClass='max500' 
+        />
       }
            
     </div>

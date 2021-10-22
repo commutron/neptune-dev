@@ -24,7 +24,7 @@ const BuildHistory = ({ allVariant, allWidget, allGroup })=> {
   const [ wasState, wasSet ] = useState(true);
   const [ incState, incSet ] = useState('this');
   const [ numState, numSet ] = useState(1);
-  const [ spanState, spanSet ] = useState('month');
+  const [ spanState, spanSet ] = useState(false);//'month');
   
   const fillG = (gID)=> allGroup.find( g => g._id === gID ).group;
   const fillW = (wID)=> allWidget.find( w => w._id === wID ).widget.toUpperCase();
@@ -85,7 +85,9 @@ const BuildHistory = ({ allVariant, allWidget, allGroup })=> {
     const lineinthesand = moment().subtract(numCntx, spanPlural);
     
     let result = [];
-    if(wasState) {
+    if(!spanState) {
+      null;
+    }else if(wasState) {
       result = preGpFltr.filter( v => 
                     v.dates.find( d => 
                         moment(d).isSameOrAfter(lineinthesand, spanState) ) );
@@ -158,6 +160,7 @@ const BuildHistory = ({ allVariant, allWidget, allGroup })=> {
             style={ { width: '8ch', border: 'none', lineHeight: 2 } }
             defaultValue={spanState}
             onChange={(e)=>spanSet(e.target.value)}>
+            <option value={false}></option>
             <option value='month'>{mCntx}</option>
             <option value='year'>{yCntx}</option>
           </select>;
@@ -166,78 +169,86 @@ const BuildHistory = ({ allVariant, allWidget, allGroup })=> {
   const G = groupState === 'any' ? 'any' : fillG(groupState);
   
   return(
-    <div className='space'>
-      <div className='rowWrapR noPrint'><PrintThis /></div>
+    <div>
+      <div className='space'>
+
+        <p>
+          <i className='medBig line2x'>When was </i>
+          
+          <select
+            style={ { width: '10ch', border: 'none', lineHeight: 2 } }
+            defaultValue={scopeState}
+            onChange={(e)=>scopeSet(e.target.value)}>
+            <option value='group'>{Pref.group}</option>
+            <option value='widget'>{Pref.widget}</option>
+          </select>
+            
+          <i className='medBig line2x'> </i>
       
-      <p>
-        <i className='medBig line2x'>When was </i>
+          {scopeState === 'widget' ?
+            <Fragment><input
+              type='search'
+              list='wdgtList'
+              style={ { width: `${Pref.aliasMax+2}ch`, border: 'none' } }
+              onChange={(e)=>widgetSet(e.target.value)} />
+              <datalist id='wdgtList'>
+                {allWidget.map( (e, ix)=>(
+                  <option 
+                    key={ix+'w'+e._id} 
+                    value={e.widget.toUpperCase()}
+                    className='cap'
+                  >{fillG(e.groupId)}</option>
+                ))}
+              </datalist></Fragment>
+            :
+            <Fragment><input
+              type='search'
+              list='grpList'
+              style={ { width: `${Pref.aliasMax+2}ch`, border: 'none' } }
+              onChange={(e)=>groupASet(e.target.value)} />
+              <datalist id='grpList'>
+                {allGroupS.map( (e, ix)=>(
+                  <option 
+                    key={ix+'g'+e._id} 
+                    value={e.alias.toUpperCase()}
+                    className='cap'
+                  >{e.group}</option>
+                ))}
+              </datalist></Fragment>}
+            
+          <i className='medBig line2x'> built last?</i>
+        </p>
         
-        <select
-          style={ { width: '10ch', border: 'none', lineHeight: 2 } }
-          defaultValue={scopeState}
-          onChange={(e)=>scopeSet(e.target.value)}>
-          <option value='group'>{Pref.group}</option>
-          <option value='widget'>{Pref.widget}</option>
-        </select>
-          
-        <i className='medBig line2x'> </i>
+        <span className='overscroll minH60'>
+          {answerState === undefined ? null :
+            answerState === false ? <i className='big smCap'>Never</i> :
+            <NumLine
+              num={moment(answerState).format("dddd, MMMM Do YYYY")}
+              name=''
+              color='blueT'
+              big={true} />
+          }
+        </span>
       
-        {scopeState === 'widget' ?
-          <Fragment><input
-            type='search'
-            list='wdgtList'
-            style={ { width: `${Pref.aliasMax+2}ch`, border: 'none' } }
-            onChange={(e)=>widgetSet(e.target.value)} />
-            <datalist id='wdgtList'>
-              {allWidget.map( (e, ix)=>(
-                <option 
-                  key={ix+'w'+e._id} 
-                  value={e.widget.toUpperCase()}
-                  className='cap'
-                >{fillG(e.groupId)}</option>
-              ))}
-            </datalist></Fragment>
-          :
-          <Fragment><input
-            type='search'
-            list='grpList'
-            style={ { width: `${Pref.aliasMax+2}ch`, border: 'none' } }
-            onChange={(e)=>groupASet(e.target.value)} />
-            <datalist id='grpList'>
-              {allGroupS.map( (e, ix)=>(
-                <option 
-                  key={ix+'g'+e._id} 
-                  value={e.alias.toUpperCase()}
-                  className='cap'
-                >{e.group}</option>
-              ))}
-            </datalist></Fragment>}
-          
-        <i className='medBig line2x'> built last?</i>
-      </p>
-      
-      <span className='overscroll minH60'>
-        {answerState === undefined ? null :
-          answerState === false ? <i className='big smCap'>Never</i> :
-          <NumLine
-            num={moment(answerState).format("dddd, MMMM Do YYYY")}
-            name=''
-            color='blueT'
-            big={true} />
-        }
-      </span>
+      </div>
       
       <hr className='vmargin' />
       
-      <p className='medBig line2x'
-        >Which {Pref.widgets} from {insertGroup} {insertWas} built {insertInc} {I && insertNum} {insertSpan}
-      </p>
+      <div className='space'>
+        <p className='medBig line2x'
+          >Which {Pref.widgets} from {insertGroup} {insertWas} built {insertInc} {I && insertNum} {insertSpan}
+        </p>
+        
+        {spanState &&
+          <ReportStatsTable 
+            title={`${Pref.widgets} build report`}
+            dateString={`${G}-${wasState}-${incState}-${numState}-${spanState}`}
+            rows={viewState}
+            extraClass='max750 transparent'
+          />
+        }
       
-      <ReportStatsTable 
-        title={`${Pref.widgets} build report`}
-        dateString={`${G}-${wasState}-${incState}-${numState}-${spanState}`}
-        rows={viewState}
-        extraClass='max750 transparent' />
+      </div>
         
     </div>
   );
@@ -252,7 +263,7 @@ const GroupSelector = ({ groupState, groupSet, allGroup, showANY })=> (
     className='up'
     defaultValue={groupState}
     onChange={(e)=>groupSet(e.target.value)}>
-    {showANY && <option value={''}>any {Pref.group}</option>}
+    {showANY && <option value='any'>any {Pref.group}</option>}
     {allGroup.map( (e, ix)=>(
       <option key={'g'+ix} value={e._id} label={e.alias} />
     ))}

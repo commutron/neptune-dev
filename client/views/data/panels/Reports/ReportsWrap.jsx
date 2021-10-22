@@ -3,6 +3,7 @@ import DateRangeSelect from '/client/components/smallUi/DateRangeSelect';
 import PrintThis from '/client/components/tinyUi/PrintThis';
 import MonthKPIReport from './MonthKPIReport'; 
 import ProblemReport from './ProblemReport';
+import BuildHistory from './BuildHistory';
 
 const ReportsWrap = ({ 
   allXBatch, allWidget, allVariant, allGroup,
@@ -14,34 +15,44 @@ const ReportsWrap = ({
   const [ dataset, datasetSet ] = useState('stats');
 
   return(
-    <div className='space2v'>
+    <div className='space'>
       
       <div className='rowWrapR noPrint'><PrintThis /></div>
       
-      <div className='centre vmarginhalf noPrint'>
+      <BuildHistory
+        allVariant={allVariant}
+        allWidget={allWidget}
+        allGroup={allGroup} 
+        app={app} 
+      />
           
-        <ReportRangeRequest 
-          setFrom={(v)=>startSet(v)}
-          setTo={(v)=>endSet(v)}
-          setData={(v)=>datasetSet(v)} 
-        />
-        
-      </div>
+      <hr className='vmargin' />
+      <div className='printBr' />
       
-      {dataset === 'stats' ?
-        <MonthKPIReport 
-          start={start} 
-          end={end} 
-          dataset={dataset}
-          isDebug={isDebug} 
-        />
-      :      
-        <ProblemReport 
-          start={start} 
-          end={end} 
-          dataset={dataset} 
-        />
-      }
+      <div className='space'>
+        <div className='noPrint'>  
+          <ReportRangeRequest 
+            setFrom={(v)=>startSet(v)}
+            setTo={(v)=>endSet(v)}
+            setData={(v)=>datasetSet(v)} 
+          />
+        </div>
+        
+        {dataset === 'stats' ?
+          <MonthKPIReport 
+            start={start} 
+            end={end} 
+            dataset={dataset}
+            isDebug={isDebug} 
+          />
+        :      
+          <ProblemReport 
+            start={start} 
+            end={end} 
+            dataset={dataset} 
+          />
+        }
+      </div>
 
     </div>
   );
@@ -53,15 +64,8 @@ const ReportRangeRequest = ({
   setFrom, setTo, setData
 })=> (
   <div>
-    <h3 className='centreText'>Date Range</h3>
-      
-    <p>
-      <DateRangeSelect
-        setFrom={setFrom}
-        setTo={setTo} />
-    </p>
-      
-    <div className='centreRow'>
+    <p className='medBig centreRow rowWrap'>
+      <i>Find</i>
       <span className='middle'>
         <input
           type='radio'
@@ -72,6 +76,7 @@ const ReportRangeRequest = ({
         />
         <label htmlFor='inputStats'>Overall Stats</label>
       </span>
+      <em>or</em>
       <span className='middle'>
         <input
           type='radio'
@@ -81,6 +86,7 @@ const ReportRangeRequest = ({
         />
         <label htmlFor='inputNC'>Non-conformances</label>
       </span>
+      <em>or</em>
       <span className='middle'>
         <input
           type='radio'
@@ -90,7 +96,15 @@ const ReportRangeRequest = ({
         />
         <label htmlFor='inputSH'>Shortfalls</label>
       </span>
-    </div>
+  
+    </p>
+    
+    <p className='rowWrap medBig'>
+      <i>Within Date Range</i>
+      <DateRangeSelect
+        setFrom={setFrom}
+        setTo={setTo} />
+    </p>
       
   </div>
 );

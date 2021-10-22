@@ -50,7 +50,7 @@ const ProblemReport = ({ start, end, dataset })=> {
   return(
     <div className='overscroll'>
       
-      <div className='vmargin centreText noPrint'>
+      <div className='vmarginhalf noPrint'>
         <button 
           className='action clearBlack'
           onClick={(e)=>getReport(e)} 
@@ -59,16 +59,14 @@ const ProblemReport = ({ start, end, dataset })=> {
       </div>
         
       {working ?
-        <div className='centreText'>
-          <p>This may take a while...</p>
-          <n-fa0><i className='fas fa-spinner fa-lg fa-spin'></i></n-fa0>
-        </div>
+        <p>This may take a while...<n-fa0><i className='fas fa-spinner fa-lg fa-spin gapL'></i></n-fa0></p>
       :
         <ReportStatsTable 
           title='problem report' 
           dateString={`${start} to ${end}`}
           rows={replyData}
-          extraClass='max600' />
+          extraClass='max600' 
+        />
       }
           
     </div>

@@ -9,8 +9,6 @@ import ReportsWrap from './panels/Reports/ReportsWrap';
 import VisWrap from './panels/ExVis/VisWrap';
 import AllGroups from './panels/AllGroups/AllGroups';
 
-import BuildHistory from './panels/BuildHistory';
-
 import ItemPanelX from './panels/ItemPanelX';
 import BatchPanelX from './panels/XBatchPanel/BatchPanelX';
 import WidgetPanel from './panels/WidgetPanel/WidgetPanel';
@@ -152,29 +150,6 @@ const DataViewOps = ({
       </TraverseWrap>
     );
   }
-  
-  if(view === 'buildHistory') {
-    return (
-      <TraverseWrap
-	      batchData={false}
-        widgetData={false}
-        variantData={false}
-        groupData={false}
-        user={user}
-        app={app}
-        title='Build History'
-        subLink={subLink}
-        action={false}
-        base={true}
-      >
-        <BuildHistory
-          allVariant={allVariant}
-          allWidget={allWidget}
-          allGroup={allGroup} 
-          app={app} />
-      </TraverseWrap>
-    );
-  }   
       
   if(view === 'reports') {
     return (

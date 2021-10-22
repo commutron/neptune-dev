@@ -1,12 +1,10 @@
 import React from 'react';
-//import Pref from '/client/global/pref.js';
 import moment from 'moment';
 import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/themes/airbnb.css';
 
 const DateRangeSelect = ({ setFrom, setTo })=> (
-
-  <span className='centreRow'>
+  <span className='centreRow rowWrap'>
     <span className='beside'>
       <span><i className="fas fa-calendar gap darkgrayT"></i></span>
       <Flatpickr

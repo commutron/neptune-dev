@@ -29,14 +29,6 @@ export const ExTaskBar = ({ subLink }) => (
     />
     
     <TaskElement
-      title='Build History'
-      subON={subLink === 'buildHistoryundefined'}
-      goLink='/data/buildHistory'
-      icon='fas fa-backward'
-      iconAdj='left-1'
-    />
-    
-    <TaskElement
       title='Reports'
       subON={subLink === 'reportsundefined'}
       goLink='/data/reports'
