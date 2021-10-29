@@ -81,11 +81,11 @@ export const PrioritySquare = ({
   
   if( pt && pt.batchID === batchID ) {
     
-    const q2t = pt.quote2tide;
+    const e2t = pt.est2tide;
     const bffrTime = pt.estEnd2fillBuffer;
     const bffrRel = pt.bffrRel;
     const overQuote = pt.overQuote;
-    isDebug && console.log({pt, batchID, bffrRel, bffrTime, q2t, overQuote});
+    isDebug && console.log({pt, batchID, bffrRel, bffrTime, e2t, overQuote});
     
     if(pt.completed) {
       const doneColor = pt.oRapid ? 'darkOrange' : 'green';
@@ -149,12 +149,12 @@ export const PrioritySquare = ({
     const ovrTxt = overQuote ? 'Over Quote' : 'Under Quote';
     
     const prTxt = `Priority Rank "${priorityRank}"`;
-    const bffTxt = `buffer: ${bffrTime} minutes`;
-    const treTxt = `Estimated Time Remaining: ${min2hr(Math.max(0,q2t))} hours`;
+    const bffTxt = `buffer: ${bffrTime || 0} minutes`;
+    const treTxt = `Estimated Time Remaining: ${min2hr(Math.max(0,e2t))} hours`;
     const soonTxt = `Soonest Complete: ${moment(pt.estSoonest).format("ddd, MMM Do, h:mm a")}`;
     
     const title = `${prTxt}\n${ovrTxt}\n\n${treTxt}\n${soonTxt}`;
-    const debugTitle = `${prTxt}\n${ovrTxt}\n\n${treTxt}\nquote-to-tide: ${q2t}\n${soonTxt}\n\n${bffTxt}\n${pt.bffrRel}`;
+    const debugTitle = `${prTxt}\n${ovrTxt}\n\n${treTxt}\nquote-to-tide: ${e2t}\n${soonTxt}\n\n${bffTxt}\n${pt.bffrRel}`;
     
     if(showExtra && !showLess) {
       return(

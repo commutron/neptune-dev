@@ -50,10 +50,10 @@ const DownstreamScrollChunk = ({
 
   const isDone = ck.completedAt ? true : false;
   
-  const q2t = ck.quote2tide;
-  const q2tStatus = !q2t ? 'Time Not Tracked' :
-          q2t > 0 ? 
-            `${min2hr(q2t)} hr remain` :
+  const e2t = ck.est2tide;
+  const e2tStatus = !e2t ? 'Time Not Tracked' :
+          e2t > 0 ? 
+            `${min2hr(e2t)} hr remain` :
             'remaining time unknown';
   
   let highG = focusBy ? tBatch.isWhat[0] === focusBy ? '' : 'hide' : '';
@@ -84,7 +84,7 @@ const DownstreamScrollChunk = ({
       {isDone ? 
         ck.oRapid ? <div>{Pref.xBatch} {Pref.rapidExd}</div> :
         <div>{Pref.xBatch} {Pref.isDone}</div> :
-        <div title={`${Math.round(q2t)} minutes`}>{q2tStatus}</div>}
+        <div title={`${Math.round(e2t)} minutes`}>{e2tStatus}</div>}
       
       <BranchProgress
         batchID={ck.batchID}

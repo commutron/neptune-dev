@@ -312,11 +312,11 @@ Meteor.methods({
     const stale = !apxtime ? true :
               moment.duration(moment().diff(moment(apxtime))).as('hours') > Config.freche * 2;
     if(stale) {
-      const traces = TraceDB.find({onFloor: true},{fields:{'quote2tide':1}}).fetch();
+      const traces = TraceDB.find({onFloor: true},{fields:{'est2tide':1}}).fetch();
       
-      const q2tArr = Array.from(traces, x => typeof x.quote2tide === 'number' && x.quote2tide );
-      const q2tTotal = q2tArr.reduce( (arr, x)=> !isNaN(x) && x > 0 ? arr + x : arr, 0 );
-      const totalMin = Math.round(q2tTotal);
+      const e2tArr = Array.from(traces, x => typeof x.est2tide === 'number' && x.est2tide );
+      const e2tTotal = e2tArr.reduce( (arr, x)=> !isNaN(x) && x > 0 ? arr + x : arr, 0 );
+      const totalMin = Math.round(e2tTotal);
       
       const openHours = round2Decimal( moment.duration(totalMin, "minutes").asHours() );
 

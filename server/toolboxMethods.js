@@ -3,7 +3,7 @@ import 'moment-timezone';
 import 'moment-business-time';
 
 import Config from '/server/hardConfig.js';
-import { avgOfArray } from './calcOps.js';
+import { avg4est } from './calcOps.js';
 import { syncLocale, getEst } from './utility.js';
 import { getShipLoad } from '/server/shipOps';
 
@@ -194,7 +194,7 @@ Meteor.methods({
         
         if(qtBready && b.tide) {
           const mQuote = b.quoteTimeBudget.length === 0 ? 0 : b.quoteTimeBudget[0].timeAsMinutes;
-          const estimatedMinutes = avgOfArray([mQuote, mEst]);
+          const estimatedMinutes = avg4est(mQuote, mEst);
           
           return { 
             mEst, mQuote, estimatedMinutes, 

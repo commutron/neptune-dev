@@ -81,8 +81,13 @@ export function getEst(widgetId, quantity, pTgt) {
   const mEst = perQ * quantity;
   
   let cEst = mEst;
-  for(let x = pTgt || 0; x > 0; x--) { 
-    cEst = cEst - ( cEst * 0.15 ); 
+  
+  for(let x = Math.abs(pTgt) || 0; x > 0; x--) { 
+    if(pTgt < 0) {
+      cEst = cEst + ( cEst * 0.15 );
+    }else{
+      cEst = cEst - ( cEst * 0.15 ); 
+    }
   }
   return cEst;
 }

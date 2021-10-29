@@ -17,12 +17,14 @@ function dryPriorityCalc(bQuTmBdg, mEst, bTide, shipAim, now, shipLoad) {
   
   const totalTideMinutes = batchTideTime(bTide);
   
-  const quote2tide = estimatedMinutes - totalTideMinutes;
+  const quote2tide = mQuote - totalTideMinutes;
+  const ested2tide = estimatedMinutes - totalTideMinutes;
+  const est2tide = ested2tide > 0 ? ested2tide : quote2tide > 0 ? quote2tide : 0;
+  
   const overQuote = totalTideMinutes > mQuote;
-  const q2tNice = Math.max(0, quote2tide);
   
   const aimAhead = shipAimMmnt.clone().subtract(Config.shipAhead, 'hours');
-  const estSoonest = now.clone().addWorkingTime(q2tNice, 'minutes');
+  const estSoonest = now.clone().addWorkingTime(est2tide, 'minutes');
 
   const buffer = aimAhead.workingDiff(estSoonest, 'minutes');
   
@@ -33,7 +35,7 @@ function dryPriorityCalc(bQuTmBdg, mEst, bTide, shipAim, now, shipLoad) {
 
   const bffrRel = Math.round( ( estEnd2fillBuffer / 100 ) + dayGap - shipPull );
   
-  return { quote2tide, estSoonest, bffrRel, estEnd2fillBuffer, overQuote };
+  return { est2tide, estSoonest, bffrRel, estEnd2fillBuffer, overQuote };
 }
 
 function collectPriority(privateKey, batchID, mockDay) {
@@ -74,7 +76,7 @@ function collectPriority(privateKey, batchID, mockDay) {
           batch: b.batch,
           batchID: b._id,
           salesOrder: b.salesOrder,
-          quote2tide: dryCalc.quote2tide,
+          est2tide: dryCalc.est2tide,
           estSoonest: dryCalc.estSoonest.format(),
           completed: doneEntry, 
           bffrRel: dryCalc.bffrRel,
@@ -89,7 +91,7 @@ function collectPriority(privateKey, batchID, mockDay) {
           batch: b.batch,
           batchID: b._id,
           salesOrder: b.salesOrder,
-          quote2tide: false,
+          est2tide: false,
           completed: doneEntry,
           bffrRel: false,
           estEnd2fillBuffer: 0,
@@ -119,7 +121,7 @@ function getFastPriority(bData, now, shipAim) {
       const dryCalc = dryPriorityCalc(bData.quoteTimeBudget, mEst, bData.tide, shipAim, now, shipLoad);
       
       resolve({
-        quote2tide: dryCalc.quote2tide,
+        est2tide: dryCalc.est2tide,
         estSoonest: dryCalc.estSoonest.format(),
         bffrRel: dryCalc.bffrRel,
         estEnd2fillBuffer: dryCalc.estEnd2fillBuffer,
@@ -127,7 +129,7 @@ function getFastPriority(bData, now, shipAim) {
       });
     }else{
       resolve({
-        quote2tide: false,
+        est2tide: false,
         estSoonest: false,
         bffrRel: false,
         estEnd2fillBuffer: 0,
@@ -225,7 +227,7 @@ Meteor.methods({
         batch: t.batch,
         batchID: t.batchID,
         salesOrder: t.salesOrder,
-        quote2tide: t.quote2tide,
+        est2tide: t.est2tide,
         estSoonest: t.estSoonest,
         completed: t.completed, 
         bffrRel: t.bffrRel,

@@ -20,7 +20,7 @@ const ShipWindows = ({
   const [ traceDTSort, traceDTSSet ] = useState([]);
   
   const addUpTime = (wipArr)=> Array.from(wipArr, 
-        x => typeof x.quote2tide === 'number' && Math.max(x.quote2tide, 0) )
+        x => typeof x.est2tide === 'number' && Math.max(x.est2tide, 0) )
               .reduce( (arr, x)=> arr + x, 0);
         
   useLayoutEffect( ()=>{
