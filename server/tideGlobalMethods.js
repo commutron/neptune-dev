@@ -102,7 +102,7 @@ function collectActivtyLevel(privateKey, batchID) {
     }else{
       const aDone = batch.completedAt;
       const rested = !batch.live && aDone && 
-                        moment.duration(now.diff(moment(aDone))).asHours() > 24;
+                        moment.duration(now.diff(moment(aDone))).asHours() > Config.timeAfterGrace;
       
       const tide = batch.tide || [];
       

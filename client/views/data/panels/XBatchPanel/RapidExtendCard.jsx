@@ -123,13 +123,15 @@ const RapidExtendCard = ({
           
           <AddAutoNCwrap
             rapidData={rapid}
-            ncTypesCombo={ncTypesCombo} 
+            ncTypesCombo={ncTypesCombo}
+            rSetItems={rSetItems}
             user={user}
             editAuth={editAuth} />
           
           <AddAutoSHwrap
             rapidData={rapid}
             vassembly={vassembly || []}
+            rSetItems={rSetItems}
             editAuth={editAuth} />
           
         </span>

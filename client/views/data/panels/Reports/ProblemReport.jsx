@@ -32,14 +32,14 @@ const ProblemReport = ({ start, end, dataset })=> {
         ];
         const prob = dataset === 'noncon' ? 
           [
-            [ 'Discovered Non-conformances', re.nonConStats.foundNC ],
-            [ 'Items with Non-conformances', re.nonConStats.uniqueSerials, nciOfComp+'%' ],
-            [ 'Non-conformance Types', re.nonConStats.typeBreakdown ],
-            [ 'Non-conformance Departments', re.nonConStats.whereBreakdown ],
+            [ `Discovered ${Pref.nonCons}`, re.nonConStats.foundNC ],
+            [ `Items with ${Pref.nonCons}`, re.nonConStats.uniqueSerials, nciOfComp+'%' ],
+            [ `${Pref.nonCon} Types`, re.nonConStats.typeBreakdown ],
+            [ `${Pref.nonCon} Departments`, re.nonConStats.whereBreakdown ],
           ] : [
-            [ 'Discovered Shortfalls', re.shortfallStats.foundSH ],
-            [ 'Items with Shortfalls', re.shortfallStats.uniqueSerials, shiOfComp+'%' ],
-            [ 'Part Shortfall Numbers', re.shortfallStats.numBreakdown ],
+            [ `Discovered ${Pref.shortfalls}`, re.shortfallStats.foundSH ],
+            [ `Items with ${Pref.shortfalls}`, re.shortfallStats.uniqueSerials, shiOfComp+'%' ],
+            [ `${Pref.shortfall} Part Numbers`, re.shortfallStats.numBreakdown ],
           ];
         workingSet(false);
         replySet([...arrange,...prob]);

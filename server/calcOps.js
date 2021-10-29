@@ -62,6 +62,19 @@ export function avgOfArray(arr, zeros) {
   }
 }
 
+export function avg4est(mQuote, mEst) {
+  if(!mQuote && !mEst) {
+    return 0;
+  }else if(!mQuote) {
+    return round2Decimal( mEst );
+  }else if(!mEst) {
+    return round2Decimal( mQuote );
+  }else{
+    const lAvg = ( ( mEst * Config.estLean ) + mQuote ) / ( 1 + Config.estLean );
+    return round2Decimal( lAvg );
+  }
+}
+
 export function asRate(instances, ofQty, one) {
   const divide = instances / ofQty;
   const finite = isFinite(divide) ? divide : 0;

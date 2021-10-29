@@ -100,8 +100,8 @@ const InfoTab = ({
           <ReleaseAction 
             id={b._id} 
             rType='floorRelease'
-            actionText='release'
-            contextText='to the floor'
+            actionText={Pref.release}
+            contextText={`to ${Pref.floor}`}
           />
         :null}  
       </div>

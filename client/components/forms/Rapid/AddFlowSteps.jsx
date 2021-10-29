@@ -221,7 +221,7 @@ const AddFlowSteps = ({
   return(
     <div>
     {editState && rSetItems > 0 ?
-      <p className='trueyellow centreText'>Items have begun this flow</p> : null}
+      <p className='trueyellow centreText'>{Pref.items} have begun this {Pref.flow}</p> : null}
     {editState &&
       <div className='inlineForm interForm'>
         <label htmlFor='phasefltr' className='cap'>{Pref.branch}<br />

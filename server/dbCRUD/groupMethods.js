@@ -1,3 +1,5 @@
+import Config from '/server/hardConfig.js';
+
 Meteor.methods({
 
 //// Groups \\\\
@@ -66,11 +68,20 @@ Meteor.methods({
 
   internalizeGroup(groupId) {
     const auth = Roles.userIsInRole(Meteor.userId(), ['edit','run']);
+    const doc = GroupDB.findOne({_id: groupId});
     
-    if(auth) {
+    if(doc && auth) {
       const inter = GroupDB.find({ internal: true }).count();
       
-      if(inter === 0) {
+      if(doc.internal) {
+        GroupDB.update({_id: groupId, orgKey: Meteor.user().orgKey}, {
+          $set : {
+            internal: false,
+            updatedAt: new Date(),
+    			  updatedWho: Meteor.userId(),
+        }});
+        return true;
+      }else if(inter < Config.interMax) {
         GroupDB.update({_id: groupId, orgKey: Meteor.user().orgKey}, {
           $set : {
             internal: true,
@@ -79,13 +90,7 @@ Meteor.methods({
         }});
         return true;
       }else{
-        GroupDB.update({_id: groupId, orgKey: Meteor.user().orgKey}, {
-          $set : {
-            internal: false,
-            updatedAt: new Date(),
-    			  updatedWho: Meteor.userId(),
-        }});
-        return true;
+        return false;
       }
     }else{
       return false;

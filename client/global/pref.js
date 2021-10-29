@@ -10,7 +10,7 @@ class Pref {
     
     this.InitialAppSetup = false;
     
-    this.neptuneVersion = '3.8.6';
+    this.neptuneVersion = '3.8.7';
     this.neptuneIs = 'Neptune Process Tracking';
 
     this.prefName = 'default';
@@ -43,6 +43,7 @@ class Pref {
     this.tooManyMin = 600; // minutes, warning duration
     this.groupMax = 128;
     this.aliasMax = 16;
+    this.interMax = 1; // Also in server hardConfig
     this.downDayMax = 24; // max ship days in downstream
     this.pagingSize = 25;
     this.idleMinutes = 0; // minus idle time from timeInDay calculation
@@ -55,7 +56,7 @@ class Pref {
     this.yrsSpan = 3; // Also in server hardConfig
     this.stepUndoWindow = 1000*30; // remember to match ".spinRe"
     this.completeGrace = 24; // allow complete undo for lower permission for how many hours
-    this.timeAfterGrace = 48; // keep the tideControl unlocked for how many hours
+    this.timeAfterGrace = 48; // hours, keep the tideControl unlocked, Also in server hardConfig
     this.seriesLimit = 10000; // max items in a series, Also in server hardConfig
     this.unitLimit = 1000; // max units per item, Also in server hardConfig
     this.clusterMin = 2; // noncon sets
@@ -74,7 +75,6 @@ class Pref {
     this.post = 'record';
     this.close = 'CLOSE';
     this.office = 'office';
-    this.floor = 'floor';
     this.instruct = 'instructions';
     this.docs = 'Pisces';
     this.helpDocs = 'help';
@@ -139,6 +139,7 @@ class Pref {
     this.comp = 'part';
     this.release = 'release';
     this.released = 'released';
+    this.floor = 'production';
     
     this.downstream = 'downstream';
     this.ship = 'ship';

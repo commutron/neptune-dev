@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Pref from '/client/global/pref.js';
 import { NonConCheck } from '/client/utility/NonConOptions';
 
-export const AddAutoNCwrap = ({ rapidData, ncTypesCombo, user, editAuth })=> {
+export const AddAutoNCwrap = ({ rapidData, ncTypesCombo, rSetItems, user, editAuth })=> {
   
   const defaultNC = rapidData ? rapidData.autoNC || [] : [];
   
@@ -41,6 +41,7 @@ export const AddAutoNCwrap = ({ rapidData, ncTypesCombo, user, editAuth })=> {
         user={user}
         nonConsState={nonConsState}
         nonConsSet={nonConsSet}
+        rSetItems={rSetItems}
         editState={editState} />
   
       {editState ?
@@ -72,7 +73,7 @@ export const AddAutoNCwrap = ({ rapidData, ncTypesCombo, user, editAuth })=> {
   );
 };
 
-const AddAutoNC = ({ ncTypesCombo, user, nonConsState, nonConsSet, editState })=> {
+const AddAutoNC = ({ ncTypesCombo, user, nonConsState, nonConsSet, rSetItems, editState })=> {
 
   const flatCheckList = Array.from(ncTypesCombo, x => 
                                   x.key ? x.live === true && x.typeText : x);
@@ -113,6 +114,10 @@ const AddAutoNC = ({ ncTypesCombo, user, nonConsState, nonConsSet, editState })=
   
   return(
     <div>
+      {editState && rSetItems > 0 ?
+      <p className='trueyellow centreText'
+        >Only applied to newly {Pref.rapidExd} {Pref.items}
+      </p> : null}
       {editState &&
       <div className='inlineForm interForm'>
       
@@ -120,7 +125,9 @@ const AddAutoNC = ({ ncTypesCombo, user, nonConsState, nonConsSet, editState })=
           <input
             type='text'
             id='ncRefs'
-            className='up miniIn12 interInput' />
+            className='up miniIn12 interInput'
+            required
+          />
         </label>
         
         
@@ -167,7 +174,7 @@ const AddAutoNC = ({ ncTypesCombo, user, nonConsState, nonConsSet, editState })=
             <span>
               <select 
                 id='ncType'
-                className='redIn miniIn18 interSelect'
+                className='miniIn18 interSelect'
                 required
                 disabled={ncTypesCombo.length < 1}
               >

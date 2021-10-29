@@ -24,10 +24,10 @@ const WidgetsDepth = ({ groupAlias, widgetData, active })=> {
       <DumbFilter
         size='medBig'
         onTxtChange={(e)=>setTextFilter(e)}
-        labelText='Filter searches id and description, not case-sensitve.' />
+        labelText='Filter searches ID and description, not case-sensitve.' />
       
       <div className='wide vspacehalf max1000'>
-        {w.length < 1 ? <p>no {Pref.widget}s created</p> : null}
+        {w.length < 1 ? <p className='centreText'>no {Pref.widget}s created</p> : null}
           { showList.map( (entry, index)=> {
           let ac = active.includes(entry._id) ? 'activeMark' : '';
             return(

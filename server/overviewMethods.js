@@ -3,7 +3,7 @@ import 'moment-timezone';
 import 'moment-business-time';
 
 import Config from '/server/hardConfig.js';
-import { avgOfArray, asRate, percentOf, quadRegression } from './calcOps.js';
+import { avg4est, asRate, percentOf, quadRegression } from './calcOps.js';
 import { syncLocale, countMulti, getEst } from './utility.js';
 import { batchTideTime } from './tideGlobalMethods.js';
 import { calcShipDay } from './reportCompleted.js';
@@ -13,7 +13,7 @@ function dryPriorityCalc(bQuTmBdg, mEst, bTide, shipAim, now, shipLoad) {
   const shipAimMmnt = moment(shipAim);
   
   const mQuote = bQuTmBdg.length === 0 ? 0 : bQuTmBdg[0].timeAsMinutes;
-  const estimatedMinutes = avgOfArray([mQuote, mEst]);
+  const estimatedMinutes = avg4est(mQuote, mEst);
   
   const totalTideMinutes = batchTideTime(bTide);
   
@@ -264,7 +264,7 @@ Meteor.methods({
       const budget = b.quoteTimeBudget || [];
       const mQuote = budget.length === 0 ? 0 : Number(budget[0].timeAsMinutes);
       const estMinutes = mQuote === 0 ? mEst :
-                         mQuote < mEst ? mQuote : avgOfArray([mQuote, mEst]);
+                         mQuote < mEst ? mQuote : avg4est(mQuote, mEst);
       
       const realTimePer = percentOf( estMinutes, totalTideMinutes );
       

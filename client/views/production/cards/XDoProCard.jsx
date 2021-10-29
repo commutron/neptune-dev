@@ -136,7 +136,7 @@ const XDoProCard = ({
           <ReleaseAction 
             id={batchData._id} 
             rType='floorRelease'
-            actionText='release' />;
+            actionText={Pref.release} />;
 
   const insertWaterfall = 
           <WaterfallSelect 

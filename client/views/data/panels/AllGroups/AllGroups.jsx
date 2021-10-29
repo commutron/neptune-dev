@@ -9,7 +9,7 @@ const AllGroups = ({
   groupData, widgetData, variantData, batchDataX, app, specify 
 }) => {
   
-  const inter = groupData.find( g => g.internal );
+  const inter = groupData.filter( g => g.internal );
   
   const groupS = groupData.sort((g1, g2)=>
                   g1.alias < g2.alias ? -1 : g1.alias > g2.alias ? 1 : 0 );
@@ -50,7 +50,7 @@ const AllGroups = ({
             widgetsList={widgetsList}
             batchDataX={batchDataX}
             app={app}
-            inter={!inter || inter._id === entry._id}
+            inter={!inter || inter.length < Pref.interMax || inter.find( x=> x._id === entry._id )}
             isERun={isERun}
           />
         )})} 

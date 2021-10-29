@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Pref from '/client/global/pref.js';
 import '/client/components/bigUi/ArrayBuilder/style.css';
 
-export const AddAutoSHwrap = ({ rapidData, vassembly, editAuth })=> {
+export const AddAutoSHwrap = ({ rapidData, vassembly, rSetItems, editAuth })=> {
   
   const defaultSH = rapidData ? rapidData.autoSH || [] : [];
   
@@ -36,6 +36,7 @@ export const AddAutoSHwrap = ({ rapidData, vassembly, editAuth })=> {
         vassembly={vassembly}
         shortState={shortState}
         shortSet={shortSet}
+        rSetItems={rSetItems}
         editState={editState} />
   
       {editState ?
@@ -67,7 +68,7 @@ export const AddAutoSHwrap = ({ rapidData, vassembly, editAuth })=> {
   );
 };
 
-const AddAutoSH = ({ vassembly, shortState, shortSet, editState })=> {
+const AddAutoSH = ({ vassembly, shortState, shortSet, rSetItems, editState })=> {
   
   function handleSH(e) {
     const part = this.shPart.value.trim().toLowerCase();
@@ -95,6 +96,10 @@ const AddAutoSH = ({ vassembly, shortState, shortSet, editState })=> {
   
   return(
     <div>
+    {editState && rSetItems > 0 ?
+      <p className='trueyellow centreText'
+        >Only applied to newly {Pref.rapidExd} {Pref.items}
+      </p> : null}
     {editState ?
       <div className='inlineForm interForm'>
         <label htmlFor='shRefs'>Referances<br />

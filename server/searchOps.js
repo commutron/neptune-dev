@@ -108,7 +108,11 @@ Meteor.methods({
     ).forEach( x => enterLine(x) );
     
     GroupDB.find({
-      alias: { $regex: new RegExp( orb ) }
+      $or: [ 
+        { group: { $regex: new RegExp( orb ), $options: 'i' } },
+        { alias: { $regex: new RegExp( orb ) } },
+        { tags: { $in: [ orb ] } }
+      ]
     },{fields:{'_id':1}}
     ).forEach( g => {
       XBatchDB.find({groupId: g._id},{fields:{'batch':1,'salesOrder':1,'live':1}})
@@ -117,8 +121,8 @@ Meteor.methods({
     
     WidgetDB.find({
       $or: [ 
-        { widget: { $regex: new RegExp( orb ) } },
-        { describe: { $regex: new RegExp( orb ) } },
+        { widget: { $regex: new RegExp( orb ), $options: 'i' } },
+        { describe: { $regex: new RegExp( orb ), $options: 'i' } },
       ]
     },{fields:{'_id':1}}
     ).forEach( w => {

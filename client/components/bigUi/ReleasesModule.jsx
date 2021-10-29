@@ -26,7 +26,7 @@ const ReleaseAction = ({ id, rType, actionText, contextText })=> {
   };
   
   const access = Roles.userIsInRole(Meteor.userId(), ['run', 'kitting']);
-  const title = access ? `Release ${Pref.xBatch} to the floor` : Pref.norole;
+  const title = access ? `${Pref.release} ${Pref.xBatch} to the ${Pref.floor}` : Pref.norole;
   
   return(
     <div className='actionBox centre greenBorder listSortInput' style={sty}>

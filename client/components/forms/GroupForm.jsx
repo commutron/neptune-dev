@@ -70,6 +70,7 @@ const GroupForm = ({ id, name, alias, wiki, title, selfclose })=> {
         if(reply) {
           toast.success('Saved');
           FlowRouter.go('/data/overview?request=groups&specify=' + groupAlias);
+          selfclose();
         }else{
           toast.error('Server Error');
         }

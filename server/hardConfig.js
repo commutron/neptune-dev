@@ -13,11 +13,13 @@ class Config {
     this.loginExpire = 0.54; // in days, auto logout after experation
     this.minUsernameChar = 4;
     this.allowedSupers = 2; // max users that may hold a 'super' role
+    this.interMax = 1; // max internal groups
     
     this.maxShift = 10; // max number of consecutive hours 
+    this.timeAfterGrace = 48; // keep the tideControl unlocked for how many hours
     this.shipSoon = 2.5; // days away from its ship day, when its priority gets a boost. 
     this.shipAhead = 0; // hours to buffer ahead of shipAim
-    this.dropShipBffr = 5; // number of hours late is allowed
+    this.dropShipBffr = 0; // number of hours late is allowed
                           // compensating for out of hours hand delivery
     
     this.seriesLimit = 10000; // max items in a series
@@ -27,6 +29,9 @@ class Config {
     this.avgSpan = 1000; // in days, how far back to count for average statistics
     this.yrsSpan = 3; // in years, how far back to count years for statistics
     
+    this.estLean = 2; // to shift estimated minutes toward est and away from quoted
+                      // 0 will only use quote, 1 will split down the middle.
+                      // used in priority & performance
     // Relationship between % of completed and % of tide time 
     // is expressed as a Quadratic Regression Equation
     this.qregA = 80.6898916;

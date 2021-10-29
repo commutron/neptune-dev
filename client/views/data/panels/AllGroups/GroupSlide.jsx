@@ -124,7 +124,7 @@ const GroupSlide = ({ groupData, widgetsList, batchDataX, app, inter, isERun })=
         widgetData={widgetsList}
         active={active} />
       
-      <div className='wide space'>
+      <div className='wide'>
         <CreateTag
           when={g.createdAt}
           who={g.createdWho}

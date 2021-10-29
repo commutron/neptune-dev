@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import Pref from '/client/global/pref.js';
+
 import DateRangeSelect from '/client/components/smallUi/DateRangeSelect';
 import PrintThis from '/client/components/tinyUi/PrintThis';
 import MonthKPIReport from './MonthKPIReport'; 
@@ -84,7 +86,7 @@ const ReportRangeRequest = ({
           name='inputData'
           onChange={(e)=>setData('noncon')}
         />
-        <label htmlFor='inputNC'>Non-conformances</label>
+        <label htmlFor='inputNC'>{Pref.nonCons}</label>
       </span>
       <em>or</em>
       <span className='middle'>
@@ -94,7 +96,7 @@ const ReportRangeRequest = ({
           name='inputData'
           onChange={(e)=>setData('short')}
         />
-        <label htmlFor='inputSH'>Shortfalls</label>
+        <label htmlFor='inputSH'>{Pref.shortfalls}</label>
       </span>
   
     </p>

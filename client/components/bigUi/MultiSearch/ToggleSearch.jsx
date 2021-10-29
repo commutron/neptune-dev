@@ -97,9 +97,7 @@ const ToggleSearch = ({
         <input
           id='multiSearch'
           type='search'
-          pattern={tggl ? '[A-Za-z0-9 _-]*' : 
-            tggl === false ? '([0-9]{8,10})|([0-9]{6}[-][0-9]{7})*' : ''
-          }
+          pattern='[A-Za-z0-9\.()_\-\s#,:[\]/\\]*'
           minLength={tggl === false ? '5' : '3'}
           className='variableInput big'
           onChange={(e)=>handle(e)}
