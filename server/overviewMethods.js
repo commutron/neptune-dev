@@ -17,14 +17,13 @@ function dryPriorityCalc(bQuTmBdg, mEst, bTide, shipAim, now, shipLoad) {
   
   const totalTideMinutes = batchTideTime(bTide);
   
-  const quote2tide = mQuote - totalTideMinutes;
-  const ested2tide = estimatedMinutes - totalTideMinutes;
-  const est2tide = ested2tide > 0 ? ested2tide : quote2tide > 0 ? quote2tide : 0;
+  const est2tide = estimatedMinutes - totalTideMinutes;
   
   const overQuote = totalTideMinutes > mQuote;
+  const e2tNice = Math.max(0, est2tide);
   
   const aimAhead = shipAimMmnt.clone().subtract(Config.shipAhead, 'hours');
-  const estSoonest = now.clone().addWorkingTime(est2tide, 'minutes');
+  const estSoonest = now.clone().addWorkingTime(e2tNice, 'minutes');
 
   const buffer = aimAhead.workingDiff(estSoonest, 'minutes');
   
