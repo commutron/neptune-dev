@@ -56,7 +56,7 @@ const NSYrWkSqItemFormX = ({
       previewSet([]);
       flrWarnSet(`Sequence maximum (999) exceeded`);
       quWarnSet(`${man_lot_year_week + startLoop} to 
-                 ${man_lot_year_week + stopLoop} is an Invalid Range`);       
+                 ${man_lot_year_week + stopLoop} > serial limit`);       
       lockSet(true);
     }else{
       

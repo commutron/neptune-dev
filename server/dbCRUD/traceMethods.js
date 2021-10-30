@@ -67,6 +67,7 @@ function shrinkWhole(bData, now, shipLoad, accessKey) {
         oRapid: rapIs,
         isActive: actvLvl.isActive,
         onFloor: brchCnd.onFloor,
+        stormy: brchCnd.stormy,
         branchCondition: brchCnd.branchSets,
         est2tide: prtyRnk.est2tide,
         estSoonest: prtyRnk.estSoonest,
@@ -163,6 +164,7 @@ function checkNoise(bData, accessKey) {
         live: bData.live,
         isActive: actvLvl.isActive,
         onFloor: brchCnd.onFloor,
+        stormy: brchCnd.stormy,
         branchCondition: brchCnd.branchSets,
     }});
     resolve(true);

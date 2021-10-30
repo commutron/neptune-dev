@@ -59,7 +59,7 @@ const YrWkPnItemFormX = ({
       previewSet([]);
       flrWarnSet(`Sequence maximum (${isPnl ? "999" : "9999"}) exceeded`);
       quWarnSet(`${startLoop + (isPnl ? '1' : '')} to 
-                 ${stopLoop + (isPnl ? itemPerNum : '')} is an Invalid Range`);       
+                 ${stopLoop + (isPnl ? itemPerNum : '')} > serial limit`);       
       lockSet(true);
     }else{
       

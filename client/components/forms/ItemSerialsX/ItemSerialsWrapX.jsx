@@ -17,7 +17,7 @@ const ItemSerialsWrapX = ({
   const quantityCheck = (tryLength, quantity, start, stop)=>
     tryLength > 0 && tryLength <= Pref.seriesLimit && tryLength <= quantity ? 
     false : 
-    `${start} to ${stop} is an Invalid Range`;
+    `${start} to ${stop} > ${Pref.xBatch} quantity`;
   
   function showToast() {
     toast.warn('Please Wait For Confirmation...', {

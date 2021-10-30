@@ -112,7 +112,7 @@ const BXCreateForm = ({ groupId, widgetId, allVariants })=> {
     <form className='centre max500' onSubmit={(e)=>save(e)}>
       <span className='overscroll'>
         <div className='centreRow'>
-          <label className='breath' htmlFor='vrsn'>{Pref.version}<br />
+          <label className='breath' htmlFor='vrsn'>{Pref.variant}<br />
             <select
               id='vrsn'
               onChange={(e)=>tempverSet(e.target.value)}

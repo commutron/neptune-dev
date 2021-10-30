@@ -136,7 +136,7 @@ const StoneSelect = ({
       Session.set('ncWhere', stepBranch);
 	    Session.set('nowStepKey', flowStep.key);
       Session.set('nowWanchor', flowStep.how);
-    
+   
       const compEntry = iDone.find( sc => sc.key === flowStep.key && sc.good === true);
       const fTest = flowStep.type === 'test' ? 
                     iDone.filter( x => x.type === 'test' && x.good === false) : [];

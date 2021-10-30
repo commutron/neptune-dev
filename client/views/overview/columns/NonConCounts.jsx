@@ -1,4 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react';
+import Pref from '/client/global/pref.js';
 
 import NumStat from '/client/components/tinyUi/NumStat';
 
@@ -62,7 +63,7 @@ const NonConCounts = ({
         <div>
           <NumStat
             num={dt.itemIsScrap}
-            name='Scrap Boards'
+            name={Pref.scrapped}
             title=''
             color='redT'
             size='big' />
@@ -70,7 +71,7 @@ const NonConCounts = ({
         <div>
           <NumStat
             num={dt.itemHasRMA}
-            name='RMA Boards'
+            name={Pref.rapidExd}
             title=''
             color='redT'
             size='big' />

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './style.css';
+import { toCap } from '/client/utility/Convert.js';
 
 const TabsLite = ({ tabs, names, children })=> {
   
@@ -13,7 +14,7 @@ const TabsLite = ({ tabs, names, children })=> {
           return (
             <button
               key={index}
-              title={names ? names[index] : ''}
+              title={names ? toCap(names[index], true) : ''}
               onClick={()=>showSet(index)}
               className={clss}
             >{entry}</button>

@@ -24,7 +24,7 @@ const BatchDetails = ({
   const progCols = branchArea ?
                     [ brancheS.find( x => x.branch === filterBy).common ] :
                     Array.from(brancheS, x => x.common);
-  const ncCols = ['NC total', 'NC remain', 'NC rate', 'NC items', 'scrap', 'RMA'];
+  const ncCols = ['NC total', 'NC remain', 'NC rate', 'NC items', Pref.scrap, Pref.rapidEx];
 
   const fullHead = ['sales order','active',...statusCols,'released',...progCols,'Perfomance',...ncCols,''];
   const brchHead = ['sales order','active',...statusCols,...progCols,'Perfomance',...ncCols,''];
@@ -103,6 +103,8 @@ const BatchDetailChunk = ({
   const rTFghostC = releasedToFloor ? '' : 'ghostState';
   const rTFghostT = releasedToFloor ? '' : `Not released from ${Pref.kitting}`;
   
+  // console.log( tBatch.stormy ); // ncStop', 'shStop', 'tfStop','scStop'
+      
   return(
     <div className={`overGridRowScroll ${highG} ${rTFghostC}`} title={rTFghostT}>
       <div>

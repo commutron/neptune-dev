@@ -54,12 +54,14 @@ const DownstreamScrollChunk = ({
   const e2tStatus = !e2t ? 'Time Not Tracked' :
           e2t > 0 ? 
             `${min2hr(e2t)} hr remain` :
-            'remaining time unknown';
+            'estimated time exceeded';
   
   let highG = focusBy ? tBatch.isWhat[0] === focusBy ? '' : 'hide' : '';
 
   const releasedToFloor = tBatch.onFloor || false;
   
+  // console.log( tBatch.stormy ); // ncStop', 'shStop', 'tfStop','scStop'
+
   return(
     <div className={`downRowScroll ${highG}`}>
       

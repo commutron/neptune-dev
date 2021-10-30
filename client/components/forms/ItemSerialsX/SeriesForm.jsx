@@ -50,8 +50,7 @@ const SeriesCreateForm = ({ batchData, selfclose })=> {
       <h4>A Series enables individual item tracking by serial number</h4>
       <dt>Including:</dt>
       <dd>First-off, Build, Inspection and Test records</dd>
-      <dd>Process Nonconformances and Part Shortfalls</dd>
-      <dd>Customer Return handling</dd>
+      <dd>Process {Pref.nonCons} and Part {Pref.shortfalls}</dd>
       
       <p className='centreText'>
         <button

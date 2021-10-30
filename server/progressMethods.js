@@ -17,6 +17,7 @@ function collectBranchCondition(privateKey, batchID) {
           batch: batchX.batch,
           batchID: batchX._id,
           onFloor: false,
+          stormy: [false, false, false, false],
           branchSets: []
         });
       }else{
@@ -31,6 +32,14 @@ function collectBranchCondition(privateKey, batchID) {
         
         const waterfall = batchX.waterfall;
         const items = !srs ? [] : srs.items;
+        
+        const rSH = !srs ? [] : srs.shortfall.some( s => s.inEffect !== true && s.reSolve !== true );
+        const iTF = items.some( x => x.history.find( y => y.type === 'test' && y.good === false ) );
+        const iSC = items.some( x => x.scrapped );
+          
+        const stormy = [ rNC.length > 0, rSH, iTF, iSC ];
+                    // 'ncStop', 'shStop', 'tfStop','scStop'
+        
         const released = batchX.releases.findIndex( x => x.type === 'floorRelease') >= 0;
         let previous = released;
         
@@ -82,8 +91,8 @@ function collectBranchCondition(privateKey, batchID) {
           const conArr = Array.from(branchSteps, x => x.condition );
            
           const nonConLeft = branch.brKey === 't3rm1n2t1ng8r2nch' ? rNC.length :
-                              rNC.filter( x => x.where === branch.branch ).length;
-              
+                              rNC.some( x => x.where === branch.branch );
+          
           const branchCon = branchSteps.length === 0 ? false :
             conArr.includes('canStart') ||
             conArr.includes('stepRemain') ||
@@ -104,6 +113,7 @@ function collectBranchCondition(privateKey, batchID) {
           batch: batchX.batch,
           batchID: batchX._id,
           onFloor: released,
+          stormy: stormy,
           branchSets: branchSets
         });
       }

@@ -1,4 +1,5 @@
 import React from 'react';
+import Pref from '/client/global/pref.js';
 import DownstreamDetails from './DownstreamDetails';
 
 const WindowGlass = ({ 
@@ -8,7 +9,7 @@ const WindowGlass = ({
   
   const statCols = ['sales order','active','estimate'];
   const progCols = ['total items',...Array.from(brancheS, x => x.common)];
-  const ncCols = ['NC total', 'NC remain', 'NC rate', 'NC items', 'scrap', 'RMA'];
+  const ncCols = ['NC total', 'NC remain', 'NC rate', 'NC items', Pref.scrap, Pref.rapidEx];
   const headersArr = [...statCols,...progCols,'Perfomance',...ncCols,'',''];
 
   return(

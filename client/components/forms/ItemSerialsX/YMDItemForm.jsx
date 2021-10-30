@@ -57,7 +57,7 @@ const YMDItemForm = ({
     if(stopLoop.length !== digitState) {
       previewSet([]);
       flrWarnSet(`Sequence maximum (${tenDg ? "9999" : "999"}) exceeded`);
-      quWarnSet(`${startLoop} to ${stopLoop} is an Invalid Range`);       
+      quWarnSet(`${startLoop} to ${stopLoop} > serial limit`);       
       lockSet(true);
     }else{
       

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
+import { min2hr } from '/client/utility/Convert';
 
 import ModelMedium from '/client/components/smallUi/ModelMedium';
 
@@ -81,25 +82,27 @@ const BXEditForm = ({ batchData, seriesData, allVariants, canEdit, selfclose })=
   }
   
   const bDt = batchData;
+  const gtb = bDt.quoteTimeBudget[0] ? min2hr(bDt.quoteTimeBudget[0].timeAsMinutes) : 0;
 
   return(
     <form className='centre' onSubmit={(e)=>save(e)}>
-      <p>
-        <select
-          id='vrsn'
-          defaultValue={bDt.versionKey}
-          disabled={!canEdit}
-          required>
-        {allVariants.map( (entry)=>{
-          if(entry.live || entry.versionKey === bDt.versionKey) {
-            return(
-              <option value={entry.versionKey} key={entry.versionKey}>
-                {entry.variant}
-              </option>
-            )}})}
-        </select>
-        <label htmlFor='vrsn'>{Pref.version}</label>
-      </p>
+      <div className='centreRow'>
+        <label className='breath' htmlFor='vrsn'>{Pref.variant}<br />
+          <select
+            id='vrsn'
+            defaultValue={bDt.versionKey}
+            disabled={!canEdit}
+            required>
+          {allVariants.map( (entry)=>{
+            if(entry.live || entry.versionKey === bDt.versionKey) {
+              return(
+                <option value={entry.versionKey} key={entry.versionKey}>
+                  {entry.variant}
+                </option>
+              )}})}
+          </select>
+        </label>
+      </div>
       
       <div className='centreRow vmargin'>
         <label htmlFor='oNum' className='breath'>{Pref.xBatch} number<br />
@@ -136,29 +139,6 @@ const BXEditForm = ({ batchData, seriesData, allVariants, canEdit, selfclose })=
       </div>
       
       <div className='centreRow vmargin'>
-        <label htmlFor='sDate' className='breath'>{Pref.start} date<br />
-        <input
-          type='date'
-          id='sDate'
-          max={moment(bDt.createdAt).format('YYYY-MM-DD')}
-          defaultValue={moment(bDt.salesStart).format('YYYY-MM-DD')}
-          pattern='[0-9]{4}-[0-9]{2}-[0-9]{2}'
-          required 
-        /></label>
-
-        <label htmlFor='eDate' className='breath'>{Pref.end} date<br />
-        <input
-          type='date'
-          id='eDate'
-          min={moment(bDt.createdAt).format('YYYY-MM-DD')}
-          defaultValue={moment(bDt.salesEnd).format('YYYY-MM-DD')}
-          pattern='[0-9]{4}-[0-9]{2}-[0-9]{2}'
-          disabled={true}
-        /></label>
-      
-      </div>
-      
-      <div className='centreRow vmargin'>
         <label htmlFor='quant' className='breath'>Quantity<br />
         <input
           type='number'
@@ -175,7 +155,7 @@ const BXEditForm = ({ batchData, seriesData, allVariants, canEdit, selfclose })=
         /></label>
         
         <label className='breath'>Serialize<br />
-          <label htmlFor='srlz' className='beside mockInputBoxOFF'>
+          <label htmlFor='srlz' className='beside'>
           <input
             type='checkbox'
             id='srlz'
@@ -185,8 +165,30 @@ const BXEditForm = ({ batchData, seriesData, allVariants, canEdit, selfclose })=
             disabled={true}
           /><i>Use {Pref.itemSerial} numbers</i></label>
         </label>
-        
       </div>
+      
+      <div className='centreRow vmargin'>
+        <label htmlFor='sDate' className='breath'>{Pref.start}<br />
+        <input
+          type='date'
+          id='sDate'
+          max={moment(bDt.createdAt).format('YYYY-MM-DD')}
+          defaultValue={moment(bDt.salesStart).format('YYYY-MM-DD')}
+          pattern='[0-9]{4}-[0-9]{2}-[0-9]{2}'
+          required 
+        /></label>
+        
+        <label htmlFor='hourNum' className='breath'>{Pref.timeBudget} (in hours)<br />
+          <input
+            type='number'
+            id='hourNum'
+            title={`update quoted time budget\n in hours to 2 decimal places`}
+            className='numberSet indenText miniIn18'
+            defaultValue={gtb}
+            disabled={true}
+          /></label>
+      </div>
+      
       
       <div className='centreRow vmargin'>
         <button
