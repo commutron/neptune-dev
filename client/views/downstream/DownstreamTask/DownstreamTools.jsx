@@ -3,7 +3,7 @@ import Pref from '/client/global/pref.js';
 import ClockString from '/client/components/smallUi/ClockString';
 import { 
   FocusSelect, FilterSelect,
-  LayoutSwitch, ThemeSwitch
+  LayoutSwitch, ThemeSwitch, StormySwitch
 } from '/client/components/smallUi/ToolBarTools';
 
 
@@ -13,6 +13,7 @@ const DownstreamTools = ({
   focusByUP, changeFocusByUP,
   salesByUP, denseUP, lightUP,
   changeSalesUP, denseSetUP, themeSetUP,
+  stormy, stormySet,
   doThing
 })=> {
   const gList = _.uniq( Array.from(traceDT, g =>
@@ -58,7 +59,12 @@ const DownstreamTools = ({
           icon='fas fa-dollar-sign'
         />
       : null}
-        
+      
+      <StormySwitch
+        stormState={stormy}
+        changeFunc={stormySet} 
+      />
+      
       <LayoutSwitch
         denseState={denseUP}
         changeFunc={denseSetUP}
@@ -68,7 +74,7 @@ const DownstreamTools = ({
         themeState={lightUP}
         changeFunc={themeSetUP}
       />
-        
+       
       <span className='flexSpace' />
       <ClockString loadTime={loadTimeUP} doThing={doThing} />
     </nav>

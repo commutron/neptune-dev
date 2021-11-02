@@ -5,7 +5,7 @@ import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock';
 
 const BatchHeaders = ({ 
   oB, traceDT,
-  app, isDebug, title, focusBy 
+  app, isDebug, title, focusBy, stormy
 })=> (
   <div className='overGridFixed'>
       
@@ -23,7 +23,9 @@ const BatchHeaders = ({
             tBatch={tBatch}
             app={app}
             isDebug={isDebug}
-            focusBy={focusBy} />
+            focusBy={focusBy}
+            stormy={stormy}
+          />
     )})}
     
   </div>
@@ -31,7 +33,7 @@ const BatchHeaders = ({
 
 export default BatchHeaders;
 
-const BatchHeaderChunk = ({ ck, tBatch, app, isDebug, focusBy })=> {
+const BatchHeaderChunk = ({ ck, tBatch, app, isDebug, focusBy, stormy })=> {
   
   const isDone = ck.completed || ck.finishedAt ? true : false;
   
@@ -41,9 +43,15 @@ const BatchHeaderChunk = ({ ck, tBatch, app, isDebug, focusBy })=> {
   const releasedToFloor = ck.releases.findIndex( 
                             x => x.type === 'floorRelease') >= 0 ? 
                             '' : 'ghostState';
-                            
+  
+  let storm = stormy === false ? '' :
+        stormy === 0 && tBatch.stormy[0] !== true ||
+        stormy === 1 && tBatch.stormy[1] !== true ||
+        stormy === 2 && tBatch.stormy[2] !== true || 
+        stormy === 3 && tBatch.stormy[3] !== true ? 'hide' : '';
+        
   return(
-    <div className={`overGridRowFixed ${releasedToFloor} ${highG}`}>
+    <div className={`overGridRowFixed ${releasedToFloor} ${highG} ${storm}`}>
       <PrioritySquare
         batchID={ck._id}
         ptData={tBatch}

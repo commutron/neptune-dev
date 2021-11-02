@@ -3,7 +3,7 @@ import ClockString from '/client/components/smallUi/ClockString';
 import { 
   BranchFilterSelect, SortSelect, 
   FocusSelect, FilterSelect,
-  LayoutSwitch, ThemeSwitch
+  LayoutSwitch, ThemeSwitch, StormySwitch
 } from '/client/components/smallUi/ToolBarTools';
 
 const OverviewTools = ({
@@ -15,6 +15,7 @@ const OverviewTools = ({
   ghostUP, ghostSetUP, 
   denseUP, denseSetUP,
   lightUP, themeSetUP,
+  stormy, stormySet,
   doThing
 })=> {
   const gList = _.uniq( Array.from(traceDT, g =>
@@ -69,7 +70,12 @@ const OverviewTools = ({
           ></i>
         </button>
       </span>
-        
+      
+      <StormySwitch
+        stormState={stormy}
+        changeFunc={stormySet} 
+      />
+      
       <LayoutSwitch
         denseState={denseUP}
         changeFunc={denseSetUP}

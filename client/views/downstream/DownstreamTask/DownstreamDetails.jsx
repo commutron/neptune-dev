@@ -13,7 +13,7 @@ const DownstreamDetails = ({
   indexKey, oB, traceDT,
   user, app,
   isDebug, isNightly, canDo,
-  focusBy, dense, progCols, ncCols, updateTrigger
+  focusBy, dense, stormy, progCols, ncCols, updateTrigger
 })=> (
   <Fragment>
     {!oB ? null :
@@ -31,6 +31,7 @@ const DownstreamDetails = ({
               canDo={canDo}
               focusBy={focusBy}
               dense={dense}
+              stormy={stormy}
               progCols={progCols}
               ncCols={ncCols}
               updateTrigger={updateTrigger}
@@ -44,7 +45,8 @@ export default DownstreamDetails;
 
 const DownstreamScrollChunk = ({
   ck, tBatch,
-  app, user, focusBy, isDebug, canDo, dense, progCols, ncCols,
+  app, user, focusBy, isDebug, canDo, dense, stormy,
+  progCols, ncCols,
   updateTrigger
 })=> {
 
@@ -59,11 +61,15 @@ const DownstreamScrollChunk = ({
   let highG = focusBy ? tBatch.isWhat[0] === focusBy ? '' : 'hide' : '';
 
   const releasedToFloor = tBatch.onFloor || false;
-  
-  // console.log( tBatch.stormy ); // ncStop', 'shStop', 'tfStop','scStop'
+
+  let storm = stormy === false ? '' :
+        stormy === 0 && tBatch.stormy[0] !== true ||
+        stormy === 1 && tBatch.stormy[1] !== true ||
+        stormy === 2 && tBatch.stormy[2] !== true || 
+        stormy === 3 && tBatch.stormy[3] !== true ? 'hide' : '';
 
   return(
-    <div className={`downRowScroll ${highG}`}>
+    <div className={`downRowScroll ${highG} ${storm}`}>
       
       <div>
         <i><i className='label' title={Pref.salesOrder}

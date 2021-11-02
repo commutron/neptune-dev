@@ -27,6 +27,7 @@ const DownstreamView = ({ traceDT, dayTime, user, app, isDebug })=> {
   const [ salesBy, salesBySet ] = useState( Session.get(sessionSticky+'sales') || false );
   const [ dense, denseSet ] = useState( defaultDense );
   const [ light, themeSet ] = useState( defaultLight );
+  const [ stormy, stormySet ] = useState(false);
   
   const [ updateTrigger, updateTriggerSet ] = useState(true);
   
@@ -94,6 +95,8 @@ const DownstreamView = ({ traceDT, dayTime, user, app, isDebug })=> {
         salesByUP={salesBy}
         denseUP={dense}
         lightUP={light}
+        stormy={stormy}
+        stormySet={stormySet}
         
         changeFocusByUP={(e)=>changeFocus(e)}
         changeSalesUP={(e)=>changeSales(e)}
@@ -114,6 +117,7 @@ const DownstreamView = ({ traceDT, dayTime, user, app, isDebug })=> {
         focusBy={focusBy}
         salesBy={salesBy}
         dense={density}
+        stormy={stormy}
         updateTrigger={updateTrigger}
       />
 

@@ -14,7 +14,7 @@ const CompModel = ({ vID, lockOut })=> {
       button={'Add ' + Pref.comp + 's'}
       title={title}
       color='blueT'
-      icon='fa-microchip'
+      icon='fa-shapes'
       lock={!access || lockOut}
     >
       <CompForm

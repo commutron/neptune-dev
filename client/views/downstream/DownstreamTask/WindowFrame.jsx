@@ -5,7 +5,7 @@ import DownstreamHeaders from './DownstreamHeaders';
 const WindowFrame = ({ 
   windowMoment, loaded, mixedOrders, 
   indexKey, traceDT,
-  app, user, isDebug, focusBy, dense
+  app, user, isDebug, focusBy, dense, stormy
 })=> (
   <div className={`downGridFrameFixed 
                   ${indexKey === -1 ? 'rapidtitle' : 
@@ -38,6 +38,7 @@ const WindowFrame = ({
         isNightly={false}
         focusBy={focusBy}
         dense={dense}
+        stormy={stormy}
       />
     </div>
   </div>

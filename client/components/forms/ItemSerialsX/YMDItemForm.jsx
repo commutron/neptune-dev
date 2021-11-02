@@ -56,8 +56,8 @@ const YMDItemForm = ({
     
     if(stopLoop.length !== digitState) {
       previewSet([]);
-      flrWarnSet(`Sequence maximum (${tenDg ? "9999" : "999"}) exceeded`);
-      quWarnSet(`${startLoop} to ${stopLoop} > serial limit`);       
+      flrWarnSet(false);
+      quWarnSet(`Format maximum (${tenDg ? "9999" : "999"}) exceeded`);     
       lockSet(true);
     }else{
       
@@ -71,7 +71,7 @@ const YMDItemForm = ({
                             app.latestSerial.nineDigit;
            
       const flrChk = startLoopNum > floor ? false :
-                     `Not in sequence (Below ${floor})`;
+                     `Warning: Out of sequence (Below ${floor})`;
       flrWarnSet(flrChk);
       
       const quChk = quantityCheck(tryData.length, quantity, startLoop, stopLoop);
@@ -248,8 +248,8 @@ const YMDItemForm = ({
           })}
         </dl>
         
-        {flrWarn && <p>{flrWarn}</p>}
-        {quWarn && <p>{quWarn}</p>}
+        {flrWarn && <p className='yellowGlow'>{flrWarn}</p>}
+        {quWarn && <p className='redGlow'>{quWarn}</p>}
         
         <p className='medBig'><i className='big'>{previewData.length}</i> {Pref.itemSerial}s</p>
         <p className='centreText'><em>duplicate checking is done on the server</em></p>

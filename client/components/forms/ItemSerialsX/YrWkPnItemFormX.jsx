@@ -57,9 +57,8 @@ const YrWkPnItemFormX = ({
     
     if(stopLoop.length !== (isPnl ? 7 : 8)) {
       previewSet([]);
-      flrWarnSet(`Sequence maximum (${isPnl ? "999" : "9999"}) exceeded`);
-      quWarnSet(`${startLoop + (isPnl ? '1' : '')} to 
-                 ${stopLoop + (isPnl ? itemPerNum : '')} > serial limit`);       
+      flrWarnSet(false);
+      quWarnSet(`Sequence maximum (${isPnl ? "999" : "9999"}) exceeded`); 
       lockSet(true);
     }else{
       
@@ -85,7 +84,7 @@ const YrWkPnItemFormX = ({
       const floor = app.latestSerial.eightDigit;
                             
       const flrChk = firstInSqu > floor ? false :
-                     `Not in sequence (Below ${floor})`;
+                     `Warning: Out of sequence (Below ${floor})`;
       flrWarnSet(flrChk);
       
       const quChk = quantityCheck(tryData.length, quantity, startLoop, stopLoop);

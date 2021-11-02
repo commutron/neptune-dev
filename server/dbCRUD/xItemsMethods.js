@@ -92,7 +92,7 @@ Meteor.methods({
           			  updatedWho: Meteor.userId()
               }});
               
-              const barLast = goodBarcodes[goodBarcodes.length - 1];
+              const barLast = goodBarcodes[goodBarcodes.length - 1].serial;
               if(Number(barLast) > floor) {
                 seqLth == 9 ?
                   AppDB.update({orgKey: accessKey}, {
@@ -175,7 +175,7 @@ Meteor.methods({
           			  updatedWho: Meteor.userId()
                 }});
               
-              const barLast = goodBarcodes[goodBarcodes.length - 1];
+              const barLast = goodBarcodes[goodBarcodes.length - 1].serial;
               if(Number(barLast) > floor) {
                 AppDB.update({orgKey: accessKey}, {
                   $set : {

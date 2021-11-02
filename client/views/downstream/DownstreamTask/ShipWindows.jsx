@@ -9,7 +9,8 @@ import { min2hr } from '/client/utility/Convert';
 
 const ShipWindows = ({ 
   calcFor, traceDT, dayTime,
-  brancheS, app, user, isDebug, focusBy, salesBy, dense, updateTrigger
+  brancheS, app, user, isDebug, focusBy, salesBy, dense, stormy,
+  updateTrigger
 })=> {
   
   const [ traceRapid, traceRapidSet ] = useState(false);
@@ -122,6 +123,7 @@ const ShipWindows = ({
             isDebug={isDebug}
             focusBy={focusBy}
             dense={dense}
+            stormy={stormy}
           />
         }
         {shipDayChunks.map( (ch, ix)=>( 
@@ -137,6 +139,7 @@ const ShipWindows = ({
             isDebug={isDebug}
             focusBy={focusBy}
             dense={dense}
+            stormy={stormy}
           />
         ))}
       </div>
@@ -155,6 +158,7 @@ const ShipWindows = ({
             canDo={canDo}
             focusBy={focusBy}
             dense={dense}
+            stormy={stormy}
             updateTrigger={updateTrigger}
           />
         }
@@ -171,6 +175,7 @@ const ShipWindows = ({
             canDo={canDo}
             focusBy={focusBy}
             dense={dense}
+            stormy={stormy}
             updateTrigger={updateTrigger}
           />
         ))}

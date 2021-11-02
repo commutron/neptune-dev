@@ -43,7 +43,7 @@ const AddressSlide = ({ app })=> {
         <p>current: <i className='clean'>{app.timeClock}</i></p>
       </div>
       <div>
-        <h2 className='cap'>Parts Search</h2>
+        <h2 className='cap'><i className='fas fa-shapes gapR'></i>Parts Search</h2>
         <p>Enable/Disable Parts Search Module and Variants Assembly Lists</p>
         <p className='beside'>
           <input

@@ -63,7 +63,7 @@ export const ExTaskBar = ({ subLink }) => (
       title='Test Fail History'
       subON={subLink === 'overviewtestfail'}
       goLink='/data/overview?request=testfail'
-      icon='fas fa-microscope'
+      icon='fas fa-microchip'
       iconAdj='down-1'
     />
     
@@ -94,7 +94,7 @@ export const UpTaskBar = ({ subLink, showParts, isAuth }) => (
         title='Parts Search'
         subON={subLink === 'parts'}
         goLink='/upstream/parts'
-        icon='fas fa-microchip'
+        icon='fas fa-shapes'
         iconAdj=''
       />
     }

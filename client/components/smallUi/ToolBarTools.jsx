@@ -1,5 +1,6 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
+import { toCap } from '/client/utility/Convert';
 
 
 export const BranchFilterSelect = ({ brancheS, filterState, changeFunc })=> (
@@ -44,7 +45,7 @@ export const FocusSelect = ({ gList, focusState, changeFunc })=> (
     <i className='fas fa-industry fa-fw darkgrayT'></i>
     <select
       id='focusSelect'
-      title={`Focus on ${Pref.group}`}
+      title={`Focus on ${toCap(Pref.group)}`}
       className={`overToolSort liteToolOn`}
       defaultValue={focusState}
       onChange={(e)=>changeFunc(e)}>
@@ -107,37 +108,98 @@ export const YearSelect = ({
 
 export const LayoutSwitch = ({ denseState, changeFunc })=> (
   <span>
-    <button
-      key='denseOff'
+    <ToolButton
+      kID='denseOff'
       title='Comfort Layout'
-      onClick={()=>changeFunc(false)}
-      className={!denseState ? 'liteToolOn' : 'liteToolOff'}
-    ><i className='fas fa-expand fa-fw'></i></button>
-    
-    <button
-      key='miniOn'
+      changeFunc={changeFunc}
+      stateVal={denseState}
+      onVal={false}
+      icon='fas fa-expand'
+    />
+    <ToolButton
+      kID='miniOn'
       title='Minifyed Layout'
-      onClick={()=>changeFunc(true)}
-      className={denseState ? 'liteToolOn' : 'liteToolOff'}
-    ><i className='fas fa-compress fa-fw'></i></button>
+      changeFunc={changeFunc}
+      stateVal={denseState}
+      onVal={true}
+      icon='fas fa-compress'
+    />
   </span>
 );
 
 export const ThemeSwitch = ({ themeState, changeFunc })=> (
   <span>
-    <button
-      key='darkOn'
+    <ToolButton
+      kID='darkOn'
       title='Dark Theme'
-      onClick={()=>changeFunc(false)}
-      className={themeState === false ? 'liteToolOn' : 'liteToolOff'}
-    ><i className='fas fa-moon fa-fw'></i></button>
-    <button
-      key='lightOn'
+      changeFunc={changeFunc}
+      stateVal={themeState}
+      onVal={false}
+      icon='fas fa-moon'
+    />
+    <ToolButton
+      kID='lightOn'
       title='Light Theme'
-      onClick={()=>changeFunc(true)}
-      className={themeState === true ? 'liteToolOn' : 'liteToolOff'}
-    ><i className='fas fa-sun fa-fw'></i></button>
+      changeFunc={changeFunc}
+      stateVal={themeState}
+      onVal={true}
+      icon='fas fa-sun'
+    />
   </span>
+);
+
+export const StormySwitch = ({ stormState, changeFunc })=> (
+  <span>
+    <ToolButton
+      kID='stormyOFF'
+      title='Problem Filter Off'
+      changeFunc={changeFunc}
+      stateVal={stormState}
+      onVal={false}
+      icon='far fa-square'
+    />
+    <ToolButton
+      kID='ncOn'
+      title={'Outstanding ' + Pref.nonCons}
+      changeFunc={changeFunc}
+      stateVal={stormState}
+      onVal={0}
+      icon='fas fa-times-circle'
+    />
+    <ToolButton
+      kID='shOn'
+      title={'Outstanding ' + Pref.shortfalls}
+      changeFunc={changeFunc}
+      stateVal={stormState}
+      onVal={1}
+      icon='fas fa-exclamation'
+    />
+    <ToolButton
+      kID='tfOn'
+      title='Test Failures'
+      changeFunc={changeFunc}
+      stateVal={stormState}
+      onVal={2}
+      icon='fas fa-microchip'
+    />
+    <ToolButton
+      kID='scOn'
+      title={Pref.scraps}
+      changeFunc={changeFunc}
+      stateVal={stormState}
+      onVal={3}
+      icon='fas fa-trash-alt'
+    />
+  </span>
+);
+
+const ToolButton = ({ kID, title, changeFunc, stateVal, onVal, icon })=> (
+  <button
+    key={kID}
+    title={toCap(title, true)}
+    onClick={()=>changeFunc(onVal)}
+    className={stateVal === onVal ? 'liteToolOn' : 'liteToolOff'}
+  ><i className={`${icon} fa-fw`}></i></button>
 );
 
 export const ToggleSwitch = ({ 

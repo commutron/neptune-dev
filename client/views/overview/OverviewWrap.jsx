@@ -46,6 +46,7 @@ const OverviewWrap = ({
   const [ ghost, ghostSet ] = useState( defaultGhost );
   const [ dense, denseSet ] = useState( defaultDense );
   const [ light, themeSet ] = useState( defaultLight );
+  const [ stormy, stormySet ] = useState(false);
   
   const [ liveState, liveSet ] = useState( false );
   
@@ -205,12 +206,14 @@ const OverviewWrap = ({
         ghostUP={ghost}
         denseUP={dense}
         lightUP={light}
+        stormy={stormy}
         changeFilterUP={(e)=>changeFilter(e)}
         changeSortUP={(e)=>changeSort(e)}
         changeSalesUP={(e)=>changeSales(e)}
         ghostSetUP={(e)=>changeGhost(e)}
         denseSetUP={(e)=>changeDense(e)}
         themeSetUP={(e)=>changeTheme(e)}
+        stormySet={stormySet}
         doThing={()=>updateTriggerSet(!updateTrigger)}
       />
       
@@ -233,6 +236,7 @@ const OverviewWrap = ({
             isDebug={isDebug}
             title={!filterBy ? 'All Live' : filterBy}
             focusBy={focusBy}
+            stormy={stormy}
           />
           
           <BatchDetails
@@ -246,6 +250,7 @@ const OverviewWrap = ({
             dense={dense}
             filterBy={filterBy}
             focusBy={focusBy}
+            stormy={stormy}
             branchArea={filterBy !== false}
             updateTrigger={updateTrigger}
           />
