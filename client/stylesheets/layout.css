@@ -851,6 +851,7 @@ n-sm-model-content {
 .hidden { display: none; }
 .invisible { visibility: hidden; }
 .collapse { visibility: collapse; }
+.clearall { opacity: 0.1 !important; }
 /*.offscreen {content-visibility: auto; }*/
 .hiddenPIN {
   opacity: 0;

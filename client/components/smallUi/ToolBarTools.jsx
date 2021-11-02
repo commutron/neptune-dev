@@ -156,7 +156,7 @@ export const StormySwitch = ({ stormState, changeFunc })=> (
       changeFunc={changeFunc}
       stateVal={stormState}
       onVal={false}
-      icon='far fa-square'
+      icon='fas fa-bars'
     />
     <ToolButton
       kID='ncOn'
