@@ -54,8 +54,7 @@ const DownstreamFixedChunk = ({
   let storm = stormy === false ? '' :
         stormy === 0 && tBatch.stormy[0] !== true ||
         stormy === 1 && tBatch.stormy[1] !== true ||
-        stormy === 2 && tBatch.stormy[2] !== true || 
-        stormy === 3 && tBatch.stormy[3] !== true ? 'clearall' : '';
+        stormy === 2 && tBatch.stormy[2] !== true ? 'clearall' : '';
 
   isDebug && console.log(ck.batch+'='+ck.batchID);
   

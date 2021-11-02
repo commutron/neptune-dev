@@ -17,7 +17,7 @@ function collectBranchCondition(privateKey, batchID) {
           batch: batchX.batch,
           batchID: batchX._id,
           onFloor: false,
-          stormy: [false, false, false, false],
+          stormy: [false, false, false],
           branchSets: []
         });
       }else{
@@ -35,10 +35,8 @@ function collectBranchCondition(privateKey, batchID) {
         
         const rSH = !srs ? [] : srs.shortfall.some( s => s.inEffect !== true && s.reSolve !== true );
         const iTF = items.some( x => x.history.find( y => y.type === 'test' && y.good === false ) );
-        const iSC = items.some( x => x.scrapped );
           
-        const stormy = [ rNC.length > 0, rSH, iTF, iSC ];
-                    // 'ncStop', 'shStop', 'tfStop','scStop'
+        const stormy = [ rNC.length > 0, rSH, iTF ];
         
         const released = batchX.releases.findIndex( x => x.type === 'floorRelease') >= 0;
         let previous = released;

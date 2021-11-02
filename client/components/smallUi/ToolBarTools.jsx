@@ -182,14 +182,6 @@ export const StormySwitch = ({ stormState, changeFunc })=> (
       onVal={2}
       icon='fas fa-microchip'
     />
-    <ToolButton
-      kID='scOn'
-      title={Pref.scraps}
-      changeFunc={changeFunc}
-      stateVal={stormState}
-      onVal={3}
-      icon='fas fa-trash-alt'
-    />
   </span>
 );
 
