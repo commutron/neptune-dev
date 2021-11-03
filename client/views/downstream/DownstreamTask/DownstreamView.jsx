@@ -25,9 +25,10 @@ const DownstreamView = ({ traceDT, dayTime, user, app, isDebug })=> {
   
   const [ focusBy, focusBySet ] = useState( Session.get(sessionSticky+'focus') || false );
   const [ salesBy, salesBySet ] = useState( Session.get(sessionSticky+'sales') || false );
+  const [ tagBy, tagBySet ] = useState( Session.get(sessionSticky+'tags') || false );
+  const [ stormy, stormySet ] = useState(false);
   const [ dense, denseSet ] = useState( defaultDense );
   const [ light, themeSet ] = useState( defaultLight );
-  const [ stormy, stormySet ] = useState(false);
   
   const [ updateTrigger, updateTriggerSet ] = useState(true);
   
@@ -63,6 +64,13 @@ const DownstreamView = ({ traceDT, dayTime, user, app, isDebug })=> {
     Session.set(sessionSticky+'sales', sales);
   }
   
+  function changeTag(e) {
+    const value = e.target.value;
+    const tag = value === 'false' ? false : value;
+    tagBySet( tag );
+    Session.set(sessionSticky+'tags', tag);
+  }
+  
   function changeDense(val) {
     denseSet( val );
     Session.set(sessionSticky+'dense', val);
@@ -92,17 +100,17 @@ const DownstreamView = ({ traceDT, dayTime, user, app, isDebug })=> {
         changeNumUP={(e)=>changeNum(e.target.value)}
         
         focusByUP={focusBy}
+        changeFocusByUP={(e)=>changeFocus(e)}
         salesByUP={salesBy}
-        denseUP={dense}
-        lightUP={light}
+        changeSalesUP={(e)=>changeSales(e)}
+        tagBy={tagBy}
+        changeTagsUP={(e)=>changeTag(e)} 
         stormy={stormy}
         stormySet={stormySet}
-        
-        changeFocusByUP={(e)=>changeFocus(e)}
-        changeSalesUP={(e)=>changeSales(e)}
+        denseUP={dense}
         denseSetUP={(e)=>changeDense(e)}
+        lightUP={light}
         themeSetUP={(e)=>changeTheme(e)}
-        
         doThing={()=>updateTriggerSet(!updateTrigger)}
       />
               
@@ -116,6 +124,7 @@ const DownstreamView = ({ traceDT, dayTime, user, app, isDebug })=> {
         isDebug={isDebug}
         focusBy={focusBy}
         salesBy={salesBy}
+        tagBy={tagBy}
         dense={density}
         stormy={stormy}
         updateTrigger={updateTrigger}

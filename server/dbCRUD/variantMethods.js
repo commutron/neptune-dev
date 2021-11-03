@@ -121,11 +121,20 @@ Meteor.methods({
         $push : { 
           tags: tag
         }});
-      XBatchDB.update({orgKey: Meteor.user().orgKey, versionKey: vKey, live: true}, {
-        $push : { 
-          tags: tag
-        }
-      },{multi: true});
+        
+      XBatchDB.find({versionKey: vKey, live: true},{fields:{'_id':1}})
+      .forEach( (b)=> {
+        XBatchDB.update(b._id, {
+          $push : { 
+            tags: tag
+          }
+        });
+        TraceDB.update({batchID: b._id}, {
+          $push : { 
+            tags: tag
+          }
+        });
+      });
     }else{
       null;
     }

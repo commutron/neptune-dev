@@ -8,8 +8,11 @@ import {
 const UpstreamTools = ({
   app, traceDT, loadTimeUP,
   focusByUP, changeFocusByUP,
-  salesByUP, sortByUP, denseUP, lightUP,
-  changeSalesUP, changeSortUP, denseSetUP, themeSetUP,
+  salesByUP, changeSalesUP, 
+  sortByUP, changeSortUP, 
+  tagBy, changeTagsUP,
+  denseUP, denseSetUP, 
+  lightUP, themeSetUP,
   doThing
 })=> {
   const gList = _.uniq( Array.from(traceDT, g =>
@@ -19,7 +22,9 @@ const UpstreamTools = ({
   const slList = _.uniq( Array.from(traceDT, s => 
           !s.isWhat[0].startsWith('.') && s.isWhat[0] === focusByUP ? 
             s.salesOrder : null ) ).filter(f=>f).sort();
-            
+  
+  const tList = _.uniq( Array.from(traceDT, t => t.tags ).flat() ).sort();
+  
   return(
     <nav className='overviewToolbar gridViewTools'>
       
@@ -44,6 +49,18 @@ const UpstreamTools = ({
       <SortSelect
         sortState={sortByUP}
         changeFunc={changeSortUP}
+        extraClass='miniIn12'
+      />
+      
+      <FilterSelect
+        unqID='fltrTAGS'
+        title='Filter By Tag'
+        selectList={tList}
+        selectState={tagBy}
+        falsey='—'
+        changeFunc={changeTagsUP}
+        icon='fas fa-tag'
+        extraClass='miniIn12'
       />
         
       <LayoutSwitch

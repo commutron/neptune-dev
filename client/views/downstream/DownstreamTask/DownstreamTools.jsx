@@ -11,9 +11,10 @@ const DownstreamTools = ({
   app, traceDT, loadTimeUP, 
   numUP, changeNumUP,
   focusByUP, changeFocusByUP,
-  salesByUP, denseUP, lightUP,
-  changeSalesUP, denseSetUP, themeSetUP,
-  stormy, stormySet,
+  salesByUP, changeSalesUP,
+  tagBy, changeTagsUP,
+  stormy, stormySet, 
+  denseUP, denseSetUP, lightUP, themeSetUP,
   doThing
 })=> {
   const gList = _.uniq( Array.from(traceDT, g =>
@@ -23,6 +24,8 @@ const DownstreamTools = ({
   const slList = _.uniq( Array.from(traceDT, s => 
           !s.isWhat[0].startsWith('.') && s.isWhat[0] === focusByUP ? 
             s.salesOrder : null ) ).filter(f=>f).sort();
+            
+  const tList = _.uniq( Array.from(traceDT, t => t.tags ).flat() ).sort();
             
   return(
     <nav className='downstreamToolbar gridViewTools'>
@@ -60,6 +63,17 @@ const DownstreamTools = ({
         />
       : null}
       
+      <FilterSelect
+        unqID='fltrTAGS'
+        title='Filter By Tag'
+        selectList={tList}
+        selectState={tagBy}
+        falsey='—'
+        changeFunc={changeTagsUP}
+        icon='fas fa-tag'
+        extraClass='miniIn12'
+      />
+        
       <StormySwitch
         stormState={stormy}
         changeFunc={stormySet} 

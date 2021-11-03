@@ -50,6 +50,7 @@ function shrinkWhole(bData, now, shipLoad, accessKey) {
         lastUpdated: new Date(),
         batch: bData.batch,
         batchID: bData._id,
+        tags: bData.tags,
         createdAt: bData.createdAt,
         salesOrder: bData.salesOrder,
         isWhat: isWhat.isWhat,
@@ -94,6 +95,7 @@ function checkMinify(bData, accessKey) {
       $set : { 
         orgKey: accessKey,
         lastUpserted: new Date(),
+        tags: bData.tags,
         batch: bData.batch,
         salesOrder: bData.salesOrder,
         isWhat: isWhat.isWhat,

@@ -12,6 +12,7 @@ const OverviewTools = ({
   focusByUP, changeFocusByUP,
   salesByUP, changeSalesUP,
   sortByUP, changeSortUP,
+  tagBy, changeTagsUP,
   ghostUP, ghostSetUP, 
   denseUP, denseSetUP,
   lightUP, themeSetUP,
@@ -25,7 +26,9 @@ const OverviewTools = ({
   const slList = _.uniq( Array.from(traceDT, s => 
           !s.isWhat[0].startsWith('.') && s.isWhat[0] === focusByUP ? 
             s.salesOrder : null ) ).filter(f=>f).sort();
-
+  
+  const tList = _.uniq( Array.from(traceDT, t => t.tags ).flat() ).sort();
+  
   return(
     <nav className='overviewToolbar gridViewTools'>
       
@@ -56,6 +59,18 @@ const OverviewTools = ({
       <SortSelect
         sortState={sortByUP}
         changeFunc={changeSortUP}
+        extraClass='miniIn12'
+      />
+      
+      <FilterSelect
+        unqID='fltrTAGS'
+        title='Filter By Tag'
+        selectList={tList}
+        selectState={tagBy}
+        falsey='—'
+        changeFunc={changeTagsUP}
+        icon='fas fa-tag'
+        extraClass='miniIn12'
       />
     
       <span>

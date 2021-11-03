@@ -7,7 +7,7 @@ const DownstreamHeaders = ({
   indexKey, oB, traceDT,
   user, app,
   isDebug,
-  focusBy, dense, stormy
+  focusBy, tagBy, dense, stormy
 })=> (
   <Fragment>
     
@@ -25,6 +25,7 @@ const DownstreamHeaders = ({
               user={user}
               isDebug={isDebug}
               focusBy={focusBy}
+              tagBy={tagBy}
               dense={dense}
               stormy={stormy}
             />
@@ -38,18 +39,16 @@ export default DownstreamHeaders;
 
 const DownstreamFixedChunk = ({
   ck, tBatch, topRapid,
-  app, user, isDebug, focusBy, dense, stormy
+  app, user, isDebug, focusBy, tagBy, dense, stormy
 })=> {
   
   const isDone = ck.completedAt ? true : false;
   
-  let what = 'unavailable';
-  let highG = '';
-  let describe = '';
+  let what = tBatch.isWhat ? tBatch.isWhat.join(' ') : 'unavailable';
+  let describe = tBatch.describe || '';
   
-  what = tBatch.isWhat.join(' ');
-  describe = tBatch.describe || '';
-  highG = focusBy ? tBatch.isWhat[0] === focusBy ? '' : 'hide' : '';
+  const highG = focusBy ? tBatch.isWhat[0] === focusBy ? '' : 'hide' : '';
+  const highT = tagBy ? tBatch.tags.includes(tagBy) ? '' : 'hide' : '';
   
   let storm = stormy === false ? '' :
         stormy === 0 && tBatch.stormy[0] !== true ||
@@ -59,7 +58,7 @@ const DownstreamFixedChunk = ({
   isDebug && console.log(ck.batch+'='+ck.batchID);
   
   return(
-    <div className={`downRowFixed ${highG} ${storm}`}>
+    <div className={`downRowFixed ${highG} ${highT} ${storm}`}>
       <PrioritySquare
         batchID={ck.batchID}
         ptData={tBatch}

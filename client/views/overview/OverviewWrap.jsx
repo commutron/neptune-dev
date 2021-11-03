@@ -42,6 +42,7 @@ const OverviewWrap = ({
   const [ focusBy, focusBySet ] = useState( Session.get(sessionSticky+'focus') || false );
   const [ salesBy, salesBySet ] = useState( Session.get(sessionSticky+'sales') || false );
   const [ sortBy, sortBySet ] = useState( Session.get(sessionSticky+'sort') || 'priority' );
+  const [ tagBy, tagBySet ] = useState( Session.get(sessionSticky+'tags') || false );
   
   const [ ghost, ghostSet ] = useState( defaultGhost );
   const [ dense, denseSet ] = useState( defaultDense );
@@ -92,6 +93,13 @@ const OverviewWrap = ({
     const sort = e.target.value;
     sortBySet( sort );
     Session.set(sessionSticky+'sort', sort);
+  }
+  
+  function changeTag(e) {
+    const value = e.target.value;
+    const tag = value === 'false' ? false : value;
+    tagBySet( tag );
+    Session.set(sessionSticky+'tags', tag);
   }
   
   function changeGhost(val) {
@@ -201,18 +209,20 @@ const OverviewWrap = ({
         focusByUP={focusBy}
         changeFocusByUP={(e)=>changeFocus(e)}
         filterByUP={filterBy}
-        sortByUP={sortBy}
-        salesByUP={salesBy}
-        ghostUP={ghost}
-        denseUP={dense}
-        lightUP={light}
-        stormy={stormy}
         changeFilterUP={(e)=>changeFilter(e)}
+        sortByUP={sortBy}
         changeSortUP={(e)=>changeSort(e)}
+        salesByUP={salesBy}
         changeSalesUP={(e)=>changeSales(e)}
+        tagBy={tagBy}
+        changeTagsUP={(e)=>changeTag(e)} 
+        ghostUP={ghost}
         ghostSetUP={(e)=>changeGhost(e)}
+        denseUP={dense}
         denseSetUP={(e)=>changeDense(e)}
+        lightUP={light}
         themeSetUP={(e)=>changeTheme(e)}
+        stormy={stormy}
         stormySet={stormySet}
         doThing={()=>updateTriggerSet(!updateTrigger)}
       />
@@ -236,6 +246,7 @@ const OverviewWrap = ({
             isDebug={isDebug}
             title={!filterBy ? 'All Live' : filterBy}
             focusBy={focusBy}
+            tagBy={tagBy}
             stormy={stormy}
           />
           
@@ -250,6 +261,7 @@ const OverviewWrap = ({
             dense={dense}
             filterBy={filterBy}
             focusBy={focusBy}
+            tagBy={tagBy}
             stormy={stormy}
             branchArea={filterBy !== false}
             updateTrigger={updateTrigger}

@@ -13,7 +13,7 @@ const BatchDetails = ({
   oB, traceDT,
   user, app, brancheS,
   isDebug,
-  dense, filterBy, focusBy, stormy, branchArea, updateTrigger
+  dense, filterBy, focusBy, tagBy, stormy, branchArea, updateTrigger
 })=> {
   
   const branchClear = brancheS.filter( b => b.reqClearance === true );
@@ -72,9 +72,11 @@ const BatchDetails = ({
               dense={dense}
               filterBy={filterBy}
               focusBy={focusBy}
+              tagBy={tagBy}
               stormy={stormy}
               branchArea={branchArea}
-              updateTrigger={updateTrigger} />
+              updateTrigger={updateTrigger}
+            />
       )})}
       
     </div>
@@ -90,7 +92,7 @@ const BatchDetailChunk = ({
   brancheS, branchClear,
   isAuth, isRO, isDebug,
   statusCols, progCols, ncCols, 
-  dense, filterBy, focusBy, stormy, branchArea,
+  dense, filterBy, focusBy, tagBy, stormy, branchArea,
   updateTrigger
 })=> {
   
@@ -98,6 +100,7 @@ const BatchDetailChunk = ({
   const isDone = isX ? oB.completed : oB.finishedAt !== false;
   
   const highG = tBatch && focusBy ? tBatch.isWhat[0] === focusBy ? '' : 'hide' : '';
+  const highT = tagBy ? tBatch.tags.includes(tagBy) ? '' : 'hide' : '';
   
   const releasedToFloor = oB.releases.findIndex( 
                             x => x.type === 'floorRelease') >= 0;
@@ -110,7 +113,7 @@ const BatchDetailChunk = ({
         stormy === 2 && tBatch.stormy[2] !== true ? 'clearall' : '';
       
   return(
-    <div className={`overGridRowScroll ${highG} ${storm} ${rTFghostC}`} title={rTFghostT}>
+    <div className={`overGridRowScroll ${highG} ${highT} ${storm} ${rTFghostC}`} title={rTFghostT}>
       <div>
         <i><i className='label' title={Pref.salesOrder}
           >{Pref.SO}:<br /></i>{oB.salesOrder}</i>

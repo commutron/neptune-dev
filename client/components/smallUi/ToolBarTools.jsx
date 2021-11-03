@@ -22,13 +22,13 @@ export const BranchFilterSelect = ({ brancheS, filterState, changeFunc })=> (
 );
 
 
-export const SortSelect = ({ sortState, changeFunc })=> (
+export const SortSelect = ({ sortState, changeFunc, extraClass })=> (
   <span>
     <i className='fas fa-sort-amount-down fa-fw darkgrayT'></i>
     <select
       id='sortSelect'
       title='Change list order'
-      className='overToolSort liteToolOn'
+      className={`overToolSort liteToolOn ${extraClass || ''}`}
       defaultValue={sortState}
       onChange={(e)=>changeFunc(e)}>
       <option value='priority'>priority</option>
@@ -49,7 +49,7 @@ export const FocusSelect = ({ gList, focusState, changeFunc })=> (
       className={`overToolSort liteToolOn`}
       defaultValue={focusState}
       onChange={(e)=>changeFunc(e)}>
-      <option value={false} className='clean'>All {Pref.group}s</option>
+      <option value={false} className='clean'>All {Pref.Group}s</option>
       {gList.map( (gr, ix)=> (
         <option key={gr+ix}>{gr}</option>
       ))}

@@ -167,6 +167,7 @@ Meteor.publish('traceDataLive', function(){
         fields: {
           'batch': 1,
           'batchID': 1,
+          'tags': 1,
           'salesOrder': 1,
           'isWhat': 1,
           'describe': 1,
@@ -205,6 +206,7 @@ Meteor.publish('traceDataActive', function(){
         fields: {
           'batch': 1,
           'batchID': 1,
+          'tags': 1,
           'salesOrder': 1,
           'isWhat': 1,
           'describe': 1,
@@ -250,6 +252,7 @@ Meteor.publish('traceDataOpen', function(){
           'lastRefreshed': 1,
           'batch': 1,
           'batchID': 1,
+          'tags': 1,
           'createdAt': 1,
           'salesOrder': 1,
           'isWhat': 1,

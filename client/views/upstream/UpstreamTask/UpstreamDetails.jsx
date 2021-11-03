@@ -11,7 +11,7 @@ const UpstreamDetails = ({
   oB, traceDT,
   user, app, brancheS,
   isAuth, isDebug,
-  dense, focusBy
+  dense, focusBy, tagBy
 })=> {
   
   const branchClear = brancheS.filter( b => b.reqClearance === true );
@@ -58,7 +58,9 @@ const UpstreamDetails = ({
               statusCols={statusCols}
               kitCols={kitCols}
               dense={dense}
-              focusBy={focusBy} />
+              focusBy={focusBy}
+              tagBy={tagBy}
+            />
       )})}
       
     </div>
@@ -74,17 +76,18 @@ const UpstreamDetailChunk = ({
   brancheS, branchClear,
   isAuth, isDebug,
   statusCols, kitCols, 
-  dense, focusBy
+  dense, focusBy, tagBy
 })=> {
   
   const isDone = oB.completed;
   
   const highG = tBatch && focusBy ? tBatch.isWhat[0] === focusBy ? '' : 'hide' : '';
+  const highT = tagBy ? tBatch.tags.includes(tagBy) ? '' : 'hide' : '';
   
   const releasedToFloor = oB.releases.findIndex( x => x.type === 'floorRelease') >= 0;
   
   return(
-    <div className={`overGridRowScroll ${highG}`}>
+    <div className={`overGridRowScroll ${highG} ${highT}`}>
       <div>
         <i><i className='label' title={Pref.salesOrder}
           >{Pref.SO}:<br /></i>{oB.salesOrder}</i>

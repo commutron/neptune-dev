@@ -301,6 +301,10 @@ Meteor.methods({
         $push : { 
           tags: tag
         }});
+      TraceDB.update({batchID: batchId}, {
+        $push : { 
+          tags: tag
+      }});
     }else{
       null;
     }
@@ -312,6 +316,10 @@ Meteor.methods({
         $pull : {
           tags: tag
         }});
+      TraceDB.update({batchID: batchId}, {
+        $pull : { 
+          tags: tag
+      }});
     }else{
       null;
     }

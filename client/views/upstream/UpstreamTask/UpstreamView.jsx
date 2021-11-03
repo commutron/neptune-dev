@@ -26,6 +26,7 @@ const UpstreamView = ({ batchX, traceDT, user, app, brancheS, isAuth, isDebug })
   const [ focusBy, focusBySet ] = useState( Session.get(sessionSticky+'focus') || false );
   const [ salesBy, salesBySet ] = useState( Session.get(sessionSticky+'sales') || false );
   const [ sortBy, sortBySet ] = useState( Session.get(sessionSticky+'sort') || 'priority' );
+  const [ tagBy, tagBySet ] = useState( Session.get(sessionSticky+'tags') || false );
   
   const [ dense, denseSet ] = useState( defaultDense );
   const [ light, themeSet ] = useState( defaultLight );
@@ -62,11 +63,19 @@ const UpstreamView = ({ batchX, traceDT, user, app, brancheS, isAuth, isDebug })
     sortBySet( sort );
     Session.set(sessionSticky+'sort', sort);
   }
+  
   function changeSales(e) {
     const value = e.target.value;
     const sales = value === 'false' ? false : value;
     salesBySet( sales );
     Session.set(sessionSticky+'sales', sales);
+  }
+  
+  function changeTag(e) {
+    const value = e.target.value;
+    const tag = value === 'false' ? false : value;
+    tagBySet( tag );
+    Session.set(sessionSticky+'tags', tag);
   }
   
   function changeDense(val) {
@@ -149,12 +158,14 @@ const UpstreamView = ({ batchX, traceDT, user, app, brancheS, isAuth, isDebug })
         focusByUP={focusBy}
         changeFocusByUP={(e)=>changeFocus(e)}
         salesByUP={salesBy}
-        sortByUP={sortBy}
-        denseUP={dense}
-        lightUP={light}
         changeSalesUP={(e)=>changeSales(e)}
+        tagBy={tagBy}
+        changeTagsUP={(e)=>changeTag(e)} 
+        sortByUP={sortBy}
         changeSortUP={(e)=>changeSort(e)}
+        denseUP={dense}
         denseSetUP={(e)=>changeDense(e)}
+        lightUP={light}
         themeSetUP={(e)=>changeTheme(e)}
         doThing={()=>updateTriggerSet(!updateTrigger)}
       />
@@ -178,6 +189,7 @@ const UpstreamView = ({ batchX, traceDT, user, app, brancheS, isAuth, isDebug })
             isDebug={isDebug}
             title={Pref.kitting}
             focusBy={focusBy}
+            tagBy={tagBy}
             showMore={true}
           />
 
@@ -192,6 +204,7 @@ const UpstreamView = ({ batchX, traceDT, user, app, brancheS, isAuth, isDebug })
             isDebug={isDebug}
             dense={dense}
             focusBy={focusBy}
+            tagBy={tagBy}
           />
             
         </div>
