@@ -135,7 +135,7 @@ class Pref {
     this.upstream = 'upstream';
     this.kit = 'kit';
     this.kitting = 'kitting';
-    this.baseSerialPart = 'PCB';
+    this.baseSerialPart = 'Barcoding / PCB';
     this.comp = 'part';
     this.release = 'release';
     this.released = 'released';

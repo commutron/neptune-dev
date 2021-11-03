@@ -50,7 +50,7 @@ const DownstreamScrollChunk = ({
   progCols, ncCols,
   updateTrigger
 })=> {
-
+  
   const isDone = ck.completedAt ? true : false;
   
   const e2t = ck.est2tide;

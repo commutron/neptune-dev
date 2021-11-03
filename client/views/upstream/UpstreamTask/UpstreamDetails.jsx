@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 
 import BatchTopStatus from '/client/views/overview/columns/BatchTopStatus';
@@ -7,12 +7,18 @@ import { TideActivitySquare } from '/client/components/tide/TideActivity';
 import PrintJump from '/client/components/smallUi/PrintJump';
 import ProJump from '/client/components/smallUi/ProJump';
 
+import Grabber from '/client/utility/Grabber.js';
+
 const UpstreamDetails = ({
   oB, traceDT,
   user, app, brancheS,
   isAuth, isDebug,
   dense, focusBy, tagBy
 })=> {
+  
+  useEffect(() => {
+    Grabber('.overGridScroll');
+  }, []);
   
   const branchClear = brancheS.filter( b => b.reqClearance === true );
   
@@ -25,8 +31,14 @@ const UpstreamDetails = ({
   const kitHead = ['sales order','active',...statusCols,...kitCols,'print','production'];
   
   return(
-    <div className={`overGridScroll forceScrollStyle ${dense ? 'dense' : ''}`} tabIndex='1'>
-      
+    <div 
+      className={
+        `overGridScroll forceScrollStyle 
+        ${dense ? 'dense' : ''}`
+      } 
+      tabIndex='1'
+    >
+
       {!dense ? 
         <div className='overGridRowScrollHeader'></div>
       :

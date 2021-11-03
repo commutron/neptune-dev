@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import moment from 'moment';
 
 import WindowFrame from './WindowFrame';
@@ -6,6 +6,8 @@ import WindowGlass from './WindowGlass';
 
 import { listShipDays } from '/client/utility/WorkTimeCalc';
 import { min2hr } from '/client/utility/Convert';
+
+import Grabber from '/client/utility/Grabber.js';
 
 const ShipWindows = ({ 
   calcFor, traceDT, dayTime,
@@ -23,7 +25,11 @@ const ShipWindows = ({
   const addUpTime = (wipArr)=> Array.from(wipArr, 
         x => typeof x.est2tide === 'number' && Math.max(x.est2tide, 0) )
               .reduce( (arr, x)=> arr + x, 0);
-        
+  
+  useEffect(() => {
+    Grabber('.downstreamScroll');
+  }, []);
+  
   useLayoutEffect( ()=>{
     const rapidShip = traceDT.filter( x => x.oRapid );
     const someR = rapidShip.length > 0;

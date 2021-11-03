@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 
 import BatchTopStatus from './BatchTopStatus';
@@ -9,12 +9,18 @@ import BranchProgress from './BranchProgress';
 import NonConCounts from './NonConCounts';
 import ProJump from '/client/components/smallUi/ProJump';
 
+import Grabber from '/client/utility/Grabber.js';
+      
 const BatchDetails = ({
   oB, traceDT,
   user, app, brancheS,
   isDebug,
   dense, filterBy, focusBy, tagBy, stormy, branchArea, updateTrigger
 })=> {
+  
+  useEffect(() => {
+    Grabber('.overGridScroll');
+  }, []);
   
   const branchClear = brancheS.filter( b => b.reqClearance === true );
   
@@ -35,7 +41,12 @@ const BatchDetails = ({
   const isRO = Roles.userIsInRole(Meteor.userId(), 'readOnly');
   
   return(
-    <div className={`overGridScroll forceScrollStyle ${dense ? 'dense' : ''}`} tabIndex='1'>
+    <div 
+      className={
+        `overGridScroll forceScrollStyle 
+        ${dense ? 'dense' : ''}`
+      } tabIndex='1'
+    >
       
       {!dense ? 
         <div className='overGridRowScrollHeader'></div>

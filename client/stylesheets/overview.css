@@ -209,7 +209,6 @@
 .downstreamScroll:focus-within {
   outline-color: var(--neptuneColor);
   outline-style: dotted;
-  outline-width: thick;
   outline-offset: -0.2vmax;
 }
 .overGridRowScrollHeader {
@@ -542,4 +541,11 @@ n-sm-model .big { font-size: 1.5rem !important; }
   .downstreamView {
     grid-template-rows: calc(3 * var(--vh)) calc( (97 * var(--vh)) - 8vmin);
   }
+}
+
+.overGridScroll, .downstreamScroll {
+  cursor: grab;
+}
+.grabber {
+  cursor: grabbing;
 }

@@ -17,7 +17,7 @@ const StreamLayout = ({
   isAuth,
   children
 })=>	{
-              
+  
   return(
     <div className='containerEx'>
       <ToastContainer
@@ -48,7 +48,7 @@ const StreamLayout = ({
         <div 
           className='baseContainer'>
           
-          <div className='traverseContent forceScroll forceScrollStyle' >
+          <div className='traverseContent forceScroll forceScrollStyle'>
             {children[0] || children}
           </div>
             

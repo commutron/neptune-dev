@@ -78,7 +78,7 @@ const OverviewTools = ({
       <span>
         <button
           key='ghostToggle'
-          title='Toggle In Kitting'
+          title="Toggle 'In Kitting'"
           onClick={()=>ghostSetUP(!ghostUP)}
           className={!ghostUP ? 'liteToolOff' : 'liteToolOn'}
           style={{'cursor':'pointer'}}
