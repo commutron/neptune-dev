@@ -63,16 +63,18 @@ const DownstreamTools = ({
         />
       : null}
       
-      <FilterSelect
-        unqID='fltrTAGS'
-        title='Filter By Tag'
-        selectList={tList}
-        selectState={tagBy}
-        falsey='—'
-        changeFunc={changeTagsUP}
-        icon='fas fa-tag'
-        extraClass='miniIn12'
-      />
+      {tList &&
+        <FilterSelect
+          unqID='fltrTAGS'
+          title='Filter By Tag'
+          selectList={tList}
+          selectState={tagBy}
+          falsey='—'
+          changeFunc={changeTagsUP}
+          icon='fas fa-tag'
+          extraClass='miniIn12'
+        />
+      }
         
       <StormySwitch
         stormState={stormy}

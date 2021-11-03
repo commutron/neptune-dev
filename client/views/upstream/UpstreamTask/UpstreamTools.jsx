@@ -52,16 +52,18 @@ const UpstreamTools = ({
         extraClass='miniIn12'
       />
       
-      <FilterSelect
-        unqID='fltrTAGS'
-        title='Filter By Tag'
-        selectList={tList}
-        selectState={tagBy}
-        falsey='—'
-        changeFunc={changeTagsUP}
-        icon='fas fa-tag'
-        extraClass='miniIn12'
-      />
+      {tList &&
+        <FilterSelect
+          unqID='fltrTAGS'
+          title='Filter By Tag'
+          selectList={tList}
+          selectState={tagBy}
+          falsey='—'
+          changeFunc={changeTagsUP}
+          icon='fas fa-tag'
+          extraClass='miniIn12'
+        />
+      }
         
       <LayoutSwitch
         denseState={denseUP}
