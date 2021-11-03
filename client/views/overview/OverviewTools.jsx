@@ -62,7 +62,7 @@ const OverviewTools = ({
         extraClass='miniIn12'
       />
       
-      {tList &&
+      {tList.length > 0 &&
         <FilterSelect
           unqID='fltrTAGS'
           title='Filter By Tag'
