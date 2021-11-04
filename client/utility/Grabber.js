@@ -1,3 +1,4 @@
+// special thanks to Ionut Daniel - https://codepen.io/thenutz/pen/VwYeYEE
 export default function Grabber(scrollDiv) {
   var slider = document.querySelector(scrollDiv);
 

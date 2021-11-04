@@ -16,7 +16,7 @@ Meteor.methods({
     this.unblock();
     const accessKey = internalKey || Meteor.user().orgKey;
     
-    const app = AppDB.find({orgKey: accessKey},{fields:{'partsGlobal':1}}).fetch();
+    const app = AppDB.findOne({orgKey: accessKey},{fields:{'partsGlobal':1}});
     
     if( app && app.partsGlobal ) {
       const variants = VariantDB.find({orgKey: accessKey, live: true}).fetch();

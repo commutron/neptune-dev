@@ -74,8 +74,7 @@ const CompSearchWrap = ({ plCache, user, app })=> {
     this.cachePLupdate.disabled = true;
     toast('request sent, this will take time');
     Meteor.call('partslistCacheUpdate', (error)=>{
-      if(error)
-        return error;
+      error && console.log(error);
     });
   }
 
