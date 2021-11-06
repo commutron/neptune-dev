@@ -44,8 +44,8 @@ const PersonChunk = ({
   const rad = moreInfo ? moreInfo.rad : null;
   
   return(
-    <tr className='leftText line2x numFont'>
-      <td className='noRightBorder medBig'><UserNice id={uC.uID} /></td>
+    <tr className='leftText numFont'>
+      <td className='noRightBorder'><UserNice id={uC.uID} /></td>
       <td className='noRightBorder'>
         <TaskTag task={branchGuess[1]} guess={branchGuess[0] === 'fromUserInput'} />
       </td>

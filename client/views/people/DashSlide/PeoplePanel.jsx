@@ -24,7 +24,7 @@ const PeoplePanel = ({
     <div>
       <table className='wide cap space'>
         <tbody key='engagedpeoplescope0'>
-          <tr className='leftText line2x medBig'>
+          <tr className='leftText line2x'>
             <th colSpan='5'>{Pref.engaged} with a {Pref.xBatch}</th>
           </tr>
           {userChunks.map( (entry, index)=>{

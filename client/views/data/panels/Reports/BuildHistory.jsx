@@ -90,11 +90,11 @@ const BuildHistory = ({ allVariant, allWidget, allGroup })=> {
     }else if(wasState) {
       result = preGpFltr.filter( v => 
                     v.dates.find( d => 
-                        moment(d).isSameOrAfter(lineinthesand, spanState) ) );
+                        moment(d).isSameOrAfter(lineinthesand) ) );
     }else{
       result = preGpFltr.filter( v => 
                     v.dates.every( d => 
-                        moment(d).isBefore(lineinthesand, spanState) ) );
+                        moment(d).isBefore(lineinthesand) ) );
     }
     
     const arrayView = Array.from(result, r => [
