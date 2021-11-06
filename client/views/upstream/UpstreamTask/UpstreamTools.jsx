@@ -23,7 +23,7 @@ const UpstreamTools = ({
           !s.isWhat[0].startsWith('.') && s.isWhat[0] === focusByUP ? 
             s.salesOrder : null ) ).filter(f=>f).sort();
   
-  const tList = _.uniq( Array.from(traceDT, t => t.tags ).flat() ).sort();
+  const tList = _.uniq( Array.from(traceDT, t => t.tags ).filter(f=>f).flat() ).sort();
   
   return(
     <nav className='overviewToolbar gridViewTools'>
