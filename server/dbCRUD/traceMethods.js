@@ -60,6 +60,7 @@ function shrinkWhole(bData, now, shipLoad, accessKey) {
         serialize: serialize,
         riverChosen: rFlow,
         live: bData.live,
+        hold: bData.hold,
         salesEnd: new Date(salesEnd),
         shipAim: new Date(shipAim),
         completed: didFinish,
@@ -103,7 +104,8 @@ function checkMinify(bData, accessKey) {
         rad: isWhat.rad,
         quantity: Number(quantity),
         serialize: serialize,
-        riverChosen: rFlow
+        riverChosen: rFlow,
+        hold: bData.hold
     }});
     resolve(true);
   });

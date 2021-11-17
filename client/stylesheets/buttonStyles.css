@@ -407,6 +407,27 @@ label.qdpplRound {
   font-size: var(--txx0);
 }
 
+.holdpill {
+  background-color: var(--asbestos);
+  color: var(--wetasphalt);
+  font-weight: 600;
+  border: 0.2em solid var(--wetasphalt);
+  border-radius: 50px;
+  padding: 0 0.25em 0 0;
+}
+.holdblock {
+  background-color: var(--asbestos);
+  color: var(--wetasphalt);
+  border-top: 0.1em solid;
+  border-bottom: 0.1em solid;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+fahld { line-height: 0; }
+
 button.variableInput.medBig { height: 40px; }
 button.variableInput.big { height: 48px; }
 button.variableInput.bigger { height: 56px; }

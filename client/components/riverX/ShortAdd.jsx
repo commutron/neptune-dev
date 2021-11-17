@@ -10,7 +10,7 @@ const ShortAdd = ({ seriesId, serial, units, pastPN, pastRF, app, doneClose })=>
     this.goSh.disabled = true;
     const partNum = this.partNum.value.trim();
     const refs = this.shRefs.value.trim().toLowerCase()
-                  .replace(Pref.listCut, "|").split("|");
+                  .replace(Pref.listCut, "|").split("|").filter(f=>f);
                   
     const uMulti = units > 1 ? this.shMulti.value : undefined;
     const comm = this.comm.value.trim();

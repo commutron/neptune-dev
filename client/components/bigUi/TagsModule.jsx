@@ -4,7 +4,7 @@ import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 import Pref from '/client/global/pref.js';
 
 
-const TagsModule = ({ action, id, vKey, tags, tagOps, truncate, rad, canRun })=>	{
+const TagsModule = ({ action, id, vKey, tags, tagOps, truncate, rad, hold, canRun })=>	{
 
   const [ newOption, newOptionSet ] = useState(false);
   const [ newRad, newRadSet ] = useState(false);
@@ -58,6 +58,12 @@ const TagsModule = ({ action, id, vKey, tags, tagOps, truncate, rad, canRun })=>
     }
   }
   
+  function addHoldFlag(rad) {
+    Meteor.call('setHold', id, (err)=>{
+      err && console.log(err);
+    });
+  }
+  
   function addRadFlag(rad) {
     Meteor.call('setVRad', vKey, rad, (err)=>{
       err && console.log(err);
@@ -109,6 +115,17 @@ const TagsModule = ({ action, id, vKey, tags, tagOps, truncate, rad, canRun })=>
           Add Custom
         </MenuItem>
         
+        {action === Pref.xBatch && !hold ?
+        <span>
+          <MenuItem divider />
+          <MenuItem onClick={()=>addHoldFlag()} className='cap'>
+            <n-faX>
+              <i className='fas fa-pause fa-fw gapR darkgrayT'></i>
+            </n-faX>Add {Pref.hold}
+          </MenuItem>
+        </span>
+        : null}
+        
         {action === 'variant' && !rad ?
         <span>
           <MenuItem divider />
@@ -153,6 +170,39 @@ const IndieTag = ({ tagText, removeTag, lock }) => (
     </ContextMenu>
   </div>
 );
+
+export const HoldFlag = ({ id, canRun })=> {
+
+  function removeHoldFlag() {
+    Meteor.call('unsetHold', id, (err)=>{
+      err && console.log(err);
+    });
+  }
+  
+  return(
+    <div 
+      className='centreRow medBig max250 vmarginhalf holdpill' 
+      title={`${Pref.xBatch} is ${Pref.isHold}`}
+    >
+      <ContextMenuTrigger
+        id={id+'hldcut'}
+        holdToDisplay={1}
+        attributes={{
+          style: { cursor: 'pointer' }
+        }}
+        renderTag='div'
+      >
+        <n-faX><i className='far fa-pause-circle fa-lg fa-fw wetasphaltT'></i></n-faX>
+        <i>{Pref.isHold}</i>
+      </ContextMenuTrigger>
+        
+      <ContextMenu id={id+'hldcut'} className='noCopy cap'>
+        <MenuItem onClick={()=>removeHoldFlag()} disabled={!canRun}
+        >Remove {Pref.hold}</MenuItem>
+      </ContextMenu>
+    </div>
+  );
+};
 
 export const RadFlag = ({ vKey, rad, canRun })=> {
 

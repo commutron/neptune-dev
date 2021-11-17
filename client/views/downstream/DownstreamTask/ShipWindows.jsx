@@ -44,8 +44,8 @@ const ShipWindows = ({
     traceDTS = limitToSales.sort((p1, p2)=> {
       const p1bf = p1.bffrRel;
       const p2bf = p2.bffrRel;
-      if (isNaN(p1bf)) { return 1 }
-      if (isNaN(p2bf)) { return -1 }
+      if (isNaN(p1bf) || p1.hold) { return 1 }
+      if (isNaN(p2bf) || p2.hold) { return -1 }
       if (p1.lateLate) { return -1 }
       if (p2.lateLate) { return 1 }
       if (p1bf < p2bf) { return -1 }

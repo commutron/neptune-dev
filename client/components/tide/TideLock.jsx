@@ -4,7 +4,7 @@ import Pref from '/client/global/pref.js';
         
 const TideLock = ({ 
   currentLive, classSty, children, 
-  message, caution, radioactive
+  message, caution, radioactive, holding
 })=> {
   
   useEffect(() => {
@@ -29,6 +29,14 @@ const TideLock = ({
         {
           autoClose: false,
           className: 'cap darkOrangeI',
+          position: toast.POSITION.BOTTOM_CENTER
+        });
+      }
+      if(holding) {
+        toast.warn(`${Pref.xBatch} is ${Pref.isHold}`, 
+        {
+          autoClose: false,
+          className: 'cap wetasphaltI',
           position: toast.POSITION.BOTTOM_CENTER
         });
       }

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import './style.css';
 import Pref from '/client/global/pref.js';
-import TideLock from '/client/components/tide/TideLock.jsx';
+import TideLock from '/client/components/tide/TideLock';
 
-import NCAdd from '/client/components/riverX/NCAdd.jsx';
-import NCFlood from '/client/components/riverX/NCFlood.jsx';
-import ShortAdd from '/client/components/riverX/ShortAdd.jsx';
+import NCAdd from '/client/components/riverX/NCAdd';
+import NCFlood from '/client/components/riverX/NCFlood';
+import ShortAdd from '/client/components/riverX/ShortAdd';
 
 const XFormBar = ({ 
   batchData, seriesData, itemData, rapIs, widgetData, radioactive,
@@ -91,7 +91,8 @@ const XFormBar = ({
           currentLive={tideFloodGate && b.live} 
           message={true} 
           caution={caution}
-          radioactive={radioactive}>
+          radioactive={radioactive}
+          holding={b.hold}>
         {!srs ?
           <p className='whiteT centreText wide'>
             <em>{Pref.nonCon}, {Pref.shortfall}, and {Pref.trackFirst} require a {Pref.series}</em>

@@ -14,6 +14,7 @@ const NonConBlock = ({
 })=> {
   
   const [ editState, editSet ] = useState(false);
+  const [ confirmState, confirmSet ] = useState(false);
   
   function handleChange(e) {
     const ncKey = entry.key;
@@ -70,14 +71,12 @@ const NonConBlock = ({
   }
   
   function popNC(e) {
-    const yes = window.confirm('Permanently delete this ' + Pref.nonCon + '?');
-    if(yes) {
-      const ncKey = entry.key;
-      Meteor.call('removeNCX', seriesId, ncKey, (error)=>{
-        error && console.log(error);
-        editSet(false);
-      });
-    }else{editSet(false)}
+    const ncKey = entry.key;
+    Meteor.call('removeNCX', seriesId, ncKey, (error)=>{
+      error && console.log(error);
+      confirmSet(false);
+      editSet(false);
+    });
   }
   
   const dt = entry;
@@ -103,9 +102,22 @@ const NonConBlock = ({
                   <dd><button
                         className='smallAction clearRed blackT inlineButton'
                         disabled={!canQA}
-                        onClick={(e)=>popNC(e)}
+                        onClick={(e)=>confirmSet(true)}
                       >Permanently Delete</button>
                   </dd>
+                  {confirmState &&
+                    <dd><b>Are you sure? </b><button
+                        className='smallAction clearRed blackT inlineButton'
+                        disabled={!canQA}
+                        onClick={(e)=>popNC(e)}
+                      >YES</button>
+                      <button
+                        className='smallAction clearRed blackT inlineButton'
+                        disabled={!canQA}
+                        onClick={(e)=>confirmSet(false)}
+                      >NO</button>
+                    </dd>
+                  }
                 </Fragment>;
 
   const editAllow = canInspect && iopen;

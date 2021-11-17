@@ -7,12 +7,13 @@ import UserNice from '/client/components/smallUi/UserNice.jsx';
 const ShortBlock = ({ seriesId, serial, units, entry, done, iopen, canQA, cal })=> {
   
   const [ editState, editSet ] = useState(false);
-
+  const [ confirmState, confirmSet ] = useState(false);
+  
   function handleChange() {
     const shKey = entry.key;
     const partNum = this.shPN.value.trim();
     const refs = this.shRefs.value.trim().toLowerCase()
-                  .replace(Pref.listCut, "|").split("|");
+                  .replace(Pref.listCut, "|").split("|").filter(f=>f);
     const multi = units > 1 ? this.shMulti.value : undefined;           
                   
     let effect = null;
@@ -48,15 +49,12 @@ const ShortBlock = ({ seriesId, serial, units, entry, done, iopen, canQA, cal })
   }
   
   function popSh(e) {
-    let check = 'Are you sure you want to remove this ' + Pref.shortfall;
-    const yes = window.confirm(check);
-    if(yes) {
-      const shKey = entry.key;
-      Meteor.call('removeShortX', seriesId, shKey, (error)=>{
-        error && console.log(error);
-        editSet(false);
-      });
-    }else{editSet(false)}
+    const shKey = entry.key;
+    Meteor.call('removeShortX', seriesId, shKey, (error)=>{
+      error && console.log(error);
+      confirmSet(false);
+      editSet(false);
+    });
   }
   
   const dt = entry;
@@ -126,17 +124,32 @@ const ShortBlock = ({ seriesId, serial, units, entry, done, iopen, canQA, cal })
             placeholder='comment'
             defaultValue={dt.comm}/>
               
-          <span className='rightRow'> 
-            <button
-              className='smallAction inlineButton vmarginhalf clearRed blackT'
-              onClick={(e)=>popSh(e)}
-              disabled={!canQA}
-            >Remove</button>
+          <div className='wide comfort'> 
+            <span>
+              <button
+                className='smallAction inlineButton vmarginhalf clearRed blackT'
+                onClick={(e)=>confirmSet(true)}
+                disabled={!canQA}
+              >Remove</button>
+              {confirmState &&
+                <span><b> Are you sure? </b><button
+                    className='smallAction clearRed blackT inlineButton'
+                    disabled={!canQA}
+                    onClick={(e)=>popSh(e)}
+                  >YES</button>
+                  <button
+                    className='smallAction clearRed blackT inlineButton'
+                    disabled={!canQA}
+                    onClick={(e)=>confirmSet(false)}
+                  >NO</button>
+                </span>
+              }
+            </span>
             <button
               className='smallAction inlineButton vmarginhalf clearGreen blackT'
               onClick={(e)=>handleChange(e)}
             >Save</button>
-          </span>
+          </div>
           
         </n-feed-info-title>
       :

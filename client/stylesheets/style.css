@@ -214,6 +214,7 @@ input::-webkit-calendar-picker-indicator {
 }
 
 .wetasphalt { background-color: var(--wetasphalt); }
+.wetasphaltI { background-color:  var(--wetasphalt) !important; }
 .wetasphaltT { color: var(--wetasphalt); }
 .wetasphaltBorder { 
   background-color: transparent;
@@ -222,6 +223,7 @@ input::-webkit-calendar-picker-indicator {
 .concrete { background-color: var(--concrete); }
 
 .grayT { color: var(--black); }
+.darkgray { background-color: var(--asbestos); }
 .darkgrayT { color: var(--asbestos); }
 .darkT { color: var(--dark); }
 

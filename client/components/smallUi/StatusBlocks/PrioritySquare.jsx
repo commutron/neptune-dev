@@ -1,6 +1,8 @@
 import React, { useRef, useState, useEffect } from 'react';
 import moment from 'moment';
 import 'moment-timezone';
+import Pref from '/client/global/pref.js';
+
 import { min2hr } from '/client/utility/Convert.js';
 import NumStat from '/client/components/tinyUi/NumStat.jsx';
 
@@ -104,7 +106,7 @@ export const PrioritySquare = ({
       );
     }
     
-    if(bffrRel === undefined || bffrRel === null || bffrRel === false) {
+    if(!pt.hold && ( bffrRel === undefined || bffrRel === null || bffrRel === false )) {
       return(
         <NumStat
           num='X'
@@ -174,6 +176,18 @@ export const PrioritySquare = ({
               <dd>{soonTxt}</dd>
             </dl> : null}
         </div>
+      );
+    }
+    
+    if(pt.hold) {
+      return(
+        <NumStat
+          num={<fahld><i className='fas fa-pause fa-fw'></i></fahld>}
+          title={Pref.isHold}
+          color='holdblock'
+          size='vbigger'
+          title={isDebug ? debugTitle : title}
+        />
       );
     }
     

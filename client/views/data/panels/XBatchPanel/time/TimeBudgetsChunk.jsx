@@ -81,7 +81,13 @@ const TimeBudgetsChunk = ({
   return(
     <div>
       <ToggleBar
-        toggleOptions={['hours', 'minutes', 'percent', 'raw']}
+        toggleIcons={['𝗛𝗿', '𝗠𝗻', 
+          <fa1><i className='fas fa-percentage fa-fw'></i></fa1>, 
+          <fa2><i className='fas fa-bars fa-fw'></i></fa2>
+        ]}
+        toggleOptions={[ 
+          'hours','minutes','percent','raw records'
+        ]}
         toggleVal={conversion}
         toggleSet={(e)=>conversionSet(e)}
       />
@@ -94,7 +100,7 @@ const TimeBudgetsChunk = ({
           </p>
         </div>}
       
-      {conversion === 'raw' ?
+      {conversion === 'raw records' ?
         <TimeBlocksRaw 
           batch={b.batch}
           tide={b.tide}

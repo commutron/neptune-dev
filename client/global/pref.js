@@ -10,7 +10,7 @@ class Pref {
     
     this.InitialAppSetup = false;
     
-    this.neptuneVersion = '3.8.8';
+    this.neptuneVersion = '3.9.0';
     this.neptuneIs = 'Neptune Process Tracking';
 
     this.prefName = 'default';
@@ -105,6 +105,8 @@ class Pref {
     
     this.radioactive = 'nonconformace report';
     this.radio = 'ncr';
+    this.hold = 'hold';
+    this.isHold = 'on hold';
     
     this.group = 'customer';//customer
     this.Group = 'Customer';//Customer

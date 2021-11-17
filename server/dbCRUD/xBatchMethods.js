@@ -32,6 +32,7 @@ Meteor.methods({
         updatedAt: new Date(),
   			updatedWho: Meteor.userId(),
   			live: true,
+  		// 	hold: false,
   			salesOrder: salesNum,
   			salesStart: new Date(sDate),
   			salesEnd: new Date(eDate),
@@ -319,6 +320,35 @@ Meteor.methods({
       TraceDB.update({batchID: batchId}, {
         $pull : { 
           tags: tag
+      }});
+    }else{
+      null;
+    }
+  },
+  
+  setHold(batchId) {
+    if(Roles.userIsInRole(Meteor.userId(), 'run')) {
+      XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+        $set : { 
+          hold: true
+        }});
+      TraceDB.update({batchID: batchId}, {
+        $set : { 
+          hold: true
+      }});
+    }else{
+      null;
+    }
+  },
+  unsetHold(batchId) {
+    if(Roles.userIsInRole(Meteor.userId(), 'run')) {
+      XBatchDB.update({_id: batchId, orgKey: Meteor.user().orgKey}, {
+        $set : { 
+          hold: false
+        }});
+      TraceDB.update({batchID: batchId}, {
+        $set : { 
+          hold: false
       }});
     }else{
       null;

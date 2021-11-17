@@ -83,7 +83,8 @@ function collectPriority(privateKey, batchID, mockDay) {
           overQuote: dryCalc.overQuote,
           shipAim: shipAim,
           lateLate: lateLate,
-          oRapid: rapIs
+          oRapid: rapIs,
+          hold: b.hold
         });
       }else{
         resolve({
@@ -234,7 +235,8 @@ Meteor.methods({
         overQuote: t.overQuote,
         shipAim: t.shipAim,
         lateLate: t.lateLate,
-        oRapid: t.oRapid
+        oRapid: t.oRapid,
+        hold: t.hold
       };
     }
   },

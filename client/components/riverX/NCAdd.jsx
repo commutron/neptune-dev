@@ -25,7 +25,7 @@ const NCAdd = ({ seriesId, serial, units, user, app, ncTypesCombo })=> {
     if(tgood && refSplit.length > 0 && refSplit[0] !== '') {
       Session.set('ncAddTypeSticky', type);
       for(let ref of refSplit) {
-        if(ref.length < 8) {
+        if(ref.length > 0 && ref.length < 8) {
           Meteor.call('addNCX', seriesId, serial, ref, uMulti, type, where, andFix, 
           (error)=>{
             error && console.log(error);

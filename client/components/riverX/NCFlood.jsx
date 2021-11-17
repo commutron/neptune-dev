@@ -31,7 +31,7 @@ const NCFlood = ({ seriesId, live, user, app, ncTypesCombo })=> {
         autoClose: false
       });
       for(let ref of refSplit) {
-        if(ref.length < 8) {
+        if(ref.length > 0 && ref.length < 8) {
           Meteor.call('floodNCX', seriesId, ref, type, (error, reply)=>{
             error && console.log(error);
             if(reply) {
