@@ -138,7 +138,7 @@ const ShortBlock = ({ seriesId, serial, units, entry, done, iopen, canQA, cal })
                     onClick={(e)=>popSh(e)}
                   >YES</button>
                   <button
-                    className='smallAction clearRed blackT inlineButton'
+                    className='smallAction clearBlack inlineButton'
                     disabled={!canQA}
                     onClick={(e)=>confirmSet(false)}
                   >NO</button>

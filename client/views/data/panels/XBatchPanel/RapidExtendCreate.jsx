@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import Pref from '/client/global/pref.js';
 
+import { toCap } from '/client/utility/Convert';
 import { RapidInfoCreate } from '/client/components/forms/Rapid/RapidInfo';
 
 const RapidExtendCreate = ({ rOpenid, batchData, editAuth, cal, cancelFunc })=> {
@@ -16,10 +18,10 @@ const RapidExtendCreate = ({ rOpenid, batchData, editAuth, cal, cancelFunc })=> 
         <span>
           <i className='fas fa-sitemap fa-2x darkOrangeT'></i>
         </span>
-        <span className={`${createState ? 'big' : 'medBig'} gapR`}>Extend</span>
+        <span className={`${createState ? 'big' : 'medBig'} gapR`}>{toCap(Pref.rapidEx)}</span>
       </button>
       
-      {!createState && rOpenid ? <small>Only 1 open extension permitted</small> : null}
+      {!createState && rOpenid ? <small>Only 1 open {Pref.rapidExn} permitted</small> : null}
         
       {createState &&
         <div className='vmargin'>

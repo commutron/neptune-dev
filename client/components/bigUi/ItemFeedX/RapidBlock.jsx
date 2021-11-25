@@ -2,28 +2,37 @@ import React from 'react';
 import { toast } from 'react-toastify';
 import './style.css';
 import Pref from '/client/global/pref.js';
+import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 
-import UserNice from '/client/components/smallUi/UserNice.jsx';
+import UserNice from '/client/components/smallUi/UserNice';
 
 const RapidBlock = ({ 
-  rapIs, rapidsData, seriesId, serial, done, 
-  deleteAuth, cal
+  rapIs, rapidsData, seriesId, serial, done, cal
 })=> {
   
+  const canRmv = Roles.userIsInRole(Meteor.userId(), ['remove', 'qa']);
+  const canFin = Roles.userIsInRole(Meteor.userId(), ['run', 'qa']);
+  
   function popRapid() {
-    let check = 'Are you sure you want to remove the extention from this ' + Pref.item;
-    const yes = window.confirm(check);
-    if(yes) {
-      Meteor.call('unsetRapidFork', seriesId, serial, rapIs.rapId, (error, reply)=>{
-        error && console.log(error);
-        reply ? toast.success('Saved') : toast.error('Not Allowed');
-      });
-    }else{null}
+    Meteor.call('unsetRapidFork', seriesId, serial, rapIs.rapId, (error, reply)=>{
+      error && console.log(error);
+      reply ? toast.success(`${Pref.rapidExn} removed`) : toast.error('Not Allowed');
+    });
   }
   
   const rapDo = rapidsData.find( x => x._id === rapIs.rapId );
   const rarapid = rapDo ? rapDo.rapid : rapIs ? rapIs.rapId : '___';
   const raissue = rapDo ? rapDo.issueOrder : '___';
+  const rawater = rapDo ? rapDo.whitewater : null;
+  const rafinsh = rawater ? rawater.find(w=> w.type === 'finish') : null;
+  const rafinky = rafinsh ? rafinsh.key : null;
+  
+  function finRapid() {
+    Meteor.call('finishExRapid', seriesId, serial, rapIs.rapId, rafinky, (error, reply)=>{
+      error && console.log(error);
+      reply ? toast.success(`${Pref.rapidExn} complete`) : toast.error('Not Allowed');
+    });
+  }
   
   return(
     <n-feed-info-block class='rapid'>
@@ -45,12 +54,23 @@ const RapidBlock = ({
           </p>}
       </n-feed-info-center>
       <n-feed-right-anchor>
-        <button
-          className='miniAction'
-          onClick={()=>popRapid()}
-          disabled={!deleteAuth || rapIs.completed || !rapDo.live}
-          ><i className='fas fa-ban fa-lg fa-fw'></i>
-        </button>
+        <ContextMenuTrigger
+          id={rarapid+'rapid'}
+          attributes={{ 
+            className: 'miniAction',
+            disabled: rapIs.completed || !rapDo.live
+          }}
+          holdToDisplay={1}
+          renderTag='button'>
+          <i className='fas fa-ellipsis-v fa-lg fa-fw'></i>
+        </ContextMenuTrigger>
+        
+        <ContextMenu id={rarapid+'rapid'} className='noCopy'>
+          <MenuItem onClick={()=>finRapid()} disabled={!canFin}
+          ><i className='fas fa-check-circle fa-fw purpleT gapR'></i>Finish {Pref.rapidExn}</MenuItem>
+          <MenuItem onClick={()=>popRapid()} disabled={!canRmv}
+          ><i className='fas fa-ban fa-fw gapR'></i>Cancel {Pref.rapidExn}</MenuItem>
+        </ContextMenu>
       </n-feed-right-anchor>
     </n-feed-info-block>
   );

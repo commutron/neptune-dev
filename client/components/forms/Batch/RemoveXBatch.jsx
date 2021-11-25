@@ -37,9 +37,7 @@ const RemoveXBatch = ({ batchData, seriesData, checkStr })=> {
     const srsID = seriesData && seriesData._id;
     const pinVal = this.orgPINitem.value;
     
-    const check = window.confirm('Permanently Delete All Items??');
-    
-    if(check && srsID) {
+    if(srsID) {
       Meteor.call('deleteSeriesItems', batchData._id, srsID, pinVal, (err, reply)=>{
         if(err) {
           console.log(err);
@@ -60,9 +58,7 @@ const RemoveXBatch = ({ batchData, seriesData, checkStr })=> {
     const srsID = seriesData && seriesData._id;
     const pinVal = this.orgPINprob.value;
     
-    const check = window.confirm(`Permanently Delete All ${Pref.nonCons} & ${Pref.shortfalls}??`);
-    
-    if(check && srsID) {
+    if(srsID) {
       Meteor.call('deleteSeriesProblems', batchData._id, srsID, pinVal, (err, reply)=>{
         if(err) {
           console.log(err);
@@ -82,44 +78,36 @@ const RemoveXBatch = ({ batchData, seriesData, checkStr })=> {
     this.cutFallGo.disabled = true;
     const pinVal = this.orgPINfall.value;
     
-    const check = window.confirm('Permanently Delete All Waterfall Counters??');
-    
-    if(check) {
-      Meteor.call('deleteXBatchFall', batchData._id, pinVal, (err, reply)=>{
-        if(err) {
-          console.log(err);
-          toast.error('Server Error. see console');
-        }
-        if(reply) {
-          toast.success('Waterfall of XBatchDB removed');
-        }else{
-          toast.warning('Records are In-Use or No Authorization');
-          this.cutFallGo.disabled = false;
-        }
-      });
-    }
+    Meteor.call('deleteXBatchFall', batchData._id, pinVal, (err, reply)=>{
+      if(err) {
+        console.log(err);
+        toast.error('Server Error. see console');
+      }
+      if(reply) {
+        toast.success('Waterfall of XBatchDB removed');
+      }else{
+        toast.warning('Records are In-Use or No Authorization');
+        this.cutFallGo.disabled = false;
+      }
+    });
   }
   
   function handleTideXRemove(e) {
     this.cutTideGo.disabled = true;
     const pinVal = this.orgPINtime.value;
     
-    const check = window.confirm('Permanently Delete All Times??');
-    
-    if(check) {
-      Meteor.call('deleteXBatchTide', batchData._id, pinVal, (err, reply)=>{
-        if(err) {
-          console.log(err);
-          toast.error('Server Error. see console');
-        }
-        if(reply) {
-          toast.success('Times in XBatchDB removed');
-        }else{
-          toast.warning('Records are In-Use or No Authorization');
-          this.cutTideGo.disabled = false;
-        }
-      });
-    }
+    Meteor.call('deleteXBatchTide', batchData._id, pinVal, (err, reply)=>{
+      if(err) {
+        console.log(err);
+        toast.error('Server Error. see console');
+      }
+      if(reply) {
+        toast.success('Times in XBatchDB removed');
+      }else{
+        toast.warning('Records are In-Use or No Authorization');
+        this.cutTideGo.disabled = false;
+      }
+    });
   }
   
   function handleAllRemove(e) {
@@ -129,23 +117,18 @@ const RemoveXBatch = ({ batchData, seriesData, checkStr })=> {
     
     const confirm = this.confirmInput.value.trim();
     
-    const check = window.confirm(`Delete this ${Pref.xBatch} Forever??`);
-    
-    if(check) {
-      
-      Meteor.call('deleteWholeXBatch', batchData._id, confirm, pinVal, (err, reply)=>{
-        err && console.log(err);
-        if(reply === 'inUse') {
-          toast.warning('Cannot do this, records are in use');
-        }else if(reply) {
-          FlowRouter.go('/data');
-          toast.success('Entry in XBatchDB removed');
-        }else{
-          toast.error('Rejected by Server, No Authorization');
-          this.cutAllGo.disabled = false;
-        }
-      });
-    }
+    Meteor.call('deleteWholeXBatch', batchData._id, confirm, pinVal, (err, reply)=>{
+      err && console.log(err);
+      if(reply === 'inUse') {
+        toast.warning('Cannot do this, records are in use');
+      }else if(reply) {
+        FlowRouter.go('/data');
+        toast.success('Entry in XBatchDB removed');
+      }else{
+        toast.error('Rejected by Server, No Authorization');
+        this.cutAllGo.disabled = false;
+      }
+    });
   }
   
   let checkshort = checkStr.split('T')[0];
@@ -175,6 +158,7 @@ const RemoveXBatch = ({ batchData, seriesData, checkStr })=> {
             type='button'
             onClick={(e)=>handleItemRemove(e)}
             id='cutItemGo'
+            title='Permanently Delete All Items?'
             disabled={itemsQ === 0}
           >DELETE Items</button>
         </div>
@@ -196,6 +180,7 @@ const RemoveXBatch = ({ batchData, seriesData, checkStr })=> {
             type='button'
             onClick={(e)=>handleProbRemove(e)}
             id='cutProbGo'
+            title={`Permanently Delete All ${Pref.nonCons} & ${Pref.shortfalls}?`}
             disabled={probsQ === 0}
           >DELETE Problems</button>
         </div>
@@ -217,6 +202,7 @@ const RemoveXBatch = ({ batchData, seriesData, checkStr })=> {
             type='button'
             onClick={(e)=>handleFallRemove(e)}
             id='cutFallGo'
+            title='Permanently Delete All Waterfall Counters?'
             disabled={batchData.waterfall.length === 0}
           >DELETE Counts</button>
         </div>
@@ -238,6 +224,7 @@ const RemoveXBatch = ({ batchData, seriesData, checkStr })=> {
             type='button'
             onClick={(e)=>handleTideXRemove(e)}
             id='cutTideGo'
+            title='Permanently Delete All Times?'
             disabled={batchData.tide.length === 0}
           >DELETE Times</button>
         </div>
@@ -283,6 +270,7 @@ const RemoveXBatch = ({ batchData, seriesData, checkStr })=> {
               className='smallAction clearRed'
               type='submit'
               id='cutAllGo'
+              title={`Delete this ${Pref.xBatch} Forever?`}
               disabled={false}>DELETE Entire {Pref.xBatch}
             </button>
           </form>

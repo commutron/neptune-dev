@@ -125,8 +125,7 @@ const ItemFeedX = ({
                 seriesId={seriesId}
                 serial={serial}
                 done={done}
-                deleteAuth={canQA}
-                cal={calFunc} /> 
+                cal={calFunc} />
             );
           }else if(typeof dt.river === 'string') {
             const rvr = widgetData.flows.find(w=>w.flowKey === dt.river);

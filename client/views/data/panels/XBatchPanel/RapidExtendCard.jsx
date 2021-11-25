@@ -1,8 +1,9 @@
 import React from 'react';
 import { toast } from 'react-toastify';
+import Pref from '/client/global/pref.js';
 
 import ActionLink from '/client/components/tinyUi/ActionLink';
-import ActionFunc from '/client/components/tinyUi/ActionFunc';
+import ActionConf from '/client/components/tinyUi/ActionConf';
 
 import NotesModule from '/client/components/bigUi/NotesModule';
 
@@ -20,21 +21,18 @@ const RapidExtendCard = ({
 })=> {
   
   function handleLive() {
-    const check = window.confirm(rapid.live ? 'Close Rapid' : 'Open Rapid');
-    if(check) {
-      if(rapid.live) {
-        Meteor.call('setRapidClose', rapid._id, batchData._id, batchData.batch,
-        (error, re)=>{
-          error && console.log(error);
-          re ? toast.success('success') : toast.error('unsuccessful');
-        });
-      }else{
-         Meteor.call('setRapidOpen', rapid._id, batchData._id,
-         (error, re)=>{
-          error && console.log(error);
-          re ? toast.success('success') : toast.error('unsuccessful');
-        });
-      }
+    if(rapid.live) {
+      Meteor.call('setRapidClose', rapid._id, batchData._id, batchData.batch,
+      (error, re)=>{
+        error && console.log(error);
+        re ? toast.success('success') : toast.error('unsuccessful');
+      });
+    }else{
+       Meteor.call('setRapidOpen', rapid._id, batchData._id,
+       (error, re)=>{
+        error && console.log(error);
+        re ? toast.success('success') : toast.error('unsuccessful');
+      });
     }
   }
   
@@ -64,19 +62,25 @@ const RapidExtendCard = ({
             icon='fas fa-print'
             color='blackT gap' />
           
-          <ActionFunc
+          <ActionConf
+            key={rapid.rapid+'open'}
+            id={rapid.rapid+'open'}
             doFunc={handleLive}
             title='Open'
+            confirm={'Open ' + Pref.rapidExn}
             icon='fas fa-bolt'
             color='darkOrangeT gap'
             lockOut={!editAuth || rOpenid || rapid.live} />
-          
-          <ActionFunc
+            
+          <ActionConf
+            key={rapid.rapid+'close'}
+            id={rapid.rapid+'close'}
             doFunc={handleLive}
             title='Close'
+            confirm={'Close ' + Pref.rapidExn}
             icon='fas fa-power-off'
             color='blackT gap'
-            lockOut={!editAuth || !rapid.live} />  
+            lockOut={!editAuth || !rapid.live} />
           
           <RemoveRapid
             batchId={batchData._id}

@@ -73,7 +73,7 @@
   border-bottom-color: var(--belizeHole);
 }
 
-.hoverAction {
+.miniAction, .hoverAction {
   cursor: pointer;
 }
 .hoverAction:hover,
@@ -99,6 +99,7 @@
 .clearBlue,
 .clearRed,
 .clearOrange,
+.clearDarkOrange,
 .clearTeal,
 .clearPurple {
   background-color: transparent;
@@ -106,27 +107,26 @@
   border-style: solid;
   font-weight: 400;
   text-shadow: 0 0 0 black;
+  color: var(--clearaccent);
+  border-color: var(--clearaccent);
 }
 .clearWhite:hover,
 .clearGreen:hover,
 .clearBlue:hover,
 .clearRed:hover,
 .clearOrange:hover,
+.clearDarkOrange:hover,
 .clearTeal:hover,
 .clearPurple:hover {
   color: black;
+  background-color: var(--clearaccent);
 }
-  
+
 .clearWhite {
-  color: white;
-  border-color: white;
-}
-.clearWhite:hover {
-  background-color: white;
+  --clearaccent: white;
 }
 .clearBlack {
-  color: var(--blackT);
-  border-color: var(--blackT);
+  --clearaccent: var(--blackT);
   background-color: transparent;
 }
 .clearBlack:hover {
@@ -137,53 +137,26 @@
   color: var(--concrete);
   border-color: var(--concrete);
 }
-
 .clearGreen {
-  color: var(--emerald);
-  border-color: var(--emerald);
+  --clearaccent: var(--emerald);
 }
-.clearGreen:hover {
-  background-color: var(--emerald);
-}
-
 .clearBlue {
-  color: var(--peterriver);
-	border-color: var(--peterriver);
+  --clearaccent: var(--peterriver);
 }
-.clearBlue:hover {
-	background-color: var(--peterriver);
-}
-
 .clearRed {
-  color: var(--alizarin);
-  border-color: var(--alizarin);
+  --clearaccent: var(--alizarin);
 }
-.clearRed:hover {
-  background-color: var(--alizarin);
-}
-
 .clearOrange {
-  color: var(--orange);
-  border-color: var(--orange);
+  --clearaccent: var(--orange);
 }
-.clearOrange:hover {
-  background-color: var(--orange);
+.clearDarkOrange { 
+  --clearaccent: var(--pumpkin);
 }
-
 .clearTeal {
-  color: var(--turquoise);
-  border-color: var(--turquoise);
+  --clearaccent: var(--turquoise);
 }
-.clearTeal:hover {
-  background-color: var(--turquoise);
-}
-
 .clearPurple {
-  color: var(--amethyst);
-  border-color: var(--amethyst);
-}
-.clearPurple:hover {
-  background-color: var(--amethyst);
+  --clearaccent: var(--amethyst);
 }
 
 .activeIndicator:focus, .activeIndicator:active {
@@ -414,6 +387,7 @@ label.qdpplRound {
   border: 0.2em solid var(--wetasphalt);
   border-radius: 50px;
   padding: 0 0.25em 0 0;
+  line-height: 1;
 }
 .holdblock {
   background-color: var(--asbestos);

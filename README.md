@@ -1,4 +1,4 @@
-Neptune v.3.9.0
+Neptune v.3.9.1
 
 A highly opinionated statistical process control web app for electronics manufacturing.
 

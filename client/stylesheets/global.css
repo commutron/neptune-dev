@@ -131,7 +131,8 @@ input[type='checkbox'] {
 button:disabled, 
 button:disabled:hover, 
 button:disabled span, 
-button:disabled label {
+button:disabled label,
+.react-contextmenu-wrapper:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }

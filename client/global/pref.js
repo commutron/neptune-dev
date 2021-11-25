@@ -10,7 +10,7 @@ class Pref {
     
     this.InitialAppSetup = false;
     
-    this.neptuneVersion = '3.9.0';
+    this.neptuneVersion = '3.9.1';
     this.neptuneIs = 'Neptune Process Tracking';
 
     this.prefName = 'default';
@@ -101,6 +101,7 @@ class Pref {
     
     this.rapidEx = 'extend';
     this.rapidExd = 'extended';
+    this.rapidExn = 'extension';
     this.rapidExs = 'extensions';
     
     this.radioactive = 'nonconformace report';

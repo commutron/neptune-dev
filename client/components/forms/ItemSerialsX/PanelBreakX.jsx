@@ -35,7 +35,10 @@ const PanelBreakX = ({ seriesId, batchId, batchNum, item })=> {
 export default PanelBreakX;
 
 const PanelBreakForm = ({ seriesId, batchId, batchNum, item })=> {
+  
   const [ newSerials, newSerialsSet ] = useState([]);
+  const [ confirmState, confirmSet ] = useState(false);
+
   
   function setSerials(e) {
     const srlInput = this.serials.value.trim().replace(",", " ");
@@ -50,20 +53,17 @@ const PanelBreakForm = ({ seriesId, batchId, batchNum, item })=> {
     if(newSerials.length > 0) {
       let overlap = newSerials.find( x => x === serial);
       if(!overlap) {
-      const verfiy = confirm("This is destuctive of the original, are you sure?");
-        if(verfiy === true) {
-          Meteor.call('breakItemIntoUnitsX', batchId, seriesId, serial, newSerials, 
-          (error, reply)=>{
-            if(error)
-            console.log(error);
-          if(reply) {
-            toast.success('Saved');
-            FlowRouter.go(`/data/batch?request=${batchNum}`);
-          }else{
-            toast.error('Server Error');
-          }
-          });
-        }else{toast.error('Error');}
+        Meteor.call('breakItemIntoUnitsX', batchId, seriesId, serial, newSerials, 
+        (error, reply)=>{
+          if(error)
+          console.log(error);
+        if(reply) {
+          toast.success('Saved');
+          FlowRouter.go(`/data/batch?request=${batchNum}`);
+        }else{
+          toast.error('Server Error');
+        }
+        });
       }else{toast.error('Error');}
     }else{toast.error('Error');}
   }
@@ -106,8 +106,24 @@ const PanelBreakForm = ({ seriesId, batchId, batchNum, item })=> {
             id='pBrkGO'
             disabled={newSerials.length !== item.units}
             className='action clearBlue'
-            type='submit'>Split</button>
+            type='button'
+            onClick={(e)=>confirmSet(true)}
+          >Split</button>
         </p>
+        <div>
+          {confirmState &&
+            <p><b>Are you sure? </b><button
+                className='smallAction clearRed inlineButton'
+                type='submit'
+              >YES</button>
+              <button
+                className='smallAction clearBlack inlineButton'
+                type='button'
+                onClick={(e)=>confirmSet(false)}
+              >NO</button>
+            </p>
+          }
+        </div>
       </form>
     </Fragment>
   );

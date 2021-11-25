@@ -91,8 +91,8 @@ const UndoFinishForm = ({
   if(rapids.length > 0) {
     return(
       <div>
-        <p className='centreText'>This {Pref.item} has been {Pref.rapidExd}.</p>
-        <p className='centreText'>The original {Pref.flow} can no longer be unfinished.</p>
+        <p className='centreText bold'>This {Pref.item} has been {Pref.rapidExd}.</p>
+        <p className='centreText bold'>The original {Pref.flow} can no longer be unfinished.</p>
       <br />
       {completedRapids.length > 0 ?
         <div>

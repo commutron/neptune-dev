@@ -242,7 +242,7 @@ const StoneSelect = ({
   
   return(
     <div className='centre centreText'>
-      <p><i className="fas fa-ghost fa-5x fade darkgrayT"></i></p>
+      <p><i className="fas fa-question-circle fa-4x fade darkgrayT"></i></p>
       <p className='medBig cap'>no {Pref.flow} available</p>
     </div>
   );

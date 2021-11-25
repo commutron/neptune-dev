@@ -582,15 +582,15 @@ Meteor.methods({
               orgKey,
               batchId, 
               'Start of Process', 
-              `First ${step} ${type} recorded by ${username}`
+              `First ${step} nest recorded by ${username}`
             );
           }else if(benchmark === 'last') {
             Meteor.call(
               'setXBatchEvent', 
               orgKey,
-              batchId, 
+              batchId,
               'End of Process', 
-              `Final ${step} ${type} recorded by ${username}`
+              `Final ${step} nest recorded by ${username}`
             );
           }else{ null }
         });
@@ -752,7 +752,51 @@ Meteor.methods({
       return false;
     }
   },
-
+  
+  finishExRapid(seriesId, serial, rapId, key) {
+    if(!Roles.userIsInRole(Meteor.userId(), ['qa', 'run'])) {
+      return false;
+    }else{
+      const orgKey = Meteor.user().orgKey;
+      
+      const srs = XSeriesDB.findOne({_id: seriesId},{fields:{'items.serial':1,'items.altPath':1}});
+      const item = srs.items.find( x => x.serial === serial );
+      let rapidPath = item.altPath.find( y => y.rapId === rapId );
+      rapidPath['completed'] = true;
+      rapidPath['completedAt'] = new Date();
+      rapidPath['completedWho'] = Meteor.userId();
+      
+      XSeriesDB.update({_id: seriesId, orgKey: orgKey, 'items.serial': serial}, {
+        $push : {
+  			  'items.$.altPath': rapidPath
+  			}
+      });
+      XSeriesDB.update({_id: seriesId, orgKey: orgKey, 'items.serial': serial}, {
+  			$pull : {
+          'items.$.altPath': { rapId: rapId, completed: false }
+        }
+      });
+      
+      if(key) {
+        XSeriesDB.update({_id: seriesId, orgKey: orgKey, 'items.serial': serial}, {
+          $push : { 
+    			  'items.$.history': {
+    			    key: key,
+              step: 'finish',
+              type: 'finish',
+              good: true,
+              time: new Date(),
+              who: Meteor.userId(),
+              comm : 'Finished from Explore',
+              info: false
+    			  }
+    			}
+        });
+      }
+  		return true;
+    }
+  },
+  
   //  remove a step
   popHistoryX(seriesId, serial) {
     if(Roles.userIsInRole(Meteor.userId(), 'active')) {
@@ -860,6 +904,7 @@ Meteor.methods({
       
       const whenDid = subDoc.completedAt;
       const whoDid = subDoc.completedWho;
+      const comDid = subDoc.comm;
     
       if(doc && docOpen) {
         XSeriesDB.update({_id: seriesId, orgKey: accessKey, 'items.serial': serial}, {
@@ -872,14 +917,14 @@ Meteor.methods({
   			    'items.$.completedWho': false
     			},
         });
-        Meteor.call('pushUndoFinishEntry', seriesId, serial, accessKey, whenDid, whoDid);
+        Meteor.call('pushUndoFinishEntry', seriesId, serial, accessKey, whenDid, whoDid, comDid);
         return true;
       }else{
         return false;
       }
     }
   },
-  pushUndoFinishEntry(seriesId, serial, accessKey, formerWhen, formerWho) {
+  pushUndoFinishEntry(seriesId, serial, accessKey, formerWhen, formerWho, formerCom) {
     XSeriesDB.update({_id: seriesId, orgKey: accessKey, 'items.serial': serial}, {
       $push : { 
 			  'items.$.history': {
@@ -889,7 +934,7 @@ Meteor.methods({
           good: false,
           time: new Date(),
           who: Meteor.userId(),
-          comm: '',
+          comm: formerCom,
           info: {
             formerWhen: formerWhen,
             formerWho: formerWho
@@ -998,7 +1043,7 @@ Meteor.methods({
   /// unset an rapid alt path
   unsetRapidFork(seriesId, serial, rapId) {
     const doc = XSeriesDB.findOne({_id: seriesId, orgKey: Meteor.user().orgKey, 'items.serial': serial},
-                                  {fields:{'items.serial':1,'items.altPath':1}});
+                                  {fields:{'items.serial':1,'items.altPath':1,'nonCon':1}});
     const subDoc = doc.items.find( x => x.serial === serial );
     const rapIs = subDoc.altPath.find( y => y.rapId === rapId );
     

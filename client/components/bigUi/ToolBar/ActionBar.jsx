@@ -16,6 +16,7 @@ import UnitSetX from '/client/components/forms/ItemSerialsX/UnitSetX';
 import PanelBreakX from '/client/components/forms/ItemSerialsX/PanelBreakX';
 import UndoFinishX from '/client/components/forms/ItemSerialsX/UndoFinishX';
 import ItemIncompleteX from '/client/components/forms/ItemSerialsX/ItemIncompleteX';
+import RapidSet from '/client/components/forms/ItemSerialsX/RapidSet';
 import ScrapItemX from '/client/components/forms/ItemSerialsX/ScrapItemX';
 import RemoveItem from '/client/components/forms/ItemSerialsX/RemoveItem';
 
@@ -28,8 +29,12 @@ const ActionBar = ({
   app, user,
   action, noText,
   ncTypesCombo
-})=> (
+})=> {
   
+  const liverapid = rapidData && rapidData.find(r=> r.live === true);
+  const itemrapid = liverapid && itemData && itemData.altPath.find(x=> x.rapId === liverapid._id);
+
+  return(
   <Fragment>
     { 
   	action === 'xitem' ?
@@ -45,15 +50,25 @@ const ActionBar = ({
           batchNum={batchData.batch}
     	    item={itemData} />
         {itemData.completed ?
-          <UndoFinishX
-      	    batchId={batchData._id}
-      	    completedAtB={batchData.completedAt}
-      	    seriesId={seriesData._id}
-      	    serial={itemData.serial}
-      	    completedAtI={itemData.completedAt}
-      	    rapidData={rapidData}
-      	    rapids={itemData.altPath.filter(x=> x.rapId !== false)}
-      	 />
+          liverapid && !itemrapid ?
+            <RapidSet
+        	    batchId={batchData._id}
+        	    completedAtB={batchData.completedAt}
+        	    seriesId={seriesData._id}
+        	    serial={itemData.serial}
+        	    completedAtI={itemData.completedAt}
+        	    rapidData={liverapid}
+        	  />
+      	  :
+      	    <UndoFinishX
+        	    batchId={batchData._id}
+        	    completedAtB={batchData.completedAt}
+        	    seriesId={seriesData._id}
+        	    serial={itemData.serial}
+        	    completedAtI={itemData.completedAt}
+        	    rapidData={rapidData}
+        	    rapids={itemData.altPath.filter(x=> x.rapId !== false)}
+        	 />
       	 :
           <ItemIncompleteX
             seriesId={seriesData._id}
@@ -156,6 +171,7 @@ const ActionBar = ({
       : null
     }
   </Fragment>
-);
+  );
+};
 
 export default ActionBar;
