@@ -182,7 +182,7 @@ export const PrioritySquare = ({
     if(pt.hold) {
       return(
         <NumStat
-          num={<fahld><i className='fas fa-pause fa-fw'></i></fahld>}
+          num={<n-faH><i className='fas fa-pause fa-fw'></i></n-faH>}
           title={Pref.isHold}
           color='holdblock'
           size='vbigger'

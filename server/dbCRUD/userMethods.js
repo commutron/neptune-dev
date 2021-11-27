@@ -276,6 +276,15 @@ Meteor.methods({
     }
   },
   
+  setColor(cVal) {
+    Meteor.users.update(Meteor.userId(), {
+      $set: {
+        customColor: cVal,
+      }
+    });
+    return true;
+  },
+  
   setAutoScan(value) {
     const curr = Meteor.user().autoScan;
     const change = value === undefined ? !curr ? true : false : value;

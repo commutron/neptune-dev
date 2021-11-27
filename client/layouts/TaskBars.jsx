@@ -112,7 +112,7 @@ export const UpTaskBar = ({ subLink, showParts, isAuth }) => (
       subON={subLink === 'values'}
       goLink='/upstream/values'
       icon='fas fa-calculator'
-      iconAdj=''
+      iconAdj='down-1'
     />
     
     {isAuth || Roles.userIsInRole(Meteor.userId(), 'admin') ?

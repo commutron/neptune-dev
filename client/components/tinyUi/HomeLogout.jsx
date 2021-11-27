@@ -1,14 +1,19 @@
 import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
 import React from 'react';
+import { toast } from 'react-toastify';
 import Pref from '/client/global/pref.js';
 
 const HomeLogout = ({ currentUser })=> {
   function doLogout() {
-	  const tideOut = !currentUser.engaged ? true : 
-	    confirm(`You are ${Pref.engaged} on ${currentUser.engaged.tName}`);
-		if(tideOut) {
+    if(currentUser.engaged) {
+      toast.warning(`You are ${Pref.engaged} on ${Meteor.user().engaged.tName}\nCLICK TO SIGN OUT IMMEDIATELY`, 
+        { autoClose: 10000,
+         onClose: ()=> Meteor.logout()
+        });
+    }else{
 		  Meteor.logout();
+		  document.querySelector(':root').style.setProperty('--neptuneColor', null);
 	  }
 	}
 	

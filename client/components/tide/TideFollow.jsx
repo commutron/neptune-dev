@@ -1,14 +1,19 @@
 import React, { Fragment } from 'react';
+import { toast } from 'react-toastify';
 import Pref from '/client/global/pref.js';
 import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 
 const TideFollow = ({ proRoute, invertColor })=> {
   
   function doLogout() {
-	  const tideOut = !Meteor.user().engaged ? true : 
-	    confirm(`You are ${Pref.engaged} on ${Meteor.user().engaged.tName}`);
-		if(tideOut) {
+	  if(Meteor.user().engaged) {
+      toast.warning(`You are ${Pref.engaged} on ${Meteor.user().engaged.tName}\nCLICK TO SIGN OUT IMMEDIATELY`, 
+        { autoClose: 10000,
+         onClose: ()=> Meteor.logout()
+        });
+    }else{
 		  Meteor.logout();
+		  document.querySelector(':root').style.setProperty('--neptuneColor', null);
 	  }
 	}
   
@@ -32,6 +37,11 @@ const TideFollow = ({ proRoute, invertColor })=> {
   const taskT = !engaged || !engaged.tTask ? '' : `, ${engaged.tTask}`;
   const tootip = !engaged ? `No Active ${Pref.xBatch}` : 
 	         `${Pref.xBatch} ${engaged.tName}${taskT}`;
+	
+	if(user) {
+	  document.querySelector(':root').style
+    .setProperty('--neptuneColor', user.customColor || null);
+	}
 	
   return(
     <Fragment>

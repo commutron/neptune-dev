@@ -43,7 +43,13 @@ const UserSettings = ({ app, user, isAdmin, brancheS })=> {
         <div>
           <h3><i className='fas fa-sliders-h fa-fw gapR'></i>Interface Preferences</h3>
           <div>
-        
+            
+            <UserColorSetting
+              userSetting={Meteor.user().customColor}
+              labelText='Custom Colour Theme'
+              helpText="Set a custom colour for '--neptuneColor'. Also matches outline, accents and text selction"
+            />
+              
             <UserToggleSetting
               userSetting={Meteor.user().miniAction}
               labelText='Prefer Dense View'
@@ -149,6 +155,37 @@ const UserSettings = ({ app, user, isAdmin, brancheS })=> {
 
 export default UserSettings;
 
+const UserColorSetting = ({ userSetting, labelText, helpText, callMethod })=> {
+  function handle(val) {
+    Meteor.call('setColor', val, (error)=>{
+      error && console.log(error);
+    });
+  }
+  
+  return(
+    <div className='bigInfoBox' 
+      data-describe={helpText}>
+      <div>{labelText}</div>
+      <div>
+        <span className='middle'>
+          <button
+            className='roundAction colorSwatch gapR'
+            title='Reset'
+            onClick={()=> { handle(null); this.userColor.value = '#007fff' }}
+          ><i className='fas fa-times-circle mini15x'></i></button>
+          <input 
+            id='userColor'
+            type='color'
+            className='colorSwatch'
+            title='Set Colour'
+            defaultValue={userSetting || '#007fff'}
+            onChange={(e)=>handle(e.target.value)}
+          />
+        </span>
+      </div>
+    </div>
+  );
+};
 
 const UserToggleSetting = ({ userSetting, labelText, yesText, noText, callMethod })=> {
   function handle() {

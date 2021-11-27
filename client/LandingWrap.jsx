@@ -3,14 +3,14 @@ import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import Pref from '/client/global/pref.js';
 import InboxToastPop from '/client/utility/InboxToastPop.js';
-import Spin from '/client/components/tinyUi/Spin.jsx';
+import Spin from '/client/components/tinyUi/Spin';
 
-import HomeIcon from '/client/layouts/HomeIcon.jsx';
-import TideFollow from '/client/components/tide/TideFollow.jsx';
+import HomeIcon from '/client/layouts/HomeIcon';
+import TideFollow from '/client/components/tide/TideFollow';
 
 import { ToastContainer } from 'react-toastify';
 
-import HomeLogout from '/client/components/tinyUi/HomeLogout.jsx';
+import HomeLogout from '/client/components/tinyUi/HomeLogout';
 import NavButton from '/client/layouts/NavButton/NavButton';
 import { NavButtonShell } from '/client/layouts/NavButton/NavButton';
 import { NavPlaceholder } from '/client/layouts/NavButton/NavButton';

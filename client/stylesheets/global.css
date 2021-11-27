@@ -85,6 +85,9 @@ a {
   border: 1px dotted transparent;
   color: var(--belizeHole);
 }
+a > n-fa0 {
+  color: var(--neptuneColor);
+}
 
 a:link, a:visited {
   text-decoration: none;

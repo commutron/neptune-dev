@@ -82,8 +82,8 @@ const TimeBudgetsChunk = ({
     <div>
       <ToggleBar
         toggleIcons={['𝗛𝗿', '𝗠𝗻', 
-          <fa1><i className='fas fa-percentage fa-fw'></i></fa1>, 
-          <fa2><i className='fas fa-bars fa-fw'></i></fa2>
+          <n-fa1><i className='fas fa-percentage fa-fw'></i></n-fa1>, 
+          <n-fa2><i className='fas fa-bars fa-fw'></i></n-fa2>
         ]}
         toggleOptions={[ 
           'hours','minutes','percent','raw records'
