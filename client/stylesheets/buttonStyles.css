@@ -121,11 +121,38 @@
   background-color: var(--clearaccent);
 }
 
+.greenHover,
+.blueHover,
+.redHover,
+.orangeHover,
+.blackHover {
+  color: var(--clearaccent);
+  background-color: var(--clouds);
+}
+.greenHover:hover,
+.blueHover:hover,
+.redHover:hover,
+.orangeHover:hover,
+.blackHover:hover {
+  color: var(--clouds);
+  background-color: var(--clearaccent);
+}
+.greenHover:disabled:hover,
+.blueHover:disabled:hover,
+.redHover:disabled:hover,
+.orangeHover:disabled:hover,
+.blackHover:disabled:hover {
+  color: var(--clearaccent);
+  background-color: var(--clouds);
+}
+
 .clearWhite {
   --clearaccent: white;
 }
-.clearBlack {
+.clearBlack, .blackHover {
   --clearaccent: var(--blackT);
+}
+.clearBlack {
   background-color: transparent;
 }
 .clearBlack:hover {
@@ -136,13 +163,13 @@
   color: var(--concrete);
   border-color: var(--concrete);
 }
-.clearGreen {
+.clearGreen, .greenHover {
   --clearaccent: var(--emerald);
 }
-.clearBlue {
+.clearBlue, .blueHover {
   --clearaccent: var(--peterriver);
 }
-.clearRed {
+.clearRed, .redHover {
   --clearaccent: var(--alizarin);
 }
 .clearOrange {
@@ -150,6 +177,9 @@
 }
 .clearDarkOrange { 
   --clearaccent: var(--pumpkin);
+}
+.orangeHover {
+  --clearaccent: var(--carrot);
 }
 .clearTeal {
   --clearaccent: var(--turquoise);
@@ -194,6 +224,11 @@
   border: none;
   padding: 0px;
   background-color: transparent;
+}
+
+.textLinkButton:active {
+  background-color: var(--belizeHole);
+  color: white;
 }
 
 .inlineLink {

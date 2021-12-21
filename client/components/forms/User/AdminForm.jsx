@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { toast } from 'react-toastify';
 
 export const AdminUp = ({ userId })=> {
 
@@ -7,9 +8,8 @@ export const AdminUp = ({ userId })=> {
     const pIn = this.pIn.value.trim();
 
     Meteor.call('adminUpgrade', userId, pIn, (err, reply)=>{
-      if(err)
-        console.log(err);
-      reply ? null : alert('Incorrect PIN');
+      err && console.log(err);
+      reply ? null : toast.error('Incorrect PIN');
     });
   }
 
@@ -48,15 +48,13 @@ export const AdminUp = ({ userId })=> {
 
 export const AdminDown = ()=> {
   
+  const [ confirmState, confirmSet ] = useState(false);
+  
   function down(e) {
-    const check = window.confirm('Are you sure you want to become a regular user?');
-    if(check) { 
     Meteor.call('adminDowngrade', (err, reply)=>{
-      if(err)
-        console.log(err);
-      reply ? window.location.reload(true) : alert('Rejected by server');
+      err && console.log(err);
+      reply ? window.location.reload(true) : toast.error('Rejected by server');
     });
-    }else{null}
   }
     
   const self = Roles.userIsInRole(Meteor.userId(), 'admin');
@@ -68,12 +66,28 @@ export const AdminDown = ()=> {
         data-describe='Only possible if there is another administrator as one administrator is always required.'>
         <div><label htmlFor='adminnomore'>Give up being an Admin</label></div>
         <div>
-          <button
-            id='adminnomore'
-            className='action clearRed'
-            onClick={(e)=>down(e)}
-            disabled={adminOther.length === 1}
-          >Downgrade</button>
+          {!confirmState ?
+            <button
+              id='adminnomore'
+              className='action clearRed'
+              onClick={(e)=>confirmSet(true)}
+              disabled={adminOther.length === 1}
+            >Downgrade</button>
+          :
+            <div>
+              <p><b>Are you sure? </b></p>
+              <p><button
+                className='action clearBlue'
+                onClick={(e)=>down(e)}
+                disabled={adminOther.length === 1}
+              >YES, become a regular user.</button></p>
+              <p><button
+                className='action clearBlack'
+                onClick={(e)=>confirmSet(false)}
+                disabled={adminOther.length === 1}
+              >NO, stay an admin.</button></p>
+            </div>
+          }
         </div>
       </div>
     );

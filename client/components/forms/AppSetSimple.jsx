@@ -18,7 +18,7 @@ const AppSetSimple = ({title, action, rndmKey})=> {
         }
       });
     }else{
-      alert('action not found');
+      toast.error('action not found');
     }
   }
     

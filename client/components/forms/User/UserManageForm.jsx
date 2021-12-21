@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
@@ -10,20 +10,21 @@ const UserManageForm = ({
   auths, areas, brancheS
 })=> {
   
+  const [ confirmState, confirmSet ] = useState(false);
+  
   function forcePassword(e) {
     e.preventDefault();
-    const check = window.confirm('Are you sure you to change this users password?');
-    const newPass = prompt('New Password', '');
-    const newConfirm = prompt('New Password Again', '');
+    const newPass = this.forcepass.value.trim();
     const self = Meteor.userId() === id;
-    if(check && !self && newPass === newConfirm) {
+    if(!self && newPass) {
       Meteor.call('forcePasswordChange', id, newPass, (error, reply)=>{
         error && console.log(error);
         reply ? toast.success('Saved') : toast.error('Server Error');
       });
     }else{
-      alert('not allowed');
+      toast.error('Not Allowed. Permission insufficient or PIN incorrect');
     }
+    confirmSet(false);
   }
 
   const admin = Roles.userIsInRole(id, 'admin');
@@ -127,10 +128,34 @@ const UserManageForm = ({
         {!admin ?
           <fieldset>
             <legend>Forgot Password</legend>
-            <button
-              className='smallAction clearRed'
-              onClick={(e)=>forcePassword(e)}
-            >Change Password</button>
+            {!confirmState ?
+              <button
+                className='smallAction clearRed'
+                onClick={(e)=>confirmSet(true)}
+              >Change Password</button>
+            :
+              <div>
+                <p><input
+                  type='password'
+                  id='forcepass'
+                  className='showValid'
+                  placeholder='password'
+                  pattern='[A-Za-z0-9\.!@#$%^&*()_\-,?`<>[\]{}~=/\\]*'
+                  minLength='6'
+                  autoComplete='new-password'
+                  required
+                /></p>
+                <p><b>Are you sure? </b></p>
+                <p><button
+                  className='action clearBlue'
+                  onClick={(e)=>forcePassword(e)}
+                >YES, change password</button></p>
+                <p><button
+                  className='action clearBlack'
+                  onClick={(e)=>confirmSet(false)}
+                >NO</button></p>
+              </div>
+            }
           </fieldset>
         :null}
       </div>

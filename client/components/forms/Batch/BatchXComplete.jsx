@@ -32,6 +32,7 @@ const BatchXComplete = ({ batchData, allFlow, allFall, nowater, quantity, canRun
       err && console.log(err);
     });
   }
+  
   function undoFinishBatchX(late, pinInput) {
     const batchID = batchData._id;
     const override = late ? pinInput : false;

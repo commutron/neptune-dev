@@ -36,7 +36,7 @@ const UserDataWrap = ({
   const brancheS = branchesSort(branches);
   
   const iL = <i className='rAlign'>{user.inbox.length}</i>;
-     
+  
   return(
     <ErrorCatch>
     <div className='simpleContainer'>

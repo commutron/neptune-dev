@@ -1,3 +1,5 @@
+import { toast } from 'react-toastify';
+
 export default function printTextThing(htmlString) {
   if( htmlString && typeof document !== 'undefined' ) {
 
@@ -16,6 +18,7 @@ export default function printTextThing(htmlString) {
 
     printableElement.remove();
   }else{
-    alert('document not found');
+    toast.error('Document not found. Invalid HTML string');
+    console.log('document not found. invalid HTML string');
   }
 }

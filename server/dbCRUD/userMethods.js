@@ -445,13 +445,14 @@ Meteor.methods({
     }
   },
   
-  logReactError(sessionID, errorType, info) {
+  logReactError(sessionID, agent, errorType, info) {
     try {
       if(Roles.userIsInRole(Meteor.userId(), 'debug')) {
         const time = (new Date()).toISOString();
         const logString = `Error, Type: ${errorType}, ${time}, 
-                            username: ${Meteor.user().username} 
-                              session: ${sessionID}, ${info}`;
+                            username: ${Meteor.user().username}, 
+                              session: ${sessionID}, 
+                                agent: ${agent}, ${info}`;
         Meteor.users.update(Meteor.userId(), {
           $push: {
             usageLog: logString,

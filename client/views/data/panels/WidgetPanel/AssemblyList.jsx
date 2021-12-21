@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import Pref from '/client/global/pref.js';
 
@@ -7,21 +7,22 @@ import ActionFunc from '/client/components/tinyUi/ActionFunc';
 
 const AssemblyList = ({ variantData, widgetData, groupData })=> {
   
+  const [ rmvState, rmvSet ] = useState(false);
+  
   const v = variantData;
   const w = widgetData;
 
   const vAssmbl = v.assembly.sort((p1, p2)=>
       p1.component < p2.component ? -1 : p1.component > p2.component ? 1 : 0 );
   
+  function tgglRemove() {
+    rmvSet(!rmvState);
+  }
+  
   function removeComp(compPN) {
-    const check = confirm('Are you sure you want to remove this ' + Pref.comp + '?');
-    if(!check) {
-      null;
-    }else{
       Meteor.call('pullCompV', v._id, compPN, (err)=>{
         err && console.log(err);
       });
-    }
   }
   
   function downloadComp() {
@@ -58,6 +59,16 @@ const AssemblyList = ({ variantData, widgetData, groupData })=> {
           lockOut={!v.live} 
         />
         
+        {Roles.userIsInRole(Meteor.userId(), 'remove') &&
+          <ActionFunc
+            doFunc={tgglRemove}
+            title='Cut Parts'
+            icon='fas fa-cut'
+            color='redT gap'
+            lockOut={false}
+          />
+        }
+        
         <ActionFunc
           doFunc={downloadComp}
           title='Download'
@@ -72,11 +83,13 @@ const AssemblyList = ({ variantData, widgetData, groupData })=> {
           return(
             <dt key={index} className='letterSpaced'>
               {entry.component}
-              <button
-                className='miniAction redT'
-                onClick={()=>removeComp(entry.component)}
-                disabled={!Roles.userIsInRole(Meteor.userId(), 'remove')}>
-              <i className='fas fa-times fa-fw'></i></button>
+              {rmvState &&
+                <button
+                  className='miniAction redT'
+                  onClick={()=>removeComp(entry.component)}
+                  disabled={!Roles.userIsInRole(Meteor.userId(), 'remove')}>
+                <i className='fas fa-times fa-fw'></i></button>
+              }
             </dt>
         )})}
       </dl>

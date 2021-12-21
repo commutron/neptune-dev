@@ -43,7 +43,7 @@ main {
 }
 
 .debugWarningLight {
-  outline: 10px dotted red;
+  outline: 10px solid red;
   outline-offset: -1vmin;
   animation: blinker 3s ease-out infinite;
 }

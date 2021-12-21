@@ -15,6 +15,8 @@ const EmailLogSlide = ({ app })=> {
   const [ logState, logSet ] = useState([]);
   const [ pageState, pageSet ] = useState(0);
   
+  const [ confirmState, confirmSet ] = useState(false);
+  
   useEffect( ()=>{
     Meteor.call('fetchEmailLog', (err, re)=>{
       err && console.log(err);
@@ -30,15 +32,13 @@ const EmailLogSlide = ({ app })=> {
   }, []);
   
   function handleClear() {
-    const check = window.confirm('Permanently Delete All Log Entries?');
-    if(check) {
-      Meteor.call('removeEmailLog', (err, re)=>{
-        err && console.log(err);
-        toast('Email Log Cleared');
-        logSet([]);
-        pageSet(0);
-      });
-    }
+    Meteor.call('removeEmailLog', (err, re)=>{
+      err && console.log(err);
+      toast('Email Log Cleared');
+      logSet([]);
+      pageSet(0);
+    });
+    confirmSet(false);
   }
   
   const inpieces = chunkArray(logState, Pref.pagingSize);
@@ -87,11 +87,24 @@ const EmailLogSlide = ({ app })=> {
       
       <div className='noPrint rowWrap'>
         <span className='flexSpace' />
-        <button 
-          className='action redHover'
-          onClick={()=>handleClear()}
-          disabled={lockState}
-        >Delete Log</button>
+        {!confirmState ?
+          <p><button 
+            className='action redHover'
+            onClick={()=>confirmSet(true)}
+            disabled={lockState}
+          >Delete Log</button></p>
+        :
+          <p><b>Permanently Delete All Log Entries? </b>
+            <button
+              className='action redHover inlineButton'
+              onClick={()=>handleClear()}
+            >YES, Delete</button>
+            <button
+              className='action blackHover inlineButton'
+              onClick={(e)=>confirmSet(false)}
+            >NO</button>
+          </p>
+        }
       </div>  
     </div>
   );

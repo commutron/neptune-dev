@@ -74,18 +74,6 @@ input::-webkit-calendar-picker-indicator {
 	box-shadow: 0 0 .1em .1em rgba(43,43,43,0.2),
 	      inset 0 0 .1em .1em rgba(43,43,43,0.2);
 }
-.greenHover {
-	color: var(--emerald);
-	background-color: transparent;
-}
-.greenHover:hover {
-  color: var(--clouds);
-	background-color: var(--emerald);
-}
-.greenHover:disabled:hover {
-  color: var(--emerald);
-	background-color: var(--clouds);
-}
 .greenList:nth-child(odd) {
   background-color: rgb(39, 174, 96);
 }
@@ -103,14 +91,6 @@ input::-webkit-calendar-picker-indicator {
 .blueT { color: var(--peterriver); }
 .blueHover {
 	color: var(--peterriver);
-	background-color: var(--clouds);
-}
-.blueHover:hover {
-  color: var(--clouds);
-	background-color: var(--peterriver);
-}
-.blueHover:disabled:hover {
-  color: var(--peterriver);
 	background-color: var(--clouds);
 }
 .onblueHover {
@@ -134,33 +114,9 @@ input::-webkit-calendar-picker-indicator {
 .darkRed { background-color: var(--pomegranate); }
 .redT { color: var(--alizarin); }
 .darkRedT { color: var(--pomegranate); }
-.redHover {
-	color: var(--alizarin);
-	background-color: var(--clouds);
-}
-.redHover:hover {
-  color: var(--clouds);
-	background-color: var(--alizarin);
-}
-.redHover:disabled:hover {
-  color: var(--alizarin);
-	background-color: var(--clouds);
-}
 
 .orange { background-color: var(--carrot); }
 .orangeT { color: var(--carrot); }
-.orangeHover {
-	color: var(--carrot);
-	background-color: var(--clouds);
-}
-.orangeHover:hover {
-  color: var(--clouds);
-	background-color: var(--carrot);
-}
-.orangeHover:disabled:hover {
-  color: var(--orange);
-	background-color: var(--clouds);
-}
 .orangeBorder { 
   background-color: transparent;
 	border: 3px solid var(--carrot);
@@ -226,7 +182,6 @@ input::-webkit-calendar-picker-indicator {
 .darkgray { background-color: var(--asbestos); }
 .darkgrayT { color: var(--asbestos); }
 .darkT { color: var(--dark); }
-
 
 .black { background-color: var(--black); }
 .blackblack { background-color: rgb(0,0,0); }

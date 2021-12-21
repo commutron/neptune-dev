@@ -1,6 +1,7 @@
 import React from 'react';
 import {mount} from 'react-mounter';
 import { FlowRouterMeta, FlowRouterTitle } from 'meteor/ostrio:flow-router-meta';
+import { toast } from 'react-toastify';
 
 import Pref from '/client/global/pref.js';
 
@@ -345,12 +346,8 @@ Accounts.onLogin( ()=>{
   if(Roles.userIsInRole(Meteor.userId(), 'debug') && 
     !Roles.userIsInRole(Meteor.userId(), 'admin')
   ) {
-  	const agent = window.navigator.userAgent;
-  	const sessionID = Meteor.connection._lastSessionId;
-  	Meteor.call('logLogInOut', true, agent, sessionID);
-    alert(`Your account is in debug mode.\n
-            Your activity may be monitored and recorded.\n
-            See your Neptune administrator for more information`);
+    toast.warning(`Your account is in debug mode.\nYour activity may be monitored and recorded.\nSee your Neptune administrator for more information`, 
+      { autoClose: false });
 	}
 });
 

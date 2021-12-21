@@ -50,9 +50,6 @@ export function ScanListenerUtility(user) {
                   // console.log('WebUSB NOT supported');
     
   const autoScan = user.autoScan;
-  // if(autoScan === undefined) {
-  //   const check = window.confirm('Would you like to use a barcode scanner from anywhere in this window?');
-  //   Meteor.call('setAutoScan', check, (error)=> error && console.log(error));
   
   const wikiwin = document.getElementById('instruct');
   wikiwin && wikiwin.contentWindow.document.addEventListener('focus',function(){

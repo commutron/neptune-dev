@@ -11,7 +11,8 @@ export default class ErrorCatch extends Component	{
       hasError: false,
       errorHeader: '',
       errorTime: '',
-      errorInfo: ''
+      errorInfo: '',
+      sendMess: false
     };
   }
   
@@ -23,20 +24,25 @@ export default class ErrorCatch extends Component	{
       errorInfo: info.componentStack
     });
     if(Roles.userIsInRole(Meteor.userId(), 'debug')) {
+      const agent = window.navigator.userAgent;
     	const sessionID = Meteor.connection._lastSessionId;
-    	Meteor.call('logReactError', sessionID, error.toString(), info.componentStack);
+    	Meteor.call('logReactError', sessionID, agent, error.toString(), info.componentStack);
     }
   }
   
   sendToAdmin() {
+    this.setState({ sendMess: true });
+    const agent = window.navigator.userAgent;
+  	const sessionID = Meteor.connection._lastSessionId;
+  	
     Meteor.call(
       'sendErrorMail', 
       this.state.errorHeader, 
       this.state.errorTime,
       Meteor.user().username,
+      agent, sessionID,
       this.state.errorInfo
     );
-    alert('Thank you for helping make Neptune better');
   }
 
   render() {
@@ -47,16 +53,19 @@ export default class ErrorCatch extends Component	{
           <p>Don't worry its not something you did.&nbsp;
            <button onClick={()=>window.location.reload()} className='textLinkButton'
            > Reload</button> the page and try again or&nbsp;
-            <a href='/'>go home</a> and try again later. If you like,&nbsp;
+            <button onClick={()=>{FlowRouter.go('/');window.location.reload();}} className='textLinkButton'>go home</button> and try again later. If you like,&nbsp;
             <button onClick={()=>this.sendToAdmin()} className='textLinkButton'
             >send</button> a notice to the Neptune admins.
           </p>
+          {this.state.sendMess ? <p>Thank you for helping make Neptune better.</p> : null}
           <details>
             <summary>Read the boring details</summary>
             <div className='clean'>
-              <em>{this.state.errorHeader}</em><br />
+              <em>{this.state.errorHeader}</em><br /><br />
               {this.state.errorTime}<br />
-              username {Meteor.user().username}<br />
+              username "{Meteor.user().username}"<br />
+              user agent "{window.navigator.userAgent}"<br />
+              Meteor session ID "{Meteor.connection._lastSessionId}"<br /><br />
               {this.state.errorInfo}
             </div>
           </details>
