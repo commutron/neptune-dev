@@ -147,9 +147,9 @@ const NCCluster = ({
 const NCStream = ({ entry, seriesId, end, doAction, inspector, verifier })=>{
   
   const [ selfLock, selfLockSet ] = useState(false);
+  const [ commState, commSet ] = useState(false);
   
-  const handleComment = ()=> {
-    let val = window.prompt('Add a comment');
+  const handleComment = (val)=> {
     val !== '' ? doAction('COMM', val) : null;
   };
   
@@ -234,7 +234,18 @@ const NCStream = ({ entry, seriesId, end, doAction, inspector, verifier })=>{
               disabled={!snooze}>
               Wake Up, repair now
             </MenuItem>
-            <MenuItem onClick={(e)=>handleComment(e)}>
+            <MenuItem divider />
+            <MenuItem onClick={null} disabled={true} className='noFade'>
+              <input 
+                type='text' 
+                id={entry.key+'addnewtag'}
+                maxLength='128'
+                defaultValue={entry.comm || null}
+                placeholder='comment'
+                className='wide black whiteT' 
+                onChange={(e)=>commSet(this[entry.key+'addnewtag'].value)} />
+            </MenuItem>
+            <MenuItem onClick={()=>handleComment(commState)} disabled={!commState}>
               {entry.comm !== '' ? 'Change' : 'Add'} Comment
             </MenuItem>
           </ContextMenu>
