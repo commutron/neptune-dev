@@ -23,7 +23,7 @@ const ShipWindows = ({
   const [ traceDTSort, traceDTSSet ] = useState([]);
   
   const addUpTime = (wipArr)=> Array.from(wipArr, 
-        x => typeof x.est2tide === 'number' && Math.max(x.est2tide, 0) )
+        x => typeof x.est2tide === 'number' && !x.hold ? Math.max(x.est2tide, 0) : 0 )
               .reduce( (arr, x)=> arr + x, 0);
   
   useEffect(() => {
@@ -77,7 +77,7 @@ const ShipWindows = ({
         wipTime = addUpTime(shipIn);
       }
       
-      const timeBucket = dayTime * Math.max(0, day[1]);
+      const timeBucket = dayTime * day[1];
       
       const remain = timeBucket + overflow - wipTime;
       

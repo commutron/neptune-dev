@@ -41,9 +41,9 @@ export function listShipDays( app, qty, withLast ) {
     
     const gap = s === 0 && withLast ? 0 : 
                 (s === 0 && !withLast) || (s === 1 && withLast) ? 
-                  newDay.workingDiff(moment(), 'days', true) :
-                  newDay.workingDiff(sArr[s - 1][0], 'days', true);
-                  
+                  moment().isAfter(newDay) ? 0 : Math.abs(newDay.workingDiff(moment(), 'days', true)) :
+                  Math.abs(newDay.workingDiff(sArr[s - 1][0], 'days', true));
+      
     sArr.push([newDay, gap]);
   }
   return sArr;
