@@ -207,6 +207,35 @@ Meteor.methods({
         }
       }
     }
-  }
+  },
+  
+  repairShortfallRefs() {
+    if(!Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      return false;
+    }else{
+      const listCut = RegExp(/(\s*\,\s*|\,|\ +)/g);
+      
+      const allSeries = XSeriesDB.find({orgKey: Meteor.user().orgKey}).fetch();
+      for(let srs of allSeries) {
+        const srsId = srs._id;
+        const shorts = srs.shortfall;
+        for(let sh of shorts) {
+          const rf = sh.refs;
+          if(Array.isArray(rf)) {
+            null;
+          }else{
+            const rfarr = rf.toLowerCase().replace(listCut, "|").split("|").filter(f=>f);
+            
+            XSeriesDB.update({_id: srsId, orgKey: Meteor.user().orgKey, 'shortfall.key': sh.key}, {
+          		$set : { 
+          		  'shortfall.$.refs': rfarr
+          		}
+          	});
+          }
+        }
+      }
+      return true;
+    }
+  },
   
 });
