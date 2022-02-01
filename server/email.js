@@ -24,7 +24,7 @@ function sendInternalEmail(to, subject, date, title, body, foot, link) {
             <p style="color:black;margin:1rem 0">${foot}</p>
             <p style="color:black;margin:1rem 0">${link}</p>
             <p style="color:black;margin:1em 0">Do not reply to this email.</p>
-          </td>        
+          </td>
         </tr>
         <tr>
           <td colspan='2' style="background-color:#007fff;width:100%;height:25px"></td>
@@ -206,6 +206,35 @@ Meteor.methods({
           }});
         }
       }
+    }
+  },
+  
+  handleInternalPCBEmail(accessKey, isG, isW, wiki) {
+    this.unblock();
+    const doc = AppDB.findOne({orgKey: accessKey});
+    const emailGlobal = doc && doc.emailGlobal;
+    const emailpcbKit = doc && doc.emailpcbKit;
+    
+    if(emailGlobal && emailpcbKit) {
+      // console.log(`ready to send email to: ${emailpcbKit}`);
+      const subject = `New PCBs Received - ${toCap(isW, true)} - automated email from Neptune`;
+      
+      const date = moment().tz(Config.clientTZ).format('h:mm a, dddd, MMM Do YYYY');
+      
+      const title = `Concerning ${toCap(isG, true)}`;
+      const body = `Kitting has received PCBs for ${toCap(isW, true)} (aka Upstream has marked "Barcoding / PCB" as "Ready")`;
+      const foot = 'A work order of this product variant has never been completed. New stencils, jigs or machine programmes may be required.';
+      const link = `<a href="${wiki}">Work Instructions</a>`;
+      
+      sendInternalEmail( emailpcbKit, subject, date, title, body, foot, link );
+        
+      EmailDB.insert({
+        sentTime: new Date(),
+        subject: 'New PCBs Received',
+        to: emailpcbKit,
+        cc: undefined,
+        text: body
+      });
     }
   },
   

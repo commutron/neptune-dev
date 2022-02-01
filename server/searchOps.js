@@ -102,10 +102,20 @@ Meteor.methods({
       $or: [ 
         { batch: { $regex: new RegExp( orb ) } },
         { salesOrder: { $regex: new RegExp( orb ) } },
-        { tags: { $in: [ orb ] } }
+        { tags: { $in: [ orb ] } },
+        { 'blocks.block': { $regex: new RegExp( orb ), $options: 'i' } },
+        { 'blocks.solve.action': { $regex: new RegExp( orb ), $options: 'i' } }
       ]
     },{fields:{'batch':1,'salesOrder':1,'live':1}}
     ).forEach( x => enterLine(x) );
+    
+    XSeriesDB.find({
+      "shortfall.partNum": { $regex: new RegExp( orb ), $options: 'i' }
+    },{fields:{'batch':1}}
+    ).forEach( srs => {
+      XBatchDB.find({batch: srs.batch},{fields:{'batch':1,'salesOrder':1,'live':1}})
+        .forEach( x => enterLine(x) );
+    });
     
     GroupDB.find({
       $or: [ 

@@ -317,10 +317,9 @@
   min-width: 10vmin;
   min-height: 10vmin;
   font-size: 5vmin;
-  border-width: 1.5vmin;
-  border-style: solid;
+  border: none;
   padding: 1vmin 1.5vmin;
-  margin: 0;
+  margin: 0 0.5vmin;
 }
 .dashNumBox p {
   font-size: 2vmin;

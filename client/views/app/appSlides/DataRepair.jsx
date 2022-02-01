@@ -224,14 +224,6 @@ const DataRepair = ({ app, users })=> {
         </form>
       </div>
       
-      <DoCard
-        title='Repair Shortfall Refs Arrays'
-        icon='screwdriver'
-        color='clearBlack'
-        button='Repair Shortfall Refs'
-        action={()=>doCallThing('repairShortfallRefs')}
-      />
-      
     </div>
   );
 };

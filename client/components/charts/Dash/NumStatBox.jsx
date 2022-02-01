@@ -8,18 +8,18 @@ const NumStatBox = ({
   const tColour = textColour || 'black';
   
   const bColour =
-    !borderColour ? 'black' :
-    borderColour === 'blue' ? "rgb(52, 152, 219)" :
-    borderColour === 'green' ? "rgb(46, 204, 113)" :
-    borderColour === 'red' ? "rgb(192,57,43)" :
-    borderColour === 'orange' ? "rgb(230, 126, 34)" :
+    !borderColour ? "rgba(0, 0, 0, 0.1)" :
+    borderColour === 'blue' ? "rgba(52, 152, 219, 0.2)" :
+    borderColour === 'green' ? "rgba(46, 204, 113, 0.2)" :
+    borderColour === 'red' ? "rgba(192,57,43, 0.2)" :
+    borderColour === 'orange' ? "rgba(230, 126, 34, 0.2)" :
+    borderColour === 'purple' ? "rgba(155, 89, 182, 0.2)" :
     borderColour;
   
   const sty = {
     textAlign: 'center',
-    margin: '5px',
     color: tColour,
-    borderColor: bColour
+    backgroundColor: bColour,
   };
   
   const lSty = {

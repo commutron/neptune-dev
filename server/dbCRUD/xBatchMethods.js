@@ -389,6 +389,25 @@ Meteor.methods({
         });
       }
       
+      if(rType.includes('pcbKitRelease')) {
+        const batch = XBatchDB.findOne({_id: batchId},{fields:{'groupId':1,'widgetId':1,'versionKey':1,'salesOrder':1}});
+        
+        const vbtch = XBatchDB.find({_id: batchId, completed: true},{fields:{'_id':1}}).count();
+        
+        if(vbtch === 0) {
+          Meteor.defer( ()=>{
+            const wig = WidgetDB.findOne({_id: batch.widgetId},{fields:{'widget':1,'describe':1}});
+            const ver = VariantDB.findOne({versionKey: batch.versionKey},{fields:{'variant':1,'instruct':1}});
+            const isW = wig.widget.toUpperCase() + ' ' + ver.variant + ' - ' + wig.describe;
+            const group = GroupDB.findOne({_id: batch.groupId},{fields:{'group':1,'alias':1}});
+            const isG = group.group + ' (' + group.alias.toUpperCase() + ')';
+            const wiki = ver.instruct;
+            
+            Meteor.call('handleInternalPCBEmail', accessKey, isG, isW, wiki);
+          });
+        }
+      }
+      
       return true;
     }else{
       return false;

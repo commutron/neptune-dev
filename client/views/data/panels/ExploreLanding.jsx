@@ -76,6 +76,40 @@ const ExploreLanding = ({ app, isDebug }) => {
       >
         
         <div className='centreRow vspacehalf'>
+          <NumStatBox
+            number={xlive || "0"}
+            name={Pref.live}
+            title={now}
+            borderColour='blue'
+          />
+          
+          <NumStatBox
+            number={xlive ? xRapid : "0"}
+            name={`${Pref.live} ${Pref.rapidEx}`}
+            title={now}
+            borderColour='orange'
+          />
+          
+          <NumStatBox
+            number={xTotal ? xDone : "0"}
+            name='Completed'
+            title={start}
+            borderColour='green'
+          />
+           <NumStatBox
+            number={xTotal || "0"}
+            name='Total'
+            title={start}
+          />
+          <NumStatBox
+            number={xlocked || "0"}
+            name='Locked'
+            title={start}
+            borderColour='purple'
+          />
+        </div>
+        
+        <div className='centreRow vspacehalf'>
           <TrendLine 
             title={`new ${Pref.xBatchs}`}
             statType='newBatch'
@@ -96,40 +130,6 @@ const ExploreLanding = ({ app, isDebug }) => {
             cycleCount={4}
             cycleBracket='week'
             isDebug={isDebug}
-          />
-        </div>
-        
-        <div className='centreRow vspacehalf'>
-          <NumStatBox
-            number={xlive || "\u2800"}
-            name={Pref.live}
-            title={now}
-            borderColour='blue'
-          />
-          
-          <NumStatBox
-            number={xlive ? xRapid : "\u2800"}
-            name={`${Pref.live} ${Pref.rapidEx}`}
-            title={now}
-            borderColour='orange'
-          />
-          
-          <NumStatBox
-            number={xTotal ? xDone : "\u2800"}
-            name='Completed'
-            title={start}
-            borderColour='green'
-          />
-           <NumStatBox
-            number={xTotal || "\u2800"}
-            name='Total'
-            title={start}
-          />
-          <NumStatBox
-            number={xlocked || "\u2800"}
-            name='Locked'
-            title={start}
-            borderColour='rgb(155, 89, 182)'
           />
         </div>
         

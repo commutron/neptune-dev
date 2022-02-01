@@ -1,4 +1,5 @@
 // import { Random } from 'meteor/random';
+import Config from '/server/hardConfig.js';
 
 Meteor.startup(function () {  
   // ensureIndex is depreciated but new createIndex errors as "not a function"
@@ -688,6 +689,34 @@ Meteor.methods({
           emailGlobal : setOp
       }});
       return true;
+    }else{
+      return false;
+    }
+  },
+  
+  pcbEmailSet(address) {
+    const check = Config.regexEmail.test(address);
+    if(typeof address === 'string' && check) {
+      if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+        AppDB.update({orgKey: Meteor.user().orgKey}, {
+          $set : { 
+            emailpcbKit: address
+          }});
+          return true;
+      }else{
+        return false;
+      }
+    }else{
+      throw new Meteor.Error(403, 'Input is not an email string');
+    }
+  },
+  pcbEmailRemove() {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      AppDB.update({orgKey: Meteor.user().orgKey}, {
+        $set : { 
+          emailpcbKit: false
+        }});
+        return true;
     }else{
       return false;
     }
