@@ -189,7 +189,7 @@ const TopNCSlide = ({ app })=> {
                 type='text'
                 id={rndmKey + 'inputPre'}
                 maxLength={2}
-                pattern="[a-z]{1-2}"
+                pattern="[a-z]{1,2}"
                 placeholder='Letter Pefix'
                 required
               />

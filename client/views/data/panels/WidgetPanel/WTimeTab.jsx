@@ -75,7 +75,7 @@ const WTimeTab = ({
         leftpad={50}
         extraClass='cardSelf dropCeiling' />
         
-      <WTimeCycle wID={widgetData._id} app={app} />
+      <WTimeCycle wID={widgetData._id} flows={widgetData.flows} app={app} />
 
     </div>
   );

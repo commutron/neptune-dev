@@ -2,7 +2,7 @@ import moment from 'moment';
 import Config from '/server/hardConfig.js';
 import { toCap } from './utility';
 
-function sendInternalEmail(to, subject, date, title, body, foot, link) {
+function sendInternalEmail(to, subject, date, title, body, asid, foot, link) {
   const from = Config.sendEmail;
     
   const html = `
@@ -21,9 +21,10 @@ function sendInternalEmail(to, subject, date, title, body, foot, link) {
             <p style="color:black;margin:1rem 0">${title}</p>
             <p style="color:black;margin:1rem 0">${date}</p>
             <p style="color:black;margin:1rem 0">${body}</p>
+            <p style="color:black;margin:1rem 0"><small>${asid}</small></p>
             <p style="color:black;margin:1rem 0">${foot}</p>
             <p style="color:black;margin:1rem 0">${link}</p>
-            <p style="color:black;margin:1em 0">Do not reply to this email.</p>
+            <p style="color:black;margin:1em 0"><em>Do not reply to this email.</em></p>
           </td>
         </tr>
         <tr>
@@ -32,7 +33,7 @@ function sendInternalEmail(to, subject, date, title, body, foot, link) {
       </tbody>
     </table>`;
     
-  const text = `Neptune Automated Message\n\n${title}\n\n${date}\n\n${body}\n\n${foot}\n\ndo not reply to this email`;
+  const text = `Neptune Automated Message\n\n${title}\n\n${date}\n\n${body}\n\n${asid}\n\n${foot}\n\ndo not reply to this email`;
 
   Email.send({ to, from, subject, html, text });
 
@@ -159,6 +160,7 @@ Meteor.methods({
       
       const title = `Concerning ${toCap(isG, true)}`;
       const body = `${toCap(name, true)} has created variant ${variant} of ${toCap(isW, true)}`;
+      const asid = '';
       const foot = 'Expect Bill Of Material changes. Please prepare for potentially new stencils, jigs and machine programmes.';
       const link = wiki ? `<a href="${wiki}">Work Instructions</a>` : 'New work instructions will be forthcoming';
       
@@ -178,7 +180,7 @@ Meteor.methods({
         
         let addresses = Array.from(emails, e => e.address );
         
-        sendInternalEmail( addresses, subject, date, title, body, foot, link );
+        sendInternalEmail( addresses, subject, date, title, body, asid, foot, link );
         
         EmailDB.insert({
           sentTime: new Date(),
@@ -222,11 +224,12 @@ Meteor.methods({
       const date = moment().tz(Config.clientTZ).format('h:mm a, dddd, MMM Do YYYY');
       
       const title = `Concerning ${toCap(isG, true)}`;
-      const body = `Kitting has received PCBs for ${toCap(isW, true)} (aka Upstream has marked "Barcoding / PCB" as "Ready")`;
+      const body = `Kitting has received PCBs for ${toCap(isW, true)}.`;
+      const asid = '(The Upstream clearance "Barcoding / PCB" is marked as "Ready", indicating that the base barcoded components are in stock. These are usually, but not always, printed circuit boards.)';
       const foot = 'A work order of this product variant has never been completed. New stencils, jigs or machine programmes may be required.';
       const link = `<a href="${wiki}">Work Instructions</a>`;
       
-      sendInternalEmail( emailpcbKit, subject, date, title, body, foot, link );
+      sendInternalEmail( emailpcbKit, subject, date, title, body, asid, foot, link );
         
       EmailDB.insert({
         sentTime: new Date(),

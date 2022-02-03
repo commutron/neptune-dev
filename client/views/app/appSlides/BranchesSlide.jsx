@@ -2,7 +2,7 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 // import { toast } from 'react-toastify';
 
-import BranchBuilder from '/client/components/bigUi/ArrayBuilder/BranchBuilder.jsx';
+import BranchBuilder, { BranchListEditor } from '/client/components/bigUi/ArrayBuilder/BranchBuilder';
 
 const BranchesSlide = ({ app, isAdmin, isDebug })=> {
   
@@ -34,16 +34,22 @@ const BranchesSlide = ({ app, isAdmin, isDebug })=> {
         <i> Entries are case sensitive, smt =/= SMT.</i>
         <i> Capitalizing is unnecessary in most cases and only recommended for abbreviations.</i>
       </p>
-      <p>
-        <i className='fas fa-exclamation-circle'></i>
-        <i> Text Areas allow for multiple entries by seperating by a comma ","</i>
-      </p>
       
+      <h2 className='dropCeiling'>Branch Behavior</h2>
       <BranchBuilder app={app} isDebug={isDebug} />
       
       <hr />
       
-      <h3>Add New Branch</h3>
+      <h2 className='dropCeiling'>Branch Associated Lists</h2>
+      <p>
+        <i className='fas fa-exclamation-circle'></i>
+        <i> Text Areas allow for multiple entries by seperating by comma (,) or semicolon (;) </i>
+      </p>
+      <BranchListEditor app={app} isDebug={isDebug} />
+      
+      <hr />
+      
+      <h2 className='dropCeiling'>Add New Branch</h2>
       <form onSubmit={(e)=>handleBranchAdd(e)}>
         <p>
           <label htmlFor='newBrchNm'>Branch Name</label><br />

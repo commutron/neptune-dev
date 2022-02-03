@@ -8,7 +8,7 @@ import { ToggleSwitch } from '/client/components/smallUi/ToolBarTools';
 import CyclePaceTable from '/client/components/tables/CyclePaceTable';
 
 
-const WTimeCycle = ({ wID, app })=> {
+const WTimeCycle = ({ wID, flows, app })=> {
   
   const mounted = useRef(true);
   
@@ -34,7 +34,8 @@ const WTimeCycle = ({ wID, app })=> {
     }
     yListSet(yearsList);
     
-    const tList = _.uniq( Array.from(app.trackOption, o =>
+    const usedOps = flows.map( (f)=> f.flow ).flat();
+    const tList = _.uniq( Array.from(usedOps, o =>
                           o.type !== 'first' && 
                           o.type !== 'scrap' && 
                           o.type !== 'undo' ? 
@@ -79,7 +80,7 @@ const WTimeCycle = ({ wID, app })=> {
   
   return(
     <div className='cardSelf dropCeiling'>
-      <div className='centreRow'>
+      <div className='centreRow rowWrap'>
         {serverData === false && typeState !== false ?
           <n-fa1><i className='fas fa-spinner fa-lg fa-spin gapR'></i>Loading</n-fa1> :
           <n-fa0><i className='fas fa-spinner fa-lg'></i></n-fa0>

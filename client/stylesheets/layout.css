@@ -1010,8 +1010,13 @@ button.numberSet {
 }
 
 .tableAction {
-  min-width: 1.75rem;
   max-width: 10ch;
+  min-width: 1.75rem;
+  height: 1.5rem;
+}
+.tableTextarea {
+  max-width: 30ch;
+  min-width: 15ch;
   height: 1.5rem;
 }
 .tableAction.narrow {

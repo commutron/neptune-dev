@@ -6,7 +6,7 @@ import ModelMedium from '/client/components/smallUi/ModelMedium';
 import MultiSelect from "react-multi-select-component";
 
 const FlowFormHeadWrapper = ({
-  id, app,
+  id, app, brancheS,
   existFlows, edit, preFill, 
   noText
 })=> {
@@ -27,6 +27,7 @@ const FlowFormHeadWrapper = ({
         id={id}
         existFlows={existFlows}
         preFill={preFill}
+        brancheS={brancheS}
         app={app}
       />
     </ModelMedium>
@@ -36,14 +37,20 @@ const FlowFormHeadWrapper = ({
 export default FlowFormHeadWrapper;
 
 
-const FlowFormHead = ({ id, existFlows, preFill, app, selfclose })=> {
+const FlowFormHead = ({ id, existFlows, preFill, brancheS, app, selfclose })=> {
 
   const [ fill, fillSet ] = useState(false);
   const [ warn, warnSet ] = useState(false);
+  const [ tskOptions, tskOptionsSet ] = useState([]);
+  const [ tskList, tskListSet ] = useState([]);
   const [ ncOptions, ncOptionsSet ] = useState([]);
   const [ ncLists, ncListSet ] = useState([]);
   
   useLayoutEffect( ()=> {
+    const alltsk = Array.from(brancheS, b => b.subTasks).flat().filter(f=>f);
+    const opstsk = alltsk.map( x => { return { label: x, value: x } });
+    tskOptionsSet(opstsk);
+    
     const ncCombo = Array.from(app.nonConTypeLists, x => { 
                       return { 
                         label: x.listPrefix +". "+ x.listName, 
@@ -58,12 +65,14 @@ const FlowFormHead = ({ id, existFlows, preFill, app, selfclose })=> {
     const optn = preFill;
     if(!optn) {
       fillSet(false);
+      tskListSet(opstsk);
       const ncDefault = ncCombo.filter( x => x.dfOn === true );
       ncListSet(ncDefault);
     }else{
       if(optn.type === 'plus') {
-        const ncDefault = ncCombo.filter( x => 
-                            optn.ncLists.find( y => y === x.value ));
+        const tkDefault = opstsk.filter( x => (optn.tskList || []).find( y => y === x.value ));
+        tskListSet(tkDefault);
+        const ncDefault = ncCombo.filter( x => optn.ncLists.find( y => y === x.value ));
         ncListSet(ncDefault);
       }
       fillSet(optn.flowKey);
@@ -81,6 +90,7 @@ const FlowFormHead = ({ id, existFlows, preFill, app, selfclose })=> {
     const widgetId = id;
     
     const flowTitle = this.flwttl.value.trim().toLowerCase();
+    const tskPlainList = Array.from(tskList, u => u.value);
     const ncPlainList = Array.from(ncLists, u => u.value);
 
     const f = fill;
@@ -88,14 +98,15 @@ const FlowFormHead = ({ id, existFlows, preFill, app, selfclose })=> {
     const editId = edit ? edit.flowKey : false;
     
     if(editId) {
-      Meteor.call('setBasicPlusFlowHead', widgetId, editId, flowTitle, ncPlainList, (error)=>{
-        if(error)
-          console.log(error);
+      Meteor.call('setBasicPlusFlowHead', widgetId, editId, flowTitle, tskPlainList, ncPlainList, 
+      (error)=>{
+        error && console.log(error);
         toast.success('Saved');
         selfclose();
       });
     }else{
-      Meteor.call('pushBasicPlusFlow', widgetId, flowTitle, ncPlainList, (error)=>{
+      Meteor.call('pushBasicPlusFlow', widgetId, flowTitle, tskPlainList, ncPlainList, 
+      (error)=>{
         error && console.log(error);
         toast.success('Saved');
         selfclose();
@@ -132,7 +143,20 @@ const FlowFormHead = ({ id, existFlows, preFill, app, selfclose })=> {
         </p>
       </form>
       
-      <div className='centre'>
+      <div className='centre vmarginhalf'>
+        <label htmlFor='Task Options' className='multiSelectContain flowForm'>
+          <MultiSelect
+            options={tskOptions}
+            value={tskList}
+            onChange={tskListSet}
+            labelledBy={"Task Options"}
+            className='multi-select'
+            hasSelectAll={true}
+            disableSearch={true}
+        />Sub-Task Options</label>
+      </div>
+      
+      <div className='centre vmarginquarter'>
         <label htmlFor='List Options' className='multiSelectContain flowForm'>
           <MultiSelect
             options={ncOptions}

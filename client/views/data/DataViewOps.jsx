@@ -474,6 +474,7 @@ const DataViewOps = ({
             groupData={group}
             variantData={allVariants}
             batchRelated={allBatches}
+            brancheS={brancheS}
             app={app}
             user={user}
             users={users}

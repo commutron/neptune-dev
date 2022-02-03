@@ -158,6 +158,7 @@ Meteor.methods({
               reqConsumable: false,
               reqProblemDam: false,
               reqUserLock: false,
+              subTasks: [],
               buildMethods: [],
               inspectMethods: [],
             }
@@ -171,11 +172,8 @@ Meteor.methods({
     }
   },
   
-  editBranchConfig(key, posVal, commonVal, opVal, clrVal, prbVal, usrVal, conVal, bMthdArr, iMthdArr) {
-    const chB = Array.isArray(bMthdArr);
-    const chI = Array.isArray(iMthdArr);
-    
-    if(chB && chI && Roles.userIsInRole(Meteor.userId(), 'admin')) {
+  editBranchConfig(key, posVal, commonVal, opVal, clrVal, prbVal, usrVal, conVal) {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
       AppDB.update({orgKey: Meteor.user().orgKey, 'branches.brKey': key}, {
         $set : { 
           'branches.$.common': commonVal,
@@ -185,6 +183,22 @@ Meteor.methods({
           'branches.$.reqConsumable': conVal,
           'branches.$.reqProblemDam': prbVal,
           'branches.$.reqUserLock': usrVal,
+      }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  editBranchLists(key, sbTskArr, bMthdArr, iMthdArr) {
+    const chT = Array.isArray(sbTskArr);
+    const chB = Array.isArray(bMthdArr);
+    const chI = Array.isArray(iMthdArr);
+
+    if(chT && chB && chI && Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      AppDB.update({orgKey: Meteor.user().orgKey, 'branches.brKey': key}, {
+        $set : { 
+          'branches.$.subTasks': sbTskArr,
           'branches.$.buildMethods': bMthdArr,
           'branches.$.inspectMethods': iMthdArr
       }});
