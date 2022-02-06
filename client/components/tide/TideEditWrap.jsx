@@ -4,14 +4,14 @@ import 'moment-business-time';
 
 import { HolidayCheck } from '/client/utility/WorkTimeCalc.js';
 import { min2hr } from '/client/utility/Convert';
-import DayPieceBar from '/client/components/charts/Tides/DayPieceBar.jsx';
-import TideBlockRow from '/client/components/tide/TideBlockRow.jsx';
+import DayPieceBar from '/client/components/charts/Tides/DayPieceBar';
+import TideBlockRow from '/client/components/tide/TideBlockRow';
 
 
 const TideEditWrap = ({ 
   weekData, traceDT, updateData, 
   user, isDebug, 
-  app, ancOptionS, plainBrancheS 
+  app, ancOptionS, brancheS 
 })=> {
   
   const isSuper = Roles.userIsInRole(Meteor.userId(), 'peopleSuper');
@@ -30,12 +30,13 @@ const TideEditWrap = ({
     const newStart = Array.isArray(e.newStart) ? e.newStart[0] : false;
     const newStop = Array.isArray(e.newStop) ? e.newStop[0] : false;
     const taskIs = e.taskIs;
+    const subtIs = e.subtIs;
     
     if(!batch || !tideKey || !newStart || !newStop) { 
       console.log([{batch, tideKey, newStart, newStop}, 'data issue no call']);
     }else{
       Meteor.call('editTideTimeBlock', 
-        batch, tideKey, newStart, newStop, taskIs, 
+        batch, tideKey, newStart, newStop, taskIs, subtIs,
         (err, asw)=>{
           err && console.log(err);
           if(asw === true) {
@@ -136,7 +137,7 @@ const TideEditWrap = ({
                 setEnd={(e)=>endBlock(e)}
                 setSplit={(e)=>splitBlock(e)}
                 ancOptionS={ancOptionS}
-                plainBrancheS={plainBrancheS}
+                brancheS={brancheS}
                 isSuper={isSuper}
                 isDebug={isDebug} />
             </Fragment>
@@ -159,7 +160,7 @@ const TideEditWrap = ({
               setEnd={(e)=>endBlock(e)}
               setSplit={(e)=>splitBlock(e)}
               ancOptionS={ancOptionS}
-              plainBrancheS={plainBrancheS}
+              brancheS={brancheS}
               isSuper={isSuper}
               isDebug={isDebug} />
           );

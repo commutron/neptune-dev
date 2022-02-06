@@ -1,13 +1,12 @@
 import { Random } from 'meteor/random'
 import React, { useRef, useState, useEffect } from 'react';
-import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 import './style.css';
         
 const TideSwitch = ({ 
   batchID, tideKey, 
   tideFloodGate, tideLockOut,
-  taskState, lockTaskSet
+  taskState, subtState, lockTaskSet
 })=> {
   
   const thingMounted = useRef(true);
@@ -41,7 +40,8 @@ const TideSwitch = ({
     lockTaskSet && lockTaskSet(true);
     let newRndm = actionID;
     Meteor.setTimeout( ()=>{
-      Meteor.call('switchTideTask', tideKey, batchID, newRndm, taskState, (error, reply)=> {
+      Meteor.call('switchTideTask', tideKey, batchID, newRndm, taskState, subtState,
+      (error, reply)=> {
         if(error) {
           console.log(error);
           toast.error('Rejected by Server');

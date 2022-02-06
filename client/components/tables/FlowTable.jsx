@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import FlowFormHead, { FlowRemove } from '../forms/FlowFormHead.jsx';
 import FlowFormRoute from '../forms/FlowFormRoute.jsx';
 
-const FlowTable = ({ id, flows, brancheS, app })=> {
+const FlowTable = ({ id, flows, app })=> {
   
   const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
   
@@ -49,7 +49,6 @@ const FlowTable = ({ id, flows, brancheS, app })=> {
                         edit={true}
                         preFill={entry}
                         existFlows={flows}
-                        brancheS={brancheS}
                         app={app}
                         small={true} />
                     </td>

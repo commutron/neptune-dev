@@ -1,17 +1,23 @@
-import React from 'react';
-// import moment from 'moment';
+import React, { Fragment } from 'react';
 import Pref from '/client/global/pref.js';
 
 const BigTideTask = ({ 
-  ctxLabel, ancOptionS, plainBrancheS,
-  taskState, lockTaskState, taskSet 
+  ctxLabel, ancOptionS, brancheS,
+  taskState, subtState, lockTaskState, taskSet, subtSet
 })=> {
   
   function handleTask(val) {
     const trueVal = val === 'false' ? false : val;
     taskSet(trueVal);
-    Session.set('userSetTask', trueVal);
+    subtSet(false);
+    !this.sbtskSlct ? null : this.sbtskSlct.value = false;
   }
+  function handleSubt(val) {
+    const trueVal = val === 'false' ? false : val;
+    subtSet(trueVal);
+  }
+  
+  const subop = taskState && brancheS.find( b=> b.branch === taskState );
   
   return(
     <n-tide-task>
@@ -29,12 +35,29 @@ const BigTideTask = ({
           ))}
         </optgroup>
         <optgroup label={Pref.branches}>
-          {plainBrancheS.map( (v, ix)=>(
-            <option key={ix+'o2'} value={v}>{v}</option>
+          {brancheS.map( (v, ix)=>(
+            <option key={ix+'o2'} value={v.branch}>{v.branch}</option>
           ))}
         </optgroup>
       </select>
       {ctxLabel && <label htmlFor='tskSlct'>{ctxLabel}</label>}
+      {subop && subop.subTasks ?
+        <Fragment>
+        <select
+          id='sbtskSlct'
+          className='cap'
+          onChange={(e)=>handleSubt(e.target.value)}
+          defaultValue={subtState}
+          disabled={lockTaskState}
+          required>
+          <option value={false}></option>
+          {subop.subTasks.map( (v, ixs)=>(
+            <option key={ixs+'o3'} value={v}>{v}</option>
+          ))}
+        </select>
+        <label htmlFor='sbtskSlct'>Sub-Task</label>
+        </Fragment>
+      : null}
     </n-tide-task>
   );
 };

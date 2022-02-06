@@ -690,6 +690,7 @@ n-sm-model-content {
 .line4x { line-height: 4; }
 
 .indent { padding-left: 2ch; }
+.indent10 { padding-left: 10px; }
 .indent3 { padding-left: 3ch; }
 .indenText { text-indent: 0.75ch; }
 .indentR { padding-right: 16px; }

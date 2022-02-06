@@ -42,8 +42,8 @@ const PeoplePanel = ({
         </tbody>
       </table>
 
-      <div className='wide space cap'>
-        <h3>{Pref.engagedNot}</h3>
+      <div className='w100 vmargin cap'>
+        <h3 className='med indent10'>{Pref.engagedNot}</h3>
         <ul className='autoGrid'>
           {dUsers.map( (entry, index)=>{
             if(entry.proTimeShare && entry.proTimeShare[0].timeAsDecimal > 0) {

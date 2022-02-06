@@ -161,6 +161,7 @@ function slimBlockReturnData(batch, thePeriod, lockout) {
       stopTime: blck.stopTime,
       durrAsMin: durr,
       task: blck.task || null,
+      subtask: blck.subtask || null,
       lockOut: lockout
     });
   }

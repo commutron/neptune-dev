@@ -26,7 +26,7 @@ Meteor.methods({
 
   // RECORD
   
-  startTideTask(batchId, newTkey, newTask) {
+  startTideTask(batchId, newTkey, newTask, newSubTask) {
     try {
       const orgKey = Meteor.user().orgKey;
       
@@ -50,6 +50,7 @@ Meteor.methods({
             null;
           }else{
             const taskVal = !newTask || newTask === 'false' ? false : newTask;
+            const subtVal = !newSubTask || newSubTask === 'false' ? false : newSubTask;
             
             XBatchDB.update({ _id: batchId }, {
               $push : { tide: { 
@@ -57,7 +58,8 @@ Meteor.methods({
                 who: Meteor.userId(),
                 startTime: new Date(),
                 stopTime: false,
-                task: taskVal
+                task: taskVal,
+                subtask: subtVal
             }}});
             Meteor.users.update(Meteor.userId(), {
               $set: {
@@ -65,7 +67,8 @@ Meteor.methods({
                   task: 'PROX',
                   tKey: newTkey,
                   tName: docX.batch,
-                  tTask: taskVal
+                  tTask: taskVal,
+                  tSubt: subtVal
                 }
               }
             });
@@ -113,7 +116,7 @@ Meteor.methods({
     }
   },
   
-  switchTideTask(tideKey, newbatchID, newTkey, newTask) {
+  switchTideTask(tideKey, newbatchID, newTkey, newTask, newSubTask) {
     try {
       const accessKey = Meteor.user().orgKey;
       
@@ -126,15 +129,15 @@ Meteor.methods({
         });
       };
       
-      const startSecond = (nbID, aKey, nTky, nTsk)=> {
-        Meteor.call('startTideTask', nbID, aKey, nTky, nTsk, (err, re)=>{
+      const startSecond = (nbID, aKey, nTky, nTsk, nSbTsk)=> {
+        Meteor.call('startTideTask', nbID, aKey, nTky, nTsk, nSbTsk, (err, re)=>{
           err && new Meteor.Error(err);
           if(re) { return true }
         });
       };
       
       stopFirst(tideKey, accessKey)
-        .then(startSecond(newbatchID, newTkey, newTask))
+        .then(startSecond(newbatchID, newTkey, newTask, newSubTask))
         .finally(()=> { return true });
 
     }catch (error) {
@@ -144,7 +147,7 @@ Meteor.methods({
   
   // CHANGE
   
-  editTideTimeBlock(batch, tideKey, newStart, newStop, taskIs) {
+  editTideTimeBlock(batch, tideKey, newStart, newStop, taskIs, subtIs) {
     try {
       if(!newStart || !newStop) {
         return false;
@@ -166,7 +169,8 @@ Meteor.methods({
               $set : { 
                 'tide.$.startTime' : newStart,
                 'tide.$.stopTime' : newStop,
-                'tide.$.task' : taskVal
+                'tide.$.task' : taskVal,
+                'tide.$.subtask' : subtIs
             }});
             return true;
           }
@@ -197,7 +201,8 @@ Meteor.methods({
           const taskVal = !taskIs || taskIs === 'false' ? false : taskIs;
           XBatchDB.update({ batch: batch, orgKey: accessKey, 'tide.tKey': tideKey}, {
             $set : { 
-              'tide.$.task' : taskVal
+              'tide.$.task' : taskVal,
+              'tide.$.subtask' : false
           }});
           return true;
         }
@@ -266,7 +271,8 @@ Meteor.methods({
                 who: subX.who,
                 startTime: newSplit,
                 stopTime: stopTime,
-                task: subX.task
+                task: subX.task,
+                subtask: subX.subtask || false
             }}});
             return true;
           }

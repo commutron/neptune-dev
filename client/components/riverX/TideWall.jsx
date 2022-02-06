@@ -10,11 +10,12 @@ import MiniHistory from './MiniHistory.jsx';
 const TideWall = ({ 
   bID, bComplete, bOpen, rapidData,
   itemData, seriesData, shortfallS, altitle, scrap,
-  ancOptionS, plainBrancheS,
+  ancOptionS, brancheS,
   tideKey, tideFloodGate
 })=> {
   
   const [ taskState, taskSet ] = useState( tideFloodGate ? tideFloodGate.task : false );
+  const [ subtState, subtSet ] = useState( tideFloodGate ? tideFloodGate.subtask || false : false );
   const [ lockTaskState, lockTaskSet ] = useState(false);
  
   const ctxLabel = tideFloodGate ? 'Set Different Task' : `Set A Task`;
@@ -37,15 +38,18 @@ const TideWall = ({
               tideFloodGate={false}
               tideLockOut={false}
               taskState={taskState}
+              subtState={subtState}
               lockTaskSet={lockTaskSet} />
           </n-big-tide-container>
           <BigTideTask
             ctxLabel={ctxLabel}
             ancOptionS={ancOptionS}
-            plainBrancheS={plainBrancheS} 
+            brancheS={brancheS} 
             taskState={taskState}
+            subtState={subtState}
             lockTaskState={lockTaskState}
-            taskSet={taskSet} /> 
+            taskSet={taskSet}
+            subtSet={subtSet} /> 
         </div>
         
       : null }
@@ -77,11 +81,14 @@ export default TideWall;
 
 export const TideBump = ({ 
   bID, bOpen,
-  ancOptionS, plainBrancheS,
+  ancOptionS, brancheS,
   tideKey, tideFloodGate
 })=> {
   
+  const ctxLabel = tideFloodGate ? 'Set Different Task' : `Set A Task`;
+  
   const [ taskState, taskSet ] = useState( tideFloodGate ? tideFloodGate.task : false );
+  const [ subtState, subtSet ] = useState( tideFloodGate ? tideFloodGate.subtask || false : false );
   const [ lockTaskState, lockTaskSet ] = useState(false);
   
   if(bOpen) {
@@ -94,14 +101,18 @@ export const TideBump = ({
             tideFloodGate={false}
             tideLockOut={false}
             taskState={taskState}
+            subtState={subtState}
             lockTaskSet={lockTaskSet} />
         </n-med-tide-container>
         <BigTideTask
+          ctxLabel={ctxLabel}
           ancOptionS={ancOptionS}
-          plainBrancheS={plainBrancheS} 
+          brancheS={brancheS} 
           taskState={taskState}
+          subtState={subtState}
           lockTaskState={lockTaskState}
-          taskSet={taskSet} />
+          taskSet={taskSet}
+          subtSet={subtSet} />
       </Fragment>
     );
   }

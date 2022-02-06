@@ -21,7 +21,7 @@ import WProbTab from './WProbTab';
 
 const WidgetPanel = ({ 
   groupData, widgetData, variantData,
-  batchRelated, brancheS,
+  batchRelated,
   app, user, users
 })=> {
 
@@ -65,7 +65,6 @@ const WidgetPanel = ({
             id={widgetData._id}
             edit={false}
             existFlows={widgetData.flows}
-            brancheS={brancheS}
             app={app} />
           
           {variantData && variantData.length > 0 ?
@@ -127,7 +126,6 @@ const WidgetPanel = ({
         <FlowTable 
           id={w._id}
           flows={w.flows}
-          brancheS={brancheS}
           app={a} />
         
         <WTimeTab

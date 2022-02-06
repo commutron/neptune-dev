@@ -45,12 +45,15 @@ const WTimeCycle = ({ wID, flows, app })=> {
     const cList = _.uniq( Array.from(app.countOption, o => 
                           [ o.key, o.gate + ' ' + o.type + ' (count)' ] ) );
     
-    fListSet( [...tList, ...cList, [ app.lastTrack.key, 'Finish (All Types)' ]]
-                .filter(f=>f)
-                  .sort((a,b)=> 
-                    a[1].toLowerCase() > b[1].toLowerCase() ? 1 :
-                    a[1].toLowerCase() < b[1].toLowerCase() ? -1 : 0
-                  )
+    
+    fListSet( _.uniq( 
+                [...tList, ...cList, [ app.lastTrack.key, 'Finish (All Types)' ]]
+                  .filter(f=>f)
+                    .sort((a,b)=> 
+                      a[1].toLowerCase() > b[1].toLowerCase() ? 1 :
+                      a[1].toLowerCase() < b[1].toLowerCase() ? -1 : 0
+                    ),
+              true, x => x[0])
             );
   }, []);
   
@@ -123,10 +126,12 @@ const WTimeCycle = ({ wID, flows, app })=> {
         </span>
       </div>
       
-      <CyclePaceTable
-        stepTimes={stepCycleTimes}
-        fallTimes={fallCycleTimes}
-      />
+      {!serverData ? <p><em>Select process to calculate cycle time</em></p> :
+        <CyclePaceTable
+          stepTimes={stepCycleTimes}
+          fallTimes={fallCycleTimes}
+        />
+      }
       
       <details className='footnotes grayT small'>
         <summary>Calculation Details</summary>

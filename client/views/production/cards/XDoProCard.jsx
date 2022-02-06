@@ -106,7 +106,6 @@ const XDoProCard = ({
                 
   const flowFirsts = useFlow.filter( x => x.type === 'first' );
   
-  const plainBrancheS = Array.from(brancheState, b => b.branch);
   const ancOptionS = app.ancillaryOption.sort();
   
   const flowAction = ( flowData.hasRiver || rapidData.rapIs ) && fallData.floorRel;
@@ -128,7 +127,7 @@ const XDoProCard = ({
             shortfallS={shortfallS}
             scrap={scrapCheck}
             ancOptionS={ancOptionS}
-            plainBrancheS={plainBrancheS}
+            brancheS={brancheState}
             tideKey={tideKey}
             tideFloodGate={tideFloodGate} />;
   
@@ -204,7 +203,6 @@ const XDoProCard = ({
             user={user}
             app={app}
             brancheS={brancheState}
-            plainBrancheS={plainBrancheS}
             ancOptionS={ancOptionS}
             floorReleased={fallData.floorRel}
             srange={flowData.srange}

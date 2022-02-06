@@ -35,8 +35,9 @@ const TideFollow = ({ proRoute, invertColor })=> {
   const recent = [...new Set(tpool)];
 	
   const taskT = !engaged || !engaged.tTask ? '' : `, ${engaged.tTask}`;
+  const taskS = !engaged || !engaged.tSubt ? '' : `, ${engaged.tSubt}`;
   const tootip = !engaged ? `No Active ${Pref.xBatch}` : 
-	         `${Pref.xBatch} ${engaged.tName}${taskT}`;
+	         `${Pref.xBatch} ${engaged.tName}${taskT}${taskS}`;
 	
 	if(user) {
 	  document.querySelector(':root').style

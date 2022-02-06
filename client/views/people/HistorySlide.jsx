@@ -248,6 +248,7 @@ const TidePlainRow = ({
   const tideWho = tBlock.who;
   const durrAsMin = tBlock.durrAsMin;
   const task = tBlock.task;
+  const stsk = tBlock.subtask;
   
   const mStop = tBlock.stopTime && moment(tBlock.stopTime);
 
@@ -262,7 +263,7 @@ const TidePlainRow = ({
       <td className='noRightBorder'>{describe}</td>
       
       <td className='noRightBorder timeInputs'>
-        {task ? task : '   '}
+        {task ? task + ( stsk ? ', ' + stsk : '') : '   '}
       </td>
       
       <td className='noRightBorder clean numFont rightText'>

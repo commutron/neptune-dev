@@ -13,7 +13,7 @@ const TideBlockRow = ({
   splitKey, splitMode,
   setEdit, setEnd, setSplit,
   
-  ancOptionS, plainBrancheS,
+  ancOptionS, brancheS,
   isSuper, isDebug
 })=> {
   
@@ -21,7 +21,7 @@ const TideBlockRow = ({
   const tideWho = tideObj.who;
   const startTime = tideObj.startTime;
   const stopTime = tideObj.stopTime;
-  const taskU = tideObj.task;
+  const taskU = tideObj.task ? tideObj.task + ' | ' + (tideObj.subtask || '') : false;
                 
   const editOn = tideKey === editKey;
   const splitOn = tideKey === splitKey; 
@@ -30,6 +30,7 @@ const TideBlockRow = ({
   const [ tempStop, setTempStop ] = useState(false);
   const [ tempSplit, setTempSplit ] = useState(false);
   const [ tempTask, setTempTask ] = useState(false);
+  const [ tempSubT, setTempSubT ] = useState(false);
   
   function safeCancel() {
     !splitOn ? editMode(false) : splitMode(false);
@@ -48,8 +49,9 @@ const TideBlockRow = ({
     }else{
       const newStart = tempStart || [startTime];
       const newStop = tempStop || [stopTime];
-      const taskIs = tempTask || taskU;
-      setEdit({batch, tideKey, newStart, newStop, taskIs});
+      const taskIs = tempTask || tideObj.task;
+      const subtIs = tempTask ? tempSubT : tideObj.subtask;
+      setEdit({batch, tideKey, newStart, newStop, taskIs, subtIs});
     }
   }
  
@@ -89,11 +91,13 @@ const TideBlockRow = ({
         <TideTaskExplicit
           taskIs={taskU}
           ancOptionS={ancOptionS}
-          plainBrancheS={plainBrancheS}
+          brancheS={brancheS}
           editOn={editOn}
           splitOn={splitOn}
           tempTask={tempTask}
-          setTempTask={setTempTask} />
+          setTempTask={setTempTask}
+          tempSubT={tempSubT}
+          setTempSubT={setTempSubT} />
         
         <td className='noRightBorder numFont centreText timeInputs'>
           <i className="fas fa-play fa-fw fa-xs greenT"></i>
@@ -200,12 +204,22 @@ export default TideBlockRow;
 
 
 const TideTaskExplicit = ({ 
-  taskIs, ancOptionS, plainBrancheS,
-  editOn, splitOn, tempTask, setTempTask
+  taskIs, ancOptionS, brancheS,
+  editOn, splitOn, 
+  tempTask, setTempTask, tempSubT, setTempSubT
 })=> {
   
   const handleTask = (val)=> {
-    setTempTask( val === 'false' ? false : val );
+    if( !val || val === 'false' ) {
+      setTempTask(false);
+      setTempSubT(false);
+    }else{
+      const twoval = val.split("|");
+      const tskval = twoval[0].trim();
+      const sbtval = twoval[1].trim();
+      setTempTask(tskval);
+      setTempSubT( sbtval === '' ? false : sbtval);
+    }
   };
   
   if( !editOn || splitOn ) {
@@ -224,22 +238,27 @@ const TideTaskExplicit = ({
         onChange={(e)=>handleTask(e.target.value)}
         defaultValue={taskIs}
         disabled={false}>
-        <option value={false}></option>
+        {!taskIs && <option value={false}></option>}
         <optgroup label='Ancillary'>
-          {ancOptionS.map( (v, ix)=>(
-            <option key={ix+'o1'} value={v}>{v}</option>
+          {ancOptionS.map( (a, ix)=>(
+            <option key={ix+'o1'} value={a + ' | '}>{a}</option>
           ))}
         </optgroup>
         <optgroup label={Pref.branches}>
-          {plainBrancheS.map( (v, ix)=>(
-            <option key={ix+'o2'} value={v}>{v}</option>
+          {brancheS.map( (v, ix)=>(
+            <Fragment key={ix+'o2'}>
+            <option value={v.branch + ' | '}>{v.branch}</option>
+            {v.subTasks && v.subTasks.map( (stsk, ixs)=>(
+              <option key={ixs+'o3'} value={v.branch + ' | ' + stsk}>&emsp;{stsk}</option>
+            ))}
+            </Fragment>
           ))}
         </optgroup>
         <optgroup label='Other'>
-          <option value='before release'>before release</option>
-          <option value='after finish'>after finish</option>
-          {/*<option value='out of route'>out of route</option>
-          <option value='extend'>extend</option>*/}
+          <option value='before release | '>before release</option>
+          <option value='after finish | '>after finish</option>
+          <option value='out of route | '>out of route</option>
+          {/*<option value='extend | '>extend</option>*/}
         </optgroup>
       </select>
     </td>

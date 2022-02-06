@@ -24,8 +24,7 @@ Meteor.methods({
 				    title: 'default flow',
 				    type: 'plus',
             flow: [endTrack],
-            ncLists: ncKeys,
-            tskList: []
+            ncLists: ncKeys
           }
         ]
       });
@@ -73,12 +72,11 @@ Meteor.methods({
   },
   
 // new
-  pushBasicPlusFlow(widgetId, flowTitle, tskList, ncLists) {
-    const tkdt = Array.isArray(tskList);
+  pushBasicPlusFlow(widgetId, flowTitle, ncLists) {
     const ncdt = Array.isArray(ncLists);
     const appDoc = AppDB.findOne({orgKey: Meteor.user().orgKey});
     const endTrack = appDoc.lastTrack;
-    if(Roles.userIsInRole(Meteor.userId(), 'edit') && tkdt && ncdt) {
+    if(Roles.userIsInRole(Meteor.userId(), 'edit') && ncdt) {
       WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey}, {
         $push : {
           flows: 
@@ -87,8 +85,7 @@ Meteor.methods({
   				  title: flowTitle,
   				  type: 'plus',
             flow: [endTrack],
-            ncLists: ncLists,
-            tskList: []
+            ncLists: ncLists
           }
       }});
       return true;
@@ -98,16 +95,14 @@ Meteor.methods({
   },
 
 // edit 
-  setBasicPlusFlowHead(widgetId, editId, flowTitle, tskList, ncLists) {
-    const tkdt = Array.isArray(tskList);
+  setBasicPlusFlowHead(widgetId, editId, flowTitle, ncLists) {
     const ncdt = Array.isArray(ncLists);
-    if(Roles.userIsInRole(Meteor.userId(), 'edit') && tkdt && ncdt) {
+    if(Roles.userIsInRole(Meteor.userId(), 'edit') && ncdt) {
       WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey, 'flows.flowKey': editId}, {
         $set : {
           'flows.$.title': flowTitle,
           'flows.$.type': 'plus',
-          'flows.$.ncLists': ncLists,
-          'flows.$.tskList': tskList
+          'flows.$.ncLists': ncLists
       }});
       return true;
     }else{

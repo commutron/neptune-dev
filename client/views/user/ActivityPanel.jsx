@@ -36,7 +36,6 @@ const ActivityPanel = ({ app, brancheS, user, isDebug, users, traceDT })=> {
     getData(true);
   }, [weekChoice]);
   
-  const plainBrancheS = Array.from(brancheS, b => b.branch);
   const ancOptionS = app.ancillaryOption.sort();
     
   return(
@@ -72,7 +71,7 @@ const ActivityPanel = ({ app, brancheS, user, isDebug, users, traceDT })=> {
           isDebug={isDebug}
           app={app}
           ancOptionS={ancOptionS}
-          plainBrancheS={plainBrancheS} />
+          brancheS={brancheS} />
       </table>
       }
       <div className='dropCeiling smTxt'>

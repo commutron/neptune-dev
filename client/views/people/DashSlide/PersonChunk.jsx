@@ -17,7 +17,12 @@ const PersonChunk = ({
   
   useEffect( ()=>{
     if(userChunk.tideBlock.task) {
-      setGuess([ 'fromUserInput', [ userChunk.tideBlock.task ] ]);
+      const sub = userChunk.tideBlock.subtask;
+      if(sub) {
+        setGuess([ 'fromUserInput', [ userChunk.tideBlock.task + ', ' + sub ] ]);
+      }else{
+        setGuess([ 'fromUserInput', [ userChunk.tideBlock.task ] ]);
+      }
     }else{
       Meteor.call('getOneBranchBestGuess', userChunk.batch, userChunk.tideBlock,
       (err, asw)=>{
