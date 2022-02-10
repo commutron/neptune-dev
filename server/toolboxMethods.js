@@ -121,6 +121,37 @@ Meteor.methods({
     }
   },
   
+  replaceTasksDANGEROUS(currTask, rplcTask, rplcSubT) {
+    if(!Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      return false;
+    }else{
+      const allBatch = XBatchDB.find({orgKey: Meteor.user().orgKey}).fetch();
+      for(let b of allBatch) {
+        const bId = b._id;
+        const tide = b.tide;
+        if(tide) {
+          for(let td of tide) {
+            if(!td.task) {
+              null;
+            }else{
+              const match = td.task === currTask;
+              if(!match) {
+                null;
+              }else{
+                XBatchDB.update({_id: bId, orgKey: Meteor.user().orgKey, 'tide.tKey': td.tKey}, {
+            			$set : { 
+            			  'tide.$.task': rplcTask,
+            			  'tide.$.subtask': rplcSubT
+            			}
+            		});
+              }
+            }
+          }
+        }
+      }
+      return true;
+    }
+  },
   
   ResetAppLatestSerial() {
     try{

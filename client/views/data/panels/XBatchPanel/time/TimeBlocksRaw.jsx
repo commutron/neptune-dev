@@ -13,34 +13,18 @@ const TimeBlocksRaw = ({ batch, tide, lockOut, isDebug })=> {
   const [ showZero, showZeroSet ] = useState(isDebug);
   
   return(
-    <div>
-      <details className='footnotes'>
-        <summary>Analysis Details</summary>
-        <p className='footnote'>Date-Time is recorded to the millisecond.</p>
-        <p className='footnote'>
-          Time and Durations are displayed as rounded to the nearest minute.
-        </p>
-        <p className='footnote'>
-          <label className='beside'>show zero durations
-          <input
-            type='checkbox'
-            className='minHeight'
-            defaultChecked={showZero}
-            onChange={()=>showZeroSet(!showZero)} 
-          /></label>
-        </p>
-        <p className='footnote'>
-          The {Pref.branch} attribution is derived from related records.
-        </p>
-        <p className='footnote'>
-          An algorithm derived task may change due to future conditions. Click to save.
-        </p>
-        <p className='footnote'>
-          *Tip - Use the browser `ctrl f` to find a date or person.
-        </p>
-      </details>
-      
-      <table className='numFont wide'>
+    <div className='cardSelf'>
+      <p>
+        <label className='beside'>
+        <input
+          type='checkbox'
+          className='minHeight'
+          defaultChecked={showZero}
+          onChange={()=>showZeroSet(!showZero)} 
+        />Show Zero Durations</label>
+      </p>
+        
+      <table className='numFont w100 vmargin'>
         <tbody>
         {!tide ?
           <p className='centreText'>start/stop not enabled</p>
@@ -64,6 +48,23 @@ const TimeBlocksRaw = ({ batch, tide, lockOut, isDebug })=> {
           isAdmin={isAdmin}
           isDebug={isDebug} />
       }
+      
+      <details className='footnotes'>
+        <summary>Analysis Details</summary>
+        <p className='footnote'>Date-Time is recorded to the millisecond.</p>
+        <p className='footnote'>
+          Time and Durations are displayed as rounded to the nearest minute.
+        </p>
+        <p className='footnote'>
+          The {Pref.branch} attribution is derived from related records.
+        </p>
+        <p className='footnote'>
+          An algorithm derived task may change due to future conditions. Click to save.
+        </p>
+        <p className='footnote'>
+          <em>Tip</em> - Use the browser `ctrl f` to find a date or person.
+        </p>
+      </details>
     </div>
   );
 };
@@ -102,12 +103,12 @@ const RawBlock = ({ tB, batch, isSuper, isDebug, showZero })=> {
       <td><AnonyUser id={tB.who} /></td>
       <td>{mStart.format('YYYY/MM/DD kk:mm')}</td>
       <td>{mStop.format('YYYY/MM/DD kk:mm')}</td>
-      <td>{durr} minutes</td>
+      <td>{durr} min</td>
       <td>
         <TaskTag
           batch={batch}
           tideKey={tB.tKey}
-          taskIs={tB.task}
+          taskIs={tB.subtask ? `${tB.task}, ${tB.subtask}` : tB.task}
           taskGuess={brGuess[1]} 
           auth={isSuper} />
       </td>

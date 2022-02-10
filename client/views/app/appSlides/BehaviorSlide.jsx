@@ -87,7 +87,7 @@ const BehaviorSlide = ({app})=> {
       
       <FirstRepeat app={app} />
       
-      <IndirectSteps app={app} />
+      <AncillarySteps app={app} />
       
       <AlterReason app={app} />
       
@@ -153,7 +153,7 @@ const FirstRepeat = ({ app })=> {
   );
 };
 
-const IndirectSteps = ({ app })=> {
+const AncillarySteps = ({ app })=> {
   
   function ancRemove(name) {
     toast.info('This may take a moment');
@@ -170,8 +170,9 @@ const IndirectSteps = ({ app })=> {
   
   return(
     <div>
-      <h2 className='cap'>{Pref.ancillary} steps</h2>
-      <i>Not strictly assembly but part of the total proccess. Not tracked</i>
+      <h2 className='cap'>Ancillary ({Pref.ancillary}) Step Options</h2>
+      <i>Not strictly assembly but part of the total proccess.</i><br />
+      <i>Outside of the tracked process flow/fall.</i>
       <AppSetSimple
         title='step'
         action='addAncOp'

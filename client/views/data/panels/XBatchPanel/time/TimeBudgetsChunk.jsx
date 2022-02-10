@@ -107,8 +107,8 @@ const TimeBudgetsChunk = ({
           lockOut={b.lock}
           isDebug={isDebug} />
       : 
-      <div>
-        <div className='space containerE'>
+      <div className='space'>
+        <div className='containerE'>
           <div className='oneEcontent numFont'>
             <TimeBudgetBar a={totalTideMinutes} b={totalLeftMinutes} c={totalOverMinutes} />
             
@@ -126,7 +126,7 @@ const TimeBudgetsChunk = ({
                   >Including {extraAs} {totalMessage} of extra time</i>
               </div>
             }
-            
+              
             <p className='bigger line1x'
               >{totalTideAs} <i className='med'>{conversion} logged</i>
             </p>
@@ -141,7 +141,7 @@ const TimeBudgetsChunk = ({
                 lockOut={b.lock} />
             </div>
           </div>
-        
+      
           <div className='twoEcontent numFont'>
             <TimeBudgetBar a={tP} b={0} c={0} />
             <dl className='readlines'>
@@ -162,7 +162,7 @@ const TimeBudgetsChunk = ({
               )}})}
             </dl>
           </div>
-        
+      
           <div className='threeEcontent numFont'>
             
             {!branchTime ? <CalcSpin />

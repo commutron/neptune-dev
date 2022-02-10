@@ -116,11 +116,13 @@ function tryFromFinish(tideStart, finishTime) {
 }
 
 function tryFromHour(tStop, trackOptions, branchOptions, yourHistoryFlat) {
-  const sameHourTide = yourHistoryFlat.filter( y => // duration ???
-                                    moment(y.time).tz(Config.clientTZ)
-                                    .isSame(moment(tStop).tz(Config.clientTZ), 'hour') );
+  const lastHourTide = yourHistoryFlat.filter( y => {
+                          const dur = moment.duration(moment(tStop).diff(moment(y.time))).asMinutes();
+                          return dur > 0 && dur <= 60;
+                      });
+                              
       
-  const fromSameHour = deriveFromHistory(sameHourTide, trackOptions, branchOptions);
+  const fromSameHour = deriveFromHistory(lastHourTide, trackOptions, branchOptions);
   const fromSameHourClean = fromSameHour.cleanResult;
   
   return fromSameHourClean;

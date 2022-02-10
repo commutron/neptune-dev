@@ -37,3 +37,25 @@ const TaskTag = ({ batch, tideKey, taskIs, taskGuess, auth }) => {
 };
 
 export default TaskTag;
+
+export const TaskTagLite = ({ task, guess }) => {
+  
+  if(task && guess) {
+    return(
+      <i>{task}</i>
+    );
+  }
+  
+  if(task) {
+    return(
+      <em>
+        <i className="fas fa-water fa-fw tealT" title='algorithm derived'>
+        </i> {task.join(', ') }
+      </em>
+    );
+  }
+  
+  return(
+    <i className='clean small'>unknown</i>
+  );
+};

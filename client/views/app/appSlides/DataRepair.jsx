@@ -1,14 +1,43 @@
-import React from 'react';
+import React, { useState, Fragment } from 'react';
 import { toast } from 'react-toastify';
 
 const DataRepair = ({ app, users })=> {
+  
+  const [ currTask, setCurrTask ] = useState(false);
+  const [ rplcTask, setrplcTask ] = useState(false);
+  const [ rplcSubT, setrplcSubT ] = useState(false);
+  
+  const handleNewTask = (val)=> {
+    if(!val || val === 'false') {
+      setrplcTask(false);
+      setrplcSubT(false);
+    }else{
+      const twoval = val.split("|");
+      const tskval = twoval[0].trim();
+      const sbtval = twoval[1].trim();
+      setrplcTask( tskval );
+      setrplcSubT( sbtval === '' ? false : sbtval);
+    }
+  };
+  
+  function fixAtaskthing(e) {
+    e.preventDefault();
+    if( currTask && rplcTask ) {
+      Meteor.call('replaceTasksDANGEROUS', currTask, rplcTask, rplcSubT,
+      (error, reply)=>{
+        error && console.log(error);
+        if(reply) { toast.success('data edit complete', { autoClose: false }); }
+      });
+    }
+  }
   
   function fixAthing(e, oldText, newText, textMatch) {
     e.preventDefault();
     
     const matchType = textMatch === 'exact';
     
-    Meteor.call('repairNonConsDANGEROUS', oldText, newText, matchType, (error, reply)=>{
+    Meteor.call('repairNonConsDANGEROUS', oldText, newText, matchType, 
+    (error, reply)=>{
       error && console.log(error);
       if(reply) { toast.success('data edit complete', { autoClose: false }); }
     });
@@ -208,19 +237,74 @@ const DataRepair = ({ app, users })=> {
         <p><b>Be VERY carefull</b></p>
         
         <form onSubmit={(e)=>fixAthing(e, oldText.value, newText.value, textMatch.value)}>
-          <input id='oldText' />
-          <br /><br />
-          <input id='newText' />
-          <br /><br />
-          <select id='textMatch'>
-            <option value='exact'>Exact</option>
-            <option value='fuzzy'>Fuzzy</option>
-          </select>
-          <br /><br />
-          <button
-            type='submit'
-            className='action clearBlack'
-          >fix</button>
+          <p><label>Old Where Text<br /><input id='oldText' /></label></p>
+          <p><label>New Where Text<br /><input id='newText' /></label></p>
+          <p><label>Text Match<br />
+            <select id='textMatch'>
+              <option value='exact'>Exact</option>
+              <option value='fuzzy'>Fuzzy</option>
+            </select>
+          </label></p>
+          <p>
+            <button
+              type='submit'
+              className='action clearBlack'
+            >Repair</button>
+          </p>
+        </form>
+      </div>
+      
+      <div>
+        <h3><i className="fas fa-exchange-alt fa-lg gap"></i>
+          Replace "Ancillary Task" Data
+        </h3>
+        <p>Potentialy very damaging. This will change data of all batches.</p>
+        <p><b>Be VERY carefull</b></p>
+        
+        <form onSubmit={(e)=>fixAtaskthing(e)}>
+          <p><label>Current Task<br />
+            <select
+              id='tskSlctCut'
+              onChange={(e)=>setCurrTask(e.target.value)}
+              required
+              >
+                <option value={false}></option>
+                {app.ancillaryOption.map( (a, ix)=>(
+                  <option key={ix+'o1'} value={a}>{a}</option>
+                ))}
+            </select>
+          </label></p>
+          <p><label>New Task<br />
+            <select
+              id='tskSlctRec'
+              onChange={(e)=>handleNewTask(e.target.value)}
+              required
+              >
+              <option value={false}></option>
+              <optgroup label='branches'>
+                {app.branches.map( (v, ix)=>(
+                  <Fragment key={ix+'o2'}>
+                  <option value={v.branch + ' | '}>{v.branch}</option>
+                  {v.subTasks && v.subTasks.map( (stsk, ixs)=>(
+                    <option key={ixs+'o3'} value={v.branch + ' | ' + stsk}>&emsp;{stsk}</option>
+                  ))}
+                  </Fragment>
+                ))}
+              </optgroup>
+              <optgroup label='Other'>
+                <option value='before release | '>before release</option>
+                <option value='after finish | '>after finish</option>
+                <option value='out of route | '>out of route</option>
+                {/*<option value='extend | '>extend</option>*/}
+              </optgroup>
+            </select>
+          </label></p>
+          <p>
+            <button
+              type='submit'
+              className='action clearBlack'
+            >Replace</button>
+          </p>
         </form>
       </div>
       

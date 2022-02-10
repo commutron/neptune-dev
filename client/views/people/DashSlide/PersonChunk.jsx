@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 
 import UserNice from '/client/components/smallUi/UserNice';
-import TaskTag from '/client/components/tinyUi/TaskTag';
+import { TaskTagLite } from '/client/components/tide/TaskTag';
 import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock';
 
 const PersonChunk = ({ 
@@ -52,7 +52,7 @@ const PersonChunk = ({
     <tr className='leftText numFont'>
       <td className='noRightBorder'><UserNice id={uC.uID} /></td>
       <td className='noRightBorder'>
-        <TaskTag task={branchGuess[1]} guess={branchGuess[0] === 'fromUserInput'} />
+        <TaskTagLite task={branchGuess[1]} guess={branchGuess[0] === 'fromUserInput'} />
       </td>
       <td className='noRightBorder'>
         <ExploreLinkBlock type='batch' keyword={uC.batch} rad={rad} />
