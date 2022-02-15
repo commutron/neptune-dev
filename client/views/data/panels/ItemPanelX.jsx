@@ -71,7 +71,7 @@ const ItemPanelX = ({
                   <SubItemLink 
                     seriesId={srs._id}
                     serial={i.serial}
-                    nestedSerial={ent} />, 
+                    nestedSerial={ent} />,&ensp; 
                 </i> 
               );
             })}

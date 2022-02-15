@@ -50,9 +50,21 @@ const BatchExport = ({
     }
     const countS = [...countArr].sort((a,b)=> a[3] > b[3] ? 1 : a[3] < b[3] ? -1 : 0);
 
-    const sub = !seriesData ? false : seriesData.items.some( y => y.subItems.length > 0 ); 
+    const sub = !seriesData ? false : seriesData.items.some( y => y.subItems.length > 0 );
+    const nsts = new Set();
+    if(sub) {
+      for( let i of seriesData.items) {
+        const nst = i.history.filter( h => h.type === 'nest' );
+        nst.forEach( n => nsts.add(n.step) );
+      }
+    }
+
     const itemArray = !seriesData ? [] : Array.from(seriesData.items, x => 
-            [ x.serial, sub ? x.subItems.join(', ') : null, 
+            [ x.serial, sub ? 
+              [...nsts].map( n => {
+                const nst = x.history.find( h => h.step === n && h.good === true );
+                if(nst) { return nst.info.subSerial }else{ return '' }
+              }) : null,
               !x.history.find( h => h.type === 'first' ) ? '' :
                x.history.find( h => h.type === 'first' && h.good === true ) ? 'PASS' : 'FAIL',
               !x.history.find( h => h.type === 'test' ) ? '' :
@@ -61,7 +73,7 @@ const BatchExport = ({
               seriesData.shortfall.filter( n => n.serial === x.serial ).length || '',
               x.scrapped ? 'SCRAP' : '',
               x.completed ? new Date(x.completedAt).toLocaleString() : '',
-            ]
+            ].flat()
           );
     
     let rapidArr = Array.from(rapidsData, x => 
@@ -282,7 +294,7 @@ const BatchExport = ({
         <table style="width:100%;table-layout:auto;border-collapse:collapse">
           <thead>
             <tr>
-              <th colspan="${sub ? '8' : '7'}">
+              <th colspan="${sub ? Math.max( ...Array.from(itemArray, x => x.length ) ) : '7'}">
                 <div style="background-color:#007fff;width:100%;height:5px;margin-top:20px"></div>
                   <p style="color:black;float:left"><b>${batchData.batch}</b></p>
                   <p style="color:black;float:right"><b>SERIALIZED ${Pref.item.toUpperCase()}S</b></p>
@@ -291,7 +303,8 @@ const BatchExport = ({
             </tr>
             <tr>
               <th style="${hsty}">Serial</th>
-              ${sub ? `<th style="${hsty}">Sub-Serials</th>` : ''}
+              ${sub ? [...nsts].map( (n, i)=>( `<th style="${hsty}">${n}</th>` )).join('') 
+                : ''}
               <th style="${hsty}">First-Off</th>
               <th style="${hsty}">Tested</th>
               <th style="${hsty}">Noncons</th>

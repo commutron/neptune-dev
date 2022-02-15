@@ -46,6 +46,13 @@ const ItemExport = ({ group, widget, variant, batch, sales, itemData, noncon, sh
   const nsted = itemData.history.find( h => h.type === 'nested' );
   const prntN = nsted ? nsted.info.parentSerial || null : '';
   
+  const nests = itemData.subItems.length > 0;
+  const nsts = new Set();
+  if(nests) {
+    const nst = itemData.history.filter( h => h.type === 'nest' );
+    nst.forEach( n => nsts.add(n.step) );
+  }
+  
   const rapid = itemData.altPath.filter( x => x.rapId !== false );
   const rtnAr = Array.from(rapid, x => new Date(x.assignedAt).toLocaleString() );
   
@@ -80,8 +87,15 @@ const ItemExport = ({ group, widget, variant, batch, sales, itemData, noncon, sh
           <tr>
             <td colspan='2' class='body' style="padding:1% 5% 2% 5%;line-height: 1.5">
               <p style="margin:1rem 0;font-size:24pt"><b>${itemData.serial}</b></p>
-              ${itemData.subItems.length > 0 ? `<p style="margin:1rem 0;font-size:14pt">Children: <b>${itemData.subItems.join(', ')}</b></p>` : ''}
               ${nsted ? `<p style="margin:1rem 0;font-size:14pt">Parent: <b>${prntN}</b></p>` : ''}
+              ${nests ?`<p style="margin:1rem 0;font-size:14pt">Children:</p>` : ''}
+              ${nests ? 
+                [...nsts].map( n => {
+                const nst = itemData.history.find( h => h.step === n && h.good === true );
+                if(nst) { 
+                  return `<p style="margin:1rem 0;font-size:14pt">&emsp;${n}: <b>${nst.info.subSerial}</b></p>`;
+                }else{ return null }
+              }).join('') : null}
             </td>
           </tr>
         </tbody>

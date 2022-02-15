@@ -177,6 +177,9 @@ const TimeBudgetsChunk = ({
                   <dl className='readlines'>
                     {branchTime.map((br, ix)=>{
                       if(br.y > 0) {
+                      
+                        console.log({subtasktime: br.z});
+                        
                         const timeAs = conversion === 'minutes' ? 
                                         Math.round(br.y) :
                                        conversion === 'percent' ?

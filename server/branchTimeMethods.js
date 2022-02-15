@@ -346,7 +346,7 @@ Meteor.methods({
     
     if( batch && Array.isArray(batch.tide) ) {  
       const slim = batch.tide.map( x => {
-        const known = x.task ? [ 'fromUserInput', [ x.task ] ] : null;
+        const known = x.task ? [ 'fromUserInput', [ x.task ], x.subtask ] : null;
         const dt = known || 
           branchBestGuess(x.who, x.startTime, x.stopTime,
                         batchNum, widgetId, river, items, nonCon, shortfall, 
@@ -379,16 +379,37 @@ Meteor.methods({
       
       for(let br of branchOptions) {
         let brDurr = 0;
-        for(let t of slim) {
-          if( Array.isArray(t.branchGuess)
-            && ( t.branchGuess[1].includes( br.branch ) || 
-                t.branchGuess[1].includes( br.branch + ' prep' ) ) ) {
-              brDurr = brDurr + ( t.duration / t.branchGuess[1].length );
+        
+        const bslim = slim.filter( t => Array.isArray(t.branchGuess) &&
+                        ( t.branchGuess[1].includes( br.branch ) || 
+                          t.branchGuess[1].includes( br.branch + ' prep' ) )
+                      );
+        
+        let subs = new Set();
+        let subt = [];
+        let sbtt = [];
+        
+        for(let bt of bslim) {
+          brDurr = brDurr + ( bt.duration / bt.branchGuess[1].length );
+
+          if(br.subTasks && bt.branchGuess[2]) {
+            subs.add(bt.branchGuess[2]);
+            subt.push({ sub: bt.branchGuess[2], dur: bt.duration });
           }
+        }
+        
+        for(let sb of subs) {
+          const ft = subt.filter( f => f.sub === sb );
+          const ct = ft.reduce((x,y)=> x + y.dur, 0);
+          sbtt.push({
+            a: sb,
+            b: ct
+          });
         }
         slimTimes.push({
           x: br.branch,
-          y: brDurr
+          y: brDurr,
+          z: sbtt
         });
       }
       let aDurr = 0;
