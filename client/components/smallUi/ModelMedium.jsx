@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 const ModelMedium = ({ 
   button, title,
-  icon, color, noText, lgIcon, smIcon,
+  icon, color, noText, lgIcon, smIcon, inline,
   lock, children 
 })=> {
   
@@ -13,6 +13,7 @@ const ModelMedium = ({
   };
     
   let iSize = smIcon ? '' : lgIcon ? 'fa-2x' : 'fa-lg';
+  let iAlgn = inline ? 'middle' : '';
   
   return(
     <span>
@@ -21,7 +22,7 @@ const ModelMedium = ({
         className='transparent'
         onClick={()=>reveal()}
         disabled={lock}>
-        <label className='navIcon actionIconWrap'>
+        <label className={`navIcon actionIconWrap ${iAlgn}`}>
           <i className={`fas ${icon} ${iSize} fa-fw ${color}`}></i>
           {!noText && <span className={'actionIconText ' + color}>{button}</span>}
         </label>

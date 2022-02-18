@@ -6,7 +6,7 @@ const TaskElement = ({ title, subON, goLink, icon, iconAdj  }) => (
   <button
     aria-label={title}
     className={`taskLink taskTip ${subON ? 'onTL' : ''}`}
-    onClick={()=>FlowRouter.go (goLink )}
+    onClick={()=>FlowRouter.go( goLink )}
   ><i className={icon} data-fa-transform={iconAdj}></i></button>
 );
 
@@ -167,5 +167,43 @@ export const DownTaskBar = ({ subLink }) => (
       iconAdj='down-1'
     />
     
+  </div>
+);
+
+const FilterElement = ({ title, subTitle, goLink, branchON, changeBranch, icon, size }) => (
+  <button
+    aria-label={title}
+    className={`taskLink taskTip numFont ${branchON ? 'onTL' : ''} ${size} ${icon ? '' : 'nomarginB'}`}
+    onClick={()=>changeBranch( goLink )}
+  >{icon ? <i className={icon}></i> : 
+           <i className={size}>{subTitle}</i>}
+  </button>
+);
+
+export const OverMenuBar = ({ brancheS, branchON, changeBranch }) => (
+  <div className='overMenuBar forceScrollStyle'>
+    <FilterElement
+      title='All'
+      subTitle='AL'
+      goLink={false}
+      branchON={branchON === false}
+      changeBranch={changeBranch}
+      icon='fas fa-code-branch'
+      size=''
+    />
+    
+    {brancheS.map( (br, ix)=> {
+      return(
+        <FilterElement
+          key={br.brKey+ix}
+          title={br.branch}
+          subTitle={br.common.charAt(0) + br.common.charAt(1)}
+          goLink={br.branch}
+          branchON={branchON === br.branch}
+          changeBranch={changeBranch}
+          icon={false}
+          size='vbigger'
+        />
+    )})}
   </div>
 );

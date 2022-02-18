@@ -10,6 +10,8 @@ import OverviewTools from './OverviewTools';
 import BatchHeaders from './columns/BatchHeaders';
 import BatchDetails from './columns/BatchDetails';
 
+import { OverMenuBar } from '/client/layouts/TaskBars';
+
 
 const OverviewWrap = ({ 
   bx, traceDT,
@@ -72,6 +74,14 @@ const OverviewWrap = ({
     const filter = value === 'false' ? false : value;
     filterBySet( filter );
     Session.set(sessionSticky+'filter', filter);
+  }
+  
+  function changeBranch(val) {
+    const brnch = !val || val === 'false' ? false : val;
+    filterBySet( brnch );
+    Session.set(sessionSticky+'focus', brnch);
+    salesBySet( false );
+    Session.set(sessionSticky+'sales', false);
   }
   
   function changeFocus(e) {
@@ -186,7 +196,7 @@ const OverviewWrap = ({
   }
       
   const density = !dense ? '' : 'minifyed';
-  
+
   return(
     <div key={0} className={`overviewContainer ${light === true ? 'lightTheme' : 'darkTheme'}`}>
       <ToastContainer
@@ -227,8 +237,14 @@ const OverviewWrap = ({
         doThing={()=>updateTriggerSet(!updateTrigger)}
       />
       
-      <div className='overviewContent forceScrollStyle' tabIndex='0'>
+      <OverMenuBar 
+        brancheS={brancheS}
+        branchON={filterBy}
+        changeBranch={(e)=>changeBranch(e)}
+      />
         
+      <div className='overviewContent forceScrollStyle' tabIndex='0'>
+          
       {!liveState ?
         <div className='centreContainer'>
           <div className='centrecentre'>

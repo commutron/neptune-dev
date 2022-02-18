@@ -3,11 +3,36 @@ import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-const QuoteTimeBudget = ({ bID, lockOut })=>	{
+import ModelMedium from '../smallUi/ModelMedium';
+import { toCap } from '/client/utility/Convert';
+
+const QuoteTimeBudget = ({ bID, lockOut })=> {
   
-  const auth = Roles.userIsInRole(Meteor.userId(), ['sales', 'edit']);
+  const access = Roles.userIsInRole(Meteor.userId(), ['sales', 'edit']);
   
-  const addTimeInHours = (e)=> {
+  return(
+    <ModelMedium
+      button={Pref.timeBudget}
+      title={Pref.timeBudget}
+      color='blueT'
+      icon='fa-hourglass-half gapR'
+      lgIcon={true}
+      inline={true}
+      lock={!access}>
+      <QuoteTimeBudgetForm
+        bID={bID}
+        auth={access}
+        lockOut={lockOut}
+      />
+    </ModelMedium>
+  );
+};
+
+export default QuoteTimeBudget;
+
+const QuoteTimeBudgetForm = ({ bID, auth, lockOut, selfclose })=> {
+
+  const setTimeInHours = (e)=> {
     e.preventDefault();
     const inHours = parseFloat( e.target.hourNum.value );
     const inMinutes = moment.duration(inHours, 'hours').asMinutes();
@@ -16,6 +41,8 @@ const QuoteTimeBudget = ({ bID, lockOut })=>	{
         if(error) {
           console.log(error);
           toast.error('Server Error');
+        }else{
+          selfclose();
         }
       });
       e.target.hourNum.value = '';
@@ -27,33 +54,34 @@ const QuoteTimeBudget = ({ bID, lockOut })=>	{
   const title = auth && !lockOut ? `update quoted time budget\n in hours to 2 decimal places` : `${aT}\n${lT}`;
   
   return(
-    <form 
-      title={title}
-      className='inlineForm'
-      onSubmit={(e)=>addTimeInHours(e)}
-    >
-      <input
-        type='number'
-        id='hourNum'
-        className='numberSet miniIn8'
-        pattern="^\d*(\.\d{0,2})?$"
-        maxLength='7'
-        minLength='1'
-        max='10000'
-        min='0.01'
-        step=".01"
-        inputMode='numeric'
-        disabled={!auth || lockOut}
-        required
-      />
-      <button
-        type='submit'
-        id='goscale'
-        className='action clearBlue numberSet minIn7'
-        disabled={!auth || lockOut}
-      >Update {Pref.timeBudget}</button>
-    </form>
+    <div className='centre'>
+      <p>{toCap(Pref.timeBudget)}</p>
+      <form 
+        title={title}
+        className='inlineForm'
+        onSubmit={(e)=>setTimeInHours(e)}
+      >
+        <input
+          type='number'
+          id='hourNum'
+          className='numberSet miniIn8'
+          pattern="^\d*(\.\d{0,2})?$"
+          maxLength='7'
+          minLength='1'
+          max='10000'
+          min='0.01'
+          step=".01"
+          inputMode='numeric'
+          disabled={!auth || lockOut}
+          required
+        />
+        <button
+          type='submit'
+          id='goscale'
+          className='action clearBlue numberSet minIn7'
+          disabled={!auth || lockOut}
+        >Update {Pref.timeBudget}</button>
+      </form>
+    </div>
   );
 };
-
-export default QuoteTimeBudget;

@@ -673,7 +673,7 @@ n-sm-model-content {
 .wmargin { 
   margin-right: auto;
   margin-left: auto;}
-.nomargin, .nopmargin p { margin: 0; }
+.nomargin, .nopmargin p, .nomarginB::before { margin: 0; }
 
 .vwrap > span { margin-top: 0.5rem; }
 
@@ -711,6 +711,11 @@ n-sm-model-content {
   margin: 5px 0;
   font-size: inherit;
 }
+.breaklines {
+  margin: 0.25rem 0;
+  padding: 0.25rem 0;
+  border-bottom: 1px solid lightgray;
+}
 
 .dropCeiling { margin-top: calc(4vh + 1rem); }
 .overscroll { margin-bottom: 5vh; }
@@ -718,7 +723,7 @@ n-sm-model-content {
 
 .bottomLine {
   padding-bottom: 0.5rem;
-  border-bottom: 1px groove lightgray;
+  border-bottom: 1px solid lightgray;
   margin-bottom: 0.5rem;
 }
 
@@ -926,8 +931,8 @@ n-sm-i {
 
 .biggester { font-size: var(--txx5); }
 
-.vbig { font-size: 2vh; }
-.vbigger { font-size: 3vh; }
+.vbig { font-size: calc(2 * var(--vh)); }
+.vbigger { font-size: calc(3 * var(--vh)); }
 
 .dbbleWide { min-width: 30vw; }
 .inlineForm > input[type='text'].dbbleWide { width: 30vw; }

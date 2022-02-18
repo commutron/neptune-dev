@@ -1,14 +1,15 @@
 import React from 'react';
 import ClockString from '/client/components/smallUi/ClockString';
 import { 
-  BranchFilterSelect, SortSelect, 
+  // BranchFilterSelect, 
+  SortSelect, 
   FocusSelect, FilterSelect,
   LayoutSwitch, ThemeSwitch, StormySwitch
 } from '/client/components/smallUi/ToolBarTools';
 
 const OverviewTools = ({
-  app, traceDT, brancheS, loadTimeUP,
-  filterByUP, changeFilterUP,
+  app, traceDT, loadTimeUP,
+  //brancheS, filterByUP, changeFilterUP,
   focusByUP, changeFocusByUP,
   salesByUP, changeSalesUP,
   sortByUP, changeSortUP,
@@ -31,13 +32,13 @@ const OverviewTools = ({
   
   return(
     <nav className='overviewToolbar gridViewTools'>
-      
+      {/*
       <BranchFilterSelect
         brancheS={brancheS}
         filterState={filterByUP}
         changeFunc={changeFilterUP}
       />
-      
+      */}
       <FocusSelect
         gList={gList}
         focusState={focusByUP}

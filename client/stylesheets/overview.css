@@ -12,11 +12,11 @@
     calc(8 * var(--vh)) 
     calc(3 * var(--vh))
     1fr;/*87vh*/
-  grid-template-columns: 100%;
+  grid-template-columns: calc(8 * var(--vh)) auto;
   grid-template-areas: 
-    'tenHeader'
-    'overviewNav'
-    'overviewContent';
+    'tenHeader tenHeader'
+    'overviewNav overviewNav'
+    'overTaskArea overviewContent';
 }
 .upstreamView,
 .downstreamView {
@@ -92,6 +92,18 @@
   border-style: solid;
 }
 
+.overMenuBar {
+  grid-area: overTaskArea;
+  height: 100%;
+  background-color: rgb(25,25,25);
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: center;
+  padding-top: var(--vh);
+  overflow: hidden;
+}
+  
 .overviewContent,
 .downstreamContent {
   background-color: rgb(30,30,30);
@@ -100,6 +112,7 @@
 .overviewContent {
   grid-area: overviewContent;
   min-height: calc(89 * var(--vh));
+  box-shadow: var(--dropShadowLeft1);
 }
 .downstreamContent {
   grid-area: downContent;
@@ -109,13 +122,18 @@
     'downFixed downScroll';
 }
 
-.overGridFrame, .overGridWideFrame {
+.overGridFrame {
+  grid-area: overviewFrame;
   display: grid;
   grid-template-areas: 
     'overFixedArea overScrollArea';
-}
-.overGridFrame {
   grid-template-columns: minmax(min-content, 30vw) auto;
+}
+
+.overGridWideFrame {
+  display: grid;
+  grid-template-areas: 
+    'overFixedArea overScrollArea';
 }
 .overGridWideFrame {
   grid-template-columns: minmax(min-content, max-content) auto;
@@ -257,6 +275,10 @@
   border-bottom: 1px outset rgba(255,255,255,0.4);
 }
 
+.overGridRowScroll .bigger,
+.downRowScroll .bigger {
+  font-size: unset;
+}
 .overGridRowScroll .big,
 .downRowScroll .big {
   font-size: calc(2 * var(--vh));
@@ -372,10 +394,12 @@
 }
 
 /* dense minifyed layout */
-.overGridFrame.minifyed,
+.overGridFrame.minifyed {
+  grid-template-columns: minmax(min-content, 25vw) auto; 
+}
 .downstreamContent.minifyed {
-  grid-template-columns: minmax(min-content, 25vw) auto; }
-  
+  grid-template-columns: minmax(min-content, 25vw) auto; 
+}
 .minifyed .label { display: none; }
 
 .minifyed .overGridRowFixedHeader > span {
@@ -522,6 +546,7 @@ n-sm-model .big { font-size: 1.5rem !important; }
 
 @media (orientation: portrait) {
   .overviewContainer {
+    grid-template-columns: 8vmin auto;
     grid-template-rows: 
       8vmin
       calc(3 * var(--vh)) 

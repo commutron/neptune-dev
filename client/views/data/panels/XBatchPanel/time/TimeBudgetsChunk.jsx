@@ -74,23 +74,42 @@ const TimeBudgetsChunk = ({
     totalLeftMinutes,
     totalOverMinutes
   });
-
+  
+  const timeAs = (dur)=> {
+    return conversion === 'minutes' ? Math.round(dur) :
+            conversion === 'percent' ?
+            ( percentOf(totalTideMinutes, dur) ).toFixed(2, 10) :
+            min2hr(dur);
+  };
+  
   const totalPeople = totalsCalc.peopleTime;
   const tP = totalPeople.length;
   
+  const cnv = conversion === 'minutes' ? 'min' :
+              conversion === 'percent' ? '%' : 'hrs';
+  
   return(
     <div>
-      <ToggleBar
-        toggleIcons={['𝗛𝗿', '𝗠𝗻', 
-          <n-fa1><i className='fas fa-percentage fa-fw'></i></n-fa1>, 
-          <n-fa2><i className='fas fa-bars fa-fw'></i></n-fa2>
-        ]}
-        toggleOptions={[ 
-          'hours','minutes','percent','raw records'
-        ]}
-        toggleVal={conversion}
-        toggleSet={(e)=>conversionSet(e)}
-      />
+      <div className='centreRow comfort'>
+        <div className='vwrap beside'>
+          <QuoteTimeBudget
+            bID={b._id} 
+            lockOut={b.lock} 
+          />
+        </div>
+        
+        <ToggleBar
+          toggleIcons={['𝗛𝗿', '𝗠𝗻', 
+            <n-fa1><i className='fas fa-percentage fa-fw'></i></n-fa1>, 
+            <n-fa2><i className='fas fa-bars fa-fw'></i></n-fa2>
+          ]}
+          toggleOptions={[ 
+            'hours','minutes','percent','raw records'
+          ]}
+          toggleVal={conversion}
+          toggleSet={(e)=>conversionSet(e)}
+        />
+      </div>
       
       {!moment(b.createdAt).isAfter(tideWall) && 
         <div className='big'>
@@ -134,12 +153,6 @@ const TimeBudgetsChunk = ({
             <p className='bigger line1x' 
               >{bufferAs} <i className='med'>{conversion} {bufferMessage}</i>
             </p>
-            
-            <div className='vmargin'>
-              <QuoteTimeBudget 
-                bID={b._id} 
-                lockOut={b.lock} />
-            </div>
           </div>
       
           <div className='twoEcontent numFont'>
@@ -147,17 +160,13 @@ const TimeBudgetsChunk = ({
             <dl className='readlines'>
               {totalPeople.map((per, ix)=>{
                 if(per.uTime > 0) {
-                  const timeAs = conversion === 'minutes' ? per.uTime :
-                                  conversion === 'percent' ?
-                                  percentOf(totalTideMinutes, per.uTime) :
-                                  min2hr(per.uTime);
                   return( 
                     <dt 
                       key={ix}
-                      className='rightRow doJustWeen'
+                      className='rightRow doJustWeen breaklines'
                     ><i className='gapR'><UserNice id={per.uID} /> </i>
                       <i className='grayT rightText medSm'
-                      > {timeAs} {conversion}</i>
+                      > {timeAs(per.uTime)} {cnv}</i>
                     </dt> 
               )}})}
             </dl>
@@ -177,24 +186,40 @@ const TimeBudgetsChunk = ({
                   <dl className='readlines'>
                     {branchTime.map((br, ix)=>{
                       if(br.y > 0) {
-                      
-                        console.log({subtasktime: br.z});
-                        
-                        const timeAs = conversion === 'minutes' ? 
-                                        Math.round(br.y) :
-                                       conversion === 'percent' ?
-                                        percentOf(totalTideMinutes, br.y) :
-                                        min2hr(br.y);
-                        return( 
-                          <dt
-                            key={ix}
-                            title={`${Math.round(br.y)} minutes`}
-                            className='rightRow doJustWeen'
-                          ><i className='cap'>{br.x}</i>
-                            <i className='grayT rightText medSm'
-                            > {timeAs} {conversion}</i>
-                          </dt> 
-                    )}})}
+                        if(br.z && br.z.length > 0) {
+                          return( 
+                            <dl key={ix} className='nomargin breaklines'>
+                              <dt
+                                title={`${Math.round(br.y)} minutes`}
+                                className='rightRow doJustWeen'
+                              ><i className='cap'>{br.x}</i>
+                                <i className='grayT rightText medSm'
+                                > {timeAs(br.y)} {cnv}</i>
+                              </dt>
+                              {br.z.map( (zt, ixz)=>(
+                                <dd 
+                                  key={ix+'sub'+ixz}
+                                  title={`${Math.round(zt.b)} minutes`}
+                                  className='rightRow doJustWeen indent'
+                                ><i className='cap'>{zt.a}</i>
+                                  <i className='grayT rightText medSm'
+                                  > {timeAs(zt.b)} {cnv}</i>
+                                </dd>
+                              ))}
+                            </dl>
+                          );
+                        }else{
+                          return( 
+                            <dt
+                              key={ix}
+                              title={`${Math.round(br.y)} minutes`}
+                              className='rightRow doJustWeen breaklines'
+                            ><i className='cap'>{br.x}</i>
+                              <i className='grayT rightText medSm'
+                              > {timeAs(br.y)} {cnv}</i>
+                            </dt>
+                          )}
+                      }})}
                   </dl>
                 </div>
               }

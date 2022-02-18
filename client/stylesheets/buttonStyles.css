@@ -444,7 +444,7 @@ button.variableInput.biggest { height: 64px; }
 .buttonLayerCorrect { height: 1em; }
 
 .taskLink {
-  margin: 0.75vmax 0;
+  margin: calc(0.75 * var(--vh)) 0;
   width: calc(5.5 * var(--vh));
   height: calc(5.5 * var(--vh));
   border-radius: 50%;
@@ -497,7 +497,7 @@ button.variableInput.biggest { height: 64px; }
 .auxTipScale::before {
   position: absolute;
   content: attr(aria-label);
-  margin: calc(0.5 * var(--vh)) 0;
+  margin: calc(0.25 * var(--vh)) 0;
   max-width: -webkit-fill-available;
   max-width: max-content;
   background-color: var(--task-front-color);

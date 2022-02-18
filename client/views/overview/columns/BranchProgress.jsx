@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useState, useEffect, useRef } from 'react';
 import Pref from '/client/global/pref.js';
 
 import NumStat from '/client/components/tinyUi/NumStat';
@@ -10,13 +10,19 @@ const BranchProgress = ({
   updateTrigger, isDebug
 })=> {
   
+  const mounted = useRef(true);
+  
+  useEffect(() => {
+    return () => { mounted.current = false; };
+  }, []);
+  
   const [ dt, setProg ] = useState(false);
   
   useEffect( ()=> {
     const branchOnly = branchArea ? filterBy : false;
     Meteor.call('branchProgress', batchID, branchOnly, (error, reply)=>{
       error && console.log(error);
-      if( reply ) { 
+      if( reply && mounted.current ) { 
         setProg( reply );
         isDebug && console.log(reply);
       }
