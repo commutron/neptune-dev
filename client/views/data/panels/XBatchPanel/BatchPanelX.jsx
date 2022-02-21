@@ -77,7 +77,9 @@ const BatchPanelX = ({
           done={done}
           allDone={flowData.allFlow}
           riverFlow={flowData.riverFlow}
-          app={app} />
+          app={app}
+          brancheS={brancheS} 
+        />
         
         <CountTab
           batchData={batchData}

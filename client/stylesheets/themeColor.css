@@ -19,9 +19,7 @@
 	border-left-color: rgb(0,0,0);
 }
 .darkTheme td,
-.darkTheme tr:last-child td,
-.darkTheme .mockTableCell,
-.darkTheme .mockTableRow {
+.darkTheme tr:last-child td {
   border-color: white;
   border-color: rgba(0,0,0,0.4);
 }

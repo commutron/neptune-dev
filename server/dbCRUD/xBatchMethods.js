@@ -40,6 +40,10 @@ Meteor.methods({
           updatedAt: new Date(),
           timeAsMinutes: qTimeNum
         }],
+        // quoteTimeBreakdown: {
+        //   updatedAt: new Date(),
+        //   timesAsMinutes: qTimeArr
+        // },
   			completed: false,
   			completedAt: null,
   			completedWho: null,
@@ -445,7 +449,7 @@ Meteor.methods({
   pushBatchXTimeBudget(batchId, qTime) {
     try{
       const accessKey = Meteor.user().orgKey;
-      if(Roles.userIsInRole(Meteor.userId(), ['sales', 'run', 'edit'])) {
+      if(Roles.userIsInRole(Meteor.userId(), ['sales', 'edit'])) {
         XBatchDB.update({_id: batchId, orgKey: accessKey}, {
           $push : { 
             'quoteTimeBudget': {
@@ -459,8 +463,29 @@ Meteor.methods({
         Meteor.defer( ()=>{
           Meteor.call('updateOneMovement', batchId, accessKey);
         });
+        return true;
       }else{
-        null;
+        return false;
+      }
+    }catch (err) {
+      throw new Meteor.Error(err);
+    }
+  },
+  
+  setBatchXTimeBreakdown(batchId, qtArray) {
+    try{
+      const accessKey = Meteor.user().orgKey;
+      if(Roles.userIsInRole(Meteor.userId(), ['sales', 'edit'])) {
+        XBatchDB.update({_id: batchId, orgKey: accessKey}, {
+          $set : { 
+            quoteTimeBreakdown: {
+              updatedAt: new Date(),
+              timesAsMinutes: qtArray
+            }
+          }});
+        return true;
+      }else{
+        return false;
       }
     }catch (err) {
       throw new Meteor.Error(err);

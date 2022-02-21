@@ -13,7 +13,7 @@ import TimeCycleChunk from './time/TimeCycleChunk';
 const TimeTab = ({
   batchData, seriesData, rapidsData, widgetData,
   floorRelease, done, allDone, riverFlow,
-  user, isDebug, app
+  user, isDebug, app, brancheS
 })=> {
   
   const [ conversion, conversionSet] = useState('hours');
@@ -34,7 +34,9 @@ const TimeTab = ({
         conversionSet={conversionSet}
         plus={plus}
         plusSet={plusSet}
-        isDebug={isDebug} />
+        isDebug={isDebug}
+        brancheS={brancheS}
+      />
       
       {conversion !== 'raw' && rapidsData.length > 0 ?
         <div className='autoFlex'>

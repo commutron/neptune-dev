@@ -18,7 +18,7 @@ import { min2hr, percentOf, percentOverUnder } from '/client/utility/Convert';
 const TimeBudgetsChunk = ({
   tideWall, b, addTime, 
   conversion, conversionSet, plus, plusSet,
-  isDebug
+  isDebug, brancheS
 }) =>	{
   
   const [ branchTime, branchTimeSet ] = useState(false);
@@ -85,6 +85,8 @@ const TimeBudgetsChunk = ({
   const totalPeople = totalsCalc.peopleTime;
   const tP = totalPeople.length;
   
+  const qtbB = b.quoteTimeBreakdown ? b.quoteTimeBreakdown.timesAsMinutes : [];
+  
   const cnv = conversion === 'minutes' ? 'min' :
               conversion === 'percent' ? '%' : 'hrs';
   
@@ -93,8 +95,11 @@ const TimeBudgetsChunk = ({
       <div className='centreRow comfort'>
         <div className='vwrap beside'>
           <QuoteTimeBudget
-            bID={b._id} 
+            bID={b._id}
+            qtB={qtB}
+            qtbB={qtbB}
             lockOut={b.lock} 
+            brancheS={brancheS}
           />
         </div>
         

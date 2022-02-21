@@ -1302,6 +1302,8 @@ n-col-table-head > span {
 .min350 { min-width: 350px; }
 .min300 { min-width: 300px; }
 .min200 { min-width: 200px; }
+.min8 { width: 8ch; }
+.min6 { width: 6ch; }
 
 .minWfit { 
   min-width: -moz-fit-content;
