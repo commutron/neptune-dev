@@ -1,14 +1,12 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
-import { toCap } from '/client/utility/Convert';
 
 
 export const BranchFilterSelect = ({ brancheS, filterState, changeFunc })=> (
-  <span>
-    <i className='fas fa-code-branch fa-fw darkgrayT'></i>
+  <span className='liteTipW' data-tip={`Filter by ${Pref.branch}`}>
+    <i className='fa-solid fa-code-branch fa-fw darkgrayT'></i>
     <select
       id='filterSelect'
-      title={`Change ${Pref.branch} Filter`}
       className='overToolSort liteToolOn'
       defaultValue={filterState}
       onChange={(e)=>changeFunc(e)}>
@@ -23,11 +21,10 @@ export const BranchFilterSelect = ({ brancheS, filterState, changeFunc })=> (
 
 
 export const SortSelect = ({ sortState, changeFunc, extraClass })=> (
-  <span>
-    <i className='fas fa-sort-amount-down fa-fw darkgrayT'></i>
+  <span className='liteTipW' data-tip='Sort list by'>
+    <i className='fa-solid fa-sort-amount-down fa-fw darkgrayT'></i>
     <select
       id='sortSelect'
-      title='Change list order'
       className={`overToolSort liteToolOn ${extraClass || ''}`}
       defaultValue={sortState}
       onChange={(e)=>changeFunc(e)}>
@@ -41,12 +38,11 @@ export const SortSelect = ({ sortState, changeFunc, extraClass })=> (
 
 
 export const FocusSelect = ({ gList, focusState, changeFunc })=> (
-  <span>
-    <i className='fas fa-industry fa-fw darkgrayT'></i>
+  <span className='liteTipW' data-tip={`Filter by ${Pref.group}`}>
+    <i className='fa-solid fa-industry fa-fw darkgrayT'></i>
     <select
       id='focusSelect'
-      title={`Focus on ${toCap(Pref.group)}`}
-      className={`overToolSort liteToolOn`}
+      className='overToolSort liteToolOn'
       defaultValue={focusState}
       onChange={(e)=>changeFunc(e)}>
       <option value={false} className='clean'>All {Pref.Group}s</option>
@@ -60,12 +56,11 @@ export const FocusSelect = ({ gList, focusState, changeFunc })=> (
 export const FilterSelect = ({ 
   unqID, title, selectList, selectState, falsey, changeFunc, extraClass, icon
 })=> (
-  <span>
+  <span className='liteTipW' data-tip={title}>
     <i className={`${icon || 'fas fa-filter'} fa-fw darkgrayT`}></i>
     <select
       id={'filterSelect'+unqID}
-      title={title}
-      className={'overToolSort liteToolOn ' + extraClass || ''}
+      className={`overToolSort liteToolOn ${extraClass || ''}`}
       defaultValue={selectState}
       onChange={(e)=>changeFunc(e)}
       disabled={selectList.length === 0}>
@@ -90,11 +85,10 @@ export const FilterSelect = ({
 export const YearSelect = ({ 
   yearsList, append, falsey, filterState, changeFunc, extraClass
 })=> (
-  <span>
-    <i className='fas fa-calendar-alt fa-fw darkgrayT'></i>
+  <span className='liteTipW' data-tip='Filter by Year'>
+    <i className='fa-solid fa-calendar-alt fa-fw darkgrayT'></i>
     <select
       id='yearSelect'
-      title='Filter by Year'
       className={`overToolSort liteToolOn ${extraClass || ''}`}
       defaultValue={filterState}
       onChange={(e)=>changeFunc(e.target.value)}>
@@ -110,19 +104,19 @@ export const LayoutSwitch = ({ denseState, changeFunc })=> (
   <span>
     <ToolButton
       kID='denseOff'
-      title='Comfort Layout'
+      tip='Comfort Layout'
       changeFunc={changeFunc}
       stateVal={denseState}
       onVal={false}
-      icon='fas fa-expand'
+      icon='fa-solid fa-expand'
     />
     <ToolButton
       kID='miniOn'
-      title='Minifyed Layout'
+      tip='Minifyed Layout'
       changeFunc={changeFunc}
       stateVal={denseState}
       onVal={true}
-      icon='fas fa-compress'
+      icon='fa-solid fa-compress'
     />
   </span>
 );
@@ -131,19 +125,19 @@ export const ThemeSwitch = ({ themeState, changeFunc })=> (
   <span>
     <ToolButton
       kID='darkOn'
-      title='Dark Theme'
+      tip='Dark Theme'
       changeFunc={changeFunc}
       stateVal={themeState}
       onVal={false}
-      icon='fas fa-moon'
+      icon='fa-solid fa-moon'
     />
     <ToolButton
       kID='lightOn'
-      title='Light Theme'
+      tip='Light Theme'
       changeFunc={changeFunc}
       stateVal={themeState}
       onVal={true}
-      icon='fas fa-sun'
+      icon='fa-solid fa-sun'
     />
   </span>
 );
@@ -152,45 +146,45 @@ export const StormySwitch = ({ stormState, changeFunc })=> (
   <span>
     <ToolButton
       kID='stormyOFF'
-      title='Problem Filter Off'
       changeFunc={changeFunc}
       stateVal={stormState}
       onVal={false}
-      icon='fas fa-bars'
+      icon='fas fa-slash'
+      tip='Problem Filter Off'
     />
     <ToolButton
       kID='ncOn'
-      title={'Outstanding ' + Pref.nonCons}
       changeFunc={changeFunc}
       stateVal={stormState}
       onVal={0}
       icon='fas fa-times-circle'
+      tip={'Outstanding ' + Pref.nonCons}
     />
     <ToolButton
       kID='shOn'
-      title={'Outstanding ' + Pref.shortfalls}
       changeFunc={changeFunc}
       stateVal={stormState}
       onVal={1}
       icon='fas fa-exclamation'
+      tip={'Outstanding ' + Pref.shortfalls}
     />
     <ToolButton
       kID='tfOn'
-      title='Test Failures'
       changeFunc={changeFunc}
       stateVal={stormState}
       onVal={2}
       icon='fas fa-microchip'
+      tip='Test Failures'
     />
   </span>
 );
 
-const ToolButton = ({ kID, title, changeFunc, stateVal, onVal, icon })=> (
+const ToolButton = ({ kID, changeFunc, stateVal, onVal, icon, tip })=> (
   <button
     key={kID}
-    title={toCap(title, true)}
     onClick={()=>changeFunc(onVal)}
-    className={stateVal === onVal ? 'liteToolOn' : 'liteToolOff'}
+    className={`liteTip ${stateVal === onVal ? 'liteToolOn' : 'liteToolOff'}`}
+    data-tip={tip}
   ><i className={`${icon} fa-fw`}></i></button>
 );
 

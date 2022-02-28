@@ -82,14 +82,14 @@ const CompSearchWrap = ({ plCache, user, app })=> {
   results && results.forEach( y => batchCount += y.btchs.length );
   
   return(
-    <div className='simpleContent starfishAccents'>
+    <div className='simpleContent defaultAcc'>
     
       <div className='wide rowWrapR lightTheme'>
         <div>
           <button
             type='button'
             title='Download All Parts'
-            className='taskLink gapR'
+            className='taskLink defaultAcc gapR'
             onClick={(e)=>dataExport(e)}>
           <i className='fas fa-download'></i>
           </button>
@@ -100,7 +100,7 @@ const CompSearchWrap = ({ plCache, user, app })=> {
             type='button'
             title='Refresh Autocomplete Cache'
             onClick={(e)=>requestRefresh(e)}
-            className='taskLink gapR'
+            className='taskLink defaultAcc gapR'
             disabled={!Roles.userIsInRole(Meteor.userId(), 'admin')}>
           <i className='fas fa-sync'></i>
           </button>

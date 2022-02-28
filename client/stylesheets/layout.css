@@ -529,23 +529,34 @@ n-sm-model-content {
 .miniStack::after,
 .firstBadge::after,
 .leapBonus::before,
-.smplTip::after {
-  font-family: 'VarelaLocal';
-  letter-spacing: 0.1ch;
+.smplTip::after,
+.liteTip::after,
+.liteTipW::before {
   text-transform: capitalize;
   pointer-events: none;
   opacity: 0;
   visibility: hidden;
 }
-.leapBonus:focus::before, .leapBonus:hover::before,
-.firstBadge:focus::after, .firstBadge:hover::after,
-.miniStack:focus::after, .miniStack:hover::after,
-.taskTip:focus::before, .taskTip:hover::before,
-.auxTip:focus::before, .auxTip:hover::before,
-.auxTipScale:focus::before, .auxTipScale:hover::before,
-.tideOut:enabled:focus::before, .tideOut:enabled:hover::before, 
-.tideFollowTip:focus::before, .tideFollowTip:hover::before,
-.smplTip:focus::after, .smplTip:hover::after {
+.tideOut::before, 
+.tideFollowTip::before,
+.taskTip::before, 
+.auxTip::before, 
+.auxTipScale::before,
+.leapBonus::before {
+  font-family: 'VarelaLocal';
+  letter-spacing: 0.1ch;
+}
+.leapBonus:focus-visible::before, .leapBonus:hover::before,
+.firstBadge:focus-visible::after, .firstBadge:hover::after,
+.miniStack:focus-visible::after, .miniStack:hover::after,
+.taskTip:focus-visible::before, .taskTip:hover::before,
+.auxTip:focus-visible::before, .auxTip:hover::before,
+.auxTipScale:focus-visible::before, .auxTipScale:hover::before,
+.tideOut:enabled:focus-visible::before, .tideOut:enabled:hover::before, 
+.tideFollowTip:focus-visible::before, .tideFollowTip:hover::before,
+.smplTip:focus-visible::after, .smplTip:hover::after,
+.liteTip:focus-visible::after, .liteTip:hover::after,
+.liteTipW:focus-visible::before, .liteTipW:hover::before {
   visibility: visible;
   opacity: 1;
 }
@@ -1302,8 +1313,8 @@ n-col-table-head > span {
 .min350 { min-width: 350px; }
 .min300 { min-width: 300px; }
 .min200 { min-width: 200px; }
-.min8 { width: 8ch; }
-.min6 { width: 6ch; }
+.min8 { min-width: 8ch; }
+.min6 { min-width: 6ch; }
 
 .minWfit { 
   min-width: -moz-fit-content;

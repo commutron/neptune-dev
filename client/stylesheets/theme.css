@@ -101,8 +101,8 @@
   /* animation */
   --scottsCurve: cubic-bezier(0.165, 0.84, 0.44, 1);
   
-  /* material shaddow */
-  --dropShadow000: 0 3px 6px rgba(50,50,50,0.1);
+  /* shaddow */
+  --dropShadow000: 0 2px 4px rgba(0,0,0,0.16);
                   
   --dropShadow00: 0 3px 6px rgba(0,0,0,0.16),
                   0 3px 6px rgba(0,0,0,0.23);

@@ -64,51 +64,50 @@ const StartView = ({user, app}) =>	{
         {isReadOnly ?
           <NavPlaceholder 
             title='Production'
-            icon='far fa-paper-plane' /> :
+            icon='fa-regular fa-paper-plane' /> :
           <NavButton
             title='Production' 
-            icon='far fa-paper-plane'
+            icon='fa-regular fa-paper-plane'
             link='/production' /> }
         
-        <NavButton title='Overview' icon='fas fa-globe' link='/overview' />
+        <NavButton title='Overview' icon='fa-solid fa-globe' link='/overview' />
         
         <NavButtonShell title='People' link='/people'
           icon={
             <span className="fa-stack fa-fw navButtonIcon navButtonLayerCorrect">
-              <i className="fas fa-user-astronaut fa-stack-1x" data-fa-transform="shrink-5 left-10 down-1"></i>
-              <i className="fas fa-user-astronaut fa-stack-1x"></i>
-              <i className="fas fa-user-astronaut fa-stack-1x" data-fa-transform="shrink-5 right-10 down-1"></i>
+              <i className="fa-solid fa-user-astronaut fa-stack-1x" data-fa-transform="shrink-5 left-10 down-1"></i>
+              <i className="fa-solid fa-user-astronaut fa-stack-1x"></i>
+              <i className="fa-solid fa-user-astronaut fa-stack-1x" data-fa-transform="shrink-5 right-10 down-1"></i>
             </span>
           } />
         
-        <NavButton title='Explore' icon='fas fa-rocket' link='/data' />
+        <NavButton title='Explore' icon='fa-solid fa-rocket' link='/data' />
         
-        <NavButton title={Pref.upstream} icon='fas fa-satellite-dish' link='/upstream' />
+        <NavButton title={Pref.upstream} icon='fa-solid fa-satellite-dish' link='/upstream' />
         
-        <NavButton title={Pref.downstream} icon='fas fa-satellite' link='/downstream' />
+        <NavButton title={Pref.downstream} icon='fa-solid fa-satellite' link='/downstream' />
         
-        <NavButton title={usernice} icon='fas fa-user-astronaut fa-flip-horizontal' link='/user' />
+        <NavButton title={usernice} icon='fa-solid fa-user-astronaut fa-flip-horizontal' link='/user' />
         
         {isAdmin ?
-          <NavButton title='Settings' icon='fas fa-sliders-h' link='/app' />
-        : <NavPlaceholder title='Settings' icon='fas fa-sliders-h'/>}
+          <NavButton title='Settings' icon='fa-solid fa-sliders-h' link='/app' />
+        : <NavPlaceholder title='Settings' icon='fa-solid fa-sliders-h'/>}
         
-        <NavButton title={Pref.docs} icon='fas fa-file-invoice' link={app.instruct || ''} blank={true} />
+        <NavButton title={Pref.docs} icon='fa-solid fa-file-invoice' link={app.instruct || ''} blank={true} />
         
-        <NavButton title='Help' icon='far fa-question-circle' link={app.helpDocs || ''} blank={true} />
+        <NavButton title='Help' icon='fa-regular fa-question-circle' link={app.helpDocs || ''} blank={true} />
         
         {!app.timeClock || app.timeClock.trim() === '' ?  
           <NavPlaceholder 
             title={Pref.timeClock} 
-            icon='far fa-clock' /> :
+            icon='fa-regular fa-clock' /> :
           <NavButton
             title={Pref.timeClock} 
-            icon='fas fa-clock' 
+            icon='fa-solid fa-clock' 
             link={app.timeClock || ''} 
             blank={true} /> }
         
         <HomeLogout currentUser={user} />
-      
       </div>
     </div>
   );

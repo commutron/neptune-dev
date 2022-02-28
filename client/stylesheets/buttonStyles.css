@@ -24,7 +24,7 @@
 	transition: all 250ms ease;
 	font-size: 1vmax;
 }
-.iconAction:focus, .iconAction:active {
+.iconAction:focus-visible, .iconAction:active {
   outline: dotted thick;
 }
 
@@ -65,7 +65,7 @@
   opacity: 1;
   border-bottom-color: inherit;
 }
-.miniAction:focus {
+.miniAction:focus-visible {
   outline: 1px dotted;
 }
 .blueLineHover:hover {
@@ -188,7 +188,7 @@
   --clearaccent: var(--amethyst);
 }
 
-.activeIndicator:focus, .activeIndicator:active {
+.activeIndicator:focus-visible, .activeIndicator:active {
   outline: dotted;  
 }
 
@@ -249,16 +249,30 @@
   user-select: text;
   opacity: 1;
 }
-
-.smplTip::after {
+.smplTip::after,
+.liteTip::after,
+.liteTipW::before {
   content: attr(data-tip);
   position: absolute;
-  margin-left: 2px;
+  margin: 0;
   padding: 0.25em 0.5em;
+  border-radius: 3px;
+}
+.smplTip::after {
   background-color: rgb(230,230,230);
   color: black;
   font-size: 0.7rem;
-  border-radius: 1px;
+}
+.liteTip::after, .liteTipW::before {
+  background-color: rgb(0,0,0);
+  color: white;
+  font-size: 0.8rem;
+}
+.liteTip::after {
+  transform:translate(-55%,-110%);
+}
+.liteTipW::before {
+  transform:translate(25%,-110%);
 }
 
 .leapText {
@@ -270,7 +284,7 @@
   border-bottom-color: white;
   word-break: break-all;
 }
-.leapText:hover, .leapText:focus, .leapText:active {
+.leapText:hover, .leapText:focus-visible, .leapText:active {
   color: var(--peterriver);
   border-bottom-color: var(--peterriver);
 }
@@ -294,13 +308,10 @@
   word-break: keep-all;
   word-wrap: normal;
 }
-.leapBar:hover, .leapBar:focus, .leapBar:active {
+.leapBar:hover, .leapBar:focus-visible, .leapBar:active {
   background-color: var(--silverfade);
 }
 
-/*.leapBonus {*/
-/*  position: relative;*/
-/*}*/
 .leapBonus::before {
   content: attr(data-bonus);
   position: absolute;
@@ -357,7 +368,7 @@
 .leapLine > span:first-child {
  font-weight: 600;
 }
-.leapLine:hover, .leapLine:focus, .leapLine:active {
+.leapLine:hover, .leapLine:focus-visible, .leapLine:active {
   box-shadow: var(--dropShadow0);
   border-bottom-color: black;
 }
@@ -467,13 +478,13 @@ button.variableInput.biggest { height: 64px; }
   background-color: var(--task-front-color);
   box-shadow: var(--dropShadow00);
 }
-.taskLink:focus,
+.taskLink:focus-visible,
 .taskLink > input[type=radio]:checked + svg,
 .taskLink > input[type=checkbox]:checked + svg{
   outline-style: hidden;
   outline-color: transparent;
 }
-.taskLink:focus {
+.taskLink:focus-visible {
   box-shadow: 
     0 0 0 3px var(--task-back-color),
     0 0 0 5px var(--box-shadow-color);
@@ -544,10 +555,20 @@ button.variableInput.biggest { height: 64px; }
 .taskLink.fGreen {
   --box-shadow-color: var(--nephritis);
 }
-
-.lightTheme .taskLink {
-  --task-front-color: var(--asbestos);
+.taskLink.defaultAcc {
+  --task-front-color: var(--neptuneColor);
   --task-back-color: var(--clouds);
+  --box-shadow-color: var(--neptuneColor);
+}
+
+.lightTheme .overMenuBar .taskLink {
+  --task-front-color: var(--blackT);
+  --task-back-color: var(--clouds);
+}
+.lightTheme .overMenuBar .taskLink:hover, 
+.lightTheme .overMenuBar .taskLink:active,
+.lightTheme .overMenuBar .taskLink.onTL {
+  --task-front-color: var(--concrete);
 }
 
 .taskLink > input[type=radio]:disabled + svg,
@@ -732,4 +753,27 @@ input[type='radio'].interInput {
   border: none;
   border-radius: 50%;
   padding: 0;
+}
+
+.defaultAcc #pnFindButton {
+  color: var(--neptuneColor);
+  background-color: white;
+  border: 1px solid var(--neptuneColor);
+  height: 100%;
+}
+.defaultAcc #pnFindButton:hover {
+  color: white;
+  background-color: var(--neptuneColor);
+}
+
+.defaultAcc #pnFind {
+  border-color: var(--neptuneColor);
+  border-right-color: transparent;
+  letter-spacing: 1px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+.defaultAcc #pnFind:focus-visible {
+  border-color: var(--neptuneColor);
+  border-right-width: 0px;
 }

@@ -26,11 +26,10 @@ const TimeWindower = ({ app, changeCount, changeBracket, stickyValue, sessionSti
 
   return(
     <nav>
-      <span>
+      <span className='liteTipW' data-tip='Filter by time span'>
         <i className='fas fa-filter fa-fw darkgrayT'></i>
         <select
           id='rangeSelect'
-          title={`Change ${Pref.phase} Filter`}
           className='overToolSort liteToolOn'
           defaultValue={stickyValue}
           onChange={(e)=>handleRange(e.target.value)}

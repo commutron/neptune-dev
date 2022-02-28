@@ -30,13 +30,12 @@ const DownstreamTools = ({
   return(
     <nav className='downstreamToolbar gridViewTools'>
       
-      <span>
+      <span className='liteTipW' data-tip='Number of Ship Days'>
         <i className='darkgrayT numFont'>{numUP > 9 ? numUP : '0'+numUP}</i>
         <i className='fas fa-calendar-day fa-fw darkgrayT'></i>
         <input
           type='range'
           id='numTick'
-          title='Change Number of Days'
           className='overToolSort liteToolOn'
           max={Pref.downDayMax.toString()}
           min='1'
@@ -54,7 +53,7 @@ const DownstreamTools = ({
       {focusByUP ?
         <FilterSelect
           unqID='fltrSALES'
-          title='Filter Sales Order'
+          title='Filter By Sales Order'
           selectList={slList}
           selectState={salesByUP}
           falsey='All Sales Orders'

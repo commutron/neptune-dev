@@ -472,12 +472,9 @@ n-sm-model .big { font-size: 1.5rem !important; }
   color: rgb(50,50,50);
 }
 
-.lightTheme .tenHeader,
-.lightTheme .frontCenterTitle,
-.lightTheme .auxRight,
-.lightTheme .proRight {
+.lightTheme .overMenuBar {
   background-color: var(--clouds);
-  color: var(--blackT); 
+  color: var(--blackT);
 }
 .lightTheme .overviewContent,
 .lightTheme .overGridFrame,

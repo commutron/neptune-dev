@@ -64,7 +64,7 @@ export const PrioritySquare = ({
   
   if(isDone) {
     const doneColor = oRapid ? 'darkOrange' : 'green';
-    const doneIcon = oRapid ? 'fas fa-bolt' : 'far fa-star';
+    const doneIcon = oRapid ? 'fa-solid fa-bolt-lightning' : 'fa-regular fa-star';
     const doneName = oRapid ? 'Extended' : 'Complete';
     return(
       <NumStat
@@ -91,7 +91,7 @@ export const PrioritySquare = ({
     
     if(pt.completed) {
       const doneColor = pt.oRapid ? 'darkOrange' : 'green';
-      const doneIcon = pt.oRapid ? 'fas fa-bolt fa-lg' : 'far fa-star fa-lg';
+      const doneIcon = pt.oRapid ? 'fa-solid fa-bolt-lightning fa-lg' : 'fa-regular fa-star fa-lg';
       const doneName = pt.oRapid ? 'Extended' : 'Complete';
       return(
         <NumStat
@@ -182,7 +182,7 @@ export const PrioritySquare = ({
     if(pt.hold) {
       return(
         <NumStat
-          num={<n-faH><i className='fas fa-pause fa-fw'></i></n-faH>}
+          num={<n-faH><i className='fa-solid fa-pause fa-fw'></i></n-faH>}
           title={Pref.isHold}
           color='holdblock'
           size='vbigger'

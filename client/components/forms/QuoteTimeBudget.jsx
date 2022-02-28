@@ -39,6 +39,7 @@ const QuoteTimeBudgetForm = ({ bID, qtB, qtbB, auth, lockOut, brancheS, selfclos
   
   const [ inputOps, inputOpsSet ] = useState([]);
   const [ breakState, breakSet ] = useState({});
+  const [ subsumState, subsumSet ] = useState(0);
   
   useEffect( ()=>{
     let ops = qtbB || [];
@@ -56,16 +57,13 @@ const QuoteTimeBudgetForm = ({ bID, qtB, qtbB, auth, lockOut, brancheS, selfclos
     
     const opsObj = opS.reduce((acc, curr, index) =>(acc[curr[0]] = curr[1], acc), {});
     breakSet(opsObj);
-    
-    // for(let op in opsObj) {
-    //   const df = qtbB.find( x => x[0] === op );
-    //   if(df) {
-    //     opsObj[op] = df[1];
-    //   }
-    // }
-    // console.log(opsObj);
-    
   }, []);
+  
+  useEffect( ()=>{
+    const objArr = Object.entries(breakState);
+    const arrTtl = objArr.reduce((x,y)=> x + y[1], 0);
+    subsumSet( arrTtl );
+  }, [breakState]);
   
   const inputHours = (val) => {
     const inHours = parseFloat(val);
@@ -120,11 +118,10 @@ const QuoteTimeBudgetForm = ({ bID, qtB, qtbB, auth, lockOut, brancheS, selfclos
   return(
     <div className='centre'>
       {auth && !lockOut ? null : <p>{aT} {lT}</p>}
-      <h4>{toCap(Pref.timeBudget, true)} Total</h4>
-      <p>Set in hours, to 2 decimal places</p>
+      <h3>{toCap(Pref.timeBudget, true)} Total</h3>
+      <p><em>Set in hours, to 2 decimal places</em></p>
       <form
         id='totalqtb'
-        className='overscroll'
         onSubmit={(e)=>setTimeInHours(e)}
       >
         <p className='inlineForm'>
@@ -148,29 +145,53 @@ const QuoteTimeBudgetForm = ({ bID, qtB, qtbB, auth, lockOut, brancheS, selfclos
           <label className='gapL min6'
           >Minutes<br /><i className='numberSet liteToolOff beside'>{totalState}</i>
           </label>
+          {/*<label className='gapL min6'
+          >Seconds<br /><i className='numberSet liteToolOff beside'>{moment.duration(totalState, 'minutes').asSeconds().toFixed(0,10)}</i>
+          </label>*/}
         </p>
         <p>
           <button
             type='submit'
             id='goQTB'
-            className='action clearBlue numberSet minIn7'
+            className='action clearBlue numberSet minIn7 vmargin'
             disabled={!auth || lockOut}
           >Update Total {toCap(Pref.timeBudget, true)}</button>
         </p>
       </form>
       
-      <h4>{toCap(Pref.timeBudget, true)} Breakdown</h4>
-      <p>Set in minutes</p>
+      <h3>{toCap(Pref.timeBudget, true)} Sub-Task Breakdown</h3>
+      <p><em>Set in minutes</em></p>
+      {subsumState > totalState ? 
+        <p className='redT bold'>Sum of sub-tasks is greater than total {Pref.timeBudget}.</p>
+        : null}
       <form
         id='brkdwnqtb'
         className='centre overscroll'
         onSubmit={(e)=>setBreakdown(e)}
       >
         <div className='rightRow doJustWeen'>
-          <label>Sub-task</label>
+          <label></label>
           <span className='middle'>
-            <label className='min6'>Hours</label>
+            {/*<label className='min6'>Hours</label>*/}
             <label className='min8'>Minutes</label>
+            <label className='min8'>Seconds</label>
+          </span>
+        </div>
+        <div className='rightRow doJustWeen vspace'>
+          <label className='bold'>Sub-Task Sum</label>
+          <span className='middle'>
+            {/*<label className='gapL min6'>
+              <i className='numberSet liteToolOff beside'
+              >{moment.duration(breakState[op[0]] || 0, 'minutes').asHours().toFixed(2,10)}</i>
+            </label>*/}
+            <label className='gapL min8'>
+              <i className={`numberSet liteToolOff beside ${subsumState > totalState ? 'redT' : ''}`}
+              >{subsumState.toFixed(1,10)}</i>
+            </label>
+            <label className='gapL min8'>
+              <i className={`numberSet liteToolOff beside ${subsumState > totalState ? 'redT' : ''}`}
+              >{moment.duration(subsumState || 0, 'minutes').asSeconds().toFixed(0,10)}</i>
+            </label>
           </span>
         </div>
         {inputOps.map( (op, index)=>(
@@ -180,32 +201,36 @@ const QuoteTimeBudgetForm = ({ bID, qtB, qtbB, auth, lockOut, brancheS, selfclos
           >
           <label>{op[0].split('|')[0]} {op[0].split('|')[1]}</label>
           <span className='middle'>
-          <label className='gapL'>
-            <i className='numberSet liteToolOff beside'
-            >{moment.duration(breakState[op[0]] || 0, 'minutes').asHours().toFixed(2,10)}</i>
-          </label>
-          <label className='gapL'>
-            <input
-                type='number'
-                id={op[0]}
-                name={op[0]}
-                className='numberSet miniIn8'
-                pattern="^\d*(\.\d{0,2})?$"
-                maxLength='8'
-                minLength='1'
-                max='100000'
-                min='0'
-                step=".1"
-                inputMode='numeric'
-                defaultValue={op[1] || null}
-                disabled={!auth || lockOut}
-                onChange={(e)=>inputMinutes(e)}
-              />
-          </label>
+            {/*<label className='gapL min6'>
+              <i className='numberSet liteToolOff beside'
+              >{moment.duration(breakState[op[0]] || 0, 'minutes').asHours().toFixed(2,10)}</i>
+            </label>*/}
+            <label className='gapL'>
+              <input
+                  type='number'
+                  id={op[0]}
+                  name={op[0]}
+                  className='numberSet miniIn8'
+                  pattern="^\d*(\.\d{0,2})?$"
+                  maxLength='8'
+                  minLength='1'
+                  max='100000'
+                  min='0'
+                  step=".1"
+                  inputMode='numeric'
+                  defaultValue={op[1] || null}
+                  disabled={!auth || lockOut}
+                  onChange={(e)=>inputMinutes(e)}
+                />
+            </label>
+            <label className='gapL min8'>
+              <i className='numberSet liteToolOff beside'
+              >{moment.duration(breakState[op[0]] || 0, 'minutes').asSeconds().toFixed(0,10)}</i>
+            </label>
           </span>
           </div>
         ))}
-        <p>
+        <p className='vmargin'>
           <button
             type='submit'
             id='goQTBB'

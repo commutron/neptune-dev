@@ -37,7 +37,7 @@ const UpstreamTools = ({
       {focusByUP ?
         <FilterSelect
           unqID='fltrSALES'
-          title='Filter Sales Order'
+          title='Filter by Sales Order'
           selectList={slList}
           selectState={salesByUP}
           falsey='All Sales Orders'

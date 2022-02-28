@@ -47,7 +47,7 @@ export const ExTaskBar = ({ subLink }) => (
       title={Pref.widget + ' ' + Pref.radio.toUpperCase() + 's'}
       subON={subLink === 'overviewradioactive'}
       goLink='/data/overview?request=radioactive'
-      icon='fas fa-radiation-alt'
+      icon='fa-solid fa-circle-radiation'
       iconAdj='down-1'
     />
     
@@ -55,7 +55,7 @@ export const ExTaskBar = ({ subLink }) => (
       title={`${Pref.rapidExd} ${Pref.xBatchs}`}
       subON={subLink === 'overviewrapidex'}
       goLink='/data/overview?request=rapidex'
-      icon='fas fa-bolt'
+      icon='fa-solid fa-bolt-lightning'
       iconAdj='down-1'
     />
     
@@ -188,7 +188,7 @@ export const OverMenuBar = ({ brancheS, branchON, changeBranch }) => (
       goLink={false}
       branchON={branchON === false}
       changeBranch={changeBranch}
-      icon='fas fa-code-branch'
+      icon='fa-solid fa-code-branch'
       size=''
     />
     

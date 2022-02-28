@@ -48,7 +48,7 @@ const OverviewTools = ({
       {focusByUP ?
         <FilterSelect
           unqID='fltrSALES'
-          title='Filter Sales Order'
+          title='Filter by Sales Order'
           selectList={slList}
           selectState={salesByUP}
           falsey='All Sales Orders'
@@ -79,9 +79,9 @@ const OverviewTools = ({
       <span>
         <button
           key='ghostToggle'
-          title="Toggle 'In Kitting'"
+          data-tip="Future / 'In Kitting'"
           onClick={()=>ghostSetUP(!ghostUP)}
-          className={!ghostUP ? 'liteToolOff' : 'liteToolOn'}
+          className={`liteTip ${!ghostUP ? 'liteToolOff' : 'liteToolOn'}`}
           style={{'cursor':'pointer'}}
         ><i className='fas fa-history fa-fw' 
             data-fa-transform="flip-h"

@@ -10,11 +10,11 @@ const TabsLite = ({ tabs, names, children })=> {
     <div>
       <div className='liteTabs flexRR'>
         {tabs.map( (entry, index)=>{
-          let clss =  show === index ? 'liteToolOn' : 'liteToolOff';
+          let clss =  show === index ? 'liteTip liteToolOn' : 'liteTip liteToolOff';
           return (
             <button
               key={index}
-              title={names ? toCap(names[index], true) : ''}
+              data-tip={names ? toCap(names[index], true) : ''}
               onClick={()=>showSet(index)}
               className={clss}
             >{entry}</button>

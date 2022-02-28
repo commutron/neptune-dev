@@ -6,7 +6,6 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.11.2",
-    "@fortawesome/react-fontawesome": "0.0.18",
     "babel-runtime": "^6.26.0",
     "bcrypt": "^3.0.8",
     "create-react-class": "^15.7.0",
@@ -25,14 +24,11 @@
     "react-contextmenu": "^2.14.0",
     "react-dom": "^16.13.1",
     "react-flatpickr": "^3.10.6",
-    "react-fontawesome": "^1.7.1",
     "react-mounter": "^1.2.0",
     "react-multi-select-component": "^2.0.14",
     "react-toastify": "^4.5.2",
     "react-transition-group": "^1.2.1",
     "victory": "^32.3.7"
   },
-  "devDependencies": {
-    "@fortawesome/fontawesome-free": "^5.14.0"
-  }
+  "devDependencies": {}
 }
