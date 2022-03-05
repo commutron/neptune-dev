@@ -266,7 +266,7 @@
 .liteTip::after, .liteTipW::before {
   background-color: rgb(0,0,0);
   color: white;
-  font-size: 0.8rem;
+  font-size: 0.7rem;
 }
 .liteTip::after {
   transform:translate(-55%,-110%);

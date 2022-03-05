@@ -47,6 +47,7 @@
 }
 
 .scanInIndicator {
+  min-height: 225px;
   margin: 30px;
   color: var(--neptuneColor);
   overflow: hidden;
