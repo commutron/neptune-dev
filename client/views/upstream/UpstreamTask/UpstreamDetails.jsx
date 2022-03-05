@@ -94,7 +94,7 @@ const UpstreamDetailChunk = ({
   const isDone = oB.completed;
   
   const highG = tBatch && focusBy ? tBatch.isWhat[0] === focusBy ? '' : 'hide' : '';
-  const highT = tagBy ? tBatch.tags.includes(tagBy) ? '' : 'hide' : '';
+  const highT = tagBy ? tBatch.tags && tBatch.tags.includes(tagBy) ? '' : 'hide' : '';
   
   const releasedToFloor = oB.releases.findIndex( x => x.type === 'floorRelease') >= 0;
   

@@ -111,7 +111,7 @@ const BatchDetailChunk = ({
   const isDone = isX ? oB.completed : oB.finishedAt !== false;
   
   const highG = tBatch && focusBy ? tBatch.isWhat[0] === focusBy ? '' : 'hide' : '';
-  const highT = tagBy ? tBatch.tags.includes(tagBy) ? '' : 'hide' : '';
+  const highT = tagBy ? tBatch.tags && tBatch.tags.includes(tagBy) ? '' : 'hide' : '';
   
   const releasedToFloor = oB.releases.findIndex( 
                             x => x.type === 'floorRelease') >= 0;

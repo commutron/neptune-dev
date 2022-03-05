@@ -40,7 +40,7 @@ const BatchHeaderChunk = ({ ck, tBatch, app, isDebug, focusBy, tagBy, stormy })=
   
   const whaT = !tBatch ? 'unavailable' : tBatch.isWhat.join(' ');
   const highG = tBatch && focusBy ? tBatch.isWhat[0] === focusBy ? '' : 'hide' : '';
-  const highT = tagBy ? tBatch.tags.includes(tagBy) ? '' : 'hide' : '';
+  const highT = tagBy ? tBatch.tags && tBatch.tags.includes(tagBy) ? '' : 'hide' : '';
   
   const releasedToFloor = ck.releases.findIndex( 
                             x => x.type === 'floorRelease') >= 0 ? 

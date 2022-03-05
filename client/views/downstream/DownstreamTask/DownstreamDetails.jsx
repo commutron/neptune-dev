@@ -60,7 +60,7 @@ const DownstreamScrollChunk = ({
             'estimated time exceeded';
   
   const highG = focusBy ? tBatch.isWhat[0] === focusBy ? '' : 'hide' : '';
-  const highT = tagBy ? tBatch.tags.includes(tagBy) ? '' : 'hide' : '';
+  const highT = tagBy ? tBatch.tags && tBatch.tags.includes(tagBy) ? '' : 'hide' : '';
 
   const releasedToFloor = tBatch.onFloor || false;
 

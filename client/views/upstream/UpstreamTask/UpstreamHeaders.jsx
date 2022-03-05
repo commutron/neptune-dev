@@ -39,7 +39,7 @@ const UpstreamHeaderChunk = ({ck, tBatch, app, isDebug, focusBy, tagBy })=> {
 
   const whaT = !tBatch ? 'unavailable' : `${tBatch.isWhat.join(' ')}`;
   const highG = tBatch && focusBy ? tBatch.isWhat[0] === focusBy ? '' : 'hide' : '';
-  const highT = tagBy ? tBatch.tags.includes(tagBy) ? '' : 'hide' : '';
+  const highT = tagBy ? tBatch.tags && tBatch.tags.includes(tagBy) ? '' : 'hide' : '';
   
   return(
     <div className={`overGridRowFixed ${highG} ${highT}`}>

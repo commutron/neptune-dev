@@ -7,7 +7,7 @@
   "dependencies": {
     "@babel/runtime": "^7.11.2",
     "babel-runtime": "^6.26.0",
-    "bcrypt": "^3.0.8",
+    "bcrypt": "^5.0.1",
     "create-react-class": "^15.7.0",
     "ee-first": "^1.1.1",
     "fixed-data-table": "^0.6.5",
@@ -20,7 +20,6 @@
     "react": "^16.13.1",
     "react-addons-pure-render-mixin": "^15.6.3",
     "react-animate-on-change": "^2.2.0",
-    "react-big-calendar": "^0.21.0",
     "react-contextmenu": "^2.14.0",
     "react-dom": "^16.13.1",
     "react-flatpickr": "^3.10.6",
