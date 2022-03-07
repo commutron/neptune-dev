@@ -50,6 +50,10 @@ const QuoteTimeBudgetForm = ({ bID, qtB, qtbB, auth, lockOut, brancheS, selfclos
             ops.push( [ br.branch+"|"+sb, 0 ] );
           }
         }
+      }else{
+        if(!ops.find( x => x[0] === br.branch+"|!X" )) {
+          ops.push( [ br.branch+"|!X", 0 ] );
+        }
       }
     }
     const opS = ops.sort( (a,b)=> a[0] > b[0] ? 1 : a[0] < b[0] ? -1 : 0);
@@ -199,7 +203,7 @@ const QuoteTimeBudgetForm = ({ bID, qtB, qtbB, auth, lockOut, brancheS, selfclos
             key={index}
             className='rightRow doJustWeen breaklines'
           >
-          <label>{op[0].split('|')[0]} {op[0].split('|')[1]}</label>
+          <label>{op[0].split('|')[0]} {op[0].split('|')[1] === '!X' ? null : op[0].split('|')[1]}</label>
           <span className='middle'>
             {/*<label className='gapL min6'>
               <i className='numberSet liteToolOff beside'

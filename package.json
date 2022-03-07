@@ -4,6 +4,9 @@
   "scripts": {
     "start": "meteor run"
   },
+  "engines": {
+    "node": "8.16.0"
+  },
   "dependencies": {
     "@babel/runtime": "^7.11.2",
     "babel-runtime": "^6.26.0",

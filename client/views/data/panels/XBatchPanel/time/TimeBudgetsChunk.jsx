@@ -78,7 +78,7 @@ const TimeBudgetsChunk = ({
   const timeAs = (dur)=> {
     return conversion === 'minutes' ? Math.round(dur) :
             conversion === 'percent' ?
-            ( percentOf(totalTideMinutes, dur) ).toFixed(2, 10) :
+            ( percentOf(totalBudgetMinutes, dur) ).toFixed(2, 10) :
             min2hr(dur);
   };
   
@@ -191,40 +191,34 @@ const TimeBudgetsChunk = ({
                   <dl className='readlines'>
                     {branchTime.map((br, ix)=>{
                       if(br.y > 0) {
-                        if(br.z && br.z.length > 0) {
-                          return( 
-                            <dl key={ix} className='nomargin breaklines'>
-                              <dt
-                                title={`${Math.round(br.y)} minutes`}
-                                className='rightRow doJustWeen'
-                              ><i className='cap'>{br.x}</i>
-                                <i className='grayT rightText medSm'
-                                > {timeAs(br.y)} {cnv}</i>
-                              </dt>
-                              {br.z.map( (zt, ixz)=>(
+                        const brt = qtbB.find( x => x[0] === br.x+'|!X' );
+                        const sbs = !brt && qtbB.filter( x => x[0].includes(br.x) );
+                        const sbt = !brt ? sbs.reduce((a,b)=> a + b[1], 0) : brt[1];
+                        return( 
+                          <dl key={ix} className='nomargin breaklines'>
+                            <dt
+                              title={`${Math.round(br.y)} minutes`}
+                              className='rightRow doJustWeen'
+                            ><i className='cap'>{br.x}</i>
+                              <span className='grayT rightText medSm'
+                              ><i className={sbt > 0 && br.y > sbt ? 'redT' : '' }> {timeAs(br.y)}</i><n-sm>{sbt > 0 && "/"+timeAs(sbt)}</n-sm> {cnv}</span>
+                            </dt>
+                            {br.z && br.z.length > 0 ? br.z.map( (zt, ixz)=> {
+                              const sbQ = qtbB.find( x => x[0] === br.x+"|"+zt.a );
+                              const mxQ = sbQ ? sbQ[1] : null;
+                              return(
                                 <dd 
                                   key={ix+'sub'+ixz}
                                   title={`${Math.round(zt.b)} minutes`}
                                   className='rightRow doJustWeen indent'
                                 ><i className='cap'>{zt.a}</i>
-                                  <i className='grayT rightText medSm'
-                                  > {timeAs(zt.b)} {cnv}</i>
+                                  <span className='rightText medSm grayT'
+                                  ><i className={mxQ && zt.b > mxQ ? 'redT' : '' }> {timeAs(zt.b)}</i><n-sm>{mxQ && "/"+timeAs(mxQ)}</n-sm> {cnv}</span>
                                 </dd>
-                              ))}
-                            </dl>
-                          );
-                        }else{
-                          return( 
-                            <dt
-                              key={ix}
-                              title={`${Math.round(br.y)} minutes`}
-                              className='rightRow doJustWeen breaklines'
-                            ><i className='cap'>{br.x}</i>
-                              <i className='grayT rightText medSm'
-                              > {timeAs(br.y)} {cnv}</i>
-                            </dt>
-                          )}
-                      }})}
+                            )}) : null}
+                          </dl>
+                        );
+                    }})}
                   </dl>
                 </div>
               }
