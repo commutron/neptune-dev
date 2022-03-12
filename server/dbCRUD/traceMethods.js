@@ -161,6 +161,9 @@ function checkNoise(bData, accessKey) {
     
     const actvLvl = Meteor.call('tideActivityLevel', bData._id, accessKey);
     const brchCnd = Meteor.call('branchCondition', bData._id, accessKey);
+    const brchPrg = Meteor.call('branchProgress', bData._id, accessKey);
+    const btchDur = Meteor.call('branchTaskTime', bData._id, accessKey);
+    const btchNCs = Meteor.call('nonconQuickStats', bData._id, accessKey);
     
     TraceDB.update({batchID: bData._id}, {
       $set : { 
@@ -170,6 +173,10 @@ function checkNoise(bData, accessKey) {
         onFloor: brchCnd.onFloor,
         stormy: brchCnd.stormy,
         branchCondition: brchCnd.branchSets,
+        totalItems: brchPrg.totalItems,
+        branchProg: brchPrg.branchProg,
+        branchTime: btchDur.branchTime,
+        btchNCs: btchNCs
     }});
     resolve(true);
   });

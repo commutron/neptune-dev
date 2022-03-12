@@ -1,21 +1,31 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useState, useEffect, useRef } from 'react';
 import Pref from '/client/global/pref.js';
 
 import NumStat from '/client/components/tinyUi/NumStat';
 
 
 const NonConCounts = ({ 
-  batchID, releasedToFloor, force,
+  batchID, tBatch, releasedToFloor, force,
   app, ncCols, updateTrigger, isDebug
 })=> {
+  
+  const mounted = useRef(true);
+  
+  useEffect(() => {
+    return () => { mounted.current = false; };
+  }, []);
   
   const [ ncData, setNC ] = useState(false);
   
   useEffect( ()=> {
-    if(!releasedToFloor && !force) { null }else{
-      Meteor.call('nonconQuickStats', batchID, 'warm', (error, reply)=>{
+    if(!releasedToFloor && !force) { 
+      null;
+    }else if(tBatch && tBatch.btchNCs) {
+      setNC( tBatch.btchNCs );
+    }else{
+      Meteor.call('nonconQuickStats', batchID, (error, reply)=>{
         error && console.log(error);
-        if( reply ) { 
+        if( reply && mounted.current ) { 
           setNC( reply );
           isDebug && console.log(ncData);
         }
@@ -23,14 +33,12 @@ const NonConCounts = ({
     }
   }, [batchID, updateTrigger]);
   
-  const dt = ncData;
-    
-  if((releasedToFloor || force) && dt && dt.batchID === batchID) {
+  if((releasedToFloor || force) && ncData && ncData.batchID === batchID) {
     return(
       <Fragment>
         <div>
           <NumStat
-            num={dt.nonConTotal}
+            num={ncData.nonConTotal}
             name='NC Total'
             title='Total Noncons'
             color='redT'
@@ -38,7 +46,7 @@ const NonConCounts = ({
         </div>
         <div>
           <NumStat
-            num={dt.nonConLeft}
+            num={ncData.nonConLeft}
             name='NC Remain'
             title='Unresolved Noncons'
             color='orangeT'
@@ -46,7 +54,7 @@ const NonConCounts = ({
         </div>
         <div>
           <NumStat
-            num={dt.nonConRate}
+            num={ncData.nonConRate}
             name='NC Rate'
             title='Rate of Noncons per Item'
             color='redT'
@@ -54,7 +62,7 @@ const NonConCounts = ({
         </div>
         <div>
           <NumStat
-            num={dt.percentOfNCitems}
+            num={ncData.percentOfNCitems}
             name='NC Items'
             title='Percent of Items with Noncons'
             color='redT'
@@ -62,7 +70,7 @@ const NonConCounts = ({
         </div>
         <div>
           <NumStat
-            num={dt.itemIsScrap}
+            num={ncData.itemIsScrap}
             name={Pref.scrapped}
             title=''
             color='redT'
@@ -70,7 +78,7 @@ const NonConCounts = ({
         </div>
         <div>
           <NumStat
-            num={dt.itemHasRMA}
+            num={ncData.itemHasRMA}
             name={Pref.rapidExd}
             title=''
             color='redT'

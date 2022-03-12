@@ -15,7 +15,7 @@ const BatchDetails = ({
   oB, traceDT,
   user, app, brancheS,
   isDebug,
-  dense, filterBy, focusBy, tagBy, stormy, branchArea, updateTrigger
+  prog, dense, filterBy, focusBy, tagBy, stormy, branchArea, updateTrigger
 })=> {
   
   useEffect(() => {
@@ -80,6 +80,7 @@ const BatchDetails = ({
               statusCols={statusCols}
               progCols={progCols}
               ncCols={ncCols}
+              prog={prog}
               dense={dense}
               filterBy={filterBy}
               focusBy={focusBy}
@@ -103,7 +104,7 @@ const BatchDetailChunk = ({
   brancheS, branchClear,
   isAuth, isRO, isDebug,
   statusCols, progCols, ncCols, 
-  dense, filterBy, focusBy, tagBy, stormy, branchArea,
+  prog, dense, filterBy, focusBy, tagBy, stormy, branchArea,
   updateTrigger
 })=> {
   
@@ -171,6 +172,8 @@ const BatchDetailChunk = ({
         batchID={oB._id}
         progCols={progCols}
         app={app}
+        tBatch={tBatch}
+        progType={prog}
         filterBy={filterBy}
         branchArea={branchArea}
         updateTrigger={updateTrigger}
@@ -180,6 +183,7 @@ const BatchDetailChunk = ({
       
       <NonConCounts
         batchID={oB._id}
+        tBatch={tBatch}
         releasedToFloor={releasedToFloor}
         app={app}
         ncCols={ncCols}

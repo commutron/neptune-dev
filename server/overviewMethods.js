@@ -140,7 +140,7 @@ function getFastPriority(bData, now, shipAim) {
 }
 
 
-function collectNonCon(privateKey, batchID, temp) {
+function collectNonCon(privateKey, batchID) {
   return new Promise(resolve => {
     let collection = false;
     const bx = XBatchDB.findOne({_id: batchID});
@@ -152,24 +152,20 @@ function collectNonCon(privateKey, batchID, temp) {
       // nonCon relevant
       const rNC = !srs ? [] : srs.nonCon.filter( n => !n.trash );
       // how many nonCons
-      const nonConTotal = temp === 'cool' ? 0 : countMulti(rNC);
+      const nonConTotal = countMulti(rNC);
       // how many are unresolved  
       const nonConLeft = countMulti( rNC.filter( x => x.inspect === false ) );
       // nc rate
       const ncRate = asRate(nonConTotal, itemQty, true);
       // how many items have nonCons
-      const hasNonCon = temp === 'cool' ? 0 :
-        [... new Set( Array.from(rNC, x => x.serial) ) ].length;
+      const hasNonCon = [... new Set( Array.from(rNC, x => x.serial) ) ].length;
       // what percent of items have nonCons
-      const percentOfNCitems = temp === 'cool' ? 0 :
-        itemQty === 0 ? 0 : hasNonCon >= itemQty ? 100 :
+      const percentOfNCitems = itemQty === 0 ? 0 : hasNonCon >= itemQty ? 100 :
         ((hasNonCon / itemQty) * 100 ).toFixed(0);
       // how many items are scrapped
-      const itemIsScrap = temp === 'cool' ? 0 :
-        items.filter( x => x.scrapped ).length;
+      const itemIsScrap = items.filter( x => x.scrapped ).length;
       // how many items with RMA
-      let itemHasRapid = temp === 'cool' ? 0 :
-        items.filter( x => x.altPath.find( y => y.rapId !== false) ).length;
+      let itemHasRapid = items.filter( x => x.altPath.find( y => y.rapId !== false) ).length;
  
       collection = {
         batch: bx.batch,
@@ -296,11 +292,12 @@ Meteor.methods({
     }
   },
   
-  nonconQuickStats(batchID, temp) {
+  nonconQuickStats(batchID, serverAccessKey) {
+    this.unblock();
     async function bundleNonCon(batchID) {
-      const accessKey = Meteor.user().orgKey;
+      const accessKey = serverAccessKey || Meteor.user().orgKey;
       try {
-        bundle = await collectNonCon(accessKey, batchID, temp);
+        bundle = await collectNonCon(accessKey, batchID);
         return bundle;
       }catch (err) {
         throw new Meteor.Error(err);

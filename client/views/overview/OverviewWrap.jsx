@@ -47,6 +47,9 @@ const OverviewWrap = ({
   const [ tagBy, tagBySet ] = useState( Session.get(sessionSticky+'tags') || false );
   
   const [ ghost, ghostSet ] = useState( defaultGhost );
+  
+  const [ prog, progSet ] = useState( false );
+  
   const [ dense, denseSet ] = useState( defaultDense );
   const [ light, themeSet ] = useState( defaultLight );
   const [ stormy, stormySet ] = useState(false);
@@ -112,19 +115,24 @@ const OverviewWrap = ({
     Session.set(sessionSticky+'tags', tag);
   }
   
-  function changeGhost(val) {
-    ghostSet( val );
-    Session.set(sessionSticky+'ghost', val);
-  }
-  
-  function changeDense(val) {
-    denseSet( val );
-    Session.set(sessionSticky+'dense', val);
-  }
-  
-  function changeTheme(val) {
-    themeSet( val );
-    Session.set(sessionSticky+'lightTheme', val);
+  function changeState(val, key) {
+    Session.set(sessionSticky+key, val);
+    switch (key) {
+      case 'ghost':
+        ghostSet( val );
+        break;
+      case 'prog':
+        progSet( val );
+        break;
+      case 'dense':
+        denseSet( val );
+        break;
+      case 'lightTheme':
+        themeSet( val );
+        break;
+      default:
+        null;
+    }
   }
   
   function sortInitial() {
@@ -227,11 +235,13 @@ const OverviewWrap = ({
         tagBy={tagBy}
         changeTagsUP={(e)=>changeTag(e)} 
         ghostUP={ghost}
-        ghostSetUP={(e)=>changeGhost(e)}
+        ghostSetUP={(e)=>changeState(e, 'ghost')}
+        progUP={prog}
+        progSetUP={(e)=>changeState(e, 'prog')}
         denseUP={dense}
-        denseSetUP={(e)=>changeDense(e)}
+        denseSetUP={(e)=>changeState(e, 'dense')}
         lightUP={light}
-        themeSetUP={(e)=>changeTheme(e)}
+        themeSetUP={(e)=>changeState(e, 'lightTheme')}
         stormy={stormy}
         stormySet={stormySet}
         doThing={()=>updateTriggerSet(!updateTrigger)}
@@ -274,6 +284,7 @@ const OverviewWrap = ({
             app={app}
             brancheS={brancheS}
             isDebug={isDebug}
+            prog={prog}
             dense={dense}
             filterBy={filterBy}
             focusBy={focusBy}

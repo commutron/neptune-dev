@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { 
   sortBranches, 
   flattenHistory,
@@ -121,18 +122,68 @@ function collectBranchCondition(privateKey, batchID) {
   });
 }
 
+const reduceTide = (tArr)=> {
+  return tArr.reduce((x,y)=> {
+    const start = moment(y.startTime);
+    const stop = !y.stopTime ? moment() : moment(y.stopTime);
+    const dur = moment.duration(stop.diff(start)).asMinutes();
+    return x + dur;
+  }, 0);
+};
 
-function collectProgress(privateKey, batchID, branchOnly) {
+function collectBranchTime(privateKey, batchID) {
   return new Promise(resolve => {
     const app = AppDB.findOne({orgKey: privateKey});
     const brancheS = sortBranches(app.branches);
-            
-    const relevantBrancheS = !branchOnly ? brancheS :
-            brancheS.filter( b => b.branch === branchOnly );
-            
+         
     const bx = XBatchDB.findOne({_id: batchID});
     
-    let branchSets = [];
+    let branchTime = [];
+    
+    if(bx) {
+      const tide = bx.tide || [];
+      
+      // const totalTime = reduceTide(tide);
+      
+      const qbr = bx.quoteTimeBreakdown;
+      const brT = qbr ? qbr.timesAsMinutes : [];
+
+      for(let branch of brancheS) {
+   
+        const brArray = tide.filter( t => t.task === branch.branch );
+        const brTime = reduceTide(brArray);
+        
+        const brBgt = brT.find( x => x[0] === branch.branch+'|!X' );
+        const sbtsk = !brBgt && brT.filter( x => x[0].includes(branch.branch) );
+        const budget = !brBgt ? sbtsk.reduce((a,b)=> a + b[1], 0) : brBgt[1];
+                
+        branchTime.push({
+          branch: branch.branch,
+          time: brTime,
+          budget: budget
+        });
+      }
+      
+      resolve({
+        batchID: bx._id,
+        // totalTime: totalTime,
+        branchTime: branchTime,
+      });
+      
+    }else{
+      resolve(false);
+    }
+  });
+}
+
+function collectProgress(privateKey, batchID) {
+  return new Promise(resolve => {
+    const app = AppDB.findOne({orgKey: privateKey});
+    const brancheS = sortBranches(app.branches);
+         
+    const bx = XBatchDB.findOne({_id: batchID});
+    
+    let branchProg = [];
     
     if(bx) {
       const totalTotal = bx.quantity;
@@ -152,7 +203,7 @@ function collectProgress(privateKey, batchID, branchOnly) {
       
       const rNC = !srs ? [] : srs.nonCon.filter( n => !n.trash && n.inspect === false );
       
-      for(let branch of relevantBrancheS) {
+      for(let branch of brancheS) {
    
         let counter = 0;
         let maxCount = 0;
@@ -192,7 +243,7 @@ function collectProgress(privateKey, batchID, branchOnly) {
                             s.inEffect !== true && s.reSolve !== true 
                           ).length > 0;
                         
-        branchSets.push({
+        branchProg.push({
           branch: branch.branch,
           steps: falls.length + firsts.length + steps.length,
           calNum: calNum,
@@ -204,7 +255,7 @@ function collectProgress(privateKey, batchID, branchOnly) {
       resolve({
         batchID: bx._id,
         totalItems: totalTotal,
-        branchSets: branchSets,
+        branchProg: branchProg,
       });
       
     }else{
@@ -216,12 +267,12 @@ function collectProgress(privateKey, batchID, branchOnly) {
 
 Meteor.methods({
 
-  branchProgress(batchID, branchOnly) {
+  branchProgress(batchID, serverAccessKey) {
     this.unblock();
     async function bundleProgress(batchID) {
-      const accessKey = Meteor.user().orgKey;
+      const accessKey = serverAccessKey || Meteor.user().orgKey;
       try {
-        bundle = await collectProgress(accessKey, batchID, branchOnly);
+        bundle = await collectProgress(accessKey, batchID);
         return bundle;
       }catch (err) {
         throw new Meteor.Error(err.message);
@@ -230,7 +281,22 @@ Meteor.methods({
     return bundleProgress(batchID);
   },
   
+  branchTaskTime(batchID, serverAccessKey) {
+    this.unblock();
+    async function bundleTaskTime(batchID) {
+      const accessKey = serverAccessKey || Meteor.user().orgKey;
+      try {
+        bundle = await collectBranchTime(accessKey, batchID);
+        return bundle;
+      }catch (err) {
+        throw new Meteor.Error(err.message);
+      }
+    }
+    return bundleTaskTime(batchID);
+  },
+  
   branchCondition(batchID, serverAccessKey) {
+    this.unblock();
     async function bundleCondition(batchID) {
       const accessKey = serverAccessKey || Meteor.user().orgKey;
       try {

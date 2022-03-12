@@ -391,28 +391,10 @@ button.stoneExtra {
   --high-color: var(--peterriver);
 }
 .iPoint {
+  background-image: url(first.svg);
   background-color: transparent;
   border-color: var(--asbestos);
-  z-index: 1;
-  font-size: 1.5rem;
   --high-color: var(--silver);
-}
-.iPoint:after {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  content: "\f08d";
-  font-family: FontAwesome;
-  font-size: 6em;
-  color: var(--asbestos);
-}
-.iPoint i {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1;
 }
 .iFinish {
   background-image: url(inspect.svg);

@@ -109,6 +109,7 @@ const DownstreamScrollChunk = ({
       
       <NonConCounts
         batchID={ck.batchID}
+        tBatch={tBatch}
         releasedToFloor={releasedToFloor}
         force={true}
         app={app}

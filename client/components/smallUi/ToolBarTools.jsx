@@ -1,25 +1,6 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
 
-
-export const BranchFilterSelect = ({ brancheS, filterState, changeFunc })=> (
-  <span className='liteTipW' data-tip={`Filter by ${Pref.branch}`}>
-    <i className='fa-solid fa-code-branch fa-fw darkgrayT'></i>
-    <select
-      id='filterSelect'
-      className='overToolSort liteToolOn'
-      defaultValue={filterState}
-      onChange={(e)=>changeFunc(e)}>
-      <option value={false}>All</option>
-      {brancheS.map( (br, ix)=> {
-        return(
-          <option key={br.brKey+ix} value={br.branch}>{br.branch}</option>
-      )})}
-    </select>
-  </span>
-);
-
-
 export const SortSelect = ({ sortState, changeFunc, extraClass })=> (
   <span className='liteTipW' data-tip='Sort list by'>
     <i className='fa-solid fa-sort-amount-down fa-fw darkgrayT'></i>
@@ -138,6 +119,27 @@ export const ThemeSwitch = ({ themeState, changeFunc })=> (
       stateVal={themeState}
       onVal={true}
       icon='fa-solid fa-sun'
+    />
+  </span>
+);
+
+export const ProgSwitch = ({ progState, changeFunc })=> (
+  <span>
+    <ToolButton
+      kID='progOn'
+      tip='Progress'
+      changeFunc={changeFunc}
+      stateVal={progState}
+      onVal={false}
+      icon='fa-solid fa-bars-progress'
+    />
+    <ToolButton
+      kID='timeOn'
+      tip='Time Budget'
+      changeFunc={changeFunc}
+      stateVal={progState}
+      onVal={true}
+      icon='fa-regular fa-hourglass'
     />
   </span>
 );

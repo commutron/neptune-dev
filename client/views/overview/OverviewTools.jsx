@@ -1,20 +1,19 @@
 import React from 'react';
 import ClockString from '/client/components/smallUi/ClockString';
 import { 
-  // BranchFilterSelect, 
   SortSelect, 
-  FocusSelect, FilterSelect,
+  FocusSelect, FilterSelect, ProgSwitch,
   LayoutSwitch, ThemeSwitch, StormySwitch
 } from '/client/components/smallUi/ToolBarTools';
 
 const OverviewTools = ({
   app, traceDT, loadTimeUP,
-  //brancheS, filterByUP, changeFilterUP,
   focusByUP, changeFocusByUP,
   salesByUP, changeSalesUP,
   sortByUP, changeSortUP,
   tagBy, changeTagsUP,
   ghostUP, ghostSetUP, 
+  progUP, progSetUP,
   denseUP, denseSetUP,
   lightUP, themeSetUP,
   stormy, stormySet,
@@ -32,13 +31,6 @@ const OverviewTools = ({
   
   return(
     <nav className='overviewToolbar gridViewTools'>
-      {/*
-      <BranchFilterSelect
-        brancheS={brancheS}
-        filterState={filterByUP}
-        changeFunc={changeFilterUP}
-      />
-      */}
       <FocusSelect
         gList={gList}
         focusState={focusByUP}
@@ -88,6 +80,11 @@ const OverviewTools = ({
           ></i>
         </button>
       </span>
+      
+      <ProgSwitch
+        progState={progUP}
+        changeFunc={progSetUP} 
+      />
       
       <StormySwitch
         stormState={stormy}

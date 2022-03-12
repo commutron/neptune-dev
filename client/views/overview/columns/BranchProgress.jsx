@@ -5,7 +5,7 @@ import NumStat from '/client/components/tinyUi/NumStat';
 
 const BranchProgress = ({ 
   batchID, showTotal,
-  progCols,
+  progCols, progType, tBatch,
   app, filterBy, branchArea,
   updateTrigger, isDebug
 })=> {
@@ -16,34 +16,45 @@ const BranchProgress = ({
     return () => { mounted.current = false; };
   }, []);
   
-  const [ dt, setProg ] = useState(false);
+  const [ dtTotl, setTotl ] = useState(false);
+  const [ dtProg, setProg ] = useState(false);
   
   useEffect( ()=> {
-    const branchOnly = branchArea ? filterBy : false;
-    Meteor.call('branchProgress', batchID, branchOnly, (error, reply)=>{
-      error && console.log(error);
-      if( reply && mounted.current ) { 
-        setProg( reply );
-        isDebug && console.log(reply);
-      }
-    });
+    if(tBatch && tBatch.branchProg && !isNaN(tBatch.totalItems) ) {
+      setProg( tBatch.branchProg );
+      setTotl( tBatch.totalItems );
+      
+      console.log(tBatch.branchTime);
+    }else{
+      Meteor.call('branchProgress', batchID, (error, reply)=>{
+        error && console.log(error);
+        if( reply && mounted.current ) { 
+          setProg( reply.branchProg );
+          setTotl( reply.totalItems );
+          isDebug && console.log(reply);
+        }
+      });
+      
+      // branchTaskTime(batchID,
+    }
   }, [batchID, branchArea, filterBy, updateTrigger]);
  
-  if(dt && dt.batchID === batchID) {
+  if(dtTotl && dtProg) {
     return(
       <Fragment>
         
         {showTotal &&
           <div>
             <NumStat
-              num={dt.totalItems}
+              num={dtTotl}
               name='Total Items'
               title=''
               color='blueT'
               size='big' />
           </div>}
       
-        {dt.branchSets.map( (branch, index)=>{
+        {(branchArea ? dtProg.filter( b => b.branch === filterBy) : dtProg)
+          .map( (branch, index)=>{
           if(branch.steps === 0) {
             return(
               <div key={batchID + branch + index + 'x'}>
@@ -52,7 +63,7 @@ const BranchProgress = ({
             );
           }else{
             const calNum = branch.calNum;
-            isDebug && console.log(`${dt.batchID} ${branch.branch} calNum: ${calNum}`);
+            isDebug && console.log(`${branch.branch} calNum: ${calNum}`);
             let fadeTick = isNaN(calNum) ? '' :
                calNum == 0 ? '0' :
                calNum < 2 ? '1' :

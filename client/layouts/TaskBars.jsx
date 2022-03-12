@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import React from 'react';
 import Pref from '/client/global/pref.js';
+import { toCap } from '/client/utility/Convert';
 
 const TaskElement = ({ title, subON, goLink, icon, iconAdj  }) => (
   <button
@@ -176,7 +177,7 @@ const FilterElement = ({ title, subTitle, goLink, branchON, changeBranch, icon, 
     className={`taskLink taskTip numFont ${branchON ? 'onTL' : ''} ${size} ${icon ? '' : 'nomarginB'}`}
     onClick={()=>changeBranch( goLink )}
   >{icon ? <i className={icon}></i> : 
-           <i className={size}>{subTitle}</i>}
+           <i className={size}>{toCap(subTitle)}</i>}
   </button>
 );
 
