@@ -229,15 +229,51 @@ Meteor.methods({
       const foot = 'A work order of this product variant has never been completed. New stencils, jigs or machine programmes may be required.';
       const link = `<a href="${wiki}">Work Instructions</a>`;
       
-      sendInternalEmail( emailpcbKit, subject, date, title, body, asid, foot, link );
+      let emails = [];
+      let ininbox = [];
+      
+      for(let eu of emailpcbKit) {
+        const user = Meteor.users.findOne({_id: eu});
+        if(user && user.emails && user.emails[0]) {
+          emails.push(user.emails[0]);
+        }else{
+          ininbox.push(eu);
+        }
+      }
+      
+      if(emails.length > 0) {
         
-      EmailDB.insert({
-        sentTime: new Date(),
-        subject: 'New PCBs Received',
-        to: emailpcbKit,
-        cc: undefined,
-        text: body
-      });
+        let addresses = Array.from(emails, e => e.address );
+        
+        sendInternalEmail( addresses, subject, date, title, body, asid, foot, link );
+        
+        EmailDB.insert({
+          sentTime: new Date(),
+          subject: 'New PCBs Received',
+          to: addresses.toString(),
+          cc: undefined,
+          text: body
+        });
+      }
+      
+      if(ininbox.length > 0) {
+        const mssgDetail = title + '. ' + body + '. ' + foot + '.';
+
+        for(let inboxID of ininbox) {
+          Meteor.users.update(inboxID, {
+            $push : { inbox : {
+              notifyKey: new Meteor.Collection.ObjectID().valueOf(),
+              keyword: 'direct',
+              type: 'direct',
+              title: subject,
+              detail: mssgDetail,
+              time: new Date(),
+              unread: true
+            }
+          }});
+        }
+      }
+      
     }
   },
   

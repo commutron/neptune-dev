@@ -709,9 +709,9 @@ Meteor.methods({
   },
   
   pcbEmailSet(address) {
-    const check = Config.regexEmail.test(address);
-    if(typeof address === 'string' && check) {
-      if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+    const isArr = Array.isArray(address);
+    if(isArr) {  
+      if(Roles.userIsInRole(Meteor.userId(), ['admin','run','sales'])) {
         AppDB.update({orgKey: Meteor.user().orgKey}, {
           $set : { 
             emailpcbKit: address
@@ -721,18 +721,22 @@ Meteor.methods({
         return false;
       }
     }else{
-      throw new Meteor.Error(403, 'Input is not an email string');
+      throw new Meteor.Error(403, 'Input is not an email array');
     }
   },
-  pcbEmailRemove() {
-    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
-      AppDB.update({orgKey: Meteor.user().orgKey}, {
-        $set : { 
-          emailpcbKit: false
-        }});
-        return true;
+  pcbEmailRemove(address) {
+    if(typeof address === 'string') {
+      if(Roles.userIsInRole(Meteor.userId(), ['admin','run','sales'])) {
+        AppDB.update({orgKey: Meteor.user().orgKey}, {
+          $pull : { 
+            emailpcbKit: address
+          }});
+          return true;
+      }else{
+        return false;
+      }
     }else{
-      return false;
+      throw new Meteor.Error(403, 'Input is not a string');
     }
   },
   

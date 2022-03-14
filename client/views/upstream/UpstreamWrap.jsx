@@ -12,7 +12,7 @@ import ReportShort from '/client/views/upstream/ReportShort';
 const UpstreamWrap = ({ 
   view, subLink,
   batchX, traceDT,
-  user, app, brancheS,
+  user, app, users, brancheS,
   isDebug
 })=> {
   
@@ -85,6 +85,7 @@ const UpstreamWrap = ({
       >
         <EmailLogSlide
           app={app}
+          users={users}
         />
       </StreamLayout>
     );

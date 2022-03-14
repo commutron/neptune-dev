@@ -12,7 +12,7 @@ import UpstreamWrap from './UpstreamWrap';
 const View = ({
   login,
   ready, readyT, view,
-  user, app, isDebug,
+  user, app, users, isDebug,
   batchX, traceDT,
 })=> {
   
@@ -21,7 +21,7 @@ const View = ({
   }, [user]);
   
     
-  if( !ready || !readyT || !app ) {
+  if( !ready || !readyT || !app || !users ) {
     return( <SpinWrap /> );
   }
   
@@ -37,6 +37,7 @@ const View = ({
         traceDT={traceDT}
         user={user}
         app={app}
+        users={users}
         brancheS={brancheS}
         isDebug={isDebug} />
     </ErrorCatch>
@@ -67,6 +68,7 @@ export default withTracker( ({ view } ) => {
       user: user,
       isDebug: isDebug,
       app: AppDB.findOne({org: org}),
+      users: Meteor.users.find( {}, { sort: { username: 1 } } ).fetch(),
       batchX: XBatchDB.find({live: true}).fetch(),
       traceDT: TraceDB.find({}).fetch(),
     };

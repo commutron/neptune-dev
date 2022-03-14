@@ -68,7 +68,7 @@ const BranchProgress = ({
         {(branchArea ? dtProg.filter( b => b.branch === filterBy) : dtProg)
           .map( (br, index)=>{
             const niceName = br.branch;
-            const bgt = !progType ? null : br.budget === null ? undefined : Math.round(br.budget); 
+            const bgt = !progType ? null : br.budget === null ? null : Math.round(br.budget); 
             const calNum = !progType ? br.calNum : (br.time / (bgt || 0)) * 100;
             
             isDebug && console.log(`${niceName} calNum: ${calNum}`);
@@ -120,7 +120,7 @@ const BranchProgress = ({
               return(
                 <div 
                   key={batchID + niceName + index + 'b'} 
-                  className={bgt >= 0 ? calNum > 100 ? 'warnRed' : 'fillUp' + fadeTick : br.time > 0 ? 'blueGlow' : ''}
+                  className={bgt !== null ? calNum > 100 ? 'warnRed' : 'fillUp' + fadeTick : br.time > 0 ? 'blueGlow' : ''}
                   title={`${Math.round(br.time)} minutes verified\n${bgt || 0} minutes budgeted\n${isFinite(calNum) && calNum >= 0 ? Math.round(calNum)+'%' : ''}`}>
                   <NumStat
                     num={isNaN(br.time) || br.time === 0 ? '' : `${Math.round(br.time)} min`}
