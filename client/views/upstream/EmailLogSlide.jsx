@@ -29,7 +29,7 @@ const EmailLogSlide = ({ app, users })=> {
       }
     });
     
-    lockSet(!Roles.userIsInRole(Meteor.userId(), 'run'));
+    lockSet(!Roles.userIsInRole(Meteor.userId(), ['admin','run','kitting']));
   }, []);
   
   function handleClear() {
@@ -130,6 +130,9 @@ const EmailsForm = ({ pcbEmails, users })=> {
                                         !Roles.userIsInRole(x._id, 'readOnly') );
     const listUsers = Array.from(liveUsers, x => { return { label: x.username, value: x._id } } );
     eListSet(listUsers);
+    
+    const emDefault = listUsers.filter( x => pcbEmails.find( y => y === x.value ));
+    emailChoiceSet(emDefault);
   }, []);
   
   

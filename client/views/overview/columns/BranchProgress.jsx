@@ -2,6 +2,7 @@ import React, { Fragment, useState, useEffect, useRef } from 'react';
 import Pref from '/client/global/pref.js';
 
 import NumStat from '/client/components/tinyUi/NumStat';
+import { min2hr, percentOf } from '/client/utility/Convert';
 
 const BranchProgress = ({ 
   batchID, showTotal,
@@ -69,7 +70,7 @@ const BranchProgress = ({
           .map( (br, index)=>{
             const niceName = br.branch;
             const bgt = !progType ? null : br.budget === null ? null : Math.round(br.budget); 
-            const calNum = !progType ? br.calNum : (br.time / (bgt || 0)) * 100;
+            const calNum = !progType ? br.calNum : percentOf((bgt || 0), br.time);
             
             isDebug && console.log(`${niceName} calNum: ${calNum}`);
             let fadeTick = isNaN(calNum) ? '' :
@@ -121,9 +122,9 @@ const BranchProgress = ({
                 <div 
                   key={batchID + niceName + index + 'b'} 
                   className={bgt !== null ? calNum > 100 ? 'warnRed' : 'fillUp' + fadeTick : br.time > 0 ? 'blueGlow' : ''}
-                  title={`${Math.round(br.time)} minutes verified\n${bgt || 0} minutes budgeted\n${isFinite(calNum) && calNum >= 0 ? Math.round(calNum)+'%' : ''}`}>
+                  title={`${Math.round(br.time)} minutes verified\n${bgt || 0} minutes budgeted\n${isFinite(calNum) && calNum >= 0 ? calNum+'%' : ''}`}>
                   <NumStat
-                    num={isNaN(br.time) || br.time === 0 ? '' : `${Math.round(br.time)} min`}
+                    num={isNaN(br.time) || br.time === 0 ? '' : `${min2hr(br.time)} hrs`}
                     name={niceName}
                     color='blackT'
                     size='big' />

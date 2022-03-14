@@ -218,7 +218,6 @@ Meteor.methods({
     const emailpcbKit = doc && doc.emailpcbKit;
     
     if(emailGlobal && emailpcbKit) {
-      // console.log(`ready to send email to: ${emailpcbKit}`);
       const subject = `New PCBs Received - ${toCap(isW, true)} - automated email from Neptune`;
       
       const date = moment().tz(Config.clientTZ).format('h:mm a, dddd, MMM Do YYYY');
@@ -278,7 +277,7 @@ Meteor.methods({
   },
   
   fetchEmailLog() {
-    if(Roles.userIsInRole(Meteor.userId(), 'run')) {
+    if(Roles.userIsInRole(Meteor.userId(), ['admin','run','kitting','sales'])) {
       const logs = EmailDB.find({}).fetch();
       
       const flat = JSON.stringify(logs);
@@ -288,7 +287,7 @@ Meteor.methods({
   },
   
   removeEmailLog() {
-    if(Roles.userIsInRole(Meteor.userId(), 'run')) {
+    if(Roles.userIsInRole(Meteor.userId(), ['admin','run','kitting'])) {
       EmailDB.remove({});
       return true;
     }

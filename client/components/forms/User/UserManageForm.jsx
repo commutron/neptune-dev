@@ -42,12 +42,14 @@ const UserManageForm = ({
     {value: 0, name: '0%' }
   ];
   const proTime = userObj.proTimeShare ? userObj.proTimeShare[0] : 1;
+  const email = userObj.emails && userObj.emails[0] ? userObj.emails[0].address : '';
   
   return(
     <div>
       
       <span className='noPrint readPs'>
         <p><b>Username:</b> {name}</p>
+        <p><b>Email:</b> {email}</p>
         <p><b>ID:</b> {id}</p>
         <p><b>{adminFlag}</b></p>
         <p><b>Organization:</b> <i className='blueT bold'>{org}</i></p>
