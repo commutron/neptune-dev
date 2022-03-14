@@ -26,7 +26,8 @@
   --nephritisfade: rgba(39, 174, 96, 0.5); /* dark green fade */
   
   --peterriver: rgb(52, 152, 219);/* light blue */
-  --peterriverfade: rgba(52, 152, 219, 0.5);
+  --peterriverfrost: rgb(52, 152, 219, 0.8);
+  --peterriverfade: rgb(52, 152, 219, 0.5);
   
   --belizeHole: rgb(41, 128, 185); /* dark blue */
   --belizeHoletrans: rgba(41, 128, 185, 0.5);

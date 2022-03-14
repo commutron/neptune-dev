@@ -1,6 +1,7 @@
 .redGlow { background-image: linear-gradient(transparent, var(--alizarintrans)); }
 .yellowGlow { background-image: linear-gradient(transparent, var(--sunflowerfade)); }
 .greenGlow { background-image: linear-gradient(transparent, var(--emeraldtrans)); }
+.blueGlow { background-image: linear-gradient(200deg, transparent 50%, var(--peterriverfade) 90%); }
 
 .countFillConcrete0 { background-image: linear-gradient(var(--asbestos), transparent 0%); }
 .countFillConcrete5 { background-image: linear-gradient(var(--asbestos), transparent 9%); }
@@ -146,3 +147,16 @@
 .fillRight90 { background-image: linear-gradient(to right, var(--emeraldfrost) 90%, transparent 100%); }
 .fillRight100 { background-color: var(--emeraldfrost); }
 
+.fillUp0 { background-color: transparent; }
+.fillUp1 { background-image: linear-gradient(0deg, var(--peterriverfrost) 1%, transparent 5%); }
+.fillUp5 { background-image: linear-gradient(0deg, var(--peterriverfrost) 5%, transparent 10%); }
+.fillUp10 { background-image: linear-gradient(0deg, var(--peterriverfrost) 10%, transparent 20%); }
+.fillUp20 { background-image: linear-gradient(0deg, var(--peterriverfrost) 20%, transparent 30%); }
+.fillUp30 { background-image: linear-gradient(0deg, var(--peterriverfrost) 30%, transparent 40%); }
+.fillUp40 { background-image: linear-gradient(0deg, var(--peterriverfrost) 40%, transparent 50%); }
+.fillUp50 { background-image: linear-gradient(0deg, var(--peterriverfrost) 50%, transparent 60%); }
+.fillUp60 { background-image: linear-gradient(0deg, var(--peterriverfrost) 60%, transparent 70%); }
+.fillUp70 { background-image: linear-gradient(0deg, var(--peterriverfrost) 70%, transparent 80%); }
+.fillUp80 { background-image: linear-gradient(0deg, var(--peterriverfrost) 80%, transparent 90%); }
+.fillUp90 { background-image: linear-gradient(0deg, var(--peterriverfrost) 90%, transparent 100%); }
+.fillUp100 { background-color: var(--peterriverfrost); }

@@ -135,7 +135,7 @@ export const ProgSwitch = ({ progState, changeFunc })=> (
     />
     <ToolButton
       kID='timeOn'
-      tip='Time Budget'
+      tip='Task Time'
       changeFunc={changeFunc}
       stateVal={progState}
       onVal={true}

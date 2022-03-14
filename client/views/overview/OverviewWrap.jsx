@@ -30,6 +30,10 @@ const OverviewWrap = ({
   
   const sessionGhost = Session.get(sessionSticky+'ghost');
   const defaultGhost = sessionGhost !== undefined ? sessionGhost : false;
+  
+  const sessionProgs = Session.get(sessionSticky+'prog');
+  const defaultProgs = sessionProgs !== undefined ? sessionProgs :
+                        user.progType || false;
                         
   const sessionDense = Session.get(sessionSticky+'dense');
   const defaultDense = sessionDense !== undefined ? sessionDense :
@@ -47,9 +51,7 @@ const OverviewWrap = ({
   const [ tagBy, tagBySet ] = useState( Session.get(sessionSticky+'tags') || false );
   
   const [ ghost, ghostSet ] = useState( defaultGhost );
-  
-  const [ prog, progSet ] = useState( false );
-  
+  const [ prog, progSet ] = useState( defaultProgs );
   const [ dense, denseSet ] = useState( defaultDense );
   const [ light, themeSet ] = useState( defaultLight );
   const [ stormy, stormySet ] = useState(false);

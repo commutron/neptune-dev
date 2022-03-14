@@ -114,6 +114,7 @@ input::-webkit-calendar-picker-indicator {
 .darkRed { background-color: var(--pomegranate); }
 .redT { color: var(--alizarin); }
 .darkRedT { color: var(--pomegranate); }
+.warnRed { background-color: var(--pomegranatefrost); }
 
 .orange { background-color: var(--carrot); }
 .orangeT { color: var(--carrot); }

@@ -49,6 +49,13 @@ const UserSettings = ({ app, user, isAdmin, brancheS })=> {
               labelText='Custom Colour Theme'
               helpText="Set a custom colour for '--neptuneColor'. Also matches outline, accents and text selction"
             />
+            
+            <UserToggleSetting
+              userSetting={Meteor.user().progType}
+              labelText='Prefer Progress By Time'
+              yesText='Overview and Streams default to the task time view.'
+              noText='Overview and Streams default to the progress view.'
+              callMethod='setUserProgPrefer' />
               
             <UserToggleSetting
               userSetting={Meteor.user().miniAction}

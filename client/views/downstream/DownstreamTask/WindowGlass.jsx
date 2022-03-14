@@ -5,7 +5,7 @@ import DownstreamDetails from './DownstreamDetails';
 const WindowGlass = ({ 
   mixedOrders, indexKey, traceDT,
   brancheS, app, user, isDebug, canDo, 
-  focusBy, tagBy, dense, stormy,
+  focusBy, tagBy, prog, dense, stormy,
   updateTrigger
 })=> {
   
@@ -43,6 +43,7 @@ const WindowGlass = ({
           isDebug={isDebug}
           canDo={canDo}
           isNightly={false}
+          prog={prog}
           dense={dense}
           focusBy={focusBy}
           tagBy={tagBy}

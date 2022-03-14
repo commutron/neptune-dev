@@ -143,8 +143,6 @@ function collectBranchTime(privateKey, batchID) {
     if(bx) {
       const tide = bx.tide || [];
       
-      // const totalTime = reduceTide(tide);
-      
       const qbr = bx.quoteTimeBreakdown;
       const brT = qbr ? qbr.timesAsMinutes : [];
 
@@ -155,21 +153,20 @@ function collectBranchTime(privateKey, batchID) {
         
         const brBgt = brT.find( x => x[0] === branch.branch+'|!X' );
         const sbtsk = !brBgt && brT.filter( x => x[0].includes(branch.branch) );
-        const budget = !brBgt ? sbtsk.reduce((a,b)=> a + b[1], 0) : brBgt[1];
-                
+        const budgt = !brBgt ? sbtsk.reduce((a,b)=> a + b[1], 0) : brBgt[1];
+        
+        const compr = !qbr ? null : budgt;
+        
         branchTime.push({
           branch: branch.branch,
           time: brTime,
-          budget: budget
+          budget: compr
         });
       }
-      
       resolve({
         batchID: bx._id,
-        // totalTime: totalTime,
         branchTime: branchTime,
       });
-      
     }else{
       resolve(false);
     }

@@ -20,24 +20,36 @@ const BranchProgress = ({
   const [ dtProg, setProg ] = useState(false);
   
   useEffect( ()=> {
-    if(tBatch && tBatch.branchProg && !isNaN(tBatch.totalItems) ) {
-      setProg( tBatch.branchProg );
-      setTotl( tBatch.totalItems );
-      
-      console.log(tBatch.branchTime);
+    if(!progType) {
+      if(tBatch && tBatch.branchProg && !isNaN(tBatch.totalItems) ) {
+        setProg( tBatch.branchProg );
+        setTotl( tBatch.totalItems );
+      }else{
+        Meteor.call('branchProgress', batchID, (error, reply)=>{
+          error && console.log(error);
+          if( reply && mounted.current ) { 
+            setProg( reply.branchProg );
+            setTotl( reply.totalItems );
+            isDebug && console.log(reply);
+          }
+        });
+      }
     }else{
-      Meteor.call('branchProgress', batchID, (error, reply)=>{
-        error && console.log(error);
-        if( reply && mounted.current ) { 
-          setProg( reply.branchProg );
-          setTotl( reply.totalItems );
-          isDebug && console.log(reply);
-        }
-      });
-      
-      // branchTaskTime(batchID,
+      if(tBatch && tBatch.branchTime && !isNaN(tBatch.totalItems) ) {
+        setProg( tBatch.branchTime );
+        setTotl( tBatch.totalItems );
+      }else{
+        Meteor.call('branchTaskTime', batchID, (error, reply)=>{
+          error && console.log(error);
+          if( reply && mounted.current ) { 
+            setProg( reply.branchTime );
+            setTotl( reply.totalItems );
+            isDebug && console.log(reply);
+          }
+        });
+      }
     }
-  }, [batchID, branchArea, filterBy, updateTrigger]);
+  }, [progType, batchID, branchArea, filterBy, updateTrigger]);
  
   if(dtTotl && dtProg) {
     return(
@@ -54,16 +66,12 @@ const BranchProgress = ({
           </div>}
       
         {(branchArea ? dtProg.filter( b => b.branch === filterBy) : dtProg)
-          .map( (branch, index)=>{
-          if(branch.steps === 0) {
-            return(
-              <div key={batchID + branch + index + 'x'}>
-               <i className='fade small label'>{branch.branch}</i>
-              </div>
-            );
-          }else{
-            const calNum = branch.calNum;
-            isDebug && console.log(`${branch.branch} calNum: ${calNum}`);
+          .map( (br, index)=>{
+            const niceName = br.branch;
+            const bgt = !progType ? null : br.budget === null ? undefined : Math.round(br.budget); 
+            const calNum = !progType ? br.calNum : (br.time / (bgt || 0)) * 100;
+            
+            isDebug && console.log(`${niceName} calNum: ${calNum}`);
             let fadeTick = isNaN(calNum) ? '' :
                calNum == 0 ? '0' :
                calNum < 2 ? '1' :
@@ -78,29 +86,51 @@ const BranchProgress = ({
                calNum < 90 ? '80' :
                calNum < 100 ? '90' :
                '100';
-            let isRed = /* calNum >= 100 && */ branch.ncLeft;
-            let redLne = isRed ? ' redRight' : '';
-            let redtxt = isRed ? `\nUnresolved ${Pref.nonCons}` : '';
             
-            let isYllw = calNum < 100 && branch.shLeft;
-            let ylwLne = isYllw ? ' yellowLeft' : '';
-            let ylwTxt = isYllw ? `\nBlocked by ${Pref.shortfalls}` : '';
-            
-            const ttlText = `Steps: ${branch.steps}${ylwTxt}${redtxt}`;
-
-            let niceName = branch.branch;
-            return(
-              <div 
-                key={batchID + branch + index + 'g'} 
-                className={'fillRight' + fadeTick + redLne + ylwLne}
-                title={ttlText}>
-                <NumStat
-                  num={isNaN(calNum) ? '' : `${calNum}%`}
-                  name={niceName}
-                  color='blackT'
-                  size='big' />
-            </div>
-        )}})}
+            if(!progType) {
+              if(br.steps === 0) {
+                return(
+                  <div key={batchID + br.branch + index + 'x'}>
+                   <i className='fade small label'>{br.branch}</i>
+                  </div>
+                );
+              }else{
+                let isRed = /* calNum >= 100 && */ br.ncLeft;
+                let redLne = isRed ? ' redRight' : '';
+                let redtxt = isRed ? `\nUnresolved ${Pref.nonCons}` : '';
+                
+                let isYllw = calNum < 100 && br.shLeft;
+                let ylwLne = isYllw ? ' yellowLeft' : '';
+                let ylwTxt = isYllw ? `\nBlocked by ${Pref.shortfalls}` : '';
+              
+                return(
+                  <div 
+                    key={batchID + niceName + index + 'g'} 
+                    className={'fillRight' + fadeTick + redLne + ylwLne}
+                    title={`Steps: ${br.steps}${ylwTxt}${redtxt}`}>
+                    <NumStat
+                      num={isNaN(calNum) ? '' : `${calNum}%`}
+                      name={niceName}
+                      color='blackT'
+                      size='big' />
+                  </div>
+                );
+              }
+            }else{
+              return(
+                <div 
+                  key={batchID + niceName + index + 'b'} 
+                  className={bgt >= 0 ? calNum > 100 ? 'warnRed' : 'fillUp' + fadeTick : br.time > 0 ? 'blueGlow' : ''}
+                  title={`${Math.round(br.time)} minutes verified\n${bgt || 0} minutes budgeted\n${isFinite(calNum) && calNum >= 0 ? Math.round(calNum)+'%' : ''}`}>
+                  <NumStat
+                    num={isNaN(br.time) || br.time === 0 ? '' : `${Math.round(br.time)} min`}
+                    name={niceName}
+                    color='blackT'
+                    size='big' />
+                </div>
+              );
+            }
+        })}
       </Fragment>
     );
   }

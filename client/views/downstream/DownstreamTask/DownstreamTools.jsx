@@ -2,7 +2,7 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import ClockString from '/client/components/smallUi/ClockString';
 import { 
-  FocusSelect, FilterSelect,
+  FocusSelect, FilterSelect, ProgSwitch,
   LayoutSwitch, ThemeSwitch, StormySwitch
 } from '/client/components/smallUi/ToolBarTools';
 
@@ -14,6 +14,7 @@ const DownstreamTools = ({
   salesByUP, changeSalesUP,
   tagBy, changeTagsUP,
   stormy, stormySet, 
+  progUP, progSetUP,
   denseUP, denseSetUP, lightUP, themeSetUP,
   doThing
 })=> {
@@ -74,7 +75,12 @@ const DownstreamTools = ({
           extraClass='miniIn12'
         />
       }
-        
+      
+      <ProgSwitch
+        progState={progUP}
+        changeFunc={progSetUP} 
+      />
+      
       <StormySwitch
         stormState={stormy}
         changeFunc={stormySet} 

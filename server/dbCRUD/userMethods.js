@@ -355,6 +355,16 @@ Meteor.methods({
     });
   },
   
+  setUserProgPrefer() {
+    const curr = Meteor.user().progType;
+    const change = !curr ? true : false;
+    Meteor.users.update(Meteor.userId(), {
+      $set: {
+        progType: change,
+      }
+    });
+  },
+  
   setUserMiniPrefer() {
     const curr = Meteor.user().miniAction;
     const change = !curr ? true : false;

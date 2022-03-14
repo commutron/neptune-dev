@@ -11,7 +11,7 @@ import Grabber from '/client/utility/Grabber.js';
 
 const ShipWindows = ({ 
   calcFor, traceDT, dayTime,
-  brancheS, app, user, isDebug, focusBy, salesBy, tagBy, dense, stormy,
+  brancheS, app, user, isDebug, focusBy, salesBy, tagBy, prog, dense, stormy,
   updateTrigger
 })=> {
   
@@ -166,6 +166,7 @@ const ShipWindows = ({
             canDo={canDo}
             focusBy={focusBy}
             tagBy={tagBy}
+            prog={prog}
             dense={dense}
             stormy={stormy}
             updateTrigger={updateTrigger}
@@ -184,6 +185,7 @@ const ShipWindows = ({
             canDo={canDo}
             focusBy={focusBy}
             tagBy={tagBy}
+            prog={prog}
             dense={dense}
             stormy={stormy}
             updateTrigger={updateTrigger}

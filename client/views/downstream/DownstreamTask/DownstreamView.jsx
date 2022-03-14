@@ -12,6 +12,10 @@ const DownstreamView = ({ traceDT, dayTime, user, app, isDebug })=> {
   const sessionSticky = 'overviewDownstream';
   
   const [ loadTime, loadTimeSet ] = useState( moment() );
+  
+  const sessionProgs = Session.get(sessionSticky+'prog');
+  const defaultProgs = sessionProgs !== undefined ? sessionProgs :
+                        user.progType || false;
                         
   const sessionDense = Session.get(sessionSticky+'dense');
   const defaultDense = sessionDense !== undefined ? sessionDense :
@@ -27,6 +31,7 @@ const DownstreamView = ({ traceDT, dayTime, user, app, isDebug })=> {
   const [ salesBy, salesBySet ] = useState( Session.get(sessionSticky+'sales') || false );
   const [ tagBy, tagBySet ] = useState( Session.get(sessionSticky+'tags') || false );
   const [ stormy, stormySet ] = useState(false);
+  const [ prog, progSet ] = useState( defaultProgs );
   const [ dense, denseSet ] = useState( defaultDense );
   const [ light, themeSet ] = useState( defaultLight );
   
@@ -71,14 +76,21 @@ const DownstreamView = ({ traceDT, dayTime, user, app, isDebug })=> {
     Session.set(sessionSticky+'tags', tag);
   }
   
-  function changeDense(val) {
-    denseSet( val );
-    Session.set(sessionSticky+'dense', val);
-  }
-  
-  function changeTheme(val) {
-    themeSet( val );
-    Session.set(sessionSticky+'lightTheme', val);
+  function changeState(val, key) {
+    Session.set(sessionSticky+key, val);
+    switch (key) {
+      case 'prog':
+        progSet( val );
+        break;
+      case 'dense':
+        denseSet( val );
+        break;
+      case 'lightTheme':
+        themeSet( val );
+        break;
+      default:
+        null;
+    }
   }
   
   const density = !dense ? '' : 'minifyed';
@@ -107,10 +119,12 @@ const DownstreamView = ({ traceDT, dayTime, user, app, isDebug })=> {
         changeTagsUP={(e)=>changeTag(e)} 
         stormy={stormy}
         stormySet={stormySet}
+        progUP={prog}
+        progSetUP={(e)=>changeState(e, 'prog')}
         denseUP={dense}
-        denseSetUP={(e)=>changeDense(e)}
+        denseSetUP={(e)=>changeState(e, 'dense')}
         lightUP={light}
-        themeSetUP={(e)=>changeTheme(e)}
+        themeSetUP={(e)=>changeState(e, 'lightTheme')}
         doThing={()=>updateTriggerSet(!updateTrigger)}
       />
               
@@ -125,6 +139,7 @@ const DownstreamView = ({ traceDT, dayTime, user, app, isDebug })=> {
         focusBy={focusBy}
         salesBy={salesBy}
         tagBy={tagBy}
+        prog={prog}
         dense={density}
         stormy={stormy}
         updateTrigger={updateTrigger}

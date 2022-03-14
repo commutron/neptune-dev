@@ -13,7 +13,7 @@ const DownstreamDetails = ({
   indexKey, oB, traceDT,
   user, app,
   isDebug, isNightly, canDo,
-  focusBy, tagBy, dense, stormy, progCols, ncCols, updateTrigger
+  focusBy, tagBy, prog, dense, stormy, progCols, ncCols, updateTrigger
 })=> (
   <Fragment>
     {!oB ? null :
@@ -31,6 +31,7 @@ const DownstreamDetails = ({
               canDo={canDo}
               focusBy={focusBy}
               tagBy={tagBy}
+              prog={prog}
               dense={dense}
               stormy={stormy}
               progCols={progCols}
@@ -46,7 +47,7 @@ export default DownstreamDetails;
 
 const DownstreamScrollChunk = ({
   ck, tBatch,
-  app, user, isDebug, focusBy, tagBy, canDo, dense, stormy,
+  app, user, isDebug, focusBy, tagBy, canDo, prog, dense, stormy,
   progCols, ncCols,
   updateTrigger
 })=> {
@@ -100,6 +101,8 @@ const DownstreamScrollChunk = ({
         showTotal={true}
         progCols={progCols}
         app={app}
+        tBatch={tBatch}
+        progType={prog}
         filterBy={false}
         branchArea={false}
         updateTrigger={updateTrigger}
