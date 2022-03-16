@@ -122,7 +122,7 @@ const TideControl = ({
         title={`START ${Pref.batch}`}
         className={`tideIn ${working ? 'startWork' : ''}`}
         onClick={()=>handleStart()}
-        disabled={lock || tideLockOut}
+        disabled={lock || tideLockOut || !taskState}
       >
       <b>
         <span className='fa-stack tideIcon'>
@@ -139,7 +139,7 @@ const TideControl = ({
         title={`Switch to ${Pref.batch}`}
         className={`tideFlip ${working ? 'flipWork' : ''}`}
         onClick={()=>handleSwitch()}
-        disabled={lock || tideLockOut}
+        disabled={lock || tideLockOut || !taskState}
       >
       <i>
         <span className='fa-stack tideIcon'>

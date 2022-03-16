@@ -143,7 +143,7 @@ n-tide-task label {
   animation-name: hvr-buzz-out;
   animation-duration: 2s;
   animation-timing-function: ease-out;
-  animation-iteration-count: infinite;
+  animation-iteration-count: 1;
 }
 
 @media screen and (prefers-reduced-motion: reduce) { 

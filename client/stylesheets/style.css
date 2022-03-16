@@ -266,6 +266,8 @@ input::-webkit-calendar-picker-indicator {
 .low { text-transform: lowercase; }
 
 .bold { font-weight: 600; }
+.em { font-style: italic; }
+.nsty { font-style: normal; }
 
 .letterSpaced { letter-spacing: 2px; }
 

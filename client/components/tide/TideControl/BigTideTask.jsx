@@ -23,20 +23,22 @@ const BigTideTask = ({
     <n-tide-task>
       <select
         id='tskSlct'
-        className='cap'
+        className={`cap ${!taskState ? 'darkgrayT em' : ''}`}
         onChange={(e)=>handleTask(e.target.value)}
         defaultValue={taskState}
         disabled={lockTaskState}
         required>
-        <option value={false}></option>
-        <optgroup label='Ancillary'>
+        <option value={false} className='darkgrayT em'>Task Required</option>
+        <optgroup label='Ancillary' className='blackblackT nsty'>
           {ancOptionS.map( (v, ix)=>(
-            <option key={ix+'o1'} value={v}>{v}</option>
+            <option key={ix+'o1'} className='blackblackT nsty' value={v}
+            >{v}</option>
           ))}
         </optgroup>
-        <optgroup label={Pref.branches}>
+        <optgroup label={Pref.branches} className='blackblackT nsty'>
           {brancheS.map( (v, ix)=>(
-            <option key={ix+'o2'} value={v.branch}>{v.branch}</option>
+            <option key={ix+'o2'} className='blackblackT nsty' value={v.branch}
+            >{v.branch}</option>
           ))}
         </optgroup>
       </select>
