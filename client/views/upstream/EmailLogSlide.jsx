@@ -47,8 +47,8 @@ const EmailLogSlide = ({ app, users })=> {
   return(
     <div className='space'>
       <EmailsForm 
-        pcbEmails={app.emailpcbKit}
-        users={users}
+        pcbEmails={app.emailpcbKit || []}
+        users={users || []}
       />
       
       <div className='noPrint rowWrap'>
