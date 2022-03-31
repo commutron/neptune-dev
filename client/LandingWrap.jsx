@@ -11,9 +11,7 @@ import TideFollow from '/client/components/tide/TideFollow';
 import { ToastContainer } from 'react-toastify';
 
 import HomeLogout from '/client/components/tinyUi/HomeLogout';
-import NavButton from '/client/layouts/NavButton/NavButton';
-import { NavButtonShell } from '/client/layouts/NavButton/NavButton';
-import { NavPlaceholder } from '/client/layouts/NavButton/NavButton';
+import NavButton, { NavButtonShell, NavBar, NavPlaceholder } from '/client/layouts/NavButton/NavButton';
 
 const StartView = ({user, app}) =>	{
   
@@ -60,7 +58,7 @@ const StartView = ({user, app}) =>	{
         <TideFollow />
       </div>
 
-      <div className='homeNavi'>
+      <div className={isAdmin ? 'homeNaviA' : 'homeNavi'}>
         {isReadOnly ?
           <NavPlaceholder 
             title='Production'
@@ -70,7 +68,9 @@ const StartView = ({user, app}) =>	{
             icon='fa-regular fa-paper-plane'
             link='/production' /> }
         
-        <NavButton title='Overview' icon='fa-solid fa-globe' link='/overview' />
+        {isAdmin ? 
+          <NavButton title='Terminal' icon='fa-solid fa-location-arrow' link='/process' />
+        : <NavPlaceholder title='Terminal' icon='fa-solid fa-location-arrow' /> }
         
         <NavButtonShell title='People' link='/people'
           icon={
@@ -85,13 +85,11 @@ const StartView = ({user, app}) =>	{
         
         <NavButton title={Pref.upstream} icon='fa-solid fa-satellite-dish' link='/upstream' />
         
+        <NavButton title='Overview' icon='fa-solid fa-globe' link='/overview' />
+        
         <NavButton title={Pref.downstream} icon='fa-solid fa-satellite' link='/downstream' />
         
         <NavButton title={usernice} icon='fa-solid fa-user-astronaut fa-flip-horizontal' link='/user' />
-        
-        {isAdmin ?
-          <NavButton title='Settings' icon='fa-solid fa-sliders-h' link='/app' />
-        : <NavPlaceholder title='Settings' icon='fa-solid fa-sliders-h'/>}
         
         <NavButton title={Pref.docs} icon='fa-solid fa-file-invoice' link={app.instruct || ''} blank={true} />
         
@@ -108,6 +106,10 @@ const StartView = ({user, app}) =>	{
             blank={true} /> }
         
         <HomeLogout currentUser={user} />
+        
+        {isAdmin ?
+          <NavBar title='Settings' icon='fa-solid fa-sliders-h' link='/app' />
+        : null}
       </div>
     </div>
   );

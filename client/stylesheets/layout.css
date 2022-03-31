@@ -232,19 +232,28 @@ main {
   justify-content: center;
 }
 
-.homeNavi, .homeNaviMini {
+.homeNavi, .homeNaviA, .homeNaviMini {
   display: grid;
   grid-gap: var(--vh) 1vw;
   place-self: center center;
   place-items: stretch stretch;
 }
-.homeNavi {
+.homeNavi, .homeNaviA {
   grid-area: splashContent;
+  grid-template-columns: repeat(4, 20vw);
+}
+.homeNavi {
   grid-template-rows: 
     calc(20 * var(--vh))
     calc(20 * var(--vh))
     calc(20 * var(--vh));
-  grid-template-columns: repeat(4, 20vw);
+}
+.homeNaviA {
+  grid-template-rows: 
+    calc(20 * var(--vh))
+    calc(20 * var(--vh))
+    calc(20 * var(--vh))
+    calc(5 * var(--vh));
 }
 .homeNaviMini {
   grid-template-rows: calc(20 * var(--vh));

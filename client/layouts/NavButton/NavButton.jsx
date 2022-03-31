@@ -23,6 +23,15 @@ export const NavButtonShell = ({ title, icon, link, blank }) => (
   </span>
 );
 
+export const NavBar = ({ title, icon, link }) => (
+  <span className='navBarWrap'>
+    <a href={link || ''}>
+      <i className={(icon || 'fas fa-unlink') + ' fa-fw navBarIcon'}></i>
+      <i className='navBarText'>{title || ''}</i>
+    </a>
+  </span>
+);
+
 export const NavPlaceholder = ({ title, icon, tag }) => (
   <span>
     <div className='navButtonPlaceHolder'>

@@ -8,8 +8,11 @@ const AppSetSimple = ({title, action, rndmKey})=> {
     const act = action;
     const newSet = this[rndmKey + 'input'].value.trim();
     
+    const newVal = newSet.slice(0,4) === 'http' && newSet.slice(-1) === '/' ?
+                   newSet.slice(0,-1) : newSet;
+
     if(act) {
-      Meteor.call(act, newSet, (error, reply)=>{
+      Meteor.call(act, newVal, (error, reply)=>{
         error && console.log(error);
         if(reply) {
           this[rndmKey + 'input'].value = '';

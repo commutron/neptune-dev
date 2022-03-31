@@ -54,7 +54,13 @@ const VariantForm = ({ widgetData, users, app, rootWI, selfclose })=> {
     const gId = widgetData.groupId;
     
     const variant = this.rev.value.trim();
-    const wiki = this.wikdress.value.trim();
+    
+    const url = this.wikdress.value.trim();
+    const http = url.slice(0,4) === 'http' ? url : 
+                 url.slice(0,1) === '/' ? url :
+                 '/' + url;
+    const wiki = http.slice(-1) === '/' ? http.slice(0,-1) : http;
+    
     const unit = this.unit.value.trim();
     
     const emailUsers = app.emailGlobal ? Array.from(emailState, u => u.value) : [];
@@ -72,6 +78,7 @@ const VariantForm = ({ widgetData, users, app, rootWI, selfclose })=> {
     });
   }
   
+  const urlWI = !rootWI ? false : rootWI.slice(0,4) === 'http' ? rootWI : app.instruct + rootWI;
 
   return(
     <div className='split overscroll'>
@@ -112,7 +119,7 @@ const VariantForm = ({ widgetData, users, app, rootWI, selfclose })=> {
           
           <p>
             <input
-              type='url'
+              type='text'
               id='wikdress'
               placeholder='Full Address'
               className='wide' />
@@ -155,7 +162,7 @@ const VariantForm = ({ widgetData, users, app, rootWI, selfclose })=> {
       <div className='half'>
         <iframe
           id='instructMini'
-          src={rootWI || app.instruct}
+          src={urlWI || app.instruct}
           height='600'
           width='100%' />
       </div>

@@ -16,6 +16,7 @@ const WikiFrame = ({ go, full, anchor })=> {
       id='instruct'
       style={sty}
       src={go}
+      referrerPolicy='unsafe-url'
       //height={( (document.body.scrollHeight - document.body.scrollTop) - correct ) +'px'}
       allowFullScreen
     />

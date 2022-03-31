@@ -69,7 +69,7 @@ export const TraverseWrap = ({
               aria-label='Production'
               className='taskLink auxTipScale'
               onClick={goFunc}>
-              <i className='far fa-paper-plane' data-fa-transform='left-1'></i>
+              <i className='fa-regular fa-paper-plane' data-fa-transform='left-1'></i>
             </button>
           }
         </div>

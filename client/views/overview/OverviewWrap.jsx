@@ -23,8 +23,7 @@ const OverviewWrap = ({
   
   const [ loadTime, loadTimeSet ] = useState( moment() );
   
-  const sessionFilter = Session.get(sessionSticky+'filter');
-  
+  const sessionFilter = Session.get(sessionSticky+'filter') || false;
   const defaultFilter = sessionFilter !== undefined ? sessionFilter :
                         user.defaultOverview || false;
   
@@ -74,19 +73,12 @@ const OverviewWrap = ({
     loadTimeSet( moment() );
   }, [traceDT]);
   
-  function changeFilter(e) {
-    const value = e.target.value;
-    const filter = value === 'false' ? false : value;
-    filterBySet( filter );
-    Session.set(sessionSticky+'filter', filter);
-  }
-  
   function changeBranch(val) {
     const brnch = !val || val === 'false' ? false : val;
     filterBySet( brnch );
-    Session.set(sessionSticky+'focus', brnch);
-    salesBySet( false );
-    Session.set(sessionSticky+'sales', false);
+    Session.set(sessionSticky+'filter', brnch);
+    // salesBySet( false );
+    // Session.set(sessionSticky+'sales', false);
   }
   
   function changeFocus(e) {
@@ -228,8 +220,6 @@ const OverviewWrap = ({
         loadTimeUP={loadTime}
         focusByUP={focusBy}
         changeFocusByUP={(e)=>changeFocus(e)}
-        filterByUP={filterBy}
-        changeFilterUP={(e)=>changeFilter(e)}
         sortByUP={sortBy}
         changeSortUP={(e)=>changeSort(e)}
         salesByUP={salesBy}

@@ -121,7 +121,13 @@ const InlineForm = ({ widgetData, variantData })=> {
     const vId = variantData._id;
     
     const variant = this.rev.value.trim();
-    const wiki = this.wikdress.value.trim();
+    
+    const url = this.wikdress.value.trim();
+    const http = url.slice(0,4) === 'http' ? url : 
+                 url.slice(0,1) === '/' ? url :
+                 '/' + url;
+    const wiki = http.slice(-1) === '/' ? http.slice(0,-1) : http;
+    
     const unit = this.unit.value.trim();
     
     Meteor.call('editVariant', wId, vId, variant, wiki, unit, (error, reply)=>{
@@ -198,7 +204,7 @@ const InlineForm = ({ widgetData, variantData })=> {
   
       <p>Work Instructions
         <input
-          type='url'
+          type='text'
           id='wikdress'
           className='interInput'
           defaultValue={variantData.instruct}

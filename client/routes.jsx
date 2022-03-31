@@ -15,6 +15,7 @@ import MetaSlide from './views/app/appSlides/MetaSlide';
 // import InitialSetup from './views/InitialSetup.jsx';
 
 import ProdData from './views/production/ProdData';
+import TerminalData from './views/proterminal/TerminalData';
 
 import UpstreamData from './views/upstream/UpstreamData';
 import OverviewData from './views/overview/OverviewData';
@@ -146,6 +147,15 @@ privlegedRoutes.route('/production', {
   action() {
     mount(CleanLayout, {
       content: (<ProdData />)
+    });
+  }
+});
+
+privlegedRoutes.route('/process', {
+  name: 'terminal',
+  action() {
+    mount(CleanLayout, {
+      content: (<TerminalData />)
     });
   }
 });
