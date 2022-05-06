@@ -1,6 +1,8 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
 
+import './cookie';
+
 const CookieBar = ({ 
   groupData, 
   widgetData, variantData,
@@ -22,7 +24,7 @@ const CookieBar = ({
         
     {widgetData && 
       <button 
-        className='cookieCrumb up numFont' 
+        className='cookieCrumb up numFont'
         title={`${Pref.widget}: ${widgetData.widget}${variantData && ' v.'+variantData.variant}`}
         onClick={()=>FlowRouter.go('/data/widget?request=' + widgetData.widget)}>
         <span className='crumb'></span> {widgetData.widget.length < 16 ? 

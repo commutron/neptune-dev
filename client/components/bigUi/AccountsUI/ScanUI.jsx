@@ -4,7 +4,7 @@ import { SigninListenerUtility, SigninListenerOff } from '/client/utility/Signin
 
 import './style.css';
 
-const ScanUI = ({ sty })=> {
+const ScanUI = ({ mxW })=> {
 	
 	const [ loginState, loginSet ] = useState( false );
   
@@ -24,7 +24,7 @@ const ScanUI = ({ sty })=> {
         ></i>
       </span>
 		}
-		  <p style={sty} className='centreText'>{Session.get('signinError')}</p>
+		  <p style={mxW} className='centreText'>{Session.get('signinError')}</p>
     </div>
 	);
 };

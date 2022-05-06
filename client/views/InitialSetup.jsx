@@ -24,7 +24,7 @@ const InitialSetup = ({ ready, option })=> {
     let options = {
       username: "administrator", 
       password: "riversserenity",
-      org: "crew"
+      org: "crew" // pttrn='[A-Za-z0-9\._-]*'
     };
   	Accounts.createUser(options, (error)=>{
   		if(error) {

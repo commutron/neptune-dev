@@ -7,7 +7,7 @@ import PasswordChange from './PasswordChange';
 
 import { AdminDown } from './AdminForm.jsx';
 
-import IdCardCard from '/client/views/user/IdCardCard';
+import IdCardCard from './IdCardCard/IdCardCard';
 
 const UserSettings = ({ app, user, isAdmin, brancheS })=> {
   

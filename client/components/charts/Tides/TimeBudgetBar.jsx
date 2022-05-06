@@ -1,5 +1,4 @@
 import React from "react";
-// import ReactDOM from 'react-dom';
 import { VictoryBar, VictoryStack } from 'victory';
 
 const TimeBudgetBar = ({ title, a, b, c, thin })=> {

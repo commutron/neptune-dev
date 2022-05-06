@@ -91,18 +91,6 @@
 .overToolSort:optional {
   border-style: solid;
 }
-
-.overMenuBar {
-  grid-area: overTaskArea;
-  height: 100%;
-  background-color: rgb(25,25,25);
-  display: flex;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  align-items: center;
-  padding-top: var(--vh);
-  overflow: hidden;
-}
   
 .overviewContent,
 .downstreamContent {
@@ -472,10 +460,6 @@ n-sm-model .big { font-size: 1.5rem !important; }
   color: rgb(50,50,50);
 }
 
-.lightTheme .overMenuBar {
-  background-color: var(--clouds);
-  color: var(--blackT);
-}
 .lightTheme .overviewContent,
 .lightTheme .overGridFrame,
 .lightTheme .downstreamContent { 

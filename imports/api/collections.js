@@ -63,3 +63,9 @@ TraceDB.deny({
   update: () => { return true; },
   remove: () => { return true; },
 });
+
+EmailDB.deny({
+  insert: () => { return true; },
+  update: () => { return true; },
+  remove: () => { return true; },
+});

@@ -2,10 +2,11 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import ModelMedium from '../smallUi/ModelMedium.jsx';
+import ModelMedium from '../smallUi/ModelMedium';
+import { cleanURL } from '/client/utility/Convert';
 
 const GroupFormWrapper = ({ 
-  id, name, alias, wiki, 
+  id, name, alias, wiki, rootURL,
   noText, primeTopRight, lgIcon,
   lockOut
 })=> {
@@ -34,6 +35,7 @@ const GroupFormWrapper = ({
         alias={alias}
         wiki={wiki}
         title={title}
+        rootURL={rootURL}
       />
     </ModelMedium>
   );
@@ -41,14 +43,16 @@ const GroupFormWrapper = ({
 
 export default GroupFormWrapper;
 
-const GroupForm = ({ id, name, alias, wiki, title, selfclose })=> {
+const GroupForm = ({ id, name, alias, wiki, rootURL, title, selfclose })=> {
 
   function createCustomer(e) {
     e.preventDefault();
     const groupId = id;
     const groupName = this.gName.value.trim();
     const groupAlias = this.gAlias.value.trim().toLowerCase();
-    const groupWiki = this.gWiki.value.trim();
+    
+    const gURL = this.gWiki.value.trim();
+    const groupWiki = cleanURL(gURL, rootURL);
     
     function create(groupName, groupAlias, groupWiki) {
       Meteor.call('addGroup', groupName, groupAlias, groupWiki, (error, reply)=>{
@@ -122,7 +126,7 @@ const GroupForm = ({ id, name, alias, wiki, title, selfclose })=> {
       </p>
       <p>
         <input
-          type='url'
+          type='text'
           id='gWiki'
           defaultValue={orWiki}
           placeholder='http://192.168.1.68/pisces'

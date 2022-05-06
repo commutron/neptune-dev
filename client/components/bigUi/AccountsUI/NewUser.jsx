@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { Accounts } from 'meteor/accounts-base';
 import { toast } from 'react-toastify';
 
+import './style';
 
-const NewUser = ({ sty })=> {
+const NewUser = ({ mxW, pad, bttn })=> {
   
   const [ newUsernameState, newUsernameSet ] = useState( false );
 	const [ choicePasswordState, choicePasswordSet ] = useState( false );
@@ -50,88 +51,106 @@ const NewUser = ({ sty })=> {
 	
 	
 	return(
-    <form 
-      onSubmit={(e)=>doNew(e)}
+    <form style={pad} onSubmit={(e)=>doNew(e)}
       autoComplete="off">
       <input type='hidden' value='autocompleteFix' autoComplete='off' />
-      <p>
-        <label htmlFor='newUsername'>Username</label>
-        <br />
-        <input
-          type='text'
-          id='newUsername'
-          className='showValid'
-          onChange={()=>newUsernameSet( newUsername.value )}
-          placeholder='username'
-          required
-          minLength='4'
-          pattern='[A-Za-z0-9\._-]*'
-          autoComplete="off" />
-      </p>
-      <p>
-        <label htmlFor='choicePassword'>New Password</label>
-        <br />
-        <input
-          type='password'
-          id='choicePassword'
-          className='showValid'
-          onChange={()=>choicePasswordSet( choicePassword.value )}
-          placeholder='password'
-          pattern='[A-Za-z0-9\.!@#$%^&*()_\-,?`<>[\]{}~=/\\]*'
-          minLength='6'
-          autoComplete="new-password"
-          required />
-      </p>
-      <p>
-        <label htmlFor='confirmPassword'>New Password Again</label>
-        <br />
-        <input
-          type='password'
-          id='confirmPassword'
-          className='showValid'
-          onChange={()=>confirmPasswordSet( confirmPassword.value )}
-          placeholder='password'
-          pattern='[A-Za-z0-9\.!@#$%^&*()_\-,?`<>[\]{}~=/\\]*'
-          autoComplete="new-password"
-          required />
-      </p>
-      <p>
-        <label htmlFor='organizationName'>Organization</label>
-        <br />
-        <input
-          type='text' 
-          id='organizationName'
-          onChange={()=>organizationNameSet( organizationName.value )}
-          placeholder='organization'
-          autoComplete='organization'
-          required />
-      </p>
-      <p>
-        <label htmlFor='orgPin'>Activation PIN</label>
-        <br />
-        <input
-          type='password'
-          id='orgPin'
-          onChange={()=>orgPinSet( orgPin.value )}
-          pattern='[0000-9999]*'
-          maxLength='4'
-          minLength='4'
-          cols='4'
-          placeholder='PIN'
-          inputMode='numeric'
-          autoComplete="new-password"
-          required />
-      </p>
+      <NewInput
+        id='newUsername'
+        type='text'
+        iSty={{ width: '100%' }} 
+        lbl='Username'
+        onChng={()=>newUsernameSet( newUsername.value )}
+        plchldr='username'
+        pttrn='[A-Za-z0-9\._-]*'
+        mnL='4'
+        autoComp="off"
+      />
+      
+      <NewInput
+        id='choicePassword'
+        type='password'
+        iSty={{ width: '100%' }} 
+        lbl='New Password'
+        onChng={()=>choicePasswordSet( choicePassword.value )}
+        plchldr='password'
+        pttrn='[A-Za-z0-9\.!@#$%^&*()_\-,?`<>[\]{}~=/\\]*'
+        mnL='6'
+        autoComp="new-password"
+      />
+      
+      <NewInput
+        id='confirmPassword'
+        type='password'
+        iSty={{ width: '100%' }} 
+        lbl='New Password Again'
+        onChng={()=>confirmPasswordSet( confirmPassword.value )}
+        plchldr='password'
+        pttrn='[A-Za-z0-9\.!@#$%^&*()_\-,?`<>[\]{}~=/\\]*'
+        mnL='6'
+        autoComp="new-password"
+      />
+      
+      <NewInput
+        id='organizationName'
+        type='text'
+        iSty={{ width: '100%' }} 
+        lbl='Organization'
+        onChng={()=>organizationNameSet( organizationName.value )}
+        plchldr='organization'
+        pttrn='[A-Za-z0-9\._-]*'
+        mnL='0'
+        autoComp="organization"
+      />
+  
+      <NewInput
+        id='orgPin'
+        type='password'
+        iSty={{ width: '100%' }} 
+        lbl='Activation PIN'
+        onChng={()=>orgPinSet( orgPin.value )}
+        plchldr='PIN'
+        pttrn='[0000-9999]*'
+        mxL='4'
+        mnL='4'
+        inputMode='numeric'
+        autoComp="new-password"
+      />
+     
       <p>
         <button
           type='submit'
           id='createSubmit'
-          className='userFormButtons createButton'
+          style={bttn}
+          className='createButton'
          >Create New User</button>
       </p>
-      <p style={sty} className='centreText'>{newUserResultState}</p>
+      <p style={mxW} className='centreText'>{newUserResultState}</p>
     </form>
   );
 };
 
 export default NewUser;
+
+const NewInput = ({ 
+  id, type, iSty, lbl, 
+  onChng, plchldr, pttrn, mxL, mnL, inMd, autoComp
+})=> (
+  <p>
+    <label htmlFor={id}>{lbl}</label>
+    <br />
+    <input
+      type={type}
+      id={id}
+      style={iSty}
+      className='showValid'
+      onChange={onChng}
+      placeholder={plchldr}
+      maxLength={mxL || '64'}
+      minLength={mnL}
+      pattern={pttrn}
+      inputMode={inMd || 'text'}
+      autoComplete={autoComp}
+      required 
+    />
+  </p>
+);

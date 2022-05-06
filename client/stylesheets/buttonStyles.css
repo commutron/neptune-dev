@@ -269,7 +269,7 @@
   font-size: 0.7rem;
 }
 .liteTip::after {
-  transform:translate(-55%,-110%);
+  transform: translate(-55%,-110%);
 }
 .liteTipW::before {
   transform:translate(25%,-110%);

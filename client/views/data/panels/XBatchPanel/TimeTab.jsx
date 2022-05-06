@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 
 import TabsLite from '/client/components/smallUi/Tabs/TabsLite';
+
+import ToggleBar from '/client/components/smallUi/Tabs/ToggleBar';
+
 import ProgLayerBurndown from '/client/components/charts/BatchBurn/ProgLayerBurndown';
 import PeopleScatter from '/client/components/charts/BatchBurn/PeopleScatter';
 import ItemsOnTime from '/client/components/charts/BatchBurn/ItemsOnTime';
@@ -53,7 +56,7 @@ const TimeTab = ({
         </div>
       : null}
     
-      <div className='dropCeiling vmargin space cardSelf'>
+      <div className='dropCeiling vmargin cardSelf'>
         <TabsLite 
           tabs={ [ 
             <i className="fas fa-running fa-lg fa-fw"></i>,
@@ -61,8 +64,9 @@ const TimeTab = ({
             <i className="fas fa-flag-checkered fa-fw"></i>
           ] }
           names={[ 
-            'People Distribution','Progress Burndown','Items Completed On Time'
-          ]}>
+            'People','Progress','On Time'
+          ]}
+          tcls='vmarginhalf'>
         
         <PeopleScatter 
           tide={batchData.tide}

@@ -10,7 +10,8 @@ import TideFollow from '/client/components/tide/TideFollow';
 
 import { ToastContainer } from 'react-toastify';
 
-import HomeLogout from '/client/components/tinyUi/HomeLogout';
+import Hsty from '/client/layouts/NavButton/style';
+import HomeLogout from '/client/layouts/NavButton/HomeLogout';
 import NavButton, { NavButtonShell, NavBar, NavPlaceholder } from '/client/layouts/NavButton/NavButton';
 
 const StartView = ({user, app}) =>	{
@@ -74,7 +75,7 @@ const StartView = ({user, app}) =>	{
         
         <NavButtonShell title='People' link='/people'
           icon={
-            <span className="fa-stack fa-fw navButtonIcon navButtonLayerCorrect">
+            <span className={`fa-stack fa-fw ${Hsty.navButtonIcon} ${Hsty.navButtonLayerCorrect}`}>
               <i className="fa-solid fa-user-astronaut fa-stack-1x" data-fa-transform="shrink-5 left-10 down-1"></i>
               <i className="fa-solid fa-user-astronaut fa-stack-1x"></i>
               <i className="fa-solid fa-user-astronaut fa-stack-1x" data-fa-transform="shrink-5 right-10 down-1"></i>

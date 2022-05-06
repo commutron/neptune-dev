@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-
 import DATAMatrix from '/client/utility/datamatrix-svg/datamatrix.js';
+
+import './usercard.css';
 
 const IdCardCard = ({ user })=> {
   

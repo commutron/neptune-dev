@@ -26,6 +26,7 @@ alanning:roles
 kadira:flow-router
 underscore@1.0.10
 fourseven:scss
+nathantreid:css-modules
 react-meteor-data
 meteorhacks:subs-manager
 msavin:usercache

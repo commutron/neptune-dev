@@ -13,6 +13,12 @@
 .darkTheme .grayT {
   color: var(--cloudstrans);
 }
+
+.darkTheme .tabOn, 
+.darkTheme .tabOff {
+  color: white;
+}
+
 .darkTheme .liteToolOn,
 .darkTheme .liteToolOff { 
 	border-right-color: rgb(0,0,0);

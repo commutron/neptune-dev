@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 
 const PrintJump = ({ batchNum, title, iText }) => {
+  
+  const mounted = useRef(true);
   
   const [ flink, flinkSet ] = useState('');
   
   useEffect( ()=>{
     Meteor.call('getBatchPrintLink', batchNum, (err, re)=> {
       err && console.log(err);
-      if(re) {
+      if(re & mounted.current ) {
         flinkSet(re);
       }
     });

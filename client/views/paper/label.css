@@ -1,0 +1,62 @@
+.printLabel {
+  box-sizing: content-box;
+  font-family: 'VarelaLocal';
+  width: 900px;
+  height: 600px;
+  margin: auto;
+  border: 2px dashed black;
+  padding: 0;
+  background-color: white;
+  color: black;
+  font-weight: 900;
+  font-stretch: semi-expanded;
+  vertical-align: middle;
+}
+
+.printLabel div {
+  margin: 10px;
+  padding: 0;
+  align-items: center;
+}
+.printLabel > div:first-child {
+  margin: 20px 10px 10px 10px;
+}
+
+.printLabel i {
+  margin: 5px 0;
+  vertical-align: middle;
+}
+
+.printLabel input {
+  width: 300px;
+  height: auto;
+  border: none;
+  font-weight: 800;
+  text-align: center;
+}
+
+.pxlg, .plg, .pmd, .psm {
+  text-align: center;
+}
+.pxlg {
+  font-size: 9rem;
+  line-height: 1.1;
+}
+.plg {
+  font-size: 6rem;
+  line-height: 1.2;
+}
+.pmd { font-size: 3rem; }
+.psm { font-size: 2.5rem; }
+.pxsm { font-size: 2rem; }
+
+@media print {
+  .printLabel {
+     position: absolute;
+     top: 0;
+     left: 0;
+     margin: 0;
+     border: none;
+     transform: rotate(180deg);
+  }
+}

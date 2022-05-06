@@ -4,7 +4,7 @@ import { ToastContainer } from 'react-toastify';
 
 import HomeIcon from '/client/layouts/HomeIcon';
 import TideFollow from '/client/components/tide/TideFollow';
-import { UpTaskBar, DownTaskBar } from './TaskBars';
+import { UpTaskBar, DownTaskBar } from './TaskBars/TaskBars';
 
 const StreamLayout = ({
   user,

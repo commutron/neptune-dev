@@ -3,6 +3,7 @@ import { Accounts } from 'meteor/accounts-base';
 import React from 'react';
 import { toast } from 'react-toastify';
 import Pref from '/client/global/pref.js';
+import './style';
 
 const HomeLogout = ({ currentUser })=> {
   function doLogout() {

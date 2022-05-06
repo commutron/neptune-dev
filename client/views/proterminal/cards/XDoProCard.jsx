@@ -8,8 +8,6 @@ import TideWall from '/client/components/canal/TideWall';
 
 import ReleaseAction from '/client/components/bigUi/ReleasesModule';
 
-import WaterfallSelect from '/client/components/canal/waterfall/WaterfallSelect';
-
 import River from '/client/components/canal/River';
 import RedoIsland from '/client/components/canal/RedoIsland';
 

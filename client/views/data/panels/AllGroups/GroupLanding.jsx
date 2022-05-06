@@ -37,7 +37,8 @@ const GroupLanding = ({ groupData, widgetData, variantData, app })=> {
         <div className='centreRow'>
           <GroupForm
             name={false}
-            lgIcon={true} />
+            lgIcon={true}
+            rootURL={app.instruct} />
           <NumBox
             num={groupData.length}
             name={Pref.group + 's'}

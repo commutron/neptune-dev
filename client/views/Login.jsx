@@ -37,19 +37,19 @@ const Login = ({ login, uID, username, timeClock })=> {
           {!login ?
             <NavPlaceholder 
               title='Account' 
-              icon="fas fa-user-astronaut fa-flip-horizontal" /> :
+              icon="fa-solid fa-user-astronaut fa-flip-horizontal" /> :
             <NavButton 
               title='Account' 
-              icon='fa-user-astronaut fa-flip-horizontal' 
+              icon='fa-solid fa-user-astronaut fa-flip-horizontal' 
               link='/user' /> }
       
           {!login || !timeClock ?   
             <NavPlaceholder 
               title={Pref.timeClock} 
-              icon='fas fa-clock' /> :
+              icon='fa-solid fa-clock' /> :
             <NavButton
               title={Pref.timeClock} 
-              icon='fa-clock' 
+              icon='fa-solid fa-clock' 
               link={timeClock} 
               blank={true} /> }
         

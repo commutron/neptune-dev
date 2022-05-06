@@ -32,5 +32,12 @@
     "react-transition-group": "^1.2.1",
     "victory": "^32.3.7"
   },
-  "devDependencies": {}
+  "devDependencies": {},
+  "cssModules": {
+    "cache": { "enableCache": true },
+    "passthroughPaths": [ "stylesheets" ],
+    "cssClassNamingConvention": {
+      "template": "${name}"
+    }
+  } 
 }

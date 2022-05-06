@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import './style.css';
 
-const SignIn = ({ sty })=> {
+const SignIn = ({ mxW, pad, bttn })=> {
   
 	const [ loginUsernameState, loginUsernameSet ] = useState( false );
 	const [ loginPasswordState, loginPasswordSet ] = useState( false );
@@ -27,11 +27,9 @@ const SignIn = ({ sty })=> {
 	    }
 	  });
 	}
-	
 		
 	return(
-		<form 
-      onSubmit={(e)=>doLogin(e)}>
+		<form style={pad} onSubmit={(e)=>doLogin(e)}>
       <input 
       	type='hidden' 
       	value='autocompleteFix' 
@@ -42,6 +40,7 @@ const SignIn = ({ sty })=> {
         <input
           type='text'
           id='loginUsername'
+          style={{ width: '100%' }}
           onChange={()=>loginUsernameSet(loginUsername.value)}
           required />
       </p>
@@ -51,6 +50,7 @@ const SignIn = ({ sty })=> {
         <input
           type='password' 
           id='loginPassword'
+          style={{ width: '100%' }}
           onChange={()=>loginPasswordSet( loginPassword.value )}
           autoComplete="off"
           required />
@@ -59,10 +59,11 @@ const SignIn = ({ sty })=> {
         <button
           type='submit'
           id='loginSubmit'
-          className='userFormButtons loginoutButton'
+          style={bttn}
+          className='loginoutButton'
          >Sign In</button>
       </p>
-      <p style={sty} className='centreText'>{loginResultState}</p>
+      <p style={mxW} className='centreText'>{loginResultState}</p>
     </form>
 	);
 };

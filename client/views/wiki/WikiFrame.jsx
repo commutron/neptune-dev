@@ -3,7 +3,7 @@ import React from 'react';
 const WikiFrame = ({ go, full, anchor })=> {
   let sty = {
     width: '100%',
-    minHeight: '99%',
+    minHeight: '100%',
     border: '0',
     margin: '0',
     padding: '0',
@@ -16,7 +16,7 @@ const WikiFrame = ({ go, full, anchor })=> {
       id='instruct'
       style={sty}
       src={go}
-      referrerPolicy='unsafe-url'
+      // referrerPolicy='unsafe-url'
       //height={( (document.body.scrollHeight - document.body.scrollTop) - correct ) +'px'}
       allowFullScreen
     />

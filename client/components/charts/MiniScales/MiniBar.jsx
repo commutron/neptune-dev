@@ -1,5 +1,5 @@
 import React from 'react';
-import './style.css';
+import s from './style.css';
 
 const MiniBar = ({ title, count, total, barColor })=> {
   let v = count;
@@ -14,7 +14,7 @@ const MiniBar = ({ title, count, total, barColor })=> {
     letterSpacing: '1px'
   };
   return(
-    <div className='miniScale meterprogStack'>
+    <div className={`${s.miniScale} ${s.meterprogStack}`}>
       <p style={name} className='cap'>{title}</p>
       <progress className={barColor || 'proGood'} value={v} max={t}></progress>
       <p style={num} className='numFont'

@@ -74,7 +74,7 @@
 .proInstruct {
   grid-area: proInstruct;
   height: 100%;
-  background-color: var(--clouds);
+  background-color: var(--black);
   box-shadow: var(--dropShadow2);
   z-index: 1;
 }

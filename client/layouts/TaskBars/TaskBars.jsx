@@ -3,9 +3,11 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toCap } from '/client/utility/Convert';
 
-const TaskElement = ({ title, subON, goLink, icon, iconAdj  }) => (
+import './taskbars.css';
+
+const TaskElement = ({ title, subON, goLink, icon, iconAdj }) => (
   <button
-    aria-label={title}
+    aria-label={toCap(title, true)}
     className={`taskLink taskTip ${subON ? 'onTL' : ''}`}
     onClick={()=>FlowRouter.go( goLink )}
   ><i className={icon} data-fa-transform={iconAdj}></i></button>
@@ -49,7 +51,7 @@ export const ExTaskBar = ({ subLink }) => (
       subON={subLink === 'overviewradioactive'}
       goLink='/data/overview?request=radioactive'
       icon='fa-solid fa-circle-radiation'
-      iconAdj='down-1'
+      iconAdj=''
     />
     
     <TaskElement
@@ -65,7 +67,7 @@ export const ExTaskBar = ({ subLink }) => (
       subON={subLink === 'overviewtestfail'}
       goLink='/data/overview?request=testfail'
       icon='fas fa-microchip'
-      iconAdj='down-1'
+      iconAdj=''
     />
     
     <TaskElement
@@ -73,7 +75,17 @@ export const ExTaskBar = ({ subLink }) => (
       subON={subLink === 'overviewscraps'}
       goLink='/data/overview?request=scraps'
       icon='fas fa-trash-alt'
-      iconAdj='down-1'
+      iconAdj=''
+    />
+    
+    <span className='flexSpace'></span>
+    
+    <TaskElement
+      title={Pref.maintain}
+      subON={subLink === 'overviewmaintain'}
+      goLink='/data/overview?request=maintain'
+      icon='fa-solid fa-wand-magic-sparkles'
+      iconAdj=''
     />
     
   </div>
@@ -171,11 +183,12 @@ export const DownTaskBar = ({ subLink }) => (
   </div>
 );
 
-const FilterElement = ({ title, subTitle, goLink, branchON, changeBranch, icon, size }) => (
+const FilterElement = ({ title, subTitle, goLink, branchON, changeBranch, icon, size, lock }) => (
   <button
     aria-label={title}
     className={`taskLink taskTip numFont ${branchON ? 'onTL' : ''} ${size} ${icon ? '' : 'nomarginB'}`}
     onClick={()=>changeBranch( goLink )}
+    disabled={lock}
   >{icon ? <i className={icon}></i> : 
            <i className={size}>{toCap(subTitle)}</i>}
   </button>
@@ -206,5 +219,18 @@ export const OverMenuBar = ({ brancheS, branchON, changeBranch }) => (
           size='vbigger'
         />
     )})}
+    
+    <span className='flexSpace'></span>
+    
+    <FilterElement
+      title={Pref.maintain}
+      subTitle='PM'
+      goLink={'maintain'}
+      branchON={branchON === 'maintain'}
+      changeBranch={changeBranch}
+      icon='fa-solid fa-wand-magic-sparkles'
+      size=''
+      lock={true}
+    />
   </div>
 );

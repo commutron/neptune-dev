@@ -10,7 +10,7 @@ import OverviewTools from './OverviewTools';
 import BatchHeaders from './columns/BatchHeaders';
 import BatchDetails from './columns/BatchDetails';
 
-import { OverMenuBar } from '/client/layouts/TaskBars';
+import { OverMenuBar } from '/client/layouts/TaskBars/TaskBars';
 
 
 const OverviewWrap = ({ 

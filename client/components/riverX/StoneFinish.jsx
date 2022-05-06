@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import StoneProgRing from './StoneProgRing.jsx';
+import StoneProgRing from './StoneProgRing';
 
 const StoneFinish = ({ 
 	batchId,
@@ -18,6 +18,14 @@ const StoneFinish = ({
 	commTxtState
 })=> { 
 	
+	const mounted = useRef(true);
+	
+	useEffect(() => {
+    return () => { 
+      mounted.current = false;
+    };
+  }, []);
+  
 	function finish() {
 		enactEntry();
 		const comm = commTxtState;
@@ -29,7 +37,7 @@ const StoneFinish = ({
 			    console.log(error);
 			    toast.error('Server Error');
 				}
-			  if(reply === true) {
+			  if(reply === true && mounted.current) {
 					resolveEntry();
 				}else{
 					toast.warning('Insufficient Permissions');
@@ -42,7 +50,7 @@ const StoneFinish = ({
 			    console.log(error);
 			    toast.error('Server Error');
 				}
-			  if(reply === true) {
+			  if(reply === true && mounted.current) {
 					resolveEntry();
 				}else{
 					toast.warning('Insufficient Permissions');

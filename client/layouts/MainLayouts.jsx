@@ -70,9 +70,7 @@ export const LabelLayout = ({content}) => (
           onClick={()=> window.print()}
         ><i className='fas fa-print'></i></button>
       </div>
-      <div className='printLabel'>
-        {content}
-      </div>
+      {content}
     </div>
   </div>
   </ErrorCatch>

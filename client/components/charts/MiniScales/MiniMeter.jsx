@@ -1,5 +1,5 @@
 import React from 'react';
-import './style.css';
+import s from './style.css';
 
 const MiniMeter = ({ title, count, app })=> {
   let df = app.ncScale || { low: 5, high: 15, max: 25 };
@@ -16,7 +16,7 @@ const MiniMeter = ({ title, count, app })=> {
     textAlign: 'right'
   };
   return(
-    <div className='wide miniScale meterprogStack'>
+    <div className={`wide ${s.miniScale} ${meterprogStack}`}>
       <p style={name} className='cap'>{title}</p>
       <meter
         style={bar}

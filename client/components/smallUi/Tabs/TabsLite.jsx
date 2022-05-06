@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import './style.css';
 import { toCap } from '/client/utility/Convert.js';
 
-const TabsLite = ({ tabs, names, children })=> {
+const TabsLite = ({ tabs, names, children, tcls })=> {
   
   const [ show, showSet ] = useState( 0 );
   
   return(
-    <div>
+    <div className={'posRel ' + tcls || ''}>
       <div className='liteTabs flexRR'>
         {tabs.map( (entry, index)=>{
           let clss =  show === index ? 'liteTip liteToolOn' : 'liteTip liteToolOff';

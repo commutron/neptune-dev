@@ -18,6 +18,8 @@ import TestFailPanel from './panels/TestFailPanel';
 import RadioPanel from './panels/RadioPanel';
 import ScrapPanel from './panels/ScrapPanel';
 
+import MainWrap from './panels/Maintain/MainWrap';
+
 import BatchesList from './lists/BatchesList';
 import ItemsListX from './lists/ItemsListX';
 
@@ -292,6 +294,30 @@ const DataViewOps = ({
         >
           <ScrapPanel 
             app={app} />
+        </TraverseWrap>
+      );
+    }else if(request === 'maintain') {
+      return(
+        <TraverseWrap
+		      batchData={false}
+          widgetData={false}
+          variantData={false}
+          groupData={false}
+          user={user}
+          app={app}
+          title={Pref.maintain}
+          subLink={subLink}
+          action='maintain'
+          base={true}
+        >
+          <MainWrap
+            batchDataX={allXBatch}
+            widgetData={allWidget}
+            variantData={allVariant}
+            groupData={allGroup} 
+            app={app}
+            brancheS={brancheS}
+            specify={specify} />
         </TraverseWrap>
       );
     }else{

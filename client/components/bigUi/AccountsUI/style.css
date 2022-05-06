@@ -1,45 +1,20 @@
-.loginCard {
-  min-height: 300px;
-  width: 300px;
-  margin: 5vh 0 0 0;
-}
-.loginCard input {
-  width: 100%;
-}
-.loginCard .tabBody > form {
-  padding: 0 25px;
-}
-
-.userFormButtons {
-  height: 32px;
-  min-width: 100%;
-  width: 100%;
-  max-width: 100%;
-  margin-top: 0.75rem;
-  font-size: medium;
-  font-weight: 600;
-  color: rgb(20,20,20);
-  text-align: center;
-  letter-spacing: 1.5px;
-  box-shadow: var(--navIndicatorOut);
+.loginoutButton,
+.createButton {
   outline: 3px solid;
   outline-offset: -3px;
-  cursor: pointer;
+  box-shadow: var(--navIndicatorOut);
 }
 .loginoutButton {
   background-color: var(--neptuneColor);
   outline-color: var(--neptuneColor);
 }
-.loginoutButton:hover, 
-.loginoutButton:focus, 
-.loginoutButton:active {
-  outline-offset: 3px;
-}
-
 .createButton {
   background-color: var(--nephritis);
   outline-color: var(--nephritis);
 }
+.loginoutButton:hover, 
+.loginoutButton:focus, 
+.loginoutButton:active,
 .createButton:hover, 
 .createButton:focus, 
 .createButton:active {

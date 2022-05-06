@@ -4,9 +4,9 @@ import { ToastContainer } from 'react-toastify';
 
 import HomeIcon from '/client/layouts/HomeIcon';
 import TideFollow from '/client/components/tide/TideFollow';
-import { ExTaskBar } from './TaskBars';
+import { ExTaskBar } from './TaskBars/TaskBars';
 import ActionBar from '/client/components/bigUi/ToolBar/ActionBar';
-import CookieBar from './CookieBar';
+import CookieBar from './CookieBar/CookieBar';
 
 export const TraverseWrap = ({
   itemData,

@@ -1,5 +1,3 @@
-.tabNav { display: flex; }
-.tabBody { overflow-x: auto; }
 .tabOn, .tabOff {
   padding: 0.5vmax 1vmin;
   line-height: 1.5;
@@ -9,9 +7,6 @@
 	text-transform: capitalize;
 	overflow: hidden;
 	border-radius: 0;
-}
-.darkTheme .tabOn, .darkTheme .tabOff {
-  color: white;
 }
 .tabOn {
 	background-color: var(--navIndicatorB);

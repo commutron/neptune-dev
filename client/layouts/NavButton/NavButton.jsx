@@ -5,7 +5,7 @@ const NavButton = ({ title, icon, link, blank, tag }) => (
   <span className='navButtonWrap'>
     <a href={link || ''} target={blank ? '_blank' : ''}>
       <i
-        className={(icon || 'fas fa-unlink') + ' fa-fw navButtonIcon'}></i>
+        className={(icon || 'fa-solid fa-unlink') + ' fa-fw navButtonIcon'}></i>
       <i className='navButtonText'
       >{title || ''}{tag && <sup className='monoFont'><wbr />{tag}</sup>}</i>
     </a>
@@ -26,7 +26,7 @@ export const NavButtonShell = ({ title, icon, link, blank }) => (
 export const NavBar = ({ title, icon, link }) => (
   <span className='navBarWrap'>
     <a href={link || ''}>
-      <i className={(icon || 'fas fa-unlink') + ' fa-fw navBarIcon'}></i>
+      <i className={(icon || 'fa-solid fa-unlink') + ' fa-fw navBarIcon'}></i>
       <i className='navBarText'>{title || ''}</i>
     </a>
   </span>
@@ -36,7 +36,7 @@ export const NavPlaceholder = ({ title, icon, tag }) => (
   <span>
     <div className='navButtonPlaceHolder'>
       <i 
-        className={(icon || 'fas fa-unlink') + ' fa-fw navButtonIcon'}></i>
+        className={(icon || 'fa-solid fa-unlink') + ' fa-fw navButtonIcon'}></i>
       <i className='navButtonText'
       >{title || ''}{tag && <sup className='monoFont'><wbr />{tag}</sup>}</i>
     </div>

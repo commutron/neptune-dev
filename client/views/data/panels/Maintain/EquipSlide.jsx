@@ -1,7 +1,6 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
 import CreateTag from '/client/components/tinyUi/CreateTag';
-import WidgetsDepth from '../../lists/WidgetsDepth';
 import TagsModule from '/client/components/bigUi/TagsModule';
 
 import GroupForm from '/client/components/forms/GroupForm';
@@ -11,26 +10,11 @@ import GroupEmails from '/client/components/forms/GroupEmails';
 import WidgetNewForm from '/client/components/forms/WidgetNewForm';
 import Remove from '/client/components/forms/Remove';
 
-import GroupTops from '/client/components/charts/GroupTops';
 
-function groupActiveWidgets(gId, widgetsList, allXBatch) {
-  
-  let activeBatch = allXBatch.filter( b => b.completed === false);
-
-  const hasBatch = (id)=> activeBatch.find( b => b.widgetId === id) ? true : false;
-  
-  let activeWidgets = widgetsList.filter( w => hasBatch(w._id) == true );
-  
-  const activeList = Array.from(activeWidgets, w => w._id);
-  return activeList;
-}
-
-
-const GroupSlide = ({ groupData, widgetsList, batchDataX, app, inter, isERun })=>{
+const EquipSlide = ({ groupData, widgetsList, batchDataX, app, inter, isERun })=>{
   
   const g = groupData;
-  const active = groupActiveWidgets(g._id, widgetsList, batchDataX);
-  
+ 
   return(
     <div className='section centre overscroll' key={g.alias}>
       
@@ -119,13 +103,6 @@ const GroupSlide = ({ groupData, widgetsList, batchDataX, app, inter, isERun })=
           <n-sm>{app.instruct}</n-sm> : null}<a className='clean wordBr' href={g.wiki} target='_blank'>{g.wiki}</a>
       </p>
       
-      <GroupTops groupId={g._id} alias={g.alias} app={app} />
-        
-      <WidgetsDepth
-        groupAlias={g.alias}
-        widgetData={widgetsList}
-        active={active} />
-      
       <div className='wide'>
         <CreateTag
           when={g.createdAt}
@@ -138,4 +115,4 @@ const GroupSlide = ({ groupData, widgetsList, batchDataX, app, inter, isERun })=
   );
 };
 
-export default GroupSlide;
+export default EquipSlide;

@@ -28,7 +28,7 @@ const UserDataWrap = ({
     InboxToastPop(user);
   }, [user]);
   
-  if( !readybNames || !app ) {
+  if( !readybNames || !app || !app.branches || !user || !user.roles ) {
     return( <SpinWrap /> );
   }
     

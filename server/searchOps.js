@@ -44,6 +44,7 @@ Meteor.methods({
   },
   
   getBatchPrintLink(keyword) {
+    this.unblock();
     const labelString = whatIsBatchX(keyword, true);
     return labelString;
   },
@@ -499,7 +500,7 @@ Meteor.methods({
           });
         }
       }else{null}
-
+      
       data.push({
         grp: findG.alias,
         wdgt: findW.widget,
@@ -509,6 +510,38 @@ Meteor.methods({
         places: 1
       });
     });
+    
+    XBatchDB.find({
+      $or: [ 
+        { 'blocks.block': { $regex: new RegExp( num ), $options: 'i' } },
+        { 'blocks.solve.action': { $regex: new RegExp( num ), $options: 'i' } }
+      ]
+    },{fields:{'batch':1}}
+    ).forEach( x => { 
+      data.push({
+        grp: x.batch,
+        wdgt: '',
+        vrnt: '',
+        dsc: 'part number mentioned in notes',
+        btchs: [],
+        places: 1
+      });
+    });
+        
+    XSeriesDB.find({
+      "shortfall.partNum": { $regex: new RegExp( num ), $options: 'i' }
+    },{fields:{'batch':1}}
+    ).forEach( srs => {
+      data.push({
+        grp: srs.batch,
+        wdgt: '',
+        vrnt: '',
+        dsc: 'item recorded part number short',
+        btchs: [],
+        places: 1
+      });
+    });
+    
     return data;
   },
   

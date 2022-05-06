@@ -88,6 +88,20 @@ export function sc2hr(milliseconds) {
   return parseFloat(trunc);
 }
 
+// transform
+
+export function cleanURL(url, instruct) {
+  const root = instruct || "rootURL";
+  
+  const uri = url.replace(root, "");
+  const http = uri.slice(0,4) === 'http' ? uri : 
+                 uri.slice(0,1) === '/' ? uri :
+                 '/' + uri;
+  const wiki = http.slice(-1) === '/' ? http.slice(0,-1) : http;
+  
+  return wiki;
+}
+
 export function chunkArray(input, size) {
   return input.reduce((arr, item, idx) => {
     return idx % size === 0

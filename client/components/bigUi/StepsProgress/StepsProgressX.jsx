@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Pref from '/client/global/pref.js';
-import './style.css';
 
 import RiverSelect from '/client/components/forms/Batch/RiverSelectX';
 

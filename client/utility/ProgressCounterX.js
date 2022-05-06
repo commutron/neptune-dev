@@ -208,5 +208,3 @@ export function WhiteWaterCounter(rapidData, seriesData) {
   
   return [ iSet, pointProgress, countArr, freshProgress, nFin ];
 }
-
-

@@ -216,6 +216,11 @@ class Pref {
     this.tide = 'start-stop';
     this.engaged = 'active';
     this.engagedNot = 'idle';
+    
+    // PM
+    this.maintain = 'maintenance';
+    this.premaintain = 'preventive maintenance';
+    this.equip = 'equipment';
   }
 }
 

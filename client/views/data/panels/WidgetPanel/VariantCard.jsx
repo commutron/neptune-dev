@@ -12,6 +12,8 @@ import Remove from '/client/components/forms/Remove';
 
 import AssemblyList from './AssemblyList';
 
+import { cleanURL } from '/client/utility/Convert';
+
 const VariantCard = ({ 
   variantData, widgetData, 
   groupData, batchRelated, 
@@ -80,7 +82,9 @@ const VariantCard = ({
           
           <InlineForm
             widgetData={widgetData}
-            variantData={variantData} />
+            variantData={variantData}
+            rootURL={app.instruct}
+          />
         
           <NotesModule
             sourceId={v._id}
@@ -110,7 +114,7 @@ const VariantCard = ({
 
 export default VariantCard;
 
-const InlineForm = ({ widgetData, variantData })=> {
+const InlineForm = ({ widgetData, variantData, rootURL })=> {
   
   const [ editState, editSet ] = useState(false);
   
@@ -123,10 +127,7 @@ const InlineForm = ({ widgetData, variantData })=> {
     const variant = this.rev.value.trim();
     
     const url = this.wikdress.value.trim();
-    const http = url.slice(0,4) === 'http' ? url : 
-                 url.slice(0,1) === '/' ? url :
-                 '/' + url;
-    const wiki = http.slice(-1) === '/' ? http.slice(0,-1) : http;
+    const wiki = cleanURL(url, rootURL);
     
     const unit = this.unit.value.trim();
     
@@ -149,7 +150,9 @@ const InlineForm = ({ widgetData, variantData })=> {
       <div className='readlines'>
         <p className='numFont'>default units: {variantData.runUnits}</p>
           
-        <p className='max250' >
+        <p className='max250 wordBr'>
+          {variantData.instruct && !variantData.instruct.includes('http') ?
+            <n-sm>{rootURL}</n-sm> : null}
           <a 
             className='clean wordBr' 
             href={variantData.instruct} 

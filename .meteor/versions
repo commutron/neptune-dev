@@ -55,6 +55,7 @@ mongo-decimal@0.1.1
 mongo-dev-server@1.1.0
 mongo-id@1.0.7
 msavin:usercache@1.8.0
+nathantreid:css-modules@4.1.0
 npm-bcrypt@0.9.3
 npm-mongo@3.3.0
 ordered-dict@1.1.0

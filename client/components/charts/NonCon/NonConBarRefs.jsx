@@ -14,7 +14,7 @@ import { countMulti } from '/client/utility/Arrays';
 const NonConBarRefs = ({ ncOp, nonCons, app, isDebug })=> {
   
   const [ series, seriesSet ] = useState([]);
-  const [ typeNum, typeNumSet ] = useState(false);
+  const [ typeNum, typeNumSet ] = useState(null);
   
   useEffect( ()=> {
     const uniqueRefs =  new Set( Array.from(nonCons, x => x.ref) );
@@ -52,7 +52,7 @@ const NonConBarRefs = ({ ncOp, nonCons, app, isDebug })=> {
 
     isDebug && console.log({series, typeNum});
 
-  if(!typeNum) {
+  if(typeNum === null) {
     return(
       <CalcSpin />
     );
