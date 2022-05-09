@@ -33,3 +33,8 @@ export function NonConMerge(ncListKeys, app, user, allKeys) {
     return ncTypesComboSort;
   }
 }
+
+export const onFire = ()=> (
+  navigator.userAgent.indexOf("Firefox") !== -1 ? "off" : ""
+// ^^^ workaround for persistent bug in desktop Firefox ^^^
+);

@@ -6,6 +6,7 @@ import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
 import ModelMedium from '/client/components/smallUi/ModelMedium';
+import { onFire } from '/client/utility/NonConOptions';
 
 const BatchXCreate = ({ groupId, widgetId, allVariants, lock })=> {
   const access = Roles.userIsInRole(Meteor.userId(), 'create');
@@ -156,7 +157,7 @@ const BXCreateForm = ({ groupId, widgetId, allVariants })=> {
             placeholder={nxtNum || '21356'}
             autoFocus={true}
             required
-            autoComplete={navigator.userAgent.includes('Firefox/') ? "off" : ""}
+            autoComplete={onFire()}
           /></label>
           
           <datalist id='nextbatch'>

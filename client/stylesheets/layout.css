@@ -13,7 +13,8 @@ main {
   z-index: 8;
 }
 
-.forceScroll { overflow-y: auto; }
+.forceScroll { overflow-y: auto !important; }
+.wideScroll { overflow-x: auto !important; }
 .forceScrollStyle::-webkit-scrollbar {
   width: 1vmax;
   height: 1vmax;
@@ -51,8 +52,10 @@ main {
 .errorReport {
   margin: 10vh auto;
   width: 50vmax;
+  height: 85vh;
   font-size: var(--tx5);
   color: white;
+  overflow: hidden auto;
 }
 .errorReport p {
   font-size: var(--tx2);
@@ -65,6 +68,7 @@ main {
   text-decoration: underline;
 }
 .errorReport details {
+  padding: 1ch;
   box-shadow: none;
   letter-spacing: 2px;
   font-family: monospace;

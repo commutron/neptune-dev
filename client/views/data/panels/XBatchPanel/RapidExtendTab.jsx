@@ -48,6 +48,7 @@ const RapidExtendTab = ({
       <RapidExtendCreate
         rOpenid={rOpenid}
         batchData={batchData}
+        app={app}
         editAuth={editAuth}
         cal={calFunc}
       />

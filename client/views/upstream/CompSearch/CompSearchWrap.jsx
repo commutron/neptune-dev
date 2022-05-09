@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
+import { onFire } from '/client/utility/NonConOptions';
+
 const CompSearchWrap = ({ plCache, user, app })=> {
   
   const [ bChk, setB ] = useState(true);
@@ -121,8 +123,7 @@ const CompSearchWrap = ({ plCache, user, app })=> {
               disabled={false}
               onChange={(e)=>thisThing(e)}
               autoFocus={true}
-              autoComplete={navigator.userAgent.includes('Firefox/') ? "off" : ""}
-              // ^^^ workaround for persistent bug in desktop Firefox ^^^
+              autoComplete={onFire()}
               required
             />
           </label>

@@ -101,6 +101,7 @@ const RapidExtendCard = ({
             rapid={rapid}
             allQ={batchData.quantity}
             rSetItems={rSetItems}
+            rootURL={app.instruct}
             editAuth={editAuth}
             cal={cal} />
         

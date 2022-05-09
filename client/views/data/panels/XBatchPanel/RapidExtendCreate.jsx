@@ -4,7 +4,7 @@ import Pref from '/client/global/pref.js';
 import { toCap } from '/client/utility/Convert';
 import { RapidInfoCreate } from '/client/components/forms/Rapid/RapidInfo';
 
-const RapidExtendCreate = ({ rOpenid, batchData, editAuth, cal, cancelFunc })=> {
+const RapidExtendCreate = ({ rOpenid, batchData, app, editAuth, cal })=> {
   
   const [ createState, createSet ] = useState(false);
   
@@ -31,6 +31,7 @@ const RapidExtendCreate = ({ rOpenid, batchData, editAuth, cal, cancelFunc })=> 
             exBatch={batchData.batch}
             allQ={batchData.quantity}
             rSetItems={0}
+            rootURL={app.instruct}
             editAuth={editAuth}
             cal={cal}
             cancelFunc={()=>createSet(false)} />

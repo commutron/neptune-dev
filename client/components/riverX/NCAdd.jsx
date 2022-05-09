@@ -2,7 +2,7 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import { NonConCheck } from '/client/utility/NonConOptions';
+import { NonConCheck, onFire } from '/client/utility/NonConOptions';
 
 const NCAdd = ({ seriesId, serial, units, user, app, ncTypesCombo })=> {
   
@@ -99,7 +99,7 @@ const NCAdd = ({ seriesId, serial, units, user, app, ncTypesCombo })=> {
           defaultValue={Session.get('ncAddTypeSticky')}
           required
           disabled={lock || ncTypesCombo.length < 1}
-          autoComplete={navigator.userAgent.includes('Firefox/') ? "off" : ""}
+          autoComplete={onFire()}
         />
           <label htmlFor='ncType' className='whiteT'>{Pref.nonConType}</label>
           <datalist id='ncTypeList'>

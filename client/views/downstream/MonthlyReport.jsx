@@ -54,14 +54,14 @@ const MonthlyReport = ({ app })=> {
   
   useEffect( ()=>{
     if(dataState) {
-      const allPerOnTime = Array.from(dataState, x => x.percentOnTime);
+      const allPerOnTime = Array.from(dataState, x => x.totalIsDone ? x.percentOnTime : undefined);
       const avgPerOnTime = round2Decimal( avgOfArray(allPerOnTime, true) );
       setYrOnTime(avgPerOnTime);
       
       const allOnTime = Array.from(dataState, x => x.totalOnTime).reduce((x,y)=>x+y);
       setYrTimeTotal(allOnTime);
       
-      const allPerOnBdgt = Array.from(dataState, x => x.percentOnBdgt);
+      const allPerOnBdgt = Array.from(dataState, x => x.totalIsDone ? x.percentOnBdgt : undefined);
       const avgPerOnBdgt = round2Decimal( avgOfArray(allPerOnBdgt, true) );
       setYrOnBdgt(avgPerOnBdgt);
       
@@ -72,7 +72,7 @@ const MonthlyReport = ({ app })=> {
       setYrDoneTotal(allIsDone);
     }
   }, [dataState]);
-    
+
   return(
     <div className='w100 minWfit space2v'>
         

@@ -3,7 +3,7 @@ import './style.css';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import { NonConCheck } from '/client/utility/NonConOptions';
+import { NonConCheck, onFire } from '/client/utility/NonConOptions';
 
 import UserNice from '/client/components/smallUi/UserNice.jsx';
 
@@ -162,7 +162,7 @@ const NonConBlock = ({
                 className='miniIn24'
                 onInput={(e)=>NonConCheck(e.target, flatCheckList)}
                 required
-                autoComplete={navigator.userAgent.includes('Firefox/') ? "off" : ""}
+                autoComplete={onFire()}
                 disabled={ncTypesCombo.length < 1}/>
             :
               <select 

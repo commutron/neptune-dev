@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Pref from '/client/global/pref.js';
-import { NonConCheck } from '/client/utility/NonConOptions';
+import { NonConCheck, onFire } from '/client/utility/NonConOptions';
 
 export const AddAutoNCwrap = ({ rapidData, ncTypesCombo, rSetItems, user, editAuth })=> {
   
@@ -142,8 +142,7 @@ const AddAutoNC = ({ ncTypesCombo, user, nonConsState, nonConsSet, rSetItems, ed
               list='ncTypeList'
               onInput={(e)=>NonConCheck(e.target, flatCheckList)}
               disabled={ncTypesCombo.length < 1}
-              autoComplete={navigator.userAgent.includes('Firefox/') ? "off" : ""}
-                // ^^^ workaround for persistent bug in desktop Firefox ^^^
+              autoComplete={onFire()}
             />
             <datalist id='ncTypeList'>
               {ncTypesCombo.map( (entry, index)=>{

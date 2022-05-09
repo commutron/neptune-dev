@@ -54,11 +54,8 @@
 }
 
 .monthsTable {
-  min-width: 1500px;
-  margin: 25px;
   font-family: VarelaLocal;
 }
-
 .monthsTable th {
   text-align: center;
   white-space: nowrap;
@@ -78,14 +75,9 @@
 .monthsTable td:nth-child(even) {
   border-right: none;
 }
-.monthsTable th:last-child,
-.monthsTable td:last-child {
-  border-right: 1px solid rgba(0,0,0,0.2);
-}
 .monthsTable td:last-child:empty {
   background-color: var(--contrast);
 }
-
 .monthsTable .miniThead th {
   font-size: 0.6rem;
   font-weight: 400;
@@ -94,7 +86,6 @@
   font-size: 0.6rem;
   border-bottom: none;
 }
-
 .monthsTable .botThead td {
   font-size: 1rem;
   border-top: 1px solid black;

@@ -75,7 +75,7 @@ const StartView = ({user, app}) =>	{
         
         <NavButtonShell title='People' link='/people'
           icon={
-            <span className={`fa-stack fa-fw ${Hsty.navButtonIcon} ${Hsty.navButtonLayerCorrect}`}>
+            <span className='fa-stack fa-fw navButtonIcon navButtonLayerCorrect'>
               <i className="fa-solid fa-user-astronaut fa-stack-1x" data-fa-transform="shrink-5 left-10 down-1"></i>
               <i className="fa-solid fa-user-astronaut fa-stack-1x"></i>
               <i className="fa-solid fa-user-astronaut fa-stack-1x" data-fa-transform="shrink-5 right-10 down-1"></i>

@@ -99,7 +99,7 @@ const EquipSlide = ({ groupData, widgetsList, batchDataX, app, inter, isERun })=
       </div>
       
       <p className='w100 capFL vmargin indenText wordBr'>
-        {Pref.instruct} Index: {g.wiki && !g.wiki.includes('http') ?
+        {Pref.instruct} Index: {g.wiki && g.wiki.indexOf('http') === -1 ?
           <n-sm>{app.instruct}</n-sm> : null}<a className='clean wordBr' href={g.wiki} target='_blank'>{g.wiki}</a>
       </p>
       

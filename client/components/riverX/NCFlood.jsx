@@ -2,7 +2,7 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import { NonConCheck } from '/client/utility/NonConOptions';
+import { NonConCheck, onFire } from '/client/utility/NonConOptions';
 
 const NCFlood = ({ seriesId, live, user, app, ncTypesCombo })=> {
   
@@ -86,8 +86,7 @@ const NCFlood = ({ seriesId, live, user, app, ncTypesCombo })=> {
               onInput={(e)=>NonConCheck(e.target, flatCheckList)}
               required
               disabled={lock || ncTypesCombo.length < 1}
-              autoComplete={navigator.userAgent.includes('Firefox/') ? "off" : ""}
-                // ^^^ workaround for persistent bug in desktop Firefox ^^^
+              autoComplete={onFire()}
             />
             <label htmlFor='ncType' className='whiteT'>{Pref.nonConType}</label>
             <datalist id='ncTypeList'>

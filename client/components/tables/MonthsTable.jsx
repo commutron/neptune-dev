@@ -17,7 +17,7 @@ const MonthsTable = ({
         
       <div className={`space w100 ${extraClass || ''}`}>
           
-          <table className='monthsTable'>
+          <table className='monthsTable' style={{minWidth: '1500px', margin: '25px'}}>
             
             <tbody>
               <tr>

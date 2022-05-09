@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import 'moment-business-time';
 import Pref from '/client/global/pref.js';
-import UserNice from '/client/components/smallUi/UserNice.jsx';
-import { min2hr } from '/client/utility/Convert.js';
+import UserNice from '/client/components/smallUi/UserNice';
+import { min2hr, cleanURL } from '/client/utility/Convert.js';
 import { toast } from 'react-toastify';
 
 export const RapidInfoCreate = ({ 
   batchId, groupId, exBatch,
-  allQ, rSetItems, 
+  allQ, rSetItems, rootURL,
   editAuth, cal, cancelFunc 
 })=> {
  
@@ -25,9 +25,10 @@ export const RapidInfoCreate = ({
     
     const howText = this.rInsc.value.trim();
     const howLink = howText.length === 0 ? false : howText;
+    const howURL = !howLink ? false : cleanURL(howLink, rootURL);
     
     Meteor.call('createExRapidBasic', batchId, groupId, exBatch, 
-      rapidType, issueNum, doneTarget, quant, inHours, howLink,
+      rapidType, issueNum, doneTarget, quant, inHours, howURL,
       (error, re)=>{
         error && console.log(error);
         re ? toast.success('Saved') : toast.error('unsuccessful');
@@ -47,7 +48,10 @@ export const RapidInfoCreate = ({
 };
 
   
-const RapidInfoEdit = ({ batchId, rapid, allQ, rSetItems, editAuth, cal })=> {
+const RapidInfoEdit = ({ 
+  batchId, rapid, allQ, rSetItems, rootURL, 
+  editAuth, cal
+})=> {
   
   const [ editState, editSet ] = useState(false);
  
@@ -67,9 +71,10 @@ const RapidInfoEdit = ({ batchId, rapid, allQ, rSetItems, editAuth, cal })=> {
     
     const howText = this.rInsc.value.trim();
     const howLink = howText.length === 0 ? false : howText;
+    const howURL = !howLink ? false : cleanURL(howLink, rootURL);
     
     Meteor.call('editExRapidBasic', batchId, rapid._id, 
-      rapidType, issueNum, doneTarget, quant, inHours, howLink,
+      rapidType, issueNum, doneTarget, quant, inHours, howURL,
       (error, re)=>{
         error && console.log(error);
         re ? toast.success('Saved') : toast.error('unsuccessful');
@@ -114,7 +119,11 @@ const RapidInfoEdit = ({ batchId, rapid, allQ, rSetItems, editAuth, cal })=> {
       <p>Extra Hours: <n-num>{min2hr(rapid.timeBudget || 0)}</n-num></p>
       
       <p className='wordBr max300'>
-        Override Instruction: {rapid.instruct ?
+        Override Instruction: {
+        rapid.instruct && !rapid.instruct.indexOf("http") != -1 ?
+          <n-sm>{rootURL}</n-sm> : null
+        }{
+        rapid.instruct ?
           <a 
             className='clean wordBr' 
             href={rapid.instruct} 
@@ -256,10 +265,10 @@ const RapidInfoFormBlock = ({
       
       <p>Override Instruction: 
         <input 
-          type='url'
+          type='text'
           id='rInsc'
           className='interInput'
-          placeholder='http://'
+          placeholder="'http://' or '/'"
           defaultValue={rDt.instruct || ''} />
       </p>
       

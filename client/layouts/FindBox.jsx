@@ -16,9 +16,30 @@ const FindBox = ({ orb, user, append })=> {
   let last = holder || 'Search';
   let lock = user ? false : true;
   
+  const fsty = {
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    backgroundColor: 'rgb(25,25,25)',
+    padding: '0',
+    margin: '0'
+  };
+  
+  const isty = {
+    textAlign: 'center',
+    lineHeight: 'normal',
+    height: '100%',
+    minHeight: 'min-content',
+    width: '100%',
+  	border: 'none',
+    padding: '0',
+    borderRadius: '0%',
+    wordBreak: 'normal'
+  };
+  
 	return (
     <form 
-      className='findForm' 
+      style={fsty} 
       onSubmit={(e)=>setVar(e)}
       autoComplete='off'>
       <input
@@ -26,6 +47,7 @@ const FindBox = ({ orb, user, append })=> {
         type='search'
         id='lookup'
         aria-label='main searchbox'
+        style={isty}
         className='up numFont'
         placeholder={last}
         disabled={lock}
