@@ -34,28 +34,25 @@ const BatchTopStatus = ({
       <div>
         <i><i className='label'>Due:<br /></i>{dueDateShip}</i>
       </div>
-      <div>
-        <NumStat
-          num={ dense ? weekDaysRemain : Math.abs(weekDaysRemain) }
-          name={
-            weekDaysRemain < 0 ? 
-              weekDaysRemain === -1 ?
-                `Workday Overdue` :
-                `Workdays Overdue` : 
-                  weekDaysRemain === 1 ?
-                    'Workday Remaining' :
-                    'Workdays Remaining'}
-          color={weekDaysRemain < 0 ? 'orangeT' : 'blackT'}
-          size='big' />
-      </div>
-        
-      <div>
-        <NumStat
-          num={tBatch.quantity || '?'}
-          name='Total Items'
-          color='blueT'
-          size='big' />
-      </div>
+
+      <NumStat
+        num={ dense ? weekDaysRemain : Math.abs(weekDaysRemain) }
+        name={
+          weekDaysRemain < 0 ? 
+            weekDaysRemain === -1 ?
+              `Workday Overdue` :
+              `Workdays Overdue` : 
+                weekDaysRemain === 1 ?
+                  'Workday Remaining' :
+                  'Workdays Remaining'}
+        color={weekDaysRemain < 0 ? 'orangeT' : 'blackT'}
+        size='big' />
+      
+      <NumStat
+        num={tBatch.quantity || '?'}
+        name='Total Items'
+        color='blueT'
+        size='big' />
       
       {!branchArea &&
       <div>

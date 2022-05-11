@@ -1,7 +1,7 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
 
-import GroupForm from '/client/components/forms/GroupForm';
+import EquipForm from '/client/components/forms/Equip/EquipForm';
 import NumBox from '/client/components/tinyUi/NumBox';
 
 
@@ -16,7 +16,7 @@ const Landing = ({ groupData, widgetData, variantData, app })=> {
           
         </div>
         <div className='centreRow'>
-          <GroupForm
+          <EquipForm
             name={false}
             lgIcon={true}
             rootURL={app.instruct} />

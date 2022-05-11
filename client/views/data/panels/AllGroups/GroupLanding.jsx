@@ -1,7 +1,7 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
 
-import GroupForm from '/client/components/forms/GroupForm';
+import GroupForm from '/client/components/forms/Group/GroupForm';
 import NumBox from '/client/components/tinyUi/NumBox';
 import TrendLine from '/client/components/charts/Trends/TrendLine';
 import VariantNewList from '../../lists/VariantNewList';

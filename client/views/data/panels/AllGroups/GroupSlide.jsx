@@ -4,10 +4,10 @@ import CreateTag from '/client/components/tinyUi/CreateTag';
 import WidgetsDepth from '../../lists/WidgetsDepth';
 import TagsModule from '/client/components/bigUi/TagsModule';
 
-import GroupForm from '/client/components/forms/GroupForm';
-import GroupHibernate from '/client/components/forms/GroupHibernate';
-import GroupInternal from '/client/components/forms/GroupInternal';
-import GroupEmails from '/client/components/forms/GroupEmails';
+import GroupForm from '/client/components/forms/Group/GroupForm';
+import GroupHibernate from '/client/components/forms/Group/GroupHibernate';
+import GroupInternal from '/client/components/forms/Group/GroupInternal';
+import GroupEmails from '/client/components/forms/Group/GroupEmails';
 import WidgetNewForm from '/client/components/forms/WidgetNewForm';
 import Remove from '/client/components/forms/Remove';
 

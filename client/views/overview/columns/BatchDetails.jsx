@@ -1,13 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { Suspense, Fragment, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 
 import BatchTopStatus from './BatchTopStatus';
 import ReleasedCheck from './ReleasedCheck';
 import TideActivityData, { TideActivitySquare } from '/client/components/tide/TideActivity';
 import { PerformanceSquare } from '/client/components/smallUi/StatusBlocks/PerformanceStatus';
-import BranchProgress from './BranchProgress';
-import NonConCounts from './NonConCounts';
 import ProJump from '/client/components/smallUi/ProJump';
+
+const BranchProgress = React.lazy(() => import('./BranchProgress'));
+const NonConCounts = React.lazy(() => import('./NonConCounts'));
 
 import Grabber from '/client/utility/Grabber.js';
       
@@ -54,9 +55,7 @@ const BatchDetails = ({
         <div className='overGridRowScroll'>
           {headersArr.map( (entry, index)=>{
             return(
-              <div key={entry+index}>
-                <i className='cap ovColhead'>{entry}</i>
-              </div>
+              <div key={entry+index} className='cap ovColhead'>{entry}</div>
         )})}
         </div>
       }
@@ -131,7 +130,6 @@ const BatchDetailChunk = ({
           >{Pref.SO}:<br /></i>{oB.salesOrder}</i>
       </div>
       
-      <div>
       {!isDone ?
         <TideActivitySquare 
           batchID={oB._id} 
@@ -141,8 +139,7 @@ const BatchDetailChunk = ({
         <TideActivityData
           batchID={oB._id}
           isDebug={isDebug} />
-      }    
-      </div>
+      }
       
       <BatchTopStatus
         rowIndex={rowIndex}
@@ -168,6 +165,7 @@ const BatchDetailChunk = ({
           isDebug={isDebug} />
       : null}
       
+    <Suspense fallback={<BlankCells batchID={oB._id} cols={progCols} />}>
       <BranchProgress
         batchID={oB._id}
         progCols={progCols}
@@ -178,9 +176,11 @@ const BatchDetailChunk = ({
         branchArea={branchArea}
         updateTrigger={updateTrigger}
         isDebug={isDebug} />
-      
+    </Suspense>
+    
       <PerformanceSquare perf={tBatch.performTgt} />
-      
+    
+    <Suspense fallback={<BlankCells batchID={oB._id} cols={ncCols} />}>
       <NonConCounts
         batchID={oB._id}
         tBatch={tBatch}
@@ -189,9 +189,21 @@ const BatchDetailChunk = ({
         ncCols={ncCols}
         updateTrigger={updateTrigger}
         isDebug={isDebug} />
-      
+    </Suspense>
+    
       <ProJump batchNum={oB.batch} dense={dense} />
         
     </div>
   );
 };
+
+const BlankCells = ({ batchID, cols })=> (
+  <Fragment>
+    {cols.map( (branch, index)=>{
+      return(
+        <div key={batchID + branch + index + 'z'}>
+          <i className='fade small label'>{branch}</i>
+        </div>
+    )})}
+  </Fragment>
+);

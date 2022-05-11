@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { PrioritySquare } from '/client/components/smallUi/StatusBlocks/PrioritySquare';
-import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock';
+import { BatchHeaderChunk } from '/client/views/overview/columns/BatchHeaders';
 
 const UpstreamHeaders = ({ 
   oB, traceDT,
@@ -18,50 +17,21 @@ const UpstreamHeaders = ({
       oB.map( (entry, index)=>{
         const tBatch = traceDT.find( t => t.batchID === entry._id );
         return(
-          <UpstreamHeaderChunk
+          <BatchHeaderChunk
             key={`${entry._id}livefixed${index}`}
-            ck={entry}
+            id={entry._id}
+            batch={entry.batch}
+            isDone={entry.completed ? true : false}
             tBatch={tBatch}
             app={app}
-            isDebug={isDebug}
+            rowclss='overGridRowFixed'
+            nameLth={50}
             focusBy={focusBy}
             tagBy={tagBy}
+            isDebug={isDebug}
           />
     )})}
   </div>
 );
 
 export default UpstreamHeaders;
-
-const UpstreamHeaderChunk = ({ck, tBatch, app, isDebug, focusBy, tagBy })=> {
-  
-  const isDone = ck.completed || ck.finishedAt ? true : false;
-
-  const whaT = !tBatch ? 'unavailable' : `${tBatch.isWhat.join(' ')}`;
-  const highG = tBatch && focusBy ? tBatch.isWhat[0] === focusBy ? '' : 'hide' : '';
-  const highT = tagBy ? tBatch.tags && tBatch.tags.includes(tagBy) ? '' : 'hide' : '';
-  
-  return(
-    <div className={`overGridRowFixed ${highG} ${highT}`}>
-      <PrioritySquare
-        batchID={ck._id}
-        ptData={tBatch}
-        isDone={isDone}
-        oRapid={tBatch ? tBatch.oRapid : false}
-        app={app}
-        isDebug={isDebug}
-        showLess={true}
-      />
-      <div>
-        <ExploreLinkBlock 
-          type='batch' 
-          keyword={ck.batch} 
-          wrap={false}
-          rad={tBatch ? tBatch.rad : null}
-        />
-      </div>
-      <div title={tBatch ? tBatch.describe : 'unavailable'}
-      >{whaT.length <= 50 ? whaT : whaT.substring(0, 50) + '...'}</div>
-    </div>
-  );
-};

@@ -58,6 +58,18 @@ XRapidsDB.deny({
   remove: () => { return true; },
 });
 
+EquipDB.deny({
+  insert: () => { return true; },
+  update: () => { return true; },
+  remove: () => { return true; },
+});
+
+MaintainDB.deny({
+  insert: () => { return true; },
+  update: () => { return true; },
+  remove: () => { return true; },
+});
+
 TraceDB.deny({
   insert: () => { return true; },
   update: () => { return true; },

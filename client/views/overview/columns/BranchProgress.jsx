@@ -52,14 +52,14 @@ const BranchProgress = ({
     }
   }, [progType, batchID, branchArea, filterBy, updateTrigger]);
  
-  if(dtTotl && dtProg) {
+  if(dtProg) {
     return(
       <Fragment>
         
         {showTotal &&
           <div>
             <NumStat
-              num={dtTotl}
+              num={dtTotl || ""}
               name='Total Items'
               title=''
               color='blueT'

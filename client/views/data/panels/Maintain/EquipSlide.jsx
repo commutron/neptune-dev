@@ -3,12 +3,8 @@ import Pref from '/client/global/pref.js';
 import CreateTag from '/client/components/tinyUi/CreateTag';
 import TagsModule from '/client/components/bigUi/TagsModule';
 
-import GroupForm from '/client/components/forms/GroupForm';
-import GroupHibernate from '/client/components/forms/GroupHibernate';
-import GroupInternal from '/client/components/forms/GroupInternal';
-import GroupEmails from '/client/components/forms/GroupEmails';
-import WidgetNewForm from '/client/components/forms/WidgetNewForm';
-import Remove from '/client/components/forms/Remove';
+import EquipForm from '/client/components/forms/Equip/EquipForm';
+
 
 
 const EquipSlide = ({ groupData, widgetsList, batchDataX, app, inter, isERun })=>{
@@ -51,7 +47,7 @@ const EquipSlide = ({ groupData, widgetsList, batchDataX, app, inter, isERun })=
         </div>
           
         <div className='centreRow'>
-          <GroupForm
+          <EquipForm
             id={g._id}
             name={g.group}
             alias={g.alias}
@@ -60,40 +56,7 @@ const EquipSlide = ({ groupData, widgetsList, batchDataX, app, inter, isERun })=
             noText={false}
             primeTopRight={false}
             lockOut={g.hibernate} />
-          <WidgetNewForm
-            groupId={g._id}
-            lock={g.hibernate}
-          />
-            
-          <GroupEmails
-            groupData={g}
-          />
-          
-          {inter &&
-            <GroupInternal
-              id={g._id}
-              iState={g.internal}
-              noText={false}
-              primeTopRight={false}
-              access={isERun}
-            />
-          }
-          <GroupHibernate
-            id={g._id}
-            hState={g.hibernate}
-            noText={false}
-            primeTopRight={false} />
-          
-          {!widgetsList || widgetsList.length === 0 ?
-            <Remove
-              action='group'
-              title={g.group}
-              check={g.createdAt.toISOString()}
-              entry={g._id}
-              noText={false}
-              lockOut={g.hibernate !== true ? 'still active' : false}
-            />
-          : null}
+         
         </div>
         
       </div>

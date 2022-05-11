@@ -11,6 +11,9 @@ XSeriesDB = new Mongo.Collection('xseriesdb');
 XRapidsDB = new Mongo.Collection('xrapidsdb');
 TraceDB = new Mongo.Collection('tracedb');
 
+EquipDB = new Mongo.Collection('equipdb');
+MaintainDB = new Mongo.Collection('maintaindb');
+
 CacheDB = new Mongo.Collection('cachedb');
 EmailDB = new Mongo.Collection('emaildb');
 
@@ -462,7 +465,6 @@ Meteor.publish('skinnyData', function(){
           'describe': 1,
           'groupId': 1
         }}),
-        
       VariantDB.find({orgKey: orgKey}, {
         fields: {
           'groupId': 1,
@@ -598,5 +600,47 @@ Meteor.publish('hotDataEx', function(dataView, dataRequest, hotWidget){
         }})
       ];
     }
+  }
+});
+
+Meteor.publish('thinEquip', function(){
+  const user = Meteor.users.findOne({_id: this.userId});
+  const orgKey = user ? user.orgKey : false;
+  
+  if(!this.userId){
+    return this.ready();
+  }else{
+    return [
+      EquipDB.find({orgKey: orgKey}, {
+        fields: {
+          'alias': 1,
+          'maincode': 1
+      }}),
+      MaintainDB.find({orgKey: orgKey}, {
+        fields: {
+          'maincode': 1
+      }})
+    ];
+  }
+});
+
+Meteor.publish('hotEquip', function(hotEquipID) {
+  const user = Meteor.users.findOne({_id: this.userId});
+  const orgKey = user ? user.orgKey : false;
+  
+  if(!this.userId) {
+    return this.ready();
+  }else{
+    return [
+      EquipDB.find({_id: hotEquipID, orgKey: orgKey}, {
+        fields: {
+          'orgKey': 0,
+        }}),
+        
+      MaintainDB.find({maincode: hotEquipID, orgKey: orgKey}, {
+        fields: {
+          'orgKey': 0,
+        }})
+    ];
   }
 });

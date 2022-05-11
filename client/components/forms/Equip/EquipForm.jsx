@@ -2,10 +2,10 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import ModelMedium from '../smallUi/ModelMedium';
+import ModelMedium from '/client/components/smallUi/ModelMedium';
 import { cleanURL } from '/client/utility/Convert';
 
-const GroupFormWrapper = ({ 
+const EquipFormWrapper = ({ 
   id, name, alias, wiki, rootURL,
   noText, primeTopRight, lgIcon,
   lockOut
@@ -29,7 +29,7 @@ const GroupFormWrapper = ({
       noText={noText}
       primeTopRight={primeTopRight}
       lgIcon={lgIcon}>
-      <GroupForm 
+      <EquipForm 
         id={id}
         name={name}
         alias={alias}
@@ -41,23 +41,23 @@ const GroupFormWrapper = ({
   );
 };
 
-export default GroupFormWrapper;
+export default EquipFormWrapper;
 
-const GroupForm = ({ id, name, alias, wiki, rootURL, title, selfclose })=> {
+const EquipForm = ({ id, name, alias, wiki, rootURL, title, selfclose })=> {
 
-  function createCustomer(e) {
+  function newEquipment(e) {
     e.preventDefault();
-    const groupId = id;
-    const groupName = this.gName.value.trim();
-    const groupAlias = this.gAlias.value.trim().toLowerCase();
+    const equipId = id;
+    const eqname = this.eName.value.trim();
+    const alias = this.eAlias.value.trim().toLowerCase();
     
-    const gURL = this.gWiki.value.trim();
-    const groupWiki = cleanURL(gURL, rootURL);
+    const eURL = this.eWiki.value.trim();
+    const eWiki = cleanURL(eURL, rootURL);
     
-    function create(groupName, groupAlias, groupWiki) {
-      Meteor.call('addGroup', groupName, groupAlias, groupWiki, (error, reply)=>{
-        if(error)
-          console.log(error);
+    function create(eqname, alias, groupWiki) {
+      Meteor.call('createEquipment', eqname, alias, maincode, brKey, eWiki,
+      (error, reply)=>{
+        error && console.log(error);
         if(reply) {
           toast.success('Saved');
           selfclose();
@@ -67,26 +67,26 @@ const GroupForm = ({ id, name, alias, wiki, rootURL, title, selfclose })=> {
       });
     }
       
-    function edit(groupId, groupName, groupAlias, groupWiki) {
-      Meteor.call('editGroup', groupId, groupName, groupAlias, groupWiki, (error, reply)=>{
-        if(error)
-          console.log(error);
-        if(reply) {
-          toast.success('Saved');
-          FlowRouter.go('/data/overview?request=groups&specify=' + groupAlias);
-          selfclose();
-        }else{
-          toast.error('Server Error');
-        }
-      });
-    }
+    // function edit(groupId, groupName, groupAlias, groupWiki) {
+    //   Meteor.call('editGroup', groupId, groupName, groupAlias, groupWiki, (error, reply)=>{
+    //     if(error)
+    //       console.log(error);
+    //     if(reply) {
+    //       toast.success('Saved');
+    //       FlowRouter.go('/data/overview?request=groups&specify=' + groupAlias);
+    //       selfclose();
+    //     }else{
+    //       toast.error('Server Error');
+    //     }
+    //   });
+    // }
     
     /////////Selection/////////
-    if(name === false) {
-      create(groupName, groupAlias, groupWiki);
-    }else{
-      edit(groupId, groupName, groupAlias, groupWiki);
-    }
+    // if(name === false) {
+    //   create(groupName, groupAlias, groupWiki);
+    // }else{
+    //   edit(groupId, groupName, groupAlias, groupWiki);
+    // }
     
   }
     
@@ -95,7 +95,7 @@ const GroupForm = ({ id, name, alias, wiki, rootURL, title, selfclose })=> {
   const orWiki = wiki ? wiki : '';
 
   return(
-    <form id='newGroup' className='fitWide' onSubmit={(e)=>createCustomer(e)}>
+    <form id='newEquip' className='fitWide' onSubmit={(e)=>newEquipment(e)}>
       <p>
         <span>
           <input

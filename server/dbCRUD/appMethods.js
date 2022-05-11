@@ -1,5 +1,4 @@
-// import { Random } from 'meteor/random';
-import Config from '/server/hardConfig.js';
+// import Config from '/server/hardConfig.js';
 
 Meteor.startup(function () {  
   // ensureIndex is depreciated but new createIndex errors as "not a function"
@@ -12,6 +11,7 @@ Meteor.startup(function () {
   GroupDB._ensureIndex({ orgKey: 1, group : 1 }, { unique: true });
   WidgetDB._ensureIndex({ orgKey: 1, widget : 1 }, { unique: true });
   VariantDB._ensureIndex({ orgKey: 1, versionKey : 1 }, { unique: true });
+  EquipDB._ensureIndex({ orgKey: 1, maincode : 1 }, { unique: true });
   CacheDB._ensureIndex({ dataName : 1 }, { unique: true });
   TraceDB._ensureIndex({ batchID : 1 }, { unique: true });
 });

@@ -131,12 +131,12 @@ const TideWorkWeek = ({
           data: { 
             fill: 'whitesmoke',
             fillOpacity: 0.4,
-            stroke: 'rgb(23,123,201)',
+            stroke: 'rgb(26, 188, 156)',
           } }}
         labels={(d) => d.y}
         labelComponent={
           <VictoryLabel 
-            style={{ fill: 'rgb(23,123,201)' }} 
+            style={{ fill: 'rgb(26, 188, 156)', fontSize: 12 }} 
             renderInPortal
             textAnchor='end' />
         }
@@ -154,7 +154,7 @@ const TideWorkWeek = ({
         labels={(d) => d.y}
         labelComponent={
           <VictoryLabel 
-            style={{ fill: 'black' }} 
+            style={{ fill: 'rgb(23,123,201)', fontSize: 12 }} 
             renderInPortal
             textAnchor='start' />
         }

@@ -39,6 +39,9 @@ XBatchDB = new Mongo.Collection('xbatchdb');
 XSeriesDB = new Mongo.Collection('xseriesdb');
 XRapidsDB = new Mongo.Collection('xrapidsdb');
 
+EquipDB = new Mongo.Collection('equipdb');
+MaintainDB = new Mongo.Collection('maintaindb');
+
 CacheDB = new Mongo.Collection('cachedb');
 TraceDB = new Mongo.Collection('tracedb');
 

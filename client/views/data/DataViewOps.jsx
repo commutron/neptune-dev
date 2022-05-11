@@ -18,7 +18,7 @@ import TestFailPanel from './panels/TestFailPanel';
 import RadioPanel from './panels/RadioPanel';
 import ScrapPanel from './panels/ScrapPanel';
 
-import MainWrap from './panels/Maintain/MainWrap';
+import MainData from './panels/Maintain/MainData';
 
 import BatchesList from './lists/BatchesList';
 import ItemsListX from './lists/ItemsListX';
@@ -310,7 +310,7 @@ const DataViewOps = ({
           action='maintain'
           base={true}
         >
-          <MainWrap
+          <MainData
             batchDataX={allXBatch}
             widgetData={allWidget}
             variantData={allVariant}

@@ -137,7 +137,27 @@ const PerformanceSlide = ({ app, user, users, traceDT, isDebug })=> {
         <CalcSpin />
       :
         <Fragment>
-      
+          <div className='vgap centreRow'>
+            <NumLine
+              num={totalLogHrsState}
+              name='Hours Logged'
+              color='blueT'
+              big={true} 
+            />
+            <NumLine
+              num={totalWeekHrsState}
+              name='Hours Maximum'
+              color='tealT'
+              big={true} 
+            />
+            <NumLine
+              num={diffPotHrsState}
+              name='Hours Missed Potential'
+              color='grayT'
+              big={true} 
+            />
+          </div>
+          
           <TideWorkWeek
             tideTimes={weekData}
             weekStart={weekStart}
@@ -150,26 +170,6 @@ const PerformanceSlide = ({ app, user, users, traceDT, isDebug })=> {
             totalWeekHrsUP={(v)=>totalWeekHrsSet(v)}
             totalLogHrsUP={(v)=>totalLogHrsSet(v)}
             diffPotHrsUP={(v)=>diffPotHrsSet(v)} />
-          
-          <div className='vgap centreRow'>
-            <NumLine
-              num={totalWeekHrsState}
-              name='Hours Maximum for the Week'
-              color='blueT'
-              big={true} />
-              
-            <NumLine
-              num={totalLogHrsState}
-              name='Hours Logged'
-              color='tealT'
-              big={true} />
-        
-            <NumLine
-              num={diffPotHrsState}
-              name='Hours Under Maximum'
-              color='grayT'
-              big={true} />
-          </div>
             
           <div className='autoGrid'>
             

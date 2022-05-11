@@ -2,7 +2,7 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import ModelSmall from '../smallUi/ModelSmall';
+import ModelSmall from '/client/components/smallUi/ModelSmall';
 import { toCap } from '/client/utility/Convert';
 
 const GroupHibernateWrapper = ({ id, hState, noText, primeTopRight })=> {

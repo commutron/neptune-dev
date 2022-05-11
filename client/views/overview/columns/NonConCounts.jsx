@@ -36,54 +36,48 @@ const NonConCounts = ({
   if((releasedToFloor || force) && ncData && ncData.batchID === batchID) {
     return(
       <Fragment>
-        <div>
-          <NumStat
-            num={ncData.nonConTotal}
-            name='NC Total'
-            title='Total Noncons'
-            color='redT'
-            size='big' />
-        </div>
-        <div>
-          <NumStat
-            num={ncData.nonConLeft}
-            name='NC Remain'
-            title='Unresolved Noncons'
-            color='orangeT'
-            size='big' />
-        </div>
-        <div>
-          <NumStat
-            num={ncData.nonConRate}
-            name='NC Rate'
-            title='Rate of Noncons per Item'
-            color='redT'
-            size='big' />
-        </div>
-        <div>
-          <NumStat
-            num={ncData.percentOfNCitems}
-            name='NC Items'
-            title='Percent of Items with Noncons'
-            color='redT'
-            size='big' />
-        </div>
-        <div>
-          <NumStat
-            num={ncData.itemIsScrap}
-            name={Pref.scrapped}
-            title=''
-            color='redT'
-            size='big' />
-        </div>
-        <div>
-          <NumStat
-            num={ncData.itemHasRMA}
-            name={Pref.rapidExd}
-            title=''
-            color='redT'
-            size='big' />
-        </div>
+        <NumStat
+          num={ncData.nonConTotal}
+          name='NC Total'
+          title='Total Noncons'
+          color='redT'
+          size='big'
+        />
+        <NumStat
+          num={ncData.nonConLeft}
+          name='NC Remain'
+          title='Unresolved Noncons'
+          color='orangeT'
+          size='big'
+        />
+        <NumStat
+          num={ncData.nonConRate}
+          name='NC Rate'
+          title='Rate of Noncons per Item'
+          color='redT'
+          size='big' 
+        />
+        <NumStat
+          num={ncData.percentOfNCitems}
+          name='NC Items'
+          title='Percent of Items with Noncons'
+          color='redT'
+          size='big' 
+        />
+        <NumStat
+          num={ncData.itemIsScrap}
+          name={Pref.scrapped}
+          title=''
+          color='redT'
+          size='big' 
+        />
+        <NumStat
+          num={ncData.itemHasRMA}
+          name={Pref.rapidExd}
+          title=''
+          color='redT'
+          size='big' 
+        />
       </Fragment>
     );
   }

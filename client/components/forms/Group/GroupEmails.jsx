@@ -1,7 +1,7 @@
 import React , { useState } from 'react';
 import { toast } from 'react-toastify';
 
-import ModelSmall from '../smallUi/ModelSmall';
+import ModelSmall from '/client/components/smallUi/ModelSmall';
 
 const GroupEmailsManager = ({ groupData })=> {
 
