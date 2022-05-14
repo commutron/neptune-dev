@@ -109,7 +109,7 @@ const Remove = ({ action, entry, title, check })=> {
           className='noCopy'
           required />
         <button
-          className='smallAction clearRed'
+          className='smallAction redHover'
           type='submit'
           id='cutGo'
           disabled={false}>DELETE</button>

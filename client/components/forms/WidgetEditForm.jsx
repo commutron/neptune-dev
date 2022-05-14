@@ -70,7 +70,7 @@ const WidgetEditForm = ({ id, now })=> {
       <span className='centre'>
         <button
           type='submit' 
-          className='action clearBlue'
+          className='action nSolid'
         >SAVE</button>
       </span>
     </form>

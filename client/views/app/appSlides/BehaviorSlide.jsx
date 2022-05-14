@@ -60,7 +60,7 @@ const BehaviorSlide = ({app})=> {
               id={rndmKey2 + 'dnTrkHow'}
               type='text'
               defaultValue={dfHow} />
-            <button type='submit' className='action clearGreen'
+            <button type='submit' className='smallAction greenHover'
             >Save</button>
           </form>
         </label>

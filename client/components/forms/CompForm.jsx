@@ -62,7 +62,7 @@ const CompForm = ({ vID, selfclose })=> {
         <button
           id='go'
           disabled={false}
-          className='action clearBlue'
+          className='action nSolid'
           type='submit'>Add</button>
       </p>
     </form>

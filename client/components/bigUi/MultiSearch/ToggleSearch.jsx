@@ -71,7 +71,7 @@ const ToggleSearch = ({
     }
   }
   
-  const bttnClss = 'action variableInput big';
+  const bttnClss = 'smallAction variableInput big';
 	
 	return(
 		<div className='wide centre centreText'>

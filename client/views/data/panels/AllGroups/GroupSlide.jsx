@@ -44,9 +44,9 @@ const GroupSlide = ({ groupData, widgetsList, batchDataX, app, inter, isERun })=
       
         {g.internal &&
           <div className='centreText comfort middle w100 vmargin intrBlue cap'>
-            <i className='fas fa-home fa-fw fa-2x logoBlueT gapL'></i>
+            <i className='fas fa-home fa-fw fa-2x nT gapL'></i>
             <h3>Internal {Pref.group}</h3>
-            <i className='fas fa-globe-americas fa-fw fa-2x logoBlueT gapR'></i>
+            <i className='fas fa-globe-americas fa-fw fa-2x nT gapR'></i>
           </div>}
           
         {g.hibernate &&
@@ -116,7 +116,7 @@ const GroupSlide = ({ groupData, widgetsList, batchDataX, app, inter, isERun })=
       
       <p className='w100 capFL vmargin indenText wordBr'>
         {Pref.instruct} Index: {g.wiki && !g.wiki.includes('http') ?
-          <n-sm>{app.instruct}</n-sm> : null}<a className='clean wordBr' href={g.wiki} target='_blank'>{g.wiki}</a>
+          app.instruct : null}<a className='clean wordBr' href={g.wiki} target='_blank'>{g.wiki}</a>
       </p>
       
       <GroupTops groupId={g._id} alias={g.alias} app={app} />

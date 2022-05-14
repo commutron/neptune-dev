@@ -63,7 +63,7 @@ const UsernameChange = (props)=> {
           <button
             type='submit'
             id='changeUsrNmSubmit'
-            className='action clearBlue'
+            className='action nSolid'
            >Save New Username</button>
         </p>
       </form>

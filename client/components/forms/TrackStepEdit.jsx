@@ -68,7 +68,7 @@ const TrackStepEdit = ({app, branchesSort, data})=> {
         <button
           type='submit'
           id={opKey + 'edit'}
-          className='smallAction clearGreen'
+          className='smallAction greenHover'
           disabled={false}
         >Set</button>
       </label>

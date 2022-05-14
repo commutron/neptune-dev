@@ -137,7 +137,7 @@ const ScheduleSlide = ({ app, user, users, isAdmin, isPeopleSuper })=> {
               }} />
               
             <button 
-              className='action clearBlue'
+              className='smallAction nHover'
               onClick={()=>handleTest()}
             >Test {dateState}</button>
           </div>
@@ -146,13 +146,13 @@ const ScheduleSlide = ({ app, user, users, isAdmin, isPeopleSuper })=> {
           <Fragment>
             <div className='vspace balance'>
               <button 
-                className='action clearGreen'
+                className='action greenSolid'
                 onClick={()=>handleAdd(true)}
                 disabled={!isAuth}>Add {wildState}
               </button>
               
               <button 
-                className='action clearGreen'
+                className='action greenSolid'
                 onClick={()=>handleAdd(false)}
                 disabled={!isAuth}>Add {dateState}
               </button>
@@ -160,13 +160,13 @@ const ScheduleSlide = ({ app, user, users, isAdmin, isPeopleSuper })=> {
       
             <div className='vspace balance'>
               <button
-                className='action clearRed'
+                className='action redSolid'
                 onClick={()=>handleRemove(true)}
                 disabled={!isAuth || noRmv}>Remove {wildState}
               </button>
             
               <button
-                className='action clearRed'
+                className='action redSolid'
                 onClick={()=>handleRemove(false)}
                 disabled={!isAuth || noRmv}>Remove {dateState}
               </button>

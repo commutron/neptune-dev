@@ -105,7 +105,7 @@ const PanelBreakForm = ({ seriesId, batchId, batchNum, item })=> {
           <button
             id='pBrkGO'
             disabled={newSerials.length !== item.units}
-            className='action clearBlue'
+            className='action nSolid'
             type='button'
             onClick={(e)=>confirmSet(true)}
           >Split</button>
@@ -113,11 +113,11 @@ const PanelBreakForm = ({ seriesId, batchId, batchNum, item })=> {
         <div>
           {confirmState &&
             <p><b>Are you sure? </b><button
-                className='smallAction clearRed inlineButton'
+                className='smallAction redHover inlineButton'
                 type='submit'
               >YES</button>
               <button
-                className='smallAction clearBlack inlineButton'
+                className='smallAction blackHover inlineButton'
                 type='button'
                 onClick={(e)=>confirmSet(false)}
               >NO</button>

@@ -12,7 +12,7 @@ const ToggleBar = ({ toggleOptions, toggleIcons, toggleVal, toggleSet })=> {
           <button
             key={index}
             onClick={()=>toggleSet(entry)}
-            className={`${tog} ${toggleIcons ? 'liteTip' : '' }`}
+            className={`${tog} ${toggleIcons ? 'liteTip' : '' } blackT`}
             data-tip={toCap(entry, true)}
           >{toggleIcons ? toggleIcons[index] : entry}</button>
       )})}

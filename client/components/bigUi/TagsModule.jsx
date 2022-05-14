@@ -71,6 +71,19 @@ const TagsModule = ({ action, id, vKey, tags, tagOps, truncate, rad, hold, canRu
   
   const currTags = tags || [];
   
+  const sty = {
+    display: 'inline-block',
+    margin: '0 10px',
+    padding: '2px',
+    verticalAlign: 'middle',
+    color: 'var(--peterriver)',
+    backgroundColor: 'transparent',
+    fontSize: '1.6rem',
+    borderRadius: '25%',
+    transition: 'all 150ms ease-in-out',
+    cursor: 'pointer'
+  };
+
   return(
     <div className='rowWrap margin5'>
       {currTags.map( (entry, index)=>{
@@ -86,7 +99,7 @@ const TagsModule = ({ action, id, vKey, tags, tagOps, truncate, rad, hold, canRu
           id={id+'tagnew'}
           holdToDisplay={1}
           renderTag='span'>
-          <i className='fas fa-tags tagAddButton'></i>
+          <i className='fas fa-tags' style={sty}></i>
         </ContextMenuTrigger>
       :null}
       
@@ -138,7 +151,7 @@ const TagsModule = ({ action, id, vKey, tags, tagOps, truncate, rad, hold, canRu
           </MenuItem>
           <MenuItem onClick={()=>addRadFlag(newRad)} disabled={!newRad} className='cap'>
             <n-faX>
-              <i className='fas fa-radiation-alt fa-fw fa-lg gapR darkOrangeT'></i>
+              <i className='fa-solid fa-bust fa-fw fa-lg gapR darkOrangeT'></i>
             </n-faX>Add {Pref.radio.toUpperCase()}
           </MenuItem>
         </span>
@@ -151,24 +164,42 @@ const TagsModule = ({ action, id, vKey, tags, tagOps, truncate, rad, hold, canRu
 
 export default TagsModule;
 
-const IndieTag = ({ tagText, removeTag, lock }) => (
-  <div className='tagFlag'>
-    <i>{tagText}</i>
-    
-    {!lock &&
-      <ContextMenuTrigger
-        id={tagText+'tagcut'}
-        holdToDisplay={1}
-        renderTag='span'>
-        <i className='fas fa-times' data-fa-transform='up-2'></i>
-      </ContextMenuTrigger>
-    }
-        
-    <ContextMenu id={tagText+'tagcut'} className='noCopy'>
-      <MenuItem onClick={()=>removeTag()}>Remove {Pref.tag}</MenuItem>
-    </ContextMenu>
-  </div>
-);
+const IndieTag = ({ tagText, removeTag, lock }) => {
+  
+  const sty = {
+    display: 'flex',
+    alignItems: 'center',
+    margin: '2px',
+    padding: '3px 5px 3px 5px',
+    border: '0.5px solid white',
+    borderRadius: '1px 25px 25px 1px',
+    backgroundColor: 'var(--peterriver)',
+    fontSize: '0.9rem',
+    color: 'white',
+    wordBreak: 'keep-all',
+    wordWrap: 'normal'
+  };
+  
+  return(
+    <div style={sty}>
+      <i>{tagText}</i>
+      
+      {!lock &&
+        <ContextMenuTrigger
+          id={tagText+'tagcut'}
+          holdToDisplay={1}
+          renderTag='span'
+          attributes={ {className: 'miniAction centreText' } }>
+          <i className='fas fa-times'></i>
+        </ContextMenuTrigger>
+      }
+          
+      <ContextMenu id={tagText+'tagcut'} className='noCopy'>
+        <MenuItem onClick={()=>removeTag()}>Remove {Pref.tag}</MenuItem>
+      </ContextMenu>
+    </div>
+  );
+};
 
 export const HoldFlag = ({ id, canRun })=> {
 
@@ -222,7 +253,7 @@ export const RadFlag = ({ vKey, rad, canRun })=> {
         }}
         renderTag='div'
       >
-        <n-faX><i className='fas fa-radiation-alt fa-fw fa-2x darkOrangeT'></i></n-faX>
+        <n-faX><i className='fa-solid fa-burst fa-fw fa-2x darkOrangeT'></i></n-faX>
         <i>{rad}</i>
       </ContextMenuTrigger>
         

@@ -1,26 +1,3 @@
-.loginoutButton,
-.createButton {
-  outline: 3px solid;
-  outline-offset: -3px;
-  box-shadow: var(--navIndicatorOut);
-}
-.loginoutButton {
-  background-color: var(--neptuneColor);
-  outline-color: var(--neptuneColor);
-}
-.createButton {
-  background-color: var(--nephritis);
-  outline-color: var(--nephritis);
-}
-.loginoutButton:hover, 
-.loginoutButton:focus, 
-.loginoutButton:active,
-.createButton:hover, 
-.createButton:focus, 
-.createButton:active {
-  outline-offset: 3px;
-}
-
 .scanInIndicator {
   min-height: 225px;
   margin: 30px;

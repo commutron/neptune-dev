@@ -7,23 +7,26 @@ Meteor.methods({
 // EquipDB = new Mongo.Collection('equipdb');
 // MaintainDB = new Mongo.Collection('maintaindb');
   
-  createEquipment(eqname, alias, maincode, brKey, instruct) {
+  createEquipment(eqname, alias, brKey, instruct) {
     
-    const dupe = EquipDB.findOne({maincode: maincode},{fields:{'_id':1}});
+    const dupe = EquipDB.findOne({alias: alias},{fields:{'_id':1}});
     
     const auth = Roles.userIsInRole(Meteor.userId(), 'create');
     
     if(!dupe && auth) {
       EquipDB.insert({
-        equip: eqName,
+        equip: eqname,
         alias: alias,
-        maincode: maincode,
         branchKey: brKey,
         orgKey: Meteor.user().orgKey,
-        instruct: instruct
-        // serialNum: serial,
-        // modelNum: model,
-        
+        createdAt: new Date(),
+        createdWho: Meteor.userId(),
+  			updatedAt: new Date(),
+  			updatedWho: Meteor.userId(),
+  			online: true,
+        instruct: instruct,
+        tasks: [],
+        pattern: []
       });
       return true;
     }else{
@@ -33,7 +36,7 @@ Meteor.methods({
 
 /*
 
-  editGroup(groupId, newGroupName, newAlias, newWiki) {
+  editGroup(eqId, eqname, alias, brKey, instruct) {
     const doc = GroupDB.findOne({_id: groupId},{fields:{'group':1,'alias':1}});
     let duplicate = GroupDB.findOne({group: newGroupName},{fields:{'_id':1}});
     let dupe = GroupDB.findOne({alias: newAlias});

@@ -29,15 +29,15 @@ const BigTideTask = ({
         disabled={lockTaskState}
         required>
         <option value={false} className='darkgrayT em'>Task Required</option>
-        <optgroup label='Ancillary' className='blackblackT nsty'>
+        <optgroup label='Ancillary' className='blackT nsty'>
           {ancOptionS.map( (v, ix)=>(
-            <option key={ix+'o1'} className='blackblackT nsty' value={v}
+            <option key={ix+'o1'} className='blackT nsty' value={v}
             >{v}</option>
           ))}
         </optgroup>
-        <optgroup label={Pref.branches} className='blackblackT nsty'>
+        <optgroup label={Pref.branches} className='blackT nsty'>
           {brancheS.map( (v, ix)=>(
-            <option key={ix+'o2'} className='blackblackT nsty' value={v.branch}
+            <option key={ix+'o2'} className='blackT nsty' value={v.branch}
             >{v.branch}</option>
           ))}
         </optgroup>

@@ -8,7 +8,7 @@ const TabsLite = ({ tabs, names, children, tcls })=> {
   
   return(
     <div className={'posRel ' + tcls || ''}>
-      <div className='liteTabs flexRR'>
+      <div className='liteTabs flexRR vmarginhalf'>
         {tabs.map( (entry, index)=>{
           let clss =  show === index ? 'liteTip liteToolOn' : 'liteTip liteToolOff';
           return (

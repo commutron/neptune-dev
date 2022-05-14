@@ -2,7 +2,7 @@ import moment from 'moment';
 import timezone from 'moment-timezone';
 import Config from '/server/hardConfig.js';
 
-export function whatIsBatchX(keyword, labelString) {
+export function whatIsBatchX(keyword) {
   const batch = XBatchDB.findOne({batch: keyword},{fields:
                 {'groupId':1,'widgetId':1,'versionKey':1,'salesOrder':1,'quantity':1}});
   const group = GroupDB.findOne({_id: batch.groupId},{fields:{'alias':1,'hibernate':1}});
@@ -11,22 +11,10 @@ export function whatIsBatchX(keyword, labelString) {
   const variant = VariantDB.findOne({versionKey: batch.versionKey},{fields:{'variant':1,'radioactive':1}});
   const more = widget.describe;
   
-  if(labelString) {
-    const label = '/print/generallabel/' + keyword +
-                  '?group=' + group.alias +
-                  '&widget=' + widget.widget +
-                  '&ver=' + variant.variant +
-                  ( variant.radioactive ? '☢' : ''  ) +
-                  '&desc=' + more +
-                  '&sales=' + batch.salesOrder +
-                  '&quant=' + batch.quantity; 
-    return label;     
-  }else{
-    const vNice = `v.${variant.variant}`;
-    const nice = [ groupH.toUpperCase(), widget.widget.toUpperCase(), vNice ];
-    const rad = variant.radioactive ? variant.radioactive : false;
-    return [ nice, more, rad ];
-  }
+  const vNice = `v.${variant.variant}`;
+  const nice = [ groupH.toUpperCase(), widget.widget.toUpperCase(), vNice ];
+  const rad = variant.radioactive ? variant.radioactive : false;
+  return [ nice, more, rad ];
 }
 
     
@@ -41,12 +29,6 @@ Meteor.methods({
       rad: niceString[2]
     };
     return niceObj;
-  },
-  
-  getBatchPrintLink(keyword) {
-    this.unblock();
-    const labelString = whatIsBatchX(keyword, true);
-    return labelString;
   },
   
   batchLookup(orb) { // significantly faster than findOne

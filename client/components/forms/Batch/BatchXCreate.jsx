@@ -271,7 +271,7 @@ const BXCreateForm = ({ groupId, widgetId, allVariants })=> {
       <div className='vmargin'>
         <button
           type='submit'
-          className='action clearBlue'
+          className='action nSolid'
         >Create</button>
       </div>
     </form>

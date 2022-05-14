@@ -150,7 +150,7 @@ const NCFlood = ({ seriesId, live, user, app, ncTypesCombo })=> {
             type='submit'
             id='go'
             disabled={lock}
-            className='smallAction clearRed bold'
+            className='smallAction redHover bold transparent'
           >Record On All WIP {Pref.items}</button>
       </form>
     </fieldset>

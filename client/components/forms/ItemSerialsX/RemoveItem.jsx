@@ -92,7 +92,7 @@ const RemoveItemForm = ({ batchId, batch, seriesId, serial, check, verify })=> {
           </p>
         }
         <button
-          className='smallAction clearRed'
+          className='smallAction redSolid'
           type='submit'
           id='cutGo'
           disabled={false}>DELETE</button>

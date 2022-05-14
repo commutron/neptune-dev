@@ -53,7 +53,7 @@ const GroupHibernate = ({ id, hState, selfclose })=> {
         <p>NO {Pref.group} data will be deleted.</p>
         <p>
           <button
-            className='action clearBlack'
+            className='action blackSolid'
             onClick={(e)=>handleHibernate(e)}
           >{Pref.hibernatate} {Pref.group}</button>
         </p>
@@ -66,7 +66,7 @@ const GroupHibernate = ({ id, hState, selfclose })=> {
       <p>{toCap(Pref.hibernatate)} flag will be removed from {Pref.group}</p>
       <p>
         <button
-          className='action clearBlue'
+          className='action nSolid'
           onClick={(e)=>handleHibernate(e)}
         >Un{Pref.hibernatate} {Pref.group}</button>
       </p>

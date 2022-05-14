@@ -54,7 +54,7 @@ const NotifySlide = ({ app })=> {
         <i>available toast notification styles</i>
         <p>
           <button
-            className='action clearBlue invert'
+            className='smallAction blueHover'
             onClick={()=>showToast()}
           >Test Toast Notifications</button>
         </p>
@@ -69,12 +69,12 @@ const NotifySlide = ({ app })=> {
           <textarea id='mesSage'></textarea>
           <br />
           <button
-            className='action clearBlue invert'
+            className='smallAction blueHover'
             onClick={(e)=>sendAtestNotify(e, false)}
           >Send Inbox Notification Test to YOURSELF</button>
         <br />
           <button
-            className='action clearBlue invert'
+            className='smallAction blueHover'
             onClick={(e)=>sendAtestNotify(e, true)}
           >Send Inbox Notification Test to ALL USERS</button>
         </form>
@@ -110,7 +110,7 @@ const NotifySlide = ({ app })=> {
           </p>
           <p>
             <button
-              className='action clearBlue'
+              className='smallAction blueHover'
               type='submit'
             >Send Email</button>
           </p>

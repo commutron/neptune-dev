@@ -87,7 +87,7 @@ const UnitSetAllForm = ({ seriesId, bdone, sqty, vqty, selfclose })=> {
         <p>
           <button
             id='setallgo'
-            className='action clearBlue'
+            className='action nSolid'
           >Set All</button>
         </p>
       </form>

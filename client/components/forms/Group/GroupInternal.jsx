@@ -51,7 +51,7 @@ const GroupInternal = ({ id, iState, selfclose })=> {
         <p>{Pref.widgets} will be left out of broad statistics</p>
         <p>
           <button
-            className='action clearBlack'
+            className='action nSolid'
             onClick={(e)=>handleInterize(e)}
           >Set {Pref.group}</button>
         </p>
@@ -64,7 +64,7 @@ const GroupInternal = ({ id, iState, selfclose })=> {
       <p>Internal flag will be removed from {Pref.group}</p>
       <p>
         <button
-          className='action clearBlack'
+          className='action nSolid'
           onClick={(e)=>handleInterize(e)}
         >Unset {Pref.group}</button>
       </p>

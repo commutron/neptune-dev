@@ -157,7 +157,7 @@ const QuoteTimeBudgetForm = ({ bID, qtB, qtbB, auth, lockOut, brancheS, selfclos
           <button
             type='submit'
             id='goQTB'
-            className='action clearBlue numberSet minIn7 vmargin'
+            className='action nSolid numberSet minIn7 vmargin'
             disabled={!auth || lockOut}
           >Update Total {toCap(Pref.timeBudget, true)}</button>
         </p>
@@ -238,7 +238,7 @@ const QuoteTimeBudgetForm = ({ bID, qtB, qtbB, auth, lockOut, brancheS, selfclos
           <button
             type='submit'
             id='goQTBB'
-            className='action clearBlue numberSet minIn7'
+            className='action nSolid numberSet minIn7'
             disabled={!auth || lockOut}
           >Update {toCap(Pref.timeBudget, true)} Breakdown</button>
         </p>

@@ -165,7 +165,7 @@ const NCAdd = ({ seriesId, serial, units, user, app, ncTypesCombo })=> {
         type='submit'
         id='go'
         disabled={lock}
-        className='smallAction clearRed bold'
+        className='smallAction redHover bold transparent'
       >Repair Later</button>
       
       <button
@@ -173,7 +173,7 @@ const NCAdd = ({ seriesId, serial, units, user, app, ncTypesCombo })=> {
         id='goFix'
         onClick={(e)=>handleNC(e, true)}
         disabled={lock}
-        className='smallAction clearRed bold'
+        className='smallAction redHover bold transparent'
       >Repaired Now</button>
           
     </form>

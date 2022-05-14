@@ -109,7 +109,7 @@ const UndoFinishForm = ({
             <p key={rindex} className='centreText'>
               <button
                 id='notDone'
-                className='action clearOrange'
+                className='action orangeSolid'
                 onClick={()=>handleRapidUndo(rentry.rapId)}
               >Undo {rapid.rapid} Finish</button>
             </p>
@@ -143,7 +143,7 @@ const UndoFinishForm = ({
           />
           <button
             onClick={(e)=>tempPinOpen(e)}
-            className='smallAction clearBlack'
+            className='smallAction blackHover'
             id='pindo'
           >Temporary Access</button>
         </p>
@@ -152,7 +152,7 @@ const UndoFinishForm = ({
       <p className='centre'>
         <button
           id='notDone'
-          className='action clearOrange'
+          className='action orangeSolid'
           onClick={()=>handleUndo()}
           disabled={!grace && !pinOpen}
         >Undo Finish</button>

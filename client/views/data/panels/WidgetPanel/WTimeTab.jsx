@@ -1,10 +1,12 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, {  Suspense, useRef, useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 
 import TideMultiBatchBar from '/client/components/charts/Tides/TideMultiBatchBar';
 import ShipScatter from '/client/components/charts/ShipScatter';
-import WTimeCycle from './WTimeCycle';
+import Spin from '/client/components/tinyUi/Spin';
 import { round1Decimal } from '/client/utility/Convert';
+
+const WTimeCycle = React.lazy(() => import('./WTimeCycle'));
 
 const WTimeTab = ({ 
   widgetData, batchIDs, 
@@ -28,6 +30,7 @@ const WTimeTab = ({
   }, []);
   
   return(
+    <Suspense fallback={<Spin />}>
     <div className='space' key={widgetData._id+'times'}>
       
       <div className='cardSelf'> 
@@ -78,6 +81,7 @@ const WTimeTab = ({
       <WTimeCycle wID={widgetData._id} flows={widgetData.flows} app={app} />
 
     </div>
+    </Suspense>
   );
 };
 

@@ -1,38 +1,3 @@
-.actionBar {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  flex-shrink: 0;
-  z-index: 8;
-}
-
-.footCent {
-  flex-grow: 2;
-}
-.footLeft, .footRight {
-  display: flex;
-  align-items: center;
-}
-.footLeft {
-  justify-content: flex-start;
-  padding: 0 0 0 5px;
-  min-height: 32px;
-}
-.footRight {
-  justify-content: flex-end;
-  padding: 0 5px 0 0;
-}
-.footPick {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-}
-.footFill {
-  flex-grow: 2;
-}
-
 .actionForm input[type='search'],
 .actionForm input[type='searchbox'],
 .actionForm select { 
@@ -90,22 +55,6 @@ input.orangeIn:invalid {
 }
 .orangeIn:focus + label {
   color: var(--orange);
-}
-
-.formBarToggle {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  transition: all 150ms ease-in-out;
-  margin: 0 1vmin !important;
-  font-size: 30px !important;
-  width: 45px !important;
-  height: 45px !important;
-}
-.formBarToggle svg {
-  width: 30px !important;
-  height: 30px !important;
 }
 
 .actionForm span,

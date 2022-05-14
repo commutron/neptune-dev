@@ -101,7 +101,7 @@ const BranchEditRow = ({ branch, isDebug })=> {
           type='number'
           title='Position'
           id={id+'chPos'}
-          className='tableAction narrow blueHover'
+          className='tableAction narrow nHover'
           pattern='[0-99]*'
           maxLength='2'
           minLength='1'
@@ -121,7 +121,7 @@ const BranchEditRow = ({ branch, isDebug })=> {
           type='text'
           title='Common'
           id={id+'chCom'}
-          className='tableAction blueHover'
+          className='tableAction nHover'
           value={comState}
           onChange={(e)=>comSet(e.target.value)}
           required
@@ -132,7 +132,7 @@ const BranchEditRow = ({ branch, isDebug })=> {
           type='checkbox'
           title='Open'
           id={id+'chkOpen'}
-          className='tableAction blueHover'
+          className='tableAction'
           checked={openState}
           onChange={(e)=>openSet(e.target.checked)}
         />
@@ -142,7 +142,7 @@ const BranchEditRow = ({ branch, isDebug })=> {
           type='checkbox'
           title='Require Kit Clearance'
           id={id+'chkClear'}
-          className='tableAction blueHover'
+          className='tableAction'
           checked={clearState}
           onChange={(e)=>clearSet(e.target.checked)}
         />
@@ -152,7 +152,7 @@ const BranchEditRow = ({ branch, isDebug })=> {
           type='checkbox'
           title='Require Problem Dam'
           id={id+'chkProbDam'}
-          className='tableAction blueHover'
+          className='tableAction'
           checked={damState}
           onChange={(e)=>damSet(e.target.checked)}
         />
@@ -162,7 +162,7 @@ const BranchEditRow = ({ branch, isDebug })=> {
           type='checkbox'
           title='Require User Locking'
           id={id+'chkUsrLck'}
-          className='tableAction blueHover'
+          className='tableAction'
           checked={uLockState}
           onChange={(e)=>uLockSet(e.target.checked)}
         />
@@ -172,7 +172,7 @@ const BranchEditRow = ({ branch, isDebug })=> {
           type='checkbox'
           title='Require Consumable Tracing'
           id={id+'chkConsume'}
-          className='tableAction blueHover'
+          className='tableAction'
           checked={consumeState}
           onChange={(e)=>consumeSet(e.target.checked)}
         />

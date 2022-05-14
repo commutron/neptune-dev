@@ -70,7 +70,7 @@ const WidgetNewForm = ({ groupId })=> {
       <br />
       <button
         type='submit'
-        className='action clearBlue'
+        className='action nSolid'
         id='go'
         disabled={false}>SAVE</button>
     </form>

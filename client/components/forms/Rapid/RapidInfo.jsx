@@ -120,8 +120,7 @@ const RapidInfoEdit = ({
       
       <p className='wordBr max300'>
         Override Instruction: {
-        rapid.instruct && !rapid.instruct.indexOf("http") != -1 ?
-          <n-sm>{rootURL}</n-sm> : null
+        rapid.instruct && !rapid.instruct.indexOf("http") != -1 ? rootURL : null
         }{
         rapid.instruct ?
           <a 
@@ -282,7 +281,7 @@ const RapidInfoFormBlock = ({
       
         <button
           type='submit'
-          className='miniAction gap greenLineHover'
+          className='miniAction gap blueLineHover'
         ><i className='fas fa-check'></i> save</button>
       </span>
       

@@ -39,15 +39,15 @@ const TimeErrorCheck = ()=> {
       <p><b>Resource intensive function. Run during idle times.</b></p>
       <br />
       <div className='rowWrap'>
-        {working ?
-          <b><i className='fas fa-spinner fa-lg fa-spin'></i></b> :
-          <i><i className='fas fa-spinner fa-lg'></i></i>
-        }
         <button
-          className='action clearBlack gap'
+          className='smallAction blackHover'
           onClick={()=>handleFetch()}
           disabled={working}
-        >Run Check</button>
+        >{working ?
+          <n-fa0><i className='gap fas fa-spinner fa-lg fa-spin'></i></n-fa0> :
+          <n-fa1><i className='gap fas fa-spinner fa-lg'></i></n-fa1>
+          } Run Check
+        </button>
       </div>
       
       <div className='rowWrapR middle '>

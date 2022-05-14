@@ -146,7 +146,7 @@ const RemoveXBatch = ({ batchData, seriesData, checkStr })=> {
           <input
             id='orgPINitem'
             autoComplete="false"
-            className='noCopy miniIn12 interSelect centreText gap redIn clearRed'
+            className='noCopy miniIn12 interSelect centreText gap redIn'
             pattern='[\d\d\d\d]*'
             maxLength='4'
             minLength='4'
@@ -154,7 +154,7 @@ const RemoveXBatch = ({ batchData, seriesData, checkStr })=> {
             required />
           <br />
           <button
-            className='smallAction clearRed'
+            className='smallAction redHover'
             type='button'
             onClick={(e)=>handleItemRemove(e)}
             id='cutItemGo'
@@ -168,7 +168,7 @@ const RemoveXBatch = ({ batchData, seriesData, checkStr })=> {
           <input
             id='orgPINprob'
             autoComplete="false"
-            className='noCopy miniIn12 interSelect centreText gap redIn clearRed'
+            className='noCopy miniIn12 interSelect centreText gap redIn'
             pattern='[\d\d\d\d]*'
             maxLength='4'
             minLength='4'
@@ -176,7 +176,7 @@ const RemoveXBatch = ({ batchData, seriesData, checkStr })=> {
             required />
           <br />
           <button
-            className='smallAction clearRed'
+            className='smallAction redHover'
             type='button'
             onClick={(e)=>handleProbRemove(e)}
             id='cutProbGo'
@@ -190,7 +190,7 @@ const RemoveXBatch = ({ batchData, seriesData, checkStr })=> {
           <input
             id='orgPINfall'
             autoComplete="false"
-            className='noCopy miniIn12 interSelect centreText gap redIn clearRed'
+            className='noCopy miniIn12 interSelect centreText gap redIn'
             pattern='[\d\d\d\d]*'
             maxLength='4'
             minLength='4'
@@ -198,7 +198,7 @@ const RemoveXBatch = ({ batchData, seriesData, checkStr })=> {
             required />
           <br />
           <button
-            className='smallAction clearRed'
+            className='smallAction redHover'
             type='button'
             onClick={(e)=>handleFallRemove(e)}
             id='cutFallGo'
@@ -212,7 +212,7 @@ const RemoveXBatch = ({ batchData, seriesData, checkStr })=> {
           <input
             id='orgPINtime'
             autoComplete="false"
-            className='noCopy miniIn12 interSelect centreText gap redIn clearRed'
+            className='noCopy miniIn12 interSelect centreText gap redIn'
             pattern='[\d\d\d\d]*'
             maxLength='4'
             minLength='4'
@@ -220,7 +220,7 @@ const RemoveXBatch = ({ batchData, seriesData, checkStr })=> {
             required />
           <br />
           <button
-            className='smallAction clearRed'
+            className='smallAction redHover'
             type='button'
             onClick={(e)=>handleTideXRemove(e)}
             id='cutTideGo'
@@ -255,19 +255,19 @@ const RemoveXBatch = ({ batchData, seriesData, checkStr })=> {
               type='text'
               id='confirmInput'
               placeholder={checkshort}
-              className='noCopy miniIn12 interSelect centreText gap redHover'
+              className='noCopy miniIn12 interSelect centreText gap'
               required />
             <input
               id='orgPINall'
               autoComplete="false"
-              className='noCopy miniIn12 interSelect centreText gap redHover'
+              className='noCopy miniIn12 interSelect centreText gap'
               pattern='[\d\d\d\d]*'
               maxLength='4'
               minLength='4'
               placeholder='PIN'
               required />
             <button
-              className='smallAction clearRed'
+              className='action redSolid'
               type='submit'
               id='cutAllGo'
               title={`Delete this ${Pref.xBatch} Forever?`}

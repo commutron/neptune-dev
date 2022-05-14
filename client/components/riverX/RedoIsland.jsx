@@ -41,11 +41,11 @@ const RedoIsland = ({
   
   return(
     <div className='stoneForm noCopy blue'>
-    	<div className='flexRR wide'>
+    	<div className='wide'>
       	<button
-      		className='action stoneFormClose'
+      		className='smallAction onblueHover medBig w100'
       		onClick={()=>handleVerify(null, false)}>
-      		<i className="fas fa-times fa-fw fa-2x"></i>
+      		<i className="fas fa-arrow-left fa-fw gap"></i>Cancel
       	</button>
     	</div>
       	

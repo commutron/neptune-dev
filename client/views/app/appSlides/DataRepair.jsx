@@ -96,7 +96,7 @@ const DataRepair = ({ app, users })=> {
         title='Force Randomize Org PIN'
         sub='Runs every day at 12:00am (CST)'
         icon='dice'
-        color='clearPurple'
+        color='purpleSolid'
         button='Randomize PIN'
         action={()=>doCallThing('randomizePIN')}
       />
@@ -108,7 +108,7 @@ const DataRepair = ({ app, users })=> {
         <small>Runs every Saturday at 12:01am (CST)</small><br />
         <button
           onClick={()=>forceLockCheck()}
-          className='action clearPurple'
+          className='action purpleSolid'
         >Request Locking</button>
       </div>
       
@@ -116,7 +116,7 @@ const DataRepair = ({ app, users })=> {
         title='Run Daily Avg Update'
         sub='Runs every Saturday at 12:03am (CST)'
         icon='calculator'
-        color='clearPurple'
+        color='purpleSolid'
         button='Request Update'
         action={()=>doCallThing('fetchWeekAvg')}
       />
@@ -125,7 +125,7 @@ const DataRepair = ({ app, users })=> {
         title='Run All Widget Avg Update'
         sub='Runs every Saturday at 12:04am (CST)'
         icon='cash-register'
-        color='clearPurple'
+        color='purpleSolid'
         button='Request Update'
         action={()=>doCallThing('updateAllWidgetAvg')}
       />
@@ -134,7 +134,7 @@ const DataRepair = ({ app, users })=> {
         title='Run Done Target Loops Update'
         sub='Runs Daily at 12:06am (CST)'
         icon='digital-tachograph'
-        color='clearPurple'
+        color='purpleSolid'
         button='Request Update'
         action={()=>doCallThing('forceRunTrendLoops')}
       />
@@ -143,7 +143,7 @@ const DataRepair = ({ app, users })=> {
         title='FORCE Run TraceDB Rebuild'
         sub='Will freeze app while running'
         icon='recycle'
-        color='clearTeal'
+        color='tealSolid'
         button='Rebuild TraceDB'
         action={()=>doCallThing('rebuildTrace')}
       />
@@ -152,7 +152,7 @@ const DataRepair = ({ app, users })=> {
         title='Run TraceDB Live Movment Update'
         sub='Runs every Weekday at 12:02am (CST) and 12:02pm (CST)'
         icon='sync'
-        color='clearTeal'
+        color='tealSolid'
         button='Update TraceDB'
         action={()=>doCallThing('updateLiveMovement')}
       />
@@ -160,7 +160,7 @@ const DataRepair = ({ app, users })=> {
       <DoCard
         title='Rebuild the LatestSerial Object'
         icon='barcode'
-        color='clearTeal'
+        color='tealSolid'
         button='Rebuild LatestSerial'
         action={()=>doCallThing('ResetAppLatestSerial')}
       />
@@ -168,7 +168,7 @@ const DataRepair = ({ app, users })=> {
       <DoCard
         title='Delete all CacheDB Entries'
         icon='snowplow'
-        color='clearRed'
+        color='redSolid'
         button='Delete All Caches'
         action={()=>doCallThing('resetALLCacheDB')}
       />
@@ -176,7 +176,7 @@ const DataRepair = ({ app, users })=> {
       <DoCard
         title='Fix Errors in TraceDB'
         icon='wrench'
-        color='clearRed'
+        color='redSolid'
         button='Fix Trace Errors'
         action={()=>doCallThing('cleanupTraceErrors')}
       />
@@ -184,7 +184,7 @@ const DataRepair = ({ app, users })=> {
       <DoCard
         title='Fix XBatchDB Errors'
         icon='hammer'
-        color='clearRed'
+        color='redSolid'
         button='Remove Damaged Batch'
         action={()=>doCallThing('fixRemoveDamagedBatch')}
       />
@@ -193,7 +193,7 @@ const DataRepair = ({ app, users })=> {
         title='Clear `Usage Logs` and `Breadcrubs`'
         sub='Only affects users with "debug" turned OFF'
         icon='user-shield'
-        color='clearBlue'
+        color='blueSolid'
         button='Clear Logs'
         action={()=>doCallThing('clearNonDebugUserUsageLogs')}
       />
@@ -204,7 +204,7 @@ const DataRepair = ({ app, users })=> {
         </h3>
         <button
           onClick={()=>doProgToTimeCurve()}
-          className='action clearBlack'
+          className='action blackSolid'
         >Get Values</button>
       </div>
       
@@ -222,7 +222,7 @@ const DataRepair = ({ app, users })=> {
           </p>
           <p>
             <button
-              className='action clearBlue'
+              className='action blueSolid'
               type='submit'
             >Request Log</button>
           </p>
@@ -248,7 +248,7 @@ const DataRepair = ({ app, users })=> {
           <p>
             <button
               type='submit'
-              className='action clearBlack'
+              className='action blackSolid'
             >Repair</button>
           </p>
         </form>
@@ -302,7 +302,7 @@ const DataRepair = ({ app, users })=> {
           <p>
             <button
               type='submit'
-              className='action clearBlack'
+              className='action blackSolid'
             >Replace</button>
           </p>
         </form>
@@ -339,7 +339,7 @@ export const ForceStopEngage = ({ userID, isAdmin, isDebug })=> {
   if(isAdmin && isDebug) {
     return(
       <button
-        className='action clearRed'
+        className='action redSolid'
         onClick={(e)=>handle(e)}
       >Force Clear Engaged</button>
     );
@@ -362,7 +362,7 @@ export const ForceRemoveTideBlock = ({ batch, isAdmin, isDebug })=> {
       <button
         id='doFORCEremoveTide'
         disabled={false}
-        className='smallAction clearRed'
+        className='smallAction redSolid'
         onClick={(e)=>handle(e)}
       >Force Pop Last Tide Block</button>
     );

@@ -57,7 +57,7 @@
   max-width: 100%;
   min-height: 8rem;
   max-height: 20rem;
-  background-color: var(--clouds);
+  /*background-color: var(--clouds);*/
   border-style: solid !important;
   border-color: black;
 }
@@ -574,6 +574,7 @@ n-trib-action-all {
   flex-direction: column;
   justify-content: space-around;
   align-self: flex-start;
+  color-scheme: light;
 }
 .stoneFormClose {
   color: rgb(25,25,25);

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { BatchHeaderChunk } from '/client/views/overview/columns/BatchHeaders';
+import BatchHeaderChunk from '/client/views/overview/columns/BatchHeaderChunk';
 
 const UpstreamHeaders = ({ 
   oB, traceDT,

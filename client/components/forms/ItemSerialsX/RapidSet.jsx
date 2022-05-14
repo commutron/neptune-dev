@@ -58,7 +58,7 @@ const RapidSetForm = ({ seriesId, serial, rapidData, selfclose })=> {
       <p className='centre vmargin'>
         <button
           id='dorapid'
-          className='action clearDarkOrange'
+          className='action darkOrangeSolid'
           onClick={(e)=>handleRapid(e)}
           disabled={false}
         >{Pref.rapidEx}</button>

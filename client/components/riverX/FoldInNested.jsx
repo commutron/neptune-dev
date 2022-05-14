@@ -84,7 +84,7 @@ const FoldInNested = ({
 	          required />
 			    <button
 			      type='submit'
-					  className='roundAction clearWhite up vmargin'
+					  className='roundAction whiteSolid up vmargin'
 					  name='include this serial number'
 					  id='goNeck'
 					  tabIndex={-1}
@@ -120,7 +120,7 @@ const FoldInNested = ({
   				}
   				<button
 			      type='button'
-					  className='roundAction clearWhite up'
+					  className='roundAction whiteSolid up'
 					  name={`include ${subState}`}
 					  id='goNest'
 					  tabIndex={-1}
@@ -132,7 +132,7 @@ const FoldInNested = ({
   		<div className='centre vmarginhalf'>
   			<button
 		      type='button'
-				  className='miniAction up'
+				  className='miniAction med up'
 				  name={`include ${subState}`}
 				  id='goBack'
 				  tabIndex={-1}

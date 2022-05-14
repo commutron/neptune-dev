@@ -53,7 +53,7 @@ export const AddAutoNCwrap = ({ rapidData, ncTypesCombo, rSetItems, user, editAu
           ><n-fa1><i className='far fa-edit'></i></n-fa1> cancel</button>
           
           <button
-            className='smallAction gap clearBlue'
+            className='smallAction gap nHover'
             onClick={()=>handleSave()}
             disabled={!rapidData.live}
           >Save</button>
@@ -119,7 +119,7 @@ const AddAutoNC = ({ ncTypesCombo, user, nonConsState, nonConsSet, rSetItems, ed
         >Only applied to newly {Pref.rapidExd} {Pref.items}
       </p> : null}
       {editState &&
-      <div className='inlineForm interForm'>
+      <div className='inlineForm interForm rightRow'>
       
         <label htmlFor='ncRefs' className='gapR'>Referances<br />
           <input
@@ -208,7 +208,7 @@ const AddAutoNC = ({ ncTypesCombo, user, nonConsState, nonConsSet, rSetItems, ed
             type='button'
             id='addNC'
             onClick={(e)=>handleNC(e)}
-            className='smallAction clearRed'
+            className='smallAction blackHover'
           >Add</button>
         </label>
         

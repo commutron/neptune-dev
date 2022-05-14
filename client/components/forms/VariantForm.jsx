@@ -151,7 +151,7 @@ const VariantForm = ({ widgetData, users, app, rootWI, selfclose })=> {
           <p>
             <button
               type='submit'
-              className='action clearBlue'
+              className='action nSolid'
               id='gonewvar'
               disabled={false}
             >SAVE</button>

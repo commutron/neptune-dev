@@ -1,14 +1,15 @@
 .lightTheme {
   background-color: var(--clouds);
   color: black;
+  --overBG: var(--clouds);
 }
 
 .darkTheme {
   background-color: var(--dark);
   color: white;
-}
-.darkTheme .blackT {
-  color: var(--clouds);
+  --actionText: var(--blackT);
+  color-scheme: dark;
+  --blackT: white;
 }
 .darkTheme .grayT {
   color: var(--cloudstrans);
@@ -37,7 +38,6 @@
 .darkTheme .itmFltrBlock {
   background-color: rgb(30,30,30);
 }
-
 
 .darkTheme .jump:hover, 
 .darkTheme .jump:focus, 

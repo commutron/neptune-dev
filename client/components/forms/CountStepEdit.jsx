@@ -67,7 +67,7 @@ const CountStepEdit = ({ app, branchesSort, data })=> {
         <button
           type='submit'
           id={opKey + 'edit'}
-          className='smallAction clearBlue'
+          className='smallAction nHover'
           disabled={false}
         >Set</button>
       </label>

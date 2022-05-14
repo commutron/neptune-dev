@@ -1,19 +1,25 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React from 'react';
 
-const PrintJump = ({ batchNum, title, iText }) => {
+const PrintJump = ({ batchNum, tBatch, title, iText }) => {
   
-  const mounted = useRef(true);
+  if(!tBatch) {
+    return ( 
+      <div className='overButton'>
+        <small className='darkgrayT'>print</small>
+      </div>
+    );
+  }
   
-  const [ flink, flinkSet ] = useState('');
+  const isWhat = tBatch.isWhat;
   
-  useEffect( ()=>{
-    Meteor.call('getBatchPrintLink', batchNum, (err, re)=> {
-      err && console.log(err);
-      if(re & mounted.current ) {
-        flinkSet(re);
-      }
-    });
-  }, []);
+  const flink = '/print/generallabel/' + batchNum +
+                '?group=' + isWhat[0] +
+                  '&widget=' + isWhat[1] +
+                  '&ver=' + isWhat[2].slice(2) +
+                  ( tBatch.rad ? '💥' : ''  ) +
+                  '&desc=' + tBatch.describe +
+                  '&sales=' + tBatch.salesOrder +
+                  '&quant=' + tBatch.quantity; 
   
   return(
     <div className='overButton'>
@@ -23,7 +29,7 @@ const PrintJump = ({ batchNum, title, iText }) => {
 			 >
         <label>
           <n-fa1>
-            <i className='fas fa-print darkgrayT'></i>
+            <i className='fa-solid fa-print darkgrayT'></i>
           </n-fa1>
           {iText && <span className='label darkgrayT'>{title}</span>}
         </label>

@@ -60,7 +60,7 @@ const SignIn = ({ mxW, pad, bttn })=> {
           type='submit'
           id='loginSubmit'
           style={bttn}
-          className='loginoutButton'
+          className='action nSolid blackT'
          >Sign In</button>
       </p>
       <p style={mxW} className='centreText'>{loginResultState}</p>

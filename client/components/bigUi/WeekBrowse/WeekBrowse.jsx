@@ -54,14 +54,14 @@ const WeekBrowse = ({ sendUp, app })=> {
      
       <button 
         title='First'
-        className='BTTNtxtBTTN clearBlack'
+        className='BTTNtxtBTTN smallAction blackHover'
         onClick={()=>tickWeek(false)} 
         disabled={backwardLock}
       ><i className="fas fa-angle-double-left fa-fw"></i></button>
    
       <button 
         title='Previous'
-        className='BTTNtxtBTTN clearBlack'
+        className='BTTNtxtBTTN smallAction blackHover'
         onClick={()=>tickWeek('down')} 
         disabled={backwardLock}
       ><i className="fas fa-angle-left fa-fw"></i></button>
@@ -70,14 +70,14 @@ const WeekBrowse = ({ sendUp, app })=> {
       
       <button 
         title='Next'
-        className='BTTNtxtBTTN clearBlack'
+        className='BTTNtxtBTTN smallAction blackHover'
         onClick={()=>tickWeek('up')} 
         disabled={forwardLock}
       ><i className="fas fa-angle-right fa-fw"></i></button>
     
       <button 
         title='This week'
-        className='BTTNtxtBTTN clearBlack'
+        className='BTTNtxtBTTN smallAction blackHover'
         onClick={()=>tickWeek('now')} 
         disabled={forwardLock}
       ><i className="fas fa-angle-double-right fa-fw"></i></button>

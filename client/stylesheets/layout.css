@@ -704,6 +704,11 @@ n-sm-model-content {
 
 .vwrap > span { margin-top: 0.5rem; }
 
+.topVpad { padding-top: var(--vh); }
+@media (orientation: portrait) {
+  .topVpad { padding-top: 1vmin; }
+}
+
 .noindent,
 .noindent > dd {
   margin-left: 0px;

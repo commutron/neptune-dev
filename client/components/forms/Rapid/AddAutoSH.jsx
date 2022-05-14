@@ -48,7 +48,7 @@ export const AddAutoSHwrap = ({ rapidData, vassembly, rSetItems, editAuth })=> {
           ><n-fa1><i className='far fa-edit'></i></n-fa1> cancel</button>
           
           <button
-            className='smallAction gap clearBlue'
+            className='smallAction gap nHover'
             onClick={()=>handleSave()}
             disabled={!rapidData.live}
           >Save</button>
@@ -101,7 +101,7 @@ const AddAutoSH = ({ vassembly, shortState, shortSet, rSetItems, editState })=> 
         >Only applied to newly {Pref.rapidExd} {Pref.items}
       </p> : null}
     {editState ?
-      <div className='inlineForm interForm'>
+      <div className='inlineForm interForm rightRow'>
         <label htmlFor='shRefs'>Referances<br />
           <input
             type='text'
@@ -133,7 +133,7 @@ const AddAutoSH = ({ vassembly, shortState, shortSet, rSetItems, editState })=> 
             type='button'
             id='addSH'
             onClick={(e)=>handleSH(e)}
-            className='smallAction clearOrange'
+            className='smallAction blackHover'
           >Add</button>
         </label>
       </div>

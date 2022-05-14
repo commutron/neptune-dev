@@ -52,7 +52,7 @@ const ProblemReport = ({ start, end, dataset })=> {
       
       <div className='vmarginhalf noPrint'>
         <button 
-          className='action clearBlack'
+          className='action blackSolid'
           onClick={(e)=>getReport(e)} 
           disabled={!start || !end || working}
         >Generate Report</button>

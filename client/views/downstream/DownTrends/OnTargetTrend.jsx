@@ -88,13 +88,13 @@ const OnTargetTrend = ({ app, isDebug })=>{
         }
         
         <button
-          className='action clearBlack gap'
+          className='smallAction blackHover gap'
           onClick={()=>runLoopLite('doneBatchLiteMonths', 'month')}
           disabled={working}
         >By Month</button>
         
         <button
-          className='action clearBlack gap'
+          className='smallAction blackHover gap'
           onClick={()=>runLoopLite('doneBatchLiteWeeks', 'week')}
           disabled={working}
         >By Week</button>

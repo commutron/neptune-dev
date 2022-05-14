@@ -36,88 +36,90 @@ const ProblemTab = ({
   const nonConArrayClean = nonConArray.filter( x => !x.trash );
   
   return(
-    <div className='vFrameContainer space'>
-      <div className='avOneContent centreSelf centreText'>
-        <p className='small cap'>{Pref.nonCons}</p>
-        {seriesData ?
-          <div className='wide autoGrid topLine'>  
-            <NonConStatusPie nonCons={nonConArrayClean} />
-            <span>
-              <HasNonCon noncons={srsNonCon} items={srsItems} />
-              <NonConPer noncons={srsNonCon} items={srsItems} />
-              <LeftFxNonCon noncons={srsNonCon} />
-              <LeftInNonCon noncons={srsNonCon} />
-            </span>
-          </div>
-        : <h4>Not Tracking {Pref.nonCons}</h4>}
+    <div className='space'>
+      <div className='balance'>
+        <div className='vmarginhalf centreSelf centreText'>
+          <p className='small cap'>{Pref.nonCons}</p>
+          {seriesData ?
+            <div className='gapsC rowWrap'>  
+              <NonConStatusPie nonCons={nonConArrayClean} />
+              <span>
+                <HasNonCon noncons={srsNonCon} items={srsItems} />
+                <NonConPer noncons={srsNonCon} items={srsItems} />
+                <LeftFxNonCon noncons={srsNonCon} />
+                <LeftInNonCon noncons={srsNonCon} />
+              </span>
+            </div>
+          : <h4>Not Tracking {Pref.nonCons}</h4>}
+        </div>
+        
+        
+        <div className='vmarginhalf centreText'>
+          <p className='small cap'>{Pref.shortfalls}</p>
+          {seriesData ?
+            <div className='gapsC rowWrap'>  
+              <ShortfallStatusPie shortfalls={srsShorts} />
+              <span>
+                <HasShortfall shortfalls={srsShorts} items={srsItems} />
+                <PartsShort shortfalls={srsShorts} />
+                <RefCount shortfalls={srsShorts} />
+                <LeftToResolve shortfalls={srsShorts} />
+              </span>
+            </div>
+          : <h4>Not Tracking {Pref.shortfalls}</h4>}
+        </div>
       </div>
       
-      
-      <div className='avTwoContent centreText'>
-        <p className='small cap'>{Pref.shortfalls}</p>
-        {seriesData ?
-          <div className='wide autoGrid topLine'>  
-            <ShortfallStatusPie shortfalls={srsShorts} />
-            <span>
-              <HasShortfall shortfalls={srsShorts} items={srsItems} />
-              <PartsShort shortfalls={srsShorts} />
-              <RefCount shortfalls={srsShorts} />
-              <LeftToResolve shortfalls={srsShorts} />
-            </span>
-          </div>
-        : <h4>Not Tracking {Pref.shortfalls}</h4>}
-      </div>
-      
-      <div className='avThreeContent vmargin'>
-        {nonConArrayClean.length > 0 || srsShorts.length > 0 ?
-          <TabsLite 
-            tabs={ [ 
-              <i className="fas fa-braille fa-lg fa-fw"></i>,
-              <i className="fas fa-chart-bar fa-lg fa-fw"></i>,
-              <i className="fas fa-chess-board fa-lg fa-fw"></i>,
-              <i className="fas fa-chart-line fa-lg fa-fw"></i>,
-              <i className="fas fa-exclamation-triangle fa-fw"></i>,
-            ] }
-            names={[ 
-              'Type Bubbles', 
-              'Type Bars', 
-              'Referance Bars', 
-              'Recorded Rate', 
-              Pref.shortfall + ' Scatter'
-            ]}>
+      <div className='vmargin'>
+      {nonConArrayClean.length > 0 || srsShorts.length > 0 ?
+        <TabsLite 
+          tabs={ [ 
+            <i className="fas fa-braille fa-lg fa-fw"></i>,
+            <i className="fas fa-chart-bar fa-lg fa-fw"></i>,
+            <i className="fas fa-chess-board fa-lg fa-fw"></i>,
+            <i className="fas fa-chart-line fa-lg fa-fw"></i>,
+            <i className="fas fa-exclamation-triangle fa-fw"></i>,
+          ] }
+          names={[ 
+            'Type Bubbles', 
+            'Type Bars', 
+            'Referance Bars', 
+            'Recorded Rate', 
+            Pref.shortfall + ' Scatter'
+          ]}>
            
-            <NonConBubble
-              ncOp={flatTypeList}
-              nonCons={nonConArrayClean}
-              app={app}
-              isDebug={isDebug} />
-              
-            <NonConBar
-              ncOp={flatTypeList}
-              nonCons={nonConArrayClean}
-              app={app}
-              isDebug={isDebug} />
-          
-            <NonConBarRefs
-              ncOp={flatTypeList}
-              nonCons={nonConArrayClean}
-              app={app}
-              isDebug={isDebug} />
-           
-            <NonConRate 
-              batches={[batch]}
-              title='NonCon Rate'
-              lineColor='rgb(231, 76, 60)' />
+          <NonConBubble
+            ncOp={flatTypeList}
+            nonCons={nonConArrayClean}
+            app={app}
+            isDebug={isDebug} />
             
-            <ShortScatter
-              shortfalls={srsShorts}
-              app={app}
-              isDebug={isDebug} />
-          </TabsLite>
-        :
-          <div className='centreText fade'>
-            <p className='cap'>no data to chart</p>
-          </div>}
+          <NonConBar
+            ncOp={flatTypeList}
+            nonCons={nonConArrayClean}
+            app={app}
+            isDebug={isDebug} />
+        
+          <NonConBarRefs
+            ncOp={flatTypeList}
+            nonCons={nonConArrayClean}
+            app={app}
+            isDebug={isDebug} />
+         
+          <NonConRate 
+            batches={[batch]}
+            title='NonCon Rate'
+            lineColor='rgb(231, 76, 60)' />
+          
+          <ShortScatter
+            shortfalls={srsShorts}
+            app={app}
+            isDebug={isDebug} />
+        </TabsLite>
+      :
+        <div className='centreText fade'>
+          <p className='cap'>no data to chart</p>
+        </div>}
       </div>
     </div>
   );

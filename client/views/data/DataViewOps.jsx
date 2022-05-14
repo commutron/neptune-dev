@@ -311,10 +311,6 @@ const DataViewOps = ({
           base={true}
         >
           <MainData
-            batchDataX={allXBatch}
-            widgetData={allWidget}
-            variantData={allVariant}
-            groupData={allGroup} 
             app={app}
             brancheS={brancheS}
             specify={specify} />

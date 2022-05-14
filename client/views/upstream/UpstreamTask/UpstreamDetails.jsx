@@ -105,12 +105,11 @@ const UpstreamDetailChunk = ({
           >{Pref.SO}:<br /></i>{oB.salesOrder}</i>
       </div>
       
-      <div>
-        <TideActivitySquare 
-          batchID={oB._id} 
-          acData={tBatch}
-          app={app} />
-      </div>
+      <TideActivitySquare 
+        batchID={oB._id} 
+        acData={tBatch}
+        app={app}
+      />
       
       <BatchTopStatus
         rowIndex={rowIndex}
@@ -137,6 +136,7 @@ const UpstreamDetailChunk = ({
     
       <PrintJump
         batchNum={oB.batch}
+        tBatch={tBatch}
         title='Print Label'
         iText={!dense}
       />

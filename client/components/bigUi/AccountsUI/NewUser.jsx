@@ -121,7 +121,7 @@ const NewUser = ({ mxW, pad, bttn })=> {
           type='submit'
           id='createSubmit'
           style={bttn}
-          className='createButton'
+          className='action greenSolid blackT'
          >Create New User</button>
       </p>
       <p style={mxW} className='centreText'>{newUserResultState}</p>

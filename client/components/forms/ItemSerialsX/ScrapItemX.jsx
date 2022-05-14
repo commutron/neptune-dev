@@ -89,7 +89,7 @@ const ScrapForm = ({ seriesId, item, ancillary, selfclose })=> {
       <p>
         <button 
           type="submit"
-          className='action clearRed'
+          className='action redSolid'
           id='scpGO'
           disabled={false}
           >SCRAP {item.serial}</button>

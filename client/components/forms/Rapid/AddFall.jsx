@@ -94,7 +94,7 @@ const AddFall = ({ rapidData, editAuth })=> {
           ><n-fa1><i className='far fa-edit'></i></n-fa1> cancel</button>
           
           <button
-            className='smallAction gap clearBlue'
+            className='smallAction gap nHover'
             onClick={()=>handleSave()}
             disabled={!rapidData.live}
           >Save</button>

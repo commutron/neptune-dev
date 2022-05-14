@@ -59,7 +59,7 @@ const IdCardCard = ({ user })=> {
               className='miniIn18'
               autoComplete="new-password"
               required />
-            <button type='submit' className='smallAction clearBlack'>SUBMIT</button>
+            <button type='submit' className='smallAction blackHover'>SUBMIT</button>
           </form>
           {bad && <p>Incorrect Password</p>}
         </span>
@@ -67,7 +67,7 @@ const IdCardCard = ({ user })=> {
         <span>
           <button
             title="Print Label"
-            className='action clearBlack vmargin noPrint'
+            className='smallAction blackHover vmargin noPrint'
             onClick={()=> window.print()}
           ><i className='fas fa-print gapR'></i> Print</button>
           

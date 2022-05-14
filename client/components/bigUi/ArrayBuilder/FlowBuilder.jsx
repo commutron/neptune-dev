@@ -173,7 +173,7 @@ const FlowBuilder = ({ app, options, defaultEnd, baseline, onClick })=> {
                 className='dbbleWide' /> 
               <button
                 type='submit' 
-                className='smallAction clearBlack'
+                className='smallAction blackHover'
               >Add</button>
             </label>
           </p>
@@ -195,7 +195,7 @@ const FlowBuilder = ({ app, options, defaultEnd, baseline, onClick })=> {
                   type='button'
                   name='Move Up'
                   id='up'
-                  className='smallAction blueHover'
+                  className='smallAction blackHover'
                   onClick={()=>moveUp(entry, index)}
                   disabled={lockout || index === 0}
                 ><i className='fas fa-arrow-up'></i></button>
@@ -203,7 +203,7 @@ const FlowBuilder = ({ app, options, defaultEnd, baseline, onClick })=> {
                   type='button'
                   name='Move Down'
                   id='dn'
-                  className='smallAction blueHover'
+                  className='smallAction blackHover'
                   onClick={()=>moveDown(entry, index)}
                   disabled={lockout || index === steps.length - 1}
                 ><i className='fas fa-arrow-down'></i></button>
@@ -221,7 +221,7 @@ const FlowBuilder = ({ app, options, defaultEnd, baseline, onClick })=> {
         </div>
         <div className='comfort vmarginhalf'>
           <button
-            className='smallAction clearBlack up'
+            className='smallAction redHover up'
             onClick={(e)=>clear(e)}
             disabled={steps.length === 0}
           >clear all</button>
@@ -236,7 +236,7 @@ const FlowBuilder = ({ app, options, defaultEnd, baseline, onClick })=> {
               <FinishOptions />
             </select>
             <button
-              className='smallAction clearGreen up'
+              className='smallAction greenHover up'
               disabled={false}
               onClick={(e)=>sendUp(e)}>Finish {Pref.flow}</button>
           </span>

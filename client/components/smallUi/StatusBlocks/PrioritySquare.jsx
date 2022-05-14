@@ -64,7 +64,7 @@ export const PrioritySquare = ({
   
   if(isDone) {
     const doneColor = oRapid ? 'darkOrange' : 'green';
-    const doneIcon = oRapid ? 'fa-solid fa-bolt-lightning' : 'fa-regular fa-star';
+    const doneIcon = oRapid ? 'fa-solid fa-bolt' : 'fa-regular fa-star';
     const doneName = oRapid ? 'Extended' : 'Complete';
     return(
       <NumStat
@@ -91,7 +91,7 @@ export const PrioritySquare = ({
     
     if(pt.completed) {
       const doneColor = pt.oRapid ? 'darkOrange' : 'green';
-      const doneIcon = pt.oRapid ? 'fa-solid fa-bolt-lightning fa-lg' : 'fa-regular fa-star fa-lg';
+      const doneIcon = pt.oRapid ? 'fa-solid fa-bolt fa-lg' : 'fa-regular fa-star fa-lg';
       const doneName = pt.oRapid ? 'Extended' : 'Complete';
       return(
         <NumStat

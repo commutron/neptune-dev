@@ -152,7 +152,7 @@ const InlineForm = ({ widgetData, variantData, rootURL })=> {
           
         <p className='max250 wordBr'>
           {variantData.instruct && !variantData.instruct.includes('http') ?
-            <n-sm>{rootURL}</n-sm> : null}
+            rootURL : null}
           <a 
             className='clean wordBr' 
             href={variantData.instruct} 

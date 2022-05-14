@@ -104,9 +104,7 @@
 .twoEcontent { grid-area: twoE; }
 .threeEcontent { grid-area: threeE; }
 
-.oneTwoThreeContainer, 
-.aFrameContainer,
-.vFrameContainer {
+.oneTwoThreeContainer {
   display: grid;
   grid-template-rows: auto auto;
   grid-column-gap: 0.5vw;
@@ -123,24 +121,6 @@
 .oneThirdContent { grid-area: oneThird; }
 .twoThirdsContent { grid-area: twoThirds; }
 .threeThirdsContent { grid-area: threeThirds; }
-
-.aFrameContainer, .vFrameContainer {
-  grid-template-columns: 1fr 1fr;
-  padding: 2vh 2vw;
-}
-.aFrameContainer {
-  grid-template-areas: 
-    'avOne avOne'
-    'avTwo avThree';
-}
-.vFrameContainer {
-  grid-template-areas: 
-    'avOne avTwo'
-    'avThree avThree';
-}
-.avOneContent { grid-area: avOne; }
-.avTwoContent { grid-area: avTwo; }
-.avThreeContent { grid-area: avThree; }
 
 .smallResultsBox {
   width: 512px;
@@ -161,10 +141,6 @@
 }
 .badBox {
   background-color: var(--alizarinfade);
-}
-
-.indexCard {
-  background-color: rgb(25,25,25);
 }
 
 .itmFltrBlock {

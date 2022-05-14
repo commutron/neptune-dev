@@ -70,7 +70,7 @@ const BatchXComplete = ({ batchData, allFlow, allFall, nowater, quantity, canRun
                 <i>All assigned processes are complete</i> }
             </p>
             <button
-              className='action clearPurple'
+              className='action purpleSolid'
               onClick={()=>finishBatchX()}
               disabled={!canFin}
             >Complete {Pref.xBatch}</button>
@@ -103,7 +103,7 @@ const BatchXComplete = ({ batchData, allFlow, allFall, nowater, quantity, canRun
                 <i>This {Pref.xBatch} was completed less than an hour ago</i>
               </p>
               <button
-                className='action clearPurple'
+                className='action purpleSolid'
                 onClick={()=>undoFinishBatchX(false)}
                 disabled={!canFin}
               >Cancel Complete</button>
@@ -113,7 +113,7 @@ const BatchXComplete = ({ batchData, allFlow, allFall, nowater, quantity, canRun
             !reopenState ?
               <div>
                 <button
-                  className='action clearPurple'
+                  className='action purpleSolid'
                   onClick={()=>reopenSet(true)}
                   disabled={!canRun}
                 >Reopen</button>
@@ -131,7 +131,7 @@ const BatchXComplete = ({ batchData, allFlow, allFall, nowater, quantity, canRun
                   required />
                   <br />
                 <button
-                  className='action clearPurple'
+                  className='action purpleSolid'
                   onClick={(e)=>undoFinishBatchX(true, this.orgPIN.value)}
                 >Yes, Reopen</button>
               </div>

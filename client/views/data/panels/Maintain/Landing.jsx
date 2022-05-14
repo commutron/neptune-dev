@@ -5,7 +5,7 @@ import EquipForm from '/client/components/forms/Equip/EquipForm';
 import NumBox from '/client/components/tinyUi/NumBox';
 
 
-const Landing = ({ groupData, widgetData, variantData, app })=> {
+const Landing = ({ equipData, maintainData, app, brancheS })=> {
   
   
   return(
@@ -17,20 +17,13 @@ const Landing = ({ groupData, widgetData, variantData, app })=> {
         </div>
         <div className='centreRow'>
           <EquipForm
-            name={false}
+            id={false}
             lgIcon={true}
-            rootURL={app.instruct} />
+            rootURL={app.instruct}
+            brancheS={brancheS} />
           <NumBox
-            num={groupData.length}
-            name={Pref.group + 's'}
-            color='blueT' />
-          <NumBox
-            num={widgetData.length}
-            name={Pref.widget + 's'}
-            color='blueT' />
-          <NumBox
-            num={variantData.length}
-            name={Pref.variants}
+            num={equipData.length}
+            name={Pref.equip}
             color='blueT' />
         </div>
       </div>

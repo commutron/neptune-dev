@@ -190,7 +190,7 @@ const EmailsForm = ({ pcbEmails, users })=> {
               <button
                 type='submit'
                 id='addPCBEmailSubmit'
-                className='action clearBlue'
+                className='action nSolid'
                 disabled={lockOut}
                >Save Emails</button>
             </p>

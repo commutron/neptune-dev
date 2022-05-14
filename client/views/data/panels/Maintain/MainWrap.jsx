@@ -6,53 +6,55 @@ import Landing from './Landing';
 import EquipSlide from './EquipSlide';
 
 const MainWrap = ({ 
-  groupData, widgetData, variantData, batchDataX, app, brancheS, specify 
+  equipData, maintainData,
+  app, brancheS, specify 
 }) => {
   
-  const inter = groupData.filter( g => g.internal );
-  
-  const equipS = [].sort((g1, g2)=>
-                  g1.alias < g2.alias ? -1 : g1.alias > g2.alias ? 1 : 0 );
+  const equipS = equipData.sort((e1, e2)=>
+                  e1.alias < e2.alias ? -1 : e1.alias > e2.alias ? 1 : 0 );
                   
-  const sortList = equipS.sort((g1, g2)=>
-                    g1.hibernate ? 1 : g2.hibernate ? -1 : 0 );
+  const sortList = equipS.sort((e1, e2)=>
+                    e1.online ? 1 : e2.online ? -1 : 0 );
         
   const menuList = sortList.map( (entry, index)=> {
-                    const clss = entry.hibernate ? 'strike fade' : '';
-                    let it = entry.internal ? ' intrBlue' : '';
-                    return [entry.alias, clss+it];
+                    const clss = entry.online ? '' : 'strike fade';
+                    return [entry.alias, clss];
                   });
   
   const defaultSlide = specify ? 
     sortList.findIndex( x => x.alias === specify ) : false;
     
   const isERun = Roles.userIsInRole(Meteor.userId(), ['edit','run']);
-                                  
+     
+     
+     console.log({equipData, maintainData});
+     
+     
+     
+     
   return(
     <SlidesNested
       menuTitle={Pref.equip}
       menu={menuList}
       topPage={
         <Landing
-          groupData={groupData}
-          widgetData={widgetData}
-          variantData={variantData}
+          equipData={equipData}
+          maintainData={maintainData}
           app={app}
+          brancheS={brancheS}
         />
       }
       defaultSlide={defaultSlide}
       textStyle='up'>
     
       {sortList.map( (entry, index)=> {
-        let widgetsList = widgetData.filter(x => x.groupId === entry._id);
+        // let widgetsList = widgetData.filter(x => x.groupId === entry._id);
         return(
           <EquipSlide
             key={index+entry._id}
-            groupData={entry}
-            widgetsList={widgetsList}
-            batchDataX={batchDataX}
+            equipData={entry}
             app={app}
-            inter={!inter || inter.length < Pref.interMax || inter.find( x=> x._id === entry._id )}
+            brancheS={brancheS}
             isERun={isERun}
           />
         )})} 

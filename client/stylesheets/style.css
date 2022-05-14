@@ -56,21 +56,23 @@ input::-webkit-calendar-picker-indicator {
   box-shadow: var(--dropShadow1);
 }
 
-.popBlue {
-  box-shadow: 0 10px 30px rgba(52, 152, 219, 0.30), 
-              0 0 10px rgba(52, 152, 219, 0.22);
-}
-
 .transparent {
   background-color: transparent;
 }
 
-.green { background-color: var(--emerald); }
-.greenT { color: var(--emerald); }
-.greenB { border: 3px solid var(--emerald); }
+.nT { color: var(--neptuneColor); }
+.logoBlue { background-color: var(--neptuneColor); }
+.intrBlue { border: 3px solid var(--neptuneColor); }
+.blueLineHover:hover {
+  border-color: var(--neptuneColor);
+}
+
+.green { background-color: var(--nephritis); }
+.greenT { color: var(--nephritis); }
+.greenB { border: 3px solid var(--nephritis); }
 .greenBorder {
   background-color: transparent;
-	border: 3px solid var(--emerald);
+	border: 3px solid var(--nephritis);
 	box-shadow: 0 0 .1em .1em rgba(43,43,43,0.2),
 	      inset 0 0 .1em .1em rgba(43,43,43,0.2);
 }
@@ -84,15 +86,11 @@ input::-webkit-calendar-picker-indicator {
 .greenList:nth-child(odd):active,
 .greenList:nth-child(even):hover,
 .greenList:nth-child(even):active {
-  background-color: var(--emerald);
+  background-color: var(--nephritis);
 }
 
 .blue { background-color: var(--peterriver); }
 .blueT { color: var(--peterriver); }
-.blueHover {
-	color: var(--peterriver);
-	background-color: var(--clouds);
-}
 .onblueHover {
   color: var(--clouds);
 	background-color: var(--peterriver);
@@ -106,14 +104,8 @@ input::-webkit-calendar-picker-indicator {
 	border: 3px solid var(--peterriver);
 }
 
-.logoBlue { background-color: var(--neptuneColor); }
-.logoBlueT { color: var(--neptuneColor); }
-.intrBlue { border: 3px solid var(--neptuneColor); }
-
-.red { background-color: var(--alizarin); }
-.darkRed { background-color: var(--pomegranate); }
-.redT { color: var(--alizarin); }
-.darkRedT { color: var(--pomegranate); }
+.red { background-color: var(--pomegranate); }
+.redT { color: var(--pomegranate); }
 .warnRed { background-color: var(--pomegranatefrost); }
 
 .orange { background-color: var(--carrot); }
@@ -160,11 +152,11 @@ input::-webkit-calendar-picker-indicator {
 .trueyellow { background-color: var(--sunflower); }
 .trueyellowT { color: var(--sunflower); }
 
-.teal { background-color: var(--turquoise); }
-.tealT { color: var(--turquoise); }
+.teal { background-color: var(--greenSea); }
+.tealT { color: var(--greenSea); }
 
 .purple { background-color: rgb(155,89,182); }
-.purpleT { color: var(--amethyst); }
+.purpleT { color: var(--wisteria); }
 .purpleBorder { 
   background-color: transparent;
 	border: 5px solid var(--wisteria);
@@ -558,54 +550,6 @@ n-prog-bar progress {
   background-color: var(--emeraldfade);
 }
 
-.tagFlag {
-  display: flex;
-  align-items: center;
-  margin: 2px;
-  padding: 3px 5px 3px 5px;
-  border: 0.5px solid white;
-  border-radius: 1px 25px 25px 1px;
-  background-color: var(--peterriver);
-  font-size: 0.9rem;
-  color: white;
-  word-break: keep-all;
-  word-wrap: normal;
-  
-}
-.tagFlag > span {
-  height: 1rem;
-  width: 1rem;
-  margin-left: 5px;
-  padding: 1px;
-  border-radius: 50%;
-  background-color: transparent;
-  color: white;
-  font-size: 0.8rem;
-  text-align: center;
-  cursor: pointer;
-}
-.tagFlag > span:hover {
-  background-color: white;
-  color: var(--peterriver);
-}
-
-.tagAddButton {
-  display: inline-block;
-  margin: 0 10px;
-  padding: 2px;
-  vertical-align: middle;
-  color: var(--peterriver);
-  background-color: transparent;
-  font-size: 1.6rem;
-  border-radius: 25%;
-  transition: all 150ms ease-in-out;
-  cursor: pointer;
-}
-.tagAddButton:hover {
-  color: white;
-  background-color: var(--peterriver);
-}
-
 .tempTag { margin: 0 7px 0 0; }
 
 .listSort {
@@ -616,7 +560,6 @@ n-prog-bar progress {
 .listSortInput input,
 .listSortInput select {
   background-color: transparent;
-  /*color: white;*/
   text-align: center;
 }
 .listSortInput option {

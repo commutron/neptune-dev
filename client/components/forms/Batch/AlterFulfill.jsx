@@ -108,7 +108,7 @@ const AlterFulfillForm = ({ batchId, createdAt, end, app, selfclose })=> {
           onChange={(e)=>endDateSet(e.target.value)}
           required 
         /></label>
-        <button type='submit' className='action clearBlue'>Save</button>
+        <button type='submit' className='action nSolid'>Save</button>
       </p>
       
       <hr className='nomargin w100' />

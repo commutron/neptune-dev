@@ -56,7 +56,7 @@ const RemoveRapidForm = ({ batchId, rapidId })=> {
           />
           <br />
           <button
-            className='smallAction clearRed'
+            className='smallAction redHover'
             type='submit'
             id='cutRapGo'
             disabled={false}

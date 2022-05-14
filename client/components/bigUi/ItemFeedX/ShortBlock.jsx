@@ -127,18 +127,18 @@ const ShortBlock = ({ seriesId, serial, units, entry, done, iopen, canQA, cal })
           <div className='wide comfort'> 
             <span>
               <button
-                className='smallAction inlineButton vmarginhalf clearRed blackT'
+                className='smallAction inlineButton vmarginhalf redHover blackT'
                 onClick={(e)=>confirmSet(true)}
                 disabled={!canQA}
               >Remove</button>
               {confirmState &&
                 <span><b> Are you sure? </b><button
-                    className='smallAction clearRed blackT inlineButton'
+                    className='smallAction redHover blackT inlineButton'
                     disabled={!canQA}
                     onClick={(e)=>popSh(e)}
                   >YES</button>
                   <button
-                    className='smallAction clearBlack inlineButton'
+                    className='smallAction blackHover inlineButton'
                     disabled={!canQA}
                     onClick={(e)=>confirmSet(false)}
                   >NO</button>
@@ -146,7 +146,7 @@ const ShortBlock = ({ seriesId, serial, units, entry, done, iopen, canQA, cal })
               }
             </span>
             <button
-              className='smallAction inlineButton vmarginhalf clearGreen blackT'
+              className='smallAction inlineButton vmarginhalf greenHover blackT'
               onClick={(e)=>handleChange(e)}
             >Save</button>
           </div>

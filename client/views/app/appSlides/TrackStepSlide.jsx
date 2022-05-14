@@ -2,7 +2,7 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import TrackStepEdit from '/client/components/forms/TrackStepEdit.jsx';
+import TrackStepEdit from '/client/components/forms/TrackStepEdit';
 
 const TrackStepSlide = ({ app, branchesS, sorted })=> {
   
@@ -87,7 +87,7 @@ const TrackStepSlide = ({ app, branchesS, sorted })=> {
             <button
               type='submit'
               id={rndmKey + 'add'}
-              className='smallAction clearGreen'
+              className='smallAction greenHover'
               disabled={false}
             >Add New</button>
           </label>

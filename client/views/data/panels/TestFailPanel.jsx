@@ -162,14 +162,14 @@ const FailTops = ({ workingList })=> {
         name={`${most.length > 1 ? 'have' : 'has'} the most with `}
         postNum={max}
         postText={most.length > 1 ? Pref.items +' each' : Pref.items}
-        color='darkRedT up'
+        color='redT up'
         big={true} />
       <StatLine
         num={mostCleanW}
         name={`${mostW.length > 1 ? 'are' : 'is'} the most with `}
         postNum={maxW}
         postText={mostW.length > 1 ? Pref.items +' each' : Pref.items}
-        color='darkRedT up'
+        color='redT up'
         big={true} />
     </div>
   );

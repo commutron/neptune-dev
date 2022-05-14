@@ -65,7 +65,7 @@ const NCTypeSlide = ({ app })=> {
                 <button
                   type='submit'
                   id={listKey + 'go'}
-                  className='action clearGreen'
+                  className='smallAction greenHover'
                   disabled={false}
                 >Add</button>
               </label>
@@ -198,7 +198,7 @@ const TopNCSlide = ({ app })=> {
               <button
                 type='submit'
                 id={rndmKey + 'go'}
-                className='smallAction clearGreen'
+                className='smallAction greenHover'
                 disabled={false}
               >Add</button>
             </label>

@@ -52,6 +52,14 @@ n-print {
   .space36v { 
     padding: 0;
   }
+  .printGenLabel {
+     position: absolute !important;
+     top: 0 !important;
+     left: 0 !important;
+     margin: 0 !important;
+     border: none !important;
+     transform: rotate(180deg) !important;
+  }
   .redGlow { background-color: var(--alizarintrans); }
   .yellowGlow { background-color: var(--sunflowerfade); }
   .greenGlow { background-color: var(--emeraldtrans); }

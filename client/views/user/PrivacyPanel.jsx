@@ -23,7 +23,7 @@ const PrivacyPanel = ({ orb, bolt, app, user, isAdmin })=> {
       <p>
         <button
           onClick={()=>clearthisUserCrumbs()}
-          className='action clearBlue'
+          className='action blackHover'
         >Clear Your breadcrumbs</button>
       </p>
       

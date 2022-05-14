@@ -72,7 +72,7 @@ const EmailNewForm = ({ user })=> {
           <button
             type='submit'
             id='changeUsrEmailSubmit'
-            className='action clearBlue'
+            className='action nSolid'
            >Save New Email Address</button>
         </p>
       </form>
@@ -121,7 +121,7 @@ const EmailRemoveForm = ({ emailaddress })=> {
           <button
             type='submit'
             id='uEmailDelete'
-            className='action clearRed'
+            className='action redSolid'
           >Remove Email Address</button>
         </p>
       </form>

@@ -35,17 +35,17 @@ const DeleteUser = ({ userID, isDebug })=> {
         />
         <button
           type='button'
-          className='miniAction red'
+          className='action redHover'
           onClick={(e)=>confirmSet(true)}
         >Delete User Account</button>
       </p>
       {confirmState &&
         <p><b>Delete this User Forever? </b><button
-            className='miniAction red inlineButton'
+            className='miniAction redHover inlineButton'
             onClick={(e)=>deleteForever(e)}
           >YES</button>
           <button
-            className='miniAction inlineButton'
+            className='miniAction blackHover inlineButton'
             onClick={(e)=>confirmSet(false)}
           >NO</button>
         </p>

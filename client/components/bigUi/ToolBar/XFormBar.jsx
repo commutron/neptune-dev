@@ -43,50 +43,53 @@ const XFormBar = ({
   const caution = b && b.releases.findIndex( x => 
                     x.type === 'floorRelease' && x.caution !== false) >= 0;
   
+  const tgsty = {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100%'
+  };
+  
   return(
     <div className='proActionForm forceScrollStyle'>
-      {showItem ?
-        <div className='footPick'>
+      {showItem && !lockOutAll ?
+        <div style={tgsty}>
           {action === 'xBatchBuild' ? null :
-          <label htmlFor='firstselect' className='formBarToggle taskLink butBlue'>
-            <input
-              type='checkbox'
-              id='firstselect'
-              name='toggleFirst'
-              title='Redo Step'
-              className='radioIcon'
-              checked={showVerifyState === true}
-              onChange={()=>handleVerify(null, true)}
-              disabled={!verAuth || lockOutAll} 
-            /><i className='fas fa-redo-alt'></i>
-          </label> }
-          <label htmlFor='ncselect' className='formBarToggle taskLink butRed'>
-            <input
-              type='radio'
-              id='ncselect'
-              name='formbarselect'
-              title={Pref.nonCon}
-              className='radioIcon'
-              checked={show === 'NC'}
-              onChange={()=>showSet( 'NC' )}
-              disabled={lockOutAll}
-            /><i className='fas fa-times'></i>
-          </label>
-          <label htmlFor='shortselect' className='formBarToggle taskLink butYellow'>
-            <input
-              type='radio'
-              id='shortselect'
-              name='formbarselect'
-              title={Pref.shortfall}
-              className='radioIcon'
-              checked={show === 'S'}
-              onChange={()=>showSet( 'S' )}
-              disabled={lockOutAll} 
-            /><i className='fas fa-exclamation'></i>
-          </label>
+          <FormToggle
+            id='firstselect'
+            type='checkbox'
+            name='toggleFirst'
+            title='Redo Step'
+            check={showVerifyState === true}
+            change={()=>handleVerify(null, true)}
+            lock={!verAuth} 
+            icon='fa-solid fa-redo-alt'
+            color='butBlue'
+          />}
+          <FormToggle
+            id='ncselect'
+            type='radio'
+            name='formbarselect'
+            title={Pref.nonCon}
+            check={show === 'NC'}
+            change={()=>showSet( 'NC' )}
+            icon='fa-solid fa-times'
+            color='butRed'
+          />
+          <FormToggle
+            id='shortselect'
+            type='radio'
+            name='formbarselect'
+            title={Pref.shortfall}
+            check={show === 'S'}
+            change={()=>showSet( 'S' )}
+            icon='fa-solid fa-exclamation'
+            color='butYellow'
+          />
         </div>
       : null}
-      <div className='footFill'>
+      <div style={{flexGrow: '2'}}>
         <TideLock 
           currentLive={tideFloodGate && b.live} 
           message={true} 
@@ -135,3 +138,42 @@ const XFormBar = ({
 };
 
 export default XFormBar;
+
+const FormToggle = ({ 
+  id, type, name, title, 
+  check, change, lock, 
+  icon, color 
+})=> {
+  
+  const sty = {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    transition: 'all 150ms ease-in-out',
+    margin: '0 1vmin',
+    fontSize: '30px',
+    width: '45px',
+    height: '45px'
+  };
+
+  const svgsty = {
+    width: '30px',
+    height: '30px'
+  };
+  
+  return(
+    <label htmlFor={id} style={sty} className={'taskLink ' + color}>
+      <input
+        type={type}
+        id={id}
+        name={name}
+        title={title}
+        className='radioIcon'
+        checked={check}
+        onChange={change}
+        disabled={lock}
+      /><i className={icon} style={svgsty}></i>
+    </label>
+  );
+};

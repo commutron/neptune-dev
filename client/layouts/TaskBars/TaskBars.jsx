@@ -3,8 +3,6 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toCap } from '/client/utility/Convert';
 
-import './taskbars.css';
-
 const TaskElement = ({ title, subON, goLink, icon, iconAdj }) => (
   <button
     aria-label={toCap(title, true)}
@@ -13,8 +11,16 @@ const TaskElement = ({ title, subON, goLink, icon, iconAdj }) => (
   ><i className={icon} data-fa-transform={iconAdj}></i></button>
 );
 
+const taskColSty = {
+  display: 'flex',
+  flexDirection: 'column',
+  flexWrap: 'nowrap',
+  alignItems: 'center',
+  height: '100%'
+};
+
 export const ExTaskBar = ({ subLink }) => (
-  <div className='taskColumn'>
+  <div style={taskColSty} className='topVpad'>
   
     <TaskElement
       title='Explore'
@@ -50,7 +56,7 @@ export const ExTaskBar = ({ subLink }) => (
       title={Pref.widget + ' ' + Pref.radio.toUpperCase() + 's'}
       subON={subLink === 'overviewradioactive'}
       goLink='/data/overview?request=radioactive'
-      icon='fa-solid fa-circle-radiation'
+      icon='fas fa-burst'
       iconAdj=''
     />
     
@@ -58,7 +64,7 @@ export const ExTaskBar = ({ subLink }) => (
       title={`${Pref.rapidExd} ${Pref.xBatchs}`}
       subON={subLink === 'overviewrapidex'}
       goLink='/data/overview?request=rapidex'
-      icon='fa-solid fa-bolt-lightning'
+      icon='fa-solid fa-bolt'
       iconAdj='down-1'
     />
     
@@ -84,7 +90,7 @@ export const ExTaskBar = ({ subLink }) => (
       title={Pref.maintain}
       subON={subLink === 'overviewmaintain'}
       goLink='/data/overview?request=maintain'
-      icon='fa-solid fa-wand-magic-sparkles'
+      icon='fa-solid fa-spray-can-sparkles'
       iconAdj=''
     />
     
@@ -92,7 +98,7 @@ export const ExTaskBar = ({ subLink }) => (
 );
 
 export const UpTaskBar = ({ subLink, showParts, isAuth }) => (
-  <div className='taskColumn'>
+  <div style={taskColSty} className='topVpad'>
   
     <TaskElement
       title='Upstream'
@@ -142,7 +148,7 @@ export const UpTaskBar = ({ subLink, showParts, isAuth }) => (
 );
 
 export const DownTaskBar = ({ subLink }) => (
-  <div className='taskColumn'>
+  <div style={taskColSty} className='topVpad'>
   
     <TaskElement
       title='Downstream'
@@ -194,43 +200,59 @@ const FilterElement = ({ title, subTitle, goLink, branchON, changeBranch, icon, 
   </button>
 );
 
-export const OverMenuBar = ({ brancheS, branchON, changeBranch }) => (
-  <div className='overMenuBar forceScrollStyle'>
-    <FilterElement
-      title='All'
-      subTitle='AL'
-      goLink={false}
-      branchON={branchON === false}
-      changeBranch={changeBranch}
-      icon='fa-solid fa-code-branch'
-      size=''
-    />
-    
-    {brancheS.map( (br, ix)=> {
-      return(
-        <FilterElement
-          key={br.brKey+ix}
-          title={br.branch}
-          subTitle={br.common.charAt(0) + br.common.charAt(1)}
-          goLink={br.branch}
-          branchON={branchON === br.branch}
-          changeBranch={changeBranch}
-          icon={false}
-          size='vbigger'
-        />
-    )})}
-    
-    <span className='flexSpace'></span>
-    
-    <FilterElement
-      title={Pref.maintain}
-      subTitle='PM'
-      goLink={'maintain'}
-      branchON={branchON === 'maintain'}
-      changeBranch={changeBranch}
-      icon='fa-solid fa-wand-magic-sparkles'
-      size=''
-      lock={true}
-    />
-  </div>
-);
+export const OverMenuBar = ({ brancheS, branchON, changeBranch }) => {
+  
+  const barsty = {
+    colorScheme: 'dark',
+    gridArea: 'overTaskArea',
+    height: '100%',
+    backgroundColor: 'var(--overBG, rgb(25,25,25))',
+    display: 'flex',
+    flexDirection: 'column',
+    flexWrap: 'nowrap',
+    alignItems: 'center',
+    paddingTop: 'var(--vh)',
+    overflow: 'hidden'
+  };
+  
+  return(
+    <div style={barsty} className='overMenuBar forceScrollStyle'>
+      <FilterElement
+        title='All'
+        subTitle='AL'
+        goLink={false}
+        branchON={branchON === false}
+        changeBranch={changeBranch}
+        icon='fa-solid fa-code-branch'
+        size=''
+      />
+      
+      {brancheS.map( (br, ix)=> {
+        return(
+          <FilterElement
+            key={br.brKey+ix}
+            title={br.branch}
+            subTitle={br.common.charAt(0) + br.common.charAt(1)}
+            goLink={br.branch}
+            branchON={branchON === br.branch}
+            changeBranch={changeBranch}
+            icon={false}
+            size='vbigger'
+          />
+      )})}
+      
+      <span className='flexSpace'></span>
+      
+      <FilterElement
+        title={Pref.maintain}
+        subTitle='PM'
+        goLink={'maintain'}
+        branchON={branchON === 'maintain'}
+        changeBranch={changeBranch}
+        icon='fa-solid fa-wand-magic-sparkles'
+        size=''
+        lock={true}
+      />
+    </div>
+  );
+};

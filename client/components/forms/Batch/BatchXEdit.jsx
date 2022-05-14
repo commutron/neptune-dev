@@ -193,7 +193,7 @@ const BXEditForm = ({ batchData, seriesData, allVariants, canEdit, selfclose })=
       <div className='centreRow vmargin'>
         <button
           type='submit'
-          className='action clearBlue'
+          className='action nSolid'
         >Save</button>
       </div>
     </form>

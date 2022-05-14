@@ -137,7 +137,7 @@ const GroupForm = ({ id, name, alias, wiki, rootURL, title, selfclose })=> {
         <button
           type='submit'
           id='grpSave'
-          className='action clearBlue'
+          className='action nSolid'
           >Save
         </button>
       </span>

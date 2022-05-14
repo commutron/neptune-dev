@@ -100,19 +100,19 @@ const NonConBlock = ({
                 <Fragment>
                   <dt>Trashed: <UserNice id={dt.trash.who} /> {cal(dt.trash.time)}</dt>
                   <dd><button
-                        className='smallAction clearRed blackT inlineButton'
+                        className='smallAction redHover blackT inlineButton'
                         disabled={!canQA}
                         onClick={(e)=>confirmSet(true)}
                       >Permanently Delete</button>
                   </dd>
                   {confirmState &&
                     <dd><b>Are you sure? </b><button
-                        className='smallAction clearRed blackT inlineButton'
+                        className='smallAction redHover blackT inlineButton'
                         disabled={!canQA}
                         onClick={(e)=>popNC(e)}
                       >YES</button>
                       <button
-                        className='smallAction clearBlack inlineButton'
+                        className='smallAction blackHover inlineButton'
                         disabled={!canQA}
                         onClick={(e)=>confirmSet(false)}
                       >NO</button>
@@ -248,7 +248,7 @@ const NonConBlock = ({
               <span className='rightRow'>
                 {ins ?
                   <button
-                    className='smallAction clearOrange blackT inlineButton vmarginhalf'
+                    className='smallAction orangeHover blackT inlineButton vmarginhalf'
                     onClick={(e)=>handleReInspect(e)}
                     disabled={done}>
                     <i className='med'> ReInspect</i>
@@ -256,19 +256,19 @@ const NonConBlock = ({
                 :null}
                 {!trashed && !ins ?
                   <button
-                    className='smallAction clearOrange blackT inlineButton vmarginhalf'
+                    className='smallAction orangeHover blackT inlineButton vmarginhalf'
                     disabled={!canVerify}
                     onClick={(e)=>handleTrash(e)}
                   >Remove</button>
                 : trashed &&
                   <button
-                    className='smallAction clearOrange blackT inlineButton vmarginhalf'
+                    className='smallAction orangeHover blackT inlineButton vmarginhalf'
                     disabled={!canInspect}
                     onClick={(e)=>handleUnTrash(e)}
                   >Restore</button>
                 }
                 <button
-                  className='smallAction clearGreen blackT inlineButton vmarginhalf'
+                  className='smallAction greenHover blackT inlineButton vmarginhalf'
                   onClick={(e)=>handleChange(e)}
                 >Save</button>
                 

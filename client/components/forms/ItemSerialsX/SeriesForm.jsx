@@ -58,7 +58,7 @@ const SeriesCreateForm = ({ batchData, selfclose })=> {
           id='goSRS'
           onClick={(e)=>save(e)}
           disabled={false}
-          className='action clearBlue'
+          className='action nSolid'
         >Create</button>
       </p>
     </div>
@@ -117,7 +117,7 @@ const SeriesRemoveForm = ({ batchId, seriesId, selfclose })=> {
           id='noSRS'
           onClick={(e)=>doRemove(e)}
           disabled={false}
-          className='action clearRed'
+          className='action redSolid'
         >Delete Series</button>
       </p>
     </div>

@@ -49,7 +49,7 @@ const QuoteTime = ({ bID, lockOut })=>	{
       <button
         type='submit'
         id='goscale'
-        className='action clearBlue numberSet minIn7'
+        className='action nSolid numberSet minIn7'
         disabled={!auth || lockOut}
       >Update {Pref.timeBudget}</button>
     </form>

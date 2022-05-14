@@ -132,7 +132,7 @@ const UserManageForm = ({
             <legend>Forgot Password</legend>
             {!confirmState ?
               <button
-                className='smallAction clearRed'
+                className='action nSolid'
                 onClick={(e)=>confirmSet(true)}
               >Change Password</button>
             :
@@ -149,11 +149,11 @@ const UserManageForm = ({
                 /></p>
                 <p><b>Are you sure? </b></p>
                 <p><button
-                  className='action clearBlue'
+                  className='action greenHover'
                   onClick={(e)=>forcePassword(e)}
                 >YES, change password</button></p>
                 <p><button
-                  className='action clearBlack'
+                  className='action blackHover'
                   onClick={(e)=>confirmSet(false)}
                 >NO</button></p>
               </div>

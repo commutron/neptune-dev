@@ -8,7 +8,6 @@ import Spin from '/client/components/tinyUi/Spin';
 const MaintainData = ({
   coldReady, hotReady, // subs
   equipData, maintainData,
-  groupData, widgetData, variantData, batchDataX, 
   app, brancheS, specify 
 })=> {
 
@@ -24,10 +23,6 @@ const MaintainData = ({
     <MainWrap
       equipData={equipData}
       maintainData={maintainData}
-      groupData={groupData}
-      widgetData={widgetData}
-      variantData={variantData}
-      batchDataX={batchDataX}
       app={app}
       brancheS={brancheS}
       specify={specify} 
@@ -35,24 +30,17 @@ const MaintainData = ({
   );
 };
 
-export default withTracker( ({ groupData, widgetData, variantData, batchDataX, app, brancheS, specify }) => {
+export default withTracker( ({ app, brancheS, specify }) => {
   const coldSub = Meteor.subscribe('thinEquip');
   const hotSub = Meteor.subscribe('hotEquip', specify);
 
   return {
     coldReady: coldSub.ready(),
     hotReady: hotSub.ready(),
-    
-    groupData: groupData, 
-    widgetData: widgetData, 
-    variantData: variantData,
-    batchDataX: batchDataX,
     app: app,
     brancheS: brancheS,
-    
     equipData: EquipDB.find( {}, { sort: { alias: -1 } } ).fetch(),
     maintainData: MaintainDB.find( {}, { sort: { burden: -1 } } ).fetch(),
-    
     specify: specify
   };
 })(MaintainData);

@@ -87,7 +87,7 @@ const CounterSlide = ({ app, branchesS })=> {
           <button
             type='submit'
             id={rndmKey + 'add'}
-            className='smallAction clearGreen'
+            className='smallAction greenHover'
             disabled={false}
           >Set</button>
         </label>

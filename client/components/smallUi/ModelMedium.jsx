@@ -39,7 +39,7 @@ const ModelMedium = ({
                   {title}
                 </span>
                 <button
-                  className='closeAction clearRed'
+                  className='action redSolid'
                   onClick={()=>reveal()}
                   title='close'
                 ><i className='fas fa-times fa-lg'></i></button>

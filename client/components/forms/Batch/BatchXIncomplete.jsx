@@ -203,7 +203,7 @@ const BatchXIncompleteForm = ({ batchData, seriesData, app, selfclose })=> {
         <button 
           type="submit"
           id='inFinGo'
-          className='action clearOrange blackT'
+          className='action orangeSolid blackT'
           disabled={false}
           >Finish {Pref.xBatch}</button>
       </p>

@@ -43,7 +43,7 @@ const MonthKPIReport = ({ start, end, dataset, isDebug })=> {
       
       <div className='vmarginhalf noPrint'>
         <button 
-          className='action clearBlack'
+          className='action blackSolid'
           onClick={(e)=>handleRun(e)} 
           disabled={!start || !end || working}
         >Generate Report</button>

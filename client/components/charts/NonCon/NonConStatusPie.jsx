@@ -49,7 +49,7 @@ const NonConSatusPie = ({ nonCons })=> {
             labels={labelState}
             labelComponent={
               <VictoryTooltip 
-                style={{ fontSize: '40px' }}
+                style={{ fontSize: '35px' }}
               />
             }
           />

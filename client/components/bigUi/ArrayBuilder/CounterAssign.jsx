@@ -123,7 +123,7 @@ const CounterAssignForm = ({ bID, app, waterfall })=> {
             type='submit'
             id='go'
             disabled={false}
-            className='action clearBlue'
+            className='action nSolid'
           >Add A Counter</button>
         </p>
       </form>
@@ -149,7 +149,7 @@ const CounterAssignForm = ({ bID, app, waterfall })=> {
                   type='number'
                   title='Position'
                   id={entry.wfKey+'chPos'}
-                  className='tableAction narrow blueHover'
+                  className='tableAction narrow blackHover'
                   pattern='[0-99]*'
                   maxLength='2'
                   minLength='1'

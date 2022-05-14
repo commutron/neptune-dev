@@ -6,17 +6,17 @@ import ModelMedium from '/client/components/smallUi/ModelMedium';
 import { cleanURL } from '/client/utility/Convert';
 
 const EquipFormWrapper = ({ 
-  id, name, alias, brKey, wiki, rootURL, brancheS,
+  id, name, alias, wiki, rootURL,
   noText, primeTopRight, lgIcon,
   lockOut
 })=> {
-  const bttn = id ? `edit ${Pref.equip}` : `new ${Pref.equip}`;
-  const otitle = id ? 'edit ' + Pref.equip : 'create new ' + Pref.equip;
+  const bttn = name ? `edit ${Pref.group}` : `new ${Pref.group}`;
+  const otitle = name ? 'edit ' + Pref.group : 'create new ' + Pref.group;
   
-  const access = id ? Roles.userIsInRole(Meteor.userId(), 'edit') :
+  const access = name ? Roles.userIsInRole(Meteor.userId(), 'edit') :
                         Roles.userIsInRole(Meteor.userId(), 'create');
   const aT = !access ? Pref.norole : '';
-  const lT = lockOut ? `${Pref.equip} is offline` : '';
+  const lT = lockOut ? `${Pref.group} is hibernated` : '';
   const title = access && !lockOut ? otitle : `${aT}\n${lT}`;
   
   return(
@@ -24,7 +24,7 @@ const EquipFormWrapper = ({
       button={bttn}
       title={title}
       color='blueT'
-      icon='fa-vault'
+      icon='fa-industry'
       lock={!access || lockOut}
       noText={noText}
       primeTopRight={primeTopRight}
@@ -33,11 +33,9 @@ const EquipFormWrapper = ({
         id={id}
         name={name}
         alias={alias}
-        brKey={brKey}
         wiki={wiki}
         title={title}
         rootURL={rootURL}
-        brancheS={brancheS}
       />
     </ModelMedium>
   );
@@ -45,37 +43,19 @@ const EquipFormWrapper = ({
 
 export default EquipFormWrapper;
 
-const EquipForm = ({ 
-  id, name, alias, brKey, wiki, rootURL, brancheS, 
-  title, selfclose
-})=> {
+const EquipForm = ({ id, name, alias, wiki, rootURL, title, selfclose })=> {
 
-  function saveEquipment(e) {
+  function newEquipment(e) {
     e.preventDefault();
     const equipId = id;
     const eqname = this.eName.value.trim();
-    const eqalias = this.eAlias.value.trim().toLowerCase();
-    
-    const eqBrKey = this.eBrKey.value;
+    const alias = this.eAlias.value.trim().toLowerCase();
     
     const eURL = this.eWiki.value.trim();
-    const eqwiki = cleanURL(eURL, rootURL);
+    const eWiki = cleanURL(eURL, rootURL);
     
-    if(equipId) {
-       Meteor.call('editEquipment', equipId, eqname, eqalias, eqBrKey, eqwiki,
-      (error, reply)=>{
-        if(error)
-          console.log(error);
-        if(reply) {
-          toast.success('Saved');
-          FlowRouter.go('/data/overview?request=maintain&specify=' + eqalias);
-          selfclose();
-        }else{
-          toast.error('Server Error');
-        }
-      });
-    }else{
-      Meteor.call('createEquipment', eqname, eqalias, eqBrKey, eqwiki,
+    function create(eqname, alias, groupWiki) {
+      Meteor.call('createEquipment', eqname, alias, maincode, brKey, eWiki,
       (error, reply)=>{
         error && console.log(error);
         if(reply) {
@@ -86,67 +66,77 @@ const EquipForm = ({
         }
       });
     }
+      
+    // function edit(groupId, groupName, groupAlias, groupWiki) {
+    //   Meteor.call('editGroup', groupId, groupName, groupAlias, groupWiki, (error, reply)=>{
+    //     if(error)
+    //       console.log(error);
+    //     if(reply) {
+    //       toast.success('Saved');
+    //       FlowRouter.go('/data/overview?request=groups&specify=' + groupAlias);
+    //       selfclose();
+    //     }else{
+    //       toast.error('Server Error');
+    //     }
+    //   });
+    // }
+    
+    /////////Selection/////////
+    // if(name === false) {
+    //   create(groupName, groupAlias, groupWiki);
+    // }else{
+    //   edit(groupId, groupName, groupAlias, groupWiki);
+    // }
+    
   }
     
   const orName = name ? name : '';
   const orAlias = alias ? alias : '';
-  const orBrKey = brKey ? brKey : false;
   const orWiki = wiki ? wiki : '';
 
   return(
-    <form id='newEquip' className='fitWide' onSubmit={(e)=>saveEquipment(e)}>
+    <form id='newEquip' className='fitWide' onSubmit={(e)=>newEquipment(e)}>
       <p>
         <span>
           <input
             type='text'
-            id='eName'
+            id='gName'
             defaultValue={orName}
-            placeholder='ie. Heller 1707 Reflow Oven'
+            placeholder='ie. Trailer Safegaurd'
             className='dbbleWide'
             pattern='[A-Za-z0-9 _-]*'
             maxLength={Pref.groupMax}
             autoFocus={true}
             required />
-          <label htmlFor='eName'>Full Name</label>
+          <label htmlFor='gName'>Full Name</label>
         </span>
       </p>
       <p>
         <span>
           <input
             type='text'
-            id='eAlias'
+            id='gAlias'
             defaultValue={orAlias}
-            placeholder='ie. Reflow'
+            placeholder='ie. TSG'
             pattern='[A-Za-z0-9 _-]*'
             maxLength={Pref.aliasMax}
             required />
-          <label htmlFor='eAlias'>Alias / Common</label>
-        </span>
-      </p>
-      <p>
-        <span>
-          <select id='eBrKey' defaultValue={orBrKey} required>
-            <option value={false}>Facility</option>
-            {brancheS.map( (br, index)=>(
-              <option key={index} value={br.brKey}>{br.branch}</option>
-            ))}
-          </select>
-          <label htmlFor='eBrKey'>{Pref.branch}</label>
+          <label htmlFor='gAlias'>Abbreviation / Alias</label>
         </span>
       </p>
       <p>
         <input
           type='text'
-          id='eWiki'
+          id='gWiki'
           defaultValue={orWiki}
           placeholder='http://192.168.1.68/pisces'
           className='dbbleWide' />
-        <label htmlFor='eWiki' className='cap'>{Pref.equip} {Pref.instruct}</label>
+        <label htmlFor='gWiki' className='cap'>{Pref.group} {Pref.instruct} index</label>
       </p>
       <span className='centre'>
         <button
           type='submit'
-          id='eqSave'
+          id='grpSave'
           className='action nSolid'
           >Save
         </button>

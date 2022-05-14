@@ -43,7 +43,7 @@ export default RapidExTable;
 const RapidExRow = ({ rex, calString })=> (
 	<tr>
     <td className='centreText'>
-      {rex.live ? <n-fa1><i className='fa-solid fa-bolt-lightning darkOrangeT'></i></n-fa1> : null}
+      {rex.live ? <n-fa1><i className='fa-solid fa-bolt darkOrangeT'></i></n-fa1> : null}
     </td>
     <td>
       {rex.rapid}

@@ -83,25 +83,22 @@ dd {
 
 a {
   border: 1px dotted transparent;
-  color: var(--belizeHole);
+  color: var(--neptuneColor);
 }
 a > n-fa0 {
   color: var(--neptuneColor);
 }
 
-a:link, a:visited {
+a:where(:link,:visited) {
   text-decoration: none;
 }
 a:active {
   border: 1px dotted black;
 }
-/*
-a:focus, a:active,
-button:focus, button:active {
-  outline-style: dotted;
-  outline-width: thick;
+a:where(:hover,:focus-visible) {
+  text-decoration: underline !important;
 }
-*/
+
 button,
 [type="button"],
 [type="reset"],
@@ -211,7 +208,7 @@ input[type='checkbox'] + label {
 }
 
 input[type='checkbox']:hover + label, input[type='radio']:hover + label {
-  border-bottom-color: inherit;
+  border-bottom-color: var(--neptuneColor);
 }
 
 input, select, textarea {

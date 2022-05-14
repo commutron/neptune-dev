@@ -131,7 +131,7 @@ const FlowFormRoute = ({
           className='medBig'
           disabled={!flow}
           form='flowSave'
-          className='action clearBlue'>SAVE</button>
+          className='action nSolid'>SAVE</button>
         <br />
       </div>
     </div>

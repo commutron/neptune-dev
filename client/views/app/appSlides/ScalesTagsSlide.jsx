@@ -86,7 +86,7 @@ const ScalesTagsSlide = ({ app })=> {
           <input type='reset' className='smallAction blackT clear' />
           <button
             type='submit'
-            className='smallAction blackT clearGreen'
+            className='smallAction greenHover'
           >Save</button>
         </form>
       </div>
@@ -137,7 +137,7 @@ const PriorityScale = ({ app })=> {
         <ScaleInput idStr='high' place='p3 is >' dfltVal={pScl.high} />
         <ScaleInput idStr='max' place='p2 to p1' dfltVal={pScl.max} />
         <ScaleInput idStr='over' dfltVal={pScl.max} lock={true} />
-        <button type='submit' className='smallAction clearGreen'>Save</button>
+        <button type='submit' className='smallAction greenHover'>Save</button>
       </form>
       <div className='vmarginhalf inlineForm'>
         <span className='progMockMeter pScale4'></span>

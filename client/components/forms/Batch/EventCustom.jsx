@@ -12,7 +12,7 @@ const EventCustom = ({ batchId })=> {
     <ModelSmall
       button='Add Event'
       title='Add Custom Event'
-      color='blueT'
+      color='nT'
       icon='fa-plus-square'
       lock={!access}
       lgIcon={true}
@@ -76,7 +76,7 @@ const EventForm = ({ batchId, selfclose })=> {
           id='gocevent'
           className='medBig'
           form='ceventSave'
-          className='action clearBlue'
+          className='action nSolid'
         >Save</button>
         
       </form>

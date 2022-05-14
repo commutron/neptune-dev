@@ -102,7 +102,7 @@ const ShortAdd = ({ seriesId, serial, units, pastPN, pastRF, app, doneClose })=>
         type='submit'
         id='goSh'
         disabled={lock}
-        className='smallAction clearOrange'
+        className='smallAction orangeHover bold transparent'
       >{Pref.post}</button>
     </form>
   );

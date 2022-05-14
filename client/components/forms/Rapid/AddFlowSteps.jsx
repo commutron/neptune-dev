@@ -89,7 +89,7 @@ export const FlowStepsWrap = ({
           ><n-fa1><i className='far fa-edit'></i></n-fa1> cancel</button>
           
           <button
-            className='smallAction gap clearBlue'
+            className='smallAction gap nHover'
             onClick={()=>handleSave()}
             disabled={
               !rapidData.live || flowsState.length === 0 || 
@@ -255,7 +255,7 @@ const AddFlowSteps = ({
             type='button'
             id='goAddStp'
             onClick={(e)=>addStep(e)}
-            className='smallAction clearBlack'
+            className='smallAction blackHover'
           >Add</button>
         </label>
       </div>
@@ -273,7 +273,7 @@ const AddFlowSteps = ({
                   type='button'
                   name='Move Up'
                   id='up'
-                  className='smallAction blueHover'
+                  className='smallAction blackHover'
                   onClick={()=>moveUp(entry, index)}
                   disabled={lockout || index === 0}
                 ><i className='fas fa-arrow-up'></i></button>
@@ -281,7 +281,7 @@ const AddFlowSteps = ({
                   type='button'
                   name='Move Down'
                   id='dn'
-                  className='smallAction blueHover'
+                  className='smallAction blackHover'
                   onClick={()=>moveDown(entry, index)}
                   disabled={lockout || index === steps.length - 1}
                 ><i className='fas fa-arrow-down'></i></button>
@@ -313,7 +313,7 @@ const AddFlowSteps = ({
             </select>
             <button
               type='button'
-              className='smallAction clearGreen'
+              className='smallAction greenHover'
               disabled={lockout}
               onClick={(e)=>sendUp(e)}>Finish Mini Flow</button>
           </span>

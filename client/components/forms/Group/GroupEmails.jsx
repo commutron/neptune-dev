@@ -86,7 +86,7 @@ const EmailPrimeForm = ({ gId, emailset, lockOut })=> {
         <button
           type='submit'
           id='changeGrpEmailSubmit'
-          className='action clearBlue'
+          className='smallAction nHover'
          >Change</button>
       </p>
     </form>
@@ -133,7 +133,7 @@ const EmailSecondForm = ({ gId, emailset, lockOut })=> {
           <button
             type='submit'
             id='addGrpEmailSubmit'
-            className='action clearBlue'
+            className='smallAction nHover'
             disabled={emailset && emailset.length >= 5 || lockOut}
            >Add New</button>
         </p>

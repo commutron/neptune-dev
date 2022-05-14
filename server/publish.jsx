@@ -613,11 +613,13 @@ Meteor.publish('thinEquip', function(){
     return [
       EquipDB.find({orgKey: orgKey}, {
         fields: {
-          'alias': 1,
-          'maincode': 1
+          'orgKey': 0
+          // 'alias': 1,
+          // 'online': 1
       }}),
       MaintainDB.find({orgKey: orgKey}, {
         fields: {
+          'equipId': 1,
           'maincode': 1
       }})
     ];

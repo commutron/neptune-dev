@@ -36,7 +36,7 @@ export const AdminUp = ({ userId })=> {
           />
           <button 
             type='submit' 
-            className='smallAction clearBlue'
+            className='smallAction nHover'
           >Upgrade</button>
         </form>
       </fieldset>
