@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect } from 'react';
+import React, { Fragment, useState, useEffect, useLayoutEffect } from 'react';
 import moment from 'moment';
 import { ToastContainer } from 'react-toastify';
 
@@ -200,18 +200,7 @@ const OverviewWrap = ({
   const density = !dense ? '' : 'minifyed';
 
   return(
-    <div key={0} className={`overviewContainer ${light === true ? 'lightTheme' : 'darkTheme'}`}>
-      <ToastContainer
-        position="top-center"
-        newestOnTop />
-      <div className='tenHeader'>
-        <div className='topBorder'></div>
-        <HomeIcon />
-        <div className='frontCenterTitle'
-          >Overview<sup className='vbig monoFont'>WIP</sup>
-        </div>
-        <TideFollow />
-      </div>
+    <Fragment>
       
       <OverviewTools
         app={app}
@@ -243,53 +232,54 @@ const OverviewWrap = ({
         brancheS={brancheS}
         branchON={filterBy}
         changeBranch={(e)=>changeBranch(e)}
+        light={light}
       />
         
-      <div className='overviewContent forceScrollStyle' tabIndex='0'>
+      <div className={`overviewContent forceScrollStyle ${light === true ? 'lightTheme' : 'darkTheme'}`} tabIndex='0'>
           
-      {!liveState ?
-        <div className='centreContainer'>
-          <div className='centrecentre'>
-            <Spin />
+        {!liveState ?
+          <div className='centreContainer'>
+            <div className='centrecentre'>
+              <Spin />
+            </div>
           </div>
-        </div>
-      :  
-        <div className={`overGridFrame ${density}`}>
-    
-          <BatchHeaders
-            key='fancylist0'
-            oB={liveState}
-            traceDT={traceDT}
-            app={app}
-            isDebug={isDebug}
-            title={!filterBy ? 'All Live' : filterBy}
-            focusBy={focusBy}
-            tagBy={tagBy}
-            stormy={stormy}
-          />
-          
-          <BatchDetails
-            key='fancylist1'
-            oB={liveState}
-            traceDT={traceDT}
-            user={user}
-            app={app}
-            brancheS={brancheS}
-            isDebug={isDebug}
-            prog={prog}
-            dense={dense}
-            filterBy={filterBy}
-            focusBy={focusBy}
-            tagBy={tagBy}
-            stormy={stormy}
-            branchArea={filterBy !== false}
-            updateTrigger={updateTrigger}
-          />
+        :  
+          <div className={`overGridFrame ${density}`}>
+      
+            <BatchHeaders
+              key='fancylist0'
+              oB={liveState}
+              traceDT={traceDT}
+              app={app}
+              isDebug={isDebug}
+              title={!filterBy ? 'All Live' : filterBy}
+              focusBy={focusBy}
+              tagBy={tagBy}
+              stormy={stormy}
+            />
             
-        </div>
-      }  
+            <BatchDetails
+              key='fancylist1'
+              oB={liveState}
+              traceDT={traceDT}
+              user={user}
+              app={app}
+              brancheS={brancheS}
+              isDebug={isDebug}
+              prog={prog}
+              dense={dense}
+              filterBy={filterBy}
+              focusBy={focusBy}
+              tagBy={tagBy}
+              stormy={stormy}
+              branchArea={filterBy !== false}
+              updateTrigger={updateTrigger}
+            />
+              
+          </div>
+        } 
       </div>
-    </div>
+    </Fragment>
   );
 };
 

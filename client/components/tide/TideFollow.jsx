@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 import Pref from '/client/global/pref.js';
 import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 
-const TideFollow = ({ proRoute, invertColor })=> {
+const TideFollow = ({ proRoute })=> {
   
   function doLogout() {
 	  if(Meteor.user().engaged) {
@@ -49,7 +49,7 @@ const TideFollow = ({ proRoute, invertColor })=> {
       <ContextMenuTrigger
   			id='tideF0ll0w1'
   			holdToDisplay={!engaged ? 1 : 500}
-  			attributes={ {className: `proRight ${invertColor ? 'invert' : ''}`} }>
+  			attributes={ {className: 'proRight'} }>
         <button 
           aria-label={tootip}
           onClick={()=>!engaged ? null :go(engaged && engaged.tName)}

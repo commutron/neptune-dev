@@ -1,62 +1,54 @@
-import React from 'react';
-import { Meteor } from 'meteor/meteor';
-import { ToastContainer } from 'react-toastify';
+import React, { Fragment } from 'react';
 
-import HomeIcon from '/client/layouts/HomeIcon';
-import TideFollow from '/client/components/tide/TideFollow';
+import { PlainFrame } from '/client/layouts/MainLayouts';
+import Spin from '/client/components/tinyUi/Spin';
 import { UpTaskBar, DownTaskBar } from './TaskBars/TaskBars';
 
 const StreamLayout = ({
-  user,
-  app,
-  flowData,
-  title,
-  subLink,
-  tag,
+  load,
+  user, app,
+  title, subLink, tag,
   navBar,
   isAuth,
   children
 })=>	{
   
-  return(
-    <div className='containerEx'>
-      <ToastContainer
-        position="top-center"
-        newestOnTop />
-      <div className='tenHeader noPrint'>
-        <div className='topBorder' />
-        <HomeIcon />
-        
-          <div className='frontCenterTitle cap'>{title}
-          {tag && <sup className='vbig monoFont'>{tag}</sup>}</div>
-        
-        <TideFollow />
-      
-      </div>
-      <aside className='taskBarEx noPrint'>
-        {navBar === 'down' ?
-          <DownTaskBar subLink={subLink} /> :
-          <UpTaskBar 
-            subLink={subLink} 
-            showParts={app.partsGlobal}
-            isAuth={isAuth}
-          />
-        }
-      </aside>
-      
-      <div className='contentAreaEx'>
-        <div 
-          className='baseContainer'>
-          
-          <div className='traverseContent forceScroll wideScroll forceScrollStyle'>
-            {children[0] || children}
-          </div>
-            
+  if(!user || !app) {
+    return(
+      <PlainFrame title={title} tag={tag}>
+        <div className='centre wide'>
+          <Spin />
         </div>
+      </PlainFrame>
+    );
+  }
+  
+  return(
+    <PlainFrame title={title} tag={tag} container='containerEx'>
+      <Fragment>
+        <aside className='taskBarEx noPrint'>
+          {navBar === 'down' ?
+            <DownTaskBar subLink={subLink} /> :
+            <UpTaskBar 
+              subLink={subLink} 
+              showParts={app.partsGlobal}
+              isAuth={isAuth}
+            />
+          }
+        </aside>
         
-      </div>
-      
-    </div>
+        <div className='contentAreaEx'>
+          <div 
+            className='baseContainer'>
+            
+            <div className='traverseContent forceScroll wideScroll forceScrollStyle'>
+              {children[0] || children}
+            </div>
+          </div>
+          
+        </div>
+      </Fragment>
+    </PlainFrame>
   );
 };
 

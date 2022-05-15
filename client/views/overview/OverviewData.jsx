@@ -1,12 +1,13 @@
 import React, { useLayoutEffect } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
-import ErrorCatch from '/client/layouts/ErrorCatch';
 import { localeUpdate } from '/client/utility/WorkTimeCalc';
 
 import InboxToastPop from '/client/utility/InboxToastPop.js';
 import { branchesOpenSort } from '/client/utility/Arrays.js';
-import { SpinWrap } from '../../components/tinyUi/Spin';
+
+import { PlainFrame } from '/client/layouts/MainLayouts';
+import Spin from '../../components/tinyUi/Spin';
 import OverviewWrap from './OverviewWrap';
 
 const View = ({
@@ -21,7 +22,13 @@ const View = ({
   
     
   if( !ready || !readyT || !app ) {
-    return( <SpinWrap /> );
+    return(
+      <PlainFrame title='Overview' tag='WIP'>
+        <div className='centre wide'>
+          <Spin />
+        </div>
+      </PlainFrame>
+    );
   }
   
   localeUpdate(app);
@@ -29,7 +36,7 @@ const View = ({
   const brancheS = branchesOpenSort(app.branches);
   
   return(
-    <ErrorCatch>
+    <PlainFrame title='Overview' tag='WIP' container='overviewContainer'>
       <OverviewWrap 
         bx={batchX}
         traceDT={traceDT}
@@ -37,7 +44,7 @@ const View = ({
         app={app}
         brancheS={brancheS}
         isDebug={isDebug} />
-    </ErrorCatch>
+    </PlainFrame>
   );
 };
 

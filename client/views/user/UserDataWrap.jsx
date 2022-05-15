@@ -1,15 +1,13 @@
 import React, { useLayoutEffect } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
-import { ToastContainer } from 'react-toastify';
-import InboxToastPop from '/client/utility/InboxToastPop.js';
 
+import InboxToastPop from '/client/utility/InboxToastPop.js';
 import { branchesSort } from '/client/utility/Arrays.js';
-import { SpinWrap } from '/client/components/tinyUi/Spin';
-import ErrorCatch from '/client/layouts/ErrorCatch';
-import HomeIcon from '/client/layouts/HomeIcon';
-import TideFollow from '/client/components/tide/TideFollow';
-import Slides from '../../components/smallUi/Slides';
+
+import { PlainFrame } from '/client/layouts/MainLayouts';
+import Spin from '/client/components/tinyUi/Spin';
+import Slides from '/client/components/smallUi/Slides';
 import ActivityPanel from './ActivityPanel';
 import InboxPanel from './InboxPanel';
 import PrivacyPanel from './PrivacyPanel';
@@ -29,7 +27,13 @@ const UserDataWrap = ({
   }, [user]);
   
   if( !readybNames || !app || !app.branches || !user || !user.roles ) {
-    return( <SpinWrap /> );
+    return( 
+      <PlainFrame title=''>
+        <div className='centre wide'>
+          <Spin />
+        </div>
+      </PlainFrame>
+    );
   }
     
   const branches = app.branches.filter( b => b.open === true );
@@ -38,19 +42,7 @@ const UserDataWrap = ({
   const iL = <i className='rAlign'>{user.inbox.length}</i>;
   
   return(
-    <ErrorCatch>
-    <div className='simpleContainer'>
-      <ToastContainer
-        position="top-center"
-        newestOnTop />
-      <div className='tenHeader'>
-        <div className='topBorder' />
-        <HomeIcon />
-        <div className='frontCenterTitle'>{user.username || "User"}</div>
-        <div className='auxRight' />
-        <TideFollow />
-      </div>
-      
+    <PlainFrame title={user.username || 'user error'}>
       <div className='simpleContent'>
       
         <Slides
@@ -98,8 +90,7 @@ const UserDataWrap = ({
         </Slides>
 				
       </div>
-    </div>
-    </ErrorCatch>
+    </PlainFrame>
   );
 };
 

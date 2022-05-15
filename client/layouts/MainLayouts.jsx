@@ -1,62 +1,54 @@
 import { Meteor } from 'meteor/meteor';
 import React from 'react';
+import Pref from '/client/global/pref.js';
+import { ToastContainer } from 'react-toastify';
 import ErrorCatch from '/client/layouts/ErrorCatch';
 import HomeIcon from '/client/layouts/HomeIcon';
 import TideFollow from '/client/components/tide/TideFollow';
-import Pref from '/client/global/pref.js';
 
 export const PublicLayout = ({content}) => (
-  <ErrorCatch>
-  <div className='simpleContainer'>
-    <div className='tenHeader'>
-      <div className='topBorder' />
-      <HomeIcon />
-      <div className='frontCenterTitle'>
-        {Pref.neptuneIs}
-      </div>
-      <div className='auxRight' />
-      <div className='proRight' />
-    </div>
+  <PlainFrame title={Pref.neptuneIs} noToast={true}>
     <div className='simpleContent darkTheme forceScrollStyle'>
       {content}
     </div>
-  </div>
-  </ErrorCatch>
+  </PlainFrame>
 );
 
 export const SplashLayout = ({content, title}) => (
-  <ErrorCatch>
-    <div className='splashContainer'>
-      <div className='tenHeader'>
-        <div className='topBorder' />
-        <HomeIcon />
-        <div className='frontCenterTitle'>
-          {title}
-        </div>
-        <div className='auxRight' />
-        <TideFollow />
-      </div>
-      {content}
-    </div>
-  </ErrorCatch>
+  <PlainFrame title={title} container='splashContainer' noToast>
+    {content}
+  </PlainFrame>
 );
 
 export const CleanLayout = ({content}) => ( 
   <ErrorCatch> {content} </ErrorCatch> 
 );
 
-export const LabelLayout = ({content}) => (
+export const PlainFrame = ({ title, tag, container, noToast, children })=> (
   <ErrorCatch>
-  <div className='simpleContainer'>
-    <div className='tenHeader noPrint'>
-      <div className='topBorder' />
-      <HomeIcon />
-      <div className='frontCenterTitle'>
-        Print Label
+    <div className={container || 'simpleContainer'}>
+      {!noToast &&
+        <ToastContainer
+          position="top-center"
+          newestOnTop
+        />
+      }
+      <div className='tenHeader noPrint'>
+        <div className='topBorder' />
+        <HomeIcon />
+        <div className='frontCenterTitle cap'
+        >{title}{tag && <sup className='vbig monoFont'>{tag}</sup>}
+        </div>
+        <div className='auxRight' />
+        <TideFollow />
       </div>
-      <div className='auxRight' />
-      <TideFollow />
+      {children[0] || children}
     </div>
+  </ErrorCatch>
+);
+
+export const LabelLayout = ({content}) => (
+  <PlainFrame title='Print Label'>
     <div className='simpleContent'>
       <div className='wide comfort indent indentR noPrint'>
         <button
@@ -72,6 +64,5 @@ export const LabelLayout = ({content}) => (
       </div>
       {content}
     </div>
-  </div>
-  </ErrorCatch>
+  </PlainFrame>
 );

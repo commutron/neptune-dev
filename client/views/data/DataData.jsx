@@ -10,6 +10,7 @@ import { branchesSort } from '/client/utility/Arrays.js';
 import Spin from '../../components/tinyUi/Spin';
 import DataViewOps from './DataViewOps';
 
+
 const ExploreView = ({
   coldReady, hotReady, // subs
   user, isDebug, org, users, app, // self
@@ -22,7 +23,6 @@ const ExploreView = ({
     InboxToastPop(user);
   }, [user]);
   
-    
   if( !coldReady || !hotReady || !user || !app ) {
     return(
       <ErrorCatch>

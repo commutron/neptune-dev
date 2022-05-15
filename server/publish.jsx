@@ -613,9 +613,8 @@ Meteor.publish('thinEquip', function(){
     return [
       EquipDB.find({orgKey: orgKey}, {
         fields: {
-          'orgKey': 0
-          // 'alias': 1,
-          // 'online': 1
+          'alias': 1,
+          'online': 1
       }}),
       MaintainDB.find({orgKey: orgKey}, {
         fields: {

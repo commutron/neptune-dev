@@ -9,11 +9,12 @@ Meteor.methods({
   
   createEquipment(eqname, alias, brKey, instruct) {
     
+    let duplicate = EquipDB.findOne({equip: eqname},{fields:{'_id':1}});
     const dupe = EquipDB.findOne({alias: alias},{fields:{'_id':1}});
     
     const auth = Roles.userIsInRole(Meteor.userId(), 'create');
     
-    if(!dupe && auth) {
+    if(!duplicate && !dupe && auth) {
       EquipDB.insert({
         equip: eqname,
         alias: alias,
@@ -32,32 +33,39 @@ Meteor.methods({
     }else{
       return false;
     }
-  }
+  },
 
-/*
-
-  editGroup(eqId, eqname, alias, brKey, instruct) {
-    const doc = GroupDB.findOne({_id: groupId},{fields:{'group':1,'alias':1}});
-    let duplicate = GroupDB.findOne({group: newGroupName},{fields:{'_id':1}});
-    let dupe = GroupDB.findOne({alias: newAlias});
-    const auth = Roles.userIsInRole(Meteor.userId(), 'edit');
-    doc.group === newGroupName ? duplicate = false : null;
+  editEquipment(eqId, newEqname, newAlias, brKey, instruct) {
+    const doc = EquipDB.findOne({_id: eqId},{fields:{'equip':1,'alias':1}});
+    
+    let duplicate = EquipDB.findOne({equip: newEqname},{fields:{'_id':1}});
+    let dupe = EquipDB.findOne({alias: newAlias});
+    
+    doc.equip === newEqname ? duplicate = false : null;
     doc.alias === newAlias ? dupe = false : null;
+    
+    const auth = Roles.userIsInRole(Meteor.userId(), 'edit');
+    
     if(!duplicate && !dupe && auth) {
-      GroupDB.update({_id: groupId, orgKey: Meteor.user().orgKey}, {
+      let setBr = !brKey || brKey === 'false' ? false : brKey;
+      
+      EquipDB.update({_id: eqId, orgKey: Meteor.user().orgKey}, {
         $set : {
-          group: newGroupName,
+          equip: newEqname,
           alias: newAlias,
+          branchKey: setBr,
           updatedAt: new Date(),
   			  updatedWho: Meteor.userId(),
-  			  wiki: newWiki
+  			  instruct: instruct
         }});
       return true;
     }else{
       return false;
     }
-  },
+  }
   
+  
+  /*
   deleteGroup(groupId, pass) {
     const inUse = WidgetDB.findOne({groupId: groupId},{fields:{'_id':1}});
     if(!inUse) {

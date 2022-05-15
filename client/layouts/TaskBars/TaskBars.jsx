@@ -200,7 +200,7 @@ const FilterElement = ({ title, subTitle, goLink, branchON, changeBranch, icon, 
   </button>
 );
 
-export const OverMenuBar = ({ brancheS, branchON, changeBranch }) => {
+export const OverMenuBar = ({ brancheS, branchON, changeBranch, light }) => {
   
   const barsty = {
     colorScheme: 'dark',
@@ -216,7 +216,7 @@ export const OverMenuBar = ({ brancheS, branchON, changeBranch }) => {
   };
   
   return(
-    <div style={barsty} className='overMenuBar forceScrollStyle'>
+    <div style={barsty} className={`overMenuBar forceScrollStyle ${light === true ? 'lightTheme' : 'darkTheme'}`}>
       <FilterElement
         title='All'
         subTitle='AL'

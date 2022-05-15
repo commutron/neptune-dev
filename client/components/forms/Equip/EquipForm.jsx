@@ -23,7 +23,7 @@ const EquipFormWrapper = ({
     <ModelMedium
       button={bttn}
       title={title}
-      color='blueT'
+      color='nT'
       icon='fa-vault'
       lock={!access || lockOut}
       noText={noText}
@@ -71,7 +71,7 @@ const EquipForm = ({
           FlowRouter.go('/data/overview?request=maintain&specify=' + eqalias);
           selfclose();
         }else{
-          toast.error('Server Error');
+          toast.warning('Duplicate Name');
         }
       });
     }else{
@@ -82,7 +82,7 @@ const EquipForm = ({
           toast.success('Saved');
           selfclose();
         }else{
-          toast.error('Server Error');
+          toast.warning('Duplicate Name');
         }
       });
     }

@@ -1,16 +1,13 @@
 import React, { useLayoutEffect } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
-import { ToastContainer } from 'react-toastify';
 import InboxToastPop from '/client/utility/InboxToastPop.js';
 import { localeUpdate } from '/client/utility/WorkTimeCalc';
 import { branchesSort } from '/client/utility/Arrays.js';
-import ErrorCatch from '/client/layouts/ErrorCatch';
+import { PlainFrame } from '/client/layouts/MainLayouts';
 import Pref from '/client/global/pref.js';
-import { SpinWrap } from '../../components/tinyUi/Spin';
+import Spin from '../../components/tinyUi/Spin';
 
-import HomeIcon from '/client/layouts/HomeIcon';
-import TideFollow from '/client/components/tide/TideFollow';
 import Slides from '../../components/smallUi/Slides';
 
 import DashSlide from './DashSlide/DashSlide';
@@ -20,6 +17,7 @@ import ScheduleSlide from './ScheduleSlide';
 import AccountsManagePanel, { PermissionHelp } from './AccountsManagePanel';
 import TimeErrorCheck from './TimeErrorCheck';
 import RevolvingPINCheck from './RevolvingPINCheck';
+
 
 const PeopleDataWrap = ({
   readybName, readyPeople,
@@ -33,7 +31,13 @@ const PeopleDataWrap = ({
   }, [user]);
     
   if( !readybName || !readyPeople || !app ) {
-    return( <SpinWrap /> );
+    return( 
+      <PlainFrame title='People'>
+        <div className='centre wide'>
+          <Spin />
+        </div>
+      </PlainFrame>
+    );
   }
   
   localeUpdate(app);
@@ -48,19 +52,7 @@ const PeopleDataWrap = ({
   const antiAuth = !isAdmin && !isPeopleSuper;
   
   return(
-    <ErrorCatch>
-    <div className='simpleContainer'>
-      <ToastContainer
-        position="top-center"
-        newestOnTop />
-      <div className='tenHeader'>
-        <div className='topBorder' />
-        <HomeIcon />
-        <div className='frontCenterTitle'>People</div>
-        <div className='auxRight' />
-        <TideFollow />
-      </div>
-      
+    <PlainFrame title='People'>
       <div className='simpleContent'>
       
         <Slides
@@ -143,8 +135,7 @@ const PeopleDataWrap = ({
         </Slides>
 				
       </div>
-    </div>
-    </ErrorCatch>
+    </PlainFrame>
   );
 };
 

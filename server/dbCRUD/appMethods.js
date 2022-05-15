@@ -2,6 +2,7 @@
 
 Meteor.startup(function () {  
   // ensureIndex is depreciated but new createIndex errors as "not a function"
+  // XxxxDB._dropIndex( "orgKey_1_maincode_1" );
   AppDB._ensureIndex({ org : 1, orgKey: 1 }, { unique: true });
   Meteor.users._ensureIndex({ orgKey: 1, username : 1 }, { unique: true });
   XBatchDB._ensureIndex({ orgKey: 1, batch: 1 }, { unique: true });
@@ -11,7 +12,8 @@ Meteor.startup(function () {
   GroupDB._ensureIndex({ orgKey: 1, group : 1 }, { unique: true });
   WidgetDB._ensureIndex({ orgKey: 1, widget : 1 }, { unique: true });
   VariantDB._ensureIndex({ orgKey: 1, versionKey : 1 }, { unique: true });
-  EquipDB._ensureIndex({ orgKey: 1, maincode : 1 }, { unique: true });
+  EquipDB._ensureIndex({ orgKey: 1, alias : 1 }, { unique: true });
+
   CacheDB._ensureIndex({ dataName : 1 }, { unique: true });
   TraceDB._ensureIndex({ batchID : 1 }, { unique: true });
 });

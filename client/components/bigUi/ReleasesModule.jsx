@@ -49,7 +49,7 @@ const ReleaseAction = ({ id, rType, actionText, contextText })=> {
         <button
           onClick={(e)=>handleRelease(e, false)}
           title={title}
-          className='action clearGreen centreText medBig cap'
+          className='action greenSolid cap'
           style={sty}
           disabled={!access}
         >{actionText} {contextText}</button>
@@ -57,7 +57,7 @@ const ReleaseAction = ({ id, rType, actionText, contextText })=> {
       <button
         onClick={(e)=>handleRelease(e, Pref.shortfall)}
         title={title}
-        className='smallAction clearOrange cap'
+        className='action orangeSolid cap'
         disabled={!access}
       >{actionText} with {Pref.shortfall}</button>
     </div>

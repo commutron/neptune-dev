@@ -505,7 +505,7 @@ button.variableInput.biggest { height: 64px; }
   }
 }
 
-.lightTheme .overMenuBar .taskTip::before {
+.lightTheme.overMenuBar .taskTip::before {
   --task-front-color: var(--silver);
   --task-back-color: var(--blackT);
 }
@@ -532,12 +532,12 @@ button.variableInput.biggest { height: 64px; }
   --box-shadow-color: var(--neptuneColor);
 }
 
-.lightTheme .overMenuBar .taskLink {
+.lightTheme.overMenuBar .taskLink {
   --task-front-color: var(--blackT);
   --task-back-color: var(--clouds);
 }
-.lightTheme .overMenuBar .taskLink:where(:hover,:active),
-.lightTheme .overMenuBar .taskLink.onTL {
+.lightTheme.overMenuBar .taskLink:where(:hover,:active),
+.lightTheme.overMenuBar .taskLink.onTL {
   --task-front-color: var(--silver);
   --task-back-color: var(--blackT);
 }

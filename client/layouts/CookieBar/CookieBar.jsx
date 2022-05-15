@@ -4,45 +4,42 @@ import Pref from '/client/global/pref.js';
 import './cookie';
 
 const CookieBar = ({ 
-  groupData, 
-  widgetData, variantData,
-  batchData, itemData, 
-  app, 
-  action, miniAction
+  alias, widget, variant,
+  batch, item, 
 }) => (
   <div className='cookieRow'>
   
-    {groupData && 
+    {alias && 
       <button 
         className='cookieCrumb up numFont' 
-        title={`${Pref.group}: ${groupData.alias}`}
-        onClick={()=>FlowRouter.go('/data/overview?request=groups&specify=' + groupData.alias)}
-      > {groupData.alias.length < 10 ? 
-          groupData.alias :
-          groupData.alias.substring(0, 9) + '...'}
+        title={`${Pref.group}: ${alias}`}
+        onClick={()=>FlowRouter.go('/data/overview?request=groups&specify=' + alias)}
+      > {alias.length < 10 ? 
+          alias :
+          alias.substring(0, 9) + '...'}
       </button>}
         
-    {widgetData && 
+    {widget && 
       <button 
         className='cookieCrumb up numFont'
-        title={`${Pref.widget}: ${widgetData.widget}${variantData && ' v.'+variantData.variant}`}
-        onClick={()=>FlowRouter.go('/data/widget?request=' + widgetData.widget)}>
-        <span className='crumb'></span> {widgetData.widget.length < 16 ? 
-                                          widgetData.widget :
-                                            widgetData.widget.substring(0, 15) + '...'}
-        <i className='clean'>{variantData && ' v.'+variantData.variant}</i>
+        title={`${Pref.widget}: ${widget}${variant && ' v.'+ variant}`}
+        onClick={()=>FlowRouter.go('/data/widget?request=' + widget)}>
+        <span className='crumb'></span> {widget.length < 16 ? 
+                                          widget :
+                                            widget.substring(0, 15) + '...'}
+        <i className='clean'>{variant && ' v.'+ variant}</i>
       </button>}
       
-    {batchData && 
+    {batch && 
       <button 
         className='cookieCrumb numFont'
-        title={`${Pref.xBatch}: ${batchData.batch}`}
-        onClick={()=>FlowRouter.go('/data/batch?request=' + batchData.batch)}
+        title={`${Pref.xBatch}: ${batch}`}
+        onClick={()=>FlowRouter.go('/data/batch?request=' + batch)}
       >
-        <span className='crumb'></span> {batchData.batch}
+        <span className='crumb'></span> {batch}
       </button>}
       
-    {itemData && 
+    {item && 
       <span className='endCrumb'></span>}
    
   </div>

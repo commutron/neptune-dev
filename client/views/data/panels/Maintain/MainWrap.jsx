@@ -30,8 +30,6 @@ const MainWrap = ({
      console.log({equipData, maintainData});
      
      
-     
-     
   return(
     <SlidesNested
       menuTitle={Pref.equip}
@@ -47,17 +45,15 @@ const MainWrap = ({
       defaultSlide={defaultSlide}
       textStyle='up'>
     
-      {sortList.map( (entry, index)=> {
-        // let widgetsList = widgetData.filter(x => x.groupId === entry._id);
-        return(
-          <EquipSlide
-            key={index+entry._id}
-            equipData={entry}
-            app={app}
-            brancheS={brancheS}
-            isERun={isERun}
-          />
-        )})} 
+      {sortList.map( (entry, index)=> (
+        <EquipSlide
+          key={index+entry._id}
+          equipLite={entry}
+          app={app}
+          brancheS={brancheS}
+          isERun={isERun}
+        />
+      ))} 
     </SlidesNested>
   );
 };

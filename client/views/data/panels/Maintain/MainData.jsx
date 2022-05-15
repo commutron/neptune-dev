@@ -6,12 +6,12 @@ import MainWrap from './MainWrap';
 import Spin from '/client/components/tinyUi/Spin';
 
 const MaintainData = ({
-  coldReady, hotReady, // subs
+  coldReady, // sub
   equipData, maintainData,
   app, brancheS, specify 
 })=> {
 
-  if( !coldReady || !hotReady ) {
+  if( !coldReady ) {
     return(
       <div className='centre wide'>
         <Spin />
@@ -32,11 +32,9 @@ const MaintainData = ({
 
 export default withTracker( ({ app, brancheS, specify }) => {
   const coldSub = Meteor.subscribe('thinEquip');
-  const hotSub = Meteor.subscribe('hotEquip', specify);
 
   return {
     coldReady: coldSub.ready(),
-    hotReady: hotSub.ready(),
     app: app,
     brancheS: brancheS,
     equipData: EquipDB.find( {}, { sort: { alias: -1 } } ).fetch(),

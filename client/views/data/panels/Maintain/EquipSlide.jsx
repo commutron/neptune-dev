@@ -1,12 +1,15 @@
 import React from 'react';
+import { withTracker } from 'meteor/react-meteor-data';
 import Pref from '/client/global/pref.js';
-import CreateTag from '/client/components/tinyUi/CreateTag';
-// import TagsModule from '/client/components/bigUi/TagsModule';
 
+import Spin from '/client/components/tinyUi/Spin';
+import CreateTag from '/client/components/tinyUi/CreateTag';
 import EquipForm from '/client/components/forms/Equip/EquipForm';
 
 
-const EquipSlide = ({ equipData, app, brancheS, isERun })=>{
+const EquipSlide = ({ equipData, maintainData, app, brancheS, isERun })=>{
+  
+  console.log({slide: equipData, maintainData});
   
   const eq = equipData;
   // safety
@@ -81,4 +84,40 @@ const EquipSlide = ({ equipData, app, brancheS, isERun })=>{
   );
 };
 
-export default EquipSlide;
+const EquipData = ({
+  hotReady, // sub
+  equipData, maintainData,
+  app, brancheS, isERun 
+})=> {
+
+  if( !hotReady ) {
+    return(
+      <div className='centre wide'>
+        <Spin />
+      </div>
+    );
+  }
+  
+  return(
+    <EquipSlide
+      equipData={equipData}
+      maintainData={maintainData}
+      app={app}
+      brancheS={brancheS}
+      isERun={isERun}
+    />
+  );
+};
+
+export default withTracker( ({ equipLite, app, brancheS, isERun }) => {
+  const hotSub = Meteor.subscribe('hotEquip', equipLite._id);
+
+  return {
+    hotReady: hotSub.ready(),
+    app: app,
+    brancheS: brancheS,
+    isERun: isERun,
+    equipData: EquipDB.findOne({_id: equipLite._id}, { sort: { alias: -1 } } ),
+    maintainData: MaintainDB.find({equipId: equipLite._id}, { sort: { burden: -1 } } ).fetch(),
+  };
+})(EquipData);

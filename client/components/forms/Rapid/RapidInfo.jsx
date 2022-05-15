@@ -281,7 +281,7 @@ const RapidInfoFormBlock = ({
       
         <button
           type='submit'
-          className='miniAction gap blueLineHover'
+          className='miniAction gap nLineHover'
         ><i className='fas fa-check'></i> save</button>
       </span>
       

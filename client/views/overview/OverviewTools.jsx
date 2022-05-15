@@ -30,7 +30,7 @@ const OverviewTools = ({
   const tList = _.uniq( Array.from(traceDT, t => t.tags ).filter(f=>f).flat() ).sort();
   
   return(
-    <nav className='overviewToolbar gridViewTools'>
+    <nav className={`overviewToolbar gridViewTools ${lightUP === true ? 'lightTheme' : 'darkTheme'}`}>
       <FocusSelect
         gList={gList}
         focusState={focusByUP}

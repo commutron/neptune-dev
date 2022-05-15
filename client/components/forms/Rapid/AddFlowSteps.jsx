@@ -322,7 +322,7 @@ const AddFlowSteps = ({
       {editState && handleClear && steps.length === 0 ?
         <span className='rightRow'>
           <button
-            className='miniAction gap blueLineHover'
+            className='miniAction gap nLineHover'
             onClick={()=>handleClear()}
           >Save Empty Flow</button>
         </span>

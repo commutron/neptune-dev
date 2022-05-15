@@ -2,7 +2,8 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 
-import { SpinWrap } from '../../components/tinyUi/Spin.jsx';
+import { PlainFrame } from '/client/layouts/MainLayouts';
+import Spin from '../../components/tinyUi/Spin.jsx';
 import AppWrap from './AppWrap.jsx';
 
 const AppView = ({
@@ -13,30 +14,40 @@ const AppView = ({
 })=> {
    
   if(!readyDebug || !app ) {
-    return( <SpinWrap /> );
+    return( 
+      <PlainFrame title='Settings'>
+        <div className='centre wide'>
+          <Spin />
+        </div>
+      </PlainFrame>
+    );
   }
   
   if(isAdmin) {
     return(
-      <AppWrap
-        orb={orb}
-        bolt={bolt}
-        isAdmin={isAdmin}
-        isDebug={isDebug}
-        app={app}
-        users={users}
-      />
+      <PlainFrame title='Settings'>
+        <AppWrap
+          orb={orb}
+          bolt={bolt}
+          isAdmin={isAdmin}
+          isDebug={isDebug}
+          app={app}
+          users={users}
+        />
+      </PlainFrame>
     );
   }
   
   return(
-    <div className='centre middle'>
-      <p className='medBig centreText'>This page is limited to administrators only</p>
-      <button
-        className='smallAction clear whiteT'
-        onClick={()=> window.history.back()}
-      ><i className='fas fa-arrow-circle-left fa-lg'></i> Go Back</button>
-    </div>
+    <PlainFrame title='Settings'>
+      <div className='centre middle'>
+        <p className='medBig centreText'>This page is limited to administrators only</p>
+        <button
+          className='smallAction clear whiteT'
+          onClick={()=> window.history.back()}
+        ><i className='fas fa-arrow-circle-left fa-lg'></i> Go Back</button>
+      </div>
+    </PlainFrame>
   );
 };
 

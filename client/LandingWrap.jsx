@@ -5,12 +5,8 @@ import Pref from '/client/global/pref.js';
 import InboxToastPop from '/client/utility/InboxToastPop.js';
 import Spin from '/client/components/tinyUi/Spin';
 
-import HomeIcon from '/client/layouts/HomeIcon';
-import TideFollow from '/client/components/tide/TideFollow';
+import { PlainFrame } from '/client/layouts/MainLayouts';
 
-import { ToastContainer } from 'react-toastify';
-
-import Hsty from '/client/layouts/NavButton/style';
 import HomeLogout from '/client/layouts/NavButton/HomeLogout';
 import NavButton, { NavButtonShell, NavBar, NavPlaceholder } from '/client/layouts/NavButton/NavButton';
 
@@ -22,20 +18,11 @@ const StartView = ({user, app}) =>	{
   
   if( !user || !app ) {
     return(
-      <div className='splashContainer'>
-        <div className='tenHeader'>
-          <div className='topBorder' />
-          <HomeIcon />
-          <div className='frontCenterTitle'>
-            {Pref.neptuneIs}
-          </div>
-          <div className='auxRight' />
-          <div />
-        </div>
+      <PlainFrame title={Pref.neptuneIs} container='splashContainer'>
         <div className='centreSpash'>
           <Spin color={true} message='Just a moment'/>
         </div>
-      </div>
+      </PlainFrame>
     );
   }
   
@@ -45,20 +32,7 @@ const StartView = ({user, app}) =>	{
   const isReadOnly = Roles.userIsInRole(Meteor.userId(), 'readOnly');
   
   return(
-    <div className='splashContainer'>
-      <ToastContainer
-        position="top-center"
-        newestOnTop />
-      <div className='tenHeader'>
-        <div className='topBorder' />
-        <HomeIcon />
-        <div className='frontCenterTitle'>
-          {Pref.neptuneIs}
-        </div>
-        <div className='auxRight' />
-        <TideFollow />
-      </div>
-
+    <PlainFrame title={Pref.neptuneIs} container='splashContainer'>
       <div className={isAdmin ? 'homeNaviA' : 'homeNavi'}>
         {isReadOnly ?
           <NavPlaceholder 
@@ -112,7 +86,7 @@ const StartView = ({user, app}) =>	{
           <NavBar title='Settings' icon='fa-solid fa-sliders-h' link='/app' />
         : null}
       </div>
-    </div>
+    </PlainFrame>
   );
 };
 

@@ -47,19 +47,18 @@ export const TraverseWrap = ({
       <div className='tenHeader noPrint'>
         <div className='topBorder' />
         <HomeIcon />
+        
         {base ? 
           <div className='frontCenterTitle cap'>{title}
           {beta && <sup className='big monoFont'>BETA</sup>}</div>
         :
           <CookieBar
-            batchData={batchData}
-            itemData={itemData}
-            widgetData={widgetData}
-            variantData={variantData}
-            groupData={groupData}
-            app={app}
-            action={action}
-            miniAction={false} />
+            batch={batchData.batch}
+            item={itemData ? true : false}
+            widget={widgetData.widget}
+            variant={variantData.variant}
+            alias={groupData.alias}
+          />
         }
           
         <div className='auxRight'>
@@ -74,9 +73,10 @@ export const TraverseWrap = ({
           }
         </div>
         
-      <TideFollow user={user} />
+        <TideFollow />
         
       </div>
+      
       <aside className='taskBarEx noPrint'>
         <ExTaskBar subLink={subLink} />
       </aside>
@@ -116,9 +116,8 @@ export const TraverseWrap = ({
                 ncTypesCombo={flowData && flowData.ncTypesComboFlat} />
             </div>
           : null }
-            
         </div>
-      </div>
-    </div>
+      </div> 
+    </div> 
   );
 };

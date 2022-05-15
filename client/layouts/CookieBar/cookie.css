@@ -1,25 +1,23 @@
-.cookieRow {
-  grid-area: proLeft / proLeft / frontCenter / frontCenter;
-  background-color: rgb(25,25,25);
+.cookieRow, .cookieCrumb {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
   align-items: center;
+  overflow: hidden;
+}
+
+.cookieRow {
+  grid-area: proLeft / proLeft / frontCenter / frontCenter;
+  background-color: rgb(25,25,25);
   width: 100%;
   max-width: calc( 100vw - (20 * var(--vh)) );
   height: 100%;
   max-height: calc(8 * var(--vh));
   padding: 0;
-  overflow: hidden;
 }
 
 .cookieCrumb {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  align-items: center;
   background-color: transparent;
-  overflow: hidden;
   white-space: nowrap;
   transition: all 150ms ease-in-out;
   color: var(--silver);
@@ -60,11 +58,9 @@
   transition: all 150ms ease-in-out;
 }
 
-.cookieCrumb:hover, .cookieCrumb:active {
-  background-color: var(--silver);
-}
 .cookieCrumb:hover,
 .cookieCrumb:active {
+  background-color: var(--silver);
   color: rgb(25,25,25);
 }
 .cookieCrumb:hover > .crumb:before,
@@ -81,8 +77,6 @@
 @media (orientation: portrait) {
   .cookieRow { 
     grid-area: frontCenter;
-  }
-  .cookieRow {
     max-height: 8vmin
   }
 }

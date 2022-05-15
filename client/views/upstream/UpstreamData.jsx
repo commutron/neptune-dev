@@ -1,12 +1,13 @@
 import React, { useLayoutEffect } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
-import ErrorCatch from '/client/layouts/ErrorCatch';
-import { localeUpdate } from '/client/utility/WorkTimeCalc';
+import Pref from '/client/global/pref.js';
 
+import { localeUpdate } from '/client/utility/WorkTimeCalc';
 import InboxToastPop from '/client/utility/InboxToastPop.js';
 import { branchesOpenSort } from '/client/utility/Arrays.js';
-import { SpinWrap } from '/client/components/tinyUi/Spin';
+
+import StreamLayout from '/client/layouts/StreamLayout';
 import UpstreamWrap from './UpstreamWrap';
 
 const View = ({
@@ -20,9 +21,15 @@ const View = ({
     InboxToastPop(user);
   }, [user]);
   
-    
   if( !ready || !readyT || !app || !users ) {
-    return( <SpinWrap /> );
+    return(
+      <StreamLayout
+        title={Pref.upstream}
+        tag='kit'
+      >
+        <div></div>
+      </StreamLayout>
+    );
   }
   
   localeUpdate(app);
@@ -30,17 +37,16 @@ const View = ({
   const brancheS = branchesOpenSort(app.branches);
 
   return(
-    <ErrorCatch>
-      <UpstreamWrap 
-        view={view}
-        batchX={batchX}
-        traceDT={traceDT}
-        user={user}
-        app={app}
-        users={users}
-        brancheS={brancheS}
-        isDebug={isDebug} />
-    </ErrorCatch>
+    <UpstreamWrap 
+      view={view}
+      batchX={batchX}
+      traceDT={traceDT}
+      user={user}
+      app={app}
+      users={users}
+      brancheS={brancheS}
+      isDebug={isDebug} 
+    />
   );
 };
 

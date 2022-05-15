@@ -1,11 +1,12 @@
 import React, { useLayoutEffect } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
-import ErrorCatch from '/client/layouts/ErrorCatch';
+import Pref from '/client/global/pref.js';
+
 import InboxToastPop from '/client/utility/InboxToastPop.js';
 import { localeUpdate } from '/client/utility/WorkTimeCalc';
 
-import { SpinWrap } from '/client/components/tinyUi/Spin';
+import StreamLayout from '/client/layouts/StreamLayout';
 import DownstreamWrap from './DownstreamWrap';
 
 const View = ({
@@ -18,24 +19,30 @@ const View = ({
     InboxToastPop(user);
   }, [user]);
     
-  if( !readyT || !app ) {
-    return( <SpinWrap /> );
+  if( !readyT || !app || !user ) {
+    return(
+      <StreamLayout
+        title={Pref.downstream}
+        tag='ship'
+        navBar='down'
+      >
+        <div></div>
+      </StreamLayout>
+    );
   }
   
   localeUpdate(app);
 
   return(
-    <ErrorCatch>
-      <DownstreamWrap 
-        view={view}
-        traceDT={traceDT}
-        dayTime={dayTime}
-        dayIFin={dayIFin}
-        user={user}
-        app={app}
-        isDebug={isDebug}
-      />
-    </ErrorCatch>
+    <DownstreamWrap 
+      view={view}
+      traceDT={traceDT}
+      dayTime={dayTime}
+      dayIFin={dayIFin}
+      user={user}
+      app={app}
+      isDebug={isDebug}
+    />
   );
 };
 

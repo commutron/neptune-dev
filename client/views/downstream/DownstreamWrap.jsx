@@ -1,7 +1,7 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
 
-import StreamLayout from '/client/layouts/StreamLayout.jsx';
+import StreamLayout from '/client/layouts/StreamLayout';
 
 import DownstreamView from '/client/views/downstream/DownstreamTask/DownstreamView';
 import MonthlyReport from './MonthlyReport';
@@ -22,7 +22,6 @@ const DownstreamWrap = ({
         app={app}
         title='Weekly Completed'
         subLink={view}
-        action={false}
         navBar='down'
       >
         <WeeklyReport
@@ -38,7 +37,6 @@ const DownstreamWrap = ({
         app={app}
         title='Daily Completed'
         subLink={view}
-        action={false}
         navBar='down'
       >
         <DailyReport 
@@ -58,7 +56,6 @@ const DownstreamWrap = ({
         app={app}
         title='Monthly Completed'
         subLink={view}
-        action={false}
         navBar='down'
       >
         <MonthlyReport 
@@ -77,7 +74,6 @@ const DownstreamWrap = ({
         app={app}
         title='Trends'
         subLink={view}
-        action={false}
         navBar='down'
       >
         <TrendWrap 

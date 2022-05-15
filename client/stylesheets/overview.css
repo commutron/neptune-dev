@@ -93,6 +93,7 @@
 }
   
 .overviewContent,
+.overviewContent.darkTheme,
 .downstreamContent {
   background-color: rgb(30,30,30);
   overflow-y: scroll;
