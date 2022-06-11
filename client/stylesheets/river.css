@@ -814,7 +814,7 @@ n-trib-action-all {
   width: 100%;
   margin: 0 0 1vh 0;
   border: 5px solid; 
-  padding: 0 1vmax;
+  padding: 0 1vmax 1vmax 1vmax;
   text-align: center;
 }
 

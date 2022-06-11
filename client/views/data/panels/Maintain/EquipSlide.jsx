@@ -5,6 +5,8 @@ import Pref from '/client/global/pref.js';
 import Spin from '/client/components/tinyUi/Spin';
 import CreateTag from '/client/components/tinyUi/CreateTag';
 import EquipForm from '/client/components/forms/Equip/EquipForm';
+// import ServeForm from '/client/components/forms/Equip/ServeForm';
+// import TasksForm from '/client/components/forms/Equip/TasksForm';
 
 
 const EquipSlide = ({ equipData, maintainData, app, brancheS, isERun })=>{
@@ -67,10 +69,19 @@ const EquipSlide = ({ equipData, maintainData, app, brancheS, isERun })=>{
         
       </div>
       
+      <p>{eq.alias}</p>
+      <p>{!eq.branchKey ? 'other/no branch' : brancheS.find( b => b.brKey === eq.branchKey).branch}</p>
+      <p>{eq.online ? 'online' : 'offline'}</p>
+      <p>{eq.service ? 'service array' : 'X'}</p>
+      
       <p className='w100 capFL vmargin indenText wordBr'>
         {Pref.instruct} Index: {eq.instruct && eq.instruct.indexOf('http') === -1 ?
           app.instruct : null}<a className='clean wordBr' href={eq.instruct} target='_blank'>{eq.instruct}</a>
       </p>
+      
+      <div>
+      {maintainData.toString()}
+      </div>
       
       <div className='wide'>
         <CreateTag

@@ -52,7 +52,8 @@ n-med-tide-container + n-tide-task {
   border-bottom-width: 1vh;
 }
 n-med-tide-container button {
-  border: 0.4vmax solid var(--turquoise);
+  border: 0.4vmax solid var(--emerald);
+  padding: 0.2vmax 0;
 }
 n-med-tide-container .tideIcon {
   font-size: 2.5vmax;
@@ -114,9 +115,9 @@ n-tide-task label {
   color: rgb(25,25,25);
 }
 
-.tideFlip .tideIndicate { color: var(--turquoise); }
+.tideFlip .tideIndicate { color: var(--emerald); }
 .flipWork, .tideFlip:hover {
-  background-color: var(--turquoise);
+  background-color: var(--emerald);
   color: rgb(25,25,25);
 }
 

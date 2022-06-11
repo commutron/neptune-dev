@@ -21,18 +21,9 @@ const ReportsWrap = ({
       
       <div className='rowWrapR noPrint'><PrintThis /></div>
       
-      <BuildHistory
-        allVariant={allVariant}
-        allWidget={allWidget}
-        allGroup={allGroup} 
-        app={app} 
-      />
-          
-      <hr className='vmargin' />
-      <div className='printBr' />
-      
       <div className='space'>
-        <div className='noPrint'>  
+        <h2 style={{marginBottom:'32px'}}>Custom Time Range Report</h2>
+        <div className='noPrint'>
           <ReportRangeRequest 
             setFrom={(v)=>startSet(v)}
             setTo={(v)=>endSet(v)}
@@ -55,6 +46,18 @@ const ReportsWrap = ({
           />
         }
       </div>
+      
+      <hr className='vmargin' />
+      <div className='printBr' />
+      
+      <h2 style={{paddingLeft:'24px'}}>Build History Report</h2>
+      
+      <BuildHistory
+        allVariant={allVariant}
+        allWidget={allWidget}
+        allGroup={allGroup} 
+        app={app} 
+      />
 
     </div>
   );

@@ -6,9 +6,37 @@ import Config from '/server/hardConfig.js';
 import { min2hr, round2Decimal, percentOverUnder, diffTrend } from './calcOps';
 import { noIg } from './utility';
 
+export function addTideDuration(td) {
+  const mStart = moment(td.startTime);
+  const mStop = td.stopTime ? moment(td.stopTime) : moment();
+  
+  if(td.focus) {
+    return Math.round( 
+      moment.duration(
+        Math.floor( mStop.diff(mStart, 'seconds') / td.focus)
+      , 'seconds').asMinutes() 
+    );
+  }else{
+    return Math.round( mStop.diff(mStart, 'minutes', true) );
+  }
+}
+
+function addTideArrayDuration(tideArray) {
+  let tideDurr = 0;
+  for(const td of tideArray) {
+    const mStart = moment(td.startTime);
+    const mStop = td.stopTime ? moment(td.stopTime) : moment();
+    
+    if(td.focus) {
+      tideDurr += Math.floor( mStop.diff(mStart, 'seconds') / td.focus);
+    }else{
+      tideDurr += mStop.diff(mStart, 'seconds');
+    }
+  }
+  return Math.round( moment.duration(tideDurr, 'seconds').asMinutes() );
+}
 
 export function batchTideTime(batchTide, lockTrunc) {
-    
   if(!batchTide ) {
     return undefined;
   }else if(batchTide.length === 0) {
@@ -17,19 +45,12 @@ export function batchTideTime(batchTide, lockTrunc) {
     if(typeof lockTrunc === 'object') {
       return lockTrunc.tideTotal;
     }else{
+      const tideTime = addTideArrayDuration(batchTide);
       
-      const tideDurr = Array.from(batchTide, bl => {
-        const mStart = moment(bl.startTime);
-        const mStop = !bl.stopTime ? moment() : moment(bl.stopTime);
-        return moment.duration(mStop.diff(mStart)).asMinutes();
-      });
-      const tideTime = tideDurr.length > 0 ? tideDurr.reduce((x,y)=> x + y) : 0;
-
       if( typeof tideTime !== 'number' ) {
         return false;
       }else{
-        const cleanTime = tideTime;
-        return cleanTime;
+        return tideTime;
       }
     }
   }
@@ -151,15 +172,19 @@ function collectActivtyLevel(privateKey, batchID) {
 function slimBlockReturnData(batch, thePeriod, lockout) {
   let slimBlock = [];
   for(let blck of thePeriod) {
-    let mStop = blck.stopTime ? moment(blck.stopTime) : moment();
-    let durr = moment.duration(mStop.diff(blck.startTime)).asMinutes();
+    const tideMinutes = addTideDuration(blck);
+    
+    // const mStop = blck.stopTime ? moment(blck.stopTime) : moment();
+    // let durr = moment.duration(mStop.diff(blck.startTime)).asMinutes();
+    
     slimBlock.push({
       batch: batch,
       tKey: blck.tKey,
       who: blck.who,
       startTime: blck.startTime,
       stopTime: blck.stopTime,
-      durrAsMin: durr,
+      durrAsMin: tideMinutes,
+      focus: blck.focus,
       task: blck.task || null,
       subtask: blck.subtask || null,
       lockOut: lockout

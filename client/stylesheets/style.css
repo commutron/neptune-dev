@@ -33,7 +33,7 @@ input::-webkit-calendar-picker-indicator {
   background-color: black;
 }
 
-.activeMark { border-left-color: var(--belizeHole); }
+.activeMark { border-left-color: var(--peterriver); }
 .gMark { border-left-color: var(--nephritis); }
 .ngMark { border-left-color: var(--pomegranate); }
 .exMark { border-left-color: var(--pumpkinfrost); }
@@ -152,7 +152,7 @@ input::-webkit-calendar-picker-indicator {
 .purpleT { color: var(--wisteria); }
 .purpleBorder { 
   background-color: transparent;
-	border: 5px solid var(--wisteria);
+	border: 3px solid var(--wisteria);
 }
 
 .wetasphalt { background-color: var(--wetasphalt); }
@@ -193,10 +193,12 @@ input::-webkit-calendar-picker-indicator {
 .paleT { color: rgba(255,255,255,0.1); }
 
 .borderWhite { border-color: var(--clouds); }
+.borderBlack { border-color: var(--black); }
 .borderGray { border-color: var(--asbestos); }
 .borderGreen { border-color: var(--nephritis); }
 .borderBlue { border-color: var(--belizeHole); }
 .borderRed { border-color: var(--alizarin); }
+/*.borderTrueyellow { border-color: var(--sunflower); }*/
 .borderOrange { border-color: var(--orange); }
 .borderTeal { border-color: var(--greenSea); }
 .borderPurple { border-color: var(--wisteria); }

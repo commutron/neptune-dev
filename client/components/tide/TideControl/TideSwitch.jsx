@@ -58,12 +58,15 @@ const TideSwitch = ({
   }
   
   if(tideKey && !tideFloodGate) {
+    
+    const disable = lock || tideLockOut || !taskState || subtState === false;
+  
     return(
       <button
         title={`Switch Task`}
         className={`tideFlip ${working ? 'flipWork' : ''}`}
         onClick={()=>handleSwitch()}
-        disabled={lock || tideLockOut}
+        disabled={disable}
       ><i><i className="fas fa-exchange-alt tideIcon tideIndicate"></i></i>
       </button>
     );

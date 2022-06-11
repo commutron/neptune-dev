@@ -9,14 +9,14 @@ const TideLock = ({
   
   useEffect(() => {
     if(!currentLive && message) {
-      toast(`Click 'START' to unlock.
-      Click 'SWITCH' to stop your current ${Pref.xBatch} and start this ${Pref.xBatch}.
-      (Only one ${Pref.xBatch} can be ${Pref.engaged} at a time).`, 
-        {
-          autoClose: false,
-          className: 'medSm',
-          position: toast.POSITION.BOTTOM_CENTER
-      });
+      // toast(`Click 'START' to unlock.
+      // Click 'SWITCH' to stop your current ${Pref.xBatch} and start this ${Pref.xBatch}.
+      // (Only one ${Pref.xBatch} can be ${Pref.engaged} at a time).`, 
+      //   {
+      //     autoClose: false,
+      //     className: 'medSm',
+      //     position: toast.POSITION.BOTTOM_CENTER
+      // });
       if(caution) {
         toast.warn(`${Pref.XBatch} is ${Pref.released} with a ${Pref.shortfall}`, 
         {
@@ -25,7 +25,7 @@ const TideLock = ({
         });
       }
       if(radioactive) {
-        toast.warn(`${Pref.widget} ${Pref.variant} ${Pref.radio.toUpperCase()} ☢`, 
+        toast.warn(`${Pref.widget} ${Pref.variant} ${Pref.radio.toUpperCase()} 💥`, 
         {
           autoClose: false,
           className: 'cap darkOrangeI',

@@ -144,6 +144,40 @@ export function UsersTimeTotal( userIDs, allUsers, dateTime, span, spanHours ) {
   return userTimeTotal;
 }
 
+export function addTideDuration(td) {
+  const mStart = moment(td.startTime);
+  const mStop = td.stopTime ? moment(td.stopTime) : moment();
+  
+  if(td.focus) {
+    return Math.round( 
+      moment.duration(
+        Math.floor( mStop.diff(mStart, 'seconds') / td.focus)
+      , 'seconds').asMinutes() 
+    );
+  }else{
+    return Math.round( mStop.diff(mStart, 'minutes', true) );
+  }
+}
+
+function addTideArrayDuration(tideArray) {
+  if(!Array.isArray(tideArray) || tideArray.length === 0) {
+    return 0;
+  }else{
+    let tideSeconds = 0;
+    for(const td of tideArray) {
+      const mStart = moment(td.startTime);
+      const mStop = td.stopTime ? moment(td.stopTime) : moment();
+      
+      if(td.focus) {
+        tideSeconds += Math.floor( mStop.diff(mStart, 'seconds') / td.focus);
+      }else{
+        tideSeconds += mStop.diff(mStart, 'seconds');
+      }
+    }
+    return Math.round( moment.duration(tideSeconds, 'seconds').asMinutes() );
+  }
+}
+
 export const splitTidebyPeople = (tideArray)=> {
   
   let totalTimeNum = 0;
@@ -156,16 +190,13 @@ export const splitTidebyPeople = (tideArray)=> {
     usersNice = [...new Set(usersGrab)];
     
     for(let ul of usersNice) {
-      let userTimeNum = 0;
       const userTide = tideArray.filter( x => x.who === ul );
-      for(let bl of userTide) {
-        const mStart = moment(bl.startTime);
-        const mStop = !bl.stopTime ? moment() : moment(bl.stopTime);
-        const block = moment.duration(mStop.diff(mStart)).asMinutes();
-        totalTimeNum = totalTimeNum + block;
-        userTimeNum = userTimeNum + block;
-      }
-      const userTime = Math.round( userTimeNum );
+      
+      const userMinutes = addTideArrayDuration(userTide);
+      
+      totalTimeNum = totalTimeNum + userMinutes;
+      
+      const userTime = Math.round( userMinutes );
       peopleTime.push({
         uID: ul,
         uTime: userTime

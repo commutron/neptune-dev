@@ -26,8 +26,7 @@ Meteor.methods({
   			updatedWho: Meteor.userId(),
   			online: true,
         instruct: instruct,
-        tasks: [],
-        pattern: []
+        service: []
       });
       return true;
     }else{
@@ -62,8 +61,84 @@ Meteor.methods({
     }else{
       return false;
     }
-  }
+  },
   
+  addServicePattern(eqId, timeSpan, pivot, recur, period) {
+    if( Roles.userIsInRole(Meteor.userId(), 'edit') ) {
+      
+      const whenOf = typeof pivot === 'string' ? pivot : Number(pivot);
+      
+      EquipDB.update({_id: eqId, orgKey: Meteor.user().orgKey}, {
+        $push : {
+          service: { 
+            serveKey: new Meteor.Collection.ObjectID().valueOf(),
+            updatedAt: new Date(),
+            timeSpan: timeSpan, // 'day', 'week', month, 'year'
+            whenOf: whenOf, // 'endOf', // 1, 2, 3, ..., 'startOf'
+            recur: Number(recur),
+            period: Number(period), // 1, 6, 30 // in days
+            grace: Number(1), // in days
+            tasks: []
+          }
+        }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+
+  // editService(eqId, serveKey ) {
+  //   // const doc = EquipDB.findOne({_id: eqId},{fields:{'equip':1,'alias':1}});
+    
+  //   const auth = Roles.userIsInRole(Meteor.userId(), 'edit');
+    
+  //   if(auth) {
+     
+  //     EquipDB.update({_id: eqId, orgKey: Meteor.user().orgKey, 'service.serveKey': serveKey}, {
+  //       $set : {
+  //         'service.$.updatedAt': new Date(),
+  //         'service.$.pattern': {
+  //           recur: Number(1),
+  //           cycle: 'month', // 'day', 'quarter', 'year'
+  //           range: Number(6), // 1, 6, 30
+  //           deadline: 'endOf' // startOf'
+  //         }
+  //       }});
+  //     return true;
+  //   }else{
+  //     return false;
+  //   }
+  // },
+  
+  setServiceTasks(eqId, serveKey, tasksArr) {
+    const auth = Roles.userIsInRole(Meteor.userId(), 'edit');
+    
+    if(auth) {
+      EquipDB.update({_id: eqId, orgKey: Meteor.user().orgKey, 'service.serveKey': serveKey}, {
+        $set : {
+          'service.$.updatedAt': new Date(),
+          'service.$.tasks': tasksArr
+        }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  
+  /*
+  service: [{
+    serveKey: new Meteor.Collection.ObjectID().valueOf(),
+    pattern: {
+      recur: 1,
+      cycle: 'month', // 'day', 'quarter', 'year'
+      range: 6, // 1, 6, 30
+      deadline: 'endOf' // startOf'
+    }
+    tasks: []
+    
+  }]
+  */
   
   /*
   deleteGroup(groupId, pass) {

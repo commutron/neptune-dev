@@ -5,6 +5,8 @@ import { AnonyUser } from '/client/components/smallUi/UserNice';
 import TaskTag from '/client/components/tide/TaskTag';
 import { ForceRemoveTideBlock } from '/client/views/app/appSlides/DataRepair';
 
+import { addTideDuration } from '/client/utility/WorkTimeCalc';
+
 const TimeBlocksRaw = ({ batch, tide, lockOut, isDebug })=> {
   
   const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
@@ -92,8 +94,8 @@ const RawBlock = ({ tB, batch, isSuper, isDebug, showZero })=> {
   
   const mStart = moment(tB.startTime);
   const mStop = tB.stopTime ? moment(tB.stopTime) : moment();
-  const durr = Math.round( moment.duration(mStop.diff(mStart)).asMinutes() );
-  
+  const durr = addTideDuration(tB);
+
   if(!showZero && durr === 0) {
     return null;
   }

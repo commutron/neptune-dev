@@ -210,7 +210,7 @@ const BXCreateForm = ({ groupId, widgetId, allVariants })=> {
       <span className='overscroll'>
         <div className='centreRow'>
         
-          <label htmlFor='sDate' className='breath'>{Pref.start}<br />
+          <label htmlFor='sDate' className='breath'>{Pref.salesOrder} {Pref.start}<br />
           <input
             type='date'
             id='sDate'
@@ -245,7 +245,7 @@ const BXCreateForm = ({ groupId, widgetId, allVariants })=> {
  
         <div className='centreRow'>
           
-          <label htmlFor='eDate' className='breath'>{Pref.end}<br />
+          <label htmlFor='eDate' className='breath'>{Pref.salesOrder} {Pref.end}<br />
           <input
             type='date'
             id='eDate'

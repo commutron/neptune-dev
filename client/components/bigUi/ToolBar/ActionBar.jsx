@@ -144,7 +144,7 @@ const ActionBar = ({
                         '?group=' + groupData.alias +
                         '&widget=' + widgetData.widget + 
                         '&ver=' + variantData.variant + 
-                        ( variantData.radioactive ? '☢' : ''  ) +
+                        ( variantData.radioactive ? '💥' : ''  ) +
                         '&desc=' + widgetData.describe +
                         '&sales=' + (batchData.salesOrder || '') +
                         '&quant=' + batchData.quantity }

@@ -116,13 +116,15 @@ const TideControl = ({
     );
   }
   
+  const disable = lock || tideLockOut || !taskState || subtState === false;
+  
   if(!tideKey && !tideFloodGate && !stopOnly) {
     return(
       <button
         title={`START ${Pref.batch}`}
         className={`tideIn ${working ? 'startWork' : ''}`}
         onClick={()=>handleStart()}
-        disabled={lock || tideLockOut || !taskState}
+        disabled={disable}
       >
       <b>
         <span className='fa-stack tideIcon'>
@@ -139,7 +141,7 @@ const TideControl = ({
         title={`Switch to ${Pref.batch}`}
         className={`tideFlip ${working ? 'flipWork' : ''}`}
         onClick={()=>handleSwitch()}
-        disabled={lock || tideLockOut || !taskState}
+        disabled={disable}
       >
       <i>
         <span className='fa-stack tideIcon'>

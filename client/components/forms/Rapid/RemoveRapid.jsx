@@ -44,23 +44,24 @@ const RemoveRapidForm = ({ batchId, rapidId })=> {
       <form onSubmit={(e)=>handleRemove(e)} className='centre'>
         <div className='max250'>
           <p>Enter the Org PIN to confirm.</p>
-          <input
-            id='orgPINrapid'
-            autoComplete="false"
-            className='noCopy miniIn12 interSelect centreText gap redIn clearRed'
-            pattern='[\d\d\d\d]*'
-            maxLength='4'
-            minLength='4'
-            placeholder='PIN'
-            required 
-          />
-          <br />
-          <button
-            className='smallAction redHover'
-            type='submit'
-            id='cutRapGo'
-            disabled={false}
-          >DELETE</button>
+          <span className='inlineForm'>
+            <input
+              id='orgPINrapid'
+              autoComplete="false"
+              className='noCopy miniIn12 interSelect centreText'
+              pattern='[\d\d\d\d]*'
+              maxLength='4'
+              minLength='4'
+              placeholder='PIN'
+              required 
+            />
+            <button
+              className='smallAction redHover'
+              type='submit'
+              id='cutRapGo'
+              disabled={false}
+            >DELETE</button>
+          </span>
         </div>
       </form>
     </div>

@@ -28,7 +28,7 @@ const BigTideTask = ({
         defaultValue={taskState}
         disabled={lockTaskState}
         required>
-        <option value={false} className='darkgrayT em'>Task Required</option>
+        <option value={false} className='darkgrayT em'>Required</option>
         <optgroup label='Ancillary' className='blackT nsty'>
           {ancOptionS.map( (v, ix)=>(
             <option key={ix+'o1'} className='blackT nsty' value={v}
@@ -47,19 +47,19 @@ const BigTideTask = ({
         <Fragment>
         <select
           id='sbtskSlct'
-          className='cap'
+          className={`cap ${!subtState ? 'darkgrayT em' : ''}`}
           onChange={(e)=>handleSubt(e.target.value)}
           defaultValue={subtState}
           disabled={lockTaskState}
           required>
-          <option value={false}></option>
+          <option value={false} className='darkgrayT em'>Required</option>
           {subop.subTasks.map( (v, ixs)=>(
-            <option key={ixs+'o3'} value={v}>{v}</option>
+            <option key={ixs+'o3'} className='blackT nsty' value={v}>{v}</option>
           ))}
         </select>
         <label htmlFor='sbtskSlct'>Sub-Task</label>
         </Fragment>
-      : null}
+      : subtSet(undefined)}
     </n-tide-task>
   );
 };

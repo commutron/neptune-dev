@@ -6,6 +6,7 @@ import Pref from '/client/global/pref.js';
 import { min2hr, toCap } from '/client/utility/Convert.js';
 
 import TagsModule, { HoldFlag } from '/client/components/bigUi/TagsModule';
+import ModelInline from '/client/components/smallUi/ModelInline';
 
 import ReleaseAction from '/client/components/bigUi/ReleasesModule';
 import BlockForm from '/client/components/forms/BlockForm';
@@ -72,13 +73,6 @@ const InfoTab = ({
           </div>
         </div>
         
-        <BatchXStatus 
-          batchData={b} 
-          allFlow={allFlow}
-          allFall={allFall}
-          nowater={nowater}
-          rapid={rOpen} />
-        
         <div className='cap middle'>
           <p>Ship Due: <b>{shipDue.format("MMMM Do, YYYY")}</b></p>
           <AlterFulfill
@@ -96,14 +90,30 @@ const InfoTab = ({
         {ontime === null ? null :
           <div className='centreText'><em>Shipped {ontime ? 'On Time' : 'Late'}</em></div>}
         
+        
         {!b.completed && !released ?
+        <ModelInline 
+          title={Pref.release} 
+          color='green' 
+          border='borderGreen'
+          icon='fa-solid fa-flag'
+        >
           <ReleaseAction 
             id={b._id} 
             rType='floorRelease'
             actionText={Pref.release}
             contextText={`to ${Pref.floor}`}
           />
-        :null}  
+        </ModelInline>
+        :null}
+        
+        <BatchXStatus 
+          batchData={b} 
+          allFlow={allFlow}
+          allFall={allFall}
+          nowater={nowater}
+          rapid={rOpen}
+        />
       </div>
       
       <div className='minHeight cap'>
@@ -121,7 +131,7 @@ const InfoTab = ({
             className='centreRow medBig max250 vmarginhalf' 
             title={`${toCap(Pref.widget)} ${Pref.radio.toUpperCase()}`}
           >
-            <n-faX><i className='fas fa-radiation-alt fa-fw fa-lg darkOrangeT'></i></n-faX>
+            <n-faX><i className='fas fa-burst fa-fw fa-lg darkOrangeT'></i></n-faX>
             <i>{radioactive}</i>
           </div>
         }

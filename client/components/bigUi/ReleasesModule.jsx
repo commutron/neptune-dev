@@ -22,14 +22,15 @@ const ReleaseAction = ({ id, rType, actionText, contextText })=> {
   
   let sty = {
     padding: '10px',
-    height: 'fit-content'
+    height: 'fit-content',
+    border: contextText ? '0' : '3px solid var(--emerald)'
   };
   
   const access = Roles.userIsInRole(Meteor.userId(), ['run', 'kitting']);
   const title = access ? `${Pref.release} ${Pref.xBatch} to the ${Pref.floor}` : Pref.norole;
   
   return(
-    <div className='actionBox centre greenBorder listSortInput' style={sty}>
+    <div className='centre listSortInput' style={sty}>
       <Flatpickr
         id='rDateTime'
         value={datetime}

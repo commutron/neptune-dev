@@ -168,7 +168,7 @@ const BXEditForm = ({ batchData, seriesData, allVariants, canEdit, selfclose })=
       </div>
       
       <div className='centreRow vmargin'>
-        <label htmlFor='sDate' className='breath'>{Pref.start}<br />
+        <label htmlFor='sDate' className='breath'>{Pref.salesOrder} {Pref.start}<br />
         <input
           type='date'
           id='sDate'

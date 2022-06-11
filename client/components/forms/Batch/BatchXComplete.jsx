@@ -5,10 +5,9 @@ import { toast } from 'react-toastify';
 import '/client/components/riverX/waterfall/style';
 import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/themes/airbnb.css';
+import ModelInline from '/client/components/smallUi/ModelInline';
 
 const BatchXComplete = ({ batchData, allFlow, allFall, nowater, quantity, canRun })=> {
-  
-  const [ reopenState, reopenSet ] = useState(false);
   
   function finishBatchX() {
     const batchID = batchData._id;
@@ -73,7 +72,7 @@ const BatchXComplete = ({ batchData, allFlow, allFall, nowater, quantity, canRun
               className='action purpleSolid'
               onClick={()=>finishBatchX()}
               disabled={!canFin}
-            >Complete {Pref.xBatch}</button>
+            >Complete<br />{Pref.xBatch}</button>
           </Fragment>
         : null
       :
@@ -110,15 +109,13 @@ const BatchXComplete = ({ batchData, allFlow, allFall, nowater, quantity, canRun
             </div>
           :
           canFin && !batchData.lock ?
-            !reopenState ?
-              <div>
-                <button
-                  className='action purpleSolid'
-                  onClick={()=>reopenSet(true)}
-                  disabled={!canRun}
-                >Reopen</button>
-              </div>
-            :
+            <ModelInline 
+              title={`Reopen ${Pref.xBatch}`}
+              color='purple'
+              border='borderPurple'
+              icon='fa-solid fa-repeat'
+              lock={!canRun}
+            >
               <div title="Must enter organization PIN to reopen">
                 <input
                   id='orgPIN'
@@ -128,14 +125,14 @@ const BatchXComplete = ({ batchData, allFlow, allFall, nowater, quantity, canRun
                   maxLength='4'
                   minLength='4'
                   placeholder='PIN'
-                  required />
-                  <br />
+                  required
+                /><br />
                 <button
                   className='action purpleSolid'
                   onClick={(e)=>undoFinishBatchX(true, this.orgPIN.value)}
                 >Yes, Reopen</button>
               </div>
-            
+            </ModelInline>
           : null
           }
           {canBackDate && !moment(batchData.completedAt).isSame(datetime, 'minute') ?

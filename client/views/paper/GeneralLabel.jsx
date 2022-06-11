@@ -71,31 +71,29 @@ const GeneralLabel = ({ batch, data })=> {
     lineHeight: '1.2',
   };
 
-
-
   return(
-  <div style={gensty} className='printGenLabel'>
-    <div style={top} className='noCopy'>
-      <div style={div} className='centre'>
-        <div style={div}  className='evenRow'>
-          <div style={div} className='centreText'>
-            <i style={pxlg}>{batch}</i>
+    <div style={gensty} className='printGenLabel'>
+      <div style={top} className='noCopy'>
+        <div style={div} className='centre'>
+          <div style={div}  className='evenRow'>
+            <div style={div} className='centreText'>
+              <i style={pxlg}>{batch}</i>
+            </div>
+            <div style={div} className='centreText'>
+              <i style={pxsm}>Qty</i><br />
+              <i><input style={input} defaultValue={data.quant} maxLength='5' /></i>
+            </div>
           </div>
-          <div style={div} className='centreText'>
-            <i style={pxsm}>Qty</i><br />
-            <i><input style={input} defaultValue={data.quant} maxLength='5' /></i>
+          <div style={div} className='centre up'>
+            <i style={plg}>{data.group}</i>
+            <i style={pmd}>{data.widget} Rev. {data.ver}</i>
+            <i style={psm}>{data.desc}</i>
+            <i style={psm}>{data.sales}</i>
           </div>
-        </div>
-        <div style={div} className='centre up'>
-          <i style={plg}>{data.group}</i>
-          <i style={pmd}>{data.widget} Rev. {data.ver}</i>
-          <i style={psm}>{data.desc}</i>
-          <i style={psm}>{data.sales}</i>
         </div>
       </div>
     </div>
-  </div>
-);
+  );
 };
 
 export default GeneralLabel;

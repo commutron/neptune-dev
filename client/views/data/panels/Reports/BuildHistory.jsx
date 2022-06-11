@@ -90,11 +90,11 @@ const BuildHistory = ({ allVariant, allWidget, allGroup })=> {
     }else if(wasState) {
       result = preGpFltr.filter( v => 
                     v.dates.find( d => 
-                        moment(d).isSameOrAfter(lineinthesand) ) );
+                        moment(d).isSameOrAfter(lineinthesand, spanState) ) );
     }else{
       result = preGpFltr.filter( v => 
                     v.dates.every( d => 
-                        moment(d).isBefore(lineinthesand) ) );
+                        moment(d).isBefore(lineinthesand, spanState) ) );
     }
     
     const arrayView = Array.from(result, r => [
@@ -125,7 +125,7 @@ const BuildHistory = ({ allVariant, allWidget, allGroup })=> {
             
   const insertWas = 
           <select
-            style={ { width: '9ch', border: 'none', lineHeight: 2 } }
+            style={ { width: '10ch', border: 'none', lineHeight: 2 } }
             defaultValue={wasState}
             onChange={(e)=>wasSet(e.target.value === 'false' ? false : true)}>
             <option value={true}>were</option>

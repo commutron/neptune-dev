@@ -23,26 +23,29 @@ const TideFollow = ({ proRoute })=> {
 	};
 	
 	const user = Meteor.user();
-	const username = user ? user.username : '__';
+	
+	if(!user) {
+	  return null;
+	}
+	
+	document.querySelector(':root').style
+    .setProperty('--neptuneColor', user.customColor || null);
+	
+	const username = user.username;
 	const usernice = username.replace(Pref.usrCut, " ");
 	
 	const uFl = username.charAt(0);
 	const usp = username.split('.');
 	const uLl = usp[1] ? usp[1].charAt(0) : username.charAt(1);
 	
-	const engaged = user ? user.engaged : false;
-	const tpool = user ? user.tidepools : [];
+	const engaged = user.engaged;
+	const tpool = user.tidepools;
   const recent = [...new Set(tpool)];
 	
   const taskT = !engaged || !engaged.tTask ? '' : `, ${engaged.tTask}`;
   const taskS = !engaged || !engaged.tSubt ? '' : `, ${engaged.tSubt}`;
   const tootip = !engaged ? `No Active ${Pref.xBatch}` : 
 	         `${Pref.xBatch} ${engaged.tName}${taskT}${taskS}`;
-	
-	if(user) {
-	  document.querySelector(':root').style
-    .setProperty('--neptuneColor', user.customColor || null);
-	}
 	
   return(
     <Fragment>

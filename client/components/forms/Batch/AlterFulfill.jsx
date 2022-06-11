@@ -98,17 +98,18 @@ const AlterFulfillForm = ({ batchId, createdAt, end, app, selfclose })=> {
         )})}
       </div>
       <p>
-        <label htmlFor='eDate' className='breath'>{Pref.end}<br />
-        <input
-          type='date'
-          id='eDate'
-          className='numberSet'
-          min={moment(createdAt).format('YYYY-MM-DD')}
-          defaultValue={moment(end).format('YYYY-MM-DD')}
-          onChange={(e)=>endDateSet(e.target.value)}
-          required 
-        /></label>
-        <button type='submit' className='action nSolid'>Save</button>
+        <label htmlFor='eDate' className='breath'>{Pref.salesOrder} {Pref.end}</label><br />
+        <span className='inlineForm'>
+          <input
+            type='date'
+            id='eDate'
+            className='numberSet'
+            min={moment(createdAt).format('YYYY-MM-DD')}
+            defaultValue={moment(end).format('YYYY-MM-DD')}
+            onChange={(e)=>endDateSet(e.target.value)}
+            required 
+          /><button type='submit' className='smallAction nHover'>Save</button>
+        </span>
       </p>
       
       <hr className='nomargin w100' />

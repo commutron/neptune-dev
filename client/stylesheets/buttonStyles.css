@@ -1,11 +1,11 @@
-.action, .smallAction, .roundAction {
+.action, .smallAction, .roundAction, .openAction {
   font-size: var(--tx0);
   letter-spacing: 1px;
   padding: 0.5ch 1ch;
   min-height: 32px;
   line-height: 1;
 }
-.action, .roundAction {
+.action, .roundAction, .openAction {
 	text-transform: uppercase;
 	font-weight: 600;
 	overflow: hidden;
@@ -29,6 +29,17 @@
 }
 .smallAction {
   min-width: var(--txx0);
+}
+
+.inlineModel {
+  width: 100%;
+}
+.inlineModel.open > div {
+  width: 100%;
+  border-width: 3px;
+  border-style: solid;
+  border-top-width: 0;
+  transition: all 500ms ease-in-out;
 }
 
 .nHover,
@@ -93,6 +104,9 @@
 .redSolid, .redHover {
   --actionColor: var(--pomegranate);
 }
+/*.yellowSolid, .yellowHover {*/
+/*  --actionColor: var(--sunflower);*/
+/*}*/
 .orangeSolid, .orangeHover {
   --actionColor: var(--carrot);
 }

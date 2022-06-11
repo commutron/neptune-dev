@@ -33,8 +33,8 @@ const MonthKPIReport = ({ start, end, dataset, isDebug })=> {
         ];
         dataSet(arrange);
         workingSet(false);
+        isDebug && console.log(rtn);
       }
-      isDebug && console.log(rtn);
 	  });
   }
     

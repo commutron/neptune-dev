@@ -2,6 +2,7 @@ import moment from 'moment';
 import 'moment-timezone';
 import Config from '/server/hardConfig.js';
 import { sortBranches } from '/server/utility';
+import { addTideDuration } from '/server/tideGlobalMethods';
 
 function deriveFromHistory(history, trackOptions, branchOptions) {
   
@@ -353,9 +354,7 @@ Meteor.methods({
                         waterfall, releases, finishTime, 
                         trackOptions, branchOptions);
                         
-        const mStart = moment(x.startTime);
-        const mStop = !x.stopTime ? moment() : moment(x.stopTime);
-        const dur = moment.duration(mStop.diff(mStart)).asMinutes();
+        const dur = addTideDuration(x);
         return {
           branchGuess: dt,
           duration: dur
