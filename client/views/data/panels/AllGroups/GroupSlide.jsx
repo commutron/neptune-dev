@@ -35,7 +35,7 @@ const GroupSlide = ({ groupData, widgetsList, batchDataX, app, inter, isERun })=
     <div className='section centre overscroll' key={g.alias}>
       
       <div className='wide centreText'>
-        <h1 className='cap biggest'>{g.group}</h1>
+        <h1 className='cap bigger'>{g.group}</h1>
         
         <hr className='vmargin' />
       </div>

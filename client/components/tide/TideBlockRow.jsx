@@ -225,7 +225,9 @@ const TideTaskExplicit = ({
   if( !editOn || splitOn ) {
     return(
       <td className='noRightBorder smTxt'>
-        {taskIs ? taskIs : '   '}
+        {taskIs ? 
+          taskIs.trim().replace(' | ', ' - ').replace(' |', '')
+        : '   '}
       </td>
     );
   }

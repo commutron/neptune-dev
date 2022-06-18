@@ -1,146 +1,134 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
 import ModelMedium from '/client/components/smallUi/ModelMedium';
-import { cleanURL } from '/client/utility/Convert';
 
-const EquipFormWrapper = ({ 
-  id, name, alias, wiki, rootURL,
-  noText, primeTopRight, lgIcon,
-  lockOut
-})=> {
-  const bttn = name ? `edit ${Pref.group}` : `new ${Pref.group}`;
-  const otitle = name ? 'edit ' + Pref.group : 'create new ' + Pref.group;
+const TasksFormWrapper = ({ id, serveKey, tasks, lockOut })=> {
   
-  const access = name ? Roles.userIsInRole(Meteor.userId(), 'edit') :
-                        Roles.userIsInRole(Meteor.userId(), 'create');
-  const aT = !access ? Pref.norole : '';
-  const lT = lockOut ? `${Pref.group} is hibernated` : '';
-  const title = access && !lockOut ? otitle : `${aT}\n${lT}`;
-  
+  const access = Roles.userIsInRole(Meteor.userId(), 'edit');
+ 
   return(
     <ModelMedium
-      button={bttn}
-      title={title}
+      button='Tasks'
+      title='Edit Task'
       color='blueT'
-      icon='fa-industry'
+      icon='fa-list-check'
       lock={!access || lockOut}
-      noText={noText}
-      primeTopRight={primeTopRight}
-      lgIcon={lgIcon}>
-      <EquipForm 
+    >
+      <TasksForm 
         id={id}
-        name={name}
-        alias={alias}
-        wiki={wiki}
-        title={title}
-        rootURL={rootURL}
+        serveKey={serveKey}
+        tasks={tasks || []}
       />
     </ModelMedium>
   );
 };
 
-export default EquipFormWrapper;
+export default TasksFormWrapper;
 
-const EquipForm = ({ id, name, alias, wiki, rootURL, title, selfclose })=> {
-
-  function newEquipment(e) {
+const TasksForm = ({ id, serveKey, tasks, selfclose })=> {
+  
+	const [ taskArray, taskSet ] = useState( tasks );
+  
+  const pushtask = (e)=> {
     e.preventDefault();
-    const equipId = id;
-    const eqname = this.eName.value.trim();
-    const alias = this.eAlias.value.trim().toLowerCase();
-    
-    const eURL = this.eWiki.value.trim();
-    const eWiki = cleanURL(eURL, rootURL);
-    
-    function create(eqname, alias, groupWiki) {
-      Meteor.call('createEquipment', eqname, alias, maincode, brKey, eWiki,
-      (error, reply)=>{
-        error && console.log(error);
-        if(reply) {
-          toast.success('Saved');
-          selfclose();
-        }else{
-          toast.error('Server Error');
-        }
-      });
+    let tsks = new Set(taskArray);
+    tsks.add(this.newtask.value);
+    taskSet([...tsks]);
+    this.newtask.value = '';
+  };
+  
+  const pulltask = (tsk)=> {
+    const tsks = new Set(taskArray);
+    tsks.delete(tsk);
+    taskSet([...tsks]);
+  };
+  
+  const move = (indx, freeze, dir)=> {
+    let newList = taskArray;
+    let tsk = newList[indx];
+    if(freeze) { null }else{
+      newList.splice(indx, 1);
+      newList.splice(dir, 0, tsk);
+      taskSet( [...newList] );
     }
-      
-    // function edit(groupId, groupName, groupAlias, groupWiki) {
-    //   Meteor.call('editGroup', groupId, groupName, groupAlias, groupWiki, (error, reply)=>{
-    //     if(error)
-    //       console.log(error);
-    //     if(reply) {
-    //       toast.success('Saved');
-    //       FlowRouter.go('/data/overview?request=groups&specify=' + groupAlias);
-    //       selfclose();
-    //     }else{
-    //       toast.error('Server Error');
-    //     }
-    //   });
-    // }
-    
-    /////////Selection/////////
-    // if(name === false) {
-    //   create(groupName, groupAlias, groupWiki);
-    // }else{
-    //   edit(groupId, groupName, groupAlias, groupWiki);
-    // }
-    
+  };
+  
+  function saveTasks() {
+    Meteor.call('setServiceTasks', id, serveKey, taskArray, (error, reply)=>{
+      error && console.log(error);
+      if(reply) {
+        toast.success('Saved Tasks');
+        selfclose();
+        }else{
+          toast.warning('Not Allowed');
+        }
+    });
   }
-    
-  const orName = name ? name : '';
-  const orAlias = alias ? alias : '';
-  const orWiki = wiki ? wiki : '';
-
+  
   return(
-    <form id='newEquip' className='fitWide' onSubmit={(e)=>newEquipment(e)}>
-      <p>
-        <span>
+    <div className='centre'>
+      <form onSubmit={(e)=>pushtask(e)}>
+        <p>
+          <label>Task</label><br />
           <input
             type='text'
-            id='gName'
-            defaultValue={orName}
-            placeholder='ie. Trailer Safegaurd'
-            className='dbbleWide'
-            pattern='[A-Za-z0-9 _-]*'
-            maxLength={Pref.groupMax}
-            autoFocus={true}
-            required />
-          <label htmlFor='gName'>Full Name</label>
-        </span>
-      </p>
+            id='newtask'
+            required
+            autoComplete="false"
+          />
+        
+          <button
+            type='submit'
+            id='addtask'
+            className='smallAction nHover'
+           >Add</button>
+        </p>
+      </form>
+      
+      <div className='stepList vmarginhalf max500'>
+        {taskArray.map( (entry, index)=> {
+          return( 
+            <div key={index} className='comfort bottomLine'>
+              <div className='indenText leftText'>{entry}</div>
+              <div>
+                <button
+                  type='button'
+                  name='Move Up'
+                  id='up'
+                  className='smallAction blackHover'
+                  onClick={()=>move(index, index === 0, index - 1)}
+                  disabled={index === 0}
+                ><i className='fas fa-arrow-up'></i></button>
+                <button
+                  type='button'
+                  name='Move Down'
+                  id='dn'
+                  className='smallAction blackHover'
+                  onClick={()=>move(index, index === taskArray.length - 1, index + 1)}
+                  disabled={index === taskArray.length - 1}
+                ><i className='fas fa-arrow-down'></i></button>
+                <button
+                  type='button'
+                  name='Remove'
+                  id='ex'
+                  className='smallAction redHover'
+                  onClick={()=>pulltask(entry)}
+                ><i className='fas fa-times'></i></button>
+              </div>
+            </div>
+        )})}
+      </div>
+      
       <p>
-        <span>
-          <input
-            type='text'
-            id='gAlias'
-            defaultValue={orAlias}
-            placeholder='ie. TSG'
-            pattern='[A-Za-z0-9 _-]*'
-            maxLength={Pref.aliasMax}
-            required />
-          <label htmlFor='gAlias'>Abbreviation / Alias</label>
-        </span>
-      </p>
-      <p>
-        <input
-          type='text'
-          id='gWiki'
-          defaultValue={orWiki}
-          placeholder='http://192.168.1.68/pisces'
-          className='dbbleWide' />
-        <label htmlFor='gWiki' className='cap'>{Pref.group} {Pref.instruct} index</label>
-      </p>
-      <span className='centre'>
         <button
-          type='submit'
-          id='grpSave'
+          id='savetasks'
           className='action nSolid'
-          >Save
-        </button>
-      </span>
-    </form>
+          onClick={()=>saveTasks()}
+          disabled={!Array.isArray(taskArray)}
+         >Save</button>
+      </p>
+    </div>
   );
 };

@@ -11,18 +11,16 @@ const MainWrap = ({
 }) => {
   
   const equipS = equipData.sort((e1, e2)=>
-                  e1.alias < e2.alias ? -1 : e1.alias > e2.alias ? 1 : 0 );
-                  
-  const sortList = equipS.sort((e1, e2)=>
-                    e1.online ? 1 : e2.online ? -1 : 0 );
+                  e1.alias < e2.alias ? -1 : 
+                  e1.alias > e2.alias ? 1 : 0 );
         
-  const menuList = sortList.map( (entry, index)=> {
+  const menuList = equipS.map( (entry, index)=> {
                     const clss = entry.online ? '' : 'strike fade';
                     return [entry.alias, clss];
                   });
   
   const defaultSlide = specify ? 
-    sortList.findIndex( x => x.alias === specify ) : false;
+    equipS.findIndex( x => x.alias === specify ) : false;
     
   const isERun = Roles.userIsInRole(Meteor.userId(), ['edit','run']);
      
@@ -45,7 +43,7 @@ const MainWrap = ({
       defaultSlide={defaultSlide}
       textStyle='up'>
     
-      {sortList.map( (entry, index)=> (
+      {equipS.map( (entry, index)=> (
         <EquipSlide
           key={index+entry._id}
           equipLite={entry}

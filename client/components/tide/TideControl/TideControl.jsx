@@ -41,7 +41,8 @@ const TideControl = ({
     lockTaskSet && lockTaskSet(true);
     let newRndm = actionID;
     Meteor.setTimeout( ()=>{
-      Meteor.call('startTideTask', batchID, newRndm, taskState, subtState,
+      Meteor.apply('startTideTask', [ batchID, newRndm, taskState, subtState ],
+      {wait: true, noRetry: true},
       (error, reply)=> {
         if(error) {
           console.log(error);
@@ -60,7 +61,8 @@ const TideControl = ({
   function handleStop() {
     setLock(true);
     setWorking(true);
-    Meteor.call('stopTideTask', tideKey, (error, reply)=> {
+    Meteor.apply('stopTideTask', [ tideKey ], {wait: true, noRetry: true},
+    (error, reply)=> {
       if(error) {
         console.log(error);
         toast.error('Rejected by Server');
@@ -81,7 +83,8 @@ const TideControl = ({
     lockTaskSet && lockTaskSet(true);
     let newRndm = actionID;
     Meteor.setTimeout( ()=>{
-      Meteor.call('switchTideTask', tideKey, batchID, newRndm, taskState, subtState,
+      Meteor.apply('switchTideTask', [ tideKey, batchID, newRndm, taskState, subtState ],
+      {wait: true, noRetry: true},
       (error, reply)=> {
         if(error) {
           console.log(error);
@@ -95,7 +98,7 @@ const TideControl = ({
           }
         }
       });
-    }, 2000);
+    }, 1500);
   }
 
   if(tideKey && tideFloodGate) {

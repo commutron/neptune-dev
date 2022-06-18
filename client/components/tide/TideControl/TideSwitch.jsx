@@ -40,7 +40,8 @@ const TideSwitch = ({
     lockTaskSet && lockTaskSet(true);
     let newRndm = actionID;
     Meteor.setTimeout( ()=>{
-      Meteor.call('switchTideTask', tideKey, batchID, newRndm, taskState, subtState,
+      Meteor.apply('switchTideTask', [ tideKey, batchID, newRndm, taskState, subtState ],
+      {wait: true, noRetry: true},
       (error, reply)=> {
         if(error) {
           console.log(error);
@@ -54,7 +55,7 @@ const TideSwitch = ({
           }
         }
       });
-    }, 2000);
+    }, 1500);
   }
   
   if(tideKey && !tideFloodGate) {

@@ -63,7 +63,23 @@ Meteor.methods({
     }
   },
   
-  addServicePattern(eqId, timeSpan, pivot, recur, period) {
+  onofflineEquipment(eqId, line) {
+    const auth = Roles.userIsInRole(Meteor.userId(), 'edit');
+    
+    if(auth) {
+      EquipDB.update({_id: eqId, orgKey: Meteor.user().orgKey}, {
+        $set : {
+          updatedAt: new Date(),
+  			  updatedWho: Meteor.userId(),
+  			  online: line
+        }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  addServicePattern(eqId, timeSpan, pivot, recur, period, grace) {
     if( Roles.userIsInRole(Meteor.userId(), 'edit') ) {
       
       const whenOf = typeof pivot === 'string' ? pivot : Number(pivot);
@@ -77,7 +93,7 @@ Meteor.methods({
             whenOf: whenOf, // 'endOf', // 1, 2, 3, ..., 'startOf'
             recur: Number(recur),
             period: Number(period), // 1, 6, 30 // in days
-            grace: Number(1), // in days
+            grace: Number(grace), // in days
             tasks: []
           }
         }});
@@ -87,33 +103,41 @@ Meteor.methods({
     }
   },
 
-  // editService(eqId, serveKey ) {
-  //   // const doc = EquipDB.findOne({_id: eqId},{fields:{'equip':1,'alias':1}});
+  editServicePattern(eqId, serveKey, timeSpan, pivot, recur, period, grace) {
+    if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
     
-  //   const auth = Roles.userIsInRole(Meteor.userId(), 'edit');
-    
-  //   if(auth) {
-     
-  //     EquipDB.update({_id: eqId, orgKey: Meteor.user().orgKey, 'service.serveKey': serveKey}, {
-  //       $set : {
-  //         'service.$.updatedAt': new Date(),
-  //         'service.$.pattern': {
-  //           recur: Number(1),
-  //           cycle: 'month', // 'day', 'quarter', 'year'
-  //           range: Number(6), // 1, 6, 30
-  //           deadline: 'endOf' // startOf'
-  //         }
-  //       }});
-  //     return true;
-  //   }else{
-  //     return false;
-  //   }
-  // },
+      const whenOf = typeof pivot === 'string' ? pivot : Number(pivot);
+      
+      EquipDB.update({_id: eqId, orgKey: Meteor.user().orgKey, 'service.serveKey': serveKey}, {
+        $set : {
+          'service.$.updatedAt': new Date(),
+          'service.$.timeSpan': timeSpan,
+          'service.$.whenOf': whenOf,
+          'service.$.recur': Number(recur),
+          'service.$.period': Number(period),
+          'service.$.grace': Number(grace)
+        }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  removeServicePattern(eqId, serveKey) {
+    if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
+      EquipDB.update({_id: eqId, orgKey: Meteor.user().orgKey, 'service.serveKey': serveKey}, {
+        $pull : { service: { serveKey: serveKey }
+      }});
+      return true;
+    }else{
+      return false;
+    }
+  },
   
   setServiceTasks(eqId, serveKey, tasksArr) {
     const auth = Roles.userIsInRole(Meteor.userId(), 'edit');
     
-    if(auth) {
+    if(auth && Array.isArray(tasksArr)) {
       EquipDB.update({_id: eqId, orgKey: Meteor.user().orgKey, 'service.serveKey': serveKey}, {
         $set : {
           'service.$.updatedAt': new Date(),
@@ -126,31 +150,16 @@ Meteor.methods({
   },
   
   
-  /*
-  service: [{
-    serveKey: new Meteor.Collection.ObjectID().valueOf(),
-    pattern: {
-      recur: 1,
-      cycle: 'month', // 'day', 'quarter', 'year'
-      range: 6, // 1, 6, 30
-      deadline: 'endOf' // startOf'
-    }
-    tasks: []
-    
-  }]
-  */
+ 
   
-  /*
-  deleteGroup(groupId, pass) {
-    const inUse = WidgetDB.findOne({groupId: groupId},{fields:{'_id':1}});
+  
+  deleteEquipment(eqId) {
+    const inUse = MaintainDB.findOne({eqId: eqId},{fields:{'_id':1}});
     if(!inUse) {
-      const doc = GroupDB.findOne({_id: groupId});
-      const lock = doc.createdAt.toISOString().split("T")[0];
-      const user = Roles.userIsInRole(Meteor.userId(), 'remove');
-      const access = doc.orgKey === Meteor.user().orgKey;
-      const unlock = lock === pass;
-      if(user && access && unlock) {
-        GroupDB.remove(groupId);
+      const access = Roles.userIsInRole(Meteor.userId(), 'remove');
+      
+      if(access) {
+        EquipDB.remove(eqId);
         return true;
       }else{
         return false;
@@ -158,7 +167,6 @@ Meteor.methods({
     }else{
       return 'inUse';
     }
-  },
+  }
   
-  */
 });

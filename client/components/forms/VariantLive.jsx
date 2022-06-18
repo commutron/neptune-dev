@@ -3,7 +3,7 @@ import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
 
-const VariantLive = ({ vId, vKey, vState, selfclose })=> {
+const VariantLive = ({ vId, vKey, vState })=> {
 
   function handleVive(e) {
     Meteor.call('changeVive', vId, vKey, vState, (error, reply)=>{

@@ -35,8 +35,9 @@ const TideEditWrap = ({
     if(!batch || !tideKey || !newStart || !newStop) { 
       console.log([{batch, tideKey, newStart, newStop}, 'data issue no call']);
     }else{
-      Meteor.call('editTideTimeBlock', 
-        batch, tideKey, newStart, newStop, taskIs, subtIs,
+      Meteor.apply('editTideTimeBlock', 
+        [ batch, tideKey, newStart, newStop, taskIs, subtIs ],
+        { wait: true, noRetry: true },
         (err, asw)=>{
           err && console.log(err);
           if(asw === true) {
@@ -52,7 +53,9 @@ const TideEditWrap = ({
     if(!batch || !tideKey) { 
       console.log([{batch, tideKey}, 'data issue no call']);
     }else{
-      Meteor.call('stopTideTimeBlock', batch, tideKey, (err, asw)=>{
+      Meteor.apply('stopTideTimeBlock', [ batch, tideKey ],
+      { wait: true, noRetry: true },
+      (err, asw)=>{
         err && console.log(err);
         if(asw === true) {
           updateData();
@@ -70,7 +73,9 @@ const TideEditWrap = ({
     if(!batch || !tideKey || !newSplit || !stopTime) { 
       console.log([{batch, tideKey, newSplit, stopTime}, 'data issue no call']);
     }else{
-      Meteor.call('splitTideTimeBlock', batch, tideKey, newSplit, stopTime, (err, asw)=>{
+      Meteor.apply('splitTideTimeBlock', [ batch, tideKey, newSplit, stopTime ],
+       { wait: true, noRetry: true },
+       (err, asw)=>{
         err && console.log(err);
         if(asw === true) {
           updateData();

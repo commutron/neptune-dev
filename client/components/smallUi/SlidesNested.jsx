@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const SlidesNested = ({ 
   menuTitle, menu, 
@@ -13,6 +13,9 @@ const SlidesNested = ({
   const [ filter, setFilter ] = useState( false );
   const [ section, setSection ] = useState( df );
   
+  useEffect( ()=>{
+    setSection( df );
+  }, [defaultSlide]);
   
   let show = section;
   let dA = [];
@@ -44,8 +47,8 @@ const SlidesNested = ({
             onClick={()=>setSection(false)}
             className={
               show === false ? 
-                'slideNestedMenuButton cap slideOn' : 
-                'slideNestedMenuButton cap slideOff'
+                'slideNestedLand cap slideOn' : 
+                'slideNestedLand cap slideOff'
             }
             disabled={dA[0]}
           ><div className='wide centreText'><b>{menuTitle}</b></div></button>}

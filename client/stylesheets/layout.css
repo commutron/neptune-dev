@@ -327,7 +327,7 @@ main {
   display: none;
 }
 
-.slideMenuButton, .slideNestedMenuButton {
+.slideMenuButton, .slideNestedMenuButton, .slideNestedLand {
   display: block;
   width: 100%;
   min-height: 6vmin;
@@ -342,7 +342,8 @@ main {
 .slideMenuButton {
   color: var(--silver);
 }
-.slideNestedMenuButton {
+.slideNestedMenuButton,
+.slideNestedLand {
   color: rgb(35,35,35);
   border-color: var(--asbestosfade);
 }
@@ -351,6 +352,8 @@ main {
 }
 .slideNestedSearch {
   display: block;
+  position: sticky;
+  top: 0;
   width: 100%;
   min-height: calc(4 * var(--vh));
   max-height: calc(4 * var(--vh));
@@ -359,7 +362,13 @@ main {
   padding-right: 0.75ch;
   border-width: 0;
   border-style: none;
-  box-shadow: inset 0 0 5px 0px rgba(0,0,0,0.5);
+  box-shadow: inset 0 3px 5px 0 rgb(0 0 0 / 25%)
+}
+.slideNestedLand {
+  position: sticky;
+  top: calc(4 * var(--vh));
+  background-color: rgb(213,218,220);
+  box-shadow: 0 3px 5px 0 rgb(0 0 0 / 25%)
 }
 
 .slideMenuButton:hover, 
@@ -367,7 +376,10 @@ main {
 .slideMenuButton.slideOn,
 .slideNestedMenuButton:hover, 
 .slideNestedMenuButton:active, 
-.slideNestedMenuButton.slideOn {
+.slideNestedMenuButton.slideOn,
+.slideNestedLand:hover, 
+.slideNestedLand:active,
+.slideNestedLand.slideOn {
   width: 100%;
   color: rgb(35,35,35);
   background-color: var(--silver);
@@ -619,7 +631,7 @@ n-sm-model-content {
 .leftRow {
   justify-content: flex-start;
 }
-.centreRow > span { margin: 0 10px; }
+.centreRow > span { margin: 5px 10px; }
 
 .topLine > div { align-self: flex-start; }
 
@@ -991,6 +1003,7 @@ input.variableInput.biggest {
 }
 input.miniIn6, select.miniIn6 { width: 6ch; }
 input.miniIn8, select.miniIn8 { width: 8ch; }
+input.miniIn10, select.miniIn10 { width: 10ch; }
 input.miniIn12, select.miniIn12 { width: 12ch; }
 input.miniIn18, select.miniIn18 { width: 18ch; }
 input.miniIn24, select.miniIn24 { width: 24ch; }

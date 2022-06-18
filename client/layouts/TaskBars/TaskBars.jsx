@@ -90,7 +90,7 @@ export const ExTaskBar = ({ subLink }) => (
       title={Pref.maintain}
       subON={subLink === 'overviewmaintain'}
       goLink='/data/overview?request=maintain'
-      icon='fa-solid fa-spray-can-sparkles'
+      icon='fa-solid fa-screwdriver-wrench'
       iconAdj=''
     />
     

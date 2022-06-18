@@ -14,17 +14,14 @@ const AllGroups = ({
   const groupS = groupData.sort((g1, g2)=>
                   g1.alias < g2.alias ? -1 : g1.alias > g2.alias ? 1 : 0 );
                   
-  const sortList = groupS.sort((g1, g2)=>
-                    g1.hibernate ? 1 : g2.hibernate ? -1 : 0 );
-        
-  const menuList = sortList.map( (entry, index)=> {
+  const menuList = groupS.map( (entry, index)=> {
                     const clss = entry.hibernate ? 'strike fade' : '';
                     let it = entry.internal ? ' intrBlue' : '';
                     return [entry.alias, clss+it];
                   });
   
   const defaultSlide = specify ? 
-    sortList.findIndex( x => x.alias === specify ) : false;
+    groupS.findIndex( x => x.alias === specify ) : false;
     
   const isERun = Roles.userIsInRole(Meteor.userId(), ['edit','run']);
                                   
@@ -43,7 +40,7 @@ const AllGroups = ({
       defaultSlide={defaultSlide}
       textStyle='up'>
     
-      {sortList.map( (entry, index)=> {
+      {groupS.map( (entry, index)=> {
         let widgetsList = widgetData.filter(x => x.groupId === entry._id);
         return(
           <GroupSlide

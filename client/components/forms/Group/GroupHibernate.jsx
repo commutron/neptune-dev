@@ -48,7 +48,7 @@ const GroupHibernate = ({ id, hState, selfclose })=> {
 
   if(!hState) {
     return(
-      <div className='centre'>
+      <div className='centre space'>
         <p>{toCap(Pref.hibernatated)} {Pref.group} will be hidden from some lists and some actions will be disabled.</p>
         <p>NO {Pref.group} data will be deleted.</p>
         <p>
@@ -62,7 +62,7 @@ const GroupHibernate = ({ id, hState, selfclose })=> {
   }
   
   return(
-    <div className='centre'>
+    <div className='centre space'>
       <p>{toCap(Pref.hibernatate)} flag will be removed from {Pref.group}</p>
       <p>
         <button
