@@ -1,5 +1,5 @@
 // import { Random } from 'meteor/random';
-let hamsters = require("hamsters.js");
+// let hamsters = require("hamsters.js");
 
 import moment from 'moment';
 import 'moment-timezone';

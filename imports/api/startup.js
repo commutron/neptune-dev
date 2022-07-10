@@ -10,7 +10,7 @@ Tracker.autorun( ()=> {
  /*
   let { Worker, parentPort } = require("worker_threads");
   let hamsters = require("hamsters.js");
-
+    meteor npm install --save hamsters.js@5.4.1
    hamsters.init({
       Worker: Worker,
       parentPort: parentPort,
