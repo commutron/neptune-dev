@@ -7,7 +7,7 @@ Tracker.autorun( ()=> {
   if(Roles.subscription.ready() && !FlowRouter._initialized) {
      FlowRouter.initialize();
   }
-  
+ /*
   let { Worker, parentPort } = require("worker_threads");
   let hamsters = require("hamsters.js");
 
@@ -16,6 +16,7 @@ Tracker.autorun( ()=> {
       parentPort: parentPort,
       // persistence: true
     });
+*/
 });
 
 

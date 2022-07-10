@@ -8,7 +8,6 @@ import 'moment-business-time';
 import { syncLocale } from '/server/utility.js';
 import Config from '/server/hardConfig.js';
 
-/*
 const nextService = (sv)=> {
   const st = moment(sv.nextAt).tz(Config.clientTZ);
   
@@ -26,7 +25,7 @@ const nextService = (sv)=> {
     }
   }
 };
-*/
+
   
 Meteor.methods({
 
@@ -233,7 +232,7 @@ Meteor.methods({
     const sv = eq.service.find( s => s.serveKey === serveKey );
     
     if(sv) {
-      const next = Meteor.call('nextWork', sv); //nextService(sv);
+      const next = /*Meteor.call('nextWork', sv); */ nextService(sv);
       const nextMmnt = moment(next).tz(Config.clientTZ);
       const close = sv.whenOf === 'startOf' ?
                       nextMmnt.nextWorkingTime().endOf('day') :
@@ -260,7 +259,7 @@ Meteor.methods({
     }
   },
   
-  
+  /*
   nextWork(sv) {
     async function runThing(sv, st) {
       try{
@@ -303,7 +302,7 @@ Meteor.methods({
     
     return runThing(sv, st);
   },
-  
+  */
   
   pmRobot() {
     syncLocale(Meteor.user().orgKey);
@@ -316,7 +315,7 @@ Meteor.methods({
       
       for(const sv of eq.service) {
         
-        const next = Meteor.call('nextWork', sv);  // nextService(sv);
+        const next = /*Meteor.call('nextWork', sv); */ nextService(sv);
         
         const nextMmnt = moment(next).tz(Config.clientTZ);
         const close = sv.whenOf === 'startOf' ?
