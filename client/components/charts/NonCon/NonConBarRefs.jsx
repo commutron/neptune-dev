@@ -100,7 +100,7 @@ const NonConBarRefs = ({ ncOp, nonCons, app, isDebug })=> {
               <VictoryBar
                 key={index+entry.l}
                 data={entry}
-                labels={(l) => `${l.l}`}
+                labels={(l) => `${l.datum.l}`}
                 labelComponent={
                   <VictoryTooltip
                     orientation='top'

@@ -143,7 +143,7 @@ const ProbScatter = ({ fetchFunc, fill, fillfade, title, brancheS, app })=> {
               padding: 2,
             } 
           }}
-          labels={(d)=> !tickXY ? d.z : d.z + d.y[brFtr]}
+          labels={(d)=> !tickXY ? d.datum.z : d.datum.z + d.datum.y[brFtr]}
           labelComponent={
             <VictoryTooltip 
               style={{ fontSize: '6px' }}

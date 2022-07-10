@@ -133,7 +133,7 @@ const TideWorkWeek = ({
             fillOpacity: 0.4,
             stroke: 'rgb(26, 188, 156)',
           } }}
-        labels={(d) => d.y}
+        labels={(d) => d.datum.y}
         labelComponent={
           <VictoryLabel 
             style={{ fill: 'rgb(26, 188, 156)', fontSize: 12 }} 
@@ -151,7 +151,7 @@ const TideWorkWeek = ({
           strokeOpacity: 1, 
           strokeWidth: 1 
         } }}
-        labels={(d) => d.y}
+        labels={(d) => d.datum.y}
         labelComponent={
           <VictoryLabel 
             style={{ fill: 'rgb(23,123,201)', fontSize: 12 }} 
@@ -169,7 +169,7 @@ const TideWorkWeek = ({
                     const hours = props.datum.y;
                     const day = props.datum.x;
                     selectDayUP(day);
-                    let other = moment.duration(hours, 'hours').asMinutes();
+                    let other = Math.round( moment.duration(hours, 'hours').asMinutes() );
                     return props.text === other + ' min' ?
                       null : { text: other + ' min' };
                   }

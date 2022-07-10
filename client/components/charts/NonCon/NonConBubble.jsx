@@ -87,7 +87,7 @@ const NonConBubble = ({ ncOp, nonCons, app, isDebug })=> {
           bubbleProperty="z"
           minBubbleSize={3}  
           maxBubbleSize={20}
-          labels={(d) => `Quantity: ${d.z}`}
+          labels={(d) => `Quantity: ${d.datum.z}`}
           labelComponent={
             <VictoryTooltip 
               style={{ fontSize: '7px' }}

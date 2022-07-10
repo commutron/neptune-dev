@@ -81,7 +81,7 @@ const WidgetMultiBatchBar = ({ fetchFunc, widgetId, leftpad })=> {
                   <VictoryBar
                     key={index+entry.l}
                     data={entry}
-                    labels={(d) => `${d.l} \n ${d.x} \n ${d.y}`}
+                    labels={(d) => `${d.datum.l} \n ${d.datum.x} \n ${d.datum.y}`}
                     labelComponent={
                       <VictoryTooltip
                         style={{ fontSize: '7px', padding: 2 }}

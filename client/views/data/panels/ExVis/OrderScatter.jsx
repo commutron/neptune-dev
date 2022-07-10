@@ -79,7 +79,7 @@ const OrderScatter = ({ app })=> {
             tickLabels: { 
               fontSize: '6px' }
           } }
-          scale={{ x: "time" }}
+          // scale={{ x: "time" }}
         />
         <VictoryAxis 
           dependentAxis
@@ -116,13 +116,13 @@ const OrderScatter = ({ app })=> {
             } 
           }}
           symbol={(d) => tggl ? d.s2 : d.s1}
-          labels={(d)=> d.z + ' Qty: '+ d.y1 + '\n' 
-                        + 'Workdays: ' + d.y2
-                        + ' (' + Math.round(d.y2 / (d.y1 || 1)) + ' per item)'
+          labels={(d)=> d.datum.z + ' Qty: '+ d.datum.y1 + '\n' 
+                        + 'Workdays: ' + d.datum.y2
+                        + ' (' + Math.round(d.datum.y2 / (d.datum.y1 || 1)) + ' per item)'
           }
           labelComponent={
             <VictoryTooltip 
-              style={{ fontSize: '6px' }}
+              style={{ fontSize: '6px', borderWidth: '1px' }}
             />}
         />
       </VictoryChart>

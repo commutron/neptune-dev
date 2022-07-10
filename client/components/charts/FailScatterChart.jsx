@@ -108,7 +108,7 @@ const FailScatterChart = ({
               padding: 2,
             } 
           }}
-          labels={(d)=> d.z}
+          labels={(d)=> d.datum.z}
           labelComponent={
             <VictoryTooltip 
               style={{ fontSize: '6px' }}

@@ -78,8 +78,8 @@ const TideMultiBatchBar = ({ batchIDs, app, extraClass })=> {
               y={(d)=> tggl ? d.y / (d.z || 1) : d.y}
               horizontal={true}
               labels={(l) => tggl ? 
-                l.y > 0 ? `${min2hr(l.y / (l.z || 1))} logged` : null :
-                l.y > 0 ? `${min2hr(l.y)} logged` : null
+                l.datum.y > 0 ? `${min2hr(l.datum.y / (l.datum.z || 1))} logged` : null :
+                l.datum.y > 0 ? `${min2hr(l.datum.y)} logged` : null
               }
               style={{ labels: { fontSize: '6px' } }}
               labelComponent={
@@ -93,8 +93,8 @@ const TideMultiBatchBar = ({ batchIDs, app, extraClass })=> {
               y={(d)=> tggl ? d.y / (d.z || 1) : d.y}
               horizontal={true}
               labels={(l) => tggl ? 
-                l.y > 0 ? `${min2hr(l.y / (l.z || 1))} Remaining` : null :
-                l.y > 0 ? `${min2hr(l.y)} Remaining` : null
+                l.datum.y > 0 ? `${min2hr(l.datum.y / (l.datum.z || 1))} Remaining` : null :
+                l.datum.y > 0 ? `${min2hr(l.datum.y)} Remaining` : null
               }
               style={{ labels: { fill: "#969696", fontSize: '6px' } }}
               labelComponent={
@@ -108,8 +108,8 @@ const TideMultiBatchBar = ({ batchIDs, app, extraClass })=> {
               y={(d)=> tggl ? d.y / (d.z || 1) : d.y}
               horizontal={true}
               labels={(l) => tggl ? 
-                l.y > 0 ? `${min2hr(l.y / (l.z || 1))} Over` : null :
-                l.y > 0 ? `${min2hr(l.y)} Over` : null
+                l.datum.y > 0 ? `${min2hr(l.datum.y / (l.datum.z || 1))} Over` : null :
+                l.datum.y > 0 ? `${min2hr(l.datum.y)} Over` : null
               }
               style={{ labels: { fill: "dimgrey", fontSize: '6px' } }}
               labelComponent={
