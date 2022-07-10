@@ -1,7 +1,7 @@
 import React, { useState, useLayoutEffect, Fragment } from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
-import MultiSelect from "react-multi-select-component";
+import { MultiSelect } from "react-multi-select-component";
 
 const FirstForm = ({ 
   batchId, seriesId, serial,

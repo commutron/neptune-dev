@@ -17,14 +17,14 @@ const PartialCard = ({ orb })=> {
   
   return(
     <div className='centre pop vmargin space min200 max875'>
-      <h4 className='wide bottomLine'>Possible {Pref.xBatch} matches</h4>
+      <p className='med wide bottomLine'>Possible {Pref.xBatch} matches</p>
       <div className='centreRow vmarginhalf'>
       {!lookup ? <em>...</em>
       : lookup.length > 0 ?
         lookup.map( (e, ix)=>(
           <button 
             key={ix}
-            className='action clearWhite margin5'
+            className='action whiteSolid margin5'
             onClick={()=>Session.set('now', e[0])}
           >{e[0]} - {e[1].join(" ")}</button>
         ))

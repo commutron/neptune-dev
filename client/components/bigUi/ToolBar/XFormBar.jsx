@@ -52,7 +52,7 @@ const XFormBar = ({
   };
   
   return(
-    <div className='proActionForm forceScrollStyle'>
+    <div className='darkTheme proActionForm forceScrollStyle'>
       {showItem && !lockOutAll ?
         <div style={tgsty}>
           {action === 'xBatchBuild' ? null :

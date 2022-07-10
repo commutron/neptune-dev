@@ -8,10 +8,10 @@ import Spin from '/client/components/tinyUi/Spin';
 const MaintainData = ({
   coldReady, // sub
   equipData, maintainData,
-  app, brancheS, specify 
+  app, users, brancheS, specify 
 })=> {
 
-  if( !coldReady ) {
+  if( !coldReady || !users ) {
     return(
       <div className='centre wide'>
         <Spin />
@@ -24,18 +24,20 @@ const MaintainData = ({
       equipData={equipData}
       maintainData={maintainData}
       app={app}
+      users={users}
       brancheS={brancheS}
       specify={specify} 
     />
   );
 };
 
-export default withTracker( ({ app, brancheS, specify }) => {
+export default withTracker( ({ app, users, brancheS, specify }) => {
   const coldSub = Meteor.subscribe('thinEquip');
 
   return {
     coldReady: coldSub.ready(),
     app: app,
+    users: users,
     brancheS: brancheS,
     equipData: EquipDB.find( {}, { sort: { alias: -1 } } ).fetch(),
     maintainData: MaintainDB.find( {}, { sort: { burden: -1 } } ).fetch(),

@@ -73,7 +73,7 @@
 
 .proActionForm {
   grid-area: proForm;
-  background-color: rgb(25,25,25);
+  --dark: rgb(25,25,25);
   box-shadow: 0 0 15px 0.5px rgb(0,0,0);
   width: 100vw;
   height: 65px;
@@ -125,14 +125,9 @@
 }
 
 .miniHistory {
-  margin: 1vh 0.5vmax;
+  margin: 1vh 0;
   min-width: 14vmax;
   max-width: 15vmax;
-  border-collapse: collapse;
-}
-.miniHistory n-mock-table-cell {
-  padding: 5px;
-  text-align: center;
 }
 
 .actionForm {

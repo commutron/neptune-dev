@@ -3,7 +3,7 @@ import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
 import ModelMedium from '/client/components/smallUi/ModelMedium';
-import MultiSelect from "react-multi-select-component";
+import { MultiSelect } from "react-multi-select-component";
 
 const FlowFormHeadWrapper = ({
   id, app,

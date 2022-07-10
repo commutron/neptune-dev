@@ -4,7 +4,7 @@ import moment from 'moment';
 import { toast } from 'react-toastify';
 import { chunkArray } from '/client/utility/Convert';
 
-import MultiSelect from "react-multi-select-component";
+import { MultiSelect } from "react-multi-select-component"
 import PrintThis from '/client/components/tinyUi/PrintThis';
 import PagingSelect from '/client/components/tinyUi/PagingSelect';
 
@@ -33,7 +33,7 @@ const EmailLogSlide = ({ app, users })=> {
   }, []);
   
   function handleClear() {
-    Meteor.call('removeEmailLog', (err, re)=>{
+    Meteor.call('removeEmailLog', (err)=>{
       err && console.log(err);
       toast('Email Log Cleared');
       logSet([]);
@@ -107,7 +107,7 @@ const EmailLogSlide = ({ app, users })=> {
             >YES, Delete</button>
             <button
               className='action blackHover inlineButton'
-              onClick={(e)=>confirmSet(false)}
+              onClick={()=>confirmSet(false)}
             >NO</button>
           </p>
         }

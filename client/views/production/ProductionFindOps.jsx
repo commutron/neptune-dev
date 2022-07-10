@@ -4,10 +4,12 @@ import Pref from '/client/global/pref.js';
 import { ProWrap, ProWindow } from '/client/layouts/ProLayout';
 
 import WikiOps from '../wiki/WikiOps';
+import QuickRecent from './QuickRecent';
 import SearchHelp from './SearchHelp';
 
 import XDoProCard from './cards/XDoProCard';
 import PartialCard from './cards/PartialCard';
+import ServiceCard from './cards/ServiceCard';
 
 import BatchesList from './lists/BatchesList';
 import GroupsList from './lists/GroupsList';
@@ -17,7 +19,8 @@ const ProductionFindOps = ({
   hotxBatch, hotxSeries, hotxRapids,
   allxBatch,
   allGroup, allWidget, allVariant,
-  user, activeUsers, app,
+  user, activeUsers, app, 
+  allEquip,
   orb, anchor
 })=> {
   
@@ -60,7 +63,9 @@ const ProductionFindOps = ({
     Session.set('nowBatch', false);
     return (
       <ProWindow app={app}>
-        <div className='centre wide'>
+        <div className='balancer gapsR gapsC wide space'>
+          <QuickRecent user={user} />
+          <ServiceCard equipData={allEquip} />
           <SearchHelp />
         </div>
       </ProWindow>
@@ -213,8 +218,9 @@ const ProductionFindOps = ({
     Session.set('nowBatch', orb);
     return(
       <ProWindow app={app}>
-        <div className='centre wide space'>
+        <div className='balancer gapsR gapsC wide space'>
           <PartialCard orb={orb} />
+          <QuickRecent user={user} />
           <SearchHelp />
         </div>
       </ProWindow>
@@ -222,11 +228,14 @@ const ProductionFindOps = ({
   }
   
   Session.set('nowBatch', false);
-	return (
+	return(
 	  <ProWindow app={app}>
-      <div className='centre wide'>
-        <p className='biggest'>¯\_(ツ)_/¯</p>
-        <br />
+      <div className='balancer gapsR gapsC wide space'>
+        <span className='vmargin spacehalf centreText'>
+          <i className='biggest'>¯\_(ツ)_/¯</i><br />
+          <n-sm>No Match</n-sm>
+        </span>
+        <QuickRecent user={user} />
         <SearchHelp />
       </div>
     </ProWindow>

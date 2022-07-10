@@ -312,6 +312,7 @@ const DataViewOps = ({
         >
           <MainData
             app={app}
+            users={users}
             brancheS={brancheS}
             specify={specify} />
         </TraverseWrap>

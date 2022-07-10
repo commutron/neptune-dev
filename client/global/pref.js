@@ -33,7 +33,8 @@ class Pref {
     ];
     this.areas = [
       'sales',
-      'kitting'
+      'kitting',
+      'equipment'
     ];
     
     // Config
@@ -221,6 +222,7 @@ class Pref {
     this.maintain = 'maintenance';
     this.premaintain = 'preventive maintenance';
     this.equip = 'equipment';
+    this.steward = 'assignee';
   }
 }
 

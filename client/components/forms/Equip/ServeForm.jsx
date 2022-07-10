@@ -1,5 +1,5 @@
-import React, { useState, Fragment } from 'react';
-// import Pref from '/client/global/pref.js';
+import React, { useState, useEffect, Fragment } from 'react';
+import moment from 'moment';
 import { toast } from 'react-toastify';
 
 import ModelMedium from '/client/components/smallUi/ModelMedium';
@@ -24,11 +24,13 @@ const ServeFormWrapper = ({
       <ServeForm 
         id={id}
         serveKey={service?.serveKey}
+        svName={service?.name || ''}
         svTime={service?.timeSpan || 'day'}
-        svPivot={service?.whenOf || 'endOf'}
+        svPivot={service?.whenOf !== undefined ? service.whenOf : 'endOf'}
+        svNext={service?.nextAt || undefined}
         svRecur={service?.recur || 1}
         svPeriod={service?.period || 1}
-        svGrace={service?.grace || 1}
+        svGrace={typeof service?.grace === 'number' ? service.grace : 1}
       />
     </ModelMedium>
   );
@@ -36,24 +38,39 @@ const ServeFormWrapper = ({
 
 export default ServeFormWrapper;
 
-const ServeForm = ({ id, serveKey, svTime, svPivot, svRecur, svPeriod, svGrace, selfclose })=> {
+const ServeForm = ({ id, serveKey, svName, svTime, svPivot, svNext, svRecur, svPeriod, svGrace, selfclose })=> {
   
+  const [ name, setName ] = useState(svName);
   const [ timeSpan, setTime ] = useState(svTime);
   const [ pivot, setPivot ] = useState(svPivot);
+  const [ next, setNext ] = useState(svNext);
   const [ recur, setRecur ] = useState(svRecur);
   const [ period, setPeriod ] = useState(svPeriod);
   const [ grace, setGrace ] = useState(svGrace);
   
+  useEffect( ()=>{
+    if(next && recur > 1) {
+      if(timeSpan === 'week') {
+        setPivot( Number( moment(next, 'YYYY-MM-DD').day() ) );
+      }else if(timeSpan === 'month') {
+        setPivot( Number( moment(next, 'YYYY-MM-DD').date() ) );
+      }else if(timeSpan === 'year') {
+        setPivot( Number( moment(next, 'YYYY-MM-DD').month() ) );
+      }else{
+        setPivot('endOf');
+      }
+    }else{
+      setPivot(svPivot);
+    }
+  }, [next, timeSpan]);
   
   function saveService(e) {
     e.preventDefault();
 
-    const rightyear = new Date().getMonth() > 1 ? new Date().getFullYear() + 1 : new Date().getFullYear();
-    const rightmonth = pivot === 'startOf' ? 1 : pivot === 'endOf' ? 12 : pivot + 1;
-    const truePeriod = timeSpan === 'year' ? new Date(rightyear, rightmonth, 0).getDate() : period;
-  
+    const nextStr = !next ? moment().format('YYYY-MM-DD') : next;
+    
     if(serveKey) {
-      Meteor.call('editServicePattern', id, serveKey, timeSpan, pivot, recur, truePeriod, grace,
+      Meteor.call('editServicePattern', id, serveKey, name, timeSpan, pivot, nextStr, recur, period, grace,
       (error, reply)=>{
         error && console.log(error);
         if(reply) {
@@ -64,7 +81,7 @@ const ServeForm = ({ id, serveKey, svTime, svPivot, svRecur, svPeriod, svGrace, 
         }
       });
     }else{
-      Meteor.call('addServicePattern', id, timeSpan, pivot, recur, truePeriod, grace,
+      Meteor.call('addServicePattern', id, name, timeSpan, pivot, nextStr, recur, period, grace,
       (error, reply)=>{
         error && console.log(error);
         if(reply) {
@@ -77,9 +94,27 @@ const ServeForm = ({ id, serveKey, svTime, svPivot, svRecur, svPeriod, svGrace, 
     }
   }
 
-
   return(
     <form id='setServicePattern' className='fitWide' onSubmit={(e)=>saveService(e)}>
+      
+      <p>
+        <span>
+          <label htmlFor='pName' title='Name'>Service is commonly referred to as
+          <input
+            type='text'
+            id='pName'
+            className='gap miniIn18'
+            defaultValue={name}
+            maxLength='32'
+            minLength='1'
+            onChange={(e)=>setName(e.target.value)}
+            required /></label>
+        </span>
+        <div className='max400 vmarginquarter'>
+          <n-sm>Should match references in instructions.</n-sm>
+        </div>
+      </p>
+      
       <p>
         <span>
           <label htmlFor='pRecur' title='frequency'>Repeat Service once every 
@@ -90,13 +125,14 @@ const ServeForm = ({ id, serveKey, svTime, svPivot, svRecur, svPeriod, svGrace, 
             defaultValue={recur}
             min={1}
             max={52}
+            inputMode='numeric'
             onChange={(e)=>setRecur(Number(e.target.value))}
             required /></label>
           <label htmlFor='pTime' title='time span'><select
             id='pTime'
             className='miniIn10'
             defaultValue={timeSpan}
-            onChange={(e)=>{setTime(e.target.value);setPivot('endOf')}}
+            onChange={(e)=>{setTime(e.target.value)}}
             required>
             <option value='day'>Day{recur > 1 ? 's' : ''}</option>
             <option value='week'>Week{recur > 1 ? 's' : ''}</option>
@@ -106,6 +142,25 @@ const ServeForm = ({ id, serveKey, svTime, svPivot, svRecur, svPeriod, svGrace, 
         </span>
       </p>
       
+      {recur > 1 &&
+        <p>
+          <span>
+            <label htmlFor='pNext' title='Next Service'>Next Service is due
+            <input
+              type='date'
+              id='pNext'
+              className='gap miniIn18'
+              defaultValue={next || new Date()}
+              onChange={(e)=>setNext(e.target.value)}
+              required 
+            /></label>
+            <div className='max400 vmarginquarter'>
+              <n-sm>Future service will be counted from this day.</n-sm>
+            </div>
+          </span>
+        </p>
+      }
+      
       <p>
         <span>
           <label htmlFor='pWhen' title='perform service when'>Perform Service by
@@ -113,7 +168,7 @@ const ServeForm = ({ id, serveKey, svTime, svPivot, svRecur, svPeriod, svGrace, 
             id='pWhen'
             className='gap miniIn18'
             value={pivot}
-            onChange={(e)=>setPivot(Number(e.target.value))}
+            onChange={(e)=>setPivot(e.target.value === 'startOf' || e.target.value === 'endOf' ? e.target.value : Number(e.target.value))}
             required>
             <option value='startOf'>Start of the {timeSpan}</option>
             <option value='endOf'>End of the {timeSpan}</option>
@@ -143,45 +198,50 @@ const ServeForm = ({ id, serveKey, svTime, svPivot, svRecur, svPeriod, svGrace, 
               </Fragment>
             : null}
           </select></label>
+          {timeSpan === 'month' &&
+          <div className='max400 vmarginquarter'>
+            <n-sm> Nonexistent days flow into the next month. For example, June 31st becomes July 1st.</n-sm>
+          </div>}
         </span>
       </p>
-      
-      {timeSpan === 'month' && 
-      <p className='max300 vmarginquarter'>
-        <n-sm>Nonexistent days flow into the next month. For example, June 31st becomes July 1st.</n-sm>
-      </p>
-      } 
       
       <p>
         <span>
           <label htmlFor='pPeriod' title='service period days'>Workdays to Complete Service 
-          {timeSpan === 'year' ? <strong> All Month</strong> :
           <input
             type='number'
             id='pPeriod'
             className='gap miniIn6'
             defaultValue={period}
             min={1}
-            max={timeSpan === 'day' ? 1 : timeSpan === 'week' ? 7 : 31}
+            max={timeSpan === 'day' ? recur : timeSpan === 'week' ? 7 : 31}
+            inputMode='numeric'
             onChange={(e)=>setPeriod(Number(e.target.value))}
-            required />
-          }</label>
+            required
+          /></label>
         </span>
+        <div className='max400 vmarginquarter'>
+          <n-sm>Eg. If service is due Friday and has two days to complete then service is from the start of Thursday to the end of Friday.</n-sm>
+        </div>
       </p>
       
       <p>
         <span>
-          <label htmlFor='pGrace' title='late grace days'>Workdays late before alert
+          <label htmlFor='pGrace' title='late/grace workdaysdays'>Workdays Grace after due
           <input
             type='number'
             id='pGrace'
             className='gap miniIn6'
             defaultValue={grace}
-            min={1}
-            max={7}
+            min={0}
+            max={60}
+            inputMode='numeric'
             onChange={(e)=>setGrace(Number(e.target.value))}
             required /></label>
         </span>
+        <div className='max400 vmarginquarter'>
+          <n-sm>After the grace period an incomplete service is considered missed.</n-sm>
+        </div>
       </p>
       
       <p>

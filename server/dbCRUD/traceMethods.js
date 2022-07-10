@@ -38,7 +38,7 @@ function shrinkWhole(bData, now, shipLoad, accessKey) {
     const gapZone = didFinish ? shpdlv[3] : null;
     const lateLate = didFinish ? gapZone[2] === 'late' : shpdlv[2];
     
-    const actvLvl = Meteor.call('tideActivityLevel', bData._id, accessKey);
+    const actvLvl = Meteor.call('tideActivityLevel', bData._id);
     const brchCnd = Meteor.call('branchCondition', bData._id, accessKey);
     const prtyRnk = Meteor.call('priorityFast', accessKey, bData, now, shipAim, shipLoad);
     const perfFtr = Meteor.call('performTarget', bData._id);
@@ -159,7 +159,7 @@ function checkMovement(bData, now, shipLoad, accessKey) {
 function checkNoise(bData, accessKey) {
   return new Promise( (resolve)=> {
     
-    const actvLvl = Meteor.call('tideActivityLevel', bData._id, accessKey);
+    const actvLvl = Meteor.call('tideActivityLevel', bData._id);
     const brchCnd = Meteor.call('branchCondition', bData._id, accessKey);
     const brchPrg = Meteor.call('branchProgress', bData._id, accessKey);
     const btchDur = Meteor.call('branchTaskTime', bData._id, accessKey);

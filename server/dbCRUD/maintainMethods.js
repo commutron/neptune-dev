@@ -1,6 +1,33 @@
 // import { Random } from 'meteor/random';
-// import Config from '/server/hardConfig.js';
+let hamsters = require("hamsters.js");
 
+import moment from 'moment';
+import 'moment-timezone';
+import 'moment-business-time';
+
+import { syncLocale } from '/server/utility.js';
+import Config from '/server/hardConfig.js';
+
+/*
+const nextService = (sv)=> {
+  const st = moment(sv.nextAt).tz(Config.clientTZ);
+  
+  let next = sv.whenOf === 'endOf' ? st.endOf(sv.timeSpan) :
+              sv.whenOf === 'startOf' ? st.startOf(sv.timeSpan) :
+              sv.timeSpan === 'week' ? st.day(sv.whenOf).endOf('day') :
+              sv.timeSpan === 'month' ? st.date(sv.whenOf).endOf('day') :
+                                        st.month(sv.whenOf).endOf('month');
+  
+  while(true) {
+    if(next.isSameOrAfter(new Date())) {
+      return new Date(next.format());
+    }else{
+      next.add(sv.recur, sv.timeSpan);
+    }
+  }
+};
+*/
+  
 Meteor.methods({
 
 
@@ -26,6 +53,7 @@ Meteor.methods({
   			updatedWho: Meteor.userId(),
   			online: true,
         instruct: instruct,
+        stewards: [],
         service: []
       });
       return true;
@@ -79,44 +107,74 @@ Meteor.methods({
     }
   },
   
-  addServicePattern(eqId, timeSpan, pivot, recur, period, grace) {
+  stewardEquipment(eqId, stewArr) {
+    const auth = Roles.userIsInRole(Meteor.userId(), ['peopleSuper','edit']);
+    const arry = Array.isArray(stewArr);
+    
+    if(auth && arry) {
+      EquipDB.update({_id: eqId, orgKey: Meteor.user().orgKey}, {
+        $set : {
+          updatedAt: new Date(),
+  			  updatedWho: Meteor.userId(),
+  			  stewards: stewArr
+  			}});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  addServicePattern(eqId, name, timeSpan, pivot, next, recur, period, grace) {
     if( Roles.userIsInRole(Meteor.userId(), 'edit') ) {
+      const accessKey = Meteor.user().orgKey;
+      const serveKey = new Meteor.Collection.ObjectID().valueOf();
       
       const whenOf = typeof pivot === 'string' ? pivot : Number(pivot);
       
-      EquipDB.update({_id: eqId, orgKey: Meteor.user().orgKey}, {
+      EquipDB.update({_id: eqId, orgKey: accessKey}, {
         $push : {
           service: { 
-            serveKey: new Meteor.Collection.ObjectID().valueOf(),
+            serveKey: serveKey,
             updatedAt: new Date(),
+            name: name,
             timeSpan: timeSpan, // 'day', 'week', month, 'year'
             whenOf: whenOf, // 'endOf', // 1, 2, 3, ..., 'startOf'
+            nextAt: next,
             recur: Number(recur),
             period: Number(period), // 1, 6, 30 // in days
             grace: Number(grace), // in days
             tasks: []
           }
         }});
+      Meteor.defer( ()=>{
+        Meteor.call('pmUpdate', eqId, serveKey, accessKey);
+      });
       return true;
     }else{
       return false;
     }
   },
 
-  editServicePattern(eqId, serveKey, timeSpan, pivot, recur, period, grace) {
+  editServicePattern(eqId, serveKey, name, timeSpan, pivot, next, recur, period, grace) {
     if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
-    
+      const accessKey = Meteor.user().orgKey;
+      
       const whenOf = typeof pivot === 'string' ? pivot : Number(pivot);
       
-      EquipDB.update({_id: eqId, orgKey: Meteor.user().orgKey, 'service.serveKey': serveKey}, {
+      EquipDB.update({_id: eqId, orgKey: accessKey, 'service.serveKey': serveKey}, {
         $set : {
           'service.$.updatedAt': new Date(),
+          'service.$.name': name,
           'service.$.timeSpan': timeSpan,
           'service.$.whenOf': whenOf,
+          'service.$.nextAt': next,
           'service.$.recur': Number(recur),
           'service.$.period': Number(period),
           'service.$.grace': Number(grace)
         }});
+      Meteor.defer( ()=>{
+        Meteor.call('pmUpdate', eqId, serveKey, accessKey);
+      });
       return true;
     }else{
       return false;
@@ -128,6 +186,7 @@ Meteor.methods({
       EquipDB.update({_id: eqId, orgKey: Meteor.user().orgKey, 'service.serveKey': serveKey}, {
         $pull : { service: { serveKey: serveKey }
       }});
+      MaintainDB.remove({equipId: eqId, serveKey: serveKey, status: false});
       return true;
     }else{
       return false;
@@ -150,11 +209,8 @@ Meteor.methods({
   },
   
   
- 
-  
-  
   deleteEquipment(eqId) {
-    const inUse = MaintainDB.findOne({eqId: eqId},{fields:{'_id':1}});
+    const inUse = MaintainDB.findOne({equipId: eqId},{fields:{'_id':1}});
     if(!inUse) {
       const access = Roles.userIsInRole(Meteor.userId(), 'remove');
       
@@ -167,6 +223,131 @@ Meteor.methods({
     }else{
       return 'inUse';
     }
+  },
+  
+  
+  pmUpdate(eqId, serveKey, accessKey) {
+    syncLocale(accessKey);
+    
+    const eq = EquipDB.findOne({_id: eqId},{fields:{'_id':1, 'service':1}});
+    const sv = eq.service.find( s => s.serveKey === serveKey );
+    
+    if(sv) {
+      const next = Meteor.call('nextWork', sv); //nextService(sv);
+      const nextMmnt = moment(next).tz(Config.clientTZ);
+      const close = sv.whenOf === 'startOf' ?
+                      nextMmnt.nextWorkingTime().endOf('day') :
+                      nextMmnt.lastWorkingTime().endOf('day');
+                    
+      const open = close.clone().subtractWorkingTime(sv.period - 1, 'days').startOf('day').format();
+      const expire = close.clone().addWorkingTime(sv.grace, 'days').format();
+            
+      MaintainDB.update({equipId: eqId, serveKey: sv.serveKey, status: false},{
+        $set: {
+          equipId: eqId,
+          serveKey: sv.serveKey,
+          orgKey: accessKey,
+          name: sv.name,
+          open: new Date( open ),
+          close: new Date( close.format() ),
+          expire: new Date( expire ),
+          status: false, // complete, notrequired, incomplete, missed
+          doneAt: false,
+          checklist: [],
+          notes: ''
+        }
+      }, { upsert: true });
+    }
+  },
+  
+  
+  nextWork(sv) {
+    async function runThing(sv, st) {
+      try{
+        var params = {
+          array: [sv, st],
+        };
+        
+        var method = function() {
+          if( params.array.length > 0 ) {
+            const sv = params.array[0];
+            const st = params.array[1];
+           
+            let next = sv.whenOf === 'endOf' ? st.endOf(sv.timeSpan) :
+                       sv.whenOf === 'startOf' ? st.startOf(sv.timeSpan) :
+                       sv.timeSpan === 'week' ? st.day(sv.whenOf).endOf('day') :
+                       sv.timeSpan === 'month' ? st.date(sv.whenOf).endOf('day') :
+                                                  st.month(sv.whenOf).endOf('month');
+            
+            let run = true;
+            while(run) {
+              if(next.isSameOrAfter(new Date())) {
+                rtn.data.push( new Date(next.format()) );
+                run = false;
+              }else{
+                next.add(sv.recur, sv.timeSpan);
+              }
+            }
+          }
+        };
+
+        var results = await hamsters.promise(params, method);
+        return results[0];
+          
+      }catch (err) {
+        console.error(err);
+      }
+    }
+    
+    const st = moment(sv.nextAt).tz(Config.clientTZ);
+    
+    return runThing(sv, st);
+  },
+  
+  
+  pmRobot() {
+    syncLocale(Meteor.user().orgKey);
+    
+    // MaintainDB.remove({status: false, checklist: { $size: 0 }});
+    
+    EquipDB.find({online: true},{fields:{'_id':1, 'service':1}})
+    .forEach( (eq)=> {
+      const maint = MaintainDB.find({equipId: eq._id},{fields:{'_id':1, 'serveKey':1, 'close':1}}).fetch();
+      
+      for(const sv of eq.service) {
+        
+        const next = Meteor.call('nextWork', sv);  // nextService(sv);
+        
+        const nextMmnt = moment(next).tz(Config.clientTZ);
+        const close = sv.whenOf === 'startOf' ?
+                  nextMmnt.nextWorkingTime().endOf('day') :
+                  nextMmnt.lastWorkingTime().endOf('day');
+                  
+        // const match = maint.find( m => m.serveKey === sv.serveKey && close.isSame(m.close, 'day') );
+        const match = maint.find( m => m.serveKey === sv.serveKey && sv.status === false );
+        
+        // if(!match) {
+        const open = close.clone().subtractWorkingTime(sv.period - 1, 'days').startOf('day').format();
+        const expire = close.clone().addWorkingTime(sv.grace, 'days').format();
+        
+        MaintainDB.update({equipId: eq._id, serveKey: sv.serveKey, status: false},{
+          $set: {
+            equipId: eq._id,
+            serveKey: sv.serveKey,
+            orgKey: Meteor.user().orgKey,
+            name: sv.name,
+            open: new Date( open ),
+            close: new Date( close.format() ),
+            expire: new Date( expire ),
+            status: false, // complete, notrequired, incomplete, missed
+            doneAt: false,
+            checklist: match?.checklist || [],
+            notes: match?.notes || ''
+          }
+        }, { upsert: true });
+      // }
+      }
+    });
   }
   
 });

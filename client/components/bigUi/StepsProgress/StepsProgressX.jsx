@@ -18,14 +18,14 @@ const StepsProgressX  = ({
 
   const dt = flowCounts;
     
-  const rvrDt = dt.riverProg;
-  const wflDt = fallCounts.fallProg;
+  const rvrDt = dt?.riverProg || [];
+  const wflDt = fallCounts?.fallProg || [];
   
-  const totalI = dt.liveItems;
+  const totalI = dt?.liveItems || 0;
 
-  const totalIU = dt.liveUnits;
+  const totalIU = dt?.liveUnits || 0;
 
-  const scrapCount = dt.scrapCount;
+  const scrapCount = dt?.scrapCount || 0;
   
   const unitsExist = totalIU > totalI ? true : false;
   const calcItem = countCalc === 'items' ? true : false;
@@ -59,10 +59,10 @@ const StepsProgressX  = ({
             </label>
           :null}
           
-          {dt.altItems > 0 ?  
+          {( dt?.altItems || 0 ) > 0 ?  
             <label>
               <NumBox
-                num={dt.altItems}
+                num={dt?.altItems || 0}
                 name={`Alt ${Pref.items}`}
                 color='tealT' />
             </label>
@@ -152,7 +152,7 @@ const StepsProgressX  = ({
         </span>
       : null}
       
-      {dt.altItems > 0 &&
+      {( dt?.altItems || 0 ) > 0 &&
         <MiniStack
           key='altCombo'
           title={`Alternative ${Pref.items}`}

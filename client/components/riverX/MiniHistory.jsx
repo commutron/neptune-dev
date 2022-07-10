@@ -6,6 +6,15 @@ const MiniHistory = ({ history, iAlt, altitle })=> {
   
   const extended = iAlt ? iAlt.filter( x => x.rapId !== false ) : [];
 
+  const lineColor = {
+    build: 'borderBlue',
+    first: 'borderBlue',
+    inspect: 'borderGreen',
+    test: 'borderTeal',
+    nest: 'borderTeal',
+    finish: 'borderPurple'
+  }
+  
   return(
     <div>
       
@@ -19,19 +28,18 @@ const MiniHistory = ({ history, iAlt, altitle })=> {
       ))}
         
       {history.length > 0 ?
-        <n-mock-table className='miniHistory vgap'>
+        <div className='miniHistory vgap'>
           {history.map( (hst, idx)=>{
+            const brdr = !hst.good ? 'borderRed' : lineColor[hst.type] || 'borderGray';
         		return( 
-        		  <n-mock-table-row className='cap' key={idx}>
-        		    <n-mock-table-cell>
-        		      {!hst.good ? <b><i className='fas fa-times fa-fw redT'></i></b> : null}
-        		      {hst.type}-{hst.step}</n-mock-table-cell>
-        		    <n-mock-table-cell
-        		      >{moment(hst.time).calendar()}
-        		    </n-mock-table-cell>
-        		  </n-mock-table-row>
+        		  <p className={`bottomLine cap indent10 margin5 ${brdr}`} key={idx}>
+        		    <i>{
+        		      !hst.good && <n-fa0><i className='fas fa-times fa-fw redT gapR'></i></n-fa0>
+        		    }{hst.step} - {hst.type}
+        		    </i><br /><n-sm>{moment(hst.time).calendar()}</n-sm>
+        		  </p>
           )})}
-        </n-mock-table>
+        </div>
         : <h3 className='centreText'>{Pref.Item} Unstarted</h3> }
     </div>
   );

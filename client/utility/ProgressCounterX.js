@@ -1,8 +1,8 @@
 import React from 'react';
-import moment from 'moment';
+// import moment from 'moment';
 import { avgOfArray } from '/client/utility/Convert';
 import { countWaterfall } from '/client/utility/Arrays';
-
+  
 function flowLoop(river, items, firstsFlat, wndw) {
   const byKey = (t, ky)=> { return ( k => k.key === ky && k.good === true )};
   
@@ -87,8 +87,10 @@ function getFirsts(items) {
 function FlowCounter(flow, seriesData) {
   const srsItems = seriesData && Array.isArray(seriesData.items) ? seriesData.items : [];
   
-  const now = moment().format();
-  const wndw = (t)=>moment(t).isSame(now, 'day');
+  // const now = moment().format();
+  // const wndw = (t)=>moment(t).isSame(now, 'day');
+  const now = new Date().toDateString();
+  const wndw = (t)=> new Date(t).toDateString() === now;
   
   const allLiveItems = outScrap(srsItems);
   const scrapCount = srsItems.length - allLiveItems.length;
@@ -104,11 +106,11 @@ function FlowCounter(flow, seriesData) {
   const altDone = althItems.filter( x => x.completed ).length;
   const altDoneNew = althItems.filter( x => x.completed && wndw(x.completedAt) ).length;
   
-  const riverProg = flowLoop(flow, stndItems, firstsFlat, wndw);
-  
   const allFlow = srsItems.length === 0 ||
                   srsItems.length > 0 && srsItems.every( x => x.completed );
 
+  const riverProg = flowLoop(flow, stndItems, firstsFlat, wndw);
+  
   return {
     riverProg: riverProg,
     liveItems: stndItems.length,
@@ -135,7 +137,9 @@ export function FallCounter(batchData) {
   for(let wf of waterfall) {
     const wfType = wf.type;
     const wfCount = countWaterfall(wf.counts);
-    let fresh = wf.counts.filter( t=> moment(t.time).isSame(moment(), 'day') );
+    
+    const now = new Date().toDateString();
+    let fresh = wf.counts.filter( t=> new Date(t.time).toDateString() === now );
     const nwCount = countWaterfall(fresh);
     const topNum = wf.action === 'slider' ? 100 : quantity;
     
@@ -163,7 +167,8 @@ export function FallCounter(batchData) {
   
 export function WhiteWaterCounter(rapidData, seriesData) {
   const totalQ = rapidData.quantity;
-  
+  const now = new Date().toDateString();
+
   let countArr = [];
   let pointArr = [];
   let newptArr = [];
@@ -180,7 +185,7 @@ export function WhiteWaterCounter(rapidData, seriesData) {
     countArr.push(wfCount);
     pointArr.push( wfCount / totalQ );
     
-    let fresh = wf.counts.filter( t=> moment(t.time).isSame(moment(), 'day') );
+    let fresh = wf.counts.filter( t=> new Date(t.time).toDateString() === now );
     newptArr.push( countWaterfall(fresh) / totalQ );
   }
   
@@ -197,7 +202,7 @@ export function WhiteWaterCounter(rapidData, seriesData) {
     
     const rapNewI = rapSetI.filter( i => i.altPath.find( r => 
                       r.rapId === rapidData._id && r.completed === true &&
-                      moment(r.completedAt).isSame(moment(), 'day') ) 
+                      new Date(r.completedAt).toDateString() === now ) 
                     ).length;
     iNew = ( rapNewI / totalQ );
     nFin = [ rapDidI, rapNewI ];

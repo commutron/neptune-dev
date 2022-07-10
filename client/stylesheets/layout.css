@@ -1008,12 +1008,25 @@ input.miniIn12, select.miniIn12 { width: 12ch; }
 input.miniIn18, select.miniIn18 { width: 18ch; }
 input.miniIn24, select.miniIn24 { width: 24ch; }
 
-.multiSelectContain .dropdown-container {
+.rmsc {
+--rmsc-main: var(--neptuneColor);
+--rmsc-hover: var(--neptuneColor);
+--rmsc-selected: var(--contrast);
+--rmsc-border: black;
+/*--rmsc-gray: #aaa;*/
+--rmsc-bg: white;
+/*--rmsc-p: 10px;*/
+--rmsc-radius: 0px;
+--rmsc-h: 32px;
+}
+
+.rmsc .dropdown-container {
   min-width: 15rem;
   max-width: 400px;
   margin: 0;
   text-align: initial;
 }
+
 .numberSet {
   min-height: var(--txx0);
   line-height: 1.1;

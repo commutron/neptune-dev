@@ -10,6 +10,7 @@
   --actionText: var(--blackT);
   color-scheme: dark;
   --blackT: white;
+  --whiteT: black;
 }
 .darkTheme .grayT {
   color: var(--cloudstrans);

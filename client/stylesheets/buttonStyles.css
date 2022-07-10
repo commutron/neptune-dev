@@ -16,9 +16,14 @@
   outline-offset: -3px;
   outline-color: transparent;
 }
-.action:where(:hover,:focus-visible,:active),
-.roundAction:where(:hover,:focus-visible,:active) {
+.action:where(:hover,:focus-visible),
+.roundAction:where(:hover,:focus-visible) {
   outline-offset: 3px;
+  outline-color: var(--actionColor, var(--silver));
+}
+.action:active,
+.roundAction:active {
+  outline-offset: 4px;
   outline-color: var(--actionColor, var(--silver));
 }
 .action:disabled:where(:hover,:active),
@@ -79,8 +84,8 @@
   --actionColor: var(--neptuneColor);
 }
 .whiteSolid {
-  --actionColor: white;
-  --actionText: black;
+  --actionColor: var(--whiteT);
+  --actionText: var(--blackT);
 }
 .whiteHover {
   background-color: transparent;
@@ -89,7 +94,7 @@
 }
 .blackSolid {
   --actionColor: var(--blackT);
-  --actionText: white;
+  --actionText: var(--whiteT);
 }
 .blackHover {
   --actionColor: var(--dark);

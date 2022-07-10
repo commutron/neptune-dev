@@ -84,7 +84,7 @@
   --asbestostrans: rgb(127, 140, 141, 0.5);
   --asbestosfade: rgb(127, 140, 141, 0.2);
   
-  /* black */
+  --whiteT: white;
   --black: rgb(48,48,48);
   --blackT: rgb(24,24,24);
   --blackfrost: rgba(5,5,5,0.7);

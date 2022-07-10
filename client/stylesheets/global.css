@@ -337,6 +337,17 @@ summary:active {
   outline-offset: 1px;
 }
 
+dialog {
+  border: 1px solid black;
+  border-radius: 0;
+  box-shadow: var(--dropShadow2);
+  background-color: var(--clouds);
+  padding: 0 16px 16px 16px;
+}
+dialog::backdrop {
+  background-color: rgb(10,10,10,0.5);
+}
+
 input::-webkit-inner-spin-button,
 input::-webkit-outer-spin-button {
   opacity: 1;

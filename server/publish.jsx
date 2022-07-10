@@ -387,7 +387,18 @@ Meteor.publish('thinData', function(){
           'live': 1,
           'completed': 1,
           'completedAt': 1,
-        }})
+        }}),
+        
+      EquipDB.find({orgKey: orgKey, online: true}, {
+        fields: {
+          'alias': 1,
+          'service': 1
+      }}),
+      MaintainDB.find({orgKey: orgKey}, {
+        fields: {
+          'equipId': 1,
+          'maincode': 1
+      }})
     ];
   }
 });
@@ -618,8 +629,7 @@ Meteor.publish('thinEquip', function(){
       }}),
       MaintainDB.find({orgKey: orgKey}, {
         fields: {
-          'equipId': 1,
-          'maincode': 1
+          'equipId': 1
       }})
     ];
   }
@@ -638,7 +648,7 @@ Meteor.publish('hotEquip', function(hotEquipID) {
           'orgKey': 0,
         }}),
         
-      MaintainDB.find({maincode: hotEquipID, orgKey: orgKey}, {
+      MaintainDB.find({equipId: hotEquipID, orgKey: orgKey}, {
         fields: {
           'orgKey': 0,
         }})

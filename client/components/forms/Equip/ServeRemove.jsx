@@ -1,9 +1,33 @@
-import React from 'react';
+import React, { Fragment } from 'react';
+import moment from 'moment';
 import { toast } from 'react-toastify';
 
-import ActionFunc from '/client/components/tinyUi/ActionFunc';
+import ModelSmall from '/client/components/smallUi/ModelSmall';
 
-const ServeRemove = ({ id, serveKey, lockOut })=> {
+const ServeRemove = ({ id, serveKey, lockOut, name, opendates })=> {
+  
+  const access = Roles.userIsInRole(Meteor.userId(), 'edit');
+  
+  return(
+    <ModelSmall
+      button='Delete'
+      title='Delete Service Pattern'
+      color='redT'
+      icon='fa-circle-minus'
+      lock={!access || lockOut}>
+      <ServeRemoveConfirm
+        id={id}
+        serveKey={serveKey}
+        name={name}
+        opendates={opendates}
+      />
+    </ModelSmall>
+  );
+};
+
+export default ServeRemove;
+
+const ServeRemoveConfirm = ({ id, serveKey, name, opendates })=> {
   
   function deleteService() {
     Meteor.call('removeServicePattern', id, serveKey, (error, reply)=>{
@@ -16,17 +40,19 @@ const ServeRemove = ({ id, serveKey, lockOut })=> {
     });
   }
   
-  const access = Roles.userIsInRole(Meteor.userId(), 'edit');
-  
   return(
-    <ActionFunc
-      doFunc={()=>deleteService()}
-      title='Delete'
-      icon='fa-solid fa-circle-minus'
-      color='redT'
-      lockOut={!access || lockOut}
-    />
+    <div className='centre space'>
+      <p>This <em>{name}</em> Service Pattern and the next service, {
+        opendates?.map( (op, ix)=>(
+          <em key={ix}>{moment(op.close).format('MMMM Do, YYYY')}, </em>
+        )) || ''}will be deleted.</p>
+      <p>
+        <button
+          onClick={()=>deleteService()}
+          title='Delete'
+          className='action redSolid vmargin'
+        >Yes, Delete</button>
+      </p>
+    </div>
   );
 };
-
-export default ServeRemove;

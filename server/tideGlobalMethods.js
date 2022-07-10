@@ -105,7 +105,7 @@ export function distTimeBudget(tide, quoteTimeBudget, allQuantity, lockTrunc) {
   }
 }
   
-function collectActivtyLevel(privateKey, batchID) {
+function collectActivtyLevel(batchID) {
   return new Promise(resolve => {
     const batch = XBatchDB.findOne(
       {_id: batchID},
@@ -198,11 +198,10 @@ Meteor.methods({
 
 //// Tide \\\\\
 
-  tideActivityLevel(batchID, serverAccessKey) {
+  tideActivityLevel(batchID) {
     async function bundleActivity(batchID) {
-      const accessKey = serverAccessKey || Meteor.user().orgKey;
       try {
-        bundle = await collectActivtyLevel(accessKey, batchID);
+        bundle = await collectActivtyLevel(batchID);
         return bundle;
       }catch (err) {
         throw new Meteor.Error(err);
