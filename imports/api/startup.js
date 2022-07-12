@@ -7,16 +7,15 @@ Tracker.autorun( ()=> {
   if(Roles.subscription.ready() && !FlowRouter._initialized) {
      FlowRouter.initialize();
   }
- /*
+
   let { Worker, parentPort } = require("worker_threads");
   let hamsters = require("hamsters.js");
-    meteor npm install --save hamsters.js@5.4.1
-   hamsters.init({
-      Worker: Worker,
-      parentPort: parentPort,
-      // persistence: true
-    });
-*/
+  hamsters.init({
+    Worker: Worker,
+    parentPort: parentPort,
+    debug: true
+    // persistence: true
+  });
 });
 
 

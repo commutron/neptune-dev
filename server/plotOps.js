@@ -7,24 +7,33 @@ import { asRate, round1Decimal } from './calcOps';
 import { getEndWork } from '/server/shipOps';
 import Config from '/server/hardConfig.js';
 
-export function plotCreatedOrders(batches) {
-  let orderset = [];
-  for( let b of batches) {
-    const did = b.completedAt || moment.tz(Config.clientTZ).format();
-    const trnGap = round1Decimal( moment(did).workingDiff(b.salesStart, 'days') );
+let hamsters = require("hamsters.js");
+
+function plotCreatedOrders() {
+  if( params.array.length > 0 ) {
     
-    orderset.push({
-      y1: b.quantity,
-      x1: b.createdAt,
-      y2: trnGap,
-      x2: b.salesStart,
-      z: `${b.batch} (so.${b.salesOrder})`,
-      s1: 'plus',
-      s2: b.completedAt ? 'diamond' : 'star',
-      size: '2'
-    });
+    const now = params.array[0];
+    const gap = params.array[1];
+    const batches = params.array[2];
+    
+    let orderset = [];
+    for( let b of batches) {
+      const did = b.completedAt || now;
+      const trnGap = gap( did, b.salesStart );
+      
+      orderset.push({
+        y1: b.quantity,
+        x1: b.createdAt,
+        y2: trnGap,
+        x2: b.salesStart,
+        z: `${b.batch} (so.${b.salesOrder})`,
+        s1: 'plus',
+        s2: b.completedAt ? 'diamond' : 'star',
+        size: '2'
+      });
+    }
+    rtn.data.push(orderset);
   }
-  return orderset;
 }
 
 export function plotPerform(batches) {
@@ -146,6 +155,28 @@ export function plotTest(batches) {
 }
 
 Meteor.methods({
+  
+  plotWork(func, batches, branches) {
+    async function runWork(func, now, gapFunc, batches, branches) {
+      try{
+        var params = {
+          array: [ now, gapFunc, batches, branches ],
+        };
+        
+        const method = func === 'orders' ? plotCreatedOrders : undefined;
+        var results = await hamsters.promise(params, method);
+        return results[0];
+          
+      }catch (err) {
+        console.error(err);
+      }
+    }
+    
+    const now = moment.tz(Config.clientTZ).format();
+    const gap = (did, salesSt)=> round1Decimal( moment(did).workingDiff(salesSt, 'days') );
+    
+    return runWork(func, now, gap, batches, branches);
+  },
   
   getBatchOnTime(idLimiter) {
     syncLocale(Meteor.user().orgKey);

@@ -277,7 +277,7 @@ Meteor.methods({
     const bchtime = bchShade ? bchShade.lastUpdated : null;
     const stale = !bchtime ? true :
               moment.duration(moment().diff(moment(bchtime))).as('hours') > Config.freche;
-    if(stale) {
+    if(true) {
       syncLocale(accessKey);
       const cutoff = ( d => new Date(d.setDate(d.getDate()-Config.avgSpan)) )(new Date);
       
@@ -294,7 +294,7 @@ Meteor.methods({
         }}
       ).fetch();
       
-      let bchset = plotCreatedOrders(batches);
+      let bchset = Meteor.call('plotWork', 'orders', batches, undefined);
       
       CacheDB.upsert({dataName: 'bchShadow'}, {
         $set : {

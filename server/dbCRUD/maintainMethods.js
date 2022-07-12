@@ -1,5 +1,5 @@
 // import { Random } from 'meteor/random';
-// let hamsters = require("hamsters.js");
+let hamsters = require("hamsters.js");
 
 import moment from 'moment';
 import 'moment-timezone';
@@ -259,7 +259,7 @@ Meteor.methods({
     }
   },
   
-  /*
+  
   nextWork(sv) {
     async function runThing(sv, st) {
       try{
@@ -302,7 +302,7 @@ Meteor.methods({
     
     return runThing(sv, st);
   },
-  */
+  
   
   pmRobot() {
     syncLocale(Meteor.user().orgKey);
@@ -315,7 +315,7 @@ Meteor.methods({
       
       for(const sv of eq.service) {
         
-        const next = /*Meteor.call('nextWork', sv); */ nextService(sv);
+        const next = Meteor.call('nextWork', sv); // nextService(sv);
         
         const nextMmnt = moment(next).tz(Config.clientTZ);
         const close = sv.whenOf === 'startOf' ?
