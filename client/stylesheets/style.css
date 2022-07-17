@@ -162,6 +162,8 @@ input::-webkit-calendar-picker-indicator {
   background-color: transparent;
 	border: 3px solid var(--wetasphalt);
 }
+.midnightblue { background-color: var(--midnightblue); }
+.midnightblueT { color: var(--midnightblue); }
 .concrete { background-color: var(--concrete); }
 
 .grayT { color: var(--black); }

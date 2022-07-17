@@ -23,7 +23,7 @@ const EquipFormWrapper = ({
     <ModelMedium
       button={bttn}
       title={title}
-      color='blueT'
+      color='midnightblueT'
       icon='fa-vault'
       lock={!access || lockOut}
       noText={noText}
@@ -35,7 +35,6 @@ const EquipFormWrapper = ({
         alias={alias}
         brKey={brKey}
         wiki={wiki}
-        title={title}
         rootURL={rootURL}
         brancheS={brancheS}
       />
@@ -46,8 +45,7 @@ const EquipFormWrapper = ({
 export default EquipFormWrapper;
 
 const EquipForm = ({ 
-  id, name, alias, brKey, wiki, rootURL, brancheS, 
-  title, selfclose
+  id, name, alias, brKey, wiki, rootURL, brancheS, selfclose
 })=> {
 
   function saveEquipment(e) {

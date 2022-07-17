@@ -12,7 +12,7 @@ const TasksFormWrapper = ({ id, serveKey, tasks, lockOut })=> {
     <ModelMedium
       button='Tasks'
       title='Edit Task'
-      color='blueT'
+      color='midnightblueT'
       icon='fa-list-check'
       lock={!access || lockOut}
     >
@@ -37,6 +37,7 @@ const TasksForm = ({ id, serveKey, tasks, selfclose })=> {
     tsks.add(this.newtask.value);
     taskSet([...tsks]);
     this.newtask.value = '';
+    this.newtask.focus();
   };
   
   const pulltask = (tsk)=> {

@@ -52,7 +52,7 @@ export default class ErrorCatch extends Component	{
   render() {
     if(this.state.hasError) {
       return(
-        <div className='errorReport'>
+        <div className='errorReport thinScroll'>
           <h2>Oops, that didn't work</h2>
           <p>Don't worry its not something you did.&nbsp;
            <button onClick={()=>window.location.reload()} className='textLinkButton'

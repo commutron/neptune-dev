@@ -13,7 +13,6 @@
     "bcrypt": "^5.0.1",
     "create-react-class": "^15.7.0",
     "ee-first": "^1.1.1",
-    "hamsters.js": "^5.4.1",
     "indexof": "0.0.1",
     "meteor-node-stubs": "^1.2.3",
     "moment": "^2.29.4",

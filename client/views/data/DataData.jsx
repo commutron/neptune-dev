@@ -1,7 +1,6 @@
 import React, { useLayoutEffect } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
-import ErrorCatch from '/client/layouts/ErrorCatch';
 import InboxToastPop from '/client/utility/InboxToastPop.js';
 import { localeUpdate } from '/client/utility/WorkTimeCalc';
 
@@ -25,23 +24,21 @@ const ExploreView = ({
   
   if( !coldReady || !hotReady || !user || !app ) {
     return(
-      <ErrorCatch>
-        <TraverseWrap
-          batchData={false}
-          widgetData={false}
-          groupData={false}
-          user={false}
-          app={false}
-          title={false}
-          subLink={subLink}
-          action={false}
-          base={true}
-        >
-          <div className='centre wide'>
-            <Spin />
-          </div>
-        </TraverseWrap>
-      </ErrorCatch>
+      <TraverseWrap
+        batchData={false}
+        widgetData={false}
+        groupData={false}
+        user={false}
+        app={false}
+        title={false}
+        subLink={subLink}
+        action={false}
+        base={true}
+      >
+        <div className='centre wide'>
+          <Spin />
+        </div>
+      </TraverseWrap>
     );
   }
   
@@ -50,27 +47,25 @@ const ExploreView = ({
   const brancheS = branchesSort(app.branches);
 
   return(
-    <ErrorCatch>
-      <DataViewOps
-        user={user}
-        isDebug={isDebug}
-        org={org}
-        users={users}
-        app={app}
-        brancheS={brancheS}
-        allGroup={allGroup}
-        allWidget={allWidget}
-        allVariant={allVariant}
-        allXBatch={allXBatch}
-        hotXBatch={hotXBatch}
-        hotXSeries={hotXSeries}
-        hotXRapids={hotXRapids}
-        view={view}
-        request={request}
-        specify={specify}
-        subLink={subLink}
-      />
-    </ErrorCatch>
+    <DataViewOps
+      user={user}
+      isDebug={isDebug}
+      org={org}
+      users={users}
+      app={app}
+      brancheS={brancheS}
+      allGroup={allGroup}
+      allWidget={allWidget}
+      allVariant={allVariant}
+      allXBatch={allXBatch}
+      hotXBatch={hotXBatch}
+      hotXSeries={hotXSeries}
+      hotXRapids={hotXRapids}
+      view={view}
+      request={request}
+      specify={specify}
+      subLink={subLink}
+    />
   );
 };
 

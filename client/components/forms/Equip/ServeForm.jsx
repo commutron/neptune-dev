@@ -6,7 +6,7 @@ import ModelMedium from '/client/components/smallUi/ModelMedium';
 
 const ServeFormWrapper = ({ 
   id, service,
-  lockOut
+  lockOut, servicing
 })=> {
   const bttn = service ? 'Edit' : 'Add Service';
   const title = service ? 'Edit Service Pattern' : 'Add Service Pattern';
@@ -17,7 +17,7 @@ const ServeFormWrapper = ({
     <ModelMedium
       button={bttn}
       title={title}
-      color='blueT'
+      color='midnightblueT'
       icon='fa-calendar-check'
       lock={!access || lockOut}
     >
@@ -30,7 +30,8 @@ const ServeFormWrapper = ({
         svNext={service?.nextAt || undefined}
         svRecur={service?.recur || 1}
         svPeriod={service?.period || 1}
-        svGrace={typeof service?.grace === 'number' ? service.grace : 1}
+        svGrace={typeof service?.grace === 'number' ? service.grace : 0}
+        servicing={servicing}
       />
     </ModelMedium>
   );
@@ -38,7 +39,10 @@ const ServeFormWrapper = ({
 
 export default ServeFormWrapper;
 
-const ServeForm = ({ id, serveKey, svName, svTime, svPivot, svNext, svRecur, svPeriod, svGrace, selfclose })=> {
+const ServeForm = ({ 
+  id, serveKey, svName, svTime, svPivot, svNext, svRecur, svPeriod, svGrace, 
+  servicing, selfclose
+})=> {
   
   const [ name, setName ] = useState(svName);
   const [ timeSpan, setTime ] = useState(svTime);
@@ -234,7 +238,9 @@ const ServeForm = ({ id, serveKey, svName, svTime, svPivot, svNext, svRecur, svP
             className='gap miniIn6'
             defaultValue={grace}
             min={0}
-            max={60}
+            max={timeSpan === 'day' ? recur - period :
+                 timeSpan === 'week' ? ( recur * 5  ) - period :
+                 timeSpan === 'month' ? ( recur * 20  ) - period : 60}
             inputMode='numeric'
             onChange={(e)=>setGrace(Number(e.target.value))}
             required /></label>
@@ -243,6 +249,11 @@ const ServeForm = ({ id, serveKey, svName, svTime, svPivot, svNext, svRecur, svP
           <n-sm>After the grace period an incomplete service is considered missed.</n-sm>
         </div>
       </p>
+      
+      {serveKey && servicing ?
+        <p className='medSm centreText'
+        >Editing this service pattern will alter an open service window.</p>
+      : null}
       
       <p>
         <span className='centre'>

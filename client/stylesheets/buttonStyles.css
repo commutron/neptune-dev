@@ -52,7 +52,8 @@
 .blueHover,
 .redHover,
 .orangeHover,
-.blackHover {
+.blackHover,
+.wetHover {
   color: var(--actionColor);
   background-color: white;
   border-width: 1.5px;
@@ -64,7 +65,8 @@
 .blueHover:hover,
 .redHover:hover,
 .orangeHover:hover,
-.blackHover:hover {
+.blackHover:hover,
+.wetHover:hover {
   color: var(--actionText, white);
   background-color: var(--actionColor);
 }
@@ -72,7 +74,8 @@
 .blueHover:disabled:hover,
 .redHover:disabled:hover,
 .orangeHover:disabled:hover,
-.blackHover:disabled:hover {
+.blackHover:disabled:hover,
+.wetHover:disabled:hover {
   color: var(--silver);
   background-color: var(--concrete);
 }
@@ -123,6 +126,12 @@
 }
 .purpleSolid {
   --actionColor: var(--wisteria);
+}
+.midnightSolid {
+  --actionColor: var(--midnightblue);
+}
+.wetSolid, .wetHover {
+  --actionColor: var(--wetasphalt);
 }
 
 .roundAction {
@@ -443,7 +452,7 @@ button.variableInput.biggest { height: 64px; }
 .taskLink {
   margin: calc(0.75 * var(--vh)) 0;
   width: calc(5.5 * var(--vh));
-  height: calc(5.5 * var(--vh));
+  min-height: calc(5.5 * var(--vh));
   border-radius: 50%;
   font-size: calc(3.5 * var(--vh));
   cursor: pointer;

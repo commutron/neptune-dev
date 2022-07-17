@@ -67,7 +67,7 @@ const RedoIsland = ({
           </div>
           <div>
             <datalist id='commonReasons'>
-              {app.repeatOption.map( (entry)=>{
+              {(app.repeatOption || []).map( (entry)=>{
                 if(entry.live === true) {
                   return( 
                     <option key={entry.key} value={entry.reason}>{entry.reason}</option> 
@@ -108,8 +108,6 @@ const RedoIsland = ({
           close={()=>handleVerify(null, false)} />
       }
       
-      
-        
     </div>
   );
 };

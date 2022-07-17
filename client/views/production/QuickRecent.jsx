@@ -8,13 +8,13 @@ const QuickRecent = ({ user })=> {
   
   return(
     <div className='centre pop vmargin space min200 max875'>
-      <p className='med wide bottomLine'>Recent {Pref.xBatchs}</p>
-      <div className='centreRow vmarginhalf'>
+      <p className='med wide bottomLine cap'>Recent {Pref.xBatchs}</p>
+      <div className='rowWrap vmarginhalf'>
       {rec.length > 0 ?
         rec.map( (val, ix)=>(
           <button 
             key={ix}
-            className='action whiteSolid margin5'
+            className='action whiteSolid margin5 letterSpaced'
             onClick={()=>Session.set('now', val)}
           >{val}</button>
         ))

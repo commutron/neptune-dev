@@ -36,10 +36,6 @@ const Landing = ({ equipData, maintainData, app, brancheS })=> {
         </div>
       </div>
       
-      <div className='centreText'>
-      <i className="fa-solid fa-robot fa-5x"></i>
-      </div>
-      
       <details className='footnotes'>
         <summary>Chart Details</summary>
         <p className='footnote'>

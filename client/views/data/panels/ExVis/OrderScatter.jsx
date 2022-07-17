@@ -24,10 +24,9 @@ const OrderScatter = ({ app })=> {
   useEffect( ()=> {
     Meteor.call('getAllOrders', (err, re)=>{
       err && console.log(err);
-      if(re) {
-        if(mounted.current) {
-          tickXYSet(re);
-        }
+      if(re && mounted.current) {
+        tickXYSet(re);
+        console.log(re);
       }
     });
     

@@ -15,12 +15,12 @@ import { NonConMerge } from '/client/utility/NonConOptions';
 export const ProWrap = ({ 
   itemSerial, itemData, batchData, seriesData, rapidsData,
   widgetData, radioactive, groupAlias, 
-  user, users, app,
+  user, users, app, defaultWide, eqAlias,
   action, tideLockOut, standAlone,
   children
 })=> {
   
-  const [ expand, expandSet ] = useState(false);
+  const [ expand, expandSet ] = useState( defaultWide || false);
   
   const [ isFirst, isFirstSet ] = useState(false);
   const [ showVerifyState, showVerifySet ] = useState(false);
@@ -96,15 +96,9 @@ export const ProWrap = ({
     expandSet( openState );
     Session.set( 'riverExpand', openState );
   }
-    
-  let scrollFix = {
-    overflowY: 'hidden'
-  };
   
-  const gAlias = groupAlias;
   const bData = batchData;
-  const iS = itemSerial;
-  const append = bData && iS ? bData.batch : null;
+  const append = bData && itemSerial ? bData.batch : null;
   
   const et = !user || !user.engaged ? false : user.engaged.tKey;
   const tide = !bData || !bData.tide ? [] : bData.tide;
@@ -112,24 +106,25 @@ export const ProWrap = ({
     x => x.tKey === et && x.who === Meteor.userId() 
   );
     
-  const exploreLink = iS && bData ?
-                      '/data/batch?request=' + bData.batch + '&specify=' + iS :
+  const exploreLink = itemSerial && bData ?
+                      '/data/batch?request=' + bData.batch + '&specify=' + itemSerial :
                       bData ?
                       '/data/batch?request=' + bData.batch :
-                      gAlias ?
-                      '/data/overview?request=groups&specify=' + gAlias :
+                      groupAlias ?
+                      '/data/overview?request=groups&specify=' + groupAlias :
+                      eqAlias ?
+                      '/data/overview?request=maintain&specify=' + eqAlias :
                       '/data/overview?request=groups';
-  
-  let riverExpand = expand;
-  
+
   const viewContainer = standAlone ? 'pro_100' :
-                        !riverExpand ? 'pro_20_80' : 
+                        !expand ? 'pro_20_80' : 
                                          'pro_40_60';
                         
   return(
     <div className={viewContainer + ' containerPro'}>
       <ToastContainer
         position="top-center"
+        theme='colored'
         newestOnTop />
       <div className='tenHeader'>
         <div className='topBorder' />
@@ -143,7 +138,7 @@ export const ProWrap = ({
               tideLockOut={tideLockOut}
               stopOnly={true} />
           </div>}
-        {iS && isFirst ?
+        {itemSerial && isFirst ?
           <div className='auxLeft firstBadge' data-steps={isFirst}>
             <span className='fa-stack'>
               <i className="fas fa-certificate fa-stack-2x fa-fw blueT"></i>
@@ -187,14 +182,12 @@ export const ProWrap = ({
         
         <button
           type='button'
-          className={!riverExpand ? 
-            'riverExpandToggle' : 'riverShrinkToggle'
-          }
+          className={!expand ? 'riverExpandToggle' : 'riverShrinkToggle'}
           onClick={()=>handleExpand(null)}>
           <i className='fas fa-sort fa-2x' data-fa-transform='rotate-90'></i>
         </button>
         
-        <div className='proInstruct' style={scrollFix}>
+        <div className='proInstruct' style={{overflowY:'hidden'}}>
           {children[1]}
         </div>
       
@@ -237,6 +230,7 @@ export const ProWindow = ({ children })=> {
     <section className='windowPro'>
       <ToastContainer
         position="top-right"
+        theme='colored'
         autoClose={2500}
         newestOnTop />
       <div className='tenHeader'>

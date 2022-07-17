@@ -37,12 +37,14 @@ export const TraverseWrap = ({
   
   const goFunc = itemData ? ()=>goPro(itemData.serial) :
                  batchData ? ()=>goPro(batchData.batch) :
-                 groupData ? ()=>goPro(groupData.alias) : null;
+                 groupData ? ()=>goPro(groupData.alias) :
+                 action === 'maintain' ? ()=>FlowRouter.go('/production') : null;
   
   return(
     <div className='containerEx'>
       <ToastContainer
         position="top-center"
+        theme='colored'
         newestOnTop />
       <div className='tenHeader noPrint'>
         <div className='topBorder' />

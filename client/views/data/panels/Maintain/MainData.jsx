@@ -40,7 +40,7 @@ export default withTracker( ({ app, users, brancheS, specify }) => {
     users: users,
     brancheS: brancheS,
     equipData: EquipDB.find( {}, { sort: { alias: -1 } } ).fetch(),
-    maintainData: MaintainDB.find( {}, { sort: { burden: -1 } } ).fetch(),
+    maintainData: MaintainDB.find( {}, { sort: { name: -1 } } ).fetch(),
     specify: specify
   };
 })(MaintainData);

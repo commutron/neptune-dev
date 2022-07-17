@@ -15,7 +15,7 @@ import BatchExport from '/client/views/paper/BatchExport';
 const BatchPanelX = ({ 
   batchData, seriesData, rapidsData, widgetData, variantData, groupData, 
   flowData, fallData,
-  user, app, brancheS, isDebug, isNigh
+  user, app, brancheS, isDebug
 })=> {
   
   const b = batchData;

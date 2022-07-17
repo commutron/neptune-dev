@@ -12,8 +12,8 @@ const FirstForm = ({
 })=> {
   
   const [ inspectCombo, inspectComboSet ] = useState( false );
-  const [ userCombo, userComboSet ] = useState( false );
-  const [ buildCombo, buildComboSet ] = useState( false );
+  const [ userCombo, userComboSet ] = useState( [] );
+  const [ buildCombo, buildComboSet ] = useState( [] );
   
   const [ howIState, howISet ] = useState( false );
   const [ whoBState, whoBSet ] = useState( false );
@@ -23,7 +23,7 @@ const FirstForm = ({
   const [ ngState, ngSet ] = useState('');
   
   useLayoutEffect( ()=>{
-    const inspectOps = sBranch ? sBranch.inspectMethods : [];
+    const inspectOps = sBranch?.inspectMethods || [];
     const iCombo = Array.from(inspectOps, x => { 
                     let icon = x.toLowerCase().includes('eye') ? 'fa-eye' :
                                x.toLowerCase().includes('camera') ? 'fa-camera' :
@@ -38,8 +38,8 @@ const FirstForm = ({
     
     const uCombo = Array.from(users, x => { return { label: x.username, value: x._id } } );
     userComboSet( uCombo );
-      
-    const buildMethods = sBranch ? sBranch.buildMethods : [];
+    
+    const buildMethods = sBranch?.buildMethods || [];
     const bCombo = Array.from(buildMethods, x => { return { label: x, value: x } } );
     buildComboSet( bCombo );
     
@@ -139,9 +139,9 @@ const FirstForm = ({
           <label htmlFor='Builder'>
             <MultiSelect
               options={userCombo}
-              value={whoBState}
+              value={whoBState || []}
               onChange={(e)=>whoBSet(e.length > 0 ? e : false)}
-              labelledBy={"Builder"}
+              labelledBy="Builder"
               hasSelectAll={false}
               disableSearch={true}
           />{Pref.builder}</label>
@@ -151,9 +151,9 @@ const FirstForm = ({
           <label htmlFor='Method'>
             <MultiSelect
               options={buildCombo}
-              value={howBState}
+              value={howBState || []}
               onChange={(e)=>howBSet(e.length > 0 ? e : false)}
-              labelledBy={"Method"}
+              labelledBy="Method"
               hasSelectAll={false}
               disableSearch={true}
           />{Pref.method}</label>

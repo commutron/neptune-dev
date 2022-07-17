@@ -8,14 +8,7 @@ Tracker.autorun( ()=> {
      FlowRouter.initialize();
   }
 
-  let { Worker, parentPort } = require("worker_threads");
-  let hamsters = require("hamsters.js");
-  hamsters.init({
-    Worker: Worker,
-    parentPort: parentPort,
-    debug: true
-    // persistence: true
-  });
+  
 });
 
 

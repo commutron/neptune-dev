@@ -1,6 +1,4 @@
 // import { Random } from 'meteor/random';
-let hamsters = require("hamsters.js");
-
 import moment from 'moment';
 import 'moment-timezone';
 import 'moment-business-time';
@@ -224,6 +222,64 @@ Meteor.methods({
     }
   },
   
+  serveNoReqSet(eqId, serveKey, NoReq) {
+    if( Roles.userIsInRole(Meteor.userId(), 'active') ) {
+      const stat = NoReq ? false : 'notrequired';
+      MaintainDB.update({equipId: eqId, serveKey: serveKey}, {
+        $set : {
+          status: stat,
+          doneAt: false,
+      }});
+      return true;
+    }
+  },
+  
+  serveCheck(eqId, serveKey, task, isDone) {
+    if( Roles.userIsInRole(Meteor.userId(), 'active') ) {
+      MaintainDB.update({equipId: eqId, serveKey: serveKey},{
+        $push: {
+          checklist: {
+            task: task,
+            time: new Date(),
+            who: Meteor.userId()
+        }
+      }});
+      if(isDone) {
+        MaintainDB.update({equipId: eqId, serveKey: serveKey}, {
+          $set : {
+            status: 'complete',
+            doneAt: new Date()
+          }
+        });
+      }
+      return true;
+    }
+  },
+  
+  serveNotCheck(eqId, serveKey, task) {
+    if( Roles.userIsInRole(Meteor.userId(), 'active') ) {
+      MaintainDB.update({equipId: eqId, serveKey: serveKey}, {
+        $pull : {
+          checklist: { task: task }
+        },
+        $set : {
+          status: false,
+          doneAt: false
+        }
+      });
+      return true;
+    }
+  },
+  
+  serveNotesSet(eqId, serveKey, notes) {
+    if( Roles.userIsInRole(Meteor.userId(), 'active') ) {
+      MaintainDB.update({equipId: eqId, serveKey: serveKey}, {
+        $set : {
+          notes: notes
+      }});
+      return true;
+    }
+  },
   
   pmUpdate(eqId, serveKey, accessKey) {
     syncLocale(accessKey);
@@ -232,18 +288,21 @@ Meteor.methods({
     const sv = eq.service.find( s => s.serveKey === serveKey );
     
     if(sv) {
-      const next = /*Meteor.call('nextWork', sv); */ nextService(sv);
+      const next = nextService(sv);
       const nextMmnt = moment(next).tz(Config.clientTZ);
-      const close = sv.whenOf === 'startOf' ?
+      const close = sv.whenOf === 'startOf' || ( sv.timeSpan === 'day' && !nextMmnt.isWorkingDay() ) ?
                       nextMmnt.nextWorkingTime().endOf('day') :
                       nextMmnt.lastWorkingTime().endOf('day');
                     
       const open = close.clone().subtractWorkingTime(sv.period - 1, 'days').startOf('day').format();
       const expire = close.clone().addWorkingTime(sv.grace, 'days').format();
-            
-      MaintainDB.update({equipId: eqId, serveKey: sv.serveKey, status: false},{
-        $set: {
-          equipId: eqId,
+      
+      const match = MaintainDB.findOne({equipId: eq._id, serveKey: sv.serveKey, expire: { $gte: new Date() }},
+                          {fields:{'_id':1, 'checklist':1, 'notes':1}});
+          
+      if(!match) {
+        MaintainDB.insert({
+          equipId: eq._id,
           serveKey: sv.serveKey,
           orgKey: accessKey,
           name: sv.name,
@@ -254,86 +313,13 @@ Meteor.methods({
           doneAt: false,
           checklist: [],
           notes: ''
-        }
-      }, { upsert: true });
-    }
-  },
-  
-  
-  nextWork(sv) {
-    async function runThing(sv, st) {
-      try{
-        var params = {
-          array: [sv, st],
-        };
-        
-        var method = function() {
-          if( params.array.length > 0 ) {
-            const sv = params.array[0];
-            const st = params.array[1];
-           
-            let next = sv.whenOf === 'endOf' ? st.endOf(sv.timeSpan) :
-                       sv.whenOf === 'startOf' ? st.startOf(sv.timeSpan) :
-                       sv.timeSpan === 'week' ? st.day(sv.whenOf).endOf('day') :
-                       sv.timeSpan === 'month' ? st.date(sv.whenOf).endOf('day') :
-                                                  st.month(sv.whenOf).endOf('month');
-            
-            let run = true;
-            while(run) {
-              if(next.isSameOrAfter(new Date())) {
-                rtn.data.push( new Date(next.format()) );
-                run = false;
-              }else{
-                next.add(sv.recur, sv.timeSpan);
-              }
-            }
-          }
-        };
-
-        var results = await hamsters.promise(params, method);
-        return results[0];
-          
-      }catch (err) {
-        console.error(err);
-      }
-    }
-    
-    const st = moment(sv.nextAt).tz(Config.clientTZ);
-    
-    return runThing(sv, st);
-  },
-  
-  
-  pmRobot() {
-    syncLocale(Meteor.user().orgKey);
-    
-    // MaintainDB.remove({status: false, checklist: { $size: 0 }});
-    
-    EquipDB.find({online: true},{fields:{'_id':1, 'service':1}})
-    .forEach( (eq)=> {
-      const maint = MaintainDB.find({equipId: eq._id},{fields:{'_id':1, 'serveKey':1, 'close':1}}).fetch();
-      
-      for(const sv of eq.service) {
-        
-        const next = Meteor.call('nextWork', sv); // nextService(sv);
-        
-        const nextMmnt = moment(next).tz(Config.clientTZ);
-        const close = sv.whenOf === 'startOf' ?
-                  nextMmnt.nextWorkingTime().endOf('day') :
-                  nextMmnt.lastWorkingTime().endOf('day');
-                  
-        // const match = maint.find( m => m.serveKey === sv.serveKey && close.isSame(m.close, 'day') );
-        const match = maint.find( m => m.serveKey === sv.serveKey && sv.status === false );
-        
-        // if(!match) {
-        const open = close.clone().subtractWorkingTime(sv.period - 1, 'days').startOf('day').format();
-        const expire = close.clone().addWorkingTime(sv.grace, 'days').format();
-        
+        });
+      }else{
         MaintainDB.update({equipId: eq._id, serveKey: sv.serveKey, status: false},{
           $set: {
             equipId: eq._id,
             serveKey: sv.serveKey,
-            orgKey: Meteor.user().orgKey,
+            orgKey: accessKey,
             name: sv.name,
             open: new Date( open ),
             close: new Date( close.format() ),
@@ -343,10 +329,106 @@ Meteor.methods({
             checklist: match?.checklist || [],
             notes: match?.notes || ''
           }
-        }, { upsert: true });
-      // }
+        });
       }
-    });
+    }
+  },
+  
+  pmRobot() {
+    try {
+      syncLocale(Meteor.user().orgKey);
+      
+      // MaintainDB.remove({status: false, checklist: { $size: 0 }});
+      
+      const updateStatus = ()=> {
+        // return new Promise(function(resolve) {
+          const now = moment().tz(Config.clientTZ);
+          
+          const maint = MaintainDB.find({status: false},{fields:{'_id':1, 'expire':1, 'checklist':1}}).fetch();
+          
+          for(const mn of maint) {
+            if( now.isAfter(mn.expire) ) {
+              const ng = mn.checklist.length > 0 ? 'incomplete' : 'missed';
+              
+              MaintainDB.update({_id: mn._id},{
+                $set: {
+                  status: ng
+                }
+              });
+              
+              // and defer email
+            }
+          }
+        //   resolve('updated');
+        // });
+      };
+      
+      const updateDates = ()=> {
+        return new Promise(function(resolve) {
+          
+        EquipDB.find({online: true},{fields:{'_id':1, 'service':1}})
+        .forEach( (eq)=> {
+          const maintEq = MaintainDB.find({equipId: eq._id, expire: { $gte: new Date() }},
+                          {fields:{'_id':1, 'serveKey':1, 'checklist':1, 'notes':1}}).fetch();
+          
+          for(const sv of eq.service) {
+            
+            const next = nextService(sv);
+            
+            const nextMmnt = moment(next).tz(Config.clientTZ);
+            const close = sv.whenOf === 'startOf' || ( sv.timeSpan === 'day' && !nextMmnt.isWorkingDay() ) ?
+                      nextMmnt.nextWorkingTime().endOf('day') :
+                      nextMmnt.lastWorkingTime().endOf('day');
+                      
+            const match = maintEq.find( m => m.serveKey === sv.serveKey );
+            
+            const open = close.clone().subtractWorkingTime(sv.period - 1, 'days').startOf('day').format();
+            const expire = close.clone().addWorkingTime(sv.grace, 'days').format();
+            
+            if(!match) {
+              MaintainDB.insert({
+                equipId: eq._id,
+                serveKey: sv.serveKey,
+                orgKey: Meteor.user().orgKey,
+                name: sv.name,
+                open: new Date( open ),
+                close: new Date( close.format() ),
+                expire: new Date( expire ),
+                status: false, // complete, notrequired, incomplete, missed
+                doneAt: false,
+                checklist: [],
+                notes: ''
+              });
+            }else{
+              MaintainDB.update({equipId: eq._id, serveKey: sv.serveKey, status: false},{
+                $set: {
+                  equipId: eq._id,
+                  serveKey: sv.serveKey,
+                  orgKey: Meteor.user().orgKey,
+                  name: sv.name,
+                  open: new Date( open ),
+                  close: new Date( close.format() ),
+                  expire: new Date( expire ),
+                  status: false, // complete, notrequired, incomplete, missed
+                  doneAt: false,
+                  checklist: match?.checklist || [],
+                  notes: match?.notes || ''
+                }
+              });
+            }
+          }
+        });
+        resolve('updated');
+        });
+      };
+      
+      updateDates()
+        .then(updateStatus())
+          .finally(()=> { return true });
+
+    }catch (error) {
+      throw new Meteor.Error(error);
+    }finally{ return true }
   }
   
 });

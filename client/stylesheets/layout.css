@@ -31,6 +31,20 @@ main {
   scrollbar-color: var(--navIndicatorA) var(--navIndicatorB);
 }
 
+.thinScroll::-webkit-scrollbar {
+  width: 3px;
+  height: 3px;
+}
+.thinScroll::-webkit-scrollbar-track {
+  background-color: var(--navIndicatorA);
+}
+.thinScroll::-webkit-scrollbar-thumb {
+  background-color: var(--navIndicatorB);
+}
+.thinScroll {
+  scrollbar-color: var(--navIndicatorA) var(--navIndicatorB);
+}
+
 .loading {
   position: fixed;
   top: 50%;
@@ -51,7 +65,7 @@ main {
 
 .errorReport {
   margin: 10vh auto;
-  width: 50vmax;
+  width: 60vmax;
   height: 85vh;
   font-size: var(--tx5);
   color: white;
@@ -729,6 +743,7 @@ n-sm-model-content {
 
 .line05x { line-height: 0.5; }
 .line1x { line-height: 1; }
+.line15x { line-height: 1.5; }
 .line2x { line-height: 2; }
 .line3x { line-height: 3; }
 .line4x { line-height: 4; }
@@ -1008,23 +1023,24 @@ input.miniIn12, select.miniIn12 { width: 12ch; }
 input.miniIn18, select.miniIn18 { width: 18ch; }
 input.miniIn24, select.miniIn24 { width: 24ch; }
 
-.rmsc {
---rmsc-main: var(--neptuneColor);
---rmsc-hover: var(--neptuneColor);
---rmsc-selected: var(--contrast);
---rmsc-border: black;
-/*--rmsc-gray: #aaa;*/
---rmsc-bg: white;
-/*--rmsc-p: 10px;*/
---rmsc-radius: 0px;
---rmsc-h: 32px;
+.rmsc,
+.rmsc input,
+.rmsc.multi-select,
+.rmsc.dropdown-container {
+  --rmsc-main: var(--neptuneColor);
+  --rmsc-hover: var(--neptuneColor);
+  --rmsc-selected: var(--contrast);
+  --rmsc-border: black;
+  --rmsc-bg: white;
+  --rmsc-radius: 0px;
 }
-
-.rmsc .dropdown-container {
+.rmsc,
+.rmsc.multi-select {
   min-width: 15rem;
   max-width: 400px;
   margin: 0;
   text-align: initial;
+  --rmsc-h: 32px;
 }
 
 .numberSet {
@@ -1097,6 +1113,10 @@ button.numberSet {
 .inlineCheckbox {
   height: 2rem;
   width: 1.5rem;
+}
+.checklistBox {
+  min-height: 1.5rem;
+  min-width: 1.5rem;
 }
 .mockInputBox, .mockInputBoxOFF {
   width: 15rem;

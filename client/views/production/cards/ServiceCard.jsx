@@ -1,34 +1,32 @@
-import React, { useState, useEffect } from 'react';
-import Pref from '/client/global/pref.js';
+import React from 'react';
+import moment from 'moment';
+import 'moment-business-time';
 
-const ServiceCard = ({ equipData })=> {
+import ServiceDock from '/client/components/riverX/ServiceDock';
+
+const ServiceCard = ({ eqData, maintData })=> {
   
-  // const [ lookup, lookupSet ] = useState(false);
-  
-  // useEffect( ()=>{
-  //   Meteor.call('proLookupPartial', orb, (err, re)=>{
-  //     err && console.log(err);
-  //     if(re) {
-  //       const reS = re.sort((a,b)=> a[0] > b[0] ? 1 : a[0] < b[0] ? -1 : 0);
-  //       lookupSet(reS);
-  //     }
-  //   });
-  // }, []);
-  
+  const serve = eqData.service.find( s => s.serveKey === maintData.serveKey );
+
   return(
-    <div className='centre pop vmargin space min200 max875'>
-      <p className='med wide bottomLine cap'>{Pref.equip}</p>
-      <div className='centreRow vmarginhalf'>
-      {equipData.map( (e, ix)=>(
-          <button 
-            key={ix}
-            className='action whiteSolid margin5'
-            onClick={()=>Session.set('now', e[0])}
-          >{e.alias}</button>
-        ))
-      }
+    <div className='stoneForm midnightblue'>
+			<div className='space1v centreText'>
+  			<p className='bigbig'>{maintData.name}</p>
+        
+        {maintData.status === 'complete' &&
+          <p className='medBig spacehalf green'>Service Completed<br />{moment(maintData.doneAt).format('MMMM Do h:mm a')}</p>}
+        
+        <p className='medBig'>Service Due {moment(maintData.close).format('dddd MMMM Do')}</p>
+        
+        <p className='medSm vmarginquarter'>Grace period ends {moment(maintData.expire).format('dddd MMMM Do')}</p>
+      </div>
+      
+      <ServiceDock
+        maintData={maintData}
+        eqId={eqData._id}
+        serve={serve}
+      />
     </div>
-   </div>
   );
 };
 

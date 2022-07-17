@@ -391,13 +391,16 @@ Meteor.publish('thinData', function(){
         
       EquipDB.find({orgKey: orgKey, online: true}, {
         fields: {
-          'alias': 1,
-          'service': 1
+          'alias': 1
       }}),
-      MaintainDB.find({orgKey: orgKey}, {
+      MaintainDB.find({orgKey: orgKey,
+                      open: { $lte: new Date() },
+                      expire: { $gte: new Date() }
+      }, {
         fields: {
           'equipId': 1,
-          'maincode': 1
+          'name': 1,
+          'serveKey': 1
       }})
     ];
   }
@@ -450,6 +453,27 @@ Meteor.publish('hotDataPlus', function(scanOrb, keyMatch){
       VariantDB.find({widgetId: wID, orgKey: orgKey}, {
         fields: {
           'orgKey': 0
+        }})
+    ];
+  }
+});
+
+Meteor.publish('hotMaint', function(hotServeKey) {
+  const user = Meteor.users.findOne({_id: this.userId});
+  const orgKey = user ? user.orgKey : false;
+  
+  if(!this.userId) {
+    return this.ready();
+  }else{
+    return [
+      EquipDB.find({orgKey: orgKey, 'service.serveKey': hotServeKey}, {
+        fields: {
+          'orgKey': 0,
+        }}),
+        
+      MaintainDB.find({serveKey: hotServeKey, orgKey: orgKey}, {
+        fields: {
+          'orgKey': 0,
         }})
     ];
   }

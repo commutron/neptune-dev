@@ -21,33 +21,19 @@ const EquipSlide = ({ equipData, maintainData, app, users, brancheS })=>{
   
   const eq = equipData;
   
-  // safety
-  
-  // helmet-safety
-  // scissors
-  // shield
-  // faucet-drip shower
-  // wind
-  // fire
-  // bolt
-  // radiation
-  // biohazard
-  // skull-crossbones
-  // person-falling
-  // hand-dots
-  // mask-ventilator
-  // mask-face
-  
+  /*
   const nextMaint = (sv)=> {
+    const st = moment(sv.nextAt);
+    
     let next = sv.whenOf === 'endOf' ? 
-                  moment(sv.nextAt).endOf(sv.timeSpan) :
+                  st.endOf(sv.timeSpan) :
                 sv.whenOf === 'startOf' ? 
-                  moment(sv.nextAt).startOf(sv.timeSpan) :
+                  st.startOf(sv.timeSpan) :
                 sv.timeSpan === 'week' ?
-                  moment(sv.nextAt).day(sv.whenOf).endOf('day') :
+                  st.day(sv.whenOf).endOf('day') :
                 sv.timeSpan === 'month' ?
-                  moment(sv.nextAt).date(sv.whenOf).endOf('day') :
-                  moment(sv.nextAt).month(sv.whenOf).endOf('month');
+                  st.date(sv.whenOf).endOf('day') :
+                  st.month(sv.whenOf).endOf('month');
     
     while(true) {
       if(next.isSameOrAfter(new Date())) {
@@ -69,6 +55,7 @@ const EquipSlide = ({ equipData, maintainData, app, users, brancheS })=>{
       }
     }
   };
+  */
   
   const weekday = {
     0: 'sunday',
@@ -109,6 +96,8 @@ const EquipSlide = ({ equipData, maintainData, app, users, brancheS })=>{
     startOf: 'start',
     endOf: 'end'
   };
+  
+  const nowD = new Date();
   
   return(
     <div className='section overscroll' key={eq.alias}>
@@ -187,8 +176,8 @@ const EquipSlide = ({ equipData, maintainData, app, users, brancheS })=>{
       <div>
       {eq.service.map( (sv)=>{
         const maint = maintainData.filter( m => m.serveKey === sv.serveKey );
+        const sving = maint.find( m => nowD > m.open && nowD < m.expire );
         
-        const next = nextMaint(sv);
         return(
         <div key={sv.serveKey} className='max400 borderTeal bottomLine'>
           <p><b>{sv.name}</b></p>
@@ -202,37 +191,28 @@ const EquipSlide = ({ equipData, maintainData, app, users, brancheS })=>{
           <p>Workdays to Complete: {sv.period}</p>
           <p>Workdays Late Grace: {sv.grace}</p>
           
-          <div className='vmargin'>
-            <h4>Local</h4>
-            
-            <dl>
-              <dd>open: {next.open}</dd>
-              <dd>close: {next.close}</dd>
-              <dd>expire: {next.expire}</dd>
-            </dl>
-
-          </div>
-          
           <div>
-          <h4>Server</h4>
+          <h4>MaintainDB</h4>
           
             {maint.map( (m, ix)=> {
               return(
                 <dl key={ix}>
+                  <dt>{m.status || 'false'}</dt>
                   <dd>open: {moment(m.open).format()}</dd>
                   <dd>close: {moment(m.close).format()}</dd>
                   <dd>expire: {moment(m.expire).format()}</dd>
                 </dl>
           )})}
           
+          <p><em>{sving && 'open service'}</em></p>
           
           </div>
-          
           
           <ServeForm
             id={eq._id}
             service={sv}
             lockOut={!eq.online}
+            servicing={sving}
           />
 
           <ServeRemove
@@ -240,7 +220,7 @@ const EquipSlide = ({ equipData, maintainData, app, users, brancheS })=>{
             serveKey={sv.serveKey}
             lockOut={!eq.online}
             name={sv.name}
-            opendates={maintainData.filter( m => m.serveKey === sv.serveKey )}
+            opendates={maintainData.filter( m => m.serveKey === sv.serveKey && m.status === false )}
           />
           <hr />
           <dl>
@@ -256,11 +236,6 @@ const EquipSlide = ({ equipData, maintainData, app, users, brancheS })=>{
           />
         </div>
       )})}
-      </div>
-      
-      
-      <div>
-      {maintainData.length}
       </div>
       
       <div className='wide'>

@@ -655,10 +655,11 @@ n-trib-action-all {
   --rmsc-gray: #aaa;
   --rmsc-background: white;
   --rmsc-border-radius: 0px;
-  --rmsc-height: 2rem;
+  --rmsc-height: 1.5rem;
   color: black;
   border: 1px solid black;
 }
+.stoneForm .multi-select,
 .stoneForm .dropdown-container {
   min-width: 11vmax;
   max-width: 11vmax;
@@ -673,12 +674,10 @@ n-trib-action-all {
 .stoneForm .dropdown-content {
   width: -moz-fit-content;
   width: fit-content;
+  font-size: 1rem;
 }
-.stoneForm .dropdown-container input {
-  min-width: 0.8rem;
-  max-width: 1.1rem;
-  min-height: 0.8rem;
-  max-height: 1.1rem;
+.stoneForm .dropdown-container {
+  min-width: unset;
 }
 
 .testFail {
@@ -816,6 +815,25 @@ n-trib-action-all {
   border: 5px solid; 
   padding: 0 1vmax 1vmax 1vmax;
   text-align: center;
+}
+
+.checkboxList input {
+  min-height: 1.5rem;
+  min-width: 1.5rem;
+  color-scheme: light;
+  accent-color: var(--wetasphalt) !important;
+}
+.checkboxList > label {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid lightgray;
+  margin: 0;
+  cursor: pointer;
+}
+.checkboxList > label:where(:hover,:focus-visible) {
+  background-color: var(--wetasphalttrans);
+}
+.checkboxList > label:active {
+  background-color: var(--wetasphalt);
 }
 
 

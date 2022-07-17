@@ -212,11 +212,12 @@ export const OverMenuBar = ({ brancheS, branchON, changeBranch, light }) => {
     flexWrap: 'nowrap',
     alignItems: 'center',
     paddingTop: 'var(--vh)',
-    overflow: 'hidden'
+    overflowY: 'auto',
+    overflowX: 'hidden'
   };
   
   return(
-    <div style={barsty} className={`overMenuBar forceScrollStyle ${light === true ? 'lightTheme' : 'darkTheme'}`}>
+    <div style={barsty} className={`overMenuBar thinScroll ${light === true ? 'lightTheme' : 'darkTheme'}`}>
       <FilterElement
         title='All'
         subTitle='AL'

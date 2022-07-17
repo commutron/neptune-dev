@@ -9,6 +9,7 @@ import SearchHelp from './SearchHelp';
 
 import XDoProCard from './cards/XDoProCard';
 import PartialCard from './cards/PartialCard';
+import EquipCard from './cards/EquipCard';
 import ServiceCard from './cards/ServiceCard';
 
 import BatchesList from './lists/BatchesList';
@@ -20,8 +21,8 @@ const ProductionFindOps = ({
   allxBatch,
   allGroup, allWidget, allVariant,
   user, activeUsers, app, 
-  allEquip,
-  orb, anchor
+  allEquip, allMaint,
+  orb, eqS, anchor
 })=> {
   
   function groupActiveWidgets(gId) {
@@ -59,13 +60,21 @@ const ProductionFindOps = ({
     return allVariant.find(x => x.versionKey === vKey);
   }
   
+  function linkedEquip() {
+    return allEquip.find(x => x.service?.find(y => y.serveKey === eqS));
+  }
+  
+  function maintDataByKey() {
+    return allMaint.find(x => x.serveKey === eqS);
+  }
+  
   if(!orb) {
     Session.set('nowBatch', false);
     return (
       <ProWindow app={app}>
         <div className='balancer gapsR gapsC wide space'>
           <QuickRecent user={user} />
-          <ServiceCard equipData={allEquip} />
+          <EquipCard equipData={allEquip} maintainData={allMaint} />
           <SearchHelp />
         </div>
       </ProWindow>
@@ -186,6 +195,36 @@ const ProductionFindOps = ({
     }
   }
 
+// Maintain
+  if(orb?.startsWith('Eq')) {
+    let eqData = linkedEquip();
+    if(eqData) {
+      Session.set('nowBatch', false);
+      Session.set('nowInstruct', eqData.instruct);
+      let maintData = maintDataByKey();
+      return (
+        <ProWrap
+          batchData={false}
+          itemData={false}
+          user={user}
+          users={activeUsers}
+          app={app}
+          defaultWide={true}
+          eqAlias={eqData.alias}
+        >
+          <ServiceCard
+            eqData={eqData}
+            maintData={maintData}
+            user={user}
+            users={activeUsers}
+          />
+          <WikiOps 
+            root={app.instruct} 
+            anchor={anchor} />
+        </ProWrap>
+      );
+    }
+  }
 // Group
   if(isNaN(orb)) {
     let alias = groupAlias();
@@ -221,6 +260,7 @@ const ProductionFindOps = ({
         <div className='balancer gapsR gapsC wide space'>
           <PartialCard orb={orb} />
           <QuickRecent user={user} />
+          <EquipCard equipData={allEquip} maintainData={allMaint} />
           <SearchHelp />
         </div>
       </ProWindow>
@@ -230,12 +270,13 @@ const ProductionFindOps = ({
   Session.set('nowBatch', false);
 	return(
 	  <ProWindow app={app}>
+	    <div className='centreText wide'>
+        <i className='biggest'>¯\_(ツ)_/¯</i><br />
+        <n-sm>No Match</n-sm>
+      </div>
       <div className='balancer gapsR gapsC wide space'>
-        <span className='vmargin spacehalf centreText'>
-          <i className='biggest'>¯\_(ツ)_/¯</i><br />
-          <n-sm>No Match</n-sm>
-        </span>
         <QuickRecent user={user} />
+        <EquipCard equipData={allEquip} maintainData={allMaint} />
         <SearchHelp />
       </div>
     </ProWindow>

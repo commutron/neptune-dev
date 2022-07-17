@@ -103,6 +103,7 @@ const TerminalWrap = ({
     <div className='pro_100 containerPro'>
       <ToastContainer
         position="top-center"
+        theme='colored'
         newestOnTop />
       <div className='tenHeader'>
         <div className='topBorder' />

@@ -11,8 +11,8 @@ import ProductionFindOps from './ProductionFindOps';
 
 const ProdData = ({
   coldReady, hotReady,
-  orb, anchor, user, org, users, app,
-  allEquip,
+  orb, eqS, anchor, user, org, users, app,
+  allEquip, allMaint,
   allGroup, allWidget, allVariant,
   allxBatch,
   hotxBatch, hotxSeries, hotxRapids
@@ -34,12 +34,14 @@ const ProdData = ({
   return (
     <ProductionFindOps
       orb={orb}
+      eqS={eqS}
       anchor={anchor}
       user={user}
       org={org}
       activeUsers={activeUsers}
       app={app}
       allEquip={allEquip}
+      allMaint={allMaint}
       allGroup={allGroup}
       allWidget={allWidget}
       allVariant={allVariant}
@@ -55,6 +57,7 @@ const ProdData = ({
 export default withTracker( () => {
 
   const orb = Session.get('now');
+  const eqS = Session.get('nowSV');
   
   let login = Meteor.userId() ? true : false;
   let user = login ? Meteor.user() : false;
@@ -68,7 +71,8 @@ export default withTracker( () => {
   
   let keyMatch = false;
   let subBatch = false;
-    
+  let subMaint = false;
+  
   if( coldSub && !subBatch ) {
     
     if( Pref.regex5.test(orb) ) {
@@ -96,13 +100,16 @@ export default withTracker( () => {
       }else{
         subBatch = orb;
       }
+    }else if(orb?.startsWith('Eq')) {
+      subMaint = eqS;
     }else{
       null;
     }
   }
 
-  const hotSub = Meteor.subscribe('hotDataPlus', subBatch, keyMatch);
-  
+  const hotSub = subMaint ? Meteor.subscribe('hotMaint', subMaint) :
+                  Meteor.subscribe('hotDataPlus', subBatch, keyMatch);
+
   if( !login ) {
     return {
       coldReady: false,
@@ -119,12 +126,14 @@ export default withTracker( () => {
       coldReady: coldSub.ready(),
       hotReady: hotSub.ready(),
       orb: orb,
+      eqS: eqS,
       anchor: Session.get( 'nowWanchor' ),
       user: user,
       org: org,
       users: Meteor.users.find( {}, { sort: { username: 1 } } ).fetch(),
       app: AppDB.findOne({org: org}),
       allEquip: EquipDB.find( {}, { sort: { alias: 1 } } ).fetch(),
+      allMaint: MaintainDB.find( {}, { sort: { name: -1 } } ).fetch(),
       allGroup: GroupDB.find( {}, { sort: { group: 1 } } ).fetch(),
       allWidget: WidgetDB.find( {}, { sort: { widget: 1 } } ).fetch(),
       allVariant: VariantDB.find( {} ).fetch(),

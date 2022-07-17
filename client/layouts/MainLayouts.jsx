@@ -21,7 +21,7 @@ export const SplashLayout = ({content, title}) => (
 );
 
 export const CleanLayout = ({content}) => ( 
-  <ErrorCatch> {content} </ErrorCatch> 
+  <ErrorCatch> {content} </ErrorCatch>
 );
 
 export const PlainFrame = ({ title, tag, container, noToast, children })=> (
@@ -30,6 +30,7 @@ export const PlainFrame = ({ title, tag, container, noToast, children })=> (
       {!noToast &&
         <ToastContainer
           position="top-center"
+          theme='colored'
           newestOnTop
         />
       }

@@ -2,7 +2,7 @@ import React , { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import Pref from '/client/global/pref.js';
 
-import MultiSelect from "react-multi-select-component";
+import { MultiSelect } from "react-multi-select-component";
 import ModelSmall from '/client/components/smallUi/ModelSmall';
 
 const EquipEmailsManager = ({ id, stewards, users })=> {
@@ -13,7 +13,7 @@ const EquipEmailsManager = ({ id, stewards, users })=> {
     <ModelSmall
       button={`${Pref.steward}s`}
       title={`Set ${Pref.steward}s`} 
-      color='grayT'
+      color='midnightblueT'
       icon='fa-users-gear'
       lock={!access}
       primeTopRight={true}>
@@ -31,7 +31,7 @@ export default EquipEmailsManager;
 
 const EquipEmails = ({ id, stewards, users })=> {
   
-  const [ eList, eListSet ] = useState( [] );
+  const [ eList, eListSet ] = useState( [ { label: 'name', value: 'name' } ] );
   const [ emails, emailSet ] = useState( [] );
 
   useEffect( ()=>{

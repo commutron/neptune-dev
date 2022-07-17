@@ -52,7 +52,7 @@ const XFormBar = ({
   };
   
   return(
-    <div className='darkTheme proActionForm forceScrollStyle'>
+    <div className='darkTheme proActionForm thinScroll'>
       {showItem && !lockOutAll ?
         <div style={tgsty}>
           {action === 'xBatchBuild' ? null :
@@ -96,7 +96,7 @@ const XFormBar = ({
           caution={caution}
           radioactive={radioactive}
           holding={b.hold}>
-        {!srs ?
+        {b && !srs ?
           <p className='whiteT centreText wide'>
             <em>{Pref.nonCon}, {Pref.shortfall}, and {Pref.trackFirst} require a {Pref.series}</em>
           </p>
@@ -154,12 +154,12 @@ const FormToggle = ({
     margin: '0 1vmin',
     fontSize: '30px',
     width: '45px',
-    height: '45px'
+    minHeight: '45px'
   };
 
   const svgsty = {
     width: '30px',
-    height: '30px'
+    minHeight: '30px'
   };
   
   return(
