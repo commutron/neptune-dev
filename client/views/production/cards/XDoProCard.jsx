@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect, Fragment } from 'react';
+import React, { useState, useLayoutEffect, Fragment } from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
 
@@ -19,31 +19,25 @@ import XBatchCard from './XBatchCard';
 
 const XDoProCard = ({ 
   itemData, seriesData, batchData, rapidsData,
-  widgetData, groupData,
-  user, users, app, 
+  widgetData,
+  user, users, 
+  brancheS, app, 
   
-  ncTypesCombo, tideKey,
+  tideKey, etPro,
+  //ncTypesCombo,
   
-  tideFloodGate,
-  expand, handleExpand,
+  timeOpen,
+  expand,
+  //handleExpand,
   
   showVerifyState, 
   optionVerify,
   handleVerify
 })=> {
-  
-  const [ brancheState, brancheSortSet ] = useState([]);
 
   const [ flowData, flowDataSet ] = useState(false);
   const [ fallData, fallDataSet ] = useState(false);
   const [ rapidData, rapidDataSet ] = useState(false);
-  
-  useEffect( ()=>{
-    const branches = app.branches.filter( b => b.open === true );
-    const branchesSort = branches.sort((b1, b2)=>
-          b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 );
-     brancheSortSet(branchesSort);
-  }, [app]);
   
   useLayoutEffect( ()=> {
     const getFlowData = HeadWater(batchData, seriesData, widgetData, itemData);
@@ -94,7 +88,7 @@ const XDoProCard = ({
   const rapid = !rapidData.rapIs ? rapidData.rapDo :
                   rapidData.rapDo._id === rapidData.rapIs.rapId ? rapidData.rapDo : false;
   
-  tideFloodGate && rapid && rapid.instruct && Session.set('nowInstruct', rapid.instruct);
+  timeOpen && rapid && rapid.instruct && Session.set('nowInstruct', rapid.instruct);
   
   let useFlow = !itemData ? [] :
                 itemData.completed ? 
@@ -127,9 +121,10 @@ const XDoProCard = ({
             shortfallS={shortfallS}
             scrap={scrapCheck}
             ancOptionS={ancOptionS}
-            brancheS={brancheState}
+            brancheS={brancheS}
             tideKey={tideKey}
-            tideFloodGate={tideFloodGate} />;
+            timeOpen={timeOpen}
+            etPro={etPro} />;
   
   const insertAxion =
           <ReleaseAction 
@@ -170,7 +165,7 @@ const XDoProCard = ({
             app={app}
             userSpeed={user.unlockSpeed}
             users={users}
-            brancheS={brancheState}
+            brancheS={brancheS}
             useFlow={useFlow}
             flowCounts={flowData.flowCounts}
             altIs={altIs}
@@ -179,7 +174,6 @@ const XDoProCard = ({
             rapIs={rapidData.rapIs}
             shortfallS={shortfallS}
             scrapCheck={scrapCheck}
-            showVerifyState={showVerifyState}
             optionVerify={optionVerify}
             handleVerify={handleVerify} />;
             
@@ -189,7 +183,7 @@ const XDoProCard = ({
             seriesId={seriesData && seriesData._id}
             itemData={itemData}
             flowFirsts={flowFirsts}
-            brancheS={brancheState}
+            brancheS={brancheS}
             app={app}
             users={users}
             optionVerify={optionVerify}
@@ -202,7 +196,7 @@ const XDoProCard = ({
             bClosed={bClosed}
             user={user}
             app={app}
-            brancheS={brancheState}
+            brancheS={brancheS}
             ancOptionS={ancOptionS}
             floorReleased={fallData.floorRel}
             srange={flowData.srange}
@@ -210,11 +204,13 @@ const XDoProCard = ({
             fallCounts={fallData.fallCounts}
             rapidData={rapidData}
             tideKey={tideKey}
-            tideFloodGate={tideFloodGate}
+            timeOpen={timeOpen}
+            etPro={etPro}
             expand={expand}
             flowwater={itemData}
             fallwater={fallAction && !itemData} />;
   
+  const openTideGate = timeOpen && etPro;
   
   return(
     <Fragment>
@@ -223,7 +219,7 @@ const XDoProCard = ({
     
       !itemData ? // @ Batch
         
-        !tideFloodGate ? insertTideWall : // @ Locked
+        !openTideGate ? insertTideWall : // @ Locked
           
           !fallData.floorRel ? insertAxion : // @ Release
           
@@ -234,7 +230,7 @@ const XDoProCard = ({
               null
     : // @ Item
       
-      !tideFloodGate ? insertTideWall : // @ Locked
+      !openTideGate ? insertTideWall : // @ Locked
         
         !flowAction || ( iComplete && !rapidData.rapIs ) ? insertItemCard : // @ Rest
           
@@ -244,7 +240,7 @@ const XDoProCard = ({
     }
       
   	{!showVerifyState &&  // Toggled and No First Form
-  	  ( ( !bOpen && !tideFloodGate ) || ( bClosed && tideFloodGate ) || expand ) ?
+  	  ( ( !bOpen && !openTideGate ) || ( bClosed && openTideGate ) || expand ) ?
 
         insertBatchCard /* Batch Tab Info */ 
         

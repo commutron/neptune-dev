@@ -20,7 +20,8 @@ const ProductionFindOps = ({
   hotxBatch, hotxSeries, hotxRapids,
   allxBatch,
   allGroup, allWidget, allVariant,
-  user, activeUsers, app, 
+  user, time, app, 
+  activeUsers, brancheS, 
   allEquip, allMaint,
   orb, eqS, anchor
 })=> {
@@ -127,7 +128,6 @@ const ProductionFindOps = ({
     if(hotxBatch) {
       let widget = linkedWidget(hotxBatch.widgetId);
       let variant = variantDataByKey(hotxBatch.versionKey);
-      let group = linkedGroup(hotxBatch.groupId);
       Session.set('nowInstruct', variant.instruct);
       return (
 		    <ProWrap
@@ -136,6 +136,7 @@ const ProductionFindOps = ({
 		      widgetData={widget}
 		      radioactive={variant.radioactive}
           user={user}
+          time={time}
           app={app}
           action='xBatchBuild'
         >
@@ -144,8 +145,8 @@ const ProductionFindOps = ({
             seriesData={hotxSeries}
             rapidsData={hotxRapids}
             widgetData={widget}
-            groupData={group}
             user={user}
+            brancheS={brancheS}
             app={app} />
           <WikiOps 
             root={app.instruct}
@@ -161,7 +162,6 @@ const ProductionFindOps = ({
       let item = itemData(hotxSeries.items, orb);
       let widget = linkedWidget(hotxSeries.widgetId);
       let variant= variantDataByKey(hotxSeries.versionKey);
-      let group = linkedGroup(hotxSeries.groupId);
       Session.set('nowInstruct', variant.instruct);
       return (
         <ProWrap
@@ -173,6 +173,7 @@ const ProductionFindOps = ({
           widgetData={widget}
           radioactive={variant.radioactive}
           user={user}
+          time={time}
           users={activeUsers}
           app={app}
           action='xItemBuild'
@@ -183,9 +184,9 @@ const ProductionFindOps = ({
             rapidsData={hotxRapids}
             itemData={item}
             widgetData={widget}
-            groupData={group}
             user={user}
             users={activeUsers}
+            brancheS={brancheS}
             app={app} />
           <WikiOps
             root={app.instruct}
@@ -207,16 +208,17 @@ const ProductionFindOps = ({
           batchData={false}
           itemData={false}
           user={user}
+          time={time}
           users={activeUsers}
           app={app}
           defaultWide={true}
           eqAlias={eqData.alias}
+          maintId={maintData._id}
         >
           <ServiceCard
             eqData={eqData}
             maintData={maintData}
-            user={user}
-            users={activeUsers}
+            brancheS={brancheS}
           />
           <WikiOps 
             root={app.instruct} 

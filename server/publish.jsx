@@ -9,11 +9,12 @@ BatchDB = new Mongo.Collection('batchdb');//X.LEGACY.X\\
 XBatchDB = new Mongo.Collection('xbatchdb');
 XSeriesDB = new Mongo.Collection('xseriesdb');
 XRapidsDB = new Mongo.Collection('xrapidsdb');
-TraceDB = new Mongo.Collection('tracedb');
 
 EquipDB = new Mongo.Collection('equipdb');
 MaintainDB = new Mongo.Collection('maintaindb');
 
+TimeDB = new Mongo.Collection('timedb');
+TraceDB = new Mongo.Collection('tracedb');
 CacheDB = new Mongo.Collection('cachedb');
 EmailDB = new Mongo.Collection('emaildb');
 
@@ -30,7 +31,7 @@ Meteor.publish('loginData', function(){
       AppDB.find({orgKey: orgKey}, 
         {fields: { 
           'timeClock': 1
-        }}),
+        }})
       ];
   }else{
     return this.ready();
@@ -46,7 +47,8 @@ Meteor.publish('selfData', function(){
         {fields: {
           'services': 0,
           'orgKey': 0
-        }})
+      }}),
+      TimeDB.find({who: this.userId, stopTime: false})
     ];
   }
 });

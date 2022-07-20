@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './style.css';
 import Pref from '/client/global/pref.js';
-import TideLock from '/client/components/tide/TideLock';
+import TideFormLock from '/client/components/tide/TideFormLock';
 
 import NCAdd from '/client/components/riverX/NCAdd';
 import NCFlood from '/client/components/riverX/NCFlood';
@@ -9,14 +9,14 @@ import ShortAdd from '/client/components/riverX/ShortAdd';
 
 const XFormBar = ({ 
   batchData, seriesData, itemData, rapIs, widgetData, radioactive,
-  tideFloodGate, ncTypesCombo, 
+  timeOpen, ncTypesCombo, 
   action, showVerifyState, handleVerify, 
   user, users, app 
 })=> {
   
   const [ show, showSet ] = useState('NC');
   
-  function handleDone(e) {
+  function handleDone() {
     showSet( 'NC' );
     this.ncselect.checked = true;
     if(user.shFocusReset) {
@@ -38,7 +38,7 @@ const XFormBar = ({
   const pastRF = srs && srs.shortfall ? [...new Set( Array.from(srs.shortfall, x => x.refs.toString() ) )] : [];
   
   const verAuth = Roles.userIsInRole(Meteor.userId(), 'verify');
-  const lockOutAll = !tideFloodGate || !b.live;
+  const lockOutAll = !timeOpen || !b.live;
   
   const caution = b && b.releases.findIndex( x => 
                     x.type === 'floorRelease' && x.caution !== false) >= 0;
@@ -90,8 +90,8 @@ const XFormBar = ({
         </div>
       : null}
       <div style={{flexGrow: '2'}}>
-        <TideLock 
-          currentLive={tideFloodGate && b.live} 
+        <TideFormLock 
+          currentLive={timeOpen && b.live} 
           message={true} 
           caution={caution}
           radioactive={radioactive}
@@ -118,7 +118,7 @@ const XFormBar = ({
                 pastPN={pastPN}
                 pastRF={pastRF}
                 app={app}
-                doneClose={(e)=>handleDone(e)} />
+                doneClose={()=>handleDone()} />
             : null
         : null
         }
@@ -131,7 +131,7 @@ const XFormBar = ({
             app={app}
             ncTypesCombo={ncTypesCombo} />
         : null}
-        </TideLock>
+        </TideFormLock>
       </div>
     </div>
   );

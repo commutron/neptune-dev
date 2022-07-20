@@ -5,7 +5,7 @@ import './style.css';
         
 const TideSwitch = ({ 
   batchID, tideKey, 
-  tideFloodGate, tideLockOut,
+  timeOpen, tideLockOut,
   taskState, subtState, lockTaskSet
 })=> {
   
@@ -58,7 +58,7 @@ const TideSwitch = ({
     }, 1500);
   }
   
-  if(tideKey && !tideFloodGate) {
+  if(tideKey && !timeOpen) {
     
     const disable = lock || tideLockOut || !taskState || subtState === false;
   

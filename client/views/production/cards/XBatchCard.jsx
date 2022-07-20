@@ -13,9 +13,11 @@ import BlockList from '/client/components/bigUi/BlockList';
 
 const BatchCardX = ({
   batchData, bOpen, bClosed, rapidData,
-  user, app, brancheS, ancOptionS,
-  floorReleased, srange, flowCounts, fallCounts,
-  tideKey, tideFloodGate, 
+  // user,
+  app, brancheS, ancOptionS,
+  // floorReleased, 
+  srange, flowCounts, fallCounts,
+  tideKey, timeOpen, etPro,
   expand, flowwater, fallwater
 })=> {
   
@@ -33,7 +35,8 @@ const BatchCardX = ({
             ancOptionS={ancOptionS}
             brancheS={brancheS}
             tideKey={tideKey}
-            tideFloodGate={tideFloodGate} />;
+            timeOpen={timeOpen}
+            etPro={etPro} />;
             
   const insertMiniInfo = 
           <MiniInfo
@@ -60,12 +63,12 @@ const BatchCardX = ({
           </div>;
   
   if( ( expand && !bOpen ) || 
-      ( tideFloodGate && expand && !flowwater && !fallwater ) ) {
+      ( ( timeOpen && etPro ) && expand && !flowwater && !fallwater ) ) {
     return(
       <Fragment>   
         <div className='proPrimeSingle'>
      
-          {tideFloodGate && bOpen && insertTideBump}
+          { ( timeOpen && etPro ) && bOpen && insertTideBump}
       
           {insertMiniInfo}
           
@@ -83,7 +86,7 @@ const BatchCardX = ({
   return(
     <div className='proPrimeSingle'>
       
-      {tideFloodGate && bOpen && insertTideBump}
+      { ( timeOpen && etPro ) && bOpen && insertTideBump}
           
       <Tabs
         tabs={[

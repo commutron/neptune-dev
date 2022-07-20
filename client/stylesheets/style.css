@@ -13,7 +13,7 @@ input::-webkit-calendar-picker-indicator {
 .logoSVG {
   width: 2.5rem;
 }
-.logoSVG:hover, .logoSVG:active {
+.logoSVG:where(:hover,:active) {
   animation: spinAround 1s infinite linear;
 }
 @media screen and (prefers-reduced-motion: reduce) { 
@@ -21,14 +21,14 @@ input::-webkit-calendar-picker-indicator {
     animation: fadeIn 3s 1 linear;
   }
 }
-.logoSVG:hover svg, .logoSVG:active svg {
+.logoSVG:where(:hover,:active) svg {
   fill: var(--neptuneColor);
 }
 
 .moveLR {
   color: black;
 }
-.moveLR:hover, .moveLR:active {
+.moveLR:where(:hover,:active) {
   color: white;
   background-color: black;
 }
@@ -182,10 +182,8 @@ input::-webkit-calendar-picker-indicator {
 .blackList:nth-child(even) {
   background-color: rgb(40, 40, 40);
 }
-.blackList:nth-child(odd):hover,
-.blackList:nth-child(odd):active,
-.blackList:nth-child(even):hover,
-.blackList:nth-child(even):active {
+.blackList:nth-child(odd):where(:hover,:active),
+.blackList:nth-child(even):where(:hover,:active) {
   background-color: rgb(50,50,50);
 }
 

@@ -7,7 +7,7 @@ import { ScanListenerUtility, ScanListenerOff } from '/client/utility/ScanListen
 import HomeIcon from './HomeIcon';
 import FindBox from './FindBox';
 
-import TideControl from '/client/components/tide/TideControl/TideControl';
+import TimeStop from '/client/components/tide/TimeStop';
 import TideFollow from '/client/components/tide/TideFollow';
 import XFormBar from '/client/components/bigUi/ToolBar/XFormBar';
 import { NonConMerge } from '/client/utility/NonConOptions';
@@ -15,7 +15,8 @@ import { NonConMerge } from '/client/utility/NonConOptions';
 export const ProWrap = ({ 
   itemSerial, itemData, batchData, seriesData, rapidsData,
   widgetData, radioactive, groupAlias, 
-  user, users, app, defaultWide, eqAlias,
+  user, time, users, app, defaultWide, 
+  eqAlias, maintId,
   action, tideLockOut, standAlone,
   children
 })=> {
@@ -100,11 +101,13 @@ export const ProWrap = ({
   const bData = batchData;
   const append = bData && itemSerial ? bData.batch : null;
   
-  const et = !user || !user.engaged ? false : user.engaged.tKey;
-  const tide = !bData || !bData.tide ? [] : bData.tide;
-  const tideFloodGate = tide.find( 
-    x => x.tKey === et && x.who === Meteor.userId() 
-  );
+  const eng = user?.engaged || false;
+  const etKey = eng?.tKey;
+  const etPro = eng?.task === 'PROX';
+  const timeOpen = etPro ? 
+                    (bData?.tide || []).find( x => 
+                      x.tKey === etKey && x.who === Meteor.userId() )
+                   : time?._id === etKey && time?.link === maintId ? time : null;
     
   const exploreLink = itemSerial && bData ?
                       '/data/batch?request=' + bData.batch + '&specify=' + itemSerial :
@@ -118,7 +121,7 @@ export const ProWrap = ({
 
   const viewContainer = standAlone ? 'pro_100' :
                         !expand ? 'pro_20_80' : 
-                                         'pro_40_60';
+                                    'pro_40_60';
                         
   return(
     <div className={viewContainer + ' containerPro'}>
@@ -129,15 +132,16 @@ export const ProWrap = ({
       <div className='tenHeader'>
         <div className='topBorder' />
         <HomeIcon />
-        {bData && 
+        {bData || etKey ? 
           <div className='proLeft'>
-            <TideControl 
-              batchID={bData._id} 
-              tideKey={et} 
-              tideFloodGate={tideFloodGate}
+            <TimeStop
+              tIdKey={etKey}
+              timeOpen={timeOpen}
+              etPro={etPro}
               tideLockOut={tideLockOut}
-              stopOnly={true} />
-          </div>}
+            />
+          </div>
+        : null}
         {itemSerial && isFirst ?
           <div className='auxLeft firstBadge' data-steps={isFirst}>
             <span className='fa-stack'>
@@ -166,12 +170,14 @@ export const ProWrap = ({
         <div className='proPrime forceScrollStyle darkTheme'>
           {React.cloneElement(children[0],
             { 
-              tideKey: et,
-              ncTypesCombo: ncTypesComboFlat,
+              tideKey: etKey,
+              etPro: etPro,
+              timeOpen: timeOpen,
               
-              tideFloodGate: tideFloodGate,
               expand: expand, 
               handleExpand: (d)=>handleExpand(d),
+              
+              ncTypesCombo: ncTypesComboFlat,
               
               showVerifyState: showVerifyState,
               optionVerify: optionVerify,
@@ -199,7 +205,7 @@ export const ProWrap = ({
           widgetData={widgetData}
           radioactive={radioactive}
           
-          tideFloodGate={tideFloodGate}
+          timeOpen={timeOpen}
           ncTypesCombo={ncTypesComboFlat}
           action={action}
           showVerifyState={showVerifyState}

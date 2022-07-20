@@ -183,7 +183,7 @@
   outline: 1px dotted;
 }
 
-.activeIndicator:focus-visible, .activeIndicator:active {
+.activeIndicator:where(:focus-visible,:active) {
   outline: dotted;  
 }
 

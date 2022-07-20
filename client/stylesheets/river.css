@@ -84,12 +84,8 @@ button.stoneExtra {
   min-width: 100%;
   color: var(--asbestos);
 }
-.riverPath:hover,
-.riverPath:focus,
-.riverPath:active,
-.stoneComm:hover > button,
-.stoneComm:focus > button,
-.stoneComm:active > button {
+.riverPath:where(:hover,:focus,:active),
+.stoneComm:where(:hover,:focus,:active) > button {
   color: var(--silver);
 }
 
@@ -153,9 +149,9 @@ button.stoneExtra {
   cursor: pointer;
 }
 
-.stone:focus, .stone:hover,
-.crackedTop:focus, .crackedTop:hover, 
-.crackedBot:focus, .crackedBot:hover { 
+.stone:where(:focus,:hover),
+.crackedTop:where(:focus,:hover), 
+.crackedBot:where(:focus,:hover) { 
   background-color: var(--high-color); 
 }
 
@@ -244,33 +240,33 @@ button.stoneExtra {
   filter: grayscale(75%);
 }
 
-.doneStoneMask:before,
-.blockStone:before,
-.authBanMask:before {
+.doneStoneMask::before,
+.blockStone::before,
+.authBanMask::before {
   text-align: center;
   text-shadow: 1px 1px black;
   position: absolute;
   top: 50%;
   padding: 1vh 1vw;
 }
-.doneStoneMask:before,
-.authBanMask:before {
+.doneStoneMask::before,
+.authBanMask::before {
   left: 50%;
   transform: translate(-50%, -50%) rotate(0deg);
   filter: opacity(0.2);
 }
 
-.doneStoneMask:before {
+.doneStoneMask::before {
   content: 	"\002714";
   font-size: calc(3rem + 8vmax);
 }
 
-.authBanMask:before {
+.authBanMask::before {
   content: 	"\1F6C7";
   font-size: calc(6rem + 8vmax);
 }
 
-.blockStone:before {
+.blockStone::before {
   content: 'All noncons and shortages must be resolved';
   font-size: calc(0.5rem + 1vmin);
   left: 0;
@@ -307,7 +303,7 @@ button.stoneExtra {
   background-color: var(--pomegranate);
   --high-color: var(--alizarin);
 }
-.crackedBot:hover, .crackedBot:active { z-index: 2; }
+.crackedBot:where(:hover,:active) { z-index: 2; }
 
 .nestBox {
   padding: 3vh 1vw;
@@ -365,7 +361,7 @@ button.stoneExtra {
 .riverNG {
   background-color: var(--pomegranate);
 }
-.riverNG:hover, .riverNG:active {
+.riverNG:where(:hover,:active) {
   background-color: var(--alizarin);
 }
 
@@ -479,7 +475,7 @@ n-trib-action-all > button {
   background-position: 0% 0%;
   background-size: 50%;
 }
-n-trib-action-main > button:after {
+n-trib-action-main > button::after {
   content: attr(data-name);
   position: relative;
   z-index: 2;
@@ -487,7 +483,7 @@ n-trib-action-main > button:after {
   bottom: -20%;
 }
 
-n-trib-action-main > button:after,
+n-trib-action-main > button::after,
 n-trib-action-main > span > i {
   font-size: calc( 0.5rem + 0.5vmin);
 }
@@ -739,12 +735,12 @@ n-trib-action-all {
   background-color: var(--high-color);
   color: white;
 }
-.firstBad:hover, .firstBad:focus, .firstBad:active,
-.firstGood:hover, .firstGood:focus, .firstGood:active,
-.reInspect:hover, .reInspect:focus, .reInspect:active,
-.reTest:hover, .reTest:focus, .reTest:active,
-.reFail:hover, .reFail:focus, .reFail:active,
-.reBy:hover, .reBy:focus, .reBy:active {
+.firstBad:where(:hover,:focus,:active),
+.firstGood:where(:hover,:focus,:active),
+.reInspect:where(:hover,:focus,:active),
+.reTest:where(:hover,:focus,:active),
+.reFail:where(:hover,:focus,:active),
+.reBy:where(:hover,:focus,:active) {
   border-color: var(--high-color);
   box-shadow: 
     0 0 0 3px white,

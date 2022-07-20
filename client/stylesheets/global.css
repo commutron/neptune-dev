@@ -85,9 +85,6 @@ a {
   border: 1px dotted transparent;
   color: var(--neptuneColor);
 }
-a > n-fa0 {
-  color: var(--neptuneColor);
-}
 
 a:where(:link,:visited) {
   text-decoration: none;
@@ -256,11 +253,11 @@ textarea {
   border-color: inherit;
 }
 
-input:focus, input:active {
+input:where(:focus,:active) {
   border-bottom-color: var(--neptuneColor);
 }
-select:focus, select:active,
-textarea:focus, textarea:active {
+select:where(:focus,:active),
+textarea:where(:focus,:active) {
   border-color: var(--neptuneColor);
 }
 
@@ -331,8 +328,7 @@ summary {
 summary:hover {
   filter: brightness(1.1);
 }
-summary:focus,
-summary:active {
+summary:where(:focus,:active) {
   outline: 1px dashed;
   outline-offset: 1px;
 }

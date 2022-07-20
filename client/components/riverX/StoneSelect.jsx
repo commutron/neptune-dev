@@ -28,7 +28,6 @@ const StoneSelect = ({
   flowCounts,
   app,
   
-  showVerifyState,
   optionVerify,
   handleVerify,
   

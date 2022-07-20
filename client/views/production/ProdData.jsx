@@ -1,4 +1,4 @@
-import React, { useLayoutEffect} from 'react';
+import React, { useLayoutEffect, useMemo } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import Pref from '/client/global/pref.js';
@@ -11,7 +11,7 @@ import ProductionFindOps from './ProductionFindOps';
 
 const ProdData = ({
   coldReady, hotReady,
-  orb, eqS, anchor, user, org, users, app,
+  orb, eqS, anchor, user, time, org, users, app,
   allEquip, allMaint,
   allGroup, allWidget, allVariant,
   allxBatch,
@@ -22,23 +22,32 @@ const ProdData = ({
     InboxToastPop(user);
   }, [user]);
   
-
+  const activeUsers = useMemo( ()=> users?.filter( x => 
+                        Roles.userIsInRole(x._id, 'active') === true &&
+                        Roles.userIsInRole(x._id, 'readOnly') === false),
+                        [users]);
+  
+  const brancheS = useMemo( ()=> app?.branches
+          .filter( b => b.open === true )
+          .sort((b1, b2)=>
+            b1.position < b2.position ? 1 : 
+            b1.position > b2.position ? -1 : 0 
+        ), [app]);
+  
   if( !coldReady || !hotReady || !user || !app ) {
     return( <SpinWrap /> );
   }
   
-  const activeUsers = users.filter( x => 
-                        Roles.userIsInRole(x._id, 'active') === true &&
-                        Roles.userIsInRole(x._id, 'readOnly') === false);
-    
   return (
     <ProductionFindOps
       orb={orb}
       eqS={eqS}
       anchor={anchor}
       user={user}
+      time={time}
       org={org}
       activeUsers={activeUsers}
+      brancheS={brancheS}
       app={app}
       allEquip={allEquip}
       allMaint={allMaint}
@@ -131,6 +140,7 @@ export default withTracker( () => {
       user: user,
       org: org,
       users: Meteor.users.find( {}, { sort: { username: 1 } } ).fetch(),
+      time: TimeDB.findOne({stopTime: false}),
       app: AppDB.findOne({org: org}),
       allEquip: EquipDB.find( {}, { sort: { alias: 1 } } ).fetch(),
       allMaint: MaintainDB.find( {}, { sort: { name: -1 } } ).fetch(),

@@ -2,8 +2,8 @@ import React, { useEffect, Fragment } from 'react';
 import { toast } from 'react-toastify';
 import Pref from '/client/global/pref.js';
         
-const TideLock = ({ 
-  currentLive, classSty, children, 
+const TideFormLock = ({ 
+  currentLive, children, 
   message, caution, radioactive, holding
 })=> {
   
@@ -52,7 +52,7 @@ const TideLock = ({
   
   if(!currentLive) {
     return(
-      <fieldset disabled={true} className={classSty || ''} style={sty}>
+      <fieldset disabled={true} style={sty}>
         <Fragment>
           {children}
         </Fragment>
@@ -68,4 +68,4 @@ const TideLock = ({
   }
 };
 
-export default TideLock;
+export default TideFormLock;

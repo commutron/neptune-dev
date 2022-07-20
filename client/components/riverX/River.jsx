@@ -8,7 +8,7 @@ const River = ({
   app, userSpeed, users, brancheS,
   useFlow, flowCounts,
   shortfallS, scrapCheck,
-  showVerifyState, optionVerify, handleVerify
+  optionVerify, handleVerify
 })=> {
   
   const thingMounted = useRef(true);
@@ -55,7 +55,6 @@ const River = ({
         userSpeed={userSpeed}
         users={users}
         
-        showVerifyState={showVerifyState}
         optionVerify={optionVerify}
         handleVerify={handleVerify}
         

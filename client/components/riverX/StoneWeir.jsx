@@ -24,7 +24,6 @@ const StoneWeir = ({
   userSpeed,
   users,
   
-  showVerifyState,
   optionVerify,
   handleVerify,
   
@@ -80,7 +79,6 @@ const StoneWeir = ({
       flowCounts={flowCounts}
       app={app}
       
-      showVerifyState={showVerifyState}
       optionVerify={optionVerify}
       handleVerify={handleVerify}
       

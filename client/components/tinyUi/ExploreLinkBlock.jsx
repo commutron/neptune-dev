@@ -14,7 +14,7 @@ const ExploreLinkBlock = ({ type, keyword, altName, wrap, rad })=>{
                 : '';
   const noWrap = wrap ? '' : 'noWrap';
   return(                    
-    <a href={link} className={noWrap + ' numFont'} 
+    <a href={link} className={noWrap + ' numFont blueT'} 
     >{rad ? <n-fa1 class='smplTip' data-tip={rad}>
               <i className='fa-solid fa-burst fa-fw noPrint darkOrangeT'></i>
             </n-fa1>

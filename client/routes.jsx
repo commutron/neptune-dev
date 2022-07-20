@@ -42,6 +42,7 @@ XRapidsDB = new Mongo.Collection('xrapidsdb');
 EquipDB = new Mongo.Collection('equipdb');
 MaintainDB = new Mongo.Collection('maintaindb');
 
+TimeDB = new Mongo.Collection('timedb');
 CacheDB = new Mongo.Collection('cachedb');
 TraceDB = new Mongo.Collection('tracedb');
 

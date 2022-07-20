@@ -11,14 +11,14 @@ const TideWall = ({
   bID, bComplete, bOpen, rapidData,
   itemData, seriesData, shortfallS, altitle, scrap,
   ancOptionS, brancheS,
-  tideKey, tideFloodGate
+  tideKey, timeOpen, etPro
 })=> {
   
-  const [ taskState, taskSet ] = useState( tideFloodGate ? tideFloodGate.task : false );
-  const [ subtState, subtSet ] = useState( tideFloodGate ? tideFloodGate.subtask || false : false );
+  const [ taskState, taskSet ] = useState( timeOpen?.task || false );
+  const [ subtState, subtSet ] = useState( timeOpen?.subtask || false );
   const [ lockTaskState, lockTaskSet ] = useState(false);
  
-  const ctxLabel = tideFloodGate ? 'Set Different Task' : `Set A Task`;
+  const ctxLabel = timeOpen ? 'Set Different Task' : `Set A Task`;
   
   if(!bOpen && bComplete && !rapidData.rapDo ) {
     return null;
@@ -82,13 +82,13 @@ export default TideWall;
 export const TideBump = ({ 
   bID, bOpen,
   ancOptionS, brancheS,
-  tideKey, tideFloodGate
+  tideKey, timeOpen, etPro
 })=> {
   
-  const ctxLabel = tideFloodGate ? 'Set Different Task' : `Set A Task`;
+  const ctxLabel = timeOpen ? 'Set Different Task' : `Set A Task`;
   
-  const [ taskState, taskSet ] = useState( tideFloodGate ? tideFloodGate.task : false );
-  const [ subtState, subtSet ] = useState( tideFloodGate ? tideFloodGate.subtask || false : false );
+  const [ taskState, taskSet ] = useState( timeOpen?.task || false );
+  const [ subtState, subtSet ] = useState( timeOpen?.subtask || false );
   const [ lockTaskState, lockTaskSet ] = useState(false);
   
   if(bOpen) {
@@ -98,7 +98,7 @@ export const TideBump = ({
           <TideSwitch 
             batchID={bID} 
             tideKey={tideKey}
-            tideFloodGate={false}
+            timeOpen={false}
             tideLockOut={false}
             taskState={taskState}
             subtState={subtState}
