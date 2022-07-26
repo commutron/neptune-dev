@@ -6,7 +6,7 @@ import Pref from '/client/global/pref.js';
 import { min2hr, toCap } from '/client/utility/Convert.js';
 
 import TagsModule, { HoldFlag } from '/client/components/bigUi/TagsModule';
-import ModelInline from '/client/components/smallUi/ModelInline';
+import ModelInline from '/client/layouts/Models/ModelInline';
 
 import ReleaseAction from '/client/components/bigUi/ReleasesModule';
 import BlockForm from '/client/components/forms/BlockForm';

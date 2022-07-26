@@ -3,10 +3,11 @@ import React, { useRef, useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 import './style.css';
-        
+import { MultiDivert } from '/client/components/tide/TideControl/TideMulti';
+
 const TideControl = ({ 
-  batchID, tideKey, 
-  tideFloodGate, tideLockOut,
+  batchID, tideKey, engagedPro, engagedMlti,
+  timeOpen, tideLockOut,
   taskState, subtState, stopOnly, lockTaskSet
 })=> {
   
@@ -35,6 +36,20 @@ const TideControl = ({
     };
   }, []);
   
+  const replyCallback = (error, reply)=> {
+    if(error) {
+      console.log(error);
+      toast.error('Rejected by Server');
+    }
+    if(reply === true) {
+      if(thingMounted.current) {
+        setActionID(Random.id());
+        timer();
+        document.getElementById('lookup').focus();
+      }
+    }
+  };
+  
   function handleStart() {
     setLock(true);
     setWorking(true);
@@ -43,38 +58,8 @@ const TideControl = ({
     Meteor.setTimeout( ()=>{
       Meteor.apply('startTideTask', [ batchID, newRndm, taskState, subtState ],
       {wait: true, noRetry: true},
-      (error, reply)=> {
-        if(error) {
-          console.log(error);
-          toast.error('Rejected by Server');
-        }
-        if(reply === true) {
-          if(thingMounted.current) {
-            setActionID(Random.id());
-            timer();
-            document.getElementById('lookup').focus();
-          }
-        }
-      });
-    }, 1500);
-  }
-  function handleStop() {
-    setLock(true);
-    setWorking(true);
-    Meteor.apply('stopTideTask', [ tideKey ], {wait: true, noRetry: true},
-    (error, reply)=> {
-      if(error) {
-        console.log(error);
-        toast.error('Rejected by Server');
-      }
-      if(reply === true) {
-        if(thingMounted.current) {
-          setActionID(Random.id());
-          timer();
-          document.getElementById('lookup').focus();
-        }
-      }
-    });
+      (error, reply)=> replyCallback(error, reply) );
+    }, 1000);
   }
   
   function handleSwitch() {
@@ -83,48 +68,22 @@ const TideControl = ({
     lockTaskSet && lockTaskSet(true);
     let newRndm = actionID;
     Meteor.setTimeout( ()=>{
-      Meteor.apply('switchTideTask', [ tideKey, batchID, newRndm, taskState, subtState ],
+      Meteor.apply('switchTideTask', [ tideKey, engagedPro, batchID, newRndm, taskState, subtState ],
       {wait: true, noRetry: true},
-      (error, reply)=> {
-        if(error) {
-          console.log(error);
-          toast.error('Rejected by Server');
-        }
-        if(reply === true) {
-          if(thingMounted.current) {
-            setActionID(Random.id());
-            timer();
-            document.getElementById('lookup').focus();
-          }
-        }
-      });
-    }, 1500);
-  }
-
-  if(tideKey && tideFloodGate) {
-    return(
-      <button
-        aria-label={`STOP ${Pref.batch}`}
-        className='tideOut'
-        onClick={()=>handleStop()}
-        disabled={lock}
-      >
-      <em>
-        <span className='fa-stack tideIcon'>
-          <i className="fas fa-circle-notch fa-stack-2x fa-spin tideIndicate"></i>
-          <i className="fas fa-stop fa-stack-1x" data-fa-transform="shrink-1"></i>
-        </span> 
-      </em>
-      </button>
-    );
+      (error, reply)=> replyCallback(error, reply) );
+    }, 1000);
   }
   
   const disable = lock || tideLockOut || !taskState || subtState === false;
   
-  if(!tideKey && !tideFloodGate && !stopOnly) {
+  if(engagedMlti) {
+    return <MultiDivert lock={lock} />;
+  }
+  
+  if(!tideKey && !timeOpen && !stopOnly) {
     return(
       <button
-        title={`START ${Pref.batch}`}
+        title={`START ${Pref.xBatch}`}
         className={`tideIn ${working ? 'startWork' : ''}`}
         onClick={()=>handleStart()}
         disabled={disable}
@@ -138,10 +97,10 @@ const TideControl = ({
     );
   }
   
-  if(tideKey && !tideFloodGate && !stopOnly) {
+  if(tideKey && !timeOpen && !stopOnly) {
     return(
       <button
-        title={`Switch to ${Pref.batch}`}
+        title={`Switch to ${Pref.xBatch}`}
         className={`tideFlip ${working ? 'flipWork' : ''}`}
         onClick={()=>handleSwitch()}
         disabled={disable}

@@ -2,7 +2,7 @@ import React, { useState, Fragment } from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import ModelLarge from '/client/components/smallUi/ModelLarge';
+import ModelLarge from '/client/layouts/Models/ModelLarge';
 
 const PanelBreakX = ({ seriesId, batchId, batchNum, item })=> {
   

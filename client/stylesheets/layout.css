@@ -601,6 +601,8 @@ n-sm-model-content {
 .liteTipW:focus-visible::before, .liteTipW:hover::before {
   visibility: visible;
   opacity: 1;
+  transition-delay: 250ms;
+  transition-property: visibility, opacity;
 }
 @media (orientation: portrait) {
   .taskTip:before, 
@@ -1436,13 +1438,13 @@ n-col-table-head > span {
   }
   .taskLink {
     margin: 1vmin 0;
-    width: 5.5vmin;
-    height: 5.5vmin;
+    min-width: 5.5vmin;
+    min-height: 5.5vmin;
     font-size: 3.25vmin;
   }
   .followTask i {
-    width: 5.5vmin;
-    height: 5.5vmin;
+    min-width: 5.5vmin;
+    min-height: 5.5vmin;
     font-size: 2.25vmin;
   }
 }

@@ -12,7 +12,8 @@ const FindBox = ({ orb, user, append })=> {
         this.lookup.select();
   }
   
-  let holder = !append ? orb : append + ' ~ ' + orb;
+  let holder = !append ? orb?.startsWith('Eq') ? orb.substring(3) :
+                orb : append + ' ~ ' + orb;
   let last = holder || 'Search';
   let lock = user ? false : true;
   

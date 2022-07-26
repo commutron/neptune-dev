@@ -19,8 +19,8 @@ n-big-tide-container + n-tide-task {
   border-right-width: 2vh;
   border-left-width: 2vh;
 }
-n-big-tide-container + n-tide-task {
-  margin: 0 0 2vmax 0;
+n-big-tide-container + n-tide-task,
+n-big-tide-container > n-tide-task {
   border-bottom-width: 2vh;
 }
 n-big-tide-container button {
@@ -76,7 +76,7 @@ n-tide-task label {
   background-color: rgb(25,25,25);
 }
 
-.tideIn, .tideOut, .tideFlip, .tideLock {
+.tideIn, .tideOut, .tideFlip, .tideMulti, .tideLock {
   width: 100%;
   height: 100%;
   cursor: pointer;
@@ -109,35 +109,45 @@ n-tide-task label {
   cursor: not-allowed;
 }
 
+.startWork, .tideIn:hover,
+.tideOut:hover,
+.tideFlip:hover,
+.tideMulti:hover {
+  color: rgb(25,25,25);
+}
+
 .tideIn .tideIndicate { color: var(--pomegranate); }
 .startWork, .tideIn:hover {
   background-color: var(--emerald);
-  color: rgb(25,25,25);
 }
 
 .tideOut .tideIndicate { color: var(--emerald); }
 .tideOut:hover {
   background-color: var(--alizarin);
-  color: rgb(25,25,25);
 }
 
 .tideFlip .tideIndicate { color: var(--emerald); }
-.flipWork, .tideFlip:hover {
+.tideFlip:hover {
   background-color: var(--emerald);
-  color: rgb(25,25,25);
+}
+
+.tideMulti .tideIndicate { color: var(--turquoise); }
+.tideMulti:hover {
+  background-color: var(--turquoise);
 }
 
 .startWork .tideIndicate,
 .tideIn:hover .tideIndicate,
 .tideOut:hover .tideIndicate,
-.flipWork .tideIndicate,
-.tideFlip:hover .tideIndicate { 
+.tideFlip:hover .tideIndicate,
+.tideMulti:hover .tideIndicate { 
   color: rgb(25,25,25);
 }
 
 .tideIn:active .tideIndicate,
 .tideOut:active .tideIndicate,
-.tideFlip:active .tideIndicate {
+.tideFlip:active .tideIndicate,
+.tideMulti:active .tideIndicate{
   animation-name: hvr-buzz-out;
   animation-duration: 1s;
   animation-timing-function: ease-out;
@@ -146,7 +156,8 @@ n-tide-task label {
 
 .tideIn:disabled .tideIndicate,
 .tideOut:disabled .tideIndicate,
-.tideFlip:disabled .tideIndicate {
+.tideFlip:disabled .tideIndicate,
+.tideMulti:disabled .tideIndicate{
   animation-name: hvr-buzz-out;
   animation-duration: 2s;
   animation-timing-function: ease-out;
@@ -156,19 +167,21 @@ n-tide-task label {
 @media screen and (prefers-reduced-motion: reduce) { 
   .tideIn:active .tideIndicate,
   .tideOut:active .tideIndicate,
-  .tideFlip:active .tideIndicate {
+  .tideFlip:active .tideIndicate,
+  .tideMulti:active .tideIndicate {
     animation-name: hvr-buzz-out;
     animation-duration: 3s;
   }
   .tideIn:disabled .tideIndicate,
   .tideOut:disabled .tideIndicate,
-  .tideFlip:disabled .tideIndicate {
+  .tideFlip:disabled .tideIndicate,
+  .tideMulti:disabled .tideIndicate {
     animation-name: hvr-buzz-out;
     animation-duration: 6s;
   }
 }
 
-.tideOut::before, 
+.tideOutTip::before, 
 .tideFollowTip::before {
   position: absolute;
   top: calc(2 * var(--vh));
@@ -177,7 +190,7 @@ n-tide-task label {
   width: auto;
   z-index: 11;
 }
-.tideOut::before {
+.tideOutTip::before {
   content: "STOP";
   left: 15vh;
   background-color: var(--alizarin);

@@ -222,10 +222,10 @@ Meteor.methods({
     }
   },
   
-  serveNoReqSet(eqId, serveKey, NoReq) {
+  serveNoReqSet(mtId, NoReq) {
     if( Roles.userIsInRole(Meteor.userId(), 'active') ) {
       const stat = NoReq ? false : 'notrequired';
-      MaintainDB.update({equipId: eqId, serveKey: serveKey}, {
+      MaintainDB.update({_id: mtId}, {
         $set : {
           status: stat,
           doneAt: false,
@@ -234,31 +234,40 @@ Meteor.methods({
     }
   },
   
-  serveCheck(eqId, serveKey, task, isDone) {
+  serveCheck(mtId, task, isDone) {
     if( Roles.userIsInRole(Meteor.userId(), 'active') ) {
-      MaintainDB.update({equipId: eqId, serveKey: serveKey},{
-        $push: {
-          checklist: {
-            task: task,
-            time: new Date(),
-            who: Meteor.userId()
-        }
-      }});
       if(isDone) {
-        MaintainDB.update({equipId: eqId, serveKey: serveKey}, {
+        MaintainDB.update({_id: mtId}, {
+          $push: {
+            checklist: {
+              task: task,
+              time: new Date(),
+              who: Meteor.userId()
+            }
+          },
           $set : {
             status: 'complete',
             doneAt: new Date()
           }
         });
+        return true;
+      }else{
+        MaintainDB.update({_id: mtId},{
+          $push: {
+            checklist: {
+              task: task,
+              time: new Date(),
+              who: Meteor.userId()
+          }
+        }});
+        return true;
       }
-      return true;
     }
   },
   
-  serveNotCheck(eqId, serveKey, task) {
+  serveNotCheck(mtId, task) {
     if( Roles.userIsInRole(Meteor.userId(), 'active') ) {
-      MaintainDB.update({equipId: eqId, serveKey: serveKey}, {
+      MaintainDB.update({_id: mtId}, {
         $pull : {
           checklist: { task: task }
         },
@@ -271,9 +280,9 @@ Meteor.methods({
     }
   },
   
-  serveNotesSet(eqId, serveKey, notes) {
+  serveNotesSet(mtId, notes) {
     if( Roles.userIsInRole(Meteor.userId(), 'active') ) {
-      MaintainDB.update({equipId: eqId, serveKey: serveKey}, {
+      MaintainDB.update({_id: mtId}, {
         $set : {
           notes: notes
       }});

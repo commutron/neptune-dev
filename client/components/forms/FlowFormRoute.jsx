@@ -2,11 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import ModelLarge from '../smallUi/ModelLarge.jsx';
-import FlowBuilder from '/client/components/bigUi/ArrayBuilder/FlowBuilder.jsx';
-// requires
-// id = widget ID
-// existFlows = existing flows
+import ModelLarge from '/client/layouts/Models/ModelLarge';
+import FlowBuilder from '/client/components/bigUi/ArrayBuilder/FlowBuilder';
 
 const FlowFormRouteWrapper = ({ 
   id, app, existFlows, edit, preFill, noText

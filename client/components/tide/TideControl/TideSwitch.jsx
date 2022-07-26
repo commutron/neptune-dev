@@ -40,7 +40,7 @@ const TideSwitch = ({
     lockTaskSet && lockTaskSet(true);
     let newRndm = actionID;
     Meteor.setTimeout( ()=>{
-      Meteor.apply('switchTideTask', [ tideKey, batchID, newRndm, taskState, subtState ],
+      Meteor.apply('switchTideTask', [ tideKey, true, batchID, newRndm, taskState, subtState ],
       {wait: true, noRetry: true},
       (error, reply)=> {
         if(error) {

@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 import Pref from '/client/global/pref.js';
 
 import BatchXComplete from '/client/components/forms/Batch/BatchXComplete';
-import ModelInline from '/client/components/smallUi/ModelInline';
+import ModelInline from '/client/layouts/Models/ModelInline';
 
 const BatchXStatus = ({ batchData, allFlow, allFall, nowater, rapid })=>	{
   

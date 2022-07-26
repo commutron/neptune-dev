@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import '/client/components/riverX/waterfall/style';
 import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/themes/airbnb.css';
-import ModelInline from '/client/components/smallUi/ModelInline';
+import ModelInline from '/client/layouts/Models/ModelInline';
 
 const BatchXComplete = ({ batchData, allFlow, allFall, nowater, quantity, canRun })=> {
   

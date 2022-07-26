@@ -341,7 +341,8 @@ dialog {
   padding: 0 16px 16px 16px;
 }
 dialog::backdrop {
-  background-color: rgb(10,10,10,0.5);
+  background-color: rgb(10,10,10,0.8);
+  /*backdrop-filter: blur(3px) grayscale(25%);*/
 }
 
 input::-webkit-inner-spin-button,

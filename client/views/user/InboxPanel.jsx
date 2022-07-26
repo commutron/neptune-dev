@@ -1,17 +1,14 @@
 import React from 'react';
-import Pref from '/client/global/pref.js';
 import moment from 'moment';
 
 
-const InboxPanel = ({ orb, bolt, app, user, users })=> {
+const InboxPanel = ({ app, user, users })=> {
   
-  const orderedInbox = user.inbox.sort((t1, t2)=> {
-    if (moment(t1.time).isAfter(t2.time)) { return -1 }
-    if (moment(t1.time).isBefore(t2.time)) { return 1 }
-    return 0;
-  });
+  const orderedInbox = user.inbox.sort((t1, t2)=>
+                        moment(t1.time).isAfter(t2.time) ? -1 :
+                        moment(t1.time).isBefore(t2.time) ? 1 : 0 );
   
-  return (
+  return(
     <div className='vspace'>
       {user.inbox.length === 0 && 
         <p className='centreText medBig darkgrayT'>No Messages <i className="fas fa-inbox"></i></p>}

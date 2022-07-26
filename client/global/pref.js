@@ -34,7 +34,7 @@ class Pref {
     this.areas = [
       'sales',
       'kitting',
-      'equipment'
+      'multitask_time'
     ];
     
     // Config

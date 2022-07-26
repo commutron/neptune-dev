@@ -4,7 +4,7 @@ import Pref from '/client/global/pref.js';
 const QuickRecent = ({ user })=> {
   
   const tpl = user.tidepools || [];
-  const rec = [...new Set(tpl)];
+  const rec = [...new Set(tpl)].filter( r => Pref.regex5.test(r));
   
   return(
     <div className='centre pop vmargin space min200 max875'>

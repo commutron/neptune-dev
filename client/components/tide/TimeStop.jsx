@@ -1,9 +1,10 @@
 import React, { useRef, useState, useEffect } from 'react';
-import Pref from '/client/global/pref.js';
+// import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 import './TideControl/style.css';
-        
-const TimeStop = ({ tIdKey, timeOpen, etPro, lockTaskSet })=> {
+import { MultiRunning } from '/client/components/tide/TideControl/TideMulti';
+
+const TimeStop = ({ tIdKey, timeOpen, etPro, etMlt, lockTaskSet })=> {
   
   const thingMounted = useRef(true);
   const [lock, setLock] = useState(true);
@@ -47,18 +48,22 @@ const TimeStop = ({ tIdKey, timeOpen, etPro, lockTaskSet })=> {
       Meteor.apply('stopTideTask', [ tIdKey ], 
         {wait: true, noRetry: true},
         (err, re)=> replyCallback(err, re) );
-    }else{
+    }else {
       Meteor.apply('stopTimeSpan', [ tIdKey ], 
         {wait: true, noRetry: true},
         (err, re)=> replyCallback(err, re) );
     }
   }
   
+  if(etMlt && timeOpen) {
+    return <MultiRunning lock={lock} />;
+  }
+  
   if(tIdKey && timeOpen) {
     return(
       <button
         aria-label='STOP Time'
-        className='tideOut'
+        className='tideOut tideOutTip'
         onClick={()=>handleStop()}
         disabled={lock}
       >

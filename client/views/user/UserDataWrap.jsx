@@ -17,7 +17,6 @@ import UserSettings from '/client/components/forms/User/UserSettings';
 
 const UserDataWrap = ({
   readybNames,
-  orb, bolt,
   user, isAdmin, isDebug, org, app,
   traceDT, users
 })=> {
@@ -47,7 +46,7 @@ const UserDataWrap = ({
       
         <Slides
           menu={[
-            <b><i className='fas fa-user-clock fa-fw gapR'></i>Production Activity</b>,
+            <b><i className='fas fa-user-clock fa-fw gapR'></i>Project Activity</b>,
             <b><i className='fas fa-user-cog fa-fw gapR'></i>Preferences</b>,
             <b><i className='fas fa-user-shield fa-fw gapR'></i>Access & Privacy</b>,
             <b><i className='fas fa-envelope fa-fw gapR'></i>Messages{iL}</b>
@@ -72,8 +71,6 @@ const UserDataWrap = ({
           
           <PrivacyPanel
             key={3}
-            orb={orb}
-            bolt={bolt}
             app={app}
             user={user}
             isAdmin={isAdmin}
@@ -81,8 +78,6 @@ const UserDataWrap = ({
           
           <InboxPanel
             key={4}
-            orb={orb}
-            bolt={bolt}
             app={app}
             user={user}
             users={users} />
@@ -94,7 +89,7 @@ const UserDataWrap = ({
   );
 };
 
-export default withTracker( () => {
+export default withTracker( ({ view }) => {
   let login = Meteor.userId() ? true : false;
   let user = login ? Meteor.user() : false;
   let org = user ? user.org : false;
@@ -108,8 +103,6 @@ export default withTracker( () => {
   }else{
     return {
       readybNames: bNameSub.ready(),
-      orb: Session.get('now'),
-      bolt: Session.get('allData'),
       user: user,
       isAdmin: isAdmin,
       isDebug: isDebug,

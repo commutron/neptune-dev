@@ -1,16 +1,16 @@
 import React, { useState, Fragment } from 'react';
 // import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
-import ModelInline from '/client/components/smallUi/ModelInline';
+import ModelInline from '/client/layouts/Models/ModelInline';
 
-const ServiceDock = ({ maintData, eqId, serve })=> {
+const ServiceDock = ({ maintData, serve })=> {
   
   const noReq = maintData.status === 'notrequired';
   
   const [ notes, setNotes ] = useState( maintData.notes );
 
   function notReq() {
-    Meteor.call('serveNoReqSet', eqId, maintData.serveKey, noReq, (error)=>{
+    Meteor.call('serveNoReqSet', maintData._id, noReq, (error)=>{
 			if(error) {
 		    console.log(error);
 		    toast.error('Server Error');
@@ -20,7 +20,7 @@ const ServiceDock = ({ maintData, eqId, serve })=> {
   
   function doCheck(task, state) {
     if(!state || state === 'false') {
-  		Meteor.apply('serveNotCheck', [ eqId, maintData.serveKey, task ],
+  		Meteor.apply('serveNotCheck', [ maintData._id, task ],
   		{wait: true, noRetry: true},
   		(err)=>{
   			if(err) {
@@ -31,8 +31,7 @@ const ServiceDock = ({ maintData, eqId, serve })=> {
     }else{
       const isDone = serve.tasks.every( (m)=> task === m ||
               maintData.checklist.find( c => c.task === m ) );
-              
-  		Meteor.apply('serveCheck', [ eqId, maintData.serveKey, task, isDone ],
+  		Meteor.apply('serveCheck', [ maintData._id, task, isDone ],
   		{wait: true, noRetry: true},
   		(err)=>{
   			if(err) {
@@ -44,7 +43,7 @@ const ServiceDock = ({ maintData, eqId, serve })=> {
 	}
 	
 	function saveNotes() {
-    Meteor.call('serveNotesSet', eqId, maintData.serveKey, notes, (error)=>{
+    Meteor.call('serveNotesSet', maintData._id, notes, (error)=>{
 			if(error) {
 		    console.log(error);
 		    toast.error('Server Error');

@@ -11,14 +11,14 @@ const TideWall = ({
   bID, bComplete, bOpen, rapidData,
   itemData, seriesData, shortfallS, altitle, scrap,
   ancOptionS, brancheS,
-  tideKey, timeOpen, etPro
+  tideKey, timeOpen, engagedPro, engagedMlti
 })=> {
   
   const [ taskState, taskSet ] = useState( timeOpen?.task || false );
   const [ subtState, subtSet ] = useState( timeOpen?.subtask || false );
   const [ lockTaskState, lockTaskSet ] = useState(false);
  
-  const ctxLabel = timeOpen ? 'Set Different Task' : `Set A Task`;
+  const ctxLabel = timeOpen ? 'Set Different Task' : 'Set A Task';
   
   if(!bOpen && bComplete && !rapidData.rapDo ) {
     return null;
@@ -26,30 +26,38 @@ const TideWall = ({
   return(
     <span>
 
-  		{bOpen && ( ( !itemData ) ||
-  		  ( itemData && ( itemData.completed === false || 
-  		    rapidData.rapIs || rapidData.rapDo ) ) ) ? 
+  		{bOpen &&
+  		  ( !itemData ||
+  		    ( itemData && 
+  		      ( itemData.completed === false || rapidData.rapIs || rapidData.rapDo ) 
+  		    ) 
+  		  ) ? 
   		  
 		    <div className='vgap'>
           <n-big-tide-container>
             <TideControl 
               batchID={bID} 
               tideKey={tideKey}
-              tideFloodGate={false}
+              timeOpen={timeOpen}
               tideLockOut={false}
+              engagedPro={engagedPro}
+              engagedMlti={engagedMlti}
               taskState={taskState}
               subtState={subtState}
               lockTaskSet={lockTaskSet} />
           </n-big-tide-container>
-          <BigTideTask
-            ctxLabel={ctxLabel}
-            ancOptionS={ancOptionS}
-            brancheS={brancheS} 
-            taskState={taskState}
-            subtState={subtState}
-            lockTaskState={lockTaskState}
-            taskSet={taskSet}
-            subtSet={subtSet} /> 
+          {!engagedMlti &&
+            <BigTideTask
+              ctxLabel={ctxLabel}
+              ancOptionS={ancOptionS}
+              brancheS={brancheS} 
+              taskState={taskState}
+              subtState={subtState}
+              lockTaskState={lockTaskState}
+              taskSet={taskSet}
+              subtSet={subtSet}
+            />
+          }
         </div>
         
       : null }
@@ -82,16 +90,14 @@ export default TideWall;
 export const TideBump = ({ 
   bID, bOpen,
   ancOptionS, brancheS,
-  tideKey, timeOpen, etPro
+  tideKey, timeOpen, engagedPro
 })=> {
-  
-  const ctxLabel = timeOpen ? 'Set Different Task' : `Set A Task`;
   
   const [ taskState, taskSet ] = useState( timeOpen?.task || false );
   const [ subtState, subtSet ] = useState( timeOpen?.subtask || false );
-  const [ lockTaskState, lockTaskSet ] = useState(false);
+  const [ lockTaskState, lockTaskSet ] = useState( false );
   
-  if(bOpen) {
+  if(bOpen && engagedPro) {
     return(
       <Fragment>
         <n-med-tide-container>
@@ -105,7 +111,7 @@ export const TideBump = ({
             lockTaskSet={lockTaskSet} />
         </n-med-tide-container>
         <BigTideTask
-          ctxLabel={ctxLabel}
+          ctxLabel='Set Different Task'
           ancOptionS={ancOptionS}
           brancheS={brancheS} 
           taskState={taskState}

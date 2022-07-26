@@ -6,6 +6,7 @@ import TimeControl from '/client/components/tide/TimeControl';
 const TimeGate = ({ 
   timeId, timeOpen,
   type, link, project,
+  engagedPro, engagedMlti,
   brancheS, taskOptions, subOptions,
   forceSelect,
   forceTask, forceSubTask
@@ -14,7 +15,7 @@ const TimeGate = ({
   const [ taskState, taskSet ] = useState( forceTask || timeOpen?.task || false );
   const [ subtState, subtSet ] = useState( forceSubTask || timeOpen?.subtask || false );
   const [ lockTaskState, lockTaskSet ] = useState(false);
- 
+  
   return(
     <div className='vgap darkTheme'>
       <n-big-tide-container>
@@ -24,6 +25,8 @@ const TimeGate = ({
           type={type}
           link={link}
           project={project}
+          engagedPro={engagedPro}
+          engagedMlti={engagedMlti}
           timeLockOut={false}
           taskState={taskState}
           subtState={subtState}
@@ -31,17 +34,19 @@ const TimeGate = ({
         />
       </n-big-tide-container>
       
-      <SmplTideTask
-        brancheS={brancheS}
-        lockTaskState={lockTaskState}
-        forceSelect={forceSelect}
-        taskState={taskState}
-        taskOptions={taskOptions}
-        taskSet={taskSet}
-        subtState={subtState}
-        subOptions={subOptions}
-        subtSet={subtSet}
-      /> 
+      {!engagedMlti &&
+        <SmplTideTask
+          brancheS={brancheS}
+          lockTaskState={lockTaskState}
+          forceSelect={forceSelect}
+          taskState={taskState}
+          taskOptions={taskOptions}
+          taskSet={taskSet}
+          subtState={subtState}
+          subOptions={subOptions}
+          subtSet={subtSet}
+        />
+      }
     </div>
   );
 };

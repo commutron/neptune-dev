@@ -23,10 +23,10 @@ const XDoProCard = ({
   user, users, 
   brancheS, app, 
   
-  tideKey, etPro,
+  tideKey, timeOpen,
+  engagedPro, engagedMlti,
   //ncTypesCombo,
   
-  timeOpen,
   expand,
   //handleExpand,
   
@@ -124,7 +124,9 @@ const XDoProCard = ({
             brancheS={brancheS}
             tideKey={tideKey}
             timeOpen={timeOpen}
-            etPro={etPro} />;
+            engagedPro={engagedPro}
+            engagedMlti={engagedMlti}
+          />;
   
   const insertAxion =
           <ReleaseAction 
@@ -205,12 +207,12 @@ const XDoProCard = ({
             rapidData={rapidData}
             tideKey={tideKey}
             timeOpen={timeOpen}
-            etPro={etPro}
+            engagedPro={engagedPro}
             expand={expand}
             flowwater={itemData}
             fallwater={fallAction && !itemData} />;
   
-  const openTideGate = timeOpen && etPro;
+  const openTideGate = timeOpen && ( engagedPro || engagedMlti );
   
   return(
     <Fragment>

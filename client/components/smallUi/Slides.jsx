@@ -8,14 +8,13 @@ const Slides = ({ menu, disable, extraClass, children })=> {
     setSection(clk);
   };
 
-  let show = section;
   const dA = Array.isArray(disable) ? disable : [];
     
   return(
     <div className='slidesLayout'>
       <div className='slidesMenu forceScrollStyle noPrint'>
         {menu.map( (entry, index)=>{
-          let clss =  show === index ? 
+          let clss =  section === index ? 
                       'slideMenuButton cap slideOn' : 
                       'slideMenuButton cap slideOff';
           return (
@@ -29,7 +28,7 @@ const Slides = ({ menu, disable, extraClass, children })=> {
       </div>
       <div className={`slidesSlide forceScrollStyle ${extraClass || ''}`}>
 
-        {children[show]}
+        {children[section]}
       
       </div>
     </div>

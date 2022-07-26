@@ -17,7 +17,7 @@ const BatchCardX = ({
   app, brancheS, ancOptionS,
   // floorReleased, 
   srange, flowCounts, fallCounts,
-  tideKey, timeOpen, etPro,
+  tideKey, timeOpen, engagedPro,
   expand, flowwater, fallwater
 })=> {
   
@@ -36,7 +36,8 @@ const BatchCardX = ({
             brancheS={brancheS}
             tideKey={tideKey}
             timeOpen={timeOpen}
-            etPro={etPro} />;
+            engagedPro={engagedPro}
+          />;
             
   const insertMiniInfo = 
           <MiniInfo
@@ -63,12 +64,12 @@ const BatchCardX = ({
           </div>;
   
   if( ( expand && !bOpen ) || 
-      ( ( timeOpen && etPro ) && expand && !flowwater && !fallwater ) ) {
+      ( timeOpen && expand && !flowwater && !fallwater ) ) {
     return(
       <Fragment>   
         <div className='proPrimeSingle'>
      
-          { ( timeOpen && etPro ) && bOpen && insertTideBump}
+          { timeOpen && bOpen && insertTideBump}
       
           {insertMiniInfo}
           
@@ -86,7 +87,7 @@ const BatchCardX = ({
   return(
     <div className='proPrimeSingle'>
       
-      { ( timeOpen && etPro ) && bOpen && insertTideBump}
+      { timeOpen && bOpen && insertTideBump}
           
       <Tabs
         tabs={[

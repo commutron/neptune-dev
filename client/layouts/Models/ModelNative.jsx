@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ModelNative = ({ dialogId, title, icon, colorT, children })=> {
+const ModelNative = ({ dialogId, title, icon, colorT, dark, children })=> {
   
   const close = ()=> {
     const dialog = document.getElementById(dialogId);
@@ -10,10 +10,10 @@ const ModelNative = ({ dialogId, title, icon, colorT, children })=> {
   return(
     <dialog 
       id={dialogId}
-      className='forceScrollStyle'
+      className={`forceScrollStyle ${dark ? 'darkTheme' : ''}`}
     >
-      <div className='split vmarginhalf bottomLine medBig bold'>
-        <span className='beside'>
+      <div className='split vmarginhalf bottomLine medBig bold cap'>
+        <span className='beside gapR'>
           <i className={`${icon} fa-fw fa-lg gapR ${colorT}`}></i>
           <i className='breath'></i>
           {title}
@@ -22,7 +22,7 @@ const ModelNative = ({ dialogId, title, icon, colorT, children })=> {
           className='action redSolid'
           onClick={()=>close()}
           title='cancel'
-        ><i className='fas fa-times fa-lg'></i></button>
+        ><i className='fas fa-xmark fa-lg'></i></button>
       </div>
       {children}
     </dialog>

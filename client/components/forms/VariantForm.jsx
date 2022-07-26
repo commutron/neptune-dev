@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import ModelLarge from '../smallUi/ModelLarge';
+import ModelLarge from '/client/layouts/Models/ModelLarge';
 import { MultiSelect } from "react-multi-select-component";
 
 const VariantModel = ({ widgetData, users, app, rootWI, lockOut })=> {

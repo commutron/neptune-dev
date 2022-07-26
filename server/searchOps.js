@@ -222,6 +222,15 @@ Meteor.methods({
     return next;
   },
   
+  getLiveBatch() {
+    const batches = XBatchDB.find({live: true},{fields:{'batch':1}}).fetch();
+    const plain = [];
+    for(let b of batches) {
+      plain.push(b.batch);
+    }
+    return plain;
+  },
+  
   getPastBatch(wID, vKey) {
     const distile = (arrArr)=> Math.floor( 
                       arrArr.sort( (a,b)=> a[0] > b[0] ? -1 : a[0] < b[0] ? 1 : 0 )

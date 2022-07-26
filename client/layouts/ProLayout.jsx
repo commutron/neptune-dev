@@ -12,6 +12,7 @@ import TideFollow from '/client/components/tide/TideFollow';
 import XFormBar from '/client/components/bigUi/ToolBar/XFormBar';
 import { NonConMerge } from '/client/utility/NonConOptions';
 
+
 export const ProWrap = ({ 
   itemSerial, itemData, batchData, seriesData, rapidsData,
   widgetData, radioactive, groupAlias, 
@@ -102,13 +103,17 @@ export const ProWrap = ({
   const append = bData && itemSerial ? bData.batch : null;
   
   const eng = user?.engaged || false;
-  const etKey = eng?.tKey;
   const etPro = eng?.task === 'PROX';
+  const etMlt = eng?.task === 'MLTI';
+  // const eTime = eng?.task === 'MAINT' || eng?.task === 'EQFX';
+  const etKey = eng?.tKey;
   const timeOpen = etPro ? 
-                    (bData?.tide || []).find( x => 
-                      x.tKey === etKey && x.who === Meteor.userId() )
+                    (bData?.tide || []).find( x => x.tKey === etKey && x.who === Meteor.userId() ) 
+                   : etMlt ?
+                    (bData?.tide || []).find( x => ( x.tKey === etKey[0] || x.tKey === etKey[1] ) && x.who === Meteor.userId() ) 
                    : time?._id === etKey && time?.link === maintId ? time : null;
-    
+  // const otKey = timeOpen?.tKey;
+  
   const exploreLink = itemSerial && bData ?
                       '/data/batch?request=' + bData.batch + '&specify=' + itemSerial :
                       bData ?
@@ -138,6 +143,7 @@ export const ProWrap = ({
               tIdKey={etKey}
               timeOpen={timeOpen}
               etPro={etPro}
+              etMlt={etMlt}
               tideLockOut={tideLockOut}
             />
           </div>
@@ -162,7 +168,7 @@ export const ProWrap = ({
             <i className='fas fa-rocket' data-fa-transform='left-1 down-1'></i>
           </button>
         </div>
-        <TideFollow proRoute={bData && bData.batch} />
+        <TideFollow tOpen={timeOpen} app={app} />
       </div>
       
       <Fragment>
@@ -171,7 +177,8 @@ export const ProWrap = ({
           {React.cloneElement(children[0],
             { 
               tideKey: etKey,
-              etPro: etPro,
+              engagedPro: etPro,
+              engagedMlti: etMlt,
               timeOpen: timeOpen,
               
               expand: expand, 
@@ -215,15 +222,13 @@ export const ProWrap = ({
           user={user}
           app={app} 
         />
-
       </Fragment>
-
     </div>
   );
 };
 
 
-export const ProWindow = ({ children })=> {
+export const ProWindow = ({ app, children })=> {
   
   useEffect( ()=> {
     if(Meteor.user()) {
@@ -247,7 +252,7 @@ export const ProWindow = ({ children })=> {
           <FindBox />
         </div>
         <div className='auxRight'></div>
-        <TideFollow proRoute={true} />
+        <TideFollow proRoute={true} app={app} />
       </div>
       <div className='proContent darkTheme'>
         <Fragment>

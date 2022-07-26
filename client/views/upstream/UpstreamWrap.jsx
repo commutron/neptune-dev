@@ -10,7 +10,7 @@ import EmailLogSlide from '/client/views/upstream/EmailLogSlide';
 import ReportShort from '/client/views/upstream/ReportShort';
 
 const UpstreamWrap = ({ 
-  view, subLink,
+  view,
   batchX, traceDT,
   user, app, users, brancheS,
   isDebug

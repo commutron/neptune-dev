@@ -2,10 +2,12 @@ import React, { useRef, useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 import './TideControl/style.css';
-        
+import { MultiDivert } from '/client/components/tide/TideControl/TideMulti';
+
 const TimeControl = ({ 
   timeId, timeOpen,
   type, link, project,
+  engagedPro, engagedMlti,
   timeLockOut,
   taskState, subtState,
   lockTaskSet
@@ -57,14 +59,7 @@ const TimeControl = ({
       Meteor.apply('startTimeSpan', [ type, link, project, taskState, subtState ],
       {wait: true, noRetry: true},
       (error, re)=> replyCallback(error, re) );
-    }, 1500);
-  }
-  
-  function handleStop() {
-    setLock(true);
-    setWorking(true);
-    Meteor.apply('stopTimeSpan', [ timeId ], {wait: true, noRetry: true},
-    (error, re)=> replyCallback(error, re) );
+    }, 500);
   }
   
   function handleSwitch() {
@@ -72,36 +67,22 @@ const TimeControl = ({
     setWorking(true);
     lockTaskSet && lockTaskSet(true);
     Meteor.setTimeout( ()=>{
-      Meteor.apply('switchTimeSpan', [ timeId, type, link, project, taskState, subtState ],
+      Meteor.apply('switchTimeSpan', [ timeId, engagedPro, type, link, project, taskState, subtState ],
       {wait: true, noRetry: true},
       (error, re)=> replyCallback(error, re) );
-    }, 1500);
-  }
-
-  if(timeId && timeOpen) {
-    return(
-      <button
-        aria-label={`STOP ${Pref.batch}`}
-        className='tideOut'
-        onClick={()=>handleStop()}
-        disabled={lock}
-      >
-      <em>
-        <span className='fa-stack tideIcon'>
-          <i className="fas fa-circle-notch fa-stack-2x fa-spin tideIndicate"></i>
-          <i className="fas fa-stop fa-stack-1x" data-fa-transform="shrink-1"></i>
-        </span> 
-      </em>
-      </button>
-    );
+    }, 500);
   }
   
   const disable = lock || timeLockOut || !taskState || subtState === false;
   
+  if(engagedMlti) {
+    return <MultiDivert lock={lock} />;
+  }
+  
   if(!timeId && !timeOpen) {
     return(
       <button
-        title={`START ${Pref.batch}`}
+        title='START'
         className={`tideIn ${working ? 'startWork' : ''}`}
         onClick={()=>handleStart()}
         disabled={disable}
@@ -118,7 +99,7 @@ const TimeControl = ({
   if(timeId && !timeOpen) {
     return(
       <button
-        title={`Switch to ${Pref.batch}`}
+        title={`Switch to ${Pref.maintain}`}
         className={`tideFlip ${working ? 'flipWork' : ''}`}
         onClick={()=>handleSwitch()}
         disabled={disable}

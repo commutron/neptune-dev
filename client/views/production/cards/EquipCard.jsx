@@ -8,7 +8,7 @@ const EquipCard = ({ equipData, maintainData })=> {
     return({
       title: (equip?.alias || '') + '-' + m.name,
       find: 'Eq-' + (equip?.alias || '') +' ~ '+ m.name,
-      serveKey: m.serveKey
+      mId: m._id
     });
   }, [])
   .sort( (e1, e2)=> e1.title > e2.title ? 1 : e1.title < e2.title ? -1 : 0);
@@ -21,7 +21,7 @@ const EquipCard = ({ equipData, maintainData })=> {
         <button 
           key={ix}
           className='action whiteSolid margin5 letterSpaced'
-          onClick={()=>{Session.set('now', m.find);Session.set('nowSV', m.serveKey)}}
+          onClick={()=>{Session.set('now', m.find);Session.set('nowSV', m.mId)}}
         >{m.title}</button>
     ))}
     </div>

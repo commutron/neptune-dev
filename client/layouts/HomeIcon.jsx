@@ -32,16 +32,16 @@ const HomeIcon = () => {
               <i className='noCopy'> Production</i>
             </MenuItem>
             
+            <MenuItem onClick={()=>FlowRouter.go('/upstream')}>
+              <i className='fas fa-satellite-dish fa-fw'></i>
+              <i className='noCopy cap'> upstream</i>
+            </MenuItem>
+            
             <MenuItem onClick={()=>FlowRouter.go('/overview')}>
               <i className='fas fa-globe fa-fw'></i>
               <i className='noCopy'> Overview</i>
             </MenuItem>
             
-            <MenuItem onClick={()=>FlowRouter.go('/upstream')}>
-              <i className='fas fa-satellite-dish fa-fw'></i>
-              <i className='noCopy cap'> upstream</i>
-            </MenuItem>
-              
             <MenuItem onClick={()=>FlowRouter.go('/downstream')}>
               <i className='fas fa-satellite fa-fw'></i>
               <i className='noCopy cap'> {Pref.downstream}</i>

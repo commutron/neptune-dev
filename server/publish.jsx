@@ -460,20 +460,21 @@ Meteor.publish('hotDataPlus', function(scanOrb, keyMatch){
   }
 });
 
-Meteor.publish('hotMaint', function(hotServeKey) {
+Meteor.publish('hotMaint', function(hotServeId) {
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
+  const mtData = MaintainDB.findOne({_id: hotServeId},{ fields:{'equipId':1}});
   
-  if(!this.userId) {
+  if(!this.userId || !mtData) {
     return this.ready();
   }else{
     return [
-      EquipDB.find({orgKey: orgKey, 'service.serveKey': hotServeKey}, {
+      EquipDB.find({_id: mtData.equipId, orgKey: orgKey}, {
         fields: {
           'orgKey': 0,
         }}),
         
-      MaintainDB.find({serveKey: hotServeKey, orgKey: orgKey}, {
+      MaintainDB.find({_id: hotServeId, orgKey: orgKey}, {
         fields: {
           'orgKey': 0,
         }})

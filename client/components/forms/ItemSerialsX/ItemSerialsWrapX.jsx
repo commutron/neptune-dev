@@ -2,7 +2,7 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import ModelLarge from '/client/components/smallUi/ModelLarge';
+import ModelLarge from '/client/layouts/Models/ModelLarge';
 import ModelSmall from '/client/components/smallUi/ModelSmall';
 import Tabs from '/client/components/smallUi/Tabs/Tabs';
 

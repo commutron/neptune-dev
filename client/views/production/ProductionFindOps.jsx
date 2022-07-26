@@ -45,10 +45,6 @@ const ProductionFindOps = ({
     return allGroup.find(x => x.alias === orb);
   }
   
-  function linkedGroup(gId) {
-    return allGroup.find(x => x._id === gId);
-  }
-  
   function linkedWidget(wId) {
     return allWidget.find(x => x._id === wId);
   }
@@ -60,13 +56,13 @@ const ProductionFindOps = ({
   function variantDataByKey(vKey) {
     return allVariant.find(x => x.versionKey === vKey);
   }
-  
-  function linkedEquip() {
-    return allEquip.find(x => x.service?.find(y => y.serveKey === eqS));
+
+  function maintDataById() {
+    return allMaint.find(x => x._id === eqS);
   }
   
-  function maintDataByKey() {
-    return allMaint.find(x => x.serveKey === eqS);
+  function linkedEquip(equipId) {
+    return allEquip.find(x => x._id === equipId);
   }
   
   if(!orb) {
@@ -198,11 +194,11 @@ const ProductionFindOps = ({
 
 // Maintain
   if(orb?.startsWith('Eq')) {
-    let eqData = linkedEquip();
-    if(eqData) {
+    const maintData = maintDataById();
+    if(maintData) {
+      const eqData = linkedEquip(maintData.equipId);
       Session.set('nowBatch', false);
-      Session.set('nowInstruct', eqData.instruct);
-      let maintData = maintDataByKey();
+      Session.set('nowInstruct', eqData?.instruct);
       return (
         <ProWrap
           batchData={false}

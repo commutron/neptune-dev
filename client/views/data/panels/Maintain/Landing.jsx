@@ -6,8 +6,6 @@ import Pref from '/client/global/pref.js';
 import EquipForm from '/client/components/forms/Equip/EquipForm';
 import NumBox from '/client/components/tinyUi/NumBox';
 
-import ModelNative, { OpenModelNative } from '/client/components/smallUi/ModelNative';
-
 const Landing = ({ equipData, maintainData, app, brancheS })=> {
   
   const runRobot = ()=> {
@@ -48,27 +46,6 @@ const Landing = ({ equipData, maintainData, app, brancheS })=> {
         <button onClick={()=>runRobot()} className='action nSolid beside'
         ><i className="fa-solid fa-robot fa-lg gap"></i>Run Service Robot</button>
         
-        <p>
-        <OpenModelNative
-          dialogId='testnativedialog'
-          title='Test Dialog'
-          icon='fa-solid fa-object-group'
-          colorT='blackT'
-          colorB='blueSolid'
-        />
-        </p>
-        
-        <ModelNative
-          dialogId='testnativedialog'
-          title='A Native Dialog'
-          icon='fa-solid fa-object-group'
-          colorT='blueT'
-          >
-            <div>
-              <p>This is a native browser HTML dialog element</p>
-              <p>click "ESC" to close</p>
-            </div>
-          </ModelNative>
       </div>
       
     </div>
