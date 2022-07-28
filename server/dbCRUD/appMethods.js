@@ -16,6 +16,8 @@ Meteor.startup(function () {
 
   CacheDB._ensureIndex({ dataName : 1 }, { unique: true });
   TraceDB._ensureIndex({ batchID : 1 }, { unique: true });
+  
+  EquipDB._dropIndex( "orgKey_1_maincode_1" );
 });
 
 Meteor.methods({
