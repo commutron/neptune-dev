@@ -14,6 +14,12 @@ const Landing = ({ equipData, maintainData, app, brancheS })=> {
     });
   };
   
+  const runemailtest = ()=> {
+    Meteor.call('testEquipMaintEmail', (err)=>{
+      err && console.log(err);
+    });
+  }
+  
   return(
     <div className='overscroll'>
       
@@ -45,6 +51,13 @@ const Landing = ({ equipData, maintainData, app, brancheS })=> {
         
         <button onClick={()=>runRobot()} className='action nSolid beside'
         ><i className="fa-solid fa-robot fa-lg gap"></i>Run Service Robot</button>
+        
+      </div>
+      
+      <div className='wide max875 vspacehalf'>
+        
+        <button onClick={()=>runemailtest()} className='action greenSolid beside'
+        ><i className="fa-solid fa-square-envelope fa-lg gap"></i>Test Service Email</button>
         
       </div>
       

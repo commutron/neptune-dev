@@ -645,13 +645,11 @@ n-trib-action-all {
 .flowForm .dropdown-container,
 .emailForm .dropdown-container,
 .stoneForm .dropdown-container {
-  --rmsc-primary: var(--peterriver);
+  --rmsc-main: var(--peterriver);
   --rmsc-hover: var(--peterriverfade);
+  --rmsc-selected: var(--contrast);
   --rmsc-border: transparent;
-  --rmsc-gray: #aaa;
-  --rmsc-background: white;
-  --rmsc-border-radius: 0px;
-  --rmsc-height: 1.5rem;
+  --rmsc-h: 1.5rem;
   color: black;
   border: 1px solid black;
 }

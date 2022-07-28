@@ -243,7 +243,8 @@ Meteor.methods({
     const emailGlobal = doc && doc.emailGlobal;
     
     if(emailGlobal) {
-      const dead = moment(deadline).tz(Config.clientTZ).format('dddd, MMM Do');
+      const dead = deadline ? false :
+                    moment(deadline).tz(Config.clientTZ).format('dddd, MMM Do');
                 
       const subject = `Scheduled Maintenance is Not Completed`;
       
@@ -251,10 +252,10 @@ Meteor.methods({
       
       const title = `Concerning ${toCap(equip, true)}`;
       const body = `${toCap(name)} scheduled maintenance is incomplete and past its ${state}.`;
-      const asid = deadline ? `A short grace period is in effect but maintenance must be completed by end of day ${dead}.` : '';
+      const asid = dead ? `A short grace period is in effect but maintenance must be completed by end of day ${dead}.` : '';
       const foot = '';
-      const link = deadline ? "To stop receiving emails concerning this equipment, remove your name from the equipment's assigned stewards" :
-                              "To stop receiving emails concerning missed maintenance, disable your 'equipSuper' authorization";
+      const link = dead ? "To stop receiving emails concerning this equipment, remove your name from the equipment's assigned stewards" :
+                          "To stop receiving emails concerning missed maintenance, disable your 'equipSuper' authorization";
       
       sortInternalRecipient(emailUserIDs, subject, date, title, body, asid, foot, link);
     }

@@ -372,14 +372,14 @@ Meteor.methods({
                 const supr = Array.from(users, u => u._id);
                 
                 Meteor.call('handleInternalMaintEmail', 
-                  orgKey, supr, equip.equip, maint.name, "grace period", false);
+                  orgKey, supr, equip.equip, maint.name, "grace period");
               });
             }else if( n.isAfter(mn.close) ) {
               Meteor.defer( ()=>{
                 const equip = EquipDB.find({_id: mn.equipId},{fields:{'alias':1,'stewards':1}});
                 const stew = equip?.stewards || [];
                 Meteor.call('handleInternalMaintEmail', 
-                  orgKey, stew, equip.equip, maint.name, "deadline", mn.expire,); 
+                  orgKey, stew, equip.equip, maint.name, "deadline", mn.expire); 
               });
             }
           }
@@ -449,6 +449,20 @@ Meteor.methods({
     }catch (error) {
       throw new Meteor.Error(error);
     }finally{ return true }
+  },
+  
+  testEquipMaintEmail() {
+    const orgKey = Meteor.user().orgKey;
+    const users = Meteor.users.find({ roles: { $in: ["equipSuper"] } });
+    const supr = Array.from(users, u => u._id);
+                
+                
+    Meteor.call('handleInternalMaintEmail', 
+      orgKey, supr, "A Magical Machine", "Daily", "grace period");
+    
+    const date = new Date();
+    Meteor.call('handleInternalMaintEmail', 
+      orgKey, supr, "An Expensive Machine", "On Demand", "grace period", date);
   }
   
 });
