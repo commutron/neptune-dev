@@ -13,8 +13,8 @@ const EquipFormWrapper = ({
   const bttn = id ? `edit ${Pref.equip}` : `new ${Pref.equip}`;
   const otitle = id ? 'edit ' + Pref.equip : 'create new ' + Pref.equip;
   
-  const access = id ? Roles.userIsInRole(Meteor.userId(), 'edit') :
-                        Roles.userIsInRole(Meteor.userId(), 'create');
+  const access = id ? Roles.userIsInRole(Meteor.userId(), ['equipSuper','edit']) :
+                        Roles.userIsInRole(Meteor.userId(), ['equipSuper','create']);
   const aT = !access ? Pref.norole : '';
   const lT = lockOut ? `${Pref.equip} is offline` : '';
   const title = access && !lockOut ? otitle : `${aT}\n${lT}`;

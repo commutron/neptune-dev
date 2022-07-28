@@ -78,7 +78,54 @@ function sendExternalEmail(to, cc, subject, date, body, foot, plainbody) {
   
   Email.send({ to, cc, from, subject, html, text });
 }
+
+function sortInternalRecipient(emailUserIDs, subject, date, title, body, asid, foot, link) {
+  let emails = [];
+  let ininbox = [];
   
+  for(let eu of emailUserIDs) {
+    const user = Meteor.users.findOne({_id: eu});
+    if(user && user.emails && user.emails[0]) {
+      emails.push(user.emails[0]);
+    }else{
+      ininbox.push(eu);
+    }
+  }
+  
+  if(emails.length > 0) {
+        
+    let addresses = Array.from(emails, e => e.address );
+    
+    sendInternalEmail( addresses, subject, date, title, body, asid, foot, link );
+    
+    EmailDB.insert({
+      sentTime: new Date(),
+      subject: subject,
+      to: addresses.toString(),
+      cc: undefined,
+      text: body
+    });
+  }
+  
+  if(ininbox.length > 0) {
+    const mssgDetail = title + '. ' + body + '. ' + foot + '.';
+
+    for(let inboxID of ininbox) {
+      Meteor.users.update(inboxID, {
+        $push : { inbox : {
+          notifyKey: new Meteor.Collection.ObjectID().valueOf(),
+          keyword: 'direct',
+          type: 'direct',
+          title: subject,
+          detail: mssgDetail,
+          time: new Date(),
+          unread: true
+        }
+      }});
+    }
+  }
+  
+}
   
 Meteor.methods({
   
@@ -111,7 +158,7 @@ Meteor.methods({
   },
   
   
-  handleExternalEmail(accessKey, emailPrime, emailSecond, isG, isW, salesOrder) {
+  handleExternalEmail(accessKey, emailPrime, emailSecond, isW, salesOrder) {
     this.unblock();
     const app = AppDB.findOne({orgKey: accessKey},{fields:{'emailGlobal':1,'describe':1}});
     const emailGlobal = app && app.emailGlobal;
@@ -154,7 +201,7 @@ Meteor.methods({
     const emailGlobal = doc && doc.emailGlobal;
     
     if(emailGlobal) {
-      const subject = `New Product Variant - ${variant} - automated email from Neptune`;
+      const subject = `New Product Variant - ${variant} - automated Neptune email`;
       
       const date = moment().tz(Config.clientTZ).format('h:mm a, dddd, MMM Do YYYY');
       
@@ -164,50 +211,8 @@ Meteor.methods({
       const foot = 'Expect Bill Of Material changes. Please prepare for potentially new stencils, jigs and machine programmes.';
       const link = wiki ? `<a href="${wiki}">Work Instructions</a>` : 'New work instructions will be forthcoming';
       
-      let emails = [];
-      let ininbox = [];
       
-      for(let eu of emailUsers) {
-        const user = Meteor.users.findOne({_id: eu});
-        if(user && user.emails && user.emails[0]) {
-          emails.push(user.emails[0]);
-        }else{
-          ininbox.push(eu);
-        }
-      }
-    
-      if(emails.length > 0) {
-        
-        let addresses = Array.from(emails, e => e.address );
-        
-        sendInternalEmail( addresses, subject, date, title, body, asid, foot, link );
-        
-        EmailDB.insert({
-          sentTime: new Date(),
-          subject: 'New Product Variant',
-          to: addresses.toString(),
-          cc: undefined,
-          text: body
-        });
-      }
-    
-      if(ininbox.length > 0) {
-        const mssgDetail = title + '. ' + body + '. ' + foot + '.';
-
-        for(let inboxID of ininbox) {
-          Meteor.users.update(inboxID, {
-            $push : { inbox : {
-              notifyKey: new Meteor.Collection.ObjectID().valueOf(),
-              keyword: 'direct',
-              type: 'direct',
-              title: subject,
-              detail: mssgDetail,
-              time: new Date(),
-              unread: true
-            }
-          }});
-        }
-      }
+      sortInternalRecipient(emailUsers, subject, date, title, body, asid, foot, link);
     }
   },
   
@@ -218,7 +223,7 @@ Meteor.methods({
     const emailpcbKit = doc && doc.emailpcbKit;
     
     if(emailGlobal && emailpcbKit) {
-      const subject = `New PCBs Received - ${toCap(isW, true)} - automated email from Neptune`;
+      const subject = `New PCBs Received - ${toCap(isW, true)} - automated Neptune email`;
       
       const date = moment().tz(Config.clientTZ).format('h:mm a, dddd, MMM Do YYYY');
       
@@ -228,51 +233,30 @@ Meteor.methods({
       const foot = 'A work order of this product variant has never been completed. New stencils, jigs or machine programmes may be required.';
       const link = `<a href="${wiki}">Work Instructions</a>`;
       
-      let emails = [];
-      let ininbox = [];
+      sortInternalRecipient(emailpcbKit, subject, date, title, body, asid, foot, link);
+    }
+  },
+  
+  handleInternalMaintEmail(accessKey, emailUserIDs, equip, name, state, deadline) {
+    this.unblock();
+    const doc = AppDB.findOne({orgKey: accessKey});
+    const emailGlobal = doc && doc.emailGlobal;
+    
+    if(emailGlobal) {
+      const dead = moment(deadline).tz(Config.clientTZ).format('dddd, MMM Do');
+                
+      const subject = `Scheduled Maintenance is Not Completed`;
       
-      for(let eu of emailpcbKit) {
-        const user = Meteor.users.findOne({_id: eu});
-        if(user && user.emails && user.emails[0]) {
-          emails.push(user.emails[0]);
-        }else{
-          ininbox.push(eu);
-        }
-      }
+      const date = moment().tz(Config.clientTZ).format('dddd, MMM Do YYYY');
       
-      if(emails.length > 0) {
-        
-        let addresses = Array.from(emails, e => e.address );
-        
-        sendInternalEmail( addresses, subject, date, title, body, asid, foot, link );
-        
-        EmailDB.insert({
-          sentTime: new Date(),
-          subject: 'New PCBs Received',
-          to: addresses.toString(),
-          cc: undefined,
-          text: body
-        });
-      }
+      const title = `Concerning ${toCap(equip, true)}`;
+      const body = `${toCap(name)} scheduled maintenance is incomplete and past its ${state}.`;
+      const asid = deadline ? `A short grace period is in effect but maintenance must be completed by end of day ${dead}.` : '';
+      const foot = '';
+      const link = deadline ? "To stop receiving emails concerning this equipment, remove your name from the equipment's assigned stewards" :
+                              "To stop receiving emails concerning missed maintenance, disable your 'equipSuper' authorization";
       
-      if(ininbox.length > 0) {
-        const mssgDetail = title + '. ' + body + '. ' + foot + '.';
-
-        for(let inboxID of ininbox) {
-          Meteor.users.update(inboxID, {
-            $push : { inbox : {
-              notifyKey: new Meteor.Collection.ObjectID().valueOf(),
-              keyword: 'direct',
-              type: 'direct',
-              title: subject,
-              detail: mssgDetail,
-              time: new Date(),
-              unread: true
-            }
-          }});
-        }
-      }
-      
+      sortInternalRecipient(emailUserIDs, subject, date, title, body, asid, foot, link);
     }
   },
   

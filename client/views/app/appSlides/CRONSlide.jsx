@@ -32,41 +32,48 @@ const CRONSlide = ()=> {
             <td>PIN Change</td>
           </tr>
           <tr>
-            <td>Saturday</td>
+            <td>Everyday</td>
             <td>6:01</td>
             <td>{isLocal('6:01')}</td>
-            <td>Batch Lock Check</td>
+            <td>Maintenance Auto-Scheduler</td>
           </tr>
           <tr>
             <td>Weekdays</td>
-            <td>6:02 & 18:02</td>
-            <td>{isLocal('6:02')} & {isLocal('18:02')}</td>
+            <td>6:05 & 18:00</td>
+            <td>{isLocal('6:05')} & {isLocal('18:00')}</td>
             <td>Trace Priority</td>
           </tr>
           <tr>
-            <td>Saturday</td>
-            <td>6:03</td>
-            <td>{isLocal('6:03')}</td>
-            <td>Average Day Time</td>
-          </tr>
-          <tr>
-            <td>Saturday</td>
-            <td>6:04</td>
-            <td>{isLocal('6:04')}</td>
-            <td>Widget Averages</td>
-          </tr>
-          <tr>
             <td>Weekdays</td>
-            <td>6:05</td>
-            <td>{isLocal('6:05')}</td>
+            <td>6:07</td>
+            <td>{isLocal('6:07')}</td>
             <td>Time Overrun Check</td>
           </tr>
           <tr>
             <td>Weekdays</td>
-            <td>6:06</td>
-            <td>{isLocal('6:06')}</td>
+            <td>6:10</td>
+            <td>{isLocal('6:10')}</td>
             <td>Done Target By Month, Done Target By Week</td>
           </tr>
+          <tr>
+            <td>Saturday</td>
+            <td>6:15</td>
+            <td>{isLocal('6:15')}</td>
+            <td>Batch Lock Check</td>
+          </tr>
+          <tr>
+            <td>Saturday</td>
+            <td>6:20</td>
+            <td>{isLocal('6:20')}</td>
+            <td>Average Day Time</td>
+          </tr>
+          <tr>
+            <td>Saturday</td>
+            <td>6:25</td>
+            <td>{isLocal('6:25')}</td>
+            <td>Widget Averages</td>
+          </tr>
+          
         </tbody>
       </table>
       

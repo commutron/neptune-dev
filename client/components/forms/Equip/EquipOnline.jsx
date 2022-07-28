@@ -16,7 +16,7 @@ const EquipOnline = ({ id, equip, online })=> {
     });
   }
   
-  const auth = Roles.userIsInRole(Meteor.userId(), 'edit');
+  const auth = Roles.userIsInRole(Meteor.userId(), ['equipSuper','edit']);
 
   if(online) {
     return(

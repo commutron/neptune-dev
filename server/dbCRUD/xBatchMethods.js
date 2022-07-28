@@ -380,14 +380,13 @@ Meteor.methods({
                         }});
                         
           if(group.emailOptIn && group.emailPrime) {
-            const isG = group.group; 
             const wig = WidgetDB.findOne({_id: batch.widgetId},{fields:{'widget':1,'describe':1}});
             const ver = VariantDB.findOne({versionKey: batch.versionKey},{fields:{'variant':1}});
             const isW = wig.widget.toUpperCase() + ' ' + ver.variant + ' - ' + wig.describe;
           
             Meteor.call('handleExternalEmail', 
               accessKey, group.emailPrime, group.emailSecond, 
-              isG, isW, batch.salesOrder
+              isW, batch.salesOrder
             );
           }
         });

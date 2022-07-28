@@ -422,7 +422,8 @@ Meteor.methods({
         orgKey: Meteor.user().orgKey,
         $or: [ { lock: false },
                { lock: { $exists: false } }
-             ]
+             ],
+        'tide.stopTime': false
       },{ fields: {'tide':1} 
       }).forEach( bx => {
         if(bx.tide) { screenT(bx.tide, bx._id) }

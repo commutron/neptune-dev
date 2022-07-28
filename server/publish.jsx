@@ -401,8 +401,7 @@ Meteor.publish('thinData', function(){
       }, {
         fields: {
           'equipId': 1,
-          'name': 1,
-          'serveKey': 1
+          'name': 1
       }})
     ];
   }
@@ -460,10 +459,10 @@ Meteor.publish('hotDataPlus', function(scanOrb, keyMatch){
   }
 });
 
-Meteor.publish('hotMaint', function(hotServeId) {
+Meteor.publish('hotMaint', function(hotMaintId) {
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
-  const mtData = MaintainDB.findOne({_id: hotServeId},{ fields:{'equipId':1}});
+  const mtData = MaintainDB.findOne({_id: hotMaintId},{ fields:{'equipId':1}});
   
   if(!this.userId || !mtData) {
     return this.ready();
@@ -472,9 +471,9 @@ Meteor.publish('hotMaint', function(hotServeId) {
       EquipDB.find({_id: mtData.equipId, orgKey: orgKey}, {
         fields: {
           'orgKey': 0,
+          'stewards': 0
         }}),
-        
-      MaintainDB.find({_id: hotServeId, orgKey: orgKey}, {
+      MaintainDB.find({_id: hotMaintId, orgKey: orgKey}, {
         fields: {
           'orgKey': 0,
         }})

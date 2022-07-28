@@ -6,7 +6,7 @@ import ModelSmall from '/client/components/smallUi/ModelSmall';
 
 const ServeRemove = ({ id, serveKey, lockOut, name, opendates })=> {
   
-  const access = Roles.userIsInRole(Meteor.userId(), 'edit');
+  const access = Roles.userIsInRole(Meteor.userId(), ['equipSuper','edit']);
   
   return(
     <ModelSmall

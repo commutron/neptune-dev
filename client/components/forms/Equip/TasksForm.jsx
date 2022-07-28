@@ -6,7 +6,7 @@ import ModelMedium from '/client/components/smallUi/ModelMedium';
 
 const TasksFormWrapper = ({ id, serveKey, tasks, lockOut })=> {
   
-  const access = Roles.userIsInRole(Meteor.userId(), 'edit');
+  const access = Roles.userIsInRole(Meteor.userId(), ['equipSuper','edit']);
  
   return(
     <ModelMedium

@@ -11,7 +11,7 @@ const ServeFormWrapper = ({
   const bttn = service ? 'Edit' : 'Add Service';
   const title = service ? 'Edit Service Pattern' : 'Add Service Pattern';
   
-  const access = Roles.userIsInRole(Meteor.userId(), 'edit');
+  const access = Roles.userIsInRole(Meteor.userId(), ['equipSuper','edit']);
 
   return(
     <ModelMedium

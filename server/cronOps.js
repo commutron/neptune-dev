@@ -26,39 +26,45 @@ SyncedCron.add({
 });
 
 SyncedCron.add({
-  name: 'Weekly Lock Check',
-  schedule: (parser)=> parser.text('at 6:01 am on Sat'),
-  job: ()=> goDo('lockingCacheUpdate')
+  name: 'Daily Maintain Events',
+  schedule: (parser)=> parser.text('at 6:01 am'),
+  job: ()=> goDo('pmRobot')
 });
 
 SyncedCron.add({
   name: 'Twice Daily Trace Priority',
-  schedule: (parser)=> parser.text('at 6:02 am every weekday also at 6:02 pm every weekday'),
+  schedule: (parser)=> parser.text('at 6:05 am every weekday also at 6:00 pm every weekday'),
   job: ()=> goDo('updateLiveMovement')
 });
 
 SyncedCron.add({
-  name: 'Weekly Avg Day Time',
-  schedule: (parser)=> parser.text('at 6:03 am on Sat'),
-  job: ()=> goDo('fetchWeekAvg')
-});
-
-SyncedCron.add({
-  name: 'Weekly Widget Avgs',
-  schedule: (parser)=> parser.text('at 6:04 am on Sat'),
-  job: ()=> goDo('updateAllWidgetAvg')
-});
-
-SyncedCron.add({
   name: 'Daily Tide Overrun',
-  schedule: (parser)=> parser.text('at 6:05 am every weekday'),
+  schedule: (parser)=> parser.text('at 6:07 am every weekday'),
   job: ()=> goDo('fetchOverRun')
 });
 
 SyncedCron.add({
   name: 'Daily Trend Loops',
-  schedule: (parser)=> parser.text('at 6:06 am every weekday'),
+  schedule: (parser)=> parser.text('at 6:10 am every weekday'),
   job: ()=> runRanges()
+});
+
+SyncedCron.add({
+  name: 'Weekly Lock Check',
+  schedule: (parser)=> parser.text('at 6:15 am on Sat'),
+  job: ()=> goDo('lockingCacheUpdate')
+});
+
+SyncedCron.add({
+  name: 'Weekly Avg Day Time',
+  schedule: (parser)=> parser.text('at 6:20 am on Sat'),
+  job: ()=> goDo('fetchWeekAvg')
+});
+
+SyncedCron.add({
+  name: 'Weekly Widget Avgs',
+  schedule: (parser)=> parser.text('at 6:25 am on Sat'),
+  job: ()=> goDo('updateAllWidgetAvg')
 });
 
 

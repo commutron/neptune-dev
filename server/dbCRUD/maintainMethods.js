@@ -36,7 +36,7 @@ Meteor.methods({
     let duplicate = EquipDB.findOne({equip: eqname},{fields:{'_id':1}});
     const dupe = EquipDB.findOne({alias: alias},{fields:{'_id':1}});
     
-    const auth = Roles.userIsInRole(Meteor.userId(), 'create');
+    const auth = Roles.userIsInRole(Meteor.userId(), ['equipSuper','create']);
     
     if(!duplicate && !dupe && auth) {
       EquipDB.insert({
@@ -68,7 +68,7 @@ Meteor.methods({
     doc.equip === newEqname ? duplicate = false : null;
     doc.alias === newAlias ? dupe = false : null;
     
-    const auth = Roles.userIsInRole(Meteor.userId(), 'edit');
+    const auth = Roles.userIsInRole(Meteor.userId(), ['equipSuper','edit']);
     
     if(!duplicate && !dupe && auth) {
       let setBr = !brKey || brKey === 'false' ? false : brKey;
@@ -89,7 +89,7 @@ Meteor.methods({
   },
   
   onofflineEquipment(eqId, line) {
-    const auth = Roles.userIsInRole(Meteor.userId(), 'edit');
+    const auth = Roles.userIsInRole(Meteor.userId(), ['equipSuper','edit']);
     
     if(auth) {
       EquipDB.update({_id: eqId, orgKey: Meteor.user().orgKey}, {
@@ -105,8 +105,8 @@ Meteor.methods({
   },
   
   stewardEquipment(eqId, stewArr) {
-    const auth = Roles.userIsInRole(Meteor.userId(), ['peopleSuper','edit']);
-    const arry = Array.isArray(stewArr);
+    const auth = Roles.userIsInRole(Meteor.userId(), ['equipSuper','peopleSuper','edit']);
+    const arry = Array.isArray(stewArr); // user IDs
     
     if(auth && arry) {
       EquipDB.update({_id: eqId, orgKey: Meteor.user().orgKey}, {
@@ -122,7 +122,7 @@ Meteor.methods({
   },
   
   addServicePattern(eqId, name, timeSpan, pivot, next, recur, period, grace) {
-    if( Roles.userIsInRole(Meteor.userId(), 'edit') ) {
+    if( Roles.userIsInRole(Meteor.userId(), ['equipSuper','edit']) ) {
       const accessKey = Meteor.user().orgKey;
       const serveKey = new Meteor.Collection.ObjectID().valueOf();
       
@@ -153,7 +153,7 @@ Meteor.methods({
   },
 
   editServicePattern(eqId, serveKey, name, timeSpan, pivot, next, recur, period, grace) {
-    if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
+    if(Roles.userIsInRole(Meteor.userId(), ['equipSuper','edit'])) {
       const accessKey = Meteor.user().orgKey;
       
       const whenOf = typeof pivot === 'string' ? pivot : Number(pivot);
@@ -179,7 +179,7 @@ Meteor.methods({
   },
   
   removeServicePattern(eqId, serveKey) {
-    if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
+    if(Roles.userIsInRole(Meteor.userId(), ['equipSuper','edit'])) {
       EquipDB.update({_id: eqId, orgKey: Meteor.user().orgKey, 'service.serveKey': serveKey}, {
         $pull : { service: { serveKey: serveKey }
       }});
@@ -191,7 +191,7 @@ Meteor.methods({
   },
   
   setServiceTasks(eqId, serveKey, tasksArr) {
-    const auth = Roles.userIsInRole(Meteor.userId(), 'edit');
+    const auth = Roles.userIsInRole(Meteor.userId(), ['equipSuper','edit']);
     
     if(auth && Array.isArray(tasksArr)) {
       EquipDB.update({_id: eqId, orgKey: Meteor.user().orgKey, 'service.serveKey': serveKey}, {
@@ -343,17 +343,18 @@ Meteor.methods({
     }
   },
   
-  pmRobot() {
+  pmRobot(accessKey) {
     try {
-      syncLocale(Meteor.user().orgKey);
-      
-      // MaintainDB.remove({status: false, checklist: { $size: 0 }});
+      const orgKey = accessKey || Meteor.user().orgKey;
+      syncLocale(orgKey);
       
       const updateStatus = ()=> {
-        // return new Promise(function(resolve) {
+        return new Promise(function(resolve) {
           const now = moment().tz(Config.clientTZ);
           
-          const maint = MaintainDB.find({status: false},{fields:{'_id':1, 'expire':1, 'checklist':1}}).fetch();
+          const maint = MaintainDB.find({status: false},
+                          {fields:{'_id':1, 'name':1,'expire':1, 'checklist':1}}
+                        ).fetch();
           
           for(const mn of maint) {
             if( now.isAfter(mn.expire) ) {
@@ -365,16 +366,28 @@ Meteor.methods({
                 }
               });
               
-              // and defer email
+              Meteor.defer( ()=>{
+                const equip = EquipDB.find({_id: mn.equipId},{fields:{'equip':1}});
+                const users = Meteor.users.find({ roles: { $in: ["equipSuper"] } });
+                const supr = Array.from(users, u => u._id);
+                
+                Meteor.call('handleInternalMaintEmail', 
+                  orgKey, supr, equip.equip, maint.name, "grace period", false);
+              });
+            }else if( n.isAfter(mn.close) ) {
+              Meteor.defer( ()=>{
+                const equip = EquipDB.find({_id: mn.equipId},{fields:{'alias':1,'stewards':1}});
+                const stew = equip?.stewards || [];
+                Meteor.call('handleInternalMaintEmail', 
+                  orgKey, stew, equip.equip, maint.name, "deadline", mn.expire,); 
+              });
             }
           }
-        //   resolve('updated');
-        // });
+          resolve('updated');
+        });
       };
       
       const updateDates = ()=> {
-        return new Promise(function(resolve) {
-          
         EquipDB.find({online: true},{fields:{'_id':1, 'service':1}})
         .forEach( (eq)=> {
           const maintEq = MaintainDB.find({equipId: eq._id, expire: { $gte: new Date() }},
@@ -398,7 +411,7 @@ Meteor.methods({
               MaintainDB.insert({
                 equipId: eq._id,
                 serveKey: sv.serveKey,
-                orgKey: Meteor.user().orgKey,
+                orgKey: orgKey,
                 name: sv.name,
                 open: new Date( open ),
                 close: new Date( close.format() ),
@@ -413,7 +426,7 @@ Meteor.methods({
                 $set: {
                   equipId: eq._id,
                   serveKey: sv.serveKey,
-                  orgKey: Meteor.user().orgKey,
+                  orgKey: orgKey,
                   name: sv.name,
                   open: new Date( open ),
                   close: new Date( close.format() ),
@@ -427,12 +440,10 @@ Meteor.methods({
             }
           }
         });
-        resolve('updated');
-        });
       };
       
-      updateDates()
-        .then(updateStatus())
+      updateStatus()
+        .then(updateDates())
           .finally(()=> { return true });
 
     }catch (error) {

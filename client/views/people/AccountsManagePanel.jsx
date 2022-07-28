@@ -167,6 +167,19 @@ export const PermissionHelp = ({ auths, admin })=> {
         </ul>
       : null}
       
+      {r.includes('equipSuper') ?
+        <ul>
+          <li><b>Equipment Super</b></li>
+          <ul>
+            <li>Create/Edit {Pref.equip} entries</li>
+            <li>Set {Pref.maintain}-service patterns</li>
+            <li>Set {Pref.maintain}-service tasks</li>
+            <li>Receive an email if {Pref.maintain}-service is missed</li>
+            <p className='small'>*Email is sent after the grace period ends</p> 
+          </ul>
+        </ul>
+      : null}
+      
       {r.includes('qa') ?
         <ul>
           <li><b>QA</b></li>
@@ -199,6 +212,7 @@ export const PermissionHelp = ({ auths, admin })=> {
         <ul>
           <li><b>Create</b></li>
           <ul>
+            <li>Create new {Pref.equip}</li>
             <li>Create a new {Pref.group}</li>
             <li>Create a new {Pref.widget}</li>
             <li>Create a new {Pref.variant}</li>
@@ -213,6 +227,7 @@ export const PermissionHelp = ({ auths, admin })=> {
         <ul>
           <li><b>Edit</b></li>
           <ul>
+            <li>Edit {Pref.equip}</li>
             <li>Edit {Pref.groups}</li>
             <li>Edit {Pref.widgets}</li>
             <li>Add or edit {Pref.widget} {Pref.variants}</li>

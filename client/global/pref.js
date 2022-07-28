@@ -21,6 +21,7 @@ class Pref {
       'readOnly',
       'nightly',
       'peopleSuper',
+      'equipSuper',
       'qa',
       'remove',
       'create',
