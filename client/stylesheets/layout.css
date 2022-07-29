@@ -1436,12 +1436,16 @@ n-col-table-head > span {
   .taskLink {
     margin: 1vmin 0;
     min-width: 5.5vmin;
+    width: 5.5vmin;
     min-height: 5.5vmin;
+    height: 5.5vmin;
     font-size: 3.25vmin;
   }
   .followTask i {
     min-width: 5.5vmin;
+    width: 5.5vmin;
     min-height: 5.5vmin;
+    height: 5.5vmin;
     font-size: 2.25vmin;
   }
 }

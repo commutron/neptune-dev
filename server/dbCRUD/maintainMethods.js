@@ -293,7 +293,7 @@ Meteor.methods({
   pmUpdate(eqId, serveKey, accessKey) {
     syncLocale(accessKey);
     
-    const eq = EquipDB.findOne({_id: eqId},{fields:{'_id':1, 'service':1}});
+    const eq = EquipDB.findOne({_id: eqId},{fields:{'service':1}});
     const sv = eq.service.find( s => s.serveKey === serveKey );
     
     if(sv) {
@@ -306,8 +306,8 @@ Meteor.methods({
       const open = close.clone().subtractWorkingTime(sv.period - 1, 'days').startOf('day').format();
       const expire = close.clone().addWorkingTime(sv.grace, 'days').format();
       
-      const match = MaintainDB.findOne({equipId: eq._id, serveKey: sv.serveKey, expire: { $gte: new Date() }},
-                          {fields:{'_id':1, 'checklist':1, 'notes':1}});
+      const match = MaintainDB.findOne({equipId: eq._id, serveKey: sv.serveKey, expire: { $gt: new Date() }},
+                                       {fields:{'checklist':1, 'notes':1}});
           
       if(!match) {
         MaintainDB.insert({
@@ -324,7 +324,7 @@ Meteor.methods({
           notes: ''
         });
       }else{
-        MaintainDB.update({equipId: eq._id, serveKey: sv.serveKey, status: false},{
+        MaintainDB.update({_id: match._id, status: false},{
           $set: {
             equipId: eq._id,
             serveKey: sv.serveKey,
@@ -348,6 +348,8 @@ Meteor.methods({
       const orgKey = accessKey || Meteor.user().orgKey;
       syncLocale(orgKey);
       
+      MaintainDB.remove({});
+      
       const updateStatus = ()=> {
         return new Promise(function(resolve, reject) {
           try {
@@ -360,7 +362,7 @@ Meteor.methods({
                               'checklist':1
                             }}
                           ).fetch();
-            
+
             for(const mn of maint) {
               if( now.isAfter(mn.expire) ) {
                 const ng = mn.checklist.length > 0 ? 'incomplete' : 'missed';
@@ -398,10 +400,10 @@ Meteor.methods({
       };
       
       const updateDates = ()=> {
-        EquipDB.find({online: true},{fields:{'_id':1, 'service':1}})
+        EquipDB.find({online: true},{fields:{'service':1}})
         .forEach( (eq)=> {
-          const maintEq = MaintainDB.find({equipId: eq._id, expire: { $gte: new Date() }},
-                          {fields:{'_id':1, 'serveKey':1, 'checklist':1, 'notes':1}}).fetch();
+          const maintEq = MaintainDB.find({equipId: eq._id, expire: { $gt: new Date() }},
+                          {fields:{'serveKey':1, 'checklist':1, 'notes':1}}).fetch();
           
           for(const sv of eq.service) {
             
@@ -413,7 +415,7 @@ Meteor.methods({
                       nextMmnt.lastWorkingTime().endOf('day');
                       
             const match = maintEq.find( m => m.serveKey === sv.serveKey );
-            
+       
             const open = close.clone().subtractWorkingTime(sv.period - 1, 'days').startOf('day').format();
             const expire = close.clone().addWorkingTime(sv.grace, 'days').format();
             
@@ -432,7 +434,7 @@ Meteor.methods({
                 notes: ''
               });
             }else{
-              MaintainDB.update({equipId: eq._id, serveKey: sv.serveKey, status: false},{
+              MaintainDB.update({_id: match._id, status: false},{
                 $set: {
                   equipId: eq._id,
                   serveKey: sv.serveKey,
