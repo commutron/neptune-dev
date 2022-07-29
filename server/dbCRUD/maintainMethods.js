@@ -348,8 +348,6 @@ Meteor.methods({
       const orgKey = accessKey || Meteor.user().orgKey;
       syncLocale(orgKey);
       
-      MaintainDB.remove({});
-      
       const updateStatus = ()=> {
         return new Promise(function(resolve, reject) {
           try {
