@@ -7,7 +7,7 @@ import ModelSmall from '/client/components/smallUi/ModelSmall';
 
 const EquipEmailsManager = ({ id, stewards, users })=> {
 
-  const access = Roles.userIsInRole(Meteor.userId(), ['peopleSuper','edit']);
+  const access = Roles.userIsInRole(Meteor.userId(), ['peopleSuper','equipSuper','edit']);
   
   return(
     <ModelSmall
@@ -29,7 +29,7 @@ const EquipEmailsManager = ({ id, stewards, users })=> {
 export default EquipEmailsManager;
 
 
-const EquipEmails = ({ id, stewards, users })=> {
+const EquipEmails = ({ id, stewards, users, selfclose })=> {
   
   const [ eList, eListSet ] = useState( [ { label: 'name', value: 'name' } ] );
   const [ emails, emailSet ] = useState( [] );
@@ -54,6 +54,7 @@ const EquipEmails = ({ id, stewards, users })=> {
         error && toast.error(error.reason || 'Error');
         if(reply) {
           toast.success('Saved');
+          selfclose();
         }else{
           toast.warning('Not Allowed');
         }

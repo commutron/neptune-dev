@@ -645,11 +645,6 @@ n-trib-action-all {
 .flowForm .dropdown-container,
 .emailForm .dropdown-container,
 .stoneForm .dropdown-container {
-  --rmsc-main: var(--peterriver);
-  --rmsc-hover: var(--peterriverfade);
-  --rmsc-selected: var(--contrast);
-  --rmsc-border: transparent;
-  --rmsc-h: 1.5rem;
   color: black;
   border: 1px solid black;
 }
@@ -661,9 +656,9 @@ n-trib-action-all {
 .flowForm .item-renderer,
 .emailForm .item-renderer,
 .stoneForm .item-renderer {
-  display: flex;
-  align-items: center;
-  color: black;
+  display: flex !important;
+  align-items: center !important;
+  color: black !important;
 }
 .stoneForm .dropdown-content {
   width: -moz-fit-content;

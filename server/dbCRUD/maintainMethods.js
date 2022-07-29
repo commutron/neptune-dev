@@ -349,41 +349,51 @@ Meteor.methods({
       syncLocale(orgKey);
       
       const updateStatus = ()=> {
-        return new Promise(function(resolve) {
-          const now = moment().tz(Config.clientTZ);
-          
-          const maint = MaintainDB.find({status: false},
-                          {fields:{'_id':1, 'name':1,'expire':1, 'checklist':1}}
-                        ).fetch();
-          
-          for(const mn of maint) {
-            if( now.isAfter(mn.expire) ) {
-              const ng = mn.checklist.length > 0 ? 'incomplete' : 'missed';
-              
-              MaintainDB.update({_id: mn._id},{
-                $set: {
-                  status: ng
-                }
-              });
-              
-              Meteor.defer( ()=>{
-                const equip = EquipDB.find({_id: mn.equipId},{fields:{'equip':1}});
-                const users = Meteor.users.find({ roles: { $in: ["equipSuper"] } });
-                const supr = Array.from(users, u => u._id);
+        return new Promise(function(resolve, reject) {
+          try {
+            const now = moment().tz(Config.clientTZ);
+            
+            const maint = MaintainDB.find({status: false},
+                            { fields: {
+                              'equipId':1, 'name':1,
+                              'close':1, 'expire':1,
+                              'checklist':1
+                            }}
+                          ).fetch();
+            
+            for(const mn of maint) {
+              if( now.isAfter(mn.expire) ) {
+                const ng = mn.checklist.length > 0 ? 'incomplete' : 'missed';
                 
-                Meteor.call('handleInternalMaintEmail', 
-                  orgKey, supr, equip.equip, maint.name, "grace period");
-              });
-            }else if( n.isAfter(mn.close) ) {
-              Meteor.defer( ()=>{
-                const equip = EquipDB.find({_id: mn.equipId},{fields:{'alias':1,'stewards':1}});
-                const stew = equip?.stewards || [];
-                Meteor.call('handleInternalMaintEmail', 
-                  orgKey, stew, equip.equip, maint.name, "deadline", mn.expire); 
-              });
+                MaintainDB.update({_id: mn._id},{
+                  $set: {
+                    status: ng
+                  }
+                });
+              
+                Meteor.defer( ()=>{
+                  const equip = EquipDB.find({_id: mn.equipId},{fields:{'equip':1}});
+                  const titl = equip?.equip || "";
+                  const users = Meteor.users.find({ roles: { $in: ["equipSuper"] } });
+                  const supr = Array.from(users, u => u._id);
+                  
+                  Meteor.call('handleInternalMaintEmail', 
+                    orgKey, supr, titl, maint.name, "grace period");
+                });
+              }else if( now.isAfter(mn.close) ) {
+                Meteor.defer( ()=>{
+                  const equip = EquipDB.find({_id: mn.equipId},{fields:{'equip':1,'stewards':1}});
+                  const stew = equip?.stewards || [];
+                  const titl = equip?.equip || "";
+                  Meteor.call('handleInternalMaintEmail', 
+                    orgKey, stew, titl, maint.name, "deadline", mn.expire); 
+                });
+              }
             }
-          }
-          resolve('updated');
+            resolve('updated');
+          }catch (err) {
+            reject(err);
+          } 
         });
       };
       
@@ -443,8 +453,10 @@ Meteor.methods({
       };
       
       updateStatus()
-        .then(updateDates())
-          .finally(()=> { return true });
+        .catch( (e)=>{
+          console.error(e) })
+            .then(updateDates())
+              .finally(()=> { return true });
 
     }catch (error) {
       throw new Meteor.Error(error);

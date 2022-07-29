@@ -231,6 +231,7 @@ const EquipSlide = ({ equipData, maintainData, app, users, brancheS })=>{
           <TasksForm
             id={eq._id}
             serveKey={sv.serveKey}
+            name={sv.name}
             tasks={sv.tasks}
             lockOut={!eq.online}
           />

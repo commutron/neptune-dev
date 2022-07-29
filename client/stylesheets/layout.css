@@ -1025,14 +1025,14 @@ input.miniIn12, select.miniIn12 { width: 12ch; }
 input.miniIn18, select.miniIn18 { width: 18ch; }
 input.miniIn24, select.miniIn24 { width: 24ch; }
 
-.rmsc,
-.rmsc input,
-.rmsc.multi-select,
-.rmsc.dropdown-container {
-  --rmsc-main: var(--neptuneColor);
-  --rmsc-hover: var(--neptuneColor);
-  --rmsc-selected: var(--contrast);
-  --rmsc-h: 32px;
+.rmsc {
+  --rmsc-main: var(--neptuneColor) !important;
+  --rmsc-hover: var(--neptuneColor) !important;
+  --rmsc-selected: var(--contrast) !important;
+  --rmsc-h: 32px !important;
+  --rmsc-border: black !important;
+  --rmsc-bg: white !important;
+  --rmsc-radius: 0px !important;
 }
 .rmsc,
 .rmsc.multi-select {

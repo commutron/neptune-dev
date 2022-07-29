@@ -4,14 +4,14 @@ import { toast } from 'react-toastify';
 
 import ModelMedium from '/client/components/smallUi/ModelMedium';
 
-const TasksFormWrapper = ({ id, serveKey, tasks, lockOut })=> {
+const TasksFormWrapper = ({ id, serveKey, name, tasks, lockOut })=> {
   
   const access = Roles.userIsInRole(Meteor.userId(), ['equipSuper','edit']);
  
   return(
     <ModelMedium
       button='Tasks'
-      title='Edit Task'
+      title={`Edit ${name} Tasks`}
       color='midnightblueT'
       icon='fa-list-check'
       lock={!access || lockOut}

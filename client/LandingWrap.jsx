@@ -30,6 +30,7 @@ const StartView = ({user, app}) =>	{
 	
   const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
   const isReadOnly = Roles.userIsInRole(Meteor.userId(), 'readOnly');
+  const isNightly = Roles.userIsInRole(Meteor.userId(), 'nightly');
   
   return(
     <PlainFrame title={Pref.neptuneIs} container='splashContainer'>
@@ -43,7 +44,7 @@ const StartView = ({user, app}) =>	{
             icon='fa-regular fa-paper-plane'
             link='/production' /> }
         
-        {isAdmin ? 
+        {isNightly ? 
           <NavButton title='Terminal' icon='fa-solid fa-location-arrow' link='/process' />
         : <NavPlaceholder title='Terminal' icon='fa-solid fa-location-arrow' /> }
         
