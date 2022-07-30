@@ -15,7 +15,7 @@ const MainWrap = ({
                   e1.alias > e2.alias ? 1 : 0 );
         
   const menuList = equipS.map( (entry)=> {
-                    const clss = entry.online ? '' : 'strike fade';
+                    const clss = entry.online ? '' : 'strike darkgrayT';
                     return [entry.alias, clss];
                   });
   

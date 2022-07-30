@@ -48,7 +48,7 @@ const SlidesNested = ({
             className={
               show === false ? 
                 'slideNestedLand cap slideOn' : 
-                'slideNestedLand cap slideOff'
+                'slideNestedLand cap'
             }
             disabled={dA[0]}
           ><div className='wide centreText'><b>{menuTitle}</b></div></button>}
@@ -57,15 +57,15 @@ const SlidesNested = ({
           const showThing = !filter || entry[0].includes(filter) ? true : false;
           let clss =  show === index ? 
                       'slideNestedMenuButton slideOn' : 
-                      'slideNestedMenuButton slideOff';
+                      'slideNestedMenuButton';
           if(showThing) {
             return(
               <button
                 key={index}
                 onClick={()=>setSection(index)}
-                className={`${clss} ${entry[1]} ${textStyle || 'cap'}`}
+                className={`${clss} ${entry[1]}`}
                 disabled={dA[index+1]}
-              ><b>{entry[0]}</b></button>
+              ><b className={textStyle || 'cap'}>{entry[0]}</b></button>
             );
           }else{
             return <hr key={index} />;

@@ -92,10 +92,14 @@ export function getEst(widgetId, quantity, pTgt) {
   return cEst;
 }
 
-export function toCap(str, all) { 
-  if(all) {
-    return str.replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase())));
+export function toCap(str, all) {
+  if(typeof str === 'string') {
+    if(all) {
+      return str.replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase())));
+    }else{
+      return str.trim().replace(/^\w/, (c) => c.toUpperCase());
+    }
   }else{
-    return str.trim().replace(/^\w/, (c) => c.toUpperCase());
+    return ""
   }
 }/* joshtronic of Digital Ocean Community Tutorials */

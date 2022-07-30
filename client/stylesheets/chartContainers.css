@@ -1,39 +1,3 @@
-
-.pieContain {
-  max-height: 300px;
-  max-width: 300px;
-}
-
-.barContain {
-  display: block;
-  min-width: 600px;
-  max-width: 800px;
-  min-height: 600px;
-  max-height: 800px;
-}
-
-.inlineContain {
-  margin: 25px 0;
-  width: 500px;
-  min-height: 200px;
-  max-height: 600px;
-}
-
-.smallContain {
-  display: flex;
-  justify-content: center;
-  margin: 10px auto;
-  width: 100%;
-  min-height: 200px;
-  max-height: 300px;
-}
-
-.miniContain {
-  max-width: 150px;
-  padding: 5px 10px;
-}
-.miniContain p { margin: 2px; }
-
 .reContain {
   padding: 10px;
   width: 800px;
@@ -41,28 +5,8 @@
   background-color: #fff;
 }
 
-.layeredCircles {
-  display: flex;
-  flex-direction: row;
-}
-
-.monoPie, .monoPieDone, .monoDon, .monoDonDone {
-  display: flex;
-  justify-content: center;
-}
-
 .chartNoHeightContain {
   height: auto;
-}
-
-.chart5Contain {
-  width: 5vmax;
-  padding: 1vmax;
-}
-.chart5Contain .pieCore,
-.chart5Contain p { 
-  font-size: 1vmax; 
-  margin: 0;
 }
 
 .chart10Shrink {
@@ -103,38 +47,6 @@
 .chart20Contain .pieCore { font-size: 8vmax; }
 .chart20Contain p { 
   font-size: 2vmax;
-  margin: 0;
-}
-
-.chart25Contain {
-  width: 25vmax;
-  padding: 1vmax;
-}
-.chart25Contain .pieCore { font-size: 10vmax; }
-.chart25Contain p { 
-  font-size: 2.5vmax;
-  margin: 0;
-}
-
-
-.chart30Contain {
-  width: 30vmax;
-  height: 30vmax;
-  padding: 1vmax;
-}
-.chart30Contain .pieCore { font-size: 12vmax; }
-.chart30Contain p { 
-  font-size: 3vmax;
-  margin: 0;
-}
-
-.chart40Contain {
-  width: 40vmax;
-  padding: 1vmax;
-}
-.chart40Contain .pieCore { font-size: 15vmax; }
-.chart40Contain p { 
-  font-size: 3vmax;
   margin: 0;
 }
 

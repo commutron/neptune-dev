@@ -416,14 +416,6 @@ main {
 }
 /* ////////////////////////// */
 
-.bleed {
-  padding: 0;
-  margin: 0;
-  border: none;
-  width: 100%;
-  height: 100%;
-}
-
 .gap { margin: 0 5px; }
 .gapR { margin: 0 5px 0 0; }
 .gapL { margin: 0 0 0 5px; }
@@ -455,15 +447,6 @@ main {
   .titleSection > span, .titleSection > button {
     font-size: var(--tx5);
   }
-}
-
-.tableList {
-  min-width: calc(75vw - (10 * var(--vh)) - 0.75vw);
-  display: table;
-}
-.tableList > div,
-.tableList > button {
-  margin: 2vh 0;
 }
 
 /* modal popup */
@@ -627,14 +610,6 @@ n-sm-model-content {
   padding: 0;
 }
 
-.centreColumn {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap-reverse;
-  align-items: center;
-  padding: 0;
-}
-
 .centreRow, .leftRow {
   display: flex;
   flex-direction: row;
@@ -651,13 +626,6 @@ n-sm-model-content {
 
 .topLine > div { align-self: flex-start; }
 
-.centreTrue {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
 .centreText { text-align: center; }
 .leftText { text-align: left !important; }
 .rightText { text-align: right; }
@@ -670,12 +638,6 @@ n-sm-model-content {
 .split {
   display: flex;
   justify-content: space-between;
-  margin: 0;
-}
-.splitReverse {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap-reverse;
   margin: 0;
 }
 .half { width: 50%; }
@@ -947,19 +909,8 @@ n-sm-model-content {
   text-indent: 1ch;
 }
 
-.verLine { vertical-align: middle; }
-
-.tweekUp { vertical-align: super; }
-
-.overrideline { line-height: 1rem; }
-
 .wrap { white-space: normal; }
-
 .noWrap { white-space: nowrap; }
-
-.vSpaceGaps {
-  border-bottom: 5vh solid var(--clouds);
-}
 
 .smaller, .smaller > p { font-size: var(--sm7); }
 .small, .small > p { font-size: var(--sm8); }
@@ -1084,10 +1035,6 @@ button.numberSet {
   font-size: var(--sm9);
 }
 
-.navSpacer {
-  flex-grow: 2;
-}
-
 .tableAction {
   max-width: 10ch;
   min-width: 1.75rem;
@@ -1117,19 +1064,6 @@ button.numberSet {
   min-height: 1.5rem;
   min-width: 1.5rem;
 }
-.mockInputBox, .mockInputBoxOFF {
-  width: 15rem;
-  min-height: 2rem;
-  max-height: 2rem;
-  line-height: 1.1;
-}
-.mockInputBox {
-  border: 1px solid black;
-}
-.mockInputBoxOFF {
-  border: 1px dotted black;
-  background-color: rgb(235,235,228);
-}
 
 .actionBox .flatpickr-input ~ .form-control {
   max-width: 100%;
@@ -1143,143 +1077,11 @@ button.numberSet {
   text-indent: 0.10rem;
 }
 
-.scrollToNav {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  background-color: rgb(25,25,25);
-}
-.scrollToNav span {
-  padding: 0 1vw;
-  font-size: 1.75vh;
-}
-.scrollToNav span:focus {
-  border: 1px dotted var(--clouds);
-}
-
-.anchorTarget {
-  position: relative;
-  top: 0;
-}
-
-.popTbody > tr:first-child > td { 
-  border-top: 3px solid rgba(255,255,255,0.5);
-}
-
-.popTbody > tr:last-child > td {
-  padding-bottom: 50px;
-  border-right: none;
-}
-
 .grid {
   display: table;
   width: 100%;
   justify-content: center;
   border-collapse: collapse;
-}
-.gridRow {
-	display: table-row;
-	border-bottom: 1px solid rgba(0,0,0,0.2);
-}
-.gridCell {
-	display: table-cell;
-	text-align: center;
-	vertical-align: middle;
-	padding: 0;
-  word-break: break-word;/*weird no standerd thing but it works*/
-  word-wrap: break-word;
-}
-.gridCell:first-child {
-	text-align: left;
-}
-.gridCell:last-child {
-	text-align: right;
-}
-.openGridCell {
-	display: table-cell;
-  border-bottom: 0.1em solid rgba(255,255,255,0.3);
-	vertical-align: middle;
-	padding: 2px 2px 2px 2px;
-}
-
-/* still using?? */
-.wipCol {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-}
-.wipCol > section {
-  position: relative;
-  width: calc((100% - 60px) / 3);
-  min-height: 100%;
-  margin: 5px 10px 30px 10px;
-  display: flex;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  align-items: stretch;
-}
-@media screen and (max-width: 1500px){
-  .wipCol > section {
-    width: calc((100% - 40px) / 2);
-  }
-  .wipCol > section.dblSection {
-    width: calc(( (100% - 40px) / 2 ) * 2);
-  }
-}
-@media screen and (max-width: 1000px){
-  .wipCol > section {
-    width: calc(100% - 20px);
-  }
-  .wipCol > section.dblSection {
-    width: calc(100% - 20px);
-  }
-}
-
-.wipCol > section > div {
-  width: 100%;
-}
-.wipCol > section > .fillHeight {
-  flex-grow: 2;
-}
-
-.wipRow {
-  position: relative;
-  width: 100%;
-  min-height: 100%;
-  margin: 32px 32px;
-  padding-bottom: 16px;
-  border: 1px solid rgb(30,30,30);
-  background-color: var(--black);
-}
-
-.wellSpacedLine {
-  margin-bottom: 8px;
-  min-height: 3rem;
-  padding: 8px 0px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-.wellSpacedLine > span {
-  padding: 0 15px;
-  border-right: 1px solid rgba(255,255,255,0.3);
-}
-
-.wellSpacedLine > span:last-child {
-  margin: 0;
-  border-right: 1px solid transparent;
-}
-
-.functionalFooter {
-  width: 100%;
-  padding: 0 10px;
-}
-.functionalFooter label {
-  font-size: 0.75rem;
-  padding: 0 15px;
-  border-left: 1px solid rgba(255,255,255,0.3);
-  border-right: 1px solid rgba(255,255,255,0.3);
 }
 
 .nestedTable { table-layout: fixed; }

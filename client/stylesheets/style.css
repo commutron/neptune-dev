@@ -203,9 +203,6 @@ input::-webkit-calendar-picker-indicator {
 .borderTeal { border-color: var(--greenSea); }
 .borderPurple { border-color: var(--wisteria); }
 
-.proWhite::-webkit-progress-value { background-color: var(--clouds); }
-.proWhite::-moz-progress-bar { background-color: var(--clouds); }
-
 .proGray::-webkit-progress-value { background-color: var(--concrete); }
 .proGray::-moz-progress-bar { background-color: var(--concrete); }
 
@@ -214,12 +211,6 @@ input::-webkit-calendar-picker-indicator {
 
 .proBlue::-webkit-progress-value { background-color: var(--belizeHole); }
 .proBlue::-moz-progress-bar { background-color: var(--belizeHole); }
-
-.proRed::-webkit-progress-value { background-color: var(--alizarin); }
-.proRed::-moz-progress-bar { background-color: var(--alizarin); }
-
-.proOrange::-webkit-progress-value { background-color: var(--orange); }
-.proOrange::-moz-progress-bar { background-color: var(--orange); }
 
 .proTeal::-webkit-progress-value { background-color: var(--greenSea); }
 .proTeal::-moz-progress-bar { background-color: var(--greenSea); }
@@ -354,17 +345,6 @@ input::-webkit-calendar-picker-indicator {
   background-color: #27ae60;
 }
 
-.proBad { background: transparent; }
-.proBad::-webkit-progress-bar {
-  background: transparent;
-}
-.proBad::-webkit-progress-value {
-  background-color: #c0392b;
-}
-.proBad::-moz-progress-bar {
-  background-color: #c0392b;
-}
-
 .progMockMeter {
   display: inline-block;
   min-width: 8ch;
@@ -397,7 +377,6 @@ input::-webkit-calendar-picker-indicator {
 }
 
 n-piece-bar-wrap {
-  
   display: block;
 }
 n-piece-bar {
@@ -446,12 +425,12 @@ n-prog-bar progress {
   height: 3px;
 }
 
-/*.eventList {*/
-/*  list-style-type: square;*/
-/*}*/
-/*.eventList li {*/
-/*  margin: 8px 0;*/
-/*}*/
+.eventList {
+  list-style-type: square;
+}
+.eventList li {
+  margin: 8px 0;
+}
 
 .tempTag { margin: 0 7px 0 0; }
 

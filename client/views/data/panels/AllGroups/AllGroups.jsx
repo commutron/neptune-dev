@@ -14,8 +14,8 @@ const AllGroups = ({
   const groupS = groupData.sort((g1, g2)=>
                   g1.alias < g2.alias ? -1 : g1.alias > g2.alias ? 1 : 0 );
                   
-  const menuList = groupS.map( (entry, index)=> {
-                    const clss = entry.hibernate ? 'strike fade' : '';
+  const menuList = groupS.map( (entry)=> {
+                    const clss = entry.hibernate ? 'strike darkgrayT' : '';
                     let it = entry.internal ? ' intrBlue' : '';
                     return [entry.alias, clss+it];
                   });

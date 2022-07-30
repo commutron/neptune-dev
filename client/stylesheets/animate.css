@@ -129,32 +129,6 @@
   }
 }
 
-/*/////////////////////////////////////////////////*/
-
-.cardTrans-enter, .cardTrans-appear {
-  -webkit-animation: fadeIn 300ms var(--scottsCurve);
-  -moz-animation: fadeIn 300ms var(--scottsCurve);
-  animation: fadeIn 300ms var(--scottsCurve);
-}
-
-.contentTrans-enter, .contentTrans-appear {
-  -webkit-animation: fadeIn 300ms var(--scottsCurve);
-  -moz-animation: fadeIn 300ms var(--scottsCurve);
-  animation: fadeIn 300ms var(--scottsCurve);
-}
-
-
-/* animation for models */
-
-.modelTrans-enter, .modelTrans-appear {
-  opacity: 0;
-  transition: all 0.2s var(--scottsCurve);
-}
-
-.modelTrans-enter-active, .modelTrans-appear-active {
-  opacity: 1;
-}
-
 @keyframes spinAround {
   0%   { transform: translate3d(0, 0, 0) rotate(0deg); }
   100% { transform: translate3d(0, 0, 0) rotate(360deg); }
@@ -205,7 +179,6 @@
   }
 }
 
-
 @keyframes rolley {
   10% { transform: translateX(10px) rotate(8deg); }
   20% { transform: translateX(-10px) rotate(-8deg); }
@@ -250,13 +223,6 @@
   animation-iteration-count: 1;
 }
 
-.twitch-change {
-  animation-name: hvr-buzz-out;
-  animation-duration: 0.5s;
-  animation-timing-function: ease-out;
-  animation-iteration-count: 0.3;
-}
-
 .bounce-change {
   animation-name: bounce;
   animation-duration: 2s;
@@ -278,13 +244,6 @@
   animation-iteration-count: 1;
 }
 
-.rolley-change {
-  animation-name: rolley;
-  animation-duration: 3s;
-  animation-timing-function: ease;
-  animation-iteration-count: 1;
-}
-
 .shaker-change {
   animation-name: shake;
   animation-duration: 0.5s;
@@ -292,18 +251,8 @@
   animation-iteration-count: 1;
 }
 
-.slideIn-change {
-  animation-name: slideInLeft;
-  animation-duration: 0.3s;
-  animation-timing-function: ease-in-out;
-  animation-iteration-count: 1;
-}
-
 .homeIconLogo:hover, .homeIconLogo:active {
   animation: spinAround 2s infinite linear;
-}
-.workIcon {
-  animation: spinAround 3s infinite linear;
 }
 
 .spinRe {
@@ -316,9 +265,7 @@
 .spin2 {
   animation: spinAround 2s infinite linear;
 }
-.slowSpin {
-  animation: spinAround 5s infinite linear ;
-}
+
 .turn {
   animation: spinAround 500s infinite linear;
 }
@@ -363,9 +310,6 @@
   }
   .homeIconLogo:hover, .homeIconLogo:active {
     animation: none
-  }
-  .workIcon {
-    animation: spinAround 30s infinite linear;
   }
   .spin2 {
     animation: spinAround 10s infinite linear;

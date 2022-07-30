@@ -26,7 +26,7 @@ const AccountsManagePanel = ({ app, users, traceDT, brancheS, isDebug })=> {
         });
   
   let usersMenu = usersSort.map( (entry)=>{
-    const clss = !Roles.userIsInRole(entry._id, 'active') ? 'strike fade' : '';
+    const clss = !Roles.userIsInRole(entry._id, 'active') ? 'strike darkgrayT' : '';
     return [ entry.username, clss ];
   });
   

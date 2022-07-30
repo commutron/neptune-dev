@@ -378,7 +378,7 @@ Meteor.methods({
                   const supr = Array.from(users, u => u._id);
                   
                   Meteor.call('handleInternalMaintEmail', 
-                    orgKey, supr, titl, maint.name, "grace period");
+                    orgKey, supr, titl, mn.name, "grace period");
                 });
               }else if( now.isAfter(mn.close) ) {
                 Meteor.defer( ()=>{
@@ -386,7 +386,7 @@ Meteor.methods({
                   const stew = equip?.stewards || [];
                   const titl = equip?.equip || "";
                   Meteor.call('handleInternalMaintEmail', 
-                    orgKey, stew, titl, maint.name, "deadline", mn.expire); 
+                    orgKey, stew, titl, mn.name, "deadline", mn.expire); 
                 });
               }
             }
