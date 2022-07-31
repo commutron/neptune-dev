@@ -5,6 +5,7 @@ import 'moment-business-time';
 import { toast } from 'react-toastify';
 import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/themes/airbnb.css';
+import Pref from '/client/global/pref.js';
 
 import TimesEdit from '/client/components/forms/LocaleTime';
 
@@ -128,14 +129,14 @@ const ScheduleSlide = ({ app, user, users, isAdmin, isPeopleSuper })=> {
       
           <h3>{isAuth ? 'Set Holiday' : 'Test'} Day</h3>
           
-          <div className='vspace balance'>
+          <div className='vspace beside'>
             <Flatpickr
               onChange={(e)=>handleDateChange(e)}
               options={{
                 dateFormat: "Y-m-d",
                 defaultDate: new Date(),
-              }} />
-              
+              }} 
+            />
             <button 
               className='smallAction nHover'
               onClick={()=>handleTest()}
@@ -172,13 +173,21 @@ const ScheduleSlide = ({ app, user, users, isAdmin, isPeopleSuper })=> {
               </button>
             </div>
             
-            <p className='small grayT centreText'
-            >removing former holidays will create inacurate on time / late calculations
-            </p>
+            <ul>
+              <li className='smTxt'
+              >removing former holidays will create inacurate on time / late calculations.
+              </li>
+              <li className='smTxt'
+              >{Pref.premaintain} service schedule recalculates everyday at midnight.
+              </li>
+              <li className='small'
+              >(schedule can be updated on demand from Settings - Data Repair.)
+              </li>
+            </ul>
           </Fragment>
           :
-          <p className='small grayT rightText'
-            >adjusting holiday days requires 'Admin' or 'PeopleSuper' access
+          <p className='smTxt rightText'
+            >adjusting holiday days requires 'Admin' or 'PeopleSuper' access.
           </p>
           }
       

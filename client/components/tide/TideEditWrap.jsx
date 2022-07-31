@@ -25,18 +25,17 @@ const TideEditWrap = ({
   
   function editBlock(e) {
     enableEdit(false);
-    const batch = e.batch;
     const tideKey = e.tideKey;
     const newStart = Array.isArray(e.newStart) ? e.newStart[0] : false;
     const newStop = Array.isArray(e.newStop) ? e.newStop[0] : false;
     const taskIs = e.taskIs;
     const subtIs = e.subtIs;
     
-    if(!batch || !tideKey || !newStart || !newStop) { 
-      console.log([{batch, tideKey, newStart, newStop}, 'data issue no call']);
+    if(!tideKey || !newStart || !newStop) { 
+      console.log([{tideKey, newStart, newStop}, 'data issue no call']);
     }else{
       Meteor.apply('editTideTimeBlock', 
-        [ batch, tideKey, newStart, newStop, taskIs, subtIs ],
+        [ e.dbHome, tideKey, newStart, newStop, taskIs, subtIs ],
         { wait: true, noRetry: true },
         (err, asw)=>{
           err && console.log(err);
@@ -47,13 +46,10 @@ const TideEditWrap = ({
     }
   }
   function endBlock(e) {
-    const batch = e.batch;
-    const tideKey = e.tideKey;
-
-    if(!batch || !tideKey) { 
-      console.log([{batch, tideKey}, 'data issue no call']);
+    if(!e.tideKey) { 
+      console.log([e.tideKey, 'data issue no call']);
     }else{
-      Meteor.apply('stopTideTimeBlock', [ batch, tideKey ],
+      Meteor.apply('stopTideTimeBlock', [ e.dbHome, e.tideKey ],
       { wait: true, noRetry: true },
       (err, asw)=>{
         err && console.log(err);
@@ -65,15 +61,14 @@ const TideEditWrap = ({
   }
   function splitBlock(e) {
     enableEdit(false);
-    const batch = e.batch;
     const tideKey = e.tideKey;
     const newSplit = Array.isArray(e.tempSplit) ? e.tempSplit[0] : false;
     const stopTime = e.stopTime;
 
-    if(!batch || !tideKey || !newSplit || !stopTime) { 
-      console.log([{batch, tideKey, newSplit, stopTime}, 'data issue no call']);
+    if(!tideKey || !newSplit || !stopTime) { 
+      console.log([{tideKey, newSplit, stopTime}, 'data issue no call']);
     }else{
-      Meteor.apply('splitTideTimeBlock', [ batch, tideKey, newSplit, stopTime ],
+      Meteor.apply('splitTideTimeBlock', [ e.dbHome, tideKey, newSplit, stopTime ],
        { wait: true, noRetry: true },
        (err, asw)=>{
         err && console.log(err);
@@ -87,10 +82,12 @@ const TideEditWrap = ({
   return(
     <tbody>
       {weekData.map( (blk, index)=>{
-        const keyword = blk.batch;
-        const moreInfo = traceDT ? traceDT.find( x => x.batch === blk.batch) : false;
-        const what = moreInfo ? moreInfo.isWhat.join(' ') : 'unavailable';
-        const rad = moreInfo ? moreInfo.rad : null;
+        const maint = blk.type === 'MAINT';
+
+        const moreInfo = maint ? false : traceDT?.find( x => x.batch === blk.batch);
+        const what = maint ? (blk.project?.split(" ~ ")?.[1]?.split("<*>")?.[0] || 'Scheduled')
+                              + ' Service' : moreInfo?.isWhat.join(' ') || 'unavailable';
+        const rad = maint ? null : moreInfo?.rad || null;
         
         const lastStart = weekData[index-1] && weekData[index-1].startTime;
         const lastStop = weekData[index+1] && weekData[index+1].stopTime;
@@ -103,7 +100,7 @@ const TideEditWrap = ({
           const restOfDay = weekData.filter( x => newDayTime.isSame(x.startTime, 'day') );
           const isHoliday = HolidayCheck( app.nonWorkDays, newDayTime);
           const dayDurr = Array.from(restOfDay, x => Math.round(x.durrAsMin) );
-          const dayTotal = dayDurr.reduce((x,y)=>x+y);
+          const dayTotal = dayDurr.reduce((x,y)=>x+y,0);
           
           return(
             <Fragment key={index+blk.tKey}>
@@ -128,7 +125,6 @@ const TideEditWrap = ({
               </tr>
               <TideBlockRow
                 key={blk.tKey}
-                batch={keyword}
                 describe={what}
                 rad={rad}
                 tideObj={blk}
@@ -151,7 +147,6 @@ const TideEditWrap = ({
           return(
             <TideBlockRow
               key={blk.tKey}
-              batch={keyword}
               describe={what}
               rad={rad}
               tideObj={blk}

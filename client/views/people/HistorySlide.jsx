@@ -109,9 +109,14 @@ const HistorySlide = ({ app, user, users, traceDT, isDebug })=> {
           <tbody>
           {dayData.map( (blk, index)=>{
             const keyword = blk.batch;
-            const moreInfo = traceDT ? traceDT.find( x => x.batch === blk.batch) : false;
-            const what = moreInfo ? moreInfo.isWhat.join(' ') : 'unavailable';
-            const rad = moreInfo ? moreInfo.rad : null;
+            const project = blk.project;
+            const equip = project?.split(" ~ ")?.[0]?.substring(3);
+            const maint = blk.type === 'MAINT';
+            
+            const moreInfo = maint ? false : traceDT?.find( x => x.batch === blk.batch);
+            const what = maint ? (project?.split(" ~ ")?.[1]?.split("<*>")?.[0] || 'Scheduled')
+                          + ' Service' : moreInfo?.isWhat.join(' ') || 'unavailable';
+            const rad = maint ? null : moreInfo?.rad || null;
             
             const lastStart = dayData[index-1] && dayData[index-1].startTime;
             
@@ -126,6 +131,7 @@ const HistorySlide = ({ app, user, users, traceDT, isDebug })=> {
                     batch={keyword}
                     describe={what}
                     rad={rad}
+                    equip={equip}
                     tBlock={blk} />
                 </Fragment>
               );
@@ -191,13 +197,16 @@ const TideTaskCols = ({ tide, traceDT })=> {
   const userList = [...new Set( Array.from(tide, x => x.who ) )]
                       .sort((u1, u2)=> u1 > u2 ? 1 : u1 < u2 ? -1 : 0 );
                       
-  const batchList = [...new Set( Array.from(tide, x => x.batch ) )]
+  const batchList = [...new Set( Array.from(tide, x => x.batch ) )].filter(f=>f)
+                      .sort((b1, b2)=> b1 > b2 ? 1 : b1 < b2 ? -1 : 0 );
+                      
+  const maintList = [...new Set( Array.from(tide, x => x.project?.split(" ~ ")?.[0]?.substring(3) ) )].filter(f=>f)
                       .sort((b1, b2)=> b1 > b2 ? 1 : b1 < b2 ? -1 : 0 );
                       
   const taskList = [...new Set( Array.from(tide, x => x.task ) )]
                     .filter(f=>f)
                     .sort((t1, t2)=> t1 > t2 ? 1 : t1 < t2 ? -1 : 0 );
- 
+
   return(
     <div className='autoGrid'>
             
@@ -237,12 +246,23 @@ const TideTaskCols = ({ tide, traceDT })=> {
         </dl>
       </span>
       
+      <span className='space1v centre'>
+        <h4> {maintList.length} Serviced</h4>
+        <dl className='readlines'>
+          {maintList.map( (eq, iq)=>(
+            <dt key={eq+iq} className='rightRow doJustWeen'>
+              <ExploreLinkBlock type='equip' keyword={eq} /> 
+            </dt>
+          ))}
+        </dl>
+      </span>
+      
     </div>
   );
 };
 
 const TidePlainRow = ({ 
-  batch, describe, rad, tBlock
+  batch, describe, equip, rad, tBlock
 })=> {
   
   const tideWho = tBlock.who;
@@ -257,7 +277,10 @@ const TidePlainRow = ({
       <td className='noRightBorder'><UserNice id={tideWho} /></td>
       
       <td className='noRightBorder'>
-        <ExploreLinkBlock type='batch' keyword={batch} rad={rad} />
+        {equip ?
+          <ExploreLinkBlock type='equip' keyword={equip} /> :
+          <ExploreLinkBlock type='batch' keyword={batch} rad={rad} />
+        }
       </td>
       
       <td className='noRightBorder'>{describe}</td>

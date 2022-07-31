@@ -11,10 +11,12 @@ const ExploreLinkBlock = ({ type, keyword, altName, wrap, rad })=>{
                   '/data/batch?request=' + title
                 : type === 'item' ? 
                   '/data/batch?request=' + keyword.split('+')[1] + '&specify=' + title
+                : type === 'equip' ?
+                  '/data/overview?request=maintain&specify=' + keyword
                 : '';
   const noWrap = wrap ? '' : 'noWrap';
   return(                    
-    <a href={link} className={noWrap + ' numFont blueT'} 
+    <a href={link} className={`${noWrap} numFont cap ${type === 'equip' ? 'wetasphaltT' : 'blueT'}`} 
     >{rad ? <n-fa1 class='smplTip' data-tip={rad}>
               <i className='fa-solid fa-burst fa-fw noPrint darkOrangeT'></i>
             </n-fa1>

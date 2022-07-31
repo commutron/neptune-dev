@@ -14,7 +14,7 @@ function sendInternalEmail(to, subject, date, title, body, asid, foot, link) {
               <span style="letter-spacing:1px;font-weight:900;font-size:30px">Neptune</span>
             </div>
           </td>
-          <td style="text-align:center;padding:0 10px;font-size:16px;font-weight:600;letter-spacing:1px;line-height:30px">Automated Email</td>
+          <td style="text-align:center;padding:0 10px;font-size:16px;font-weight:600;letter-spacing:1px;line-height:20px">Automated Email</td>
         </tr>
         <tr>
           <td colspan='2' class='body' style="padding:20px 10%;line-height: 1.5">
@@ -252,8 +252,8 @@ Meteor.methods({
       
       const title = `Concerning ${toCap(equip, true)}`;
       const body = `${toCap(name)} scheduled maintenance is incomplete and past its ${state}.`;
-      const asid = dead ? `A short grace period is in effect but maintenance must be completed by end of day ${dead}.` : '';
-      const foot = '';
+      const asid = '';
+      const foot = dead ? `A short grace period is in effect but maintenance must be completed by end of day ${dead}.` : '';
       const link = dead ? "To stop receiving emails concerning this equipment, remove your name from the equipment's assigned stewards" :
                           "To stop receiving emails concerning missed maintenance, disable your 'equipSuper' authorization";
       

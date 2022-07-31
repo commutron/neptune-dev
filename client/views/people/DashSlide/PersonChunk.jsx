@@ -44,9 +44,15 @@ const PersonChunk = ({
   
   isDebug && console.log(branchGuess);
   
-  const moreInfo = traceDT ? traceDT.find( x => x.batch === uC.batch) : false;
-  const what = moreInfo ? moreInfo.isWhat.join(' ') : 'unavailable';
-  const rad = moreInfo ? moreInfo.rad : null;
+  const project = userChunk.tideBlock.project;
+  const equip = project?.split(" ~ ")?.[0]?.substring(3);
+  
+  const maint = userChunk.tideBlock.type === 'MAINT';
+  
+  const moreInfo = maint ? false : traceDT?.find( x => x.batch === uC.batch);
+  const what = maint ? (project?.split(" ~ ")?.[1]?.split("<*>")?.[0] || 'Scheduled')
+                          + ' Service' : moreInfo?.isWhat.join(' ') || 'unavailable';
+  const rad = maint ? null : moreInfo?.rad || null;
   
   return(
     <tr className='leftText numFont'>
@@ -55,7 +61,10 @@ const PersonChunk = ({
         <TaskTagLite task={branchGuess[1]} guess={branchGuess[0] === 'fromUserInput'} />
       </td>
       <td className='noRightBorder'>
-        <ExploreLinkBlock type='batch' keyword={uC.batch} rad={rad} />
+        {project ?
+          <ExploreLinkBlock type='equip' keyword={equip} /> :
+          <ExploreLinkBlock type='batch' keyword={uC.batch} rad={rad} />
+        }
       </td>
       <td className='noRightBorder'>{what}</td>
       <td className='noRightBorder centreText'>

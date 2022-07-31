@@ -150,11 +150,20 @@ const DataRepair = ({ app, users })=> {
       
       <DoCard
         title='Run TraceDB Live Movment Update'
-        sub='Runs every Weekday at 12:02am (CST) and 12:02pm (CST)'
+        sub='Runs every Weekday at 12:05am (CST) and 12:00pm (CST)'
         icon='sync'
         color='tealSolid'
         button='Update TraceDB'
         action={()=>doCallThing('updateLiveMovement')}
+      />
+      
+      <DoCard
+        title='Run Maintenance Schedule Robot'
+        sub='Runs every day at 12:01am (CST)'
+        icon='robot'
+        color='midnightSolid'
+        button='Run Service Robot'
+        action={()=>doCallThing('pmRobot')}
       />
       
       <DoCard
@@ -316,7 +325,7 @@ export default DataRepair;
 
 const DoCard = ({ title, sub, icon, color, button, action })=> (
   <div>
-    <h3><i className={`fas fa-${icon} fa-lg gap`}></i>
+    <h3><i className={`fa-solid fa-${icon} fa-lg gap`}></i>
       {title}
     </h3>
     {sub && <small>{sub}</small>}

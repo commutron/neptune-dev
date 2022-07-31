@@ -656,7 +656,9 @@ Meteor.publish('thinEquip', function(){
       MaintainDB.find({orgKey: orgKey}, {
         fields: {
           'equipId': 1
-      }})
+      }}),
+      
+      TimeDB.find({})
     ];
   }
 });

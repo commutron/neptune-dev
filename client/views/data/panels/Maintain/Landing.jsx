@@ -7,13 +7,7 @@ import EquipForm from '/client/components/forms/Equip/EquipForm';
 import NumBox from '/client/components/tinyUi/NumBox';
 
 const Landing = ({ equipData, maintainData, app, brancheS })=> {
-  
-  const runRobot = ()=> {
-    Meteor.call('pmRobot', (err)=>{
-      err && console.log(err);
-    });
-  };
-  
+
   const runemailtest = ()=> {
     Meteor.call('testEquipMaintEmail', (err)=>{
       err && console.log(err);
@@ -46,13 +40,6 @@ const Landing = ({ equipData, maintainData, app, brancheS })=> {
           
         </p>
       </details>
-      
-      <div className='wide max875 vspacehalf'>
-        
-        <button onClick={()=>runRobot()} className='action nSolid beside'
-        ><i className="fa-solid fa-robot fa-lg gap"></i>Run Service Robot</button>
-        
-      </div>
       
       <div className='wide max875 vspacehalf'>
         

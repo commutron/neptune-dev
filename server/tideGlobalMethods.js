@@ -169,13 +169,10 @@ function collectActivtyLevel(batchID) {
   });
 }
 
-function slimBlockReturnData(batch, thePeriod, lockout) {
+function slimTideArray(batch, thePeriod, lockout) {
   let slimBlock = [];
   for(let blck of thePeriod) {
     const tideMinutes = addTideDuration(blck);
-    
-    // const mStop = blck.stopTime ? moment(blck.stopTime) : moment();
-    // let durr = moment.duration(mStop.diff(blck.startTime)).asMinutes();
     
     slimBlock.push({
       batch: batch,
@@ -191,6 +188,22 @@ function slimBlockReturnData(batch, thePeriod, lockout) {
     });
   }
   return slimBlock;     
+}
+function slimTimeReturn(proj, entry) {
+  const timeMinutes = addTideDuration(entry);
+  return {
+    project: proj,
+    type: entry.type,
+    tKey: entry._id,
+    who: entry.who,
+    startTime: entry.startTime,
+    stopTime: entry.stopTime,
+    durrAsMin: timeMinutes,
+    focus: null,
+    task: entry.task || null,
+    subtask: entry.subtask || null,
+    lockOut: false
+  };
 }
 
 
@@ -216,28 +229,44 @@ Meteor.methods({
   fetchOrgTideActivity(dateString) {
     try {
       const localDate = moment.tz(dateString, Config.clientTZ);
+      const dayStart = new Date(localDate.startOf('day').format());
+      const dayEnd = new Date(localDate.endOf('day').format());
       
       const getYear = localDate.year();
       const getDay = localDate.dayOfYear();
       
+      let slimCollection = [];
+      
       const touchedBX = XBatchDB.find({
         orgKey: Meteor.user().orgKey,
         tide: { $elemMatch: { startTime: {
-        $gte: new Date(localDate.startOf('day').format()),
-        $lte: new Date(localDate.endOf('day').format())
+          $gte: dayStart,
+          $lte: dayEnd
       }}}
       }).fetch();
       
-      let slimTideCollection = [];
       for(let btch of touchedBX) {
-        const theDay = !btch.tide ? [] : btch.tide.filter( x => 
+        const bchDay = !btch.tide ? [] : btch.tide.filter( x => 
           moment.tz(x.startTime, Config.clientTZ).year() === getYear && 
           moment.tz(x.startTime, Config.clientTZ).dayOfYear() === getDay);
         
-        const slimData = slimBlockReturnData(btch.batch, theDay, btch.lock);
-        Array.prototype.push.apply(slimTideCollection, slimData);
+        const slimTide = slimTideArray(btch.batch, bchDay, btch.lock);
+        Array.prototype.push.apply(slimCollection, slimTide);
       }
-      return slimTideCollection;
+      
+      const dayTimez = TimeDB.find({
+        startTime: {
+          $gte: dayStart,
+          $lte: dayEnd
+        }
+      }).fetch();
+      
+      for(let time of dayTimez) {
+        const slimTimez = slimTimeReturn(time.project, time);
+        slimCollection.push(slimTimez);
+      }
+      
+      return slimCollection;
     }catch(err) {
       throw new Meteor.Error(err);
     }
@@ -251,21 +280,23 @@ Meteor.methods({
       const getYear = yearNum || moment().weekYear();
       const getWeek = weekNum || moment().week();
       const pinDate = moment.tz(Config.clientTZ).year(getYear).week(getWeek);
+      const weekStart = new Date(pinDate.startOf('week').format());
+      const weekEnd = new Date(pinDate.endOf('week').format());
       
       const isAuth = Meteor.userId() === mockUserId ||
               Roles.userIsInRole(Meteor.userId(), ['admin', 'peopleSuper']);
-                      
-      const sendAll = allOrg;
-      const sendOneID = !mockUserId ? Meteor.userId() :
-                        isAuth ? mockUserId : null;
 
-      const touchedBX = !sendAll ?
+      const sendOneID = mockUserId ? isAuth ? mockUserId : null : Meteor.userId();
+
+      let slimCollection = [];
+      
+      const touchedBX = !allOrg ?
         XBatchDB.find({
           orgKey: orgKey, 
           groupId: { $ne: xid },
           tide: { $elemMatch: { startTime: {
-            $gte: new Date(pinDate.startOf('week').format()),
-            $lte: new Date(pinDate.endOf('week').format())
+            $gte: weekStart,
+            $lte: weekEnd
           }}},
           'tide.who': sendOneID
         }).fetch()
@@ -274,22 +305,43 @@ Meteor.methods({
           orgKey: orgKey,
           groupId: { $ne: xid },
           tide: { $elemMatch: { startTime: {
-            $gte: new Date(pinDate.startOf('week').format()),
-            $lte: new Date(pinDate.endOf('week').format())
+            $gte: weekStart,
+            $lte: weekEnd
           }}},
         }).fetch();
       
-      let slimTideCollection = [];
       for(let btch of touchedBX) {
         const yourWeek = !btch.tide ? [] : btch.tide.filter( x => 
-          (sendAll || x.who === sendOneID ) && 
+          (allOrg || x.who === sendOneID ) && 
           moment(x.startTime).weekYear() === getYear && 
           moment(x.startTime).week() === getWeek);
           
-        const rtnBlock = slimBlockReturnData(btch.batch, yourWeek, btch.lock);
-        Array.prototype.push.apply(slimTideCollection, rtnBlock);
+        const rtnBlock = slimTideArray(btch.batch, yourWeek, btch.lock);
+        Array.prototype.push.apply(slimCollection, rtnBlock);
       }
-      return slimTideCollection;
+      
+      const dayTimez = !allOrg ?
+        TimeDB.find({
+          startTime: {
+            $gte: weekStart,
+            $lte: weekEnd
+          },
+          who: sendOneID
+        }).fetch()
+        :
+        TimeDB.find({
+          startTime: {
+            $gte: weekStart,
+            $lte: weekEnd
+          }
+        }).fetch();
+      
+      for(let time of dayTimez) {
+        const slimTimez = slimTimeReturn(time.project, time);
+        slimCollection.push(slimTimez);
+      }
+      
+      return slimCollection;
     }catch(err) {
       throw new Meteor.Error(err);
     }
@@ -300,12 +352,12 @@ Meteor.methods({
       const now = moment.tz(Config.clientTZ);
       const yearNum = now.weekYear();
       const weekNum = now.week();
-      const weekTides = Meteor.call('fetchWeekTideActivity',
+      const weekTimes = Meteor.call('fetchWeekTideActivity',
                           yearNum, weekNum, true, false, accessKey, true);
       
-      const durrs = Array.from(weekTides, x => x.durrAsMin);
+      const durrs = Array.from(weekTimes, x => x.durrAsMin);
       const total = durrs.reduce((x,y)=> x + y, 0);
-      const days = [...new Set(Array.from(weekTides, x => moment(x.startTime).day())) ].length;
+      const days = [...new Set(Array.from(weekTimes, x => moment(x.startTime).day())) ].length;
       
       const avgperday = total > 0 ? total / days : 0;
   
@@ -365,22 +417,31 @@ Meteor.methods({
   
   fetchOverRun() {
     try {
-      const stillEng = Meteor.users.find({'engaged.task': 'PROX'},
+      const stillEng = Meteor.users.find({engaged: { $ne: false }},
                                          { fields:{'engaged':1} }).fetch();
       
       if(stillEng.length > 0) {
-        const mssg = `You did not stop your time tracker from the previous workday.\nPlease correct your Production Activity record.`;
+        const mssg = `You did not stop your time tracker from the previous workday.\nPlease correct your Project Activity record.`;
         
         for( let u of stillEng ) {
-          const ttle = `${u.engaged.tName} Production Time Overrun`;
+          const ttle = `${u.engaged.tName} Project Time Overrun`;
         
           const b = XBatchDB.findOne({ 'tide.tKey': u.engaged.tKey },{fields:{'tide':1}});
           if(b) {
-            const t = b.tide.find( x => x.tKey === u.engaged.tKey );
-            const overDay = ( new Date() - t.startTime ) > 
+            const td = b.tide.find( x => x.tKey === u.engaged.tKey );
+            const overDay = ( new Date() - td.startTime ) > 
                             ( (Config.maxShift / 2) * 60 * 60000 );
             if(overDay) {
               Meteor.call('sendUserDM', u._id, ttle, mssg);
+            }
+          }else{
+            const t = TimeDB.findOne({ _id: u.engaged.tKey },{fields:{'startTime':1}});
+            if(t) {
+              const overDay = ( new Date() - t.startTime ) > 
+                              ( (Config.maxShift / 2) * 60 * 60000 );
+              if(overDay) {
+                Meteor.call('sendUserDM', u._id, ttle, mssg);
+              }
             }
           }
         }
@@ -409,7 +470,6 @@ Meteor.methods({
               }});
             }
           }
-          
           if( ( ( t.stopTime || now ) - t.startTime ) > tooManyMsec ) {
             badDurr.push([
               t.startTime, t.who
@@ -429,8 +489,28 @@ Meteor.methods({
         if(bx.tide) { screenT(bx.tide, bx._id) }
       });
       
-      const badDurrS = badDurr.sort( (d1, d2)=> 
-                          d1[1] < d2[1] ? 1 : d1[1] > d2[1] ? -1 : 0 );
+      TimeDB.find({
+        orgKey: Meteor.user().orgKey,
+        'tide.stopTime': false
+      },{ fields: {'who':1,'startTime':1,'stopTime':1} 
+      }).forEach( tm => {
+        if( tm.stopTime === false ) {
+          if( !Meteor.users.findOne({_id: tm.who, 'engaged.tKey': tm._id}) ) {
+            const stopshort = moment(tm.startTime).add(3, 'seconds').toISOString();
+            TimeDB.update({ _id: tm._id }, {
+              $set : { 
+                stopTime : new Date(stopshort)
+            }});
+          }
+          if( ( ( tm.stopTime || now ) - tm.startTime ) > tooManyMsec ) {
+            badDurr.push([
+              tm.startTime, tm.who
+            ]);
+          }
+        }
+      });
+      
+      const badDurrS = badDurr.sort( (d1, d2)=> d1[1] < d2[1] ? 1 : d1[1] > d2[1] ? -1 : 0 );
       return JSON.stringify(badDurrS);
     }catch(err) {
       throw new Meteor.Error(err);

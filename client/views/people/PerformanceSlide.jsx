@@ -21,6 +21,7 @@ const PerformanceSlide = ({ app, user, users, traceDT, isDebug })=> {
   const [userList, setUserList] = useState([]);
   const [batchList, setBatchList] = useState([]);
   const [taskList, setTaskList] = useState([]);
+  const [equipList, setEquipList] = useState([]);
   
   const [ selectDayState, selectDaySet ] = useState(false);
   const [ totalWeekHrsState, totalWeekHrsSet ] = useState(false);
@@ -102,13 +103,20 @@ const PerformanceSlide = ({ app, user, users, traceDT, isDebug })=> {
             u1.username.toLowerCase() < u2.username.toLowerCase() ? -1 : 0 );
     setUserList(unqUserS);
     
-    const unqBatches = [...new Set( Array.from(dayFiltered, x => x.batch ) )];
-    const unqBatcheS = unqBatches.sort((b1, b2)=> b1 < b2 ? 1 : b1 > b2 ? -1 : 0 );
+    const unqBatcheS = [...new Set( Array.from(dayFiltered, x => x.batch ) )]
+                        .filter(f=>f)
+                        .sort((b1, b2)=> b1 < b2 ? 1 : b1 > b2 ? -1 : 0 );
     setBatchList(unqBatcheS);
     
-    const unqTasks = [...new Set( Array.from(dayFiltered, x => x.task ) )].filter(f=>f);
-    const unqTaskSclean = unqTasks.sort((t1, t2)=> t1 > t2 ? 1 : t1 < t2 ? -1 : 0 );
+    const unqTaskSclean = [...new Set( Array.from(dayFiltered, x => x.task ) )]
+                          .filter(f=>f)
+                          .sort((t1, t2)=> t1 > t2 ? 1 : t1 < t2 ? -1 : 0 );
     setTaskList(unqTaskSclean);
+    
+    const unqEquipS = [...new Set( Array.from(dayFiltered, x => x.project?.split(" ~ ")?.[0]?.substring(3) ) )]
+                      .filter(f=>f)
+                      .sort((b1, b2)=> b1 > b2 ? 1 : b1 < b2 ? -1 : 0 );
+    setEquipList(unqEquipS);
     
   }, [weekData, selectDayState, weekDays]);
   
@@ -205,6 +213,17 @@ const PerformanceSlide = ({ app, user, users, traceDT, isDebug })=> {
               <dl className='readlines'>
                 {taskList.map( (ent, ix)=>(
                   <dt key={ent+ix}>{ent}</dt>
+                ))}
+              </dl>
+            </span>
+            
+            <span className='space1v centre'>
+              <h4> {equipList.length} Serviced [{selectDayState || 'Week ' + weekChoice.weekNum}]</h4>
+              <dl className='readlines'>
+                {equipList.map( (eq, iq)=>(
+                  <dt key={eq+iq} className='rightRow doJustWeen'>
+                    <ExploreLinkBlock type='equip' keyword={eq} /> 
+                  </dt>
                 ))}
               </dl>
             </span>

@@ -27,7 +27,7 @@ const PeoplePanel = ({
           <tr className='leftText line2x'>
             <th colSpan='5'>{Pref.engaged} with a {Pref.xBatch}</th>
           </tr>
-          {userChunks.map( (entry, index)=>{
+          {userChunks.map( (entry)=>{
             return(
               <PersonChunk 
                 key={entry.uID}
@@ -45,7 +45,7 @@ const PeoplePanel = ({
       <div className='w100 vmargin cap'>
         <h3 className='med indent10'>{Pref.engagedNot}</h3>
         <ul className='autoGrid'>
-          {dUsers.map( (entry, index)=>{
+          {dUsers.map( (entry)=>{
             if(entry.proTimeShare && entry.proTimeShare[0].timeAsDecimal > 0) {
               return(
                 <li key={entry._id} className='leftText line2x'>

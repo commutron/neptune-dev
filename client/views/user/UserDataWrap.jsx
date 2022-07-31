@@ -17,7 +17,7 @@ import UserSettings from '/client/components/forms/User/UserSettings';
 
 const UserDataWrap = ({
   readybNames,
-  user, isAdmin, isDebug, org, app,
+  user, isAdmin, isDebug, app,
   traceDT, users
 })=> {
   
@@ -89,7 +89,7 @@ const UserDataWrap = ({
   );
 };
 
-export default withTracker( ({ view }) => {
+export default withTracker( () => {
   let login = Meteor.userId() ? true : false;
   let user = login ? Meteor.user() : false;
   let org = user ? user.org : false;
@@ -106,7 +106,6 @@ export default withTracker( ({ view }) => {
       user: user,
       isAdmin: isAdmin,
       isDebug: isDebug,
-      org: org,
       app: AppDB.findOne({org: org}),
       traceDT: TraceDB.find({}).fetch(),
       users: Meteor.users.find({}, {sort: {username:1}}).fetch()

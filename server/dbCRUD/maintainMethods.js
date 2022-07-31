@@ -293,10 +293,10 @@ Meteor.methods({
   pmUpdate(eqId, serveKey, accessKey) {
     syncLocale(accessKey);
     
-    const eq = EquipDB.findOne({_id: eqId},{fields:{'service':1}});
-    const sv = eq.service.find( s => s.serveKey === serveKey );
+    const eq = EquipDB.findOne({_id: eqId, online: true},{fields:{'service':1}});
+    const sv = eq?.service.find( s => s.serveKey === serveKey );
     
-    if(sv) {
+    if(eq && sv) {
       const next = nextService(sv);
       const nextMmnt = moment(next).tz(Config.clientTZ);
       const close = sv.whenOf === 'startOf' || ( sv.timeSpan === 'day' && !nextMmnt.isWorkingDay() ) ?
@@ -380,7 +380,7 @@ Meteor.methods({
                   Meteor.call('handleInternalMaintEmail', 
                     orgKey, supr, titl, mn.name, "grace period");
                 });
-              }else if( now.isAfter(mn.close) ) {
+              }else if( now.isSame(moment(mn.close).add(1, 'days'), 'day') ) {
                 Meteor.defer( ()=>{
                   const equip = EquipDB.find({_id: mn.equipId},{fields:{'equip':1,'stewards':1}});
                   const stew = equip?.stewards || [];

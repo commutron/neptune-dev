@@ -112,8 +112,7 @@ export const ProWrap = ({
                    : etMlt ?
                     (bData?.tide || []).find( x => ( x.tKey === etKey[0] || x.tKey === etKey[1] ) && x.who === Meteor.userId() ) 
                    : time?._id === etKey && time?.link === maintId ? time : null;
-  // const otKey = timeOpen?.tKey;
-  
+
   const exploreLink = itemSerial && bData ?
                       '/data/batch?request=' + bData.batch + '&specify=' + itemSerial :
                       bData ?

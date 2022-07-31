@@ -7,7 +7,7 @@ import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/themes/airbnb.css';
 
 const TideBlockRow = ({ 
-  batch, describe, rad, tideObj,
+  describe, rad, tideObj,
   lastStop, nextStart,
   editKey, editMode,
   splitKey, splitMode,
@@ -17,6 +17,11 @@ const TideBlockRow = ({
   isSuper, isDebug
 })=> {
   
+  const batch = tideObj.batch;
+  const project = tideObj.project;
+  const equip = project?.split(" ~ ")?.[0]?.substring(3);
+  
+  const dbHome = project ? false : batch;            
   const tideKey = tideObj.tKey;
   const tideWho = tideObj.who;
   const startTime = tideObj.startTime;
@@ -40,7 +45,7 @@ const TideBlockRow = ({
   
   function saveTemp() {
     if(splitOn && tempSplit) {
-      setSplit({batch, tideKey, tempSplit, startTime, stopTime});
+      setSplit({dbHome, tideKey, tempSplit, startTime, stopTime});
     }else if(splitOn) {
       toast.info("no changes, not saved", {
         autoClose: 1000*10
@@ -51,7 +56,7 @@ const TideBlockRow = ({
       const newStop = tempStop || [stopTime];
       const taskIs = tempTask || tideObj.task;
       const subtIs = tempTask ? tempSubT : tideObj.subtask;
-      setEdit({batch, tideKey, newStart, newStop, taskIs, subtIs});
+      setEdit({dbHome, tideKey, newStart, newStop, taskIs, subtIs});
     }
   }
  
@@ -84,7 +89,10 @@ const TideBlockRow = ({
     return(
       <tr className={`smTxt ${editOn ? 'pop' : ''}`}>
         <td className='noRightBorder med'>
+        {project ?
+          <ExploreLinkBlock type='equip' keyword={equip} /> :
           <ExploreLinkBlock type='batch' keyword={batch} rad={rad} />
+        }
         </td>
         <td className='noRightBorder'>{describe}</td>
         
@@ -94,6 +102,7 @@ const TideBlockRow = ({
           brancheS={brancheS}
           editOn={editOn}
           splitOn={splitOn}
+          equipLock={tideObj.type === 'MAINT' ? true : false}
           tempTask={tempTask}
           setTempTask={setTempTask}
           tempSubT={tempSubT}
@@ -182,7 +191,7 @@ const TideBlockRow = ({
             {!isStop ?
               <button
                 className='miniAction'
-                onClick={()=>setEnd({batch, tideKey})}
+                onClick={()=>setEnd({dbHome, tideKey})}
                 disabled={!isSuper}
               ><em><i className="far fa-edit"></i></em> stop</button>
             : 
@@ -205,7 +214,7 @@ export default TideBlockRow;
 
 const TideTaskExplicit = ({ 
   taskIs, ancOptionS, brancheS,
-  editOn, splitOn, 
+  editOn, splitOn, equipLock,
   tempTask, setTempTask, tempSubT, setTempSubT
 })=> {
   
@@ -222,7 +231,7 @@ const TideTaskExplicit = ({
     }
   };
   
-  if( !editOn || splitOn ) {
+  if( !editOn || splitOn || equipLock ) {
     return(
       <td className='noRightBorder smTxt'>
         {taskIs ? 
