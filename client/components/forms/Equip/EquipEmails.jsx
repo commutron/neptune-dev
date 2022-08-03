@@ -11,10 +11,10 @@ const EquipEmailsManager = ({ id, stewards, users })=> {
   
   return(
     <ModelSmall
-      button={`${Pref.steward}s`}
+      button={`Set ${Pref.steward}s`}
       title={`Set ${Pref.steward}s`} 
       color='midnightblueT'
-      icon='fa-users-gear'
+      icon='fa-users'
       lock={!access}
       primeTopRight={true}>
       <EquipEmails

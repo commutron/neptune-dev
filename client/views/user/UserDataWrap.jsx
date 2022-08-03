@@ -9,6 +9,7 @@ import { PlainFrame } from '/client/layouts/MainLayouts';
 import Spin from '/client/components/tinyUi/Spin';
 import Slides from '/client/components/smallUi/Slides';
 import ActivityPanel from './ActivityPanel';
+import ServicePanel from './ServicePanel';
 import InboxPanel from './InboxPanel';
 import PrivacyPanel from './PrivacyPanel';
 
@@ -47,6 +48,7 @@ const UserDataWrap = ({
         <Slides
           menu={[
             <b><i className='fas fa-user-clock fa-fw gapR'></i>Project Activity</b>,
+            <b><i className='fas fa-user-cog fa-fw gapR'></i>Equipment</b>,
             <b><i className='fas fa-user-cog fa-fw gapR'></i>Preferences</b>,
             <b><i className='fas fa-user-shield fa-fw gapR'></i>Access & Privacy</b>,
             <b><i className='fas fa-envelope fa-fw gapR'></i>Messages{iL}</b>
@@ -61,23 +63,27 @@ const UserDataWrap = ({
             isDebug={isDebug}
             users={users}
             traceDT={traceDT} />
-            
-          <UserSettings
+          
+          <ServicePanel
             key={2}
+          />
+          
+          <UserSettings
+            key={3}
             app={app}
             user={user}
             isAdmin={isAdmin}
             brancheS={brancheS} />
           
           <PrivacyPanel
-            key={3}
+            key={4}
             app={app}
             user={user}
             isAdmin={isAdmin}
           />
           
           <InboxPanel
-            key={4}
+            key={5}
             app={app}
             user={user}
             users={users} />

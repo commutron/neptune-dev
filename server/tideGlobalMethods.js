@@ -491,10 +491,7 @@ Meteor.methods({
         if(bx.tide) { screenT(bx.tide, bx._id) }
       });
       
-      TimeDB.find({
-        orgKey: Meteor.user().orgKey,
-        'tide.stopTime': false
-      },{ fields: {'who':1,'startTime':1,'stopTime':1} 
+      TimeDB.find({ stopTime: false },{ fields: {'who':1,'startTime':1,'stopTime':1} 
       }).forEach( tm => {
         if( tm.stopTime === false ) {
           if( !Meteor.users.findOne({_id: tm.who, 'engaged.tKey': tm._id}) ) {

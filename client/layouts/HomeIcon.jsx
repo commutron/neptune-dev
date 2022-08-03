@@ -34,7 +34,7 @@ const HomeIcon = () => {
             
             <MenuItem onClick={()=>FlowRouter.go('/upstream')}>
               <i className='fas fa-satellite-dish fa-fw'></i>
-              <i className='noCopy cap'> upstream</i>
+              <i className='noCopy cap'> {Pref.upstream}</i>
             </MenuItem>
             
             <MenuItem onClick={()=>FlowRouter.go('/overview')}>
@@ -55,7 +55,11 @@ const HomeIcon = () => {
               <i className='fas fa-rocket fa-fw'></i>
               <i className='noCopy'> Explore</i>
             </MenuItem>
-        
+            <MenuItem onClick={()=>FlowRouter.go('/data/overview?request=maintain')}>
+              <i className='fa-solid fa-screwdriver-wrench fa-fw'></i>
+              <i className='noCopy cap'> {Pref.maintain}</i>
+            </MenuItem>
+
             {Roles.userIsInRole(Meteor.userId(), 'admin') ?
               <MenuItem onClick={()=>FlowRouter.go('/app')}>
                 <i className='fas fa-sliders-h fa-fw'></i>

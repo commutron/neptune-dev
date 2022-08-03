@@ -245,12 +245,12 @@ export const OverMenuBar = ({ brancheS, branchON, changeBranch, light }) => {
       <span className='flexSpace'></span>
       
       <FilterElement
-        title={Pref.maintain}
-        subTitle='PM'
-        goLink={'maintain'}
-        branchON={branchON === 'maintain'}
+        title='Calendar'
+        subTitle='CAL'
+        goLink={'calendar'}
+        branchON={branchON === 'calendar'}
         changeBranch={changeBranch}
-        icon='fa-solid fa-wand-magic-sparkles'
+        icon='fa-regular fa-calendar'
         size=''
         lock={true}
       />

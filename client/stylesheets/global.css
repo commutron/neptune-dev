@@ -415,6 +415,10 @@ tr {
   border-bottom: 1px solid lightgray;
 }
 
+th, td {
+  font-size: 0.95rem;
+}
+
 th {
   padding: 0 10px;
   border-right: 1px solid lightgray;
@@ -435,11 +439,9 @@ td:last-child, th:last-child {
 
 @media screen and (max-width: 1000px) {
   th {
-    font-size: 1rem;
     padding: 0 10px;
   }
   td {
-    font-size: 1rem;
     line-height: 1.5rem;
   }
 }

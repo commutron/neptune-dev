@@ -18,7 +18,7 @@ import TestFailPanel from './panels/TestFailPanel';
 import RadioPanel from './panels/RadioPanel';
 import ScrapPanel from './panels/ScrapPanel';
 
-import MainData from './panels/Maintain/MainData';
+import EquipData from './panels/Maintain/EquipData';
 
 import BatchesList from './lists/BatchesList';
 import ItemsListX from './lists/ItemsListX';
@@ -310,11 +310,13 @@ const DataViewOps = ({
           action='maintain'
           base={true}
         >
-          <MainData
+          <EquipData
             app={app}
             users={users}
             brancheS={brancheS}
-            specify={specify} />
+            specify={specify}
+            isDebug={isDebug}
+          />
         </TraverseWrap>
       );
     }else{

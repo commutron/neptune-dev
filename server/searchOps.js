@@ -260,6 +260,29 @@ Meteor.methods({
     return [ perfS, shipS ];
   },
   
+  getEquipAssigned() {
+    let nextService = [];
+    const equip = EquipDB.find({online: true, stewards: { $in: [Meteor.userId()] }}, {
+      fields: {
+        'equip': 1,
+        'alias': 1
+    }}).fetch();
+    
+    for(let eq of equip) {
+      const maint = MaintainDB.find({equipId: eq._id, status: false}, {
+        fields: {
+          'close': 1,
+          'name': 1
+      }}).fetch();
+      nextService.push({
+        equip: eq.equip,
+        alias: eq.alias,
+        serve: maint
+      });
+    }
+    
+    return nextService;
+  },
       /////////////////////////////////////////////////////////////////////////
     // First Firsts
    ///////////////////////////////////////////////////////////////////////////

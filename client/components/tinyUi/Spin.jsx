@@ -38,7 +38,7 @@ export const CalcSpin = () => {
           className='minispinLogoSVG'
           style={sty} />
         <br />
-        <em>Calculating</em>
+        <em>Loading...</em>
       </p>
     </div>
   );

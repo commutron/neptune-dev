@@ -10,8 +10,8 @@ const TasksFormWrapper = ({ id, serveKey, name, tasks, lockOut })=> {
  
   return(
     <ModelMedium
-      button='Tasks'
-      title={`Edit ${name} Tasks`}
+      button='Checklist'
+      title={`Edit ${name} Checklist`}
       color='midnightblueT'
       icon='fa-list-check'
       lock={!access || lockOut}

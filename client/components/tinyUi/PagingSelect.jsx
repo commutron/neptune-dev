@@ -8,7 +8,7 @@ const PagingSelect = ({ multiArray, isSet, doChange })=> (
         key={ix}
         onClick={()=>doChange(ix)}
         className={
-          `smallAction gap clearBlack 
+          `smallAction gap blackHover transparent
           ${isSet == ix ? '' : 'borderWhite'}`
         }
       >{ix+1}</button>

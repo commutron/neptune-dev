@@ -691,7 +691,7 @@ n-sm-model-content {
 .wmargin { 
   margin-right: auto;
   margin-left: auto;}
-.nomargin, .nopmargin p, .nomarginB::before { margin: 0; }
+.nomargin, .nopmargin p, .nomarginB::before { margin: 0 !important; }
 
 .vwrap > span { margin-top: 0.5rem; }
 
@@ -992,6 +992,7 @@ input.miniIn24, select.miniIn24 { width: 24ch; }
   max-width: 400px;
   margin: 0;
   text-align: initial;
+  font-size: 1rem;
 }
 
 .numberSet {

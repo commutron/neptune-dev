@@ -45,8 +45,8 @@ const StartView = ({user, app}) =>	{
             link='/production' /> }
         
         {isNightly ? 
-          <NavButton title='Terminal' icon='fa-solid fa-location-arrow' link='/process' />
-        : <NavPlaceholder title='Terminal' icon='fa-solid fa-location-arrow' /> }
+          <NavButton title='' icon='fa-solid fa-location-arrow' link='/process' />
+        : <NavPlaceholder title='' icon='fa-solid fa-location-arrow' /> }
         
         <NavButtonShell title='People' link='/people'
           icon={

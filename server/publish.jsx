@@ -1,4 +1,6 @@
 import Config from '/server/hardConfig.js';
+import moment from 'moment';
+import 'moment-timezone';
 
 // Collections \\
 AppDB = new Mongo.Collection('appdb');
@@ -644,6 +646,9 @@ Meteor.publish('thinEquip', function(){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
   
+  const week0 = moment().tz(Config.clientTZ).startOf('week').toISOString();
+  const week6 = moment().tz(Config.clientTZ).endOf('week').toISOString();
+
   if(!this.userId){
     return this.ready();
   }else{
@@ -653,12 +658,15 @@ Meteor.publish('thinEquip', function(){
           'alias': 1,
           'online': 1
       }}),
-      MaintainDB.find({orgKey: orgKey}, {
+      MaintainDB.find({orgKey: orgKey, status: false,
+                      close: { $gte: new Date(week0), $lte: new Date(week6) }
+      }, {
         fields: {
-          'equipId': 1
-      }}),
-      
-      TimeDB.find({})
+          'equipId': 1,
+          'name': 1,
+          'close': 1
+      }})
+      // TimeDB.find({})
     ];
   }
 });

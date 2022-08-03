@@ -5,9 +5,9 @@ import SlidesNested from '/client/components/smallUi/SlidesNested';
 import Landing from './Landing';
 import EquipSlide from './EquipSlide';
 
-const MainWrap = ({ 
+const EquipWrap = ({ 
   equipData, maintainData,
-  app, users, brancheS, specify 
+  app, users, isDebug, brancheS, specify 
 }) => {
   
   const equipS = equipData.sort((e1, e2)=>
@@ -21,12 +21,6 @@ const MainWrap = ({
   
   const defaultSlide = specify ? 
     equipS.findIndex( x => x.alias === specify ) : false;
-    
-  // const isERun = Roles.userIsInRole(Meteor.userId(), ['edit','run']);
-     
-     
-     console.log({equipData, maintainData});
-     
      
   return(
     <SlidesNested
@@ -49,6 +43,7 @@ const MainWrap = ({
           equipLite={entry}
           app={app}
           users={users}
+          isDebug={isDebug}
           brancheS={brancheS}
         />
       ))} 
@@ -56,4 +51,4 @@ const MainWrap = ({
   );
 };
 
-export default MainWrap;
+export default EquipWrap;

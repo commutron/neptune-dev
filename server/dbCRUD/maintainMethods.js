@@ -461,20 +461,6 @@ Meteor.methods({
     }catch (error) {
       throw new Meteor.Error(error);
     }finally{ return true }
-  },
-  
-  testEquipMaintEmail() {
-    const orgKey = Meteor.user().orgKey;
-    const users = Meteor.users.find({ roles: { $in: ["equipSuper"] } });
-    const supr = Array.from(users, u => u._id);
-                
-                
-    Meteor.call('handleInternalMaintEmail', 
-      orgKey, supr, "A Magical Machine", "Daily", "grace period");
-    
-    const date = new Date();
-    Meteor.call('handleInternalMaintEmail', 
-      orgKey, supr, "An Expensive Machine", "On Demand", "grace period", date);
   }
   
 });
