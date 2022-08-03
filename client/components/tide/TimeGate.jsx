@@ -9,7 +9,7 @@ const TimeGate = ({
   engagedPro, engagedMlti,
   brancheS, taskOptions, subOptions,
   forceSelect,
-  forceTask, forceSubTask
+  forceTask, forceSubTask, lockOut
 })=> {
   
   const [ taskState, taskSet ] = useState( forceTask || timeOpen?.task || false );
@@ -27,14 +27,14 @@ const TimeGate = ({
           project={project}
           engagedPro={engagedPro}
           engagedMlti={engagedMlti}
-          timeLockOut={false}
+          timeLockOut={lockOut}
           taskState={taskState}
           subtState={subtState}
           lockTaskSet={lockTaskSet}
         />
       </n-big-tide-container>
       
-      {!engagedMlti &&
+      {!engagedMlti && !lockOut ?
         <SmplTideTask
           brancheS={brancheS}
           lockTaskState={lockTaskState}
@@ -46,7 +46,7 @@ const TimeGate = ({
           subOptions={subOptions}
           subtSet={subtSet}
         />
-      }
+      : null}
     </div>
   );
 };

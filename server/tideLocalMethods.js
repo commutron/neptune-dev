@@ -1,31 +1,46 @@
+const matchUserToTime = (uTkey)=> {
+  const batchX = XBatchDB.findOne(
+    { 'tide.tKey': uTkey },
+    { fields: {'batch':1,'tide':1} });
+  const subX = batchX?.tide.find( x => x.tKey === uTkey);
+        
+  if(subX) {
+    return {
+      uID: subX.who,
+      batch: batchX.batch,
+      tideBlock: subX
+    };
+  }else{
+    const timeZ = TimeDB.findOne({ '_id': uTkey });
+    if(timeZ) {
+      return {
+        uID: timeZ.who,
+        project: timeZ.project,
+        tideBlock: timeZ
+      };
+    }else{
+      return false;
+    }
+  }
+};
+
 Meteor.methods({
 //// For a Person \\\\\
-
+  
   getEngagedBlocks(userTkeys) {
     if(Array.isArray(userTkeys) === false) {
       return false;
     }else{
       let objArr = [];
       for( let uTkey of userTkeys ) {
-        const batchX = XBatchDB.findOne(
-          { 'tide.tKey': uTkey },
-          { fields: {'batch':1,'tide':1} });
-        const subX = batchX && batchX.tide.find( x => x.tKey === uTkey);
-       
-        if(subX) {
-          objArr.push({
-            uID: subX.who,
-            batch: batchX.batch,
-            tideBlock: subX
-          });
+        if(Array.isArray(uTkey)) {
+          for(let uT of uTkey ) {
+            objArr.push( matchUserToTime(uT) );
+          }
         }else{
-          const timeZ = TimeDB.findOne({ '_id': uTkey });
-          if(timeZ) {
-            objArr.push({
-              uID: timeZ.who,
-              batch: timeZ.project,
-              tideBlock: timeZ
-            });
+          const match = matchUserToTime(uTkey);
+          if(match) {
+            objArr.push(match);
           }else{null}
         }
       }

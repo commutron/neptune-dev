@@ -100,6 +100,6 @@ export function toCap(str, all) {
       return str.trim().replace(/^\w/, (c) => c.toUpperCase());
     }
   }else{
-    return ""
+    return "";
   }
 }/* joshtronic of Digital Ocean Community Tutorials */

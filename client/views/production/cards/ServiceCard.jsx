@@ -42,6 +42,7 @@ const ServiceCard = ({ eqData, maintData, brancheS, tideKey, timeOpen, engagedPr
           forceSelect={true}
           forceTask={brancheS.find( b=> b.brKey === eqData.branchKey)?.branch}
           forceSubTask={Pref.premaintain}
+          lockOut={moment().isAfter(maintData.expire)}
         />  
       :
         <ServiceDock

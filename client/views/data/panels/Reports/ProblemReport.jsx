@@ -22,8 +22,12 @@ const ProblemReport = ({ start, end, dataset })=> {
         const scrpOfComp = percentOf(re.itemStats.completedItems, re.itemStats.scraps);
         const nciOfComp = percentOf(re.itemStats.completedItems, re.nonConStats.uniqueSerials);
         const shiOfComp = percentOf(re.itemStats.completedItems, re.shortfallStats.uniqueSerials);
+        
+        const cleanItms = re.itemStats.completedItems - re.nonConStats.uniqueSerials;
+        const clnOfComp = percentOf(re.itemStats.completedItems, cleanItms);
+        
         let arrange = [
-          ['', 'total', 'of total'],
+          ['', 'total', 'of total finished'],
           ['Included ' + Pref.xBatchs, re.seriesInclude ],
           [ 'Included Serialized Items', re.itemsInclude ],
           [ 'Finished Serialized Items', re.itemStats.completedItems ],
@@ -34,6 +38,7 @@ const ProblemReport = ({ start, end, dataset })=> {
           [
             [ `Discovered ${Pref.nonCons}`, re.nonConStats.foundNC ],
             [ `Items with ${Pref.nonCons}`, re.nonConStats.uniqueSerials, nciOfComp+'%' ],
+            [ `Items without ${Pref.nonCons}`, cleanItms, clnOfComp+'%' ],
             [ `${Pref.nonCon} Types`, re.nonConStats.typeBreakdown ],
             [ `${Pref.nonCon} Departments`, re.nonConStats.whereBreakdown ],
           ] : [

@@ -660,6 +660,7 @@ n-sm-model-content {
   justify-self: right;
 }
 
+.spaceTxt { padding: 0 2px; }
 .space5x5 { padding: 5vh 5vw; }
 .space2vsq { padding: 2vh; }
 .space1v { padding: 1vmax; }

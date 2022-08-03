@@ -462,7 +462,9 @@ Meteor.methods({
       const screenT = (tideArr, bID)=> {
         for( let t of tideArr ) {
           if( t.stopTime === false ) {
-            if( !Meteor.users.findOne({_id: t.who, 'engaged.tKey': t.tKey}) ) {
+            if( !Meteor.users.findOne({_id: t.who, 'engaged.tKey': t.tKey}) &&
+                !Meteor.users.findOne({_id: t.who, 'engaged.tKey': { $in: [t.tKey] } })
+            ) {
               const stopshort = moment(t.startTime).add(3, 'seconds').toISOString();
               XBatchDB.update({ _id: bID, 'tide.tKey': t.tKey }, {
                 $set : { 

@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
+import Pref from '/client/global/pref.js';
 
 import UserNice from '/client/components/smallUi/UserNice';
 import { TaskTagLite } from '/client/components/tide/TaskTag';
 import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock';
 
 const PersonChunk = ({ 
-  userChunk, traceDT, app,
+  userChunk, traceDT,
   updateBranches, removeBranch, update, 
   isDebug
 })=> {
@@ -44,7 +45,7 @@ const PersonChunk = ({
   
   isDebug && console.log(branchGuess);
   
-  const project = userChunk.tideBlock.project;
+  const project = userChunk.project;
   const equip = project?.split(" ~ ")?.[0]?.substring(3);
   
   const maint = userChunk.tideBlock.type === 'MAINT';
@@ -74,7 +75,11 @@ const PersonChunk = ({
           </em> 
         :
           <b title='Start Time'>
-            <i className="fas fa-play fa-fw fa-xs greenT"></i>
+          {uC.tideBlock.focus ?
+            <i className='fa-solid fa-layer-group fa-fw fa-xs tealT'
+            title={`Multi ${Pref.xBatch} time counts as 1/${uC.tideBlock.focus} duration`}></i> 
+          :
+            <i className="fa-solid fa-play fa-fw fa-xs greenT"></i>}
           </b>
         }
         <i> {moment(uC.tideBlock.startTime).format('hh:mm A')}</i>

@@ -173,10 +173,10 @@ Meteor.methods({
       
       const date = moment().tz(Config.clientTZ).format('h:mm a, dddd, MMM Do YYYY');
       
-      const body = `Your order ${'<b>'}${salesOrder}${'</b>'} of ${'<b>'}${toCap(isW, true)}${'</b>'} has ${'<b>'}Entered Production${'</b>'}`;
+      const body = `Your order ${'<b>'}${salesOrder}${'</b>'} of ${'<b>'}${toCap(isW, true)}${'</b>'} has ${'<b>'}Entered Production${'</b>'},`;
       const foot = 'Once your order is completed, a packing slip will be provided.';
       
-      const plainbody = `Your order — ${salesOrder} — of — ${toCap(isW, true)} — has Entered Production`;
+      const plainbody = `Your order — ${salesOrder} — of — ${toCap(isW, true)} — has Entered Production.`;
       
       sendExternalEmail( to, cc, subject, date, body, foot, plainbody );
       
@@ -205,11 +205,11 @@ Meteor.methods({
       
       const date = moment().tz(Config.clientTZ).format('h:mm a, dddd, MMM Do YYYY');
       
-      const title = `Concerning ${toCap(isG, true)}`;
-      const body = `${toCap(name, true)} has created variant ${variant} of ${toCap(isW, true)}`;
+      const title = `Concerning ${toCap(isG, true)}.`;
+      const body = `${toCap(name, true)} has created variant ${variant} of ${toCap(isW, true)}.`;
       const asid = '';
       const foot = 'Expect Bill Of Material changes. Please prepare for potentially new stencils, jigs and machine programmes.';
-      const link = wiki ? `<a href="${wiki}">Work Instructions</a>` : 'New work instructions will be forthcoming';
+      const link = wiki ? `<a href="${wiki}">Work Instructions</a>` : 'New work instructions will be forthcoming.';
       
       
       sortInternalRecipient(emailUsers, subject, date, title, body, asid, foot, link);
@@ -227,7 +227,7 @@ Meteor.methods({
       
       const date = moment().tz(Config.clientTZ).format('h:mm a, dddd, MMM Do YYYY');
       
-      const title = `Concerning ${toCap(isG, true)}`;
+      const title = `Concerning ${toCap(isG, true)}.`;
       const body = `Kitting has received PCBs for ${toCap(isW, true)}.`;
       const asid = '(The Upstream clearance "Barcoding / PCB" is marked as "Ready", indicating that the base barcoded components are in stock. These are usually, but not always, printed circuit boards.)';
       const foot = 'A work order of this product variant has never been completed. New stencils, jigs or machine programmes may be required.';
@@ -243,14 +243,14 @@ Meteor.methods({
     const emailGlobal = doc && doc.emailGlobal;
     
     if(emailGlobal) {
-      const dead = deadline ? false :
+      const dead = !deadline ? false :
                     moment(deadline).tz(Config.clientTZ).format('dddd, MMM Do');
                 
       const subject = `Scheduled Maintenance is Not Completed`;
       
       const date = moment().tz(Config.clientTZ).format('dddd, MMM Do YYYY');
       
-      const title = `Concerning ${toCap(equip, true)}`;
+      const title = toCap(equip, true);
       const body = `${toCap(name)} scheduled maintenance is incomplete and past its ${state}.`;
       const asid = '';
       const foot = dead ? `A short grace period is in effect but maintenance must be completed by end of day ${dead}.` : '';

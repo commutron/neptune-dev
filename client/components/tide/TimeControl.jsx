@@ -79,7 +79,7 @@ const TimeControl = ({
     return <MultiDivert lock={lock} />;
   }
   
-  if(!timeId && !timeOpen) {
+  if(!timeLockOut && !timeId && !timeOpen) {
     return(
       <button
         title='START'
@@ -96,7 +96,7 @@ const TimeControl = ({
     );
   }
   
-  if(timeId && !timeOpen) {
+  if(!timeLockOut && timeId && !timeOpen) {
     return(
       <button
         title={`Switch to ${Pref.maintain}`}
@@ -121,6 +121,7 @@ const TimeControl = ({
           <i className="fas fa-play fa-stack-1x" data-fa-transform="shrink-1 right-2"></i>
         </span>
       </i>
+      <i className='big centreText'>Not Available</i>
     </div>
   );
 };

@@ -142,6 +142,7 @@ const HistorySlide = ({ app, user, users, traceDT, isDebug })=> {
                   batch={keyword}
                   describe={what}
                   rad={rad}
+                  equip={equip}
                   tBlock={blk} />
               );
           }})}
@@ -271,7 +272,7 @@ const TidePlainRow = ({
   const stsk = tBlock.subtask;
   
   const mStop = tBlock.stopTime && moment(tBlock.stopTime);
-
+  
   return(
     <tr className='smTxt'>
       <td className='noRightBorder'><UserNice id={tideWho} /></td>
@@ -290,6 +291,9 @@ const TidePlainRow = ({
       </td>
       
       <td className='noRightBorder clean numFont rightText'>
+        {tBlock.focus && <i className='fa-solid fa-layer-group fa-fw gapR tealT' 
+          title={`Multi ${Pref.xBatch} time counts as 1/${tBlock.focus} duration`}>
+        </i>}
         {mStop ? Math.round( durrAsMin ) : '...'} minutes
       </td>
       

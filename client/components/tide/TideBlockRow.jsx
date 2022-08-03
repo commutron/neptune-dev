@@ -27,7 +27,8 @@ const TideBlockRow = ({
   const startTime = tideObj.startTime;
   const stopTime = tideObj.stopTime;
   const taskU = tideObj.task ? tideObj.task + ' | ' + (tideObj.subtask || '') : false;
-                
+  const overlap = tideObj.focus ? true : false;
+  
   const editOn = tideKey === editKey;
   const splitOn = tideKey === splitKey; 
   
@@ -68,11 +69,11 @@ const TideBlockRow = ({
   const mStopDay = mStop.clone().endOf('day');
   
   const absoluteMin =
-    !lastStop || !moment(lastStop).isAfter(mStartDay) ?
+    !lastStop || !moment(lastStop).isAfter(mStartDay) || overlap ?
       mStartDay.format() : lastStop;
     
   const absoluteMax =
-    !nextStart || moment(nextStart).isAfter(mStopDay) ?
+    !nextStart || moment(nextStart).isAfter(mStopDay) || overlap ?
       mStopDay.format() : nextStart;
   
   const editSelf = tideWho === Meteor.userId();
@@ -87,7 +88,7 @@ const TideBlockRow = ({
   });
   
     return(
-      <tr className={`smTxt ${editOn ? 'pop' : ''}`}>
+      <tr className={`smTxt ${editOn ? 'pop' : ''} ${overlap ? 'borderTeal' : ''}`}>
         <td className='noRightBorder med'>
         {project ?
           <ExploreLinkBlock type='equip' keyword={equip} /> :
@@ -185,6 +186,10 @@ const TideBlockRow = ({
         :
           <Fragment>
             <td className='noRightBorder clean numFont rightText'>
+              {overlap && 
+                <i className='fa-solid fa-layer-group fa-fw gapR tealT' 
+                   title={`Multi ${Pref.xBatch} time counts as 1/${tideObj.focus} duration`}>
+                </i>}
               {isStop ? Math.round( tideObj.durrAsMin ) : '...'}<i className='small'> min</i>
             </td>
             <td className='noRightBorder centreText'>
@@ -192,7 +197,8 @@ const TideBlockRow = ({
               <button
                 className='miniAction'
                 onClick={()=>setEnd({dbHome, tideKey})}
-                disabled={!isSuper}
+                disabled={!isSuper || overlap}
+                title={overlap ? 'Not possible when using Multi-Mode' : ''}
               ><em><i className="far fa-edit"></i></em> stop</button>
             : 
               tideObj.lockOut ? <i className="fas fa-lock purpleT"></i> :

@@ -129,7 +129,7 @@ const ScheduleSlide = ({ app, user, users, isAdmin, isPeopleSuper })=> {
       
           <h3>{isAuth ? 'Set Holiday' : 'Test'} Day</h3>
           
-          <div className='vspace beside'>
+          <div className='vspace beside centreRow'>
             <Flatpickr
               onChange={(e)=>handleDateChange(e)}
               options={{

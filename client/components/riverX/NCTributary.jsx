@@ -52,7 +52,7 @@ const NCTributary = ({ seriesId, serial, nonCons, sType })=> {
         }else{
           return(
             <Fragment key={'cluster'+chindex}>
-              {chunk[1].map( (entry, index)=>{
+              {chunk[1].map( (entry)=>{
                 sType === 'finish' && entry.snooze === true ?
                   handleAction(entry.key, 'WAKE') : null;
                 return(
@@ -154,7 +154,7 @@ const NCStream = ({ entry, seriesId, end, doAction, inspector, verifier })=>{
   };
   
   function handleClick(ACT, extra) {
-    selfLockSet(true);
+    ACT !== 'REJECT' && selfLockSet(true);
     doAction(ACT, extra);
   }
     

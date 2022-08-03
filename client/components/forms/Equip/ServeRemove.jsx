@@ -46,6 +46,7 @@ const ServeRemoveConfirm = ({ id, serveKey, name, opendates })=> {
         opendates?.map( (op, ix)=>(
           <em key={ix}>{moment(op.close).format('MMMM Do, YYYY')}, </em>
         )) || ''}will be deleted.</p>
+      <p>Previous maintenance records will be retained.</p>
       <p>
         <button
           onClick={()=>deleteService()}

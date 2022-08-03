@@ -324,7 +324,7 @@ Meteor.methods({
           notes: ''
         });
       }else{
-        MaintainDB.update({_id: match._id, status: false},{
+        MaintainDB.update({_id: match._id, status: false, close: { $gt: new Date() }},{
           $set: {
             equipId: eq._id,
             serveKey: sv.serveKey,
@@ -372,7 +372,7 @@ Meteor.methods({
                 });
               
                 Meteor.defer( ()=>{
-                  const equip = EquipDB.find({_id: mn.equipId},{fields:{'equip':1}});
+                  const equip = EquipDB.findOne({_id: mn.equipId},{fields:{'equip':1}});
                   const titl = equip?.equip || "";
                   const users = Meteor.users.find({ roles: { $in: ["equipSuper"] } });
                   const supr = Array.from(users, u => u._id);
@@ -382,7 +382,7 @@ Meteor.methods({
                 });
               }else if( now.isSame(moment(mn.close).add(1, 'days'), 'day') ) {
                 Meteor.defer( ()=>{
-                  const equip = EquipDB.find({_id: mn.equipId},{fields:{'equip':1,'stewards':1}});
+                  const equip = EquipDB.findOne({_id: mn.equipId},{fields:{'equip':1,'stewards':1}});
                   const stew = equip?.stewards || [];
                   const titl = equip?.equip || "";
                   Meteor.call('handleInternalMaintEmail', 
@@ -432,7 +432,7 @@ Meteor.methods({
                 notes: ''
               });
             }else{
-              MaintainDB.update({_id: match._id, status: false},{
+              MaintainDB.update({_id: match._id, status: false, close: { $gt: new Date() }},{
                 $set: {
                   equipId: eq._id,
                   serveKey: sv.serveKey,

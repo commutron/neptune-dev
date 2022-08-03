@@ -13,6 +13,7 @@ const DashSlide = ({ app, user, users, traceDT, brancheS, isDebug })=> {
   
   const [ openTBlockState, openTBlockSet ] = useState("[]");
   const [ xyBatchState, xyBatchSet ] = useState([]);
+  const [ xyEqState, xyEqSet ] = useState([]);
   
   const [ userBranches, setUserBranches ] = useState({});
   const [ brList, setBranchList ] = useState([]);
@@ -66,16 +67,19 @@ const DashSlide = ({ app, user, users, traceDT, brancheS, isDebug })=> {
   
   useEffect( ()=>{
     const openTBlocks = JSON.parse(openTBlockState);
-    const qBatches = _.countBy(openTBlocks, x => x && x.batch);
-    const qBatchesClean = _.omit(qBatches, (value, key, object)=> {
-      return key == false;
-    });
     
+    const qBatches = _.countBy(openTBlocks.filter(a=>a.batch), x => x?.batch);
+    const qBatchesClean = _.omit(qBatches, (val, key, obj)=> key == false );
     const itrXY = obj2xy(qBatchesClean);
     
-    isDebug && console.log({qBatches, itrXY});
+    const qEquip = _.countBy(openTBlocks.filter(a=>a.project), x => x?.project);
+    const qEquipClean = _.omit(qEquip, (v, key, obj)=> key == false );
+    const eqXY = obj2xy(qEquipClean);
+    
+    isDebug && console.log({qBatches, itrXY, eqXY});
     
     xyBatchSet(itrXY);
+    xyEqSet(eqXY);
   }, [openTBlockState]);
   
   
@@ -109,7 +113,7 @@ const DashSlide = ({ app, user, users, traceDT, brancheS, isDebug })=> {
           nums={[eUsersState.length, dUsersState.length ]}
           name={`${eUsersState.length == 1 ? 'Person Is' : 'People Are'} ${Pref.engaged}`} 
           title={`${eUsersState.length} people currently\n${Pref.engaged} with ${Pref.xBatchs}`} 
-          colour='blue'
+          colour='greenBi'
         />
         
         <NumStatRing
@@ -127,13 +131,20 @@ const DashSlide = ({ app, user, users, traceDT, brancheS, isDebug })=> {
           title={`${xyBatchState.length} ${Pref.xBatchs} currently\n${Pref.engaged} by people`} 
           colour='blue'
         />
+        
+        <NumStatRing
+          total={xyEqState.length}
+          nums={xyEqState}
+          name={`${Pref.equip} servicing`}
+          title={`${xyEqState.length} ${Pref.equip} currently\nundergoing service`} 
+          colour={[ "#2c3e50", "#34495e" ]}
+        />
             
       </div>
     
       <div className='wide'>
          
         <PeoplePanel
-          app={app}
           eUsers={eUsersState}
           dUsers={dUsersState}
           openTBlockState={openTBlockState}

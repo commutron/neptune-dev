@@ -53,7 +53,7 @@ const DataRepair = ({ app, users })=> {
   function doCallThing(mtrMethod, rtnLog) {
     Meteor.call(mtrMethod, (error, re)=>{
       error && console.log(error);
-      re && toast.success('success', {autoClose: false});
+      re && toast.success((mtrMethod+' success'), {autoClose: false});
       if(rtnLog) {
         console.log(re);
       }
