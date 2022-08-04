@@ -10,15 +10,7 @@ export function addTideDuration(td) {
   const mStart = moment(td.startTime);
   const mStop = td.stopTime ? moment(td.stopTime) : moment();
   
-  if(td.focus) {
-    return Math.round( 
-      moment.duration(
-        Math.floor( mStop.diff(mStart, 'seconds') / td.focus)
-      , 'seconds').asMinutes() 
-    );
-  }else{
-    return Math.round( mStop.diff(mStart, 'minutes', true) );
-  }
+  return Math.round( mStop.diff(mStart, 'minutes', true) );
 }
 
 function addTideArrayDuration(tideArray) {
@@ -27,11 +19,7 @@ function addTideArrayDuration(tideArray) {
     const mStart = moment(td.startTime);
     const mStop = td.stopTime ? moment(td.stopTime) : moment();
     
-    if(td.focus) {
-      tideDurr += Math.floor( mStop.diff(mStart, 'seconds') / td.focus);
-    }else{
-      tideDurr += mStop.diff(mStart, 'seconds');
-    }
+    tideDurr += mStop.diff(mStart, 'seconds');
   }
   return Math.round( moment.duration(tideDurr, 'seconds').asMinutes() );
 }

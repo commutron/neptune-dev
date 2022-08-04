@@ -60,7 +60,7 @@ const PeopleScatter = ({ tide, period, xlabel, app, isDebug })=> {
             tickLabels: { 
               fontSize: '6px' }
           } }
-          scale={{ x: "time" }}
+          scale="time"
         />
 
         <VictoryAxis 

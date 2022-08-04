@@ -292,7 +292,7 @@ const TidePlainRow = ({
       
       <td className='noRightBorder clean numFont rightText'>
         {tBlock.focus && <i className='fa-solid fa-layer-group fa-fw gapR tealT' 
-          title={`Multi ${Pref.xBatch} time counts as 1/${tBlock.focus} duration`}>
+          title={`Multi-tasking ${tBlock.focus} ${Pref.xBatchs}`}>
         </i>}
         {mStop ? Math.round( durrAsMin ) : '...'} minutes
       </td>

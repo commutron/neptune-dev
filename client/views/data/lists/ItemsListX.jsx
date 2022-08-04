@@ -292,12 +292,12 @@ const ItemsListX = ({
   useEffect( ()=> {
     if(srs.items.length > 200) {
       document.getElementById('exItemList')
-        .addEventListener('scroll', handleScroll);
+        ?.addEventListener('scroll', handleScroll);
     }
     return ()=> {
       if(srs.items.length > 200) {
         document.getElementById('exItemList')
-                    .removeEventListener('scroll', handleScroll);
+                    ?.removeEventListener('scroll', handleScroll);
       }
     };
   }, []);

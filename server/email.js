@@ -2,7 +2,7 @@ import moment from 'moment';
 import Config from '/server/hardConfig.js';
 import { toCap } from './utility';
 
-function sendInternalEmail(to, subject, date, title, body, asid, foot, link) {
+function sendInternalEmail(to, subject, date, title, body, asid, foot, link, fine) {
   const from = Config.sendEmail;
     
   const html = `
@@ -25,6 +25,7 @@ function sendInternalEmail(to, subject, date, title, body, asid, foot, link) {
             <p style="color:black;margin:1rem 0">${foot}</p>
             <p style="color:black;margin:1rem 0">${link}</p>
             <p style="color:black;margin:1em 0"><em>Do not reply to this email.</em></p>
+            <p style="color:black;margin:1rem 0"><small>${fine}</small></p>
           </td>
         </tr>
         <tr>
@@ -33,7 +34,7 @@ function sendInternalEmail(to, subject, date, title, body, asid, foot, link) {
       </tbody>
     </table>`;
     
-  const text = `Neptune Automated Message\n\n${title}\n\n${date}\n\n${body}\n\n${asid}\n\n${foot}\n\ndo not reply to this email`;
+  const text = `Neptune Automated Message\n\n${title}\n\n${date}\n\n${body}\n\n${asid}\n\n${foot}\n\n\ndo not reply to this email\n\n${fine}`;
 
   Email.send({ to, from, subject, html, text });
 
@@ -74,12 +75,12 @@ function sendExternalEmail(to, cc, subject, date, body, foot, plainbody) {
       </tbody>
     </table>`;
     
-  const text = `COMMUTRON Industries Ltd.\n\nAutomated message\n\n${date}(CST)\n\n${plainbody}\n\ndo not reply to this email\n\nCustomer Service: ${Config.orgPhone}\n${Config.orgStreet}`;
+  const text = `COMMUTRON Industries Ltd.\n\nAutomated message\n\n${date}(CST)\n\n${plainbody}\n\n\ndo not reply to this email\n\nCustomer Service: ${Config.orgPhone}\n${Config.orgStreet}`;
   
   Email.send({ to, cc, from, subject, html, text });
 }
 
-function sortInternalRecipient(emailUserIDs, subject, date, title, body, asid, foot, link) {
+function sortInternalRecipient(emailUserIDs, subject, date, title, body, asid, foot, link, fine) {
   let emails = [];
   let ininbox = [];
   
@@ -96,7 +97,7 @@ function sortInternalRecipient(emailUserIDs, subject, date, title, body, asid, f
         
     let addresses = Array.from(emails, e => e.address );
     
-    sendInternalEmail( addresses, subject, date, title, body, asid, foot, link );
+    sendInternalEmail( addresses, subject, date, title, body, asid, foot, link, fine);
     
     EmailDB.insert({
       sentTime: new Date(),
@@ -108,7 +109,7 @@ function sortInternalRecipient(emailUserIDs, subject, date, title, body, asid, f
   }
   
   if(ininbox.length > 0) {
-    const mssgDetail = title + '. ' + body + '. ' + foot + '.';
+    const mssgDetail = title + ' ' + body + ' ' + foot;
 
     for(let inboxID of ininbox) {
       Meteor.users.update(inboxID, {
@@ -140,12 +141,13 @@ Meteor.methods({
     if(check(to) && check(from) && check(subject)) {
       
       const date = moment().tz(Config.clientTZ).format('h:mm:ss a, dddd, MMM Do YYYY');
-      const title = "Email Test";
-      const body = `Sent by ${name}`;
-      const foot = "no action required";
+      const title = "Email Test.";
+      const body = `Sent by ${name}.`;
+      const foot = "no action required.";
       const link = '';
+      const fine = '';
       
-      sendInternalEmail(to, subject, date, title, body, foot, link);
+      sendInternalEmail(to, subject, date, title, body, foot, link, fine);
       
       EmailDB.insert({
         sentTime: new Date(),
@@ -210,9 +212,9 @@ Meteor.methods({
       const asid = '';
       const foot = 'Expect Bill Of Material changes. Please prepare for potentially new stencils, jigs and machine programmes.';
       const link = wiki ? `<a href="${wiki}">Work Instructions</a>` : 'New work instructions will be forthcoming.';
+      const fine = '';
       
-      
-      sortInternalRecipient(emailUsers, subject, date, title, body, asid, foot, link);
+      sortInternalRecipient(emailUsers, subject, date, title, body, asid, foot, link, fine);
     }
   },
   
@@ -232,8 +234,9 @@ Meteor.methods({
       const asid = '(The Upstream clearance "Barcoding / PCB" is marked as "Ready", indicating that the base barcoded components are in stock. These are usually, but not always, printed circuit boards.)';
       const foot = 'A work order of this product variant has never been completed. New stencils, jigs or machine programmes may be required.';
       const link = `<a href="${wiki}">Work Instructions</a>`;
-      
-      sortInternalRecipient(emailpcbKit, subject, date, title, body, asid, foot, link);
+      const fine = dead ? "To stop receiving emails concerning PCBs, contact receiving." :
+
+      sortInternalRecipient(emailpcbKit, subject, date, title, body, asid, foot, link, fine);
     }
   },
   
@@ -248,16 +251,16 @@ Meteor.methods({
                 
       const subject = `Scheduled Maintenance is Not Completed`;
       
-      const date = moment().tz(Config.clientTZ).format('dddd, MMM Do YYYY');
-      
-      const title = toCap(equip, true);
-      const body = `${toCap(name)} scheduled maintenance is incomplete and past its ${state}.`;
+      const title = toCap(equip, true) + '.';
+      const date = '';
+      const body = `${toCap(name)} scheduled maintenance is incomplete and ${dead ? 'past its '+state :  'its '+state+' has ended'}.`;
       const asid = '';
-      const foot = dead ? `A short grace period is in effect but maintenance must be completed by end of day ${dead}.` : '';
-      const link = dead ? "To stop receiving emails concerning this equipment, remove your name from the equipment's assigned stewards" :
-                          "To stop receiving emails concerning missed maintenance, disable your 'equipSuper' authorization";
+      const foot = dead ? `A short grace period is in effect but maintenance must be completed by end of day, ${dead}.` : '';
+      const link = '';
+      const fine = dead ? "To stop receiving emails concerning this equipment, remove your name from the equipment's assignees." :
+                          "To stop receiving emails concerning missed maintenance, disable your 'equipSuper' authorization.";
       
-      sortInternalRecipient(emailUserIDs, subject, date, title, body, asid, foot, link);
+      sortInternalRecipient(emailUserIDs, subject, date, title, body, asid, foot, link, fine);
     }
   },
   

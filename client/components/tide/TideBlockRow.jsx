@@ -174,7 +174,7 @@ const TideBlockRow = ({
               <button
                 className='miniAction'
                 onClick={()=>saveTemp()}
-              ><i className="fas fa-check"></i> save</button>
+              ><i><i className="fas fa-check"></i></i> save</button>
             </td>
             <td className='noRightBorder centreText'>
               <button
@@ -187,9 +187,9 @@ const TideBlockRow = ({
           <Fragment>
             <td className='noRightBorder clean numFont rightText'>
               {overlap && 
-                <i className='fa-solid fa-layer-group fa-fw gapR tealT' 
-                   title={`Multi ${Pref.xBatch} time counts as 1/${tideObj.focus} duration`}>
-                </i>}
+                <n-fa0><i className='fa-solid fa-layer-group fa-fw gapR tealT' 
+                   title={`Multi-tasking ${tideObj.focus} ${Pref.xBatchs}`}>
+                </i></n-fa0>}
               {isStop ? Math.round( tideObj.durrAsMin ) : '...'}<i className='small'> min</i>
             </td>
             <td className='noRightBorder centreText'>

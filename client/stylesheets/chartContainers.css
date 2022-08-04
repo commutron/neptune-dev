@@ -64,6 +64,10 @@
 .hzBarContain25 {
   overflow: hidden;
 }
+.hzBarContain15 svg,
+.hzBarContain25 svg {
+  height: unset !important;
+}
 .hzBarContain15 {
   height: 15px; 
 }

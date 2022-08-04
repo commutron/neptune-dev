@@ -357,27 +357,32 @@ Meteor.methods({
         const dur = addTideDuration(x);
         return {
           branchGuess: dt,
-          duration: dur
+          duration: dur,
+          multi: x.focus ? true : false
         };
       });
       
       const ancOptionS = app.ancillaryOption.sort();
       for(let anc of ancOptionS) {
         let ancDurr = 0;
+        let ancMlti = false;
         for(let t of slim) {
           if( Array.isArray(t.branchGuess)
             && t.branchGuess[1].includes( anc ) ) {
               ancDurr = ancDurr + ( t.duration / t.branchGuess[1].length );
+            if( t.multi ) { ancMlti = true; }
           }
         }
         slimTimes.push({
           x: anc,
-          y: ancDurr
+          y: ancDurr,
+          w: ancMlti
         });
       }
       
       for(let br of branchOptions) {
         let brDurr = 0;
+        let brMlti = false;
         
         const bslim = slim.filter( t => Array.isArray(t.branchGuess) &&
                         ( t.branchGuess[1].includes( br.branch ) || 
@@ -393,45 +398,57 @@ Meteor.methods({
 
           if(br.subTasks && bt.branchGuess[2]) {
             subs.add(bt.branchGuess[2]);
-            subt.push({ sub: bt.branchGuess[2], dur: bt.duration });
+            subt.push({ sub: bt.branchGuess[2], dur: bt.duration, mlt: bt.multi });
           }
+          if( bt.multi ) { brMlti = true; }
         }
         
         for(let sb of subs) {
           const ft = subt.filter( f => f.sub === sb );
           const ct = ft.reduce((x,y)=> x + y.dur, 0);
+          const ml = ft.some( s => s.mlt );
           sbtt.push({
             a: sb,
-            b: ct
+            b: ct,
+            w: ml
           });
         }
         slimTimes.push({
           x: br.branch,
           y: brDurr,
-          z: sbtt
+          z: sbtt,
+          w: brMlti
         });
       }
       let aDurr = 0;
+      let aMlti = false;
       let zDurr = 0;
+      let zMlti = false;
       let yDurr = 0;
+      let yMlti = false;
       let xDurr = 0;
+      let xMlti = false;
       for(let t of slim) {
         if( !t.branchGuess || t.branchGuess[1].includes( 'guessUnsupported' ) ) {
           xDurr = xDurr + t.duration;
+          t.multi ? xMlti = true : null;
         }else if( t.branchGuess[1].includes( 'before release' ) ) {
           aDurr = aDurr + t.duration;
+          t.multi ? aMlti = true : null;
         }else if( t.branchGuess[1].includes( 'after complete' ) ) {
           zDurr = zDurr + t.duration;
+          t.multi ? zMlti = true : null;
         }else if( t.branchGuess[1].includes( 'out of route' ) ) {
           yDurr = yDurr + t.duration;
+          t.multi ? yMlti = true : null;
         }else{
           null;
         }
       }
-      slimTimes.unshift({ x: 'before release', y: aDurr });
-      slimTimes.push({ x: 'after complete', y: zDurr });
-      slimTimes.push({ x: 'out of route', y: yDurr });
-      slimTimes.push({ x: 'unknown', y: xDurr });
+      slimTimes.unshift({ x: 'before release', y: aDurr, w: aMlti });
+      slimTimes.push({ x: 'after complete', y: zDurr, w: zMlti });
+      slimTimes.push({ x: 'out of route', y: yDurr, w: yMlti });
+      slimTimes.push({ x: 'unknown', y: xDurr, w: xMlti });
       
       return slimTimes;
     }else{

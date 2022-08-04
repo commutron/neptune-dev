@@ -90,6 +90,8 @@ const TimeBudgetsChunk = ({
   const cnv = conversion === 'minutes' ? 'min' :
               conversion === 'percent' ? '%' : 'hrs';
   
+  const mlt = 'Includes Multi-tasking';
+  
   return(
     <div>
       <div className='centreRow comfort'>
@@ -199,7 +201,10 @@ const TimeBudgetsChunk = ({
                             <dt
                               title={`${Math.round(br.y)} minutes`}
                               className='rightRow doJustWeen'
-                            ><i className='cap'>{br.x}</i>
+                            ><i className='cap'
+                              >{br.x}{br.w && 
+                                <i className='fa-solid fa-layer-group fa-sm tealT gapL' title={mlt}></i>}
+                              </i>
                               <span className='grayT rightText medSm'
                               ><i className={sbt > 0 && br.y > sbt ? 'redT' : '' }> {timeAs(br.y)}</i><n-sm>{sbt > 0 && "/"+timeAs(sbt)}</n-sm> {cnv}</span>
                             </dt>
@@ -211,7 +216,9 @@ const TimeBudgetsChunk = ({
                                   key={ix+'sub'+ixz}
                                   title={`${Math.round(zt.b)} minutes`}
                                   className='rightRow doJustWeen indent'
-                                ><i className='cap'>{zt.a}</i>
+                                ><i className='cap'>{zt.a}{zt.w && 
+                                   <i className='fa-solid fa-layer-group fa-xs tealT gapL' title={mlt}></i>}
+                                 </i>
                                   <span className='rightText medSm grayT'
                                   ><i className={mxQ && zt.b > mxQ ? 'redT' : '' }> {timeAs(zt.b)}</i><n-sm>{mxQ && "/"+timeAs(mxQ)}</n-sm> {cnv}</span>
                                 </dd>

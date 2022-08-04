@@ -77,7 +77,7 @@ const PersonChunk = ({
           <b title='Start Time'>
           {uC.tideBlock.focus ?
             <i className='fa-solid fa-layer-group fa-fw fa-xs tealT'
-            title={`Multi ${Pref.xBatch} time counts as 1/${uC.tideBlock.focus} duration`}></i> 
+            title={`Multi-tasking ${uC.tideBlock.focus} ${Pref.xBatchs}`}></i> 
           :
             <i className="fa-solid fa-play fa-fw fa-xs greenT"></i>}
           </b>

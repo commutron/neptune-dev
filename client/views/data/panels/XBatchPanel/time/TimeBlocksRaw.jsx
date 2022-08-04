@@ -105,7 +105,10 @@ const RawBlock = ({ tB, batch, isSuper, isDebug, showZero })=> {
       <td><AnonyUser id={tB.who} /></td>
       <td>{mStart.format('YYYY/MM/DD kk:mm')}</td>
       <td>{mStop.format('YYYY/MM/DD kk:mm')}</td>
-      <td>{durr} min</td>
+      <td>{tB.focus &&
+        <i className='fa-solid fa-layer-group fa-fw tealT gapR'
+           title={`Multi-tasking ${tB.focus} ${Pref.xBatchs}`}></i>
+      }{durr} min</td>
       <td>
         <TaskTag
           batch={batch}
