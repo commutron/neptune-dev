@@ -34,6 +34,18 @@ const ProdData = ({
             b1.position > b2.position ? -1 : 0 
         ), [app]);
   
+  const canMulti = useMemo( ()=> Roles.userIsInRole(Meteor.userId(), 'multitask_time'), [user]);
+  
+  const plainBatchS = useMemo( ()=> {
+          const plain = [];
+          if(canMulti && allxBatch?.length > 0) {
+            for(let b of allxBatch) {
+              plain.push(b.batch);
+            }
+          }
+          return plain.sort((b1, b2)=> b1 < b2 ? 1 : b1 > b2 ? -1 : 0);
+        }, [coldReady]);
+    
   if( !coldReady || !hotReady || !user || !app ) {
     return( <SpinWrap /> );
   }
@@ -46,7 +58,9 @@ const ProdData = ({
       user={user}
       time={time}
       org={org}
+      canMulti={canMulti}
       activeUsers={activeUsers}
+      plainBatchS={plainBatchS}
       brancheS={brancheS}
       app={app}
       allEquip={allEquip}

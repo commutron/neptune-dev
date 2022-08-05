@@ -7,14 +7,14 @@ const QuickRecent = ({ user })=> {
   const rec = [...new Set(tpl)].filter( r => Pref.regex5.test(r));
   
   return(
-    <div className='centre pop vmargin space min200 max875'>
+    <div className='centre pop vmargin space min200 max875 blueGlow'>
       <p className='med wide bottomLine cap'>Recent {Pref.xBatchs}</p>
       <div className='rowWrap vmarginhalf'>
       {rec.length > 0 ?
         rec.map( (val, ix)=>(
           <button 
             key={ix}
-            className='action whiteSolid margin5 letterSpaced'
+            className='action whiteSolid margin5 letterSpaced spacehalf'
             onClick={()=>Session.set('now', val)}
           >{val}</button>
         ))

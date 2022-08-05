@@ -3,34 +3,34 @@ import React, { useRef, useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
+import ModelNative from '/client/layouts/Models/ModelNative';
 import BigTideTask from '/client/components/tide/TideControl/BigTideTask';
 
+const TideMulti = ({ loaded, user, brancheS, plainBatchS })=> (
+	<ModelNative
+    dialogId='multiprojdialog'
+    title={`Multiple ${Pref.xBatch} Mode`}
+    icon='fa-solid fa-layer-group'
+    colorT='tealT'
+    dark={true}
+    >
+      <TideMultiCore
+        loaded={loaded}
+        user={user}
+        brancheS={brancheS}
+        plainBatchS={plainBatchS}
+      />
+  </ModelNative>
+);
 
-const TideMulti = ({ loaded, user, app })=> {
+export default TideMulti;
+
+const TideMultiCore = ({ user, brancheS, plainBatchS })=> {
   
   const thingMounted = useRef(true);
   
   const eng = user?.engaged;
   const mltiON = eng?.task === 'MLTI';
-  
-  const [ livebatchlist, livebatchSet ] = useState([]);
-  const [ brancheS, branchSet ] = useState([]);
-  
-  useEffect( ()=> {
-  	if(loaded || mltiON) {
-	  	Meteor.call('getLiveBatch', (err, re)=>{
-	  		err && console.log(err);
-	  		re && livebatchSet(re);
-	  	});
-	  	
-	  	branchSet( app?.branches
-        .filter( b => b.open === true )
-        .sort((b1, b2)=>
-          b1.position < b2.position ? 1 : 
-          b1.position > b2.position ? -1 : 0 
-      ) || []); 
-  	}
-  },[loaded]);
   
   useEffect(() => {
     return () => {
@@ -76,10 +76,10 @@ const TideMulti = ({ loaded, user, app })=> {
 		setWorking(true);
     lockTaskSet && lockTaskSet(true);
     
-  	let matchO = livebatchlist.find( x => x === batchStateOne);
+  	let matchO = plainBatchS.find( x => x === batchStateOne);
   	!matchO && toast.warning('please choose from the list');
   	
-  	let matchI = livebatchlist.find( x => x === batchStateTwo);
+  	let matchI = plainBatchS.find( x => x === batchStateTwo);
   	!matchI && toast.warning('please choose from the list');
   	
   	if( valid && matchO && matchI ) {
@@ -199,7 +199,7 @@ const TideMulti = ({ loaded, user, app })=> {
 			    </div>
 			    
           <datalist id='livebatches'>
-            {livebatchlist.map( (entry)=>( 
+            {plainBatchS.map( (entry)=>( 
                <option key={entry} value={entry}>{entry}</option> 
             ))}
           </datalist>
@@ -258,8 +258,6 @@ const TideMulti = ({ loaded, user, app })=> {
     </div>
   );
 };
-
-export default TideMulti;
 
 export const MultiRunning = ({ lock })=> {
 	

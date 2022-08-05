@@ -1,17 +1,12 @@
-import React, { useMemo, Fragment, useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import { toast } from 'react-toastify';
 import Pref from '/client/global/pref.js';
 import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 
-import ModelNative from '/client/layouts/Models/ModelNative';
-import TideMulti from '/client/components/tide/TideControl/TideMulti';
+// import TideMulti from '/client/components/tide/TideControl/TideMulti';
 
 
-const TideFollow = ({ tOpen, app })=> {
-  
-  const [ loaded, loadedSet ] = useState(false);
-  
-  const canMulti = useMemo( ()=> Roles.userIsInRole(Meteor.userId(), 'multitask_time'), [Meteor.userId()]);
+const TideFollow = ({ tOpen, canMulti })=> {
   
   function doLogout() {
 	  if(Meteor.user().engaged) {
@@ -44,7 +39,6 @@ const TideFollow = ({ tOpen, app })=> {
 	};
 	
 	const openMutiTide = ()=> {
-	  loadedSet(true);
     const dialog = document.getElementById('multiprojdialog');
     dialog?.showModal();
   };
@@ -101,7 +95,7 @@ const TideFollow = ({ tOpen, app })=> {
         </MenuItem>
         <MenuItem divider />
         
-        {app && canMulti ?
+        {canMulti ?
           <Fragment>
             <MenuItem onClick={()=>openMutiTide()} className='line2x'>
               <i className='fa-solid fa-layer-group fa-fw gapR tealT'></i>
@@ -126,23 +120,6 @@ const TideFollow = ({ tOpen, app })=> {
           <i className='fas fa-sign-out-alt fa-fw'></i><i className='noCopy'> Sign-out</i>
         </MenuItem>
       </ContextMenu>
-      
-      {app && canMulti ?
-        <ModelNative
-          dialogId='multiprojdialog'
-          title={`Multiple ${Pref.xBatch} Mode`}
-          icon='fa-solid fa-layer-group'
-          colorT='tealT'
-          dark={true}
-          >
-            <TideMulti
-              loaded={loaded}
-              user={user}
-              app={app}
-              canMulti={canMulti}
-            />
-        </ModelNative>
-      : null}
     </Fragment>
   );
 };

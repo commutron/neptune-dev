@@ -16,7 +16,7 @@ const PartialCard = ({ orb })=> {
   }, []);
   
   return(
-    <div className='centre pop vmargin space min200 max875'>
+    <div className='centre pop vmargin space min200 max600'>
       <p className='med wide bottomLine'>Possible {Pref.xBatch} matches</p>
       <div className='centreRow vmarginhalf'>
       {!lookup ? <em>...</em>
@@ -24,7 +24,7 @@ const PartialCard = ({ orb })=> {
         lookup.map( (e, ix)=>(
           <button 
             key={ix}
-            className='action whiteSolid margin5'
+            className='action whiteSolid margin5 spacehalf'
             onClick={()=>Session.set('now', e[0])}
           >{e[0]} - {e[1].join(" ")}</button>
         ))

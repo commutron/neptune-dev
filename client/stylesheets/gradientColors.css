@@ -2,6 +2,9 @@
 .yellowGlow { background-image: linear-gradient(transparent, var(--sunflowerfade)); }
 .greenGlow { background-image: linear-gradient(transparent, var(--emeraldtrans)); }
 .blueGlow { background-image: linear-gradient(200deg, transparent 50%, var(--peterriverfade) 90%); }
+.midnightGlow { background-image: linear-gradient(200deg, transparent 50%, var(--wetasphalttrans) 90%); }
+.tealGlow { background-image: linear-gradient(200deg, transparent 50%, var(--turquoisetrans) 90%); }
+.darkredGlow { background-image: linear-gradient(200deg, transparent 50%, var(--pomegranatetrans) 90%); }
 
 .countFillConcrete0 { background-image: linear-gradient(var(--asbestos), transparent 0%); }
 .countFillConcrete5 { background-image: linear-gradient(var(--asbestos), transparent 9%); }

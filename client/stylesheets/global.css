@@ -335,14 +335,17 @@ summary:where(:focus,:active) {
 
 dialog {
   border: 1px solid black;
-  border-radius: 0;
+  border-radius: 4px;
   box-shadow: var(--dropShadow2);
   background-color: var(--clouds);
   padding: 0 16px 16px 16px;
 }
 dialog::backdrop {
   background-color: rgb(10,10,10,0.8);
-  /*backdrop-filter: blur(3px) grayscale(25%);*/
+  backdrop-filter: blur(1px);
+}
+dialog .action {
+  border-radius: 4px;
 }
 
 input::-webkit-inner-spin-button,

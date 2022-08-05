@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect, Fragment } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useMemo, Fragment } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { ToastContainer } from 'react-toastify';
 
@@ -7,6 +7,7 @@ import { ScanListenerUtility, ScanListenerOff } from '/client/utility/ScanListen
 import HomeIcon from './HomeIcon';
 import FindBox from './FindBox';
 
+import TideMulti from '/client/components/tide/TideControl/TideMulti';
 import TimeStop from '/client/components/tide/TimeStop';
 import TideFollow from '/client/components/tide/TideFollow';
 import XFormBar from '/client/components/bigUi/ToolBar/XFormBar';
@@ -16,9 +17,10 @@ import { NonConMerge } from '/client/utility/NonConOptions';
 export const ProWrap = ({ 
   itemSerial, itemData, batchData, seriesData, rapidsData,
   widgetData, radioactive, groupAlias, 
-  user, time, users, app, defaultWide, 
+  user, time, users, app, 
+  brancheS, plainBatchS, canMulti,
   eqAlias, maintId,
-  action, tideLockOut, standAlone,
+  action, tideLockOut, standAlone, defaultWide,
   children
 })=> {
   
@@ -167,7 +169,7 @@ export const ProWrap = ({
             <i className='fas fa-rocket' data-fa-transform='left-1 down-1'></i>
           </button>
         </div>
-        <TideFollow tOpen={timeOpen} app={app} />
+        <TideFollow tOpen={timeOpen} canMulti={canMulti} />
       </div>
       
       <Fragment>
@@ -222,12 +224,20 @@ export const ProWrap = ({
           app={app} 
         />
       </Fragment>
+      
+      {canMulti ?
+        <TideMulti
+          user={user}
+          brancheS={brancheS}
+          plainBatchS={plainBatchS}
+        />
+      : null}
     </div>
   );
 };
 
 
-export const ProWindow = ({ app, children })=> {
+export const ProWindow = ({ brancheS, plainBatchS, canMulti, user, children })=> {
   
   useEffect( ()=> {
     if(Meteor.user()) {
@@ -251,13 +261,20 @@ export const ProWindow = ({ app, children })=> {
           <FindBox />
         </div>
         <div className='auxRight'></div>
-        <TideFollow proRoute={true} app={app} />
+        <TideFollow proRoute={true} canMulti={canMulti} />
       </div>
       <div className='proContent darkTheme'>
         <Fragment>
           {children}
         </Fragment>
       </div>
+      {canMulti ?
+        <TideMulti
+          user={user}
+          brancheS={brancheS}
+          plainBatchS={plainBatchS}
+        />
+      : null}
     </section>
   );
 };
