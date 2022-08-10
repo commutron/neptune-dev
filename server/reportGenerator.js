@@ -80,6 +80,7 @@ function loopItems(items, from, to) {
     let completedItems = 0;
     let testFail = 0;
     let itemsFail = 0;
+    let itemsRapid = 0;
     let scraps = 0;
     for(let i of items) {
       if(i.completed && moment(i.completedAt).isBetween(from, to) ) { 
@@ -92,11 +93,14 @@ function loopItems(items, from, to) {
         testFail += didFail;
         itemsFail += 1;
       }
+      if(it.altPath.find( a => a.rapId !== false && moment(a.assignedAt).isBetween(from, to) )) {
+        itemsRapid += 1;
+      }
       i.scrapped === true && inTime.find( x => x.type === 'scrap' && x.good === true ) ?
         scraps += 1 : null;
     }
     
-    resolve({completedItems, testFail, itemsFail, scraps});
+    resolve({completedItems, testFail, itemsFail, itemsRapid, scraps});
   });
 }
 
@@ -110,14 +114,13 @@ function loopNCItems(items, from, to, nonCons) {
     
     let itemsFail = 0;
     let testFail = 0;
+    let itemsRapid = 0;
     let scraps = 0;
     
     for(let it of completedItems) {
       const itNC = nonCons.filter( x => x.serial === it.serial );
-      
       if(itNC.length > 0) {
         ncItemsNum += 1;
-        
         const cNC = countMulti(itNC);
         ncTotalNum += Number(cNC);
       }
@@ -127,12 +130,17 @@ function loopNCItems(items, from, to, nonCons) {
         testFail += didFail;
         itemsFail += 1;
       }
+      
+      if(it.altPath.find( a => a.rapId !== false )) {
+        itemsRapid += 1;
+      }
+      
       if(it.scrapped === true && it.history.find( x => x.type === 'scrap' && x.good === true ) ) {
         scraps += 1;
       }
     }
     
-    resolve({completedNum, ncItemsNum, ncTotalNum, itemsFail, testFail, scraps});
+    resolve({completedNum, ncItemsNum, ncTotalNum, itemsFail, testFail, itemsRapid, scraps});
   });
 }
 

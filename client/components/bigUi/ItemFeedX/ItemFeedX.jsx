@@ -33,7 +33,8 @@ const ItemFeedX = ({
   const flatCheckList = Array.from(ncTypesCombo, x => 
                                   x.key ? x.live === true && x.typeText : x);
   
-  const canQA = Roles.userIsInRole(Meteor.userId(), ['remove', 'qa']);
+  const canQARmv = Roles.userIsInRole(Meteor.userId(), ['remove', 'qa']);
+  const canQAFin = Roles.userIsInRole(Meteor.userId(), ['run', 'qa']);
   const canEdit = Roles.userIsInRole(Meteor.userId(), ['edit', 'run']);
   const canVerify = Roles.userIsInRole(Meteor.userId(), 'verify');
   const canInspect = Roles.userIsInRole(Meteor.userId(), 'inspect');
@@ -94,7 +95,7 @@ const ItemFeedX = ({
                 done={done}
                 iopen={iopen}
                 user={user}
-                canQA={canQA}
+                canQA={canQARmv}
                 canVerify={canVerify}
                 canInspect={canInspect}
                 app={app}
@@ -113,7 +114,7 @@ const ItemFeedX = ({
                 units={units}
                 done={done}
                 iopen={iopen}
-                canQA={canQA}
+                canQA={canQARmv}
                 cal={calFunc} /> 
             );
           }else if(typeof dt.rapId === 'string') {
@@ -125,7 +126,10 @@ const ItemFeedX = ({
                 seriesId={seriesId}
                 serial={serial}
                 done={done}
-                cal={calFunc} />
+                cal={calFunc}
+                canRmv={canQARmv}
+                canFin={canQAFin}
+              />
             );
           }else if(typeof dt.river === 'string') {
             const rvr = widgetData.flows.find(w=>w.flowKey === dt.river);

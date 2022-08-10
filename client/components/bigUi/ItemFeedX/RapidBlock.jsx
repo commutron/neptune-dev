@@ -7,11 +7,8 @@ import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 import UserNice from '/client/components/smallUi/UserNice';
 
 const RapidBlock = ({ 
-  rapIs, rapidsData, seriesId, serial, done, cal
+  rapIs, rapidsData, seriesId, serial, done, cal, canRmv, canFin
 })=> {
-  
-  const canRmv = Roles.userIsInRole(Meteor.userId(), ['remove', 'qa']);
-  const canFin = Roles.userIsInRole(Meteor.userId(), ['run', 'qa']);
   
   function popRapid() {
     Meteor.call('unsetRapidFork', seriesId, serial, rapIs.rapId, (error, reply)=>{

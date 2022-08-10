@@ -19,11 +19,20 @@ const ProblemReport = ({ start, end, dataset })=> {
       err && console.log(err);
       if(reply) {
         const re = JSON.parse(reply);
+        
         const scrpOfComp = percentOf(re.itemStats.completedItems, re.itemStats.scraps);
-        const scrpInComp = percentOf(re.nonConItemStats.completedNum, re.nonConItemStats.scraps);
-
+        const rpdOfComp = percentOf(re.itemStats.completedItems, re.itemStats.itemsRapid);
+        const failOfComp = percentOf(re.itemStats.completedItems, re.itemStats.itemsFail);
+        
         const nciOfComp = percentOf(re.itemsInclude, re.nonConStats.uniqueSerials);
         const shiOfComp = percentOf(re.itemStats.completedItems, re.shortfallStats.uniqueSerials);
+        
+        const cleanItms = Math.max( re.itemsInclude - re.nonConStats.uniqueSerials, 0);
+        const clnOfComp = percentOf(re.itemsInclude, cleanItms);
+        
+        const scrpInComp = percentOf(re.nonConItemStats.completedNum, re.nonConItemStats.scraps);
+        const rpdInComp = percentOf(re.nonConItemStats.completedNum, re.nonConItemStats.itemsRapid);
+        const failInComp = percentOf(re.nonConItemStats.completedNum, re.nonConItemStats.itemsFail)
         
         const badPrc = percentOf(re.nonConItemStats.completedNum, re.nonConItemStats.ncItemsNum);
         const goodFinItms = Math.max( re.nonConItemStats.completedNum - re.nonConItemStats.ncItemsNum, 0);
@@ -31,16 +40,14 @@ const ProblemReport = ({ start, end, dataset })=> {
         const doneNCrate = asRate(re.nonConItemStats.ncTotalNum, re.nonConItemStats.completedNum);
         const badNCrate = asRate(re.nonConItemStats.ncTotalNum, re.nonConItemStats.ncItemsNum);
         
-        const cleanItms = Math.max( re.itemsInclude - re.nonConStats.uniqueSerials, 0);
-        const clnOfComp = percentOf(re.itemsInclude, cleanItms);
-        
         let arrange = dataset === 'completed' ?
           [ 
             ['', 'total', 'percent'],
             [ `Completed Items`, re.nonConItemStats.completedNum ],
             [ 'Scrapped Items', re.nonConItemStats.scraps, scrpInComp+'%' ],
+            [ 'Returned/Reprocessed Items', re.nonConItemStats.itemsRapid, rpdInComp+'%' ],
             [ 'Total Failed Tests', re.nonConItemStats.testFail ],
-            [ 'Items That Failed', re.nonConItemStats.itemsFail ],
+            [ 'Items That Failed', re.nonConItemStats.itemsFail, failInComp+'%'],
             [ `Completed Items With ${Pref.nonCons}`, re.nonConItemStats.ncItemsNum, badPrc+'%' ],
             [ `Completed Items Without ${Pref.nonCons}`, goodFinItms, goodPrc+'%' ],
             [ `Total ${Pref.nonCons} Of Completed Items`, re.nonConItemStats.ncTotalNum ],
@@ -54,8 +61,9 @@ const ProblemReport = ({ start, end, dataset })=> {
           [ 'Live Serialized Items', re.itemsInclude ],
           [ 'Completed Serialized Items', re.itemStats.completedItems ],
           [ 'Scrapped Serialized Items', re.itemStats.scraps, scrpOfComp+'%' ],
+          [ 'Returned/Reprocessed Items', re.itemStats.itemsRapid, rpdOfComp+'%' ],
           [ 'Total Failed Tests', re.itemStats.testFail ],
-          [ 'Failed Serialized Items', re.itemStats.itemsFail ],
+          [ 'Failed Serialized Items', re.itemStats.itemsFail, failOfComp+'%' ],
         ];
         
         const prob = dataset === 'noncon' ? 
