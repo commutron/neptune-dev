@@ -48,14 +48,14 @@ Meteor.methods({
     }
   },
 
-  // RECORD - Always call with 'apply' noretry wait
+  // RECORD - Always call with 'apply'
   startTimeSpan(type, link, project, newTask, newSubTask) {
     
     const user = Meteor.user();
     const spinning = user && user.engaged;
     const notactive = !Roles.userIsInRole(Meteor.userId(), 'active');
       
-    if(!Meteor.user()?.orgKey || spinning || notactive) {
+    if(spinning || notactive) {
       return false;
     }else{
       // PROX = XBatch = batch
@@ -93,7 +93,6 @@ Meteor.methods({
     }
   },
   
-  // Always call with 'apply' noretry wait
   stopTimeSpan(tId) {
     const user = Meteor.user();
     if(tId && user) {
@@ -119,7 +118,6 @@ Meteor.methods({
     }
   },
   
-  // Always call with 'apply' noretry wait
   switchTimeSpan(nowId, isPROX, type, link, project, newTask, newSubTask) {
     try {
       
@@ -161,22 +159,19 @@ Meteor.methods({
       throw new Meteor.Error(error);
     }finally{ return true }
   },
-  
-  // Always call with 'apply' noretry wait
+
   startTideTask(batchId, newTkey, newTask, newSubTask) {
     try {
-      const orgKey = Meteor.user().orgKey;
-      
       const user = Meteor.user();
       const spinning = user && user.engaged;
       const notactive = !Roles.userIsInRole(Meteor.userId(), 'active');
       
       if(typeof newTkey !== 'string' || spinning || notactive) {
-        null;
+        return false;
       }else{
         
         const docX = XBatchDB.findOne(
-          { _id: batchId, orgKey: orgKey },
+          { _id: batchId },
           { fields: {'batch':1,'tide':1} }
         );
         
@@ -184,7 +179,7 @@ Meteor.methods({
           const keyChecX = docX.tide.every( x => x.tKey !== newTkey );
       
           if(!keyChecX) { 
-            null;
+            return false;
           }else{
             const taskVal = !newTask || newTask === 'false' ? false : newTask;
             const subtVal = !newSubTask || newSubTask === 'false' ? false : newSubTask;
@@ -217,7 +212,7 @@ Meteor.methods({
       throw new Meteor.Error(err);
     }
   },
-  // Always call with 'apply' noretry wait
+
   stopTideTask(tideKey) {
     try {
       const docX = XBatchDB.findOne({ 
@@ -246,13 +241,17 @@ Meteor.methods({
             }
           });    
           return true;
+        }else{
+          return false;
         }
+      }else{
+        return false;
       }
     }catch (err) {
       throw new Meteor.Error(err);
     }
   },
-  // Always call with 'apply' noretry wait
+
   switchTideTask(tideKey, isPROX, newbatchID, newTkey, newTask, newSubTask) {
     try {
 
@@ -295,7 +294,6 @@ Meteor.methods({
     }finally{ return true }
   },
   
-  // MULTI - Always call with 'apply' noretry wait
   startMultiTideTask(batch1, newTkey1, newTask1, newSubTask1, batch2, newTkey2, newTask2, newSubTask2) {
     try {
       const orgKey = Meteor.user().orgKey;
@@ -305,7 +303,7 @@ Meteor.methods({
       const special = Roles.userIsInRole(Meteor.userId(), 'multitask_time');
       
       if(typeof newTkey1 !== 'string' || typeof newTkey2 !== 'string' || spinning || !special) {
-        return true;
+        return false;
       }else{
         
         const docX1 = XBatchDB.findOne({ batch: batch1, orgKey: orgKey }, { fields: {'tide':1} });
@@ -316,7 +314,7 @@ Meteor.methods({
           const keyChecX2 = docX2.tide.every( x => x.tKey !== newTkey2 );
       
           if(!keyChecX1 || !keyChecX2) { 
-            null;
+            return false;
           }else{
             const taskVal1 = !newTask1 || newTask1 === 'false' ? false : newTask1;
             const subtVal1 = !newSubTask1 || newSubTask1 === 'false' ? false : newSubTask1;
@@ -359,6 +357,8 @@ Meteor.methods({
             });
             return true;
           }
+        }else{
+          return false;
         }
       }
     }catch (err) {
@@ -380,27 +380,22 @@ Meteor.methods({
       });
       
       if(docX1 && docX2) {
-        const batchIDx1 = docX1._id;
-        if(batchIDx1) {
-          XBatchDB.update({
-            _id: batchIDx1,
-            'tide.tKey': tideKey1
-          }, {
-            $set : { 
-              'tide.$.stopTime' : new Date()
-          }});
-        }
+        XBatchDB.update({
+          _id: docX1._id,
+          'tide.tKey': tideKey1
+        }, {
+          $set : { 
+            'tide.$.stopTime' : new Date()
+        }});
         
-        const batchIDx2 = docX2._id;
-        if(batchIDx2) {
-          XBatchDB.update({
-            _id: batchIDx2,
-            'tide.tKey': tideKey2
-          }, {
-            $set : { 
-              'tide.$.stopTime' : new Date()
-          }});
-        }
+        XBatchDB.update({
+          _id: docX2._id,
+          'tide.tKey': tideKey2
+        }, {
+          $set : { 
+            'tide.$.stopTime' : new Date()
+        }});
+
         Meteor.users.update(Meteor.userId(), {
           $set: {
             engaged: false
@@ -410,13 +405,14 @@ Meteor.methods({
           }
         });    
         return true;
+      }else{
+        return false;
       }
     }catch (err) {
       throw new Meteor.Error(err);
     }
   },
   
-  // CHANGE - Always call with 'apply' noretry wait
   editTideTimeBlock(dbHome, tideKey, newStart, newStop, taskIs, subtIs) {
     try {
       const pplSup = Roles.userIsInRole(Meteor.userId(), 'peopleSuper');
@@ -555,7 +551,7 @@ Meteor.methods({
       throw new Meteor.Error(err);
     }
   },
-  // Always call with 'apply' noretry wait
+
   splitTideTimeBlock(dbHome, tideKey, newSplit, stopTime) {
     try {
       const pplSup = Roles.userIsInRole(Meteor.userId(), 'peopleSuper');

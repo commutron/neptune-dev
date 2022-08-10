@@ -70,14 +70,14 @@ const ReportRangeRequest = ({
   setFrom, setTo, setData
 })=> (
   <div>
-    <p className='medBig centreRow rowWrap'>
+    <p className='centreRow rowWrap'>
       <i>Find</i>
       <span className='middle'>
         <input
           type='radio'
           id='inputStats'
           name='inputData'
-          onChange={(e)=>setData('stats')}
+          onChange={()=>setData('stats')}
           defaultChecked={true} 
         />
         <label htmlFor='inputStats'>Overall Stats</label>
@@ -88,7 +88,7 @@ const ReportRangeRequest = ({
           type='radio'
           id='inputNC'
           name='inputData'
-          onChange={(e)=>setData('noncon')}
+          onChange={()=>setData('noncon')}
         />
         <label htmlFor='inputNC'>{Pref.nonCons}</label>
       </span>
@@ -98,7 +98,7 @@ const ReportRangeRequest = ({
           type='radio'
           id='inputSH'
           name='inputData'
-          onChange={(e)=>setData('short')}
+          onChange={()=>setData('short')}
         />
         <label htmlFor='inputSH'>{Pref.shortfalls}</label>
       </span>
@@ -108,13 +108,13 @@ const ReportRangeRequest = ({
           type='radio'
           id='inputDN'
           name='inputData'
-          onChange={(e)=>setData('completed')}
+          onChange={()=>setData('completed')}
         />
         <label htmlFor='inputDN'>Completed Items Only</label>
       </span>
     </p>
     
-    <p className='rowWrap medBig'>
+    <p className='rowWrap'>
       <i>Within Date Range</i>
       <DateRangeSelect
         setFrom={setFrom}

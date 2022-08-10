@@ -14,7 +14,7 @@ const TideSwitch = ({
   const [lock, setLock] = useState(true);
   const [working, setWorking] = useState(false);
   
-  const timer = ()=> Meteor.setTimeout( ()=>{ 
+  const unlockAll = ()=> Meteor.setTimeout( ()=>{ 
     if(thingMounted.current) {
       setLock(false);
       setWorking(false);
@@ -24,13 +24,13 @@ const TideSwitch = ({
   
   useEffect(() => {
     setLock(true);
-    timer();
+    unlockAll();
   }, [tideKey]);
   
   useEffect(() => {
     return () => {
       thingMounted.current = false;
-      Meteor.clearTimeout(timer);
+      Meteor.clearTimeout(unlockAll);
     };
   }, []);
   
@@ -41,16 +41,17 @@ const TideSwitch = ({
     let newRndm = actionID;
     Meteor.setTimeout( ()=>{
       Meteor.apply('switchTideTask', [ tideKey, true, batchID, newRndm, taskState, subtState ],
-      {wait: true, noRetry: true},
+      {wait: true, noRetry: false},
       (error, reply)=> {
         if(error) {
           console.log(error);
           toast.error('Rejected by Server');
+          unlockAll();
         }
         if(reply === true) {
+          unlockAll();
           if(thingMounted.current) {
             setActionID(Random.id());
-            timer();
             document.getElementById('lookup').focus();
           }
         }

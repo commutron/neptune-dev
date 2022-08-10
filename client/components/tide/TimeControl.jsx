@@ -17,7 +17,7 @@ const TimeControl = ({
   const [lock, setLock] = useState(true);
   const [working, setWorking] = useState(false);
   
-  const timer = ()=> Meteor.setTimeout( ()=>{ 
+  const unlockAll = ()=> Meteor.setTimeout( ()=> { 
     if(thingMounted.current) {
       setLock(false);
       setWorking(false);
@@ -27,13 +27,13 @@ const TimeControl = ({
   
   useEffect(() => {
     setLock(true);
-    timer();
+    unlockAll();
   }, [timeId]);
   
   useEffect(() => {
     return () => {
       thingMounted.current = false;
-      Meteor.clearTimeout(timer);
+      Meteor.clearTimeout(unlockAll);
     };
   }, []);
   
@@ -41,10 +41,11 @@ const TimeControl = ({
     if(error) {
       console.log(error);
       toast.error('Rejected by Server');
+      unlockAll();
     }
     if(re === true) {
       if(thingMounted.current) {
-        timer();
+        unlockAll();
         document.getElementById('lookup').focus();
       }
     }
@@ -57,7 +58,7 @@ const TimeControl = ({
 
     Meteor.setTimeout( ()=>{
       Meteor.apply('startTimeSpan', [ type, link, project, taskState, subtState ],
-      {wait: true, noRetry: true},
+      {wait: true, noRetry: false},
       (error, re)=> replyCallback(error, re) );
     }, 500);
   }
@@ -66,9 +67,10 @@ const TimeControl = ({
     setLock(true);
     setWorking(true);
     lockTaskSet && lockTaskSet(true);
+    
     Meteor.setTimeout( ()=>{
       Meteor.apply('switchTimeSpan', [ timeId, engagedPro, type, link, project, taskState, subtState ],
-      {wait: true, noRetry: true},
+      {wait: true, noRetry: false},
       (error, re)=> replyCallback(error, re) );
     }, 500);
   }

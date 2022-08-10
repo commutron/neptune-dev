@@ -9,7 +9,7 @@ const TimeStop = ({ tIdKey, timeOpen, etPro, etMlt, lockTaskSet })=> {
   const thingMounted = useRef(true);
   const [lock, setLock] = useState(true);
   
-  const timer = ()=> Meteor.setTimeout( ()=>{ 
+  const unlockAll = ()=> Meteor.setTimeout( ()=>{ 
     if(thingMounted.current) {
       setLock(false);
       lockTaskSet && lockTaskSet(false);
@@ -18,13 +18,13 @@ const TimeStop = ({ tIdKey, timeOpen, etPro, etMlt, lockTaskSet })=> {
   
   useEffect(() => {
     setLock(true);
-    timer();
+    unlockAll();
   }, [tIdKey]);
   
   useEffect(() => {
     return () => {
       thingMounted.current = false;
-      Meteor.clearTimeout(timer);
+      Meteor.clearTimeout(unlockAll);
     };
   }, []);
   
@@ -32,10 +32,11 @@ const TimeStop = ({ tIdKey, timeOpen, etPro, etMlt, lockTaskSet })=> {
     if(err) {
       console.log(err);
       toast.error('Rejected by Server');
+      unlockAll();
     }
     if(re === true) {
+      unlockAll();
       if(thingMounted.current) {
-        timer();
         document.getElementById('lookup').focus();
       }
     }
@@ -46,11 +47,11 @@ const TimeStop = ({ tIdKey, timeOpen, etPro, etMlt, lockTaskSet })=> {
     
     if(etPro) {
       Meteor.apply('stopTideTask', [ tIdKey ], 
-        {wait: true, noRetry: true},
+        {wait: true, noRetry: false},
         (err, re)=> replyCallback(err, re) );
     }else {
       Meteor.apply('stopTimeSpan', [ tIdKey ], 
-        {wait: true, noRetry: true},
+        {wait: true, noRetry: false},
         (err, re)=> replyCallback(err, re) );
     }
   }

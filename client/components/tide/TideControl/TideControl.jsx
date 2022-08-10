@@ -16,7 +16,7 @@ const TideControl = ({
   const [lock, setLock] = useState(true);
   const [working, setWorking] = useState(false);
   
-  const timer = ()=> Meteor.setTimeout( ()=>{ 
+  const unlockAll = ()=> Meteor.setTimeout( ()=>{ 
     if(thingMounted.current) {
       setLock(false);
       setWorking(false);
@@ -26,13 +26,13 @@ const TideControl = ({
   
   useEffect(() => {
     setLock(true);
-    timer();
+    unlockAll();
   }, [tideKey]);
   
   useEffect(() => {
     return () => {
       thingMounted.current = false;
-      Meteor.clearTimeout(timer);
+      Meteor.clearTimeout(unlockAll);
     };
   }, []);
   
@@ -40,11 +40,12 @@ const TideControl = ({
     if(error) {
       console.log(error);
       toast.error('Rejected by Server');
+      unlockAll();
     }
     if(reply === true) {
+      unlockAll();
       if(thingMounted.current) {
         setActionID(Random.id());
-        timer();
         document.getElementById('lookup').focus();
       }
     }
@@ -57,7 +58,7 @@ const TideControl = ({
     let newRndm = actionID;
     Meteor.setTimeout( ()=>{
       Meteor.apply('startTideTask', [ batchID, newRndm, taskState, subtState ],
-      {wait: true, noRetry: true},
+      {wait: true, noRetry: false },
       (error, reply)=> replyCallback(error, reply) );
     }, 1000);
   }
@@ -69,7 +70,7 @@ const TideControl = ({
     let newRndm = actionID;
     Meteor.setTimeout( ()=>{
       Meteor.apply('switchTideTask', [ tideKey, engagedPro, batchID, newRndm, taskState, subtState ],
-      {wait: true, noRetry: true},
+      {wait: true, noRetry: false },
       (error, reply)=> replyCallback(error, reply) );
     }, 1000);
   }

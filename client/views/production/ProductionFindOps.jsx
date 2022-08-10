@@ -70,7 +70,12 @@ const ProductionFindOps = ({
   if(!orb) {
     Session.set('nowBatch', false);
     return (
-      <ProWindow brancheS={brancheS} plainBatchS={plainBatchS} canMulti={canMulti}>
+      <ProWindow 
+        brancheS={brancheS} 
+        plainBatchS={plainBatchS}
+        user={user}
+        canMulti={canMulti}
+      >
         <QuickCards
           orbslice={orb}
           canMulti={canMulti}
@@ -122,7 +127,12 @@ const ProductionFindOps = ({
     Session.set('nowBatch', false);
     Session.set('nowInstruct', undefined);
     return (
-      <ProWindow brancheS={brancheS} plainBatchS={plainBatchS} canMulti={canMulti}>
+      <ProWindow 
+        brancheS={brancheS} 
+        plainBatchS={plainBatchS}
+        user={user}
+        canMulti={canMulti}
+      >
         <WikiOps 
           root={app.instruct} 
           anchor={false} 
@@ -278,7 +288,12 @@ const ProductionFindOps = ({
   if(!isNaN(orb) && orb.length >= 5) {
     Session.set('nowBatch', orb);
     return(
-      <ProWindow brancheS={brancheS} plainBatchS={plainBatchS} canMulti={canMulti}>
+      <ProWindow 
+        brancheS={brancheS} 
+        plainBatchS={plainBatchS} 
+        user={user}
+        canMulti={canMulti}
+      >
         <QuickCards
           orbslice={orb}
           canMulti={canMulti}
@@ -292,7 +307,12 @@ const ProductionFindOps = ({
   
   Session.set('nowBatch', false);
 	return(
-	  <ProWindow brancheS={brancheS} plainBatchS={plainBatchS} canMulti={canMulti}>
+	  <ProWindow 
+	    brancheS={brancheS} 
+	    plainBatchS={plainBatchS}
+	    user={user}
+	    canMulti={canMulti}
+	   >
 	    <div className='centreText wide'>
         <i className='biggest'>¯\_(ツ)_/¯</i><br />
         <n-sm>No Match</n-sm>

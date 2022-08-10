@@ -20,17 +20,14 @@
   --emerald: rgb(46, 204, 113); /* light green */
   --emeraldfrost: rgba(46, 204, 113, 0.8);
   --emeraldtrans: rgba(46, 204, 113, 0.4);
-  --emeraldfade: rgba(46, 204, 113, 0.1);
   
   --nephritis: rgb(39, 174, 96); /* dark green */
-  --nephritisfade: rgba(39, 174, 96, 0.5); /* dark green fade */
   
   --peterriver: rgb(52, 152, 219);/* light blue */
   --peterriverfrost: rgb(52, 152, 219, 0.8);
   --peterriverfade: rgb(52, 152, 219, 0.5);
   
   --belizeHole: rgb(41, 128, 185); /* dark blue */
-  --belizeHoletrans: rgba(41, 128, 185, 0.5);
   --belizeHolefade: rgba(41, 128, 185, 0.2); /* dark blue fade */
   
   --amethyst: rgb(155, 89, 182); /* light purple */
@@ -43,7 +40,6 @@
   
   --orange: rgb(243, 156, 18);
   --orangefrost: rgba(243, 156, 18, 0.8);
-  --orangetrans: rgba(243, 156, 18, 0.5);
   --orangefade: rgba(243, 156, 18, 0.1);
   
   --carrot: rgb(230, 126, 34);
@@ -55,33 +51,27 @@
   --alizarin: rgb(231, 76, 60);
   --alizarinfrost: rgba(231, 76, 60, 0.8);
   --alizarintrans: rgba(231, 76, 60, 0.5);
-  --alizarinfade: rgba(231, 76, 60, 0.1);
   
   --pomegranate: rgb(192, 57, 43); /* dark red */
   --pomegranatefrost: rgba(192, 57, 43, 0.8);
   --pomegranatetrans: rgba(192, 57, 43, 0.5);
-  --pomegranatefade: rgba(192, 57, 43, 0.2);
   
   --silver: rgb(189, 195, 199);
   --silverfade: rgba(189, 195, 199, 0.5);
   
   --clouds: rgb(236, 240, 241); /*off white */
   --cloudstrans: rgba(227,231,232, 0.5);
-  --cloudsfade: rgba(236, 240, 241, 0.2);
   
   --concrete: rgb(149, 165, 166);
-  --concretetrans: rgba(149, 165, 166, 0.5);
   --concretefade: rgba(149, 165, 166, 0.2);
   
   --wetasphalt: rgb(52, 73, 94); /* lighter grey-blue */
   --wetasphalttrans: rgba(52, 73, 94, 0.5);
-  --wetasphaltfade: rgba(52, 73, 94, 0.3); /* lighter grey-blue */
   
   --midnightblue: rgb(44, 62, 80); /* darker grey-blue */
   --midnightbluefade: rgba(44, 62, 80, 0.3); /* darker grey-blue */
   
   --asbestos: rgb(127, 140, 141); /* gray */
-  --asbestostrans: rgb(127, 140, 141, 0.5);
   --asbestosfade: rgb(127, 140, 141, 0.2);
   
   --whiteT: white;
@@ -118,6 +108,6 @@
                  0 10px 10px rgba(0,0,0,0.22);
 
   --dropShadowLeft00: -5px 0 10px 0px rgba(0,0,0,0.11);
-  --dropShadowLeft0: -10px 0 15px 0px rgba(0,0,0,0.22);
+  /*--dropShadowLeft0: -10px 0 15px 0px rgba(0,0,0,0.22);*/
   --dropShadowLeft1: -15px 0 20px 0px rgba(0,0,0,0.22);
 }

@@ -36,7 +36,7 @@ const TideEditWrap = ({
     }else{
       Meteor.apply('editTideTimeBlock', 
         [ e.dbHome, tideKey, newStart, newStop, taskIs, subtIs ],
-        { wait: true, noRetry: true },
+        { wait: true, noRetry: false },
         (err, asw)=>{
           err && console.log(err);
           if(asw === true) {
@@ -50,7 +50,7 @@ const TideEditWrap = ({
       console.log([e.tideKey, 'data issue no call']);
     }else{
       Meteor.apply('stopTideTimeBlock', [ e.dbHome, e.tideKey ],
-      { wait: true, noRetry: true },
+      { wait: true, noRetry: false },
       (err, asw)=>{
         err && console.log(err);
         if(asw === true) {
@@ -69,7 +69,7 @@ const TideEditWrap = ({
       console.log([{tideKey, newSplit, stopTime}, 'data issue no call']);
     }else{
       Meteor.apply('splitTideTimeBlock', [ e.dbHome, tideKey, newSplit, stopTime ],
-       { wait: true, noRetry: true },
+       { wait: true, noRetry: false },
        (err, asw)=>{
         err && console.log(err);
         if(asw === true) {

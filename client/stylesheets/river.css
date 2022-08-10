@@ -487,8 +487,7 @@ n-trib-action-main > button::after,
 n-trib-action-main > span > i {
   font-size: calc( 0.5rem + 0.5vmin);
 }
-@media all and (max-width: 1000px),
-       (orientation: portrait), {
+@media all and (max-width: 1000px), (orientation: portrait) {
   n-trib-action-main > button {
     background-position: 50% 50%;
   }

@@ -93,8 +93,9 @@ function loopItems(items, from, to) {
         testFail += didFail;
         itemsFail += 1;
       }
-      if(it.altPath.find( a => a.rapId !== false && moment(a.assignedAt).isBetween(from, to) )) {
-        itemsRapid += 1;
+      const didRap = i.altPath.filter( a => a.rapId !== false && moment(a.assignedAt).isBetween(from, to) ).length;
+      if(didRap > 0) {
+        itemsRapid += didRap;
       }
       i.scrapped === true && inTime.find( x => x.type === 'scrap' && x.good === true ) ?
         scraps += 1 : null;
@@ -131,8 +132,9 @@ function loopNCItems(items, from, to, nonCons) {
         itemsFail += 1;
       }
       
-      if(it.altPath.find( a => a.rapId !== false )) {
-        itemsRapid += 1;
+      const didRap = it.altPath.filter( a => a.rapId !== false ).length;
+      if(didRap > 0) {
+        itemsRapid += didRap;
       }
       
       if(it.scrapped === true && it.history.find( x => x.type === 'scrap' && x.good === true ) ) {

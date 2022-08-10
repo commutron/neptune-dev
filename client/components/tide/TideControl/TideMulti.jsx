@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import ModelNative from '/client/layouts/Models/ModelNative';
 import BigTideTask from '/client/components/tide/TideControl/BigTideTask';
 
-const TideMulti = ({ loaded, user, brancheS, plainBatchS })=> (
+const TideMulti = ({ user, brancheS, plainBatchS })=> (
 	<ModelNative
     dialogId='multiprojdialog'
     title={`Multiple ${Pref.xBatch} Mode`}
@@ -15,7 +15,6 @@ const TideMulti = ({ loaded, user, brancheS, plainBatchS })=> (
     dark={true}
     >
       <TideMultiCore
-        loaded={loaded}
         user={user}
         brancheS={brancheS}
         plainBatchS={plainBatchS}
@@ -56,18 +55,22 @@ const TideMultiCore = ({ user, brancheS, plainBatchS })=> {
   							taskStateOne && taskStateTwo && 
   							subtStateOne !== false && 
 		        	  subtStateTwo !== false;
-
+	
   const replyCallback = (error, re)=> {
     if(error) {
       console.log(error);
       toast.error('Rejected by Server');
+      if(thingMounted.current) {
+	      setWorking(false);
+	  		lockTaskSet(false);
+	    }
     }
     if(re === true) {
       if(thingMounted.current) {
         setActionIDOne(Random.id());
         setActionIDTwo(Random.id());
         setWorking(false);
-    		Meteor.setTimeout( ()=> lockTaskSet && lockTaskSet(false), 5000);
+  			Meteor.setTimeout( ()=> lockTaskSet(false), 5000);
       }
     }
   };
@@ -88,7 +91,7 @@ const TideMultiCore = ({ user, brancheS, plainBatchS })=> {
 	  		batchStateOne, actionIDOne, taskStateOne, subtStateOne, 
 	  		batchStateTwo, actionIDTwo, taskStateTwo, subtStateTwo
 	    ],
-	    {wait: true, noRetry: true},
+	    {wait: true, noRetry: false },
 	    (error, re)=> replyCallback(error, re) );
 
   	}else{
@@ -100,14 +103,14 @@ const TideMultiCore = ({ user, brancheS, plainBatchS })=> {
   const handleStop = ()=> {
   	lockTaskSet && lockTaskSet(true);
   	
-  	const eng = user?.engaged;
-  	const mltiON = eng?.task === 'MLTI';
+  	const engNow = user?.engaged;
+  	const mltiONnow = engNow?.task === 'MLTI';
   	
-  	if(mltiON) {
-  		const tkeys = eng.tKey;
+  	if(mltiONnow) {
+  		const tkeys = engNow.tKey;
   		
   		Meteor.apply('stopMultiTideTask', [ tkeys[0], tkeys[1] ],
-	    {wait: true, noRetry: true},
+	    {wait: true, noRetry: false },
 	    (error, re)=> replyCallback(error, re) );
 	    
   	}else{

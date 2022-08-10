@@ -9,7 +9,7 @@ const BigTideTask = ({
   const subop = taskState && brancheS.find( b=> b.branch === taskState );
   
   useEffect( ()=> {
-    if(!subop?.subTasks) {
+    if(!subop?.subTasks?.length) {
       subtSet(undefined);
     }
   }, [taskState]);
@@ -50,7 +50,7 @@ const BigTideTask = ({
         </optgroup>
       </select>
       {ctxLabel && <label htmlFor='tskSlct'>{ctxLabel}</label>}
-      {subop && subop.subTasks ?
+      {subop?.subTasks?.length ?
         <Fragment>
         <select
           id='sbtskSlct'

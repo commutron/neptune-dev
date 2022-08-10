@@ -32,7 +32,7 @@ const ProblemReport = ({ start, end, dataset })=> {
         
         const scrpInComp = percentOf(re.nonConItemStats.completedNum, re.nonConItemStats.scraps);
         const rpdInComp = percentOf(re.nonConItemStats.completedNum, re.nonConItemStats.itemsRapid);
-        const failInComp = percentOf(re.nonConItemStats.completedNum, re.nonConItemStats.itemsFail)
+        const failInComp = percentOf(re.nonConItemStats.completedNum, re.nonConItemStats.itemsFail);
         
         const badPrc = percentOf(re.nonConItemStats.completedNum, re.nonConItemStats.ncItemsNum);
         const goodFinItms = Math.max( re.nonConItemStats.completedNum - re.nonConItemStats.ncItemsNum, 0);
