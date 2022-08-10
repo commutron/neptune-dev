@@ -497,7 +497,7 @@ button.variableInput.biggest { height: 64px; }
 .auxTip {
   vertical-align: middle;
 }
-.taskTip::before, 
+.taskTip::after, 
 .auxTip::before, 
 .auxTipScale::before {
   position: absolute;
@@ -510,7 +510,7 @@ button.variableInput.biggest { height: 64px; }
   box-shadow: var(--dropShadow0);
   z-index: 11;
 }
-.taskTip::before {
+.taskTip::after {
   left: calc(7.5 * var(--vh));
 }
 .auxTip::before, 
@@ -519,7 +519,7 @@ button.variableInput.biggest { height: 64px; }
 }
 
 @media (orientation: portrait) {
-  .taskTip::before {
+  .taskTip::after {
     left: 7.5vmin;
     margin: 0;
   }
@@ -533,7 +533,7 @@ button.variableInput.biggest { height: 64px; }
   }
 }
 
-.lightTheme.overMenuBar .taskTip::before {
+.lightTheme.overMenuBar .taskTip::after {
   --task-front-color: var(--silver);
   --task-back-color: var(--blackT);
 }

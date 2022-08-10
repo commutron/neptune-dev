@@ -541,6 +541,9 @@ n-sm-model .big { font-size: 1.5rem !important; }
       'topBorder topBorder topBorder topBorder'
       'homeIcon frontCenter auxRight proRight';
   }
+  .overviewContainer .vbigger {
+    font-size: 3vmin;
+  }
   .overviewContent {
     min-height: calc( (97 * var(--vh)) - 8vmin);
   }

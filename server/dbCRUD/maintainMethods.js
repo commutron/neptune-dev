@@ -24,203 +24,31 @@ const nextService = (sv)=> {
   }
 };
 
+const futureService = (sv, startDate, endDate)=> {
+  const st = moment(sv.nextAt).tz(Config.clientTZ);
+  
+  let evArr = [];
+  
+  let next = sv.whenOf === 'endOf' ? st.endOf(sv.timeSpan) :
+              sv.whenOf === 'startOf' ? st.startOf(sv.timeSpan) :
+              sv.timeSpan === 'week' ? st.day(sv.whenOf).endOf('day') :
+              sv.timeSpan === 'month' ? st.date(sv.whenOf).endOf('day') :
+                                        st.month(sv.whenOf).endOf('month');
+  
+  while(true) {
+    if( next.isSameOrAfter(startDate) && next.isBefore(endDate) ) {
+      evArr.push( new Date(next.format()) );
+      next.add(sv.recur, sv.timeSpan);
+    }else if( next.isAfter(endDate) ) {
+      return evArr;
+    }else{
+      next.add(sv.recur, sv.timeSpan);
+    }
+  }
+};
+
   
 Meteor.methods({
-
-
-// EquipDB = new Mongo.Collection('equipdb');
-// MaintainDB = new Mongo.Collection('maintaindb');
-  
-  createEquipment(eqname, alias, brKey, instruct) {
-    
-    let duplicate = EquipDB.findOne({equip: eqname},{fields:{'_id':1}});
-    const dupe = EquipDB.findOne({alias: alias},{fields:{'_id':1}});
-    
-    const auth = Roles.userIsInRole(Meteor.userId(), ['equipSuper','create']);
-    
-    if(!duplicate && !dupe && auth) {
-      EquipDB.insert({
-        equip: eqname,
-        alias: alias,
-        branchKey: brKey,
-        orgKey: Meteor.user().orgKey,
-        createdAt: new Date(),
-        createdWho: Meteor.userId(),
-  			updatedAt: new Date(),
-  			updatedWho: Meteor.userId(),
-  			online: true,
-        instruct: instruct,
-        stewards: [],
-        service: []
-      });
-      return true;
-    }else{
-      return false;
-    }
-  },
-
-  editEquipment(eqId, newEqname, newAlias, brKey, instruct) {
-    const doc = EquipDB.findOne({_id: eqId},{fields:{'equip':1,'alias':1}});
-    
-    let duplicate = EquipDB.findOne({equip: newEqname},{fields:{'_id':1}});
-    let dupe = EquipDB.findOne({alias: newAlias});
-    
-    doc.equip === newEqname ? duplicate = false : null;
-    doc.alias === newAlias ? dupe = false : null;
-    
-    const auth = Roles.userIsInRole(Meteor.userId(), ['equipSuper','edit']);
-    
-    if(!duplicate && !dupe && auth) {
-      let setBr = !brKey || brKey === 'false' ? false : brKey;
-      
-      EquipDB.update({_id: eqId, orgKey: Meteor.user().orgKey}, {
-        $set : {
-          equip: newEqname,
-          alias: newAlias,
-          branchKey: setBr,
-          updatedAt: new Date(),
-  			  updatedWho: Meteor.userId(),
-  			  instruct: instruct
-        }});
-      return true;
-    }else{
-      return false;
-    }
-  },
-  
-  onofflineEquipment(eqId, line) {
-    const auth = Roles.userIsInRole(Meteor.userId(), ['equipSuper','edit']);
-    
-    if(auth) {
-      EquipDB.update({_id: eqId, orgKey: Meteor.user().orgKey}, {
-        $set : {
-          updatedAt: new Date(),
-  			  updatedWho: Meteor.userId(),
-  			  online: line
-        }});
-      return true;
-    }else{
-      return false;
-    }
-  },
-  
-  stewardEquipment(eqId, stewArr) {
-    const auth = Roles.userIsInRole(Meteor.userId(), ['equipSuper','peopleSuper','edit']);
-    const arry = Array.isArray(stewArr); // user IDs
-    
-    if(auth && arry) {
-      EquipDB.update({_id: eqId, orgKey: Meteor.user().orgKey}, {
-        $set : {
-          updatedAt: new Date(),
-  			  updatedWho: Meteor.userId(),
-  			  stewards: stewArr
-  			}});
-      return true;
-    }else{
-      return false;
-    }
-  },
-  
-  addServicePattern(eqId, name, timeSpan, pivot, next, recur, period, grace) {
-    if( Roles.userIsInRole(Meteor.userId(), ['equipSuper','edit']) ) {
-      const accessKey = Meteor.user().orgKey;
-      const serveKey = new Meteor.Collection.ObjectID().valueOf();
-      
-      const whenOf = typeof pivot === 'string' ? pivot : Number(pivot);
-      
-      EquipDB.update({_id: eqId, orgKey: accessKey}, {
-        $push : {
-          service: { 
-            serveKey: serveKey,
-            updatedAt: new Date(),
-            name: name,
-            timeSpan: timeSpan, // 'day', 'week', month, 'year'
-            whenOf: whenOf, // 'endOf', // 1, 2, 3, ..., 'startOf'
-            nextAt: next,
-            recur: Number(recur),
-            period: Number(period), // 1, 6, 30 // in days
-            grace: Number(grace), // in days
-            tasks: []
-          }
-        }});
-      Meteor.defer( ()=>{
-        Meteor.call('pmUpdate', eqId, serveKey, accessKey);
-      });
-      return true;
-    }else{
-      return false;
-    }
-  },
-
-  editServicePattern(eqId, serveKey, name, timeSpan, pivot, next, recur, period, grace) {
-    if(Roles.userIsInRole(Meteor.userId(), ['equipSuper','edit'])) {
-      const accessKey = Meteor.user().orgKey;
-      
-      const whenOf = typeof pivot === 'string' ? pivot : Number(pivot);
-      
-      EquipDB.update({_id: eqId, orgKey: accessKey, 'service.serveKey': serveKey}, {
-        $set : {
-          'service.$.updatedAt': new Date(),
-          'service.$.name': name,
-          'service.$.timeSpan': timeSpan,
-          'service.$.whenOf': whenOf,
-          'service.$.nextAt': next,
-          'service.$.recur': Number(recur),
-          'service.$.period': Number(period),
-          'service.$.grace': Number(grace)
-        }});
-      Meteor.defer( ()=>{
-        Meteor.call('pmUpdate', eqId, serveKey, accessKey);
-      });
-      return true;
-    }else{
-      return false;
-    }
-  },
-  
-  removeServicePattern(eqId, serveKey) {
-    if(Roles.userIsInRole(Meteor.userId(), ['equipSuper','edit'])) {
-      EquipDB.update({_id: eqId, orgKey: Meteor.user().orgKey, 'service.serveKey': serveKey}, {
-        $pull : { service: { serveKey: serveKey }
-      }});
-      MaintainDB.remove({equipId: eqId, serveKey: serveKey, status: false});
-      return true;
-    }else{
-      return false;
-    }
-  },
-  
-  setServiceTasks(eqId, serveKey, tasksArr) {
-    const auth = Roles.userIsInRole(Meteor.userId(), ['equipSuper','edit']);
-    
-    if(auth && Array.isArray(tasksArr)) {
-      EquipDB.update({_id: eqId, orgKey: Meteor.user().orgKey, 'service.serveKey': serveKey}, {
-        $set : {
-          'service.$.updatedAt': new Date(),
-          'service.$.tasks': tasksArr
-        }});
-      return true;
-    }else{
-      return false;
-    }
-  },
-  
-  
-  deleteEquipment(eqId) {
-    const inUse = MaintainDB.findOne({equipId: eqId},{fields:{'_id':1}});
-    if(!inUse) {
-      const access = Roles.userIsInRole(Meteor.userId(), 'remove');
-      
-      if(access) {
-        EquipDB.remove(eqId);
-        return true;
-      }else{
-        return false;
-      }
-    }else{
-      return 'inUse';
-    }
-  },
   
   serveNoReqSet(mtId, NoReq) {
     if( Roles.userIsInRole(Meteor.userId(), 'active') ) {
@@ -461,6 +289,65 @@ Meteor.methods({
     }catch (error) {
       throw new Meteor.Error(error);
     }finally{ return true }
+  },
+  
+  predictMonthService(startDate, endDate) {
+    const orgKey = Meteor.user().orgKey;
+    syncLocale(orgKey);
+    
+    let futureEvents = [];
+    
+    EquipDB.find({online: true},{fields:{'alias':1,'service':1}})
+      .forEach( (eq)=> {
+          // const maintEq = MaintainDB.find({equipId: eq._id, expire: { $gt: new Date() }},
+                          // {fields:{'serveKey':1, 'checklist':1, 'notes':1}}).fetch();
+          
+        for(const sv of eq.service) {
+            
+            const next = futureService(sv, startDate, endDate);
+            
+            for( let nx of next ) {
+              
+              const nextMmnt = moment(nx).tz(Config.clientTZ);
+              
+              const close = sv.whenOf === 'startOf' || ( sv.timeSpan === 'day' && !nextMmnt.isWorkingDay() ) ?
+                      nextMmnt.nextWorkingTime().endOf('day') :
+                      nextMmnt.lastWorkingTime().endOf('day');
+              
+              if(futureEvents.length === 0 || !close.isSame( futureEvents[futureEvents.length-1].end, 'day' ) ) {
+                
+                const open = close.clone().subtractWorkingTime(sv.period - 1, 'days').startOf('day').format();
+            
+                futureEvents.push({
+              	  title: eq.alias + ' - ' + sv.name,
+              	  start: new Date(open),
+              	  end: new Date(close.format()),
+              	  allDay: true
+              	});
+              }else{
+                null;
+              }
+              
+            }
+            
+            /*
+            const nextMmnt = moment(next).tz(Config.clientTZ);
+            const close = sv.whenOf === 'startOf' || ( sv.timeSpan === 'day' && !nextMmnt.isWorkingDay() ) ?
+                      nextMmnt.nextWorkingTime().endOf('day') :
+                      nextMmnt.lastWorkingTime().endOf('day');
+                      
+            // const match = maintEq.find( m => m.serveKey === sv.serveKey );
+       
+            const open = close.clone().subtractWorkingTime(sv.period - 1, 'days').startOf('day').format();
+            const expire = close.clone().addWorkingTime(sv.grace, 'days').format();
+            */
+            
+        }
+      });
+      
+      return futureEvents;
+
+    
   }
   
 });

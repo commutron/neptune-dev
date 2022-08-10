@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from 'react';
+import React, { useLayoutEffect, useMemo } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import { localeUpdate } from '/client/utility/WorkTimeCalc';
@@ -11,7 +11,7 @@ import Spin from '../../components/tinyUi/Spin';
 import OverviewWrap from './OverviewWrap';
 
 const View = ({
-  login, ready, readyT,
+  login, ready, readyT, calView,
   user, app, isDebug,
   batchX, traceDT
 })=> {
@@ -20,7 +20,8 @@ const View = ({
     InboxToastPop(user);
   }, [user]);
   
-    
+  const brancheS = useMemo( ()=> branchesOpenSort(app?.branches || []), [app]);
+  
   if( !ready || !readyT || !app ) {
     return(
       <PlainFrame title='Overview' tag='WIP'>
@@ -33,7 +34,7 @@ const View = ({
   
   localeUpdate(app);
   
-  const brancheS = branchesOpenSort(app.branches);
+  // const brancheS = branchesOpenSort(app.branches);
   
   return(
     <PlainFrame title='Overview' tag='WIP' container='overviewContainer'>
@@ -43,13 +44,15 @@ const View = ({
         user={user}
         app={app}
         brancheS={brancheS}
-        isDebug={isDebug} />
+        calView={calView}
+        isDebug={isDebug} 
+      />
     </PlainFrame>
   );
 };
 
 
-export default withTracker( () => {
+export default withTracker( ({ view }) => {
   let login = Meteor.userId() ? true : false;
   let user = login ? Meteor.user() : false;
   const active = user ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
@@ -67,6 +70,7 @@ export default withTracker( () => {
       login: Meteor.userId(),
       ready: sub.ready(),
       readyT: subT.ready(),
+      calView: view === 'calendar',
       user: user,
       isDebug: isDebug,
       app: AppDB.findOne({org: org}),

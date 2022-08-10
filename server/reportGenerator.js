@@ -2,7 +2,10 @@ import moment from 'moment';
 import timezone from 'moment-timezone';
 import Config from '/server/hardConfig.js';
 
-function findRelevantSeries(orgKey, from, to) {
+import { countMulti } from '/server/utility.js';
+
+
+function findRelevantSeries(from, to) {
   return new Promise(resolve => {
     const batchPack = XBatchDB.find({
         orgKey: Meteor.user().orgKey,
@@ -28,7 +31,7 @@ function findRelevantSeries(orgKey, from, to) {
   });
 }
 
-function loopSerieses(serieses, from, to) {
+function loopSerieses(serieses) {
   return new Promise(resolve => {
     let allItems = [];
     let allNonCons = [];
@@ -46,46 +49,132 @@ function loopSerieses(serieses, from, to) {
 function loopShortfalls(shortfall, from, to) {
   return new Promise(resolve => {
     const inTime = shortfall.filter( x => moment(x.cTime).isBetween(from, to) );
-    const foundSH = inTime.length;
-    const uniqueSerials = [... new Set( Array.from(inTime, x => x.serial ) ) ].length;
+    const foundSH = countMulti(inTime);
     
-    const numObj = _.countBy(inTime, x => x.partNum);
-    const numBreakdown = Object.entries(numObj);
+    let serials = new Set();
+    
+    let numBreakdown = [];
+    let parts = new Set();
+    for(let sh of inTime) {
+      parts.add(sh.partNum);
+      serials.add(sh.serial);
+    }
+    for(let part of parts) {
+      let ptTotal = 0;
+      for(let shP of inTime) {
+        if(shP.partNum === part) {
+          ptTotal += ( Number(shP.multi) || 1 );
+        }
+      }
+      numBreakdown.push( [ part, ptTotal ] );
+    }
+    
+    const uniqueSerials = serials.size;
     
     resolve({ foundSH, uniqueSerials, numBreakdown });
   });
 }
 
-function loopItems(items, from, to ) {
+function loopItems(items, from, to) {
   return new Promise(resolve => {
     let completedItems = 0;
     let testFail = 0;
+    let itemsFail = 0;
     let scraps = 0;
     for(let i of items) {
       if(i.completed && moment(i.completedAt).isBetween(from, to) ) { 
         completedItems += 1;
       }
       const inTime = i.history.filter( x => moment(x.time).isBetween(from, to) );
-      testFail += inTime.filter( x => x.type === 'test' && x.good === false ).length;
+      
+      const didFail = inTime.filter( x => x.type === 'test' && x.good === false ).length;
+      if(didFail > 0) {
+        testFail += didFail;
+        itemsFail += 1;
+      }
       i.scrapped === true && inTime.find( x => x.type === 'scrap' && x.good === true ) ?
         scraps += 1 : null;
     }
     
-    resolve({completedItems, testFail, scraps});
+    resolve({completedItems, testFail, itemsFail, scraps});
+  });
+}
+
+function loopNCItems(items, from, to, nonCons) {
+  return new Promise(resolve => {
+    const completedItems = items.filter( i=> i.completed && moment(i.completedAt).isBetween(from, to) );
+    const completedNum = completedItems.length;
+    
+    let ncItemsNum = 0;
+    let ncTotalNum = 0;
+    
+    let itemsFail = 0;
+    let testFail = 0;
+    let scraps = 0;
+    
+    for(let it of completedItems) {
+      const itNC = nonCons.filter( x => x.serial === it.serial );
+      
+      if(itNC.length > 0) {
+        ncItemsNum += 1;
+        
+        const cNC = countMulti(itNC);
+        ncTotalNum += Number(cNC);
+      }
+      
+      const didFail = it.history.filter( x => x.type === 'test' && x.good === false ).length;
+      if(didFail > 0) {
+        testFail += didFail;
+        itemsFail += 1;
+      }
+      if(it.scrapped === true && it.history.find( x => x.type === 'scrap' && x.good === true ) ) {
+        scraps += 1;
+      }
+    }
+    
+    resolve({completedNum, ncItemsNum, ncTotalNum, itemsFail, testFail, scraps});
   });
 }
 
 function loopNonCons(nonCons, from, to, flatTypeListClean) {
   return new Promise(resolve => {
     const inTime = nonCons.filter( x => moment(x.time).isBetween(from, to) );
-    let foundNC = inTime.length;
-    let uniqueSerials = [... new Set( Array.from(inTime, x => x.serial ) ) ].length;
+    const foundNC = countMulti(inTime);
     
-    const typeObj = _.countBy(inTime, x => x.type);
-    const typeBreakdown = Object.entries(typeObj);
+    let serials = new Set();
     
-    const whereObj = _.countBy(inTime, x => x.where);
-    const whereBreakdown = Object.entries(whereObj);
+    let typeBreakdown = [];
+    let types = new Set();
+    for(let nt of inTime) {
+      types.add(nt.type);
+      serials.add(nt.serial);
+    }
+    for(let type of types) {
+      let tyTotal = 0;
+      for(let ncT of inTime) {
+        if(ncT.type === type) {
+          tyTotal += ( Number(ncT.multi) || 1 );
+        }
+      }
+      typeBreakdown.push( [ type, tyTotal ] );
+    }
+    
+    let whereBreakdown = [];
+    let wheres = new Set();
+    for(let nw of inTime) {
+      wheres.add(nw.where);
+    }
+    for(let where of wheres) {
+      let whTotal = 0;
+      for(let ncW of inTime) {
+        if(ncW.where === where) {
+          whTotal += 1;
+        }
+      }
+      whereBreakdown.push( [where, whTotal ] );
+    }
+    
+    const uniqueSerials = serials.size;
     
     resolve({foundNC, uniqueSerials, typeBreakdown, whereBreakdown});
   });
@@ -95,25 +184,28 @@ function loopNonCons(nonCons, from, to, flatTypeListClean) {
 Meteor.methods({
   
   buildProblemReport(startDay, endDay, dataset) {
-    const orgKey = Meteor.user().orgKey;
-        
+      
     const from = moment(startDay).tz(Config.clientTZ).startOf('day').format();
     const to = moment(endDay).tz(Config.clientTZ).endOf('day').format();
     const nc = dataset === 'noncon';
+    const dn = dataset === 'completed';
     
     async function getBatches() {
       try {
-        seriesSlice = await findRelevantSeries(orgKey, from, to);
+        seriesSlice = await findRelevantSeries(from, to);
         seriesArange = await loopSerieses(seriesSlice, from, to);
-        itemStats = await loopItems(seriesArange.allItems, from, to);
+        itemStats = dn ? [] : await loopItems(seriesArange.allItems, from, to);
         nonConStats = !nc ? [] : await loopNonCons(seriesArange.allNonCons, from, to);
-        shortfallStats = nc ? [] : await loopShortfalls(seriesArange.allShortfalls, from, to);
+        nonConItemStats = !dn ? [] : await loopNCItems(seriesArange.allItems, from, to, seriesArange.allNonCons);
+        shortfallStats = nc || dn ? [] : await loopShortfalls(seriesArange.allShortfalls, from, to);
         
         const seriesInclude = seriesSlice.length;
         const itemsInclude = seriesArange.allItems.length;
        
         return JSON.stringify({
-          seriesInclude, itemsInclude, itemStats, nonConStats, shortfallStats
+          seriesInclude, itemsInclude, itemStats, 
+          nonConStats, nonConItemStats, 
+          shortfallStats
         });
       }catch (err) {
         throw new Meteor.Error(err);

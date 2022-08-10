@@ -11,6 +11,8 @@ const SignIn = ({ mxW, pad, bttn })=> {
 	
 	function doLogin(e) {
 	  e.preventDefault();
+	  this.loginSubmit.disabled = true;
+	  
 	  const user = loginUsernameState;
 	  const pass = loginPasswordState;
 		const redirect = Session.get('redirectAfterLogin');
@@ -19,6 +21,7 @@ const SignIn = ({ mxW, pad, bttn })=> {
 	    if(error) {
 	      console.log(error);
 	      loginResultSet( error.reason );
+	      this.loginSubmit.disabled = true;
 	    }else{
 	    	Meteor.logoutOtherClients();
 	    }

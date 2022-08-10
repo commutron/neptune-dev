@@ -98,6 +98,8 @@ const EquipSlide = ({ equipData, maintainData, app, users, isDebug, brancheS })=
   
   const nowD = new Date();
   
+  const shrtI = eq.instruct && eq.instruct.indexOf('http') === -1;
+  
   return(
     <div className='section overscroll' key={eq.alias}>
       
@@ -161,8 +163,12 @@ const EquipSlide = ({ equipData, maintainData, app, users, isDebug, brancheS })=
       </div>
       
       <p className='w100 vmarginhalf capFL wordBr'>
-        {Pref.instruct} Index: {eq.instruct && eq.instruct.indexOf('http') === -1 ?
-          app.instruct : null}<a className='clean wordBr' href={eq.instruct} target='_blank'>{eq.instruct}</a>
+        {Pref.instruct} Index: {shrtI ? app.instruct : null}
+        <a 
+          className='clean wordBr' 
+          href={shrtI ? app.instruct + eq.instruct : eq.instruct} 
+          target='_blank'
+        >{eq.instruct}</a>
       </p>
       
       <dl className='vmarginhalf'>

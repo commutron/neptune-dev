@@ -4,6 +4,7 @@ import moment from 'moment';
 import Spin from '../../components/tinyUi/Spin';
 
 import OverviewTools from './OverviewTools';
+import CalWrap from './calendar/CalWrap';
 import BatchHeaders from './columns/BatchHeaders';
 import BatchDetails from './columns/BatchDetails';
 
@@ -13,7 +14,7 @@ import { OverMenuBar } from '/client/layouts/TaskBars/TaskBars';
 const OverviewWrap = ({ 
   bx, traceDT,
   user, app, brancheS,
-  isDebug
+  calView, isDebug
 })=> {
   
   const sessionSticky = 'overviewOverview';
@@ -228,19 +229,24 @@ const OverviewWrap = ({
       <OverMenuBar 
         brancheS={brancheS}
         branchON={filterBy}
+        calView={calView}
         changeBranch={(e)=>changeBranch(e)}
         light={light}
       />
         
       <div className={`overviewContent forceScrollStyle ${light === true ? 'lightTheme' : 'darkTheme'}`} tabIndex='0'>
           
-        {!liveState ?
+        {calView ?
+          <CalWrap 
+          
+          />
+        : !liveState ?
           <div className='centreContainer'>
             <div className='centrecentre'>
               <Spin />
             </div>
           </div>
-        :  
+        : 
           <div className={`overGridFrame ${density}`}>
       
             <BatchHeaders

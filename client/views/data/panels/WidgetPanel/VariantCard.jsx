@@ -24,7 +24,7 @@ const VariantCard = ({
   
   const calString = "ddd, MMM D /YY, h:mm A";
   const calFunc = (d)=> moment(d).calendar(null, {sameElse: calString});
-
+  
   return(
     <div className='min300 max300'>
       <div className='comfort'>
@@ -143,7 +143,7 @@ const InlineForm = ({ widgetData, variantData, rootURL })=> {
   }
   
   const editAuth = Roles.userIsInRole(Meteor.userId(), 'edit');
-  
+  const shrtI = variantData.instruct && !variantData.instruct.includes('http');
   
   if(!editState) {
     return(
@@ -151,15 +151,14 @@ const InlineForm = ({ widgetData, variantData, rootURL })=> {
         <p className='numFont'>default units: {variantData.runUnits}</p>
           
         <p className='max250 wordBr'>
-          {variantData.instruct && !variantData.instruct.includes('http') ?
-            rootURL : null}
+          {shrtI ? rootURL : null}
           <a 
             className='clean wordBr' 
-            href={variantData.instruct} 
+            href={shrtI ? rootURL + variantData.instruct : variantData.instruct} 
             target='_blank'
           >{variantData.instruct}</a>
         </p>
-    
+        
         <span className='rightRow'>
           <button
             title={!editAuth ? Pref.norole : !variantData.live ? 'not open' : ''}

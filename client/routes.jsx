@@ -155,7 +155,7 @@ privlegedRoutes.route('/production', {
   }
 });
 
-privlegedRoutes.route('/process', {
+privlegedRoutes.route('/express', {
   name: 'terminal',
   action() {
     mount(CleanLayout, {
@@ -165,12 +165,19 @@ privlegedRoutes.route('/process', {
 });
 
 privlegedRoutes.route('/overview', {
-  name: 'overview',
   action() {
     mount(CleanLayout, {
       content: ( <OverviewData /> )
     });
   }
+});
+privlegedRoutes.route('/overview/:view', {
+  name: 'overview',
+  action: function(params) {
+    mount(CleanLayout, {
+      content: ( <OverviewData view={params.view} /> )
+    });
+  },
 });
 
 privlegedRoutes.route('/people', {

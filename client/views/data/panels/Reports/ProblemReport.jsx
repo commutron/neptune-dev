@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
-import { percentOf } from '/client/utility/Convert';
+import { asRate, percentOf } from '/client/utility/Convert';
 
 import ReportStatsTable from '/client/components/tables/ReportStatsTable'; 
 
@@ -20,32 +20,59 @@ const ProblemReport = ({ start, end, dataset })=> {
       if(reply) {
         const re = JSON.parse(reply);
         const scrpOfComp = percentOf(re.itemStats.completedItems, re.itemStats.scraps);
-        const nciOfComp = percentOf(re.itemStats.completedItems, re.nonConStats.uniqueSerials);
+        const scrpInComp = percentOf(re.nonConItemStats.completedNum, re.nonConItemStats.scraps);
+
+        const nciOfComp = percentOf(re.itemsInclude, re.nonConStats.uniqueSerials);
         const shiOfComp = percentOf(re.itemStats.completedItems, re.shortfallStats.uniqueSerials);
         
-        const cleanItms = re.itemStats.completedItems - re.nonConStats.uniqueSerials;
-        const clnOfComp = percentOf(re.itemStats.completedItems, cleanItms);
+        const badPrc = percentOf(re.nonConItemStats.completedNum, re.nonConItemStats.ncItemsNum);
+        const goodFinItms = Math.max( re.nonConItemStats.completedNum - re.nonConItemStats.ncItemsNum, 0);
+        const goodPrc = percentOf(re.nonConItemStats.completedNum, goodFinItms);
+        const doneNCrate = asRate(re.nonConItemStats.ncTotalNum, re.nonConItemStats.completedNum);
+        const badNCrate = asRate(re.nonConItemStats.ncTotalNum, re.nonConItemStats.ncItemsNum);
         
-        let arrange = [
-          ['', 'total', 'of total finished'],
-          ['Included ' + Pref.xBatchs, re.seriesInclude ],
-          [ 'Included Serialized Items', re.itemsInclude ],
-          [ 'Finished Serialized Items', re.itemStats.completedItems ],
+        const cleanItms = Math.max( re.itemsInclude - re.nonConStats.uniqueSerials, 0);
+        const clnOfComp = percentOf(re.itemsInclude, cleanItms);
+        
+        let arrange = dataset === 'completed' ?
+          [ 
+            ['', 'total', 'percent'],
+            [ `Completed Items`, re.nonConItemStats.completedNum ],
+            [ 'Scrapped Items', re.nonConItemStats.scraps, scrpInComp+'%' ],
+            [ 'Total Failed Tests', re.nonConItemStats.testFail ],
+            [ 'Items That Failed', re.nonConItemStats.itemsFail ],
+            [ `Completed Items With ${Pref.nonCons}`, re.nonConItemStats.ncItemsNum, badPrc+'%' ],
+            [ `Completed Items Without ${Pref.nonCons}`, goodFinItms, goodPrc+'%' ],
+            [ `Total ${Pref.nonCons} Of Completed Items`, re.nonConItemStats.ncTotalNum ],
+            [ `Rate Among All Completed Items`, doneNCrate  ],
+            [ `Rate Among Completed Items With ${Pref.nonCons}`, badNCrate,  ],
+          ]
+        :
+        [
+          ['', 'total', 'percent'],
+          ['Live ' + Pref.xBatchs, re.seriesInclude ],
+          [ 'Live Serialized Items', re.itemsInclude ],
+          [ 'Completed Serialized Items', re.itemStats.completedItems ],
           [ 'Scrapped Serialized Items', re.itemStats.scraps, scrpOfComp+'%' ],
-          [ 'Failed Tests', re.itemStats.testFail ],
+          [ 'Total Failed Tests', re.itemStats.testFail ],
+          [ 'Failed Serialized Items', re.itemStats.itemsFail ],
         ];
+        
         const prob = dataset === 'noncon' ? 
           [
             [ `Discovered ${Pref.nonCons}`, re.nonConStats.foundNC ],
-            [ `Items with ${Pref.nonCons}`, re.nonConStats.uniqueSerials, nciOfComp+'%' ],
-            [ `Items without ${Pref.nonCons}`, cleanItms, clnOfComp+'%' ],
-            [ `${Pref.nonCon} Types`, re.nonConStats.typeBreakdown ],
+            [ `Live Items with ${Pref.nonCons}`, re.nonConStats.uniqueSerials, nciOfComp+'%' ],
+            [ `Live Items without ${Pref.nonCons}`, cleanItms, clnOfComp+'%' ],
+            [ `${Pref.nonCon} Types `, re.nonConStats.typeBreakdown ],
             [ `${Pref.nonCon} Departments`, re.nonConStats.whereBreakdown ],
-          ] : [
+          ] 
+        : dataset === 'short' ? 
+          [
             [ `Discovered ${Pref.shortfalls}`, re.shortfallStats.foundSH ],
             [ `Items with ${Pref.shortfalls}`, re.shortfallStats.uniqueSerials, shiOfComp+'%' ],
             [ `${Pref.shortfall} Part Numbers`, re.shortfallStats.numBreakdown ],
-          ];
+          ]
+        : [];
         workingSet(false);
         replySet([...arrange,...prob]);
       }

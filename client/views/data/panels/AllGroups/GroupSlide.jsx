@@ -30,6 +30,7 @@ const GroupSlide = ({ groupData, widgetsList, batchDataX, app, inter, isERun })=
   
   const g = groupData;
   const active = groupActiveWidgets(g._id, widgetsList, batchDataX);
+  const shrtI = g.wiki && !g.wiki.includes('http');
   
   return(
     <div className='section centre overscroll' key={g.alias}>
@@ -115,8 +116,8 @@ const GroupSlide = ({ groupData, widgetsList, batchDataX, app, inter, isERun })=
       </div>
       
       <p className='w100 capFL vmargin indenText wordBr'>
-        {Pref.instruct} Index: {g.wiki && !g.wiki.includes('http') ?
-          app.instruct : null}<a className='clean wordBr' href={g.wiki} target='_blank'>{g.wiki}</a>
+        {Pref.instruct} Index: {shrtI ? app.instruct : null
+        }<a className='clean wordBr' href={shrtI ? app.instruct + g.wiki : g.wiki} target='_blank'>{g.wiki}</a>
       </p>
       
       <GroupTops groupId={g._id} alias={g.alias} app={app} />

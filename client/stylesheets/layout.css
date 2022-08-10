@@ -535,7 +535,7 @@ n-sm-model-content {
 
 .tideOut::before, 
 .tideFollowTip::before,
-.taskTip::before, 
+.taskTip::after, 
 .auxTip::before, 
 .auxTipScale::before,
 .firstBadge::after,
@@ -548,7 +548,7 @@ n-sm-model-content {
 }
 .tideOut::before, 
 .tideFollowTip::before,
-.taskTip::before, 
+.taskTip::after, 
 .auxTip::before, 
 .auxTipScale::before,
 .miniStack::after,
@@ -564,7 +564,7 @@ n-sm-model-content {
 }
 .tideOut::before, 
 .tideFollowTip::before,
-.taskTip::before, 
+.taskTip::after, 
 .auxTip::before, 
 .auxTipScale::before,
 .leapBonus::before {
@@ -574,7 +574,7 @@ n-sm-model-content {
 .leapBonus:focus-visible::before, .leapBonus:hover::before,
 .firstBadge:focus-visible::after, .firstBadge:hover::after,
 .miniStack:focus-visible::after, .miniStack:hover::after,
-.taskTip:focus-visible::before, .taskTip:hover::before,
+.taskTip:focus-visible::after, .taskTip:hover::after,
 .auxTip:focus-visible::before, .auxTip:hover::before,
 .auxTipScale:focus-visible::before, .auxTipScale:hover::before,
 .tideOut:enabled:focus-visible::before, .tideOut:enabled:hover::before, 
@@ -588,7 +588,7 @@ n-sm-model-content {
   transition-property: visibility, opacity;
 }
 @media (orientation: portrait) {
-  .taskTip:before, 
+  .taskTip:after, 
   .auxTipScale:before {
     padding: 1vmin;
     font-size: 1.5vmin;
@@ -1048,7 +1048,7 @@ button.numberSet {
   height: 1.5rem;
 }
 .tableAction.narrow {
-  max-width: 4ch;
+  max-width: 5ch;
 }
 
 .tableInput {

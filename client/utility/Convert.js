@@ -63,6 +63,15 @@ export function percentOverUnder(goalNumber, realNumber) {
   return overunderClean;
 }
 
+export function asRate(instances, ofQty, one) {
+  const divide = instances / ofQty;
+  const finite = isFinite(divide) ? divide : 0;
+  if(one) {
+    return round1Decimal( finite );
+  }else{
+    return round2Decimal( finite );
+  }
+}
 
 // milliseconds
 

@@ -3,11 +3,13 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toCap } from '/client/utility/Convert';
 
-const TaskElement = ({ title, subON, goLink, icon, iconAdj }) => (
+const TaskElement = ({ title, subON, goLink, icon, shrink, iconAdj, lock }) => (
   <button
     aria-label={toCap(title, true)}
+    style={shrink ? {minHeight:'unset'} : {}}
     className={`taskLink taskTip ${subON ? 'onTL' : ''}`}
     onClick={()=>FlowRouter.go( goLink )}
+    disabled={lock}
   ><i className={icon} data-fa-transform={iconAdj}></i></button>
 );
 
@@ -189,18 +191,24 @@ export const DownTaskBar = ({ subLink }) => (
   </div>
 );
 
-const FilterElement = ({ title, subTitle, goLink, branchON, changeBranch, icon, size, lock }) => (
+const FilterElement = ({ title, subTitle, goLink, branchON, changeBranch, icon, size, shrink, lock }) => (
   <button
     aria-label={title}
-    className={`taskLink taskTip numFont ${branchON ? 'onTL' : ''} ${size} ${icon ? '' : 'nomarginB'}`}
-    onClick={()=>changeBranch( goLink )}
+    style={shrink ? {minHeight:'unset',padding:'3px 0'} : {}}
+    className={
+      `taskLink taskTip numFont 
+      ${branchON ? 'onTL' : ''} 
+      ${size} 
+      ${icon ? '' : 'nomarginB'}
+    `}
+    onClick={()=>{FlowRouter.go( '/overview' );changeBranch( goLink )}}
     disabled={lock}
   >{icon ? <i className={icon}></i> : 
            <i className={size}>{toCap(subTitle)}</i>}
   </button>
 );
 
-export const OverMenuBar = ({ brancheS, branchON, changeBranch, light }) => {
+export const OverMenuBar = ({ brancheS, branchON, calView, changeBranch, light }) => {
   
   const barsty = {
     colorScheme: 'dark',
@@ -213,19 +221,21 @@ export const OverMenuBar = ({ brancheS, branchON, changeBranch, light }) => {
     alignItems: 'center',
     paddingTop: 'var(--vh)',
     overflowY: 'auto',
-    overflowX: 'hidden'
+    overflowX: 'hidden',
   };
   
   return(
     <div style={barsty} className={`overMenuBar thinScroll ${light === true ? 'lightTheme' : 'darkTheme'}`}>
+    
       <FilterElement
         title='All'
         subTitle='AL'
         goLink={false}
-        branchON={branchON === false}
+        branchON={!calView && branchON === false}
         changeBranch={changeBranch}
         icon='fa-solid fa-code-branch'
         size=''
+        shrink={brancheS.length >= 13}
       />
       
       {brancheS.map( (br, ix)=> {
@@ -235,25 +245,25 @@ export const OverMenuBar = ({ brancheS, branchON, changeBranch, light }) => {
             title={br.branch}
             subTitle={br.common.charAt(0) + br.common.charAt(1)}
             goLink={br.branch}
-            branchON={branchON === br.branch}
+            branchON={!calView && branchON === br.branch}
             changeBranch={changeBranch}
             icon={false}
             size='vbigger'
+            shrink={brancheS.length >= 11}
           />
       )})}
       
       <span className='flexSpace'></span>
       
-      <FilterElement
+      <TaskElement
         title='Calendar'
-        subTitle='CAL'
-        goLink={'calendar'}
-        branchON={branchON === 'calendar'}
-        changeBranch={changeBranch}
+        subON={calView}
+        goLink='/overview/calendar'
         icon='fa-regular fa-calendar'
-        size=''
-        lock={true}
+        shrink={brancheS.length >= 13}
+        lock={!Roles.userIsInRole(Meteor.userId(), 'nightly')}
       />
+
     </div>
   );
 };

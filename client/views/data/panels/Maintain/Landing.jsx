@@ -23,7 +23,7 @@ const Landing = ({ equipData, maintainData, app, brancheS })=> {
     <div className='overscroll'>
       
       <div className='wide centreRow'>
-        <h2>Service Due This Week</h2>
+        <h2>Upcoming Service Due</h2>
         <span className='flexSpace' />
         <EquipForm
           id={false}

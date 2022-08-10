@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from 'react';
+import React, { useLayoutEffect, useMemo } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import InboxToastPop from '/client/utility/InboxToastPop.js';
@@ -22,6 +22,8 @@ const ExploreView = ({
     InboxToastPop(user);
   }, [user]);
   
+  const brancheS = useMemo( ()=> branchesSort(app?.branches || []), [app]);
+  
   if( !coldReady || !hotReady || !user || !app ) {
     return(
       <TraverseWrap
@@ -44,7 +46,7 @@ const ExploreView = ({
   
   localeUpdate(app);
   
-  const brancheS = branchesSort(app.branches);
+  // const brancheS = branchesSort(app.branches);
 
   return(
     <DataViewOps

@@ -6,6 +6,7 @@ import Pref from '/client/global/pref.js';
 import InboxToastPop from '/client/utility/InboxToastPop.js';
 
 import { SpinWrap } from '/client/components/tinyUi/Spin';
+import { branchesOpenSort } from '/client/utility/Arrays.js';
 import ProductionFindOps from './ProductionFindOps';
 
 
@@ -27,12 +28,7 @@ const ProdData = ({
                         Roles.userIsInRole(x._id, 'readOnly') === false),
                         [users]);
   
-  const brancheS = useMemo( ()=> app?.branches
-          .filter( b => b.open === true )
-          .sort((b1, b2)=>
-            b1.position < b2.position ? 1 : 
-            b1.position > b2.position ? -1 : 0 
-        ), [app]);
+  const brancheS = useMemo( ()=> branchesOpenSort(app?.branches || []), [app]);
   
   const canMulti = useMemo( ()=> Roles.userIsInRole(Meteor.userId(), 'multitask_time'), [user]);
   

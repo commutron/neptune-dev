@@ -23,6 +23,7 @@ const ReportsWrap = ({
       
       <div className='space'>
         <h2 style={{marginBottom:'32px'}}>Custom Time Range Report</h2>
+        <h4>WARNING: Long Time Ranges Can Delay Production Activities</h4>
         <div className='noPrint'>
           <ReportRangeRequest 
             setFrom={(v)=>startSet(v)}
@@ -101,7 +102,16 @@ const ReportRangeRequest = ({
         />
         <label htmlFor='inputSH'>{Pref.shortfalls}</label>
       </span>
-  
+      <em>or</em>
+      <span className='middle'>
+        <input
+          type='radio'
+          id='inputDN'
+          name='inputData'
+          onChange={(e)=>setData('completed')}
+        />
+        <label htmlFor='inputDN'>Completed Items Only</label>
+      </span>
     </p>
     
     <p className='rowWrap medBig'>
