@@ -316,10 +316,7 @@ button[disabled].rbc-btn {
 .rbc-off-range {
   color: #999999;
 }
-
-.rbc-off-range-bg {
-  background: #e6e6e6;
-}
+/*.rbc-off-range-bg {*/
 
 .rbc-header {
   overflow: hidden;
@@ -381,7 +378,7 @@ button[disabled].rbc-btn {
 }
 
 .rbc-today {
-  background-color: #eaf6ff;
+  background-color: var(--belizeHolefade);
 }
 
 .rbc-toolbar {
@@ -398,7 +395,7 @@ button[disabled].rbc-btn {
   text-align: center;
 }
 .rbc-toolbar button {
-  color: #373a3c;
+  color: inherit;
   display: inline-block;
   margin: 0;
   text-align: center;
@@ -414,26 +411,26 @@ button[disabled].rbc-btn {
 .rbc-toolbar button:active, .rbc-toolbar button.rbc-active {
   background-image: none;
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-  background-color: #e6e6e6;
+  background-color: var(--navIndicatorB);
   border-color: #adadad;
 }
 .rbc-toolbar button:active:hover, 
 .rbc-toolbar button:active:focus, 
 .rbc-toolbar button.rbc-active:hover, 
 .rbc-toolbar button.rbc-active:focus {
-  color: #373a3c;
-  background-color: #d4d4d4;
-  border-color: #8c8c8c;
+  color: inherit;
+  background-color: var(--navIndicatorB);
+  /*border-color: #8c8c8c;*/
 }
 .rbc-toolbar button:focus {
-  color: #373a3c;
-  background-color: #e6e6e6;
-  border-color: #adadad;
+  color: inherit;
+  background-color: var(--navIndicatorA);
+  /*border-color: var(--navIndicatorA);*/
 }
 .rbc-toolbar button:hover {
-  color: #373a3c;
-  background-color: #e6e6e6;
-  border-color: #adadad;
+  color: inherit;
+  background-color: var(--navIndicatorA);
+  /*border-color: var(--navIndicatorA);*/
 }
 
 .rbc-btn-group {
@@ -475,24 +472,28 @@ button[disabled].rbc-btn {
 .rbc-event, .rbc-day-slot .rbc-background-event {
   border: none;
   box-shadow: none;
-  margin: 0;
+  margin: 1px 0;
   padding: 2px 5px;
-  background-color: #3174ad;
+  background-color: var(--wetasphalt);
   border-radius: 5px;
   color: #fff;
-  cursor: pointer;
+  /*cursor: pointer;*/
   width: 100%;
   text-align: left;
+  text-transform: capitalize;
 }
 .rbc-slot-selecting .rbc-event, .rbc-slot-selecting .rbc-day-slot .rbc-background-event, .rbc-day-slot .rbc-slot-selecting .rbc-background-event {
   cursor: inherit;
   pointer-events: none;
 }
 .rbc-event.rbc-selected, .rbc-day-slot .rbc-selected.rbc-background-event {
-  background-color: #265985;
+  background-color: var(--midnightblue);
+}
+.rbc-event.green.rbc-selected {
+  background-color: var(--emerald);
 }
 .rbc-event:focus, .rbc-day-slot .rbc-background-event:focus {
-  outline: 5px auto #3b99fc;
+  outline: 5px auto var(--dark);
 }
 
 .rbc-event-label {
@@ -536,16 +537,15 @@ button[disabled].rbc-btn {
 }
 
 .rbc-show-more {
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: var(--wetasphalt);
   z-index: 4;
-  font-weight: bold;
   font-size: 85%;
+  font-style: italic;
   height: auto;
-  line-height: normal;
-  color: #3174ad;
-}
-.rbc-show-more:hover, .rbc-show-more:focus {
-  color: #265985;
+  line-height: 1;
+  padding: 2px 5px;
+  border-radius: 5px;
+  color: white;
 }
 
 .rbc-month-view {
@@ -628,7 +628,7 @@ button[disabled].rbc-btn {
   margin: -10px -10px 5px -10px;
   padding: 2px 10px;
 }
-
+/*
 .rbc-agenda-view {
   display: flex;
   flex-direction: column;
@@ -687,6 +687,7 @@ button[disabled].rbc-btn {
 .rbc-agenda-event-cell {
   width: 100%;
 }
+*/
 
 .rbc-time-column {
   display: flex;
@@ -929,4 +930,8 @@ button[disabled].rbc-btn {
 .rbc-time-header {
   height: 100%;
   height: -webkit-fill-available;
+}
+.rbc-time-view .rbc-event-content {
+  white-space: unset;
+  min-height: 5vh;
 }

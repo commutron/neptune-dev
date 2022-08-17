@@ -261,7 +261,6 @@ export const OverMenuBar = ({ brancheS, branchON, calView, changeBranch, light }
         goLink='/overview/calendar'
         icon='fa-regular fa-calendar'
         shrink={brancheS.length >= 13}
-        lock={!Roles.userIsInRole(Meteor.userId(), 'nightly')}
       />
 
     </div>

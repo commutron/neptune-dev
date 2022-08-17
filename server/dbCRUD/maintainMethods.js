@@ -6,6 +6,27 @@ import 'moment-business-time';
 import { syncLocale } from '/server/utility.js';
 import Config from '/server/hardConfig.js';
 
+const calcClose = ( nextMmnt, whenOf, timeSpan )=> {
+  if( whenOf === 'startOf' || ( timeSpan === 'day' && !nextMmnt.isWorkingDay() ) ) {
+    return nextMmnt.nextWorkingTime().endOf('day');
+  }else{
+    return nextMmnt.lastWorkingTime().endOf('day');
+  }
+};
+
+const calcOpen = ( closeMmnt, period )=> {
+  return closeMmnt.clone()
+    .subtractWorkingTime(period - 1, 'days')
+      .startOf('day')
+        .format();
+};
+
+const calcExpire = ( closeMmnt, grace )=> {
+  return closeMmnt.clone()
+    .addWorkingTime(grace, 'days')
+      .format();
+};
+
 const nextService = (sv)=> {
   const st = moment(sv.nextAt).tz(Config.clientTZ);
   
@@ -36,10 +57,20 @@ const futureService = (sv, startDate, endDate)=> {
                                         st.month(sv.whenOf).endOf('month');
   
   while(true) {
-    if( next.isSameOrAfter(startDate) && next.isBefore(endDate) ) {
-      evArr.push( new Date(next.format()) );
+    const close = calcClose(next, sv.whenOf, sv.timeSpan);
+    const open = moment( calcOpen( close, sv.period ) );
+
+    if( close.isBetween(startDate, endDate, undefined, '[]') ||
+        open.isBetween(startDate, endDate, undefined, '[]')
+    ) {
+      if(evArr.length === 0 || !close.isSame( evArr[evArr.length-1][1], 'day' ) ) {
+        evArr.push([
+          new Date(open.format()),
+          new Date(close.format())
+        ]);
+      }
       next.add(sv.recur, sv.timeSpan);
-    }else if( next.isAfter(endDate) ) {
+    }else if( open.isAfter(endDate) && close.isAfter(endDate) ) {
       return evArr;
     }else{
       next.add(sv.recur, sv.timeSpan);
@@ -127,12 +158,11 @@ Meteor.methods({
     if(eq && sv) {
       const next = nextService(sv);
       const nextMmnt = moment(next).tz(Config.clientTZ);
-      const close = sv.whenOf === 'startOf' || ( sv.timeSpan === 'day' && !nextMmnt.isWorkingDay() ) ?
-                      nextMmnt.nextWorkingTime().endOf('day') :
-                      nextMmnt.lastWorkingTime().endOf('day');
-                    
-      const open = close.clone().subtractWorkingTime(sv.period - 1, 'days').startOf('day').format();
-      const expire = close.clone().addWorkingTime(sv.grace, 'days').format();
+      
+      const close = calcClose(nextMmnt, sv.whenOf, sv.timeSpan);
+      
+      const open = calcOpen( close, sv.period );
+      const expire = calcExpire( close, sv.grace );
       
       const match = MaintainDB.findOne({equipId: eq._id, serveKey: sv.serveKey, expire: { $gt: new Date() }},
                                        {fields:{'checklist':1, 'notes':1}});
@@ -236,14 +266,12 @@ Meteor.methods({
             const next = nextService(sv);
             
             const nextMmnt = moment(next).tz(Config.clientTZ);
-            const close = sv.whenOf === 'startOf' || ( sv.timeSpan === 'day' && !nextMmnt.isWorkingDay() ) ?
-                      nextMmnt.nextWorkingTime().endOf('day') :
-                      nextMmnt.lastWorkingTime().endOf('day');
-                      
+            const close = calcClose(nextMmnt, sv.whenOf, sv.timeSpan);
+            
             const match = maintEq.find( m => m.serveKey === sv.serveKey );
        
-            const open = close.clone().subtractWorkingTime(sv.period - 1, 'days').startOf('day').format();
-            const expire = close.clone().addWorkingTime(sv.grace, 'days').format();
+            const open = calcOpen( close, sv.period );
+            const expire = calcExpire( close, sv.grace );
             
             if(!match) {
               MaintainDB.insert({
@@ -291,7 +319,9 @@ Meteor.methods({
     }finally{ return true }
   },
   
-  predictMonthService(startDate, endDate) {
+  predictMonthService(startDate, endDate, incDone, incNext) {
+    this.unblock();
+    
     const orgKey = Meteor.user().orgKey;
     syncLocale(orgKey);
     
@@ -299,49 +329,56 @@ Meteor.methods({
     
     EquipDB.find({online: true},{fields:{'alias':1,'service':1}})
       .forEach( (eq)=> {
-          // const maintEq = MaintainDB.find({equipId: eq._id, expire: { $gt: new Date() }},
-                          // {fields:{'serveKey':1, 'checklist':1, 'notes':1}}).fetch();
-          
-        for(const sv of eq.service) {
-            
+        
+        if(!incNext) {
+          MaintainDB.find({equipId: eq._id, doneAt: { $ne: false }, $or: [ 
+            { open: { $gte: new Date(startDate), $lte: new Date(endDate) } },
+            { close: { $gte: new Date(startDate), $lte: new Date(endDate) } }
+          ]
+          }, {
+            fields: { 'name': 1, 'doneAt': 1 }
+          }).forEach( (mn)=> {
+            futureEvents.push({
+          	  title: eq.alias + ' - ' + mn.name,
+          	  start: mn.doneAt,
+          	  end: mn.doneAt,
+          	  allDay: true,
+              done: true
+          	});
+          });
+        }else{
+      
+          for(const sv of eq.service) {
+              
             const next = futureService(sv, startDate, endDate);
             
             for( let nx of next ) {
               
-              const nextMmnt = moment(nx).tz(Config.clientTZ);
+              const match = !incDone ? false :
+                MaintainDB.findOne({
+                  serveKey: sv.serveKey, 
+                  doneAt: { $ne: false },
+                  open: nx[0], close: nx[1]
+              }, { fields: { 'name': 1, 'doneAt': 1 } });
               
-              const close = sv.whenOf === 'startOf' || ( sv.timeSpan === 'day' && !nextMmnt.isWorkingDay() ) ?
-                      nextMmnt.nextWorkingTime().endOf('day') :
-                      nextMmnt.lastWorkingTime().endOf('day');
-              
-              if(futureEvents.length === 0 || !close.isSame( futureEvents[futureEvents.length-1].end, 'day' ) ) {
-                
-                const open = close.clone().subtractWorkingTime(sv.period - 1, 'days').startOf('day').format();
-            
+              if(match) {
                 futureEvents.push({
-              	  title: eq.alias + ' - ' + sv.name,
-              	  start: new Date(open),
-              	  end: new Date(close.format()),
-              	  allDay: true
+              	  title: eq.alias + ' -  ' + match.name,
+              	  start: match.doneAt,
+              	  end: match.doneAt,
+              	  allDay: true,
+              	  done: true
               	});
               }else{
-                null;
+                futureEvents.push({
+              	  title: eq.alias + ' - ' + sv.name,
+              	  start: nx[0],
+              	  end: nx[1],
+              	  allDay: true
+              	});
               }
-              
             }
-            
-            /*
-            const nextMmnt = moment(next).tz(Config.clientTZ);
-            const close = sv.whenOf === 'startOf' || ( sv.timeSpan === 'day' && !nextMmnt.isWorkingDay() ) ?
-                      nextMmnt.nextWorkingTime().endOf('day') :
-                      nextMmnt.lastWorkingTime().endOf('day');
-                      
-            // const match = maintEq.find( m => m.serveKey === sv.serveKey );
-       
-            const open = close.clone().subtractWorkingTime(sv.period - 1, 'days').startOf('day').format();
-            const expire = close.clone().addWorkingTime(sv.grace, 'days').format();
-            */
-            
+          }
         }
       });
       
