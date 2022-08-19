@@ -67,7 +67,7 @@ export const TideActivitySquare = ({ batchID, acData, isDebug })=> {
     return(
       <div className='infoSquareOuter noCopy center' title={title}>
         {iconState}
-        <i className='label infoSquareLabel'>Activity</i>
+        <i className='label infoSquareLabel'>{ac.isNow ? `${ac.isNow} Active` : 'Not Active'}</i>
       </div>
     );
   }
@@ -75,7 +75,7 @@ export const TideActivitySquare = ({ batchID, acData, isDebug })=> {
   return(
     <div className='infoSquareOuter noCopy' title='activity unknown'>
       <i className='medBig'>?</i>
-      <i className='label infoSquareLabel'></i>
+      <i className='label infoSquareLabel'>Unknown</i>
     </div>
   );
 };

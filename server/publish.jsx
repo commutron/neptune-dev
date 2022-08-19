@@ -347,6 +347,21 @@ Meteor.publish('shaddowData', function(){
         },
         sort: {batch:-1}
       }),
+      EquipDB.find({orgKey: orgKey, online: true}, {
+        fields: {
+          'alias': 1,
+          'branchKey': 1
+      }}),
+      MaintainDB.find({orgKey: orgKey,
+                      open: { $lte: new Date() },
+                      expire: { $gte: new Date() }
+      }, {
+        fields: {
+          'equipId': 1,
+          'name': 1,
+          'status': 1,
+          'close': 1
+      }})
     ];
   }
 });

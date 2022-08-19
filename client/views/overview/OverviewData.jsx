@@ -11,9 +11,10 @@ import Spin from '../../components/tinyUi/Spin';
 import OverviewWrap from './OverviewWrap';
 
 const View = ({
-  login, ready, readyT, calView,
+  ready, readyT, calView,
   user, app, isDebug,
-  batchX, traceDT
+  batchX, traceDT,
+  allEquip, openMaint
 })=> {
   
   useLayoutEffect( ()=>{
@@ -33,14 +34,14 @@ const View = ({
   }
   
   localeUpdate(app);
-  
-  // const brancheS = branchesOpenSort(app.branches);
-  
+
   return(
     <PlainFrame title='Overview' tag='WIP' container='overviewContainer'>
       <OverviewWrap 
         bx={batchX}
         traceDT={traceDT}
+        allEquip={allEquip}
+        openMaint={openMaint}
         user={user}
         app={app}
         brancheS={brancheS}
@@ -67,15 +68,16 @@ export default withTracker( ({ view }) => {
     };
   }else{
     return {
-      login: Meteor.userId(),
       ready: sub.ready(),
       readyT: subT.ready(),
-      calView: view === 'calendar',
+      calView: view === 'pmcalendar',
       user: user,
       isDebug: isDebug,
       app: AppDB.findOne({org: org}),
       batchX: XBatchDB.find({}).fetch(),
       traceDT: TraceDB.find({}).fetch(),
+      allEquip: EquipDB.find( {}, { sort: { alias: 1 } } ).fetch(),
+      openMaint: MaintainDB.find( {expire: {$exists: false}}, { sort: { name: -1 } } ).fetch(),
     };
   }
 })(View);

@@ -1,12 +1,11 @@
-import React, { useRef, useCallback, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import moment from 'moment';
 import 'moment-business-time';
 // import Pref from '/client/global/pref.js';
-import { Calendar, momentLocalizer } from 'react-big-calendar';
 
-const localizer = momentLocalizer(moment);
+import CalComp from './CalComp';
 
-const CalWrap = ({ })=> {
+const CalWrap = ({ oB, filterBranch })=> {
   
   const mounted = useRef(true);
   const [ work, workSet ] = useState(false);
@@ -46,30 +45,45 @@ const CalWrap = ({ })=> {
   	getEvents( new Date() );
   }, []);
   
-  const dayPropGetter = useCallback(
-    (date) => ({
-      ...(moment(date).day() === 0 && {
-        style: { backgroundColor: 'rgb(150,150,150,0.1)' }
-      }),
-      ...(moment(date).day() === 6 && {
-        style: { backgroundColor: 'rgb(150,150,150,0.1)' }
-      }),
-      ...(moment(date).isHoliday() && {
-        className: 'yellowGlow'
-      }),
-    }),
-    []
-  );
+  /*
+  const [ brTime, setTime ] = useState([]);
   
-  const eventPropGetter = useCallback(
-    ({done}) => ({
-      ...(done && {
-        className: 'green'
-      })
-    }),
-    []
-  );
-
+  useEffect( ()=> {
+  	
+  	let timeArr = [];
+  	
+  	if(Array.isArray(oB)) {
+      for(let b of oB) {
+        
+        Meteor.apply('branchTaskTime', [ b._id ], {wait: true}, (error, reply)=>{
+          error && console.log(error);
+          if( reply && mounted.current ) { 
+            
+            for(let t of reply.branchTime) {
+              if(t.budget) {
+                timeArr.push(
+                  [ b.batch, t.branch, Math.max( (t.budget - t.time), 0 ) ]
+                );
+              //     {
+              // 	  title: eq.alias + ' -  ' + match.name,
+              // 	  start: match.doneAt,
+              // 	  end: match.doneAt,
+              // 	  allDay: true,
+              // 	  done: true
+              // 	});
+              }
+            }
+          
+            setTime(timeArr);
+          }
+        });
+      }
+  	}
+  }, [oB]);
+  
+  console.log({brTime});
+  */
+  
   return(
 	  <div className='space3v'>
 	  	<div className='rowWrap vmarginquarter'>
@@ -78,19 +92,10 @@ const CalWrap = ({ })=> {
           <n-fa1><i className='fas fa-spinner fa-lg'></i></n-fa1>
         }</span>
 	  	</div>
-	  	<Calendar
-	      localizer={localizer}
-	      events={events}
-	      startAccessor="start"
-	      endAccessor="end"
-	      defaultView='month'
-	      views={['month', 'week']}
-	      style={{ height: '75vh' }}
-	      onNavigate={(e)=>getEvents(e)}
-	      popup={true}
-	      dayPropGetter={dayPropGetter}
-	      eventPropGetter={eventPropGetter}
-    	/>
+	  	<CalComp
+	  	  events={events}
+	  	  getEvents={getEvents}
+	  	/>
 	  </div>
   );
 };

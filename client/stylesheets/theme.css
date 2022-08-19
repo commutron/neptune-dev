@@ -58,6 +58,7 @@
   
   --silver: rgb(189, 195, 199);
   --silverfade: rgba(189, 195, 199, 0.5);
+  --silverfader: rgba(189, 195, 199, 0.2);
   
   --clouds: rgb(236, 240, 241); /*off white */
   --cloudstrans: rgba(227,231,232, 0.5);

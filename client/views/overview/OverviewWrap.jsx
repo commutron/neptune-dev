@@ -12,7 +12,7 @@ import { OverMenuBar } from '/client/layouts/TaskBars/TaskBars';
 
 
 const OverviewWrap = ({ 
-  bx, traceDT,
+  bx, traceDT, allEquip, openMaint,
   user, app, brancheS,
   calView, isDebug
 })=> {
@@ -41,7 +41,7 @@ const OverviewWrap = ({
                         user.preferLight || false;
                         
   const [ filterBy, filterBySet ] = useState( defaultFilter );
-  
+
   const [ focusBy, focusBySet ] = useState( Session.get(sessionSticky+'focus') || false );
   const [ salesBy, salesBySet ] = useState( Session.get(sessionSticky+'sales') || false );
   const [ sortBy, sortBySet ] = useState( Session.get(sessionSticky+'sort') || 'priority' );
@@ -54,6 +54,10 @@ const OverviewWrap = ({
   const [ stormy, stormySet ] = useState(false);
   
   const [ liveState, liveSet ] = useState( false );
+  const [ holdState, holdSet ] = useState( [] );
+  const [ holdShow, holdshowSet ] = useState( false );
+  
+  const [ serveState, serveSet ] = useState( false );
   
   useLayoutEffect( ()=> {
     sortInitial();
@@ -71,12 +75,36 @@ const OverviewWrap = ({
     loadTimeSet( moment() );
   }, [traceDT]);
   
+  useEffect( ()=> {
+    if(!filterBy) {
+      serveSet(false);
+    }else{
+      const brKey = brancheS.find( x => x.branch === filterBy ).brKey;
+    
+      let serve = [];
+      for(let m of openMaint) {
+        const eq = allEquip.find( e => e._id === m.equipId );
+        if(eq?.branchKey === brKey) {
+          serve.push({
+            title: m.name,
+            find: 'Eq-' + eq.alias +' ~ '+ m.name,
+            mId: m._id,
+            equip: eq.alias,
+            pass: m.status === 'notrequired',
+            done: m.status === 'complete',
+            due: m.close
+          });
+        }
+      }
+      serveSet(serve);
+    }
+  }, [openMaint, filterBy]);
+  
+  
   function changeBranch(val) {
     const brnch = !val || val === 'false' ? false : val;
     filterBySet( brnch );
     Session.set(sessionSticky+'filter', brnch);
-    // salesBySet( false );
-    // Session.set(sessionSticky+'sales', false);
   }
   
   function changeFocus(e) {
@@ -191,7 +219,9 @@ const OverviewWrap = ({
           return 0;
         });
       
-      liveSet( orderedBatches );
+      
+      liveSet( orderedBatches.filter( x => !x.hold ) );
+      holdSet( orderedBatches.filter( x => x.hold ) );
     });
   }
       
@@ -237,10 +267,12 @@ const OverviewWrap = ({
       <div className={`overviewContent forceScrollStyle ${light === true ? 'lightTheme' : 'darkTheme'}`} tabIndex='0'>
           
         {calView ?
-          <CalWrap 
-          
+          <CalWrap
+            oB={liveState}
+            filterBranch={filterBy}
           />
-        : !liveState ?
+        : 
+        !liveState ?
           <div className='centreContainer'>
             <div className='centrecentre'>
               <Spin />
@@ -252,10 +284,14 @@ const OverviewWrap = ({
             <BatchHeaders
               key='fancylist0'
               oB={liveState}
+              hB={holdState}
+              sV={serveState}
               traceDT={traceDT}
               app={app}
               isDebug={isDebug}
               title={!filterBy ? 'All Live' : filterBy}
+              holdShow={holdShow}
+              holdshowSet={holdshowSet}
               focusBy={focusBy}
               tagBy={tagBy}
               stormy={stormy}
@@ -264,11 +300,15 @@ const OverviewWrap = ({
             <BatchDetails
               key='fancylist1'
               oB={liveState}
+              hB={holdState}
+              sV={serveState}
               traceDT={traceDT}
               user={user}
               app={app}
               brancheS={brancheS}
               isDebug={isDebug}
+              holdShow={holdShow}
+              holdshowSet={holdshowSet}
               prog={prog}
               dense={dense}
               filterBy={filterBy}

@@ -20,42 +20,6 @@ const EquipSlide = ({ equipData, maintainData, app, users, isDebug, brancheS })=
   
   const eq = equipData;
   
-  /*
-  const nextMaint = (sv)=> {
-    const st = moment(sv.nextAt);
-    
-    let next = sv.whenOf === 'endOf' ? 
-                  st.endOf(sv.timeSpan) :
-                sv.whenOf === 'startOf' ? 
-                  st.startOf(sv.timeSpan) :
-                sv.timeSpan === 'week' ?
-                  st.day(sv.whenOf).endOf('day') :
-                sv.timeSpan === 'month' ?
-                  st.date(sv.whenOf).endOf('day') :
-                  st.month(sv.whenOf).endOf('month');
-    
-    while(true) {
-      if(next.isSameOrAfter(new Date())) {
-        const close = sv.whenOf === 'startOf' ?
-                next.clone().nextWorkingTime().endOf('day') :
-                next.clone().lastWorkingTime().endOf('day');
-        
-        const openWindow = close.clone().subtractWorkingTime(sv.period - 1, 'days').startOf('day').format();
-        
-        const expireWndw = close.clone().addWorkingTime(sv.grace, 'days').format();
-        
-        return {
-          open: openWindow,
-          close: close.format(),
-          expire:expireWndw 
-        };
-      }else{
-        next.add(sv.recur, sv.timeSpan);
-      }
-    }
-  };
-  */
-  
   const weekday = {
     0: 'sunday',
     1: 'monday',

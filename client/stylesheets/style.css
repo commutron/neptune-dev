@@ -167,6 +167,7 @@ input::-webkit-calendar-picker-indicator {
 .concrete { background-color: var(--concrete); }
 
 .grayT { color: var(--black); }
+.grayFade { background-color: var(--silverfader); }
 .darkgray { background-color: var(--asbestos); }
 .darkgrayT { color: var(--asbestos); }
 .darkT { color: var(--dark); }

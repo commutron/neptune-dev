@@ -93,12 +93,12 @@ function collectBranchCondition(privateKey, batchID) {
                               rNC.some( x => x.where === branch.branch );
           
           const branchCon = branchSteps.length === 0 ? false :
+            conArr.includes('onHold') ? 'onHold' :
             conArr.includes('canStart') ||
             conArr.includes('stepRemain') ||
             nonConLeft > 0 ?
-            'open' :
-            conArr.includes('onHold') ? 
-            'onHold' :
+            'open'
+            :
             'closed';
             
           branchSets.push({
@@ -134,7 +134,7 @@ const reduceTide = (tArr)=> {
 function collectBranchTime(privateKey, batchID) {
   return new Promise(resolve => {
     const app = AppDB.findOne({orgKey: privateKey});
-    const brancheS = sortBranches(app.branches);
+    const brancheS = sortBranches(app.branches).filter( b => b.open );
          
     const bx = XBatchDB.findOne({_id: batchID});
     
@@ -176,8 +176,8 @@ function collectBranchTime(privateKey, batchID) {
 function collectProgress(privateKey, batchID) {
   return new Promise(resolve => {
     const app = AppDB.findOne({orgKey: privateKey});
-    const brancheS = sortBranches(app.branches);
-         
+    const brancheS = sortBranches(app.branches).filter( b => b.open );
+
     const bx = XBatchDB.findOne({_id: batchID});
     
     let branchProg = [];
@@ -283,8 +283,7 @@ Meteor.methods({
     async function bundleTaskTime(batchID) {
       const accessKey = serverAccessKey || Meteor.user().orgKey;
       try {
-        bundle = await collectBranchTime(accessKey, batchID);
-        return bundle;
+        return await collectBranchTime(accessKey, batchID);
       }catch (err) {
         throw new Meteor.Error(err.message);
       }

@@ -11,7 +11,7 @@ import Grabber from '/client/utility/Grabber.js';
 
 const UpstreamDetails = ({
   oB, traceDT,
-  user, app, brancheS,
+  app, brancheS,
   isAuth, isDebug,
   dense, focusBy, tagBy
 })=> {
@@ -61,9 +61,7 @@ const UpstreamDetails = ({
               rowIndex={index}
               oB={entry}
               tBatch={tBatch}
-              user={user}
               app={app}
-              brancheS={brancheS}
               branchClear={branchClear}
               isAuth={isAuth}
               isDebug={isDebug}
@@ -83,9 +81,9 @@ export default UpstreamDetails;
 
 
 const UpstreamDetailChunk = ({ 
-  rowIndex, oB, tBatch, user,
+  rowIndex, oB, tBatch,
   app, 
-  brancheS, branchClear,
+  branchClear,
   isAuth, isDebug,
   statusCols, kitCols, 
   dense, focusBy, tagBy

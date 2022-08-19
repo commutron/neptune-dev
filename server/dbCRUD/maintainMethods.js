@@ -60,8 +60,9 @@ const futureService = (sv, startDate, endDate)=> {
     const close = calcClose(next, sv.whenOf, sv.timeSpan);
     const open = moment( calcOpen( close, sv.period ) );
 
-    if( close.isBetween(startDate, endDate, undefined, '[]') ||
-        open.isBetween(startDate, endDate, undefined, '[]')
+    if( ( close.isBetween(startDate, endDate, undefined, '[]') ||
+          open.isBetween(startDate, endDate, undefined, '[]') ) //&&
+          //close.isSameOrAfter(new Date(), 'day')
     ) {
       if(evArr.length === 0 || !close.isSame( evArr[evArr.length-1][1], 'day' ) ) {
         evArr.push([
@@ -80,6 +81,15 @@ const futureService = (sv, startDate, endDate)=> {
 
   
 Meteor.methods({
+  
+  serveActive(mtId) {
+    const maint = MaintainDB.findOne({_id: mtId},{fields:{'checklist':1}});
+    if(maint) {
+      return maint.checklist.length;
+    }else{
+      return 0;
+    }
+  },
   
   serveNoReqSet(mtId, NoReq) {
     if( Roles.userIsInRole(Meteor.userId(), 'active') ) {
@@ -331,10 +341,11 @@ Meteor.methods({
       .forEach( (eq)=> {
         
         if(!incNext) {
-          MaintainDB.find({equipId: eq._id, doneAt: { $ne: false }, $or: [ 
-            { open: { $gte: new Date(startDate), $lte: new Date(endDate) } },
-            { close: { $gte: new Date(startDate), $lte: new Date(endDate) } }
-          ]
+          MaintainDB.find({equipId: eq._id, doneAt: { $ne: false },
+            $or: [ 
+              { open: { $gte: new Date(startDate), $lte: new Date(endDate) } },
+              { close: { $gte: new Date(startDate), $lte: new Date(endDate) } }
+            ]
           }, {
             fields: { 'name': 1, 'doneAt': 1 }
           }).forEach( (mn)=> {
@@ -346,7 +357,24 @@ Meteor.methods({
               done: true
           	});
           });
-        }else{
+          
+          MaintainDB.find({equipId: eq._id, status: 'notrequired',
+            $or: [ 
+              { open: { $gte: new Date(startDate), $lte: new Date(endDate) } },
+              { close: { $gte: new Date(startDate), $lte: new Date(endDate) } }
+            ]
+          }, {
+            fields: { 'name': 1, 'close': 1 }
+          }).forEach( (mn)=> {
+            futureEvents.push({
+          	  title: eq.alias + ' - ' + mn.name,
+          	  start: mn.close,
+          	  end: mn.close,
+          	  allDay: true,
+              pass: true
+          	});
+          });
+        }else{ // notrequired
       
           for(const sv of eq.service) {
               
@@ -354,28 +382,45 @@ Meteor.methods({
             
             for( let nx of next ) {
               
-              const match = !incDone ? false :
+              const matchdone = !incDone ? false :
                 MaintainDB.findOne({
                   serveKey: sv.serveKey, 
                   doneAt: { $ne: false },
                   open: nx[0], close: nx[1]
               }, { fields: { 'name': 1, 'doneAt': 1 } });
               
-              if(match) {
+              const matchpass = !incDone || matchdone ? false :
+                MaintainDB.findOne({
+                  serveKey: sv.serveKey, 
+                  status: 'notrequired',
+                  open: nx[0], close: nx[1]
+              }, { fields: { 'name': 1, 'close': 1 } });
+              
+              if(matchdone) {
                 futureEvents.push({
-              	  title: eq.alias + ' -  ' + match.name,
-              	  start: match.doneAt,
-              	  end: match.doneAt,
+              	  title: eq.alias + ' -  ' + matchdone.name,
+              	  start: matchdone.doneAt,
+              	  end: matchdone.doneAt,
               	  allDay: true,
               	  done: true
               	});
-              }else{
+              }else if(matchpass) {
+                futureEvents.push({
+              	  title: eq.alias + ' -  ' + matchpass.name,
+              	  start: matchpass.close,
+              	  end: matchpass.close,
+              	  allDay: true,
+              	  pass: true
+              	});
+              }else if( nx[1] >= new Date() ) {
                 futureEvents.push({
               	  title: eq.alias + ' - ' + sv.name,
               	  start: nx[0],
               	  end: nx[1],
               	  allDay: true
               	});
+              }else{
+                null;
               }
             }
           }
@@ -383,8 +428,6 @@ Meteor.methods({
       });
       
       return futureEvents;
-
-    
   }
   
 });

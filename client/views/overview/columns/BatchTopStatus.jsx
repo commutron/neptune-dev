@@ -31,7 +31,7 @@ const BatchTopStatus = ({
 
   return(
     <Fragment>
-      <div>
+      <div className='med'>
         <i><i className='label'>Due:<br /></i>{dueDateShip}</i>
       </div>
 

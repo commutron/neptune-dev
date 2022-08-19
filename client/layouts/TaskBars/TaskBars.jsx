@@ -256,10 +256,10 @@ export const OverMenuBar = ({ brancheS, branchON, calView, changeBranch, light }
       <span className='flexSpace'></span>
       
       <TaskElement
-        title='Calendar'
+        title={`${Pref.maintain} Calendar`}
         subON={calView}
-        goLink='/overview/calendar'
-        icon='fa-regular fa-calendar'
+        goLink='/overview/pmcalendar'
+        icon='fa-solid fa-screwdriver-wrench'
         shrink={brancheS.length >= 13}
       />
 

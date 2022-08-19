@@ -205,7 +205,7 @@ export const PrioritySquare = ({
   
   return(
     <NumStat
-      num='?'
+      num={altNumber || '?'}
       name=''
       title='priority rank unknown'
       color='fade'
