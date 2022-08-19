@@ -85,7 +85,7 @@ const AlterFulfillForm = ({ batchId, createdAt, end, app, selfclose })=> {
               <label 
                 key={index}
                 htmlFor={entry+index} 
-                className='beside breath med'>
+                className='beside breath medSm'>
                 <input
                   type='radio'
                   id={entry+index}

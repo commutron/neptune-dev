@@ -19,6 +19,7 @@ const ShipWindows = ({
   const [ rapidChunk, rapidChunkSet ] = useState(false);
   
   const [ shipDayChunks, shipDayChunksSet ] = useState([]);
+  const [ holdShow, holdshowSet ] = useState( false );
   
   const [ traceDTSort, traceDTSSet ] = useState([]);
   
@@ -144,6 +145,8 @@ const ShipWindows = ({
             app={app}
             user={user}
             isDebug={isDebug}
+            holdShow={holdShow}
+            holdshowSet={holdshowSet}
             focusBy={focusBy}
             tagBy={tagBy}
             dense={dense}
@@ -183,6 +186,8 @@ const ShipWindows = ({
             user={user}
             isDebug={isDebug}
             canDo={canDo}
+            holdShow={holdShow}
+            holdshowSet={holdshowSet}
             focusBy={focusBy}
             tagBy={tagBy}
             prog={prog}

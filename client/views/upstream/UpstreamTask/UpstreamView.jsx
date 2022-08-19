@@ -32,6 +32,8 @@ const UpstreamView = ({ batchX, traceDT, user, app, brancheS, isAuth, isDebug })
   const [ light, themeSet ] = useState( defaultLight );
   
   const [ liveState, liveSet ] = useState( false );
+  const [ holdState, holdSet ] = useState( [] );
+  const [ holdShow, holdshowSet ] = useState( false );
   
   useLayoutEffect( ()=> {
     sortInitial();
@@ -141,7 +143,8 @@ const UpstreamView = ({ batchX, traceDT, user, app, brancheS, isAuth, isDebug })
           return 0;
         });
       
-      liveSet( orderedBatches );
+      liveSet( orderedBatches.filter( x => !x.hold ) );
+      holdSet( orderedBatches.filter( x => x.hold ) );
     });
   }
       
@@ -184,10 +187,13 @@ const UpstreamView = ({ batchX, traceDT, user, app, brancheS, isAuth, isDebug })
           <UpstreamHeaders
             key='fancylist0'
             oB={liveState}
+            hB={holdState}
             traceDT={traceDT}
             app={app}
             isDebug={isDebug}
             title={Pref.kitting}
+            holdShow={holdShow}
+            holdshowSet={holdshowSet}
             focusBy={focusBy}
             tagBy={tagBy}
             showMore={true}
@@ -196,12 +202,15 @@ const UpstreamView = ({ batchX, traceDT, user, app, brancheS, isAuth, isDebug })
           <UpstreamDetails
             key='fancylist1'
             oB={liveState}
+            hB={holdState}
             traceDT={traceDT}
             user={user}
             app={app}
             brancheS={brancheS}
             isAuth={isAuth}
             isDebug={isDebug}
+            holdShow={holdShow}
+            holdshowSet={holdshowSet}
             dense={dense}
             focusBy={focusBy}
             tagBy={tagBy}

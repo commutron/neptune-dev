@@ -4,7 +4,8 @@ import DownstreamDetails from './DownstreamDetails';
 
 const WindowGlass = ({ 
   mixedOrders, indexKey, traceDT,
-  brancheS, app, user, isDebug, canDo, 
+  brancheS, app, user, isDebug, 
+  holdShow, holdshowSet, canDo, 
   focusBy, tagBy, prog, dense, stormy,
   updateTrigger
 })=> {
@@ -14,6 +15,9 @@ const WindowGlass = ({
   const ncCols = ['NC total', 'NC remain', 'NC rate', 'NC items', Pref.scrap, Pref.rapidEx];
   const headersArr = [...statCols,...progCols,'Perfomance',...ncCols,'',''];
 
+  const dayOrders = indexKey === 0 ? mixedOrders.filter( o => !o.hold ) : mixedOrders;
+  const hldOrders = indexKey === 0 ? mixedOrders.filter( o => o.hold ) : [];
+  
   return(
     <div className={`downGridFrameScroll 
                     ${indexKey === -1 ? 'rapidtitle' : 
@@ -34,7 +38,7 @@ const WindowGlass = ({
       <div className='downOrdersScroll'>
         <DownstreamDetails
           indexKey={indexKey}
-          oB={mixedOrders}
+          oB={dayOrders}
           traceDT={traceDT}
           title='things'
           showMore={true}
@@ -52,6 +56,35 @@ const WindowGlass = ({
           ncCols={ncCols}
           updateTrigger={updateTrigger}
         />
+      
+        {hldOrders.length === 0 ? null :
+          <button className='downRowScroll labels grayFade'
+            onClick={()=>holdshowSet(!holdShow)}
+          ></button>
+        }
+    
+        {holdShow &&
+          <DownstreamDetails
+            indexKey={indexKey+'hld'}
+            oB={hldOrders}
+            traceDT={traceDT}
+            title='things'
+            showMore={true}
+            user={user}
+            app={app}
+            isDebug={isDebug}
+            canDo={canDo}
+            isNightly={false}
+            prog={prog}
+            dense={dense}
+            focusBy={focusBy}
+            tagBy={tagBy}
+            stormy={stormy}
+            progCols={progCols}
+            ncCols={ncCols}
+            updateTrigger={updateTrigger}
+          />
+        }
       </div>
     </div>
   );

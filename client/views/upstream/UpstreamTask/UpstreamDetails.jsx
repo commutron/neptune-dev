@@ -10,9 +10,10 @@ import ProJump from '/client/components/smallUi/ProJump';
 import Grabber from '/client/utility/Grabber.js';
 
 const UpstreamDetails = ({
-  oB, traceDT,
+  oB, hB, traceDT,
   app, brancheS,
   isAuth, isDebug,
+  holdShow, holdshowSet,
   dense, focusBy, tagBy
 })=> {
   
@@ -58,6 +59,33 @@ const UpstreamDetails = ({
           return(
             <UpstreamDetailChunk
               key={`${entry.batchID}live${index}`}
+              rowIndex={index}
+              oB={entry}
+              tBatch={tBatch}
+              app={app}
+              branchClear={branchClear}
+              isAuth={isAuth}
+              isDebug={isDebug}
+              statusCols={statusCols}
+              kitCols={kitCols}
+              dense={dense}
+              focusBy={focusBy}
+              tagBy={tagBy}
+            />
+      )})}
+      
+      {hB.length === 0 ? null :
+        <button className='overGridRowScrollHeader labels grayFade'
+          onClick={()=>holdshowSet(!holdShow)}
+        ></button>
+      }
+      
+      {holdShow &&
+        hB.map( (entry, index)=>{
+          const tBatch = traceDT.find( t => t.batchID === entry._id );
+          return(
+            <UpstreamDetailChunk
+              key={`${entry.batchID}hold${index}`}
               rowIndex={index}
               oB={entry}
               tBatch={tBatch}
