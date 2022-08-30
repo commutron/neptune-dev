@@ -30,14 +30,14 @@ const MainHistory = ({ maintData, sving, isDebug })=>{
         </thead>
         <tbody>
           {(inpieces[pageState] || []).map( (m, ix)=> {
-            const frmt = ix == 0 ? 'dddd MMMM Do' : 'MMMM D YYYY';
+            const frmt = pageState == 0 && ix == 0 ? 'dddd MMMM Do' : 'MMMM D YYYY';
             return(
               <tr key={ix}>
                 <td>{m.status || <em>{sving ? 'current' : 'next'}</em>}</td>
                 <td>{moment(m.open).format(frmt)}</td>
                 <td>{moment(m.close).format(frmt)}</td>
                 <td>{moment(m.expire).format(frmt)}</td>
-                <td>{m.doneAt && moment(m.expire).format(frmt)}</td>
+                <td>{m.doneAt && moment(m.doneAt).format(frmt)}</td>
                 <td className='centreRow'>
                   {m.checklist.length > 0 || m.notes ? 
                     <MainDetail

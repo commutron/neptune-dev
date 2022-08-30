@@ -7,6 +7,7 @@ const ServiceDock = ({ maintData, serve })=> {
   
   const noReq = maintData.status === 'notrequired';
   
+  // const [ work, setWork ] = useState( false );
   const [ notes, setNotes ] = useState( maintData.notes );
 
   function notReq() {
@@ -18,27 +19,28 @@ const ServiceDock = ({ maintData, serve })=> {
 		});
   }
   
+  const cllbk = (err)=> {
+    // setWork(false);
+    if(err) {
+	    console.log(err);
+	    toast.error('Server Error');
+		}
+  };
+  
   function doCheck(task, state) {
+    // setWork(index);
     if(!state || state === 'false') {
   		Meteor.apply('serveNotCheck', [ maintData._id, task ],
-  		{wait: true, noRetry: true},
-  		(err)=>{
-  			if(err) {
-  		    console.log(err);
-  		    toast.error('Server Error');
-  			}
-  		});
+  		{wait: true},
+  		(err)=> cllbk(err)
+  		);
     }else{
-      const isDone = serve.tasks.every( (m)=> task === m ||
-              maintData.checklist.find( c => c.task === m ) );
+      const isDone = serve.tasks.every( t => task === t ||
+              maintData.checklist.find( c => c.task === t ) );
   		Meteor.apply('serveCheck', [ maintData._id, task, isDone ],
-  		{wait: true, noRetry: true},
-  		(err)=>{
-  			if(err) {
-  		    console.log(err);
-  		    toast.error('Server Error');
-  			}
-  		});
+  		{wait: true},
+  		(err)=> cllbk(err)
+  		);
     }
 	}
 	
@@ -67,14 +69,15 @@ const ServiceDock = ({ maintData, serve })=> {
             {serve.tasks.map( (m, ix)=> {
               let chk = maintData.checklist.find( c => c.task === m ) ? true : false;
               return(
-                <label key={ix} htmlFor={'tsk'+ix} className='beside margin5 line15x borderGray noCopy'>
+                <label key={ix} htmlFor={'tsk'+ix} className='beside margin5 borderGray noCopy'>
                   <input
                     id={'tsk'+ix}
                     type='checkbox'
-                    defaultChecked={chk}
-                    onClick={()=>doCheck(m, !chk)}
+                    checked={chk}
+                    onChange={()=>doCheck(m, !chk, ix)}
+                    // disabled={work === ix}
                   />
-                  <i>{m}</i>
+                  <i className='line15x'>{m}</i>
                 </label>
             )})}
           </div>

@@ -46,7 +46,7 @@ const PersonChunk = ({
   isDebug && console.log(branchGuess);
   
   const project = userChunk.project;
-  const equip = project?.split(" ~ ")?.[0]?.substring(3);
+  const equip = project?.split(" ~ ")?.[0]?.split("-")[1];
   
   const maint = userChunk.tideBlock.type === 'MAINT';
   

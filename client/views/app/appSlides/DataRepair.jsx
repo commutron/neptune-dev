@@ -167,6 +167,14 @@ const DataRepair = ({ app, users })=> {
       />
       
       <DoCard
+        title='Run Incomplete Service Repair Function'
+        icon='gear'
+        color='midnightSolid'
+        button='REPAIR Incomplete'
+        action={()=>doCallThing('REPAIRmaint')}
+      />
+      
+      <DoCard
         title='Rebuild the LatestSerial Object'
         icon='barcode'
         color='tealSolid'
@@ -328,7 +336,7 @@ const DoCard = ({ title, sub, icon, color, button, action })=> (
     <h3><i className={`fa-solid fa-${icon} fa-lg gap`}></i>
       {title}
     </h3>
-    {sub && <small>{sub}</small>}
+    {sub && <small className='line2x'>{sub}</small>}
     <br />
     <button
       onClick={()=>action()}

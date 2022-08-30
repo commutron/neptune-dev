@@ -344,7 +344,7 @@ dialog::backdrop {
   background-color: rgb(10,10,10,0.8);
   backdrop-filter: blur(1px);
 }
-dialog .action {
+dialog > div:first-child .action {
   border-radius: 4px;
 }
 

@@ -36,7 +36,7 @@ const TideEditWrap = ({
     }else{
       Meteor.apply('editTideTimeBlock', 
         [ e.dbHome, tideKey, newStart, newStop, taskIs, subtIs ],
-        { wait: true, noRetry: false },
+        { wait: true },
         (err, asw)=>{
           err && console.log(err);
           if(asw === true) {
@@ -50,7 +50,7 @@ const TideEditWrap = ({
       console.log([e.tideKey, 'data issue no call']);
     }else{
       Meteor.apply('stopTideTimeBlock', [ e.dbHome, e.tideKey ],
-      { wait: true, noRetry: false },
+      { wait: true },
       (err, asw)=>{
         err && console.log(err);
         if(asw === true) {
@@ -69,7 +69,7 @@ const TideEditWrap = ({
       console.log([{tideKey, newSplit, stopTime}, 'data issue no call']);
     }else{
       Meteor.apply('splitTideTimeBlock', [ e.dbHome, tideKey, newSplit, stopTime ],
-       { wait: true, noRetry: false },
+       { wait: true },
        (err, asw)=>{
         err && console.log(err);
         if(asw === true) {
@@ -83,11 +83,13 @@ const TideEditWrap = ({
     <tbody>
       {weekData.map( (blk, index)=>{
         const maint = blk.type === 'MAINT';
+        const eqfix = blk.type === 'EQFX';
 
         const moreInfo = maint ? false : traceDT?.find( x => x.batch === blk.batch);
-        const what = maint ? (blk.project?.split(" ~ ")?.[1]?.split("<*>")?.[0] || 'Scheduled')
+        const what = eqfix ? '' : 
+                     maint ? (blk.project?.split(" ~ ")?.[1]?.split("<*>")?.[0] || 'Scheduled')
                               + ' Service' : moreInfo?.isWhat.join(' ') || 'unavailable';
-        const rad = maint ? null : moreInfo?.rad || null;
+        const rad = maint || eqfix ? null : moreInfo?.rad || null;
         
         const lastStart = weekData[index-1] && weekData[index-1].startTime;
         const lastStop = weekData[index+1] && weekData[index+1].stopTime;

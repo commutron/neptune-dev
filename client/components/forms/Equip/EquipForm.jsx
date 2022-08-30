@@ -6,7 +6,7 @@ import ModelMedium from '/client/components/smallUi/ModelMedium';
 import { cleanURL } from '/client/utility/Convert';
 
 const EquipFormWrapper = ({ 
-  id, name, alias, brKey, wiki, rootURL, brancheS,
+  id, name, alias, brKey, wiki, lib, rootURL, brancheS,
   noText, primeTopRight, lgIcon,
   lockOut
 })=> {
@@ -35,6 +35,7 @@ const EquipFormWrapper = ({
         alias={alias}
         brKey={brKey}
         wiki={wiki}
+        lib={lib}
         rootURL={rootURL}
         brancheS={brancheS}
       />
@@ -45,7 +46,7 @@ const EquipFormWrapper = ({
 export default EquipFormWrapper;
 
 const EquipForm = ({ 
-  id, name, alias, brKey, wiki, rootURL, brancheS, selfclose
+  id, name, alias, brKey, wiki, lib, rootURL, brancheS, selfclose
 })=> {
 
   function saveEquipment(e) {
@@ -56,11 +57,14 @@ const EquipForm = ({
     
     const eqBrKey = this.eBrKey.value;
     
-    const eURL = this.eWiki.value.trim();
-    const eqwiki = cleanURL(eURL, rootURL);
+    const wURL = this.eWiki.value.trim();
+    const eqwiki = cleanURL(wURL, rootURL);
+    
+    const lURL = this.reWiki.value.trim();
+    const eqlib = cleanURL(lURL, rootURL);
     
     if(equipId) {
-       Meteor.call('editEquipment', equipId, eqname, eqalias, eqBrKey, eqwiki,
+       Meteor.call('editEquipment', equipId, eqname, eqalias, eqBrKey, eqwiki, eqlib,
       (error, reply)=>{
         if(error)
           console.log(error);
@@ -73,7 +77,7 @@ const EquipForm = ({
         }
       });
     }else{
-      Meteor.call('createEquipment', eqname, eqalias, eqBrKey, eqwiki,
+      Meteor.call('createEquipment', eqname, eqalias, eqBrKey, eqwiki, eqlib,
       (error, reply)=>{
         error && console.log(error);
         if(reply) {
@@ -91,6 +95,7 @@ const EquipForm = ({
   const orAlias = alias ? alias : '';
   const orBrKey = brKey ? brKey : false;
   const orWiki = wiki ? wiki : '';
+  const orLib = lib ? lib : '';
 
   return(
     <form id='newEquip' className='fitWide' onSubmit={(e)=>saveEquipment(e)}>
@@ -140,16 +145,25 @@ const EquipForm = ({
           defaultValue={orWiki}
           placeholder='http://192.168.1.68/pisces'
           className='dbbleWide' />
-        <label htmlFor='eWiki' className='cap'>{Pref.equip} {Pref.instruct}</label>
+        <label htmlFor='eWiki' className='dbbleWide cap'>{Pref.premaintain} {Pref.instruct}</label>
       </p>
-      <span className='centre'>
+      <p>
+        <input
+          type='text'
+          id='reWiki'
+          defaultValue={orLib}
+          placeholder='http://192.168.1.68/pisces'
+          className='dbbleWide' />
+        <label htmlFor='reWiki' className='dbbleWide cap'>{Pref.equip} Repair Documents</label>
+      </p>
+      <p className='centre'>
         <button
           type='submit'
           id='eqSave'
           className='action nSolid'
           >Save
         </button>
-      </span>
+      </p>
     </form>
   );
 };

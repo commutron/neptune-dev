@@ -1,6 +1,6 @@
 Meteor.methods({
 
-  createEquipment(eqname, alias, brKey, instruct) {
+  createEquipment(eqname, alias, brKey, instruct, library) {
     
     let duplicate = EquipDB.findOne({equip: eqname},{fields:{'_id':1}});
     const dupe = EquipDB.findOne({alias: alias},{fields:{'_id':1}});
@@ -19,6 +19,7 @@ Meteor.methods({
   			updatedWho: Meteor.userId(),
   			online: true,
         instruct: instruct,
+        library: library,
         stewards: [],
         service: []
       });
@@ -28,7 +29,7 @@ Meteor.methods({
     }
   },
 
-  editEquipment(eqId, newEqname, newAlias, brKey, instruct) {
+  editEquipment(eqId, newEqname, newAlias, brKey, instruct, library) {
     const doc = EquipDB.findOne({_id: eqId},{fields:{'equip':1,'alias':1}});
     
     let duplicate = EquipDB.findOne({equip: newEqname},{fields:{'_id':1}});
@@ -49,7 +50,8 @@ Meteor.methods({
           branchKey: setBr,
           updatedAt: new Date(),
   			  updatedWho: Meteor.userId(),
-  			  instruct: instruct
+  			  instruct: instruct,
+  			  library: library
         }});
       return true;
     }else{
@@ -59,14 +61,48 @@ Meteor.methods({
   
   onofflineEquipment(eqId, line) {
     const auth = Roles.userIsInRole(Meteor.userId(), ['equipSuper','edit']);
+    const accessKey = Meteor.user().orgKey;
     
     if(auth) {
-      EquipDB.update({_id: eqId, orgKey: Meteor.user().orgKey}, {
+      EquipDB.update({_id: eqId, orgKey: accessKey}, {
         $set : {
           updatedAt: new Date(),
   			  updatedWho: Meteor.userId(),
   			  online: line
         }});
+      const eq = EquipDB.findOne({_id: eqId, orgKey: accessKey});
+      for(let sv of eq.service) {
+        Meteor.defer( ()=>{
+          Meteor.call('pmUpdate', eqId, sv.serveKey, accessKey);
+        });
+      }
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  hibernateEquipment(eqId, hibernate) {
+    const auth = Roles.userIsInRole(Meteor.userId(), ['equipSuper','edit']);
+    const accessKey = Meteor.user().orgKey;
+    
+    if(auth) {
+      EquipDB.update({_id: eqId, orgKey: accessKey}, {
+        $set : {
+          updatedAt: new Date(),
+  			  updatedWho: Meteor.userId(),
+  			  hibernate: hibernate
+        }});
+      if(hibernate === true) {
+        MaintainDB.remove({equipId: eqId, status: false});
+      }else{
+        const eq = EquipDB.findOne({_id: eqId, orgKey: accessKey});
+        for(let sv of eq.service) {
+          Meteor.defer( ()=>{
+            Meteor.call('pmUpdate', eqId, sv.serveKey, accessKey);
+          });
+        }
+      }
       return true;
     }else{
       return false;

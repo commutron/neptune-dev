@@ -213,6 +213,7 @@
   text-overflow: ellipsis;
   word-break: break-word;
   font-size: calc(1.75 * var(--vh));
+  max-width: 35vmin;
 }
 .downRowFixed > div:last-child {
   border-right: 1px outset rgba(255,255,255,0.3);

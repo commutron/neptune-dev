@@ -47,11 +47,11 @@ const TimeStop = ({ tIdKey, timeOpen, etPro, etMlt, lockTaskSet })=> {
     
     if(etPro) {
       Meteor.apply('stopTideTask', [ tIdKey ], 
-        {wait: true, noRetry: false},
+        {wait: true},
         (err, re)=> replyCallback(err, re) );
     }else {
       Meteor.apply('stopTimeSpan', [ tIdKey ], 
-        {wait: true, noRetry: false},
+        {wait: true},
         (err, re)=> replyCallback(err, re) );
     }
   }

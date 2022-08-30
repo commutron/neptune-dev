@@ -10,7 +10,7 @@ class Pref {
     
     this.InitialAppSetup = false;
     
-    this.neptuneVersion = '3.12.2';
+    this.neptuneVersion = '3.12.3';
     this.neptuneIs = 'Neptune Process Tracking';
 
     this.prefName = 'default';
@@ -222,9 +222,11 @@ class Pref {
     // PM
     this.maintain = 'maintenance';
     this.premaintain = 'preventive maintenance';
+    this.fixmaintain = 'repair maintenance';
     this.equip = 'equipment';
     this.steward = 'assignee';
     this.estop = 'breakdown';
+    this.eqhib = 'Disconnected';
   }
 }
 

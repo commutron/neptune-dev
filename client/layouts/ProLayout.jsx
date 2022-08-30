@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect, useMemo, Fragment } from 'react';
+import React, { useState, useEffect, useLayoutEffect, Fragment } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { ToastContainer } from 'react-toastify';
 
@@ -6,6 +6,7 @@ import { ScanListenerUtility, ScanListenerOff } from '/client/utility/ScanListen
 
 import HomeIcon from './HomeIcon';
 import FindBox from './FindBox';
+import EquipMenu from '/client/views/production/lists/EquipMenu';
 
 import TideMulti from '/client/components/tide/TideControl/TideMulti';
 import TimeStop from '/client/components/tide/TimeStop';
@@ -19,7 +20,7 @@ export const ProWrap = ({
   widgetData, radioactive, groupAlias, 
   user, time, users, app, 
   brancheS, plainBatchS, canMulti,
-  eqAlias, maintId,
+  eqAlias, equipId, maintId,
   action, tideLockOut, standAlone, defaultWide,
   children
 })=> {
@@ -113,7 +114,9 @@ export const ProWrap = ({
                     (bData?.tide || []).find( x => x.tKey === etKey && x.who === Meteor.userId() ) 
                    : etMlt ?
                     (bData?.tide || []).find( x => ( x.tKey === etKey[0] || x.tKey === etKey[1] ) && x.who === Meteor.userId() ) 
-                   : time?._id === etKey && time?.link === maintId ? time : null;
+                   : time?._id === etKey &&
+                    (time?.link === maintId || time?.link === equipId) ? 
+                    time : null;
 
   const exploreLink = itemSerial && bData ?
                       '/data/batch?request=' + bData.batch + '&specify=' + itemSerial :
@@ -237,7 +240,7 @@ export const ProWrap = ({
 };
 
 
-export const ProWindow = ({ brancheS, plainBatchS, canMulti, user, children })=> {
+export const ProWindow = ({ brancheS, plainBatchS, allEquip, canMulti, user, children })=> {
   
   useEffect( ()=> {
     if(Meteor.user()) {
@@ -275,6 +278,11 @@ export const ProWindow = ({ brancheS, plainBatchS, canMulti, user, children })=>
           plainBatchS={plainBatchS}
         />
       : null}
+      <EquipMenu
+        user={user}
+        brancheS={brancheS}
+        allEquip={allEquip}
+      />
     </section>
   );
 };

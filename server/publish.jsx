@@ -347,7 +347,7 @@ Meteor.publish('shaddowData', function(){
         },
         sort: {batch:-1}
       }),
-      EquipDB.find({orgKey: orgKey, online: true}, {
+      EquipDB.find({orgKey: orgKey, hibernate: { $ne: true }}, {
         fields: {
           'alias': 1,
           'branchKey': 1
@@ -408,9 +408,11 @@ Meteor.publish('thinData', function(){
           'completedAt': 1,
         }}),
         
-      EquipDB.find({orgKey: orgKey, online: true}, {
+      EquipDB.find({orgKey: orgKey}, {
         fields: {
-          'alias': 1
+          'alias': 1,
+          'hibernate': 1,
+          'branchKey': 1
       }}),
       MaintainDB.find({orgKey: orgKey,
                       open: { $lte: new Date() },
@@ -418,7 +420,8 @@ Meteor.publish('thinData', function(){
       }, {
         fields: {
           'equipId': 1,
-          'name': 1
+          'name': 1,
+          'status': 1
       }})
     ];
   }
@@ -476,7 +479,24 @@ Meteor.publish('hotDataPlus', function(scanOrb, keyMatch){
   }
 });
 
-Meteor.publish('hotMaint', function(hotMaintId) {
+Meteor.publish('hotProEquip', function(hotEquipId) {
+  const user = Meteor.users.findOne({_id: this.userId});
+  const orgKey = user ? user.orgKey : false;
+
+  if(!this.userId) {
+    return this.ready();
+  }else{
+    return [
+      EquipDB.find({_id: hotEquipId, orgKey: orgKey}, {
+        fields: {
+          'orgKey': 0,
+          'stewards': 0
+        }})
+    ];
+  }
+});
+
+Meteor.publish('hotProMaint', function(hotMaintId) {
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
   const mtData = MaintainDB.findOne({_id: hotMaintId},{ fields:{'equipId':1}});
@@ -671,6 +691,7 @@ Meteor.publish('thinEquip', function(){
       EquipDB.find({orgKey: orgKey}, {
         fields: {
           'alias': 1,
+          'hibernate': 1,
           'online': 1
       }}),
       MaintainDB.find({orgKey: orgKey, status: false,

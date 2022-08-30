@@ -12,7 +12,7 @@ const ModelNative = ({ dialogId, title, icon, colorT, dark, children })=> {
       id={dialogId}
       className={`forceScrollStyle ${dark ? 'darkTheme' : ''}`}
     >
-      <div className='split vmarginhalf bottomLine medBig bold cap'>
+      <div className='stick split vspacehalf bottomLine medBig bold cap'>
         <span className='beside gapR'>
           <i className={`${icon} fa-fw fa-lg gapR ${colorT}`}></i>
           <i className='breath'></i>

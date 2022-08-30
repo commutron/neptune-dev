@@ -41,7 +41,7 @@ const GroupTops = ({ groupId, alias, app })=> {
     <n-fa3><i className='fas fa-minus'></i></n-fa3>;
         
   return(
-    <div className='balancer' title={title}>
+    <div className='balancer vmarginhalf' title={title}>
       
       <NumStatRing
         total={total !== false ? `${total}%` :

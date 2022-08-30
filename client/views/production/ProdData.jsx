@@ -90,6 +90,7 @@ export default withTracker( () => {
   
   let keyMatch = false;
   let subBatch = false;
+  let subEquip = false;
   let subMaint = false;
   
   if( coldSub && !subBatch ) {
@@ -119,6 +120,8 @@ export default withTracker( () => {
       }else{
         subBatch = orb;
       }
+    }else if(orb?.startsWith('EqFx')) {
+      subEquip = eqS;
     }else if(orb?.startsWith('Eq')) {
       subMaint = eqS;
     }else{
@@ -126,7 +129,8 @@ export default withTracker( () => {
     }
   }
 
-  const hotSub = subMaint ? Meteor.subscribe('hotMaint', subMaint) :
+  const hotSub = subEquip ? Meteor.subscribe('hotProEquip', subEquip) :
+                 subMaint ? Meteor.subscribe('hotProMaint', subMaint) :
                   Meteor.subscribe('hotDataPlus', subBatch, keyMatch);
 
   if( !login ) {

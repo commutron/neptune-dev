@@ -8,6 +8,7 @@ import Spin from '/client/components/tinyUi/Spin';
 import CreateTag from '/client/components/tinyUi/CreateTag';
 import EquipForm from '/client/components/forms/Equip/EquipForm';
 import EquipOnline from '/client/components/forms/Equip/EquipOnline';
+import EquipHibernate from '/client/components/forms/Equip/EquipHibernate';
 import EquipEmails from '/client/components/forms/Equip/EquipEmails';
 import EquipRemove from '/client/components/forms/Equip/EquipRemove';
 import ServeForm from '/client/components/forms/Equip/ServeForm';
@@ -16,9 +17,16 @@ import TasksForm from '/client/components/forms/Equip/TasksForm';
 
 import MainHistory from './MainHistory';
 
-const EquipSlide = ({ equipData, maintainData, app, users, isDebug, brancheS })=>{
+const EquipSlide = ({ 
+  equipData, maintainData, 
+  app, users, isDebug, brancheS
+})=> {
   
   const eq = equipData;
+  
+  const nowD = new Date();
+  
+  const shrtI = eq.instruct && eq.instruct.indexOf('http') === -1;
   
   const weekday = {
     0: 'sunday',
@@ -60,10 +68,6 @@ const EquipSlide = ({ equipData, maintainData, app, users, isDebug, brancheS })=
     endOf: 'end'
   };
   
-  const nowD = new Date();
-  
-  const shrtI = eq.instruct && eq.instruct.indexOf('http') === -1;
-  
   return(
     <div className='section overscroll' key={eq.alias}>
       
@@ -76,13 +80,21 @@ const EquipSlide = ({ equipData, maintainData, app, users, isDebug, brancheS })=
       <div className='wide rowWrapR'>
       
         <div className='centreRow'>
-          <EquipOnline
+          {!eq.hibernate &&
+            <EquipOnline
+              id={eq._id}
+              equip={eq.alias}
+              online={eq.online}
+            />
+          }
+          
+          <EquipHibernate
             id={eq._id}
             equip={eq.alias}
-            online={eq.online}
+            connect={!eq.hibernate}
           />
           
-          <h3 className='spacehalf gapL'
+          <h3 className='spacehalf gapL cap'
           >{!eq.branchKey ? 'other/no branch' : 
             brancheS.find( b => b.brKey === eq.branchKey).branch}
           </h3>
@@ -97,17 +109,18 @@ const EquipSlide = ({ equipData, maintainData, app, users, isDebug, brancheS })=
             alias={eq.alias}
             brKey={eq.branchKey}
             wiki={eq.instruct}
+            lib={eq.library}
             rootURL={app.instruct}
             brancheS={brancheS}
             noText={false}
             primeTopRight={false}
-            lockOut={!eq.online}
+            lockOut={eq.hibernate}
           />
           
           <ServeForm
             id={eq._id}
             service={false}
-            lockOut={!eq.online}
+            lockOut={eq.hibernate}
           />
           
           <EquipEmails
@@ -126,13 +139,28 @@ const EquipSlide = ({ equipData, maintainData, app, users, isDebug, brancheS })=
         
       </div>
       
+      {eq.hibernate ?
+        <p className='bold vspacehalf max875'>Disconnected equipment is unavailable, in storage, undergoing repairs, or similar, so maintenance will not be scheduled.</p>
+      : !eq.online && !eq.hibernate ?
+        <p className='bold vspacehalf max875'>Offline equipment is temporarily not in use, so frequent daily and weekly maintenance will default to 'not required'.<br/ >Less frequent monthly and yearly maintenance will still be required by default.</p>
+      : null}
+      
       <p className='w100 vmarginhalf capFL wordBr'>
-        {Pref.instruct} Index: {shrtI ? app.instruct : null}
+        {Pref.premaintain} {Pref.instruct}: {shrtI ? app.instruct : null}
         <a 
           className='clean wordBr' 
           href={shrtI ? app.instruct + eq.instruct : eq.instruct} 
           target='_blank'
         >{eq.instruct}</a>
+      </p>
+      
+      <p className='w100 vmarginhalf capFL wordBr'>
+        {Pref.equip} repair documents: {shrtI ? app.instruct : null}
+        <a 
+          className='clean wordBr' 
+          href={shrtI ? app.instruct + eq.library : eq.library} 
+          target='_blank'
+        >{eq.library}</a>
       </p>
       
       <dl className='vmarginhalf'>
@@ -165,18 +193,18 @@ const EquipSlide = ({ equipData, maintainData, app, users, isDebug, brancheS })=
                 serveKey={sv.serveKey}
                 name={sv.name}
                 tasks={sv.tasks}
-                lockOut={!eq.online}
+                lockOut={eq.hibernate}
               />
               <ServeForm
                 id={eq._id}
                 service={sv}
-                lockOut={!eq.online}
+                lockOut={eq.hibernate}
                 servicing={sving}
               />
               <ServeRemove
                 id={eq._id}
                 serveKey={sv.serveKey}
-                lockOut={!eq.online}
+                lockOut={eq.hibernate}
                 name={sv.name}
                 opendates={maintainData.filter( m => m.serveKey === sv.serveKey && m.status === false )}
               />
@@ -194,10 +222,10 @@ const EquipSlide = ({ equipData, maintainData, app, users, isDebug, brancheS })=
             <p>Workdays To Complete: <n-num>{sv.period}</n-num></p>
             <p>Workdays Late Grace: <n-num>{sv.grace}</n-num></p>
             
-            <dl className='overscroll'>
+            <dl className='overscroll max500'>
               <dt className='vmarginquarter'>Checklist:</dt>
               {sv.tasks.map( (entry, index)=>( 
-                <dd key={index} className='line2x cap'>☑ {entry}</dd>
+                <dd key={index} className='line15x cap'>☑ {entry}</dd>
               ))}
             </dl>
           </div>

@@ -8,7 +8,8 @@ const EquipCard = ({ equipData, maintainData })=> {
     return({
       title: (equip?.alias || '') + '-' + m.name,
       find: 'Eq-' + (equip?.alias || '') +' ~ '+ m.name,
-      mId: m._id
+      mId: m._id,
+      flg: m.status
     });
   }, [])
   .sort( (e1, e2)=> e1.title > e2.title ? 1 : e1.title < e2.title ? -1 : 0);
@@ -17,14 +18,19 @@ const EquipCard = ({ equipData, maintainData })=> {
     <div className='centre pop vmargin space min200 max600 midnightGlow'>
       <p className='med wide bottomLine cap'>{Pref.equip} {Pref.premaintain}</p>
       <div className='rowWrap vmarginhalf'>
-      {sorts.map( (m, ix)=> (
-        <button 
-          key={ix}
-          className='action whiteSolid margin5 letterSpaced spacehalf'
-          onClick={()=>{Session.set('now', m.find);Session.set('nowSV', m.mId)}}
-        >{m.title}</button>
-    ))}
-    </div>
+        {sorts.map( (m, ix)=> (
+          <button 
+            key={ix}
+            className='action whiteSolid margin5 letterSpaced spacehalf'
+            onClick={()=>{Session.set('now', m.find);Session.set('nowSV', m.mId)}}
+          >{m.flg === 'notrequired' ?
+            <n-fa2><i className='fa-solid fa-ban fa-lg fa-fw orangeT gapR'></i></n-fa2>
+          : m.flg === 'complete' ?
+            <n-fa1><i className='fa-solid fa-clipboard-check fa-lg fa-fw greenT gapR'></i></n-fa1>
+          : <n-fa0><i className='fa-regular fa-clipboard fa-lg fa-fw grayT gapR'></i></n-fa0>
+          }{m.title}</button>
+        ))}
+      </div>
    </div>
   );
 };

@@ -76,7 +76,7 @@ n-tide-task label {
   background-color: rgb(25,25,25);
 }
 
-.tideIn, .tideOut, .tideFlip, .tideMulti, .tideLock {
+.tideIn, .tideOut, .tideFlip, .tideMulti, .tideFix, .tideLock {
   width: 100%;
   height: 100%;
   cursor: pointer;
@@ -109,13 +109,6 @@ n-tide-task label {
   cursor: not-allowed;
 }
 
-.startWork, .tideIn:hover,
-.tideOut:hover,
-.tideFlip:hover,
-.tideMulti:hover {
-  color: rgb(25,25,25);
-}
-
 .tideIn .tideIndicate { color: var(--pomegranate); }
 .startWork, .tideIn:hover {
   background-color: var(--emerald);
@@ -136,18 +129,25 @@ n-tide-task label {
   background-color: var(--turquoise);
 }
 
-.startWork .tideIndicate,
-.tideIn:hover .tideIndicate,
-.tideOut:hover .tideIndicate,
-.tideFlip:hover .tideIndicate,
-.tideMulti:hover .tideIndicate { 
+.tideFix .tideIndicate { color: var(--midnightblue); }
+.tideFix:hover {
+  background-color: var(--midnightblue);
+}
+
+.startWork, .startWork .tideIndicate,
+.tideIn:hover, .tideIn:hover .tideIndicate,
+.tideOut:hover, .tideOut:hover .tideIndicate,
+.tideFlip:hover, .tideFlip:hover .tideIndicate,
+.tideMulti:hover, .tideMulti:hover .tideIndicate,
+.tideFix:hover , .tideFix:hover .tideIndicate { 
   color: rgb(25,25,25);
 }
 
 .tideIn:active .tideIndicate,
 .tideOut:active .tideIndicate,
 .tideFlip:active .tideIndicate,
-.tideMulti:active .tideIndicate{
+.tideMulti:active .tideIndicate,
+.tideFix:active .tideIndicate {
   animation-name: hvr-buzz-out;
   animation-duration: 1s;
   animation-timing-function: ease-out;
@@ -157,7 +157,8 @@ n-tide-task label {
 .tideIn:disabled .tideIndicate,
 .tideOut:disabled .tideIndicate,
 .tideFlip:disabled .tideIndicate,
-.tideMulti:disabled .tideIndicate{
+.tideMulti:disabled .tideIndicate, 
+.tideFix:disabled .tideIndicate {
   animation-name: hvr-buzz-out;
   animation-duration: 2s;
   animation-timing-function: ease-out;
@@ -168,14 +169,16 @@ n-tide-task label {
   .tideIn:active .tideIndicate,
   .tideOut:active .tideIndicate,
   .tideFlip:active .tideIndicate,
-  .tideMulti:active .tideIndicate {
+  .tideMulti:active .tideIndicate,
+  .tideFix:active .tideIndicate {
     animation-name: hvr-buzz-out;
     animation-duration: 3s;
   }
   .tideIn:disabled .tideIndicate,
   .tideOut:disabled .tideIndicate,
   .tideFlip:disabled .tideIndicate,
-  .tideMulti:disabled .tideIndicate {
+  .tideMulti:disabled .tideIndicate,
+  .tideFix:disabled .tideIndicate {
     animation-name: hvr-buzz-out;
     animation-duration: 6s;
   }

@@ -20,7 +20,7 @@ const MainDetail = ({ dialogId, title, mData })=> (
       icon='fa-regular fa-rectangle-list'
       colorT='midnightblueT'
     >
-      <div className='space'>
+      <div className='space max875'>
         <div className='leftText overscroll'>
           <p>Done: {mData.status === 'incomplete' ?
                     <strong>Incomplete</strong> :
@@ -42,7 +42,7 @@ const MainDetail = ({ dialogId, title, mData })=> (
           <tbody>
             {mData.checklist.map( (c, ix)=> (
               <tr key={ix}>
-                <td>{c.task}</td>
+                <td className='max500'>{c.task}</td>
                 <td>{moment(c.time).format('dddd MMMM D h:mm A')}</td>
                 <td>{UserName(c.who)}</td>
               </tr>

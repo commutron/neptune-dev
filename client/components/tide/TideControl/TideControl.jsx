@@ -58,7 +58,7 @@ const TideControl = ({
     let newRndm = actionID;
     Meteor.setTimeout( ()=>{
       Meteor.apply('startTideTask', [ batchID, newRndm, taskState, subtState ],
-      {wait: true, noRetry: false },
+      {wait: true},
       (error, reply)=> replyCallback(error, reply) );
     }, 1000);
   }
@@ -70,7 +70,7 @@ const TideControl = ({
     let newRndm = actionID;
     Meteor.setTimeout( ()=>{
       Meteor.apply('switchTideTask', [ tideKey, engagedPro, batchID, newRndm, taskState, subtState ],
-      {wait: true, noRetry: false },
+      {wait: true},
       (error, reply)=> replyCallback(error, reply) );
     }, 1000);
   }

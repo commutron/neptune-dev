@@ -58,7 +58,7 @@ const TimeControl = ({
 
     Meteor.setTimeout( ()=>{
       Meteor.apply('startTimeSpan', [ type, link, project, taskState, subtState ],
-      {wait: true, noRetry: false},
+      {wait: true},
       (error, re)=> replyCallback(error, re) );
     }, 500);
   }
@@ -70,7 +70,7 @@ const TimeControl = ({
     
     Meteor.setTimeout( ()=>{
       Meteor.apply('switchTimeSpan', [ timeId, engagedPro, type, link, project, taskState, subtState ],
-      {wait: true, noRetry: false},
+      {wait: true},
       (error, re)=> replyCallback(error, re) );
     }, 500);
   }

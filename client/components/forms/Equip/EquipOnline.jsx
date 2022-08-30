@@ -25,7 +25,7 @@ const EquipOnline = ({ id, equip, online })=> {
         title={`Currently Online\nChange to Offline`}
         onClick={()=>handle(false)}
         disabled={!auth}
-      ><n-fa1><i className='fa-solid fa-plug-circle-bolt greenT fa-2x fa-fw'></i></n-fa1>
+      ><n-fa1><i className='fa-solid fa-rss greenT fa-2x fa-fw' data-fa-transform="rotate-315 up-2"></i></n-fa1>
       <br /><small>Online</small>
       </button>
     );
@@ -37,7 +37,7 @@ const EquipOnline = ({ id, equip, online })=> {
       title={`Currently Offline\nChange to Online`}
       onClick={()=>handle(true)}
       disabled={!auth}
-    ><n-fa0><i className='fa-solid fa-plug-circle-xmark wetasphaltT fa-2x fa-fw'></i></n-fa0>
+    ><n-fa0><i className='fa-solid fa-circle wetasphaltT fa-2x fa-fw' data-fa-transform="shrink-10 down-5"></i></n-fa0>
     <br /><small>Offline</small>
     </button>
   );

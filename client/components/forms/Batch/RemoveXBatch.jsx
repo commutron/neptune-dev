@@ -146,7 +146,7 @@ const RemoveXBatch = ({ batchData, seriesData, checkStr })=> {
           <input
             id='orgPINitem'
             autoComplete="false"
-            className='noCopy miniIn12 interSelect centreText gap redIn'
+            className='noCopy miniIn12 interSelect centreText gap redT'
             pattern='[\d\d\d\d]*'
             maxLength='4'
             minLength='4'
@@ -168,7 +168,7 @@ const RemoveXBatch = ({ batchData, seriesData, checkStr })=> {
           <input
             id='orgPINprob'
             autoComplete="false"
-            className='noCopy miniIn12 interSelect centreText gap redIn'
+            className='noCopy miniIn12 interSelect centreText gap redT'
             pattern='[\d\d\d\d]*'
             maxLength='4'
             minLength='4'
@@ -190,7 +190,7 @@ const RemoveXBatch = ({ batchData, seriesData, checkStr })=> {
           <input
             id='orgPINfall'
             autoComplete="false"
-            className='noCopy miniIn12 interSelect centreText gap redIn'
+            className='noCopy miniIn12 interSelect centreText gap redT'
             pattern='[\d\d\d\d]*'
             maxLength='4'
             minLength='4'
@@ -212,7 +212,7 @@ const RemoveXBatch = ({ batchData, seriesData, checkStr })=> {
           <input
             id='orgPINtime'
             autoComplete="false"
-            className='noCopy miniIn12 interSelect centreText gap redIn'
+            className='noCopy miniIn12 interSelect centreText gap redT'
             pattern='[\d\d\d\d]*'
             maxLength='4'
             minLength='4'

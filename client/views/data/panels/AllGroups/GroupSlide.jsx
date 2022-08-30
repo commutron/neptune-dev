@@ -32,6 +32,14 @@ const GroupSlide = ({ groupData, widgetsList, batchDataX, app, inter, isERun })=
   const active = groupActiveWidgets(g._id, widgetsList, batchDataX);
   const shrtI = g.wiki && !g.wiki.includes('http');
   
+  const mockTag = {
+    padding: '3px 7px 3px 5px',
+    borderRadius: '1px 25px 25px 1px',
+    backgroundColor: 'var(--nephritis)',
+    fontSize: '0.9rem',
+    color: 'white'
+  };
+  
   return(
     <div className='section centre overscroll' key={g.alias}>
       
@@ -115,7 +123,15 @@ const GroupSlide = ({ groupData, widgetsList, batchDataX, app, inter, isERun })=
         
       </div>
       
-      <p className='w100 capFL vmargin indenText wordBr'>
+      {!groupData.emailOptIn &&
+        <p className='w100 indenText'>
+        <span style={mockTag}>
+          <i className="fa-solid fa-envelope-circle-check fa-lg gapR"></i>Automated Emails Enabled
+        </span>
+        </p>
+      }
+      
+      <p className='w100 capFL indenText wordBr'>
         {Pref.instruct} Index: {shrtI ? app.instruct : null
         }<a className='clean wordBr' href={shrtI ? app.instruct + g.wiki : g.wiki} target='_blank'>{g.wiki}</a>
       </p>

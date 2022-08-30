@@ -817,7 +817,7 @@ n-trib-action-all {
   margin: 0;
   cursor: pointer;
 }
-.checkboxList > label:where(:hover,:focus-visible) {
+.checkboxList > label:where(:hover,:focus-visible,:disabled) {
   background-color: var(--wetasphalttrans);
 }
 .checkboxList > label:active {

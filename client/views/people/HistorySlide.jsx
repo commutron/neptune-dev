@@ -110,12 +110,14 @@ const HistorySlide = ({ app, user, users, traceDT, isDebug })=> {
           {dayData.map( (blk, index)=>{
             const keyword = blk.batch;
             const project = blk.project;
-            const equip = project?.split(" ~ ")?.[0]?.substring(3);
+            const equip = project?.split(" ~ ")?.[0]?.split("-")[1];
             const maint = blk.type === 'MAINT';
+            const eqfix = blk.type === 'EQFX';
             
             const moreInfo = maint ? false : traceDT?.find( x => x.batch === blk.batch);
-            const what = maint ? (project?.split(" ~ ")?.[1]?.split("<*>")?.[0] || 'Scheduled')
-                          + ' Service' : moreInfo?.isWhat.join(' ') || 'unavailable';
+            const what = eqfix ? '' :
+                    maint ? (project?.split(" ~ ")?.[1]?.split("<*>")?.[0] || 'Scheduled')
+                            + ' Service' : moreInfo?.isWhat.join(' ') || 'unavailable';
             const rad = maint ? null : moreInfo?.rad || null;
             
             const lastStart = dayData[index-1] && dayData[index-1].startTime;
@@ -201,7 +203,7 @@ const TideTaskCols = ({ tide, traceDT })=> {
   const batchList = [...new Set( Array.from(tide, x => x.batch ) )].filter(f=>f)
                       .sort((b1, b2)=> b1 > b2 ? 1 : b1 < b2 ? -1 : 0 );
                       
-  const maintList = [...new Set( Array.from(tide, x => x.project?.split(" ~ ")?.[0]?.substring(3) ) )].filter(f=>f)
+  const maintList = [...new Set( Array.from(tide, x => x.project?.split(" ~ ")?.[0]?.split("-")[1] ) )].filter(f=>f)
                       .sort((b1, b2)=> b1 > b2 ? 1 : b1 < b2 ? -1 : 0 );
                       
   const taskList = [...new Set( Array.from(tide, x => x.task ) )]

@@ -61,8 +61,7 @@ const futureService = (sv, startDate, endDate)=> {
     const open = moment( calcOpen( close, sv.period ) );
 
     if( ( close.isBetween(startDate, endDate, undefined, '[]') ||
-          open.isBetween(startDate, endDate, undefined, '[]') ) //&&
-          //close.isSameOrAfter(new Date(), 'day')
+          open.isBetween(startDate, endDate, undefined, '[]') )
     ) {
       if(evArr.length === 0 || !close.isSame( evArr[evArr.length-1][1], 'day' ) ) {
         evArr.push([
@@ -79,7 +78,18 @@ const futureService = (sv, startDate, endDate)=> {
   }
 };
 
-  
+const doneCheck = (mn)=> {
+  const eq = EquipDB.findOne({_id: mn.equipId},{fields:{'service':1}});
+  const sv = eq.service.find( s => s.serveKey === mn.serveKey );
+    
+  const all = sv.tasks.every( t => mn.checklist.find( c => c.task === t ) );
+  if(all){
+    return true;
+  }else{
+    return false;
+  }
+};
+
 Meteor.methods({
   
   serveActive(mtId) {
@@ -162,7 +172,7 @@ Meteor.methods({
   pmUpdate(eqId, serveKey, accessKey) {
     syncLocale(accessKey);
     
-    const eq = EquipDB.findOne({_id: eqId, online: true},{fields:{'service':1}});
+    const eq = EquipDB.findOne({_id: eqId, hibernate: { $ne: true } },{fields:{'online':1,'service':1}});
     const sv = eq?.service.find( s => s.serveKey === serveKey );
     
     if(eq && sv) {
@@ -175,8 +185,10 @@ Meteor.methods({
       const expire = calcExpire( close, sv.grace );
       
       const match = MaintainDB.findOne({equipId: eq._id, serveKey: sv.serveKey, expire: { $gt: new Date() }},
-                                       {fields:{'checklist':1, 'notes':1}});
-          
+                                       {fields:{'_id':1}});
+      
+      const req = !eq.online && ( sv.timeSpan === 'day' || sv.timeSpan === 'week' ) ? 'notrequired' : false;
+      
       if(!match) {
         MaintainDB.insert({
           equipId: eq._id,
@@ -186,25 +198,23 @@ Meteor.methods({
           open: new Date( open ),
           close: new Date( close.format() ),
           expire: new Date( expire ),
-          status: false, // complete, notrequired, incomplete, missed
+          status: req, // complete, notrequired, incomplete, missed
           doneAt: false,
           checklist: [],
           notes: ''
         });
       }else{
-        MaintainDB.update({_id: match._id, status: false, close: { $gt: new Date() }},{
+        MaintainDB.update({_id: match._id, 
+          $or: [ 
+            { status: false },
+            { status: 'notrequired' }
+          ], close: { $gt: new Date() }},{
           $set: {
-            equipId: eq._id,
-            serveKey: sv.serveKey,
-            orgKey: accessKey,
             name: sv.name,
             open: new Date( open ),
             close: new Date( close.format() ),
             expire: new Date( expire ),
-            status: false, // complete, notrequired, incomplete, missed
-            doneAt: false,
-            checklist: match?.checklist || [],
-            notes: match?.notes || ''
+            status: req
           }
         });
       }
@@ -223,7 +233,8 @@ Meteor.methods({
             
             const maint = MaintainDB.find({status: false},
                             { fields: {
-                              'equipId':1, 'name':1,
+                              'equipId':1, 'serveKey': 1,
+                              'name':1,
                               'close':1, 'expire':1,
                               'checklist':1
                             }}
@@ -231,23 +242,32 @@ Meteor.methods({
 
             for(const mn of maint) {
               if( now.isAfter(mn.expire) ) {
-                const ng = mn.checklist.length > 0 ? 'incomplete' : 'missed';
-                
-                MaintainDB.update({_id: mn._id},{
-                  $set: {
-                    status: ng
-                  }
-                });
-              
-                Meteor.defer( ()=>{
-                  const equip = EquipDB.findOne({_id: mn.equipId},{fields:{'equip':1}});
-                  const titl = equip?.equip || "";
-                  const users = Meteor.users.find({ roles: { $in: ["equipSuper"] } });
-                  const supr = Array.from(users, u => u._id);
+                if( mn.checklist.length > 0 && doneCheck(mn) ) {
+                  MaintainDB.update({_id: mn._id},{
+                    $set: {
+                      status: 'complete',
+                      doneAt: new Date( mn.checklist[mn.checklist.length-1].time )
+                    }
+                  });
+                }else{
+                  const ng = mn.checklist.length > 0 ? 'incomplete' : 'missed';
                   
-                  Meteor.call('handleInternalMaintEmail', 
-                    orgKey, supr, titl, mn.name, "grace period");
-                });
+                  MaintainDB.update({_id: mn._id},{
+                    $set: {
+                      status: ng
+                    }
+                  });
+              
+                  Meteor.defer( ()=>{
+                    const equip = EquipDB.findOne({_id: mn.equipId},{fields:{'equip':1}});
+                    const titl = equip?.equip || "";
+                    const users = Meteor.users.find({ roles: { $in: ["equipSuper"] } });
+                    const supr = Array.from(users, u => u._id);
+                    
+                    Meteor.call('handleInternalMaintEmail', 
+                      orgKey, supr, titl, mn.name, "grace period");
+                  });
+                }
               }else if( now.isSame(moment(mn.close).add(1, 'days'), 'day') ) {
                 Meteor.defer( ()=>{
                   const equip = EquipDB.findOne({_id: mn.equipId},{fields:{'equip':1,'stewards':1}});
@@ -266,13 +286,15 @@ Meteor.methods({
       };
       
       const updateDates = ()=> {
-        EquipDB.find({online: true},{fields:{'service':1}})
+        EquipDB.find({hibernate: { $ne: true }},{fields:{'alias':1,'online':1,'service':1}})
         .forEach( (eq)=> {
+
           const maintEq = MaintainDB.find({equipId: eq._id, expire: { $gt: new Date() }},
-                          {fields:{'serveKey':1, 'checklist':1, 'notes':1}}).fetch();
+                          {fields:{'serveKey':1}}).fetch();
           
           for(const sv of eq.service) {
-            
+            const req = !eq.online && ( sv.timeSpan === 'day' || sv.timeSpan === 'week' ) ? 'notrequired' : false;
+      
             const next = nextService(sv);
             
             const nextMmnt = moment(next).tz(Config.clientTZ);
@@ -292,25 +314,22 @@ Meteor.methods({
                 open: new Date( open ),
                 close: new Date( close.format() ),
                 expire: new Date( expire ),
-                status: false, // complete, notrequired, incomplete, missed
+                status: req, // complete, notrequired, incomplete, missed
                 doneAt: false,
                 checklist: [],
                 notes: ''
               });
             }else{
-              MaintainDB.update({_id: match._id, status: false, close: { $gt: new Date() }},{
+              MaintainDB.update({_id: match._id, 
+                $or: [ 
+                  { status: false },
+                  { status: 'notrequired' }
+                ], close: { $gt: new Date() }},{
                 $set: {
-                  equipId: eq._id,
-                  serveKey: sv.serveKey,
-                  orgKey: orgKey,
                   name: sv.name,
                   open: new Date( open ),
                   close: new Date( close.format() ),
-                  expire: new Date( expire ),
-                  status: false, // complete, notrequired, incomplete, missed
-                  doneAt: false,
-                  checklist: match?.checklist || [],
-                  notes: match?.notes || ''
+                  expire: new Date( expire )
                 }
               });
             }
@@ -337,7 +356,7 @@ Meteor.methods({
     
     let futureEvents = [];
     
-    EquipDB.find({online: true},{fields:{'alias':1,'service':1}})
+    EquipDB.find({hibernate: { $ne: true}},{fields:{'alias':1,'service':1}})
       .forEach( (eq)=> {
         
         if(!incNext) {
@@ -374,7 +393,7 @@ Meteor.methods({
               pass: true
           	});
           });
-        }else{ // notrequired
+        }else{
       
           for(const sv of eq.service) {
               
@@ -428,6 +447,28 @@ Meteor.methods({
       });
       
       return futureEvents;
+  },
+  
+  REPAIRmaint() {
+    const maint = MaintainDB.find({status: 'incomplete'}).fetch();
+    
+    for( let m of maint ) {
+      const eq = EquipDB.findOne({_id: m.equipId},{fields:{'service':1}});
+      const sv = eq.service.find( s => s.serveKey === m.serveKey );
+      
+      const all = sv.tasks.every( t => m.checklist.find( c => c.task === t ) );
+      
+      if(all) {
+        const last = m.checklist[m.checklist.length-1].time;
+        
+        MaintainDB.update({_id: m._id},{
+          $set: {
+            status: 'complete',
+            doneAt: new Date(last)
+          }
+        });
+      }
+    }
   }
   
 });

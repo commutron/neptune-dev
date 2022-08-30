@@ -83,7 +83,7 @@ const RemoveItemForm = ({ batchId, batch, seriesId, serial, check, verify })=> {
             <input
               id='orgPINitem'
               autoComplete="false"
-              className='noCopy miniIn12 interSelect centreText gap redIn clearRed'
+              className='noCopy miniIn12 interSelect centreText gap redT'
               pattern='[\d\d\d\d]*'
               maxLength='4'
               minLength='4'

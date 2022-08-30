@@ -107,12 +107,14 @@ main {
   background-color: transparent;
   z-index: 7;
 }
-.stickInPlace {
+.stickInPlace, .stick {
   position: sticky;
   top: 0;
   left: 0;
   z-index: 2;
-  background-color: var(--clouds);
+  background-color: inherit;
+}
+.stickInPlace {
   box-shadow: 0 3px 6px var(--contrast);
 }
 

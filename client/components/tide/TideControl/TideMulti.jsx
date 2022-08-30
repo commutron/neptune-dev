@@ -91,7 +91,7 @@ const TideMultiCore = ({ user, brancheS, plainBatchS })=> {
 	  		batchStateOne, actionIDOne, taskStateOne, subtStateOne, 
 	  		batchStateTwo, actionIDTwo, taskStateTwo, subtStateTwo
 	    ],
-	    {wait: true, noRetry: false },
+	    {wait: true},
 	    (error, re)=> replyCallback(error, re) );
 
   	}else{
@@ -110,7 +110,7 @@ const TideMultiCore = ({ user, brancheS, plainBatchS })=> {
   		const tkeys = engNow.tKey;
   		
   		Meteor.apply('stopMultiTideTask', [ tkeys[0], tkeys[1] ],
-	    {wait: true, noRetry: false },
+	    {wait: true},
 	    (error, re)=> replyCallback(error, re) );
 	    
   	}else{
@@ -124,7 +124,7 @@ const TideMultiCore = ({ user, brancheS, plainBatchS })=> {
     dialog?.close();
   };
   
-  if(eng?.task === 'PROX' || eng?.task === 'MAINT') {
+  if( eng && eng.task !== 'MLTI' ) {
   	return(
   		<div className='min400 spacehalf vmargin centreText med'>
   			<p className='med'>Multiple {Pref.xBatch} mode is unavailable.</p>

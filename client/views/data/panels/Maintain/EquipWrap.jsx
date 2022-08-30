@@ -15,13 +15,14 @@ const EquipWrap = ({
                   e1.alias > e2.alias ? 1 : 0 );
         
   const menuList = equipS.map( (entry)=> {
-                    const clss = entry.online ? '' : 'strike darkgrayT';
-                    return [entry.alias, clss];
+                    const ttle = !entry.online && !entry.hibernate ? '・ ' + entry.alias : entry.alias;
+                    const clss = entry.hibernate ? 'strike darkgrayT' : '';
+                    return [ttle, clss];
                   });
   
   const defaultSlide = specify ? 
     equipS.findIndex( x => x.alias === specify ) : false;
-     
+  
   return(
     <SlidesNested
       menuTitle={Pref.equip}

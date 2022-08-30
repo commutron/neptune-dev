@@ -19,7 +19,7 @@ const TideBlockRow = ({
   
   const batch = tideObj.batch;
   const project = tideObj.project;
-  const equip = project?.split(" ~ ")?.[0]?.substring(3);
+  const equip = project?.split(" ~ ")?.[0]?.split("-")[1];
   
   const dbHome = project ? false : batch;            
   const tideKey = tideObj.tKey;
@@ -103,7 +103,7 @@ const TideBlockRow = ({
           brancheS={brancheS}
           editOn={editOn}
           splitOn={splitOn}
-          equipLock={tideObj.type === 'MAINT' ? true : false}
+          equipLock={tideObj.type === 'MAINT' || tideObj.type === 'EQFX'}
           tempTask={tempTask}
           setTempTask={setTempTask}
           tempSubT={tempSubT}

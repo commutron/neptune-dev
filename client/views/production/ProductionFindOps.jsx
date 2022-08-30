@@ -10,9 +10,9 @@ import SearchHelp from './SearchHelp';
 import XDoProCard from './cards/XDoProCard';
 import PartialCard from './cards/PartialCard';
 import EquipCard from './cards/EquipCard';
-import EStopCard from './cards/EStopCard';
+import EqAllCard from './cards/EqAllCard';
 import MultiCard from './cards/MultiCard';
-import ServiceCard from './cards/ServiceCard';
+import ServiceCard, { RepairCard } from './cards/ServiceCard';
 
 import BatchesList from './lists/BatchesList';
 import GroupsList from './lists/GroupsList';
@@ -59,6 +59,10 @@ const ProductionFindOps = ({
     return allVariant.find(x => x.versionKey === vKey);
   }
 
+  function equipDataById() {
+    return allEquip.find(x => x._id === eqS);
+  }
+  
   function maintDataById() {
     return allMaint.find(x => x._id === eqS);
   }
@@ -75,6 +79,7 @@ const ProductionFindOps = ({
         plainBatchS={plainBatchS}
         user={user}
         canMulti={canMulti}
+        allEquip={allEquip}
       >
         <QuickCards
           orbslice={orb}
@@ -220,6 +225,38 @@ const ProductionFindOps = ({
     }
   }
 
+// Equipment
+  if(orb?.startsWith('EqFx')) {
+    const eqData = equipDataById();
+    if(eqData) {
+      Session.set('nowBatch', false);
+      Session.set('nowInstruct', eqData?.library);
+      return (
+        <ProWrap
+          batchData={false}
+          itemData={false}
+          user={user}
+          time={time}
+          users={activeUsers}
+          app={app}
+          brancheS={brancheS}
+          plainBatchS={plainBatchS} 
+          canMulti={canMulti}
+          defaultWide={true}
+          eqAlias={eqData.alias}
+          equipId={eqData._id}
+        >
+          <RepairCard
+            eqData={eqData}
+            brancheS={brancheS}
+          />
+          <WikiOps 
+            root={app.instruct} 
+            anchor={anchor} />
+        </ProWrap>
+      );
+    }
+  }
 // Maintain
   if(orb?.startsWith('Eq')) {
     const maintData = maintDataById();
@@ -293,6 +330,7 @@ const ProductionFindOps = ({
         plainBatchS={plainBatchS} 
         user={user}
         canMulti={canMulti}
+        allEquip={allEquip}
       >
         <QuickCards
           orbslice={orb}
@@ -310,6 +348,7 @@ const ProductionFindOps = ({
 	  <ProWindow 
 	    brancheS={brancheS} 
 	    plainBatchS={plainBatchS}
+	    allEquip={allEquip}
 	    user={user}
 	    canMulti={canMulti}
 	   >
@@ -335,7 +374,7 @@ const QuickCards = ({ orbslice, canMulti, user, allEquip, allMaint })=> (
     {orbslice && <PartialCard orb={orbslice} /> }
     <QuickRecent user={user} />
     <EquipCard equipData={allEquip} maintainData={allMaint} />
-    <EStopCard />
+    <EqAllCard />
     {canMulti && <MultiCard />}
     <SearchHelp />
   </div>

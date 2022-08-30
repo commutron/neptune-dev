@@ -113,7 +113,7 @@ const PerformanceSlide = ({ app, user, users, traceDT, isDebug })=> {
                           .sort((t1, t2)=> t1 > t2 ? 1 : t1 < t2 ? -1 : 0 );
     setTaskList(unqTaskSclean);
     
-    const unqEquipS = [...new Set( Array.from(dayFiltered, x => x.project?.split(" ~ ")?.[0]?.substring(3) ) )]
+    const unqEquipS = [...new Set( Array.from(dayFiltered, x => x.project?.split(" ~ ")?.[0]?.split("-")[1] ) )]
                       .filter(f=>f)
                       .sort((b1, b2)=> b1 > b2 ? 1 : b1 < b2 ? -1 : 0 );
     setEquipList(unqEquipS);

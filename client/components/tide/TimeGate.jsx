@@ -35,17 +35,23 @@ const TimeGate = ({
       </n-big-tide-container>
       
       {!engagedMlti && !lockOut ?
-        <SmplTideTask
-          brancheS={brancheS}
-          lockTaskState={lockTaskState}
-          forceSelect={forceSelect}
-          taskState={taskState}
-          taskOptions={taskOptions}
-          taskSet={taskSet}
-          subtState={subtState}
-          subOptions={subOptions}
-          subtSet={subtSet}
-        />
+        forceSelect ? 
+          <PresetTimeTask
+            taskState={taskState}
+            subtState={subtState}
+          />
+        :
+          <SmplTideTask
+            brancheS={brancheS}
+            lockTaskState={lockTaskState}
+            forceSelect={forceSelect}
+            taskState={taskState}
+            taskOptions={taskOptions}
+            taskSet={taskSet}
+            subtState={subtState}
+            subOptions={subOptions}
+            subtSet={subtSet}
+          />
       : null}
     </div>
   );
@@ -53,6 +59,28 @@ const TimeGate = ({
 
 export default TimeGate;
 
+export const PresetTimeTask = ({ taskState, subtState })=> (
+  <n-tide-task>
+    <select
+      id='tskPreset'
+      className='cap'
+      value={taskState}
+      disabled={true}
+      required>
+      <option value={taskState} className='blackT nsty'>{taskState}</option>
+    </select>
+    <label htmlFor='tskSlct'>Set A Task</label>
+    <select
+      id='sbtskPreset'
+      className='cap'
+      value={subtState}
+      disabled={true}
+      required>
+      <option value={subtState} className='blackT nsty'>{subtState}</option>
+    </select>
+    <label htmlFor='sbtskSlct'>Sub-Task</label>
+  </n-tide-task>
+);
 
 const SmplTideTask = ({ 
   brancheS,
