@@ -31,6 +31,7 @@ export const RapidInfoCreate = ({
       rapidType, issueNum, doneTarget, quant, inHours, howURL,
       (error, re)=>{
         error && console.log(error);
+        console.log(re);
         re ? toast.success('Saved') : toast.error('unsuccessful');
       });
     cancelFunc();
@@ -77,7 +78,6 @@ const RapidInfoEdit = ({
       rapidType, issueNum, doneTarget, quant, inHours, howURL,
       (error, re)=>{
         error && console.log(error);
-        console.log(re);
         re ? toast.success('Saved') : toast.error('unsuccessful');
       });
       
