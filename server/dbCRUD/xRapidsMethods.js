@@ -8,8 +8,6 @@ function getNextRapidNumber(rapidType) {
     const r2n = parseInt( r2.rapid.substring(2), 10 );
     return( r1n > r2n ? -1 : r1n < r2n ? 1 : 0 );
   });
-  
-  console.log(rapidS);
     
   const next = rapidS.length === 0 ? 1 : 
                 parseInt( rapidS[0].rapid.substring(2), 10 ) + 1;
@@ -23,7 +21,7 @@ function getNextRapidNumber(rapidType) {
     
     console.log(nextRapid);
     
-    return nextRapid;
+    return rapidS;
   }else{ 
     return false;
   }
@@ -31,7 +29,7 @@ function getNextRapidNumber(rapidType) {
 
 Meteor.methods({
   
-  REPAIRRapidNum() {
+  REPAIRRapidNum() { // VERIFIED
     const allRapids = XRapidsDB.find({},{fields:{'rapid':1}, sort: {'createdAt': 1}}).fetch();
     
     let nx = 0;
@@ -54,19 +52,6 @@ Meteor.methods({
       }
     }
   
-    
-    // let nums = [];
-    
-    // for(let i = 0; i < 25; i++) {
-    //   const next = nums.length === 0 ? 1 : 
-    //             parseInt( nums[i-1].substring(2), 10 ) + 1;
-      
-    //   const nextRapid = 'EM' + next.toString().padStart(2, 0);
-  
-    //   nums.push(nextRapid);
-    // }
-    
-    // return nums;
     return true;
   },
   
@@ -77,7 +62,7 @@ Meteor.methods({
     if(Roles.userIsInRole(Meteor.userId(), ['run', 'qa'])) {
       
       const nextRapid = getNextRapidNumber(rapidType);
-      return true;
+      return nextRapid;
       /*
       if(nextRapid) {
         
