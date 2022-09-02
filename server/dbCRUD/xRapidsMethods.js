@@ -1,8 +1,9 @@
 import moment from 'moment';
 
 function getNextRapidNumber(rapidType) {
-  const allRapids = XRapidsDB.find({},{fields:{'rapid':1}, sort: {'createdAt': -1}, limit: 1}).fetch();
-    
+  // const allRapids = XRapidsDB.find({},{fields:{'rapid':1}, sort: {'createdAt': -1}, limit: 1}).fetch();
+    const allRapids = XRapidsDB.find({},{fields:{'rapid':1}}).fetch();
+   
   const rapidS = allRapids.sort( (r1, r2)=>{
     const r1n = r1.rapid.substring(2);
     const r2n = r2.rapid.substring(2);

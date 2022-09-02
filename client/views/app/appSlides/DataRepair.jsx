@@ -97,7 +97,7 @@ const DataRepair = ({ app, users })=> {
         icon='pencil'
         color='orangeSolid'
         button='Rename Rapids'
-        action={()=>doCallThing('getFutureRapidNum', true)}
+        action={()=>doCallThing('REPAIRRapidNum', true)}
       />
       
       <DoCard
