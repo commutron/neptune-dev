@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 export const RapidInfoCreate = ({ 
   batchId, groupId, exBatch,
   allQ, rSetItems, rootURL,
-  editAuth, cal, cancelFunc 
+  cal, cancelFunc 
 })=> {
  
   function handleCreate(e) {
@@ -31,7 +31,6 @@ export const RapidInfoCreate = ({
       rapidType, issueNum, doneTarget, quant, inHours, howURL,
       (error, re)=>{
         error && console.log(error);
-        console.log(re);
         re ? toast.success('Saved') : toast.error('unsuccessful');
       });
     cancelFunc();

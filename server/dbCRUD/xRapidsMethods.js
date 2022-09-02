@@ -1,7 +1,7 @@
 import moment from 'moment';
 
 function getNextRapidNumber(rapidType) {
-  const allRapids = XRapidsDB.find({},{fields:{'rapid':1}, sort: {'createdAt': -1}, limit: 25}).fetch();
+  const allRapids = XRapidsDB.find({},{fields:{'rapid':1}, sort: {'createdAt': -1}, limit: 10}).fetch();
    
   const rapidS = allRapids.sort( (r1, r2)=>{
     const r1n = parseInt( r1.rapid.substring(2), 10 );
@@ -12,16 +12,11 @@ function getNextRapidNumber(rapidType) {
   const next = rapidS.length === 0 ? 1 : 
                 parseInt( rapidS[0].rapid.substring(2), 10 ) + 1;
   
-  console.log(next);
-  
   const apend = rapidType === 'modify' ? 'EM' : 'ER';
   
   if(!isNaN(next)) {
     const nextRapid = apend + next.toString().padStart(2, 0);
-    
-    console.log(nextRapid);
-    
-    return rapidS;
+    return nextRapid;
   }else{ 
     return false;
   }
@@ -62,8 +57,7 @@ Meteor.methods({
     if(Roles.userIsInRole(Meteor.userId(), ['run', 'qa'])) {
       
       const nextRapid = getNextRapidNumber(rapidType);
-      return nextRapid;
-      /*
+      
       if(nextRapid) {
         
         const inHours = parseFloat( exTime );
@@ -110,7 +104,6 @@ Meteor.methods({
       }else{ 
         return false;
       }
-      */
     }else{
       return false;
     }

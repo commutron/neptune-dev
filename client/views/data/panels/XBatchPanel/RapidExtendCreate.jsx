@@ -32,7 +32,6 @@ const RapidExtendCreate = ({ rOpenid, batchData, app, editAuth, cal })=> {
             allQ={batchData.quantity}
             rSetItems={0}
             rootURL={app.instruct}
-            editAuth={editAuth}
             cal={cal}
             cancelFunc={()=>createSet(false)} />
         </div>
