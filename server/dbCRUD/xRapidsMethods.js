@@ -1,12 +1,11 @@
 import moment from 'moment';
 
 function getNextRapidNumber(rapidType) {
-  // const allRapids = XRapidsDB.find({},{fields:{'rapid':1}, sort: {'createdAt': -1}, limit: 1}).fetch();
-    const allRapids = XRapidsDB.find({},{fields:{'rapid':1}}).fetch();
+  const allRapids = XRapidsDB.find({},{fields:{'rapid':1}, sort: {'createdAt': -1}, limit: 25}).fetch();
    
   const rapidS = allRapids.sort( (r1, r2)=>{
-    const r1n = r1.rapid.substring(2);
-    const r2n = r2.rapid.substring(2);
+    const r1n = parseInt( r1.rapid.substring(2), 10 );
+    const r2n = parseInt( r2.rapid.substring(2), 10 );
     return( r1n > r2n ? -1 : r1n < r2n ? 1 : 0 );
   });
   
