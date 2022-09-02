@@ -7,7 +7,7 @@ const ServiceDock = ({ maintData, serve })=> {
   
   const noReq = maintData.status === 'notrequired';
   
-  // const [ work, setWork ] = useState( false );
+  const [ work, setWork ] = useState( false );
   const [ notes, setNotes ] = useState( maintData.notes );
 
   function notReq() {
@@ -20,15 +20,15 @@ const ServiceDock = ({ maintData, serve })=> {
   }
   
   const cllbk = (err)=> {
-    // setWork(false);
+    setWork(false);
     if(err) {
 	    console.log(err);
 	    toast.error('Server Error');
 		}
   };
   
-  function doCheck(task, state) {
-    // setWork(index);
+  function doCheck(task, state, index) {
+    setWork(index);
     if(!state || state === 'false') {
   		Meteor.apply('serveNotCheck', [ maintData._id, task ],
   		{wait: true},
@@ -75,7 +75,7 @@ const ServiceDock = ({ maintData, serve })=> {
                     type='checkbox'
                     checked={chk}
                     onChange={()=>doCheck(m, !chk, ix)}
-                    // disabled={work === ix}
+                    disabled={work === ix}
                   />
                   <i className='line15x'>{m}</i>
                 </label>

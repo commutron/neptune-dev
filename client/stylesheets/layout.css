@@ -112,10 +112,13 @@ main {
   top: 0;
   left: 0;
   z-index: 2;
-  background-color: inherit;
 }
 .stickInPlace {
+  background-color: var(--clouds);
   box-shadow: 0 3px 6px var(--contrast);
+}
+.stick {
+  background-color: inherit;
 }
 
 .flexSpace { flex-grow: 2; }

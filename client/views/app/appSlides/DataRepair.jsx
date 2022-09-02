@@ -93,6 +93,14 @@ const DataRepair = ({ app, users })=> {
     <div className='space3v autoFlex'>
       
       <DoCard
+        title='Fix Rapid Numbering'
+        icon='pencil'
+        color='orangeSolid'
+        button='Rename Rapids'
+        action={()=>doCallThing('getFutureRapidNum', true)}
+      />
+      
+      <DoCard
         title='Force Randomize Org PIN'
         sub='Runs every day at 12:00am (CST)'
         icon='dice'

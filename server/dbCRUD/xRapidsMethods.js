@@ -1,21 +1,28 @@
 import moment from 'moment';
 
 function getNextRapidNumber(rapidType) {
-  const allRapids = XRapidsDB.find({},{fields:{'rapid':1}}).fetch();
-  
+  const allRapids = XRapidsDB.find({},{fields:{'rapid':1}, sort: {'createdAt': -1}, limit: 1}).fetch();
+    
   const rapidS = allRapids.sort( (r1, r2)=>{
     const r1n = r1.rapid.substring(2);
     const r2n = r2.rapid.substring(2);
     return( r1n > r2n ? -1 : r1n < r2n ? 1 : 0 );
   });
+  
+  console.log(rapidS);
     
   const next = rapidS.length === 0 ? 1 : 
                 parseInt( rapidS[0].rapid.substring(2), 10 ) + 1;
+  
+  console.log(next);
   
   const apend = rapidType === 'modify' ? 'EM' : 'ER';
   
   if(!isNaN(next)) {
     const nextRapid = apend + next.toString().padStart(2, 0);
+    
+    console.log(nextRapid);
+    
     return nextRapid;
   }else{ 
     return false;
@@ -24,6 +31,45 @@ function getNextRapidNumber(rapidType) {
 
 Meteor.methods({
   
+  REPAIRRapidNum() {
+    const allRapids = XRapidsDB.find({},{fields:{'rapid':1}, sort: {'createdAt': 1}}).fetch();
+    
+    let nx = 0;
+    
+    for( let rap of allRapids) {
+      if( parseInt(rap.rapid.substring(2), 10) > 99 ) {
+        const currNum = parseInt( rap.rapid.substring(2), 10);
+        const apend = rap.rapid.split('1')[0];
+        
+        const newRapid = apend + ( currNum + nx ).toString().padStart(2, 0);
+        
+        console.log( newRapid );
+        XRapidsDB.update(rap._id, {
+          $set: {
+            rapid: newRapid, 
+          }
+        });
+      
+        nx = nx + 1;
+      }
+    }
+  
+    
+    // let nums = [];
+    
+    // for(let i = 0; i < 25; i++) {
+    //   const next = nums.length === 0 ? 1 : 
+    //             parseInt( nums[i-1].substring(2), 10 ) + 1;
+      
+    //   const nextRapid = 'EM' + next.toString().padStart(2, 0);
+  
+    //   nums.push(nextRapid);
+    // }
+    
+    // return nums;
+    return true;
+  },
+  
   createExRapidBasic(batchId, groupId, exBatch, 
     rapidType, issueNum, doneTarget, quant, exTime, howLink
   ) {
@@ -31,7 +77,8 @@ Meteor.methods({
     if(Roles.userIsInRole(Meteor.userId(), ['run', 'qa'])) {
       
       const nextRapid = getNextRapidNumber(rapidType);
-      
+      return true;
+      /*
       if(nextRapid) {
         
         const inHours = parseFloat( exTime );
@@ -73,10 +120,12 @@ Meteor.methods({
           });
           Meteor.defer( ()=>{ Meteor.call('updateOneMovement', batchId, accessKey); });
         }
+        
         return true;
       }else{ 
         return false;
       }
+      */
     }else{
       return false;
     }

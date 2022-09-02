@@ -17,7 +17,7 @@ const ServiceCard = ({ eqData, maintData, brancheS, tideKey, timeOpen, engagedPr
   return(
     <div className='stoneForm midnightblue'>
 			<div className='space1v centreText'>
-  			<p className='bigbig cap'>{m.name}</p>
+  			<p className='bigbig cap'>{m.name} {Pref.maintain}</p>
         
         {m.status === 'complete' &&
           <p className='medBig spacehalf green'>Service Completed<br />{moment(m.doneAt).format('MMMM Do h:mm a')}</p>}
@@ -63,7 +63,7 @@ export const RepairCard = ({ eqData, brancheS, tideKey, timeOpen, engagedPro, en
   return(
     <div className='stoneForm midnightblue'>
 			<div className='space1v centreText'>
-  			<p className='bigger cap'>{eqData.alias}</p>
+  			<p className='bigger cap'>{eqData.alias} Repair</p>
         
         <div className='medBig spacehalf balancer'>
         
