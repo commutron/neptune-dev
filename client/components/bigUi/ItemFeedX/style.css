@@ -1,6 +1,3 @@
-.scrollWrap {
-  overflow-x: auto;
-}
 .infoFeed {
   display: flex;
   flex-direction: column;

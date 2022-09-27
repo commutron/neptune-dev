@@ -24,32 +24,6 @@ function getNextRapidNumber(rapidType) {
 
 Meteor.methods({
   
-  REPAIRRapidNum() { // VERIFIED
-    const allRapids = XRapidsDB.find({},{fields:{'rapid':1}, sort: {'createdAt': 1}}).fetch();
-    
-    let nx = 0;
-    
-    for( let rap of allRapids) {
-      if( parseInt(rap.rapid.substring(2), 10) > 99 ) {
-        const currNum = parseInt( rap.rapid.substring(2), 10);
-        const apend = rap.rapid.split('1')[0];
-        
-        const newRapid = apend + ( currNum + nx ).toString().padStart(2, 0);
-        
-        console.log( newRapid );
-        XRapidsDB.update(rap._id, {
-          $set: {
-            rapid: newRapid, 
-          }
-        });
-      
-        nx = nx + 1;
-      }
-    }
-  
-    return true;
-  },
-  
   createExRapidBasic(batchId, groupId, exBatch, 
     rapidType, issueNum, doneTarget, quant, exTime, howLink
   ) {

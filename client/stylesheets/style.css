@@ -271,6 +271,7 @@ input::-webkit-calendar-picker-indicator {
   max-width: -moz-fit-content;
   max-width: fit-content;
 }
+.blk { display: block; }
 
 .noCopy {
  -webkit-user-select: none;

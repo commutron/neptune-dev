@@ -21,7 +21,8 @@ Meteor.methods({
         instruct: instruct,
         library: library,
         stewards: [],
-        service: []
+        service: [],
+        issues: []
       });
       return true;
     }else{
@@ -210,7 +211,142 @@ Meteor.methods({
     }
   },
   
+  addEqIssue(eqId, title, logtext) {
+    if( Roles.userIsInRole(Meteor.userId(), 'active') ) {
+      const accessKey = Meteor.user().orgKey;
+      const newKey = new Meteor.Collection.ObjectID().valueOf();
+      
+      EquipDB.update({_id: eqId, orgKey: accessKey}, {
+        $push : {
+          issues: { 
+            issueKey: newKey,
+            createdAt: new Date(),
+            createdWho: Meteor.userId(),
+            updatedAt: new Date(),
+            title: title,
+            open: true, // true-wip / false-resolved
+            problog: [{
+              time: new Date(),
+              who: Meteor.userId(),
+              text: logtext,
+            }]
+          }
+        }});
+      
+      return true;
+    }else{
+      return false;
+    }
+  },
   
+  editEqIssueTitle(eqId, iKey, title) {
+    if( Roles.userIsInRole(Meteor.userId(), 'active') ) {
+      
+      EquipDB.update({_id: eqId, 'issues.issueKey': iKey, 'issues.createdWho': Meteor.userId()}, {
+        $set : {
+          'issues.$.updatedAt': new Date(),
+          'issues.$.title': title
+        }});
+      
+      return true;
+    }else{
+      return false;
+    }
+  },
+  editEqIssueState(eqId, iKey, open) {
+    if( Roles.userIsInRole(Meteor.userId(), 'active') ) {
+
+      EquipDB.update({_id: eqId, 'issues.issueKey': iKey}, {
+        $set : {
+          'issues.$.updatedAt': new Date(),
+          'issues.$.open': open, // true-wip / false-resolved 
+      }});
+      
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  logEqIssue(eqId, iKey, text) {
+    if( Roles.userIsInRole(Meteor.userId(), 'active') ) {
+      const accessKey = Meteor.user().orgKey;
+    
+      EquipDB.update({_id: eqId, orgKey: accessKey, 'issues.issueKey': iKey}, {
+          $set : {
+            'issues.$.updatedAt': new Date(),
+          },
+          $push : { 'issues.$.problog': {
+            time: new Date(),
+            who: Meteor.userId(),
+            text: text,
+        }}});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  backdateEqIssue(eqId, title, logtext, date, userID, wip) {
+    if( Roles.userIsInRole(Meteor.userId(), 'active') ) {
+      const accessKey = Meteor.user().orgKey;
+      const newKey = new Meteor.Collection.ObjectID().valueOf();
+      
+      EquipDB.update({_id: eqId, orgKey: accessKey}, {
+        $push : {
+          issues: { 
+            issueKey: newKey,
+            createdAt: new Date(date),
+            createdWho: userID,
+            updatedAt: new Date(date),
+            title: title,
+            open: wip,
+            problog: [{
+              time: new Date(date),
+              who: userID,
+              text: logtext,
+            }]
+          }
+        }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  /*
+   modEqlog(eqId, iKey, logtime, logObj) {
+    try {
+      const accessKey = Meteor.user().orgKey;
+      if(typeof logObj === 'object' && Roles.userIsInRole(Meteor.userId(), 'admin')) {
+        
+        const pulllog = ()=> {
+          return new Promise(function(resolve) {
+            EquipDB.update({_id: eqId, orgKey: accessKey, 'issues.issueKey': iKey}, {
+              $pull : {
+                'issues.$.problog': { time: logtime }
+            }});
+            resolve(true);
+          });
+        };
+        
+        const pushlog = ()=> {
+          EquipDB.update({_id: eqId, orgKey: accessKey, 'issues.issueKey': iKey}, {
+            $push : {
+              'issues.$.problog': logObj
+          }});
+        };
+            
+        pulllog()
+          .then(pushlog())
+            .finally(()=> { return true });
+      }else{
+        return false;
+      }
+    }catch (error) {
+      throw new Meteor.Error(error);
+    }
+  },
+  */
   deleteEquipment(eqId) {
     const inUse = MaintainDB.findOne({equipId: eqId},{fields:{'_id':1}});
     if(!inUse) {

@@ -19,7 +19,7 @@ const ModelNative = ({ dialogId, title, icon, colorT, dark, children })=> {
           {title}
         </span>
         <button
-          className='action redSolid'
+          className='action redSolid centreRow'
           onClick={()=>close()}
           title='cancel'
         ><i className='fas fa-xmark fa-lg'></i></button>

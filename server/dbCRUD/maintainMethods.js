@@ -447,28 +447,6 @@ Meteor.methods({
       });
       
       return futureEvents;
-  },
-  
-  REPAIRmaint() {
-    const maint = MaintainDB.find({status: 'incomplete'}).fetch();
-    
-    for( let m of maint ) {
-      const eq = EquipDB.findOne({_id: m.equipId},{fields:{'service':1}});
-      const sv = eq.service.find( s => s.serveKey === m.serveKey );
-      
-      const all = sv.tasks.every( t => m.checklist.find( c => c.task === t ) );
-      
-      if(all) {
-        const last = m.checklist[m.checklist.length-1].time;
-        
-        MaintainDB.update({_id: m._id},{
-          $set: {
-            status: 'complete',
-            doneAt: new Date(last)
-          }
-        });
-      }
-    }
   }
   
 });

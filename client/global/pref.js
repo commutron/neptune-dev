@@ -225,8 +225,9 @@ class Pref {
     this.fixmaintain = 'repair maintenance';
     this.equip = 'equipment';
     this.steward = 'assignee';
-    this.estop = 'breakdown';
     this.eqhib = 'Disconnected';
+    this.estop = 'breakdown';
+    this.eqissue = 'issues';
   }
 }
 

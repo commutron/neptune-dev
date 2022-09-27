@@ -18,16 +18,24 @@
 
 .cookieCrumb {
   background-color: transparent;
-  white-space: nowrap;
-  transition: all 150ms ease-in-out;
+  transition: background-color, color, max-width 300ms ease-in;
   color: var(--silver);
-  max-width: 25vw;
   margin: 0;
   font-size: 2.5vmin;
   text-indent: 1vmin;
-  word-break: keep-all;
-  text-overflow: ellipsis;
   cursor: pointer;
+}
+.cookie {
+  max-width: 25vw;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cookieCrumb:first-child > .cookie {
+  margin-left: 1ch;
+}
+.cookieCrumb:hover > .cookie {
+  max-width: calc( 100vw - ( 24vh + 10vmin ) );
 }
 .cookieCrumb:first-child {
   height: 100%;
@@ -58,19 +66,18 @@
   transition: all 150ms ease-in-out;
 }
 
-.cookieCrumb:hover,
-.cookieCrumb:active {
+.cookieCrumb:where(:hover,:active) {
   background-color: var(--silver);
   color: rgb(25,25,25);
 }
-.cookieCrumb:hover > .crumb:before,
-.cookieCrumb:active > .crumb:before {
+.cookieCrumb:hover > .crumb::before,
+.cookieCrumb:active > .crumb::before {
   color: var(--silver);
 }
-.cookieCrumb:hover + .cookieCrumb > .crumb:before,
-.cookieCrumb:hover + .endCrumb:before,
-.cookieCrumb:active + .cookieCrumb > .crumb:before,
-.cookieCrumb:active + .endCrumb:before {
+.cookieCrumb:hover + .cookieCrumb > .crumb::before,
+.cookieCrumb:hover + .endCrumb::before,
+.cookieCrumb:active + .cookieCrumb > .crumb::before,
+.cookieCrumb:active + .endCrumb::before {
   background-color: var(--silver);
 }
 
@@ -78,5 +85,8 @@
   .cookieRow { 
     grid-area: frontCenter;
     max-height: 8vmin
+  }
+  .cookieCrumb:hover > .cookie {
+    max-width: calc( 100vw - ( 24vmin + 10vmin ) );
   }
 }

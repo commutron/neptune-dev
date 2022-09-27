@@ -44,6 +44,9 @@ main {
 .thinScroll {
   scrollbar-color: var(--navIndicatorA) var(--navIndicatorB);
 }
+.scrollWrap {
+  overflow-x: auto !important;
+}
 
 .loading {
   position: fixed;

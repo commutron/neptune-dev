@@ -38,7 +38,7 @@ const ModelLarge = ({
                 {title}
               </span>
               <button
-                className='action redSolid'
+                className='action redSolid centreRow'
                 onClick={()=>reveal()}
                 title='close'
               ><i className='fas fa-times fa-lg'></i></button>
