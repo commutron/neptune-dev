@@ -5,11 +5,6 @@
   font-family: 'VarelaLocal';
 }
 
-input::-webkit-calendar-picker-indicator {
-  background-color: rgb(0,0,0);
-  background-color: rgba(0,0,0,0);
-}
-
 .logoSVG {
   width: 2.5rem;
 }
@@ -252,6 +247,7 @@ input::-webkit-calendar-picker-indicator {
 
 .strike { text-decoration: line-through; }
 .underline { text-decoration: underline; }
+.underdotline { text-decoration: underline dotted; }
 .fullline { border-bottom: 1px solid #000; }
 
 .fade { opacity: 0.6; }

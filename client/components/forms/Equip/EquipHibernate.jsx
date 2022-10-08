@@ -2,7 +2,6 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-
 const EquipHibernate = ({ id, equip, connect })=> {
 
   function handle(flip) {

@@ -122,11 +122,11 @@ const EquipSlide = ({
             users={users}
           />
           
-          {maintainData.length === 0 &&
+          {maintainData.length === 0 && ( !eq.issues || eq.issues.length === 0 ) ?
             <EquipRemove
               id={eq._id}
             />
-          }
+          : null}
          
         </div>
         
@@ -148,7 +148,7 @@ const EquipSlide = ({
       </p>
       
       <p className='w100 vmarginhalf capFL wordBr'>
-        {Pref.equip} repair documents: {shrtI ? app.instruct : null}
+        Repair documents: {shrtI ? app.instruct : null}
         <a 
           className='clean wordBr' 
           href={shrtI ? app.instruct + eq.library : eq.library} 

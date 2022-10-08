@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 
 const FindBox = ({ orb, user, append })=> {
-    
+
   function setVar(e) {
     e.preventDefault();
     const chosen = this.lookup.value.trim().toLowerCase();
@@ -11,6 +11,16 @@ const FindBox = ({ orb, user, append })=> {
         this.lookup.value = '';
         this.lookup.select();
   }
+  
+  useEffect( ()=> {
+    addEventListener('click', (evt)=> {
+      if(evt.detail === 3) {
+        Session.set('now', null);
+        this.lookup.value = '';
+        this.lookup.select();
+      }
+    });
+  },[]);
   
   let holder = !append ? orb?.startsWith('Eq') ?
                          orb.split("-")[1] : orb :

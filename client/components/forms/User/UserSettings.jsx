@@ -28,19 +28,27 @@ const UserSettings = ({ app, user, isAdmin, brancheS })=> {
   return(
     <div>
       <div className='comfort cardify'>
-        <span className='noPrint readPs medBig'>
+        <div className='noPrint'>
           <p><b>Username:</b> {user.username}</p>
           <p><b>ID:</b> {Meteor.user()._id}</p>
           <p><b>Organization:</b> <i className='blueT bold'>{Meteor.user().org}</i></p>
           <p><b>Joined:</b> {user.createdAt.toLocaleString()}</p>
-        </span>
+        </div>
         
         <IdCardCard user={user} />
       </div>
-      
+        
       <div className='cardSelf settingColumn noPrint'>  
         
-        <div>
+        <span className='comfort w100'>
+          <a className='margin5 blackT underdotline' href='#uipref'>Interface Preferences</a>
+          <a className='margin5 blackT underdotline' href='#usernamechng'>Username</a>
+          <a className='margin5 blackT underdotline' href='#emailchng'>Email Address</a>
+          <a className='margin5 blackT underdotline' href='#passwordchng'>Password</a>
+          <a className='margin5 blackT underdotline' href='#adminpwr'>Admin Status</a>
+        </span>
+      
+        <div id='uipref'>
           <h3><i className='fas fa-sliders-h fa-fw gapR'></i>Interface Preferences</h3>
           <div>
             
@@ -132,23 +140,23 @@ const UserSettings = ({ app, user, isAdmin, brancheS })=> {
           </div>
         </div>
         
-        <div className='minHeight'>
+        <div id='usernamechng' className='minHeight'>
           <h3><i className='fas fa-user-edit fa-fw gapR'></i>Username</h3>
           <UsernameChange />
         </div>
         
-        <div className='minHeight'>
+        <div id='emailchng' className='minHeight'>
           <h3><i className='fas fa-at fa-fw gapR'></i>Email Address</h3>
           <EmailForm user={user} />
         </div>
         
-        <div className='minHeight'>
+        <div id='passwordchng' className='minHeight'>
           <h3><i className='fas fa-key fa-fw gapR'></i>Password</h3>
           <PasswordChange />
         </div>
 
         {isAdmin ?
-          <div className='minHeight'>
+          <div id='adminpwr' className='minHeight'>
             <h3><i className='fas fa-meteor fa-fw'></i> Admin Status</h3>
              <AdminDown />
           </div>

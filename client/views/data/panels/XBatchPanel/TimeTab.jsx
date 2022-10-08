@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 
 import TabsLite from '/client/components/smallUi/Tabs/TabsLite';
 
-import ToggleBar from '/client/components/smallUi/Tabs/ToggleBar';
-
 import ProgLayerBurndown from '/client/components/charts/BatchBurn/ProgLayerBurndown';
 import PeopleScatter from '/client/components/charts/BatchBurn/PeopleScatter';
 import ItemsOnTime from '/client/components/charts/BatchBurn/ItemsOnTime';

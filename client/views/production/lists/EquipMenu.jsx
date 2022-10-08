@@ -47,7 +47,7 @@ const EquipMenuCore = ({ user, brancheS, allEquip })=> {
                   className='action whiteSolid margin5 letterSpaced spacehalf'
                   onClick={()=>goclose(eq.alias, eq._id)}
                 >{eqfxON && eng.tName.split("<*>")[1] === eq._id ?
-                <n-fa1><i className='fa-solid fa-circle-notch midnightblueT fa-lg fa-fw gapR fa-spin'></i></n-fa1>
+                <n-fa1><i className='fa-solid fa-circle-notch midnightblueT fa-fw gapR fa-spin'></i></n-fa1>
                 : null}{eq.alias}</button>
               ))}
             </div>

@@ -159,7 +159,7 @@ export function addTideDuration(td) {
   }
 }
 
-function addTideArrayDuration(tideArray) {
+export function addTideArrayDuration(tideArray) {
   if(!Array.isArray(tideArray) || tideArray.length === 0) {
     return 0;
   }else{

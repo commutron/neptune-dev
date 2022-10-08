@@ -10,7 +10,7 @@ const EquipRemove = ({ id })=> {
       error && console.log(error);
       if(reply) {
         toast.success('Removed');
-        FlowRouter.go('/data/overview?request=maintain&specify=undefined');
+        FlowRouter.go('/data/overview?request=maintain');
       }else{
         toast.warning('Not Allowed');
       }

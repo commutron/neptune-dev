@@ -24,10 +24,10 @@ const EquipCard = ({ equipData, maintainData })=> {
             className='action whiteSolid margin5 letterSpaced spacehalf'
             onClick={()=>{Session.set('now', m.find);Session.set('nowSV', m.mId)}}
           >{m.flg === 'notrequired' ?
-            <n-fa2><i className='fa-solid fa-ban fa-lg fa-fw orangeT gapR'></i></n-fa2>
+            <n-fa2><i className='fa-solid fa-ban fa-fw orangeT gapR'></i></n-fa2>
           : m.flg === 'complete' ?
-            <n-fa1><i className='fa-solid fa-clipboard-check fa-lg fa-fw greenT gapR'></i></n-fa1>
-          : <n-fa0><i className='fa-regular fa-clipboard fa-lg fa-fw grayT gapR'></i></n-fa0>
+            <n-fa1><i className='fa-solid fa-clipboard-check fa-fw greenT gapR'></i></n-fa1>
+          : <n-fa0><i className='fa-regular fa-clipboard fa-fw grayT gapR'></i></n-fa0>
           }{m.title}</button>
         ))}
       </div>

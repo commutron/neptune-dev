@@ -447,6 +447,16 @@ Meteor.methods({
       });
       
       return futureEvents;
+  },
+  
+  getMaintTime(mID) {
+    return TimeDB.find({ 'link': mID }, 
+                    { fields: {
+                      'who':1,
+                      'startTime':1, 
+                      'stopTime':1,
+                    }
+                  }).fetch();
   }
   
 });

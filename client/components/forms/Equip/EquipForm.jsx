@@ -100,7 +100,7 @@ const EquipForm = ({
   return(
     <form id='newEquip' className='fitWide' onSubmit={(e)=>saveEquipment(e)}>
       <p>
-        <span>
+        <label htmlFor='eName'>Full Name<br />
           <input
             type='text'
             id='eName'
@@ -111,11 +111,10 @@ const EquipForm = ({
             maxLength={Pref.groupMax}
             autoFocus={true}
             required />
-          <label htmlFor='eName'>Full Name</label>
-        </span>
+        </label>
       </p>
       <p>
-        <span>
+        <label htmlFor='eAlias'>Alias / Common<br />
           <input
             type='text'
             id='eAlias'
@@ -124,37 +123,37 @@ const EquipForm = ({
             pattern='[A-Za-z0-9 _-]*'
             maxLength={Pref.aliasMax}
             required />
-          <label htmlFor='eAlias'>Alias / Common</label>
-        </span>
+        </label>
       </p>
       <p>
-        <span>
+        <label htmlFor='eBrKey'>{Pref.branch}<br />
           <select id='eBrKey' defaultValue={orBrKey} required>
             <option value={false}>Facility</option>
             {brancheS.map( (br, index)=>(
               <option key={index} value={br.brKey}>{br.branch}</option>
             ))}
           </select>
-          <label htmlFor='eBrKey'>{Pref.branch}</label>
-        </span>
+        </label>
       </p>
       <p>
+        <label htmlFor='eWiki' className='dbbleWide cap'>{Pref.premaintain} {Pref.instruct}<br />
         <input
           type='text'
           id='eWiki'
           defaultValue={orWiki}
           placeholder='http://192.168.1.68/pisces'
           className='dbbleWide' />
-        <label htmlFor='eWiki' className='dbbleWide cap'>{Pref.premaintain} {Pref.instruct}</label>
+        </label>
       </p>
       <p>
+        <label htmlFor='reWiki' className='dbbleWide cap'>{Pref.equip} Repair Documents<br />
         <input
           type='text'
           id='reWiki'
           defaultValue={orLib}
           placeholder='http://192.168.1.68/pisces'
           className='dbbleWide' />
-        <label htmlFor='reWiki' className='dbbleWide cap'>{Pref.equip} Repair Documents</label>
+        </label>
       </p>
       <p className='centre'>
         <button

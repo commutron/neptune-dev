@@ -178,6 +178,10 @@ label {
   opacity: 0.6;
 }
 
+input::-webkit-calendar-picker-indicator {
+  background-color: transparent;
+}
+
 input[type='checkbox'], 
 input[type='radio'] {
   margin: 0 5px;

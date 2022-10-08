@@ -6,7 +6,7 @@ import Pref from '/client/global/pref.js';
 import EquipForm from '/client/components/forms/Equip/EquipForm';
 import NumBox from '/client/components/tinyUi/NumBox';
 
-const Landing = ({ equipData, maintainData, app, brancheS })=> {
+const Landing = ({ equipData, maintainData, issues, app, brancheS })=> {
   
   const week0 = useMemo( ()=> moment().startOf('week'), [app]);
   const week6 = useMemo( ()=> moment().endOf('week'), [app]);
@@ -23,27 +23,45 @@ const Landing = ({ equipData, maintainData, app, brancheS })=> {
     <div className='overscroll'>
       
       <div className='wide centreRow'>
-        <h2>Upcoming Service Due</h2>
         <span className='flexSpace' />
+        <NumBox
+          num={equipData.filter( e => e.online && !e.hibernate ).length}
+          name='Online'
+          color='greenT' 
+        />
+        <NumBox
+          num={equipData.filter( e => !e.online && !e.hibernate ).length}
+          name='Offline'
+          color='midnightBlueT' 
+        />
+        <NumBox
+          num={equipData.filter( e => e.hibernate ).length}
+          name={Pref.eqhib}
+          color='darkgrayT' 
+        />
+        <NumBox
+          num={issues || 0}
+          name={`WIP ${Pref.eqissue}`}
+          color='orangeT' 
+        />
+        
         <EquipForm
           id={false}
           lgIcon={true}
           rootURL={app.instruct}
-          brancheS={brancheS} />
-        <NumBox
-          num={equipData.length}
-          name={Pref.equip}
-          color='blueT' />
+          brancheS={brancheS} 
+        />
       </div>
 
       <div>
+        <h3>Upcoming Service Due</h3>
         <dl className='max400'>
         {thisWeek.map( (mn, index)=> {
           const eq = equipData.find( e => e._id === mn.equipId );
           if(index === 0 || thisWeek[index-1].close.toLocaleString() !== mn.close.toLocaleString()) {
             return(
               <Fragment key={index}>
-                <dt className='vmarginhalf bottomLine medBig bold'>{moment(mn.close).format('dddd')}</dt>
+                <dt className='vmarginhalf bottomLine bold'>{moment(mn.close).format('dddd')}</dt>
                 <dd className='cap med line2x bottomLine'>{eq.alias} {mn.name}</dd>
               </Fragment>
             );

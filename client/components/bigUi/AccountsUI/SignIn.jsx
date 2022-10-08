@@ -21,7 +21,7 @@ const SignIn = ({ mxW, pad, bttn })=> {
 	    if(error) {
 	      console.log(error);
 	      loginResultSet( error.reason );
-	      this.loginSubmit.disabled = true;
+	      this.loginSubmit.disabled = false;
 	    }else{
 	    	Meteor.logoutOtherClients();
 	    }

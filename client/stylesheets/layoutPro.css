@@ -170,11 +170,11 @@
 }
 #lookup::selection {
 	color: white;
-	background-color: rgb(30,30,30);
+	background-color: var(--black);
 }
 #lookup::-moz-selection {
 	color: white;
-	background-color: rgb(30,30,30);
+	background-color: var(--black);
 }
 #lookup::-webkit-input-placeholder { /* Chrome/Opera/Safari */
   color: white;

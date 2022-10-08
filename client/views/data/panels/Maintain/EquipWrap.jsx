@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState }from 'react';
 import Pref from '/client/global/pref.js';
 
 import SlidesNested from '/client/components/smallUi/SlidesNested';
@@ -9,6 +9,15 @@ const EquipWrap = ({
   equipData, maintainData,
   app, users, isDebug, brancheS, specify 
 }) => {
+  
+  const [ issues, issueSet ] = useState(0);
+  
+  useEffect( ()=> {
+    Meteor.call('countOpenEqIssue', (err, re)=> {
+      err && console.log(err);
+      re && issueSet(re);
+    }); 
+  },[]);
   
   const equipS = equipData.sort((e1, e2)=>
                   e1.alias < e2.alias ? -1 : 
@@ -31,6 +40,7 @@ const EquipWrap = ({
         <Landing
           equipData={equipData}
           maintainData={maintainData}
+          issues={issues}
           app={app}
           brancheS={brancheS}
         />

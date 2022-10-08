@@ -58,10 +58,32 @@ export default ServiceCard;
 
 export const RepairCard = ({ eqData, brancheS, tideKey, timeOpen, engagedPro, engagedMlti })=> {
   
-  // const [ issueKey, issueSet ] = useState(false);
+  const atIssue = timeOpen?.project.split("[+]")[1];
+  const eqIssue = atIssue && eqData.issues ? eqData.issues.find( i => i.issueKey === atIssue ) : false;
+  
+  function handleAppendIssue(issueKey) {
+    if(tideKey) {
+      Meteor.call('assignTimeToIssue', tideKey, issueKey, (err)=>{
+        err && console.log(err);
+      });
+    }
+  }
+  
+  function handleLog(logtext) {
+    if(logtext.length > 0) {
+      Meteor.call('logEqIssue', eqData._id, atIssue, logtext, (err, re)=>{
+        err && console.log(err);
+        if(re) {
+          null;
+        }else{
+          toast.warning('Not Allowed');
+        }
+      });
+    }
+  }
   
   return(
-    <div className='stoneForm midnightblue'>
+    <div className='midnightblue'>
 			<div className='space1v centreText'>
   			<p className='bigger cap'>{eqData.alias} Repair</p>
         
@@ -113,9 +135,51 @@ export const RepairCard = ({ eqData, brancheS, tideKey, timeOpen, engagedPro, en
           lockOut={false}
         />  
       :
-        <div className='centreText vmargin spacehalf'>
-          <p className='medBig'
-          >Recording time repairing the {eqData.alias} since {moment(timeOpen.startTime).format('h:mm A')}</p>
+        <div className='centreText overscroll spacehalf'>
+          {atIssue ?
+            <div>
+              <p className='small'>Repair time assigned to issue:</p>
+              <p className='medBig'>{eqIssue.title}</p>
+              
+              <dl className='leftText readlines'>
+                {eqIssue.problog.map( (l, ix)=> (
+                  <dd key={ix} className='bottomLine vspacehalf'>{l.text}</dd>
+                ))}
+              </dl>
+              
+              <form 
+                onSubmit={(e)=>{
+                  e.preventDefault();
+                  handleLog(this[atIssue+'addislog'].value.trim());
+                  this[atIssue+'addislog'].value = '';
+              }}
+                className='vspacehalf'
+              >
+                <label>Action / Troubleshooting<br />
+                  <textarea id={atIssue+'addislog'} rows='1' className='adaptStone wetasphalt' required></textarea>
+                </label>
+                <div className='rightText'>
+                  <button type='submit' className='action wetSolid'>Save</button>
+                </div>
+              </form>
+            </div>
+          :
+            <label>Assign Repair Time to Specific Issue<br />
+              <select id='eqissuekey'
+                className='lightTheme adaptStone'
+                onChange={()=>handleAppendIssue(this.eqissuekey.value)}
+                defaultValue={atIssue || false}
+                required>
+                <option value={false}></option>
+                {(eqData.issues || []).map( (i, ix)=> {
+                  if(i.open) {
+                    return( <option key={ix} value={i.issueKey}>{i.title}</option> );
+                }})}
+              </select>
+            </label>
+          }
+        
+        
         </div>
       }
     </div>

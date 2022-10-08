@@ -593,6 +593,12 @@ n-trib-action-all {
 .fakeFielset label {
   line-height: 1.2;
 }
+.stoneForm input[type='text'],
+.stoneForm select,
+.stoneForm details {
+  max-width: 11vmax;
+}
+
 .wideStone {
   min-width: 11vmax;
   width: -moz-fit-content;
@@ -605,10 +611,12 @@ n-trib-action-all {
   min-width: 11vmax;
   width: 100%;
 }
-.stoneForm input[type='text'],
-.stoneForm select,
-.stoneForm details {
-  max-width: 11vmax;
+
+.adaptStone {
+  min-width: 11vw;
+  width: 100%;
+  max-width: 30vmax;
+  width: clamp(11vmax, 100%, 30vmax);
 }
 
 .stoneForm textarea { 

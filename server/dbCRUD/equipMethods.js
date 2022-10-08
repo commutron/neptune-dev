@@ -287,6 +287,25 @@ Meteor.methods({
     }
   },
   
+  assignTimeToIssue(tideKey, issueKey) {
+    const time = TimeDB.findOne({ _id: tideKey },{ fields: {'who':1, 'project':1} });
+      
+    if(time) {
+      const authT = time.who === Meteor.userId();
+      if(!authT) {
+        return false;
+      }else{
+        const append = !issueKey ? time.project.split("[+]")[0] : time.project + "[+]" + issueKey;
+        
+        TimeDB.update({ _id: tideKey }, {
+          $set : { 
+            project : append
+        }});
+        return true;
+      }
+    }
+  },
+  
   backdateEqIssue(eqId, title, logtext, date, userID, wip) {
     if( Roles.userIsInRole(Meteor.userId(), 'active') ) {
       const accessKey = Meteor.user().orgKey;
@@ -313,6 +332,32 @@ Meteor.methods({
       return false;
     }
   },
+  
+  countOpenEqIssue() {
+    let open = 0;
+    EquipDB.find({},{ fields: {'issues.open':1} })
+      .forEach( eq => {
+        open += (eq.issues || []).filter( i => i.open).length;
+      });
+    return open;
+  },
+  
+  getEqIssueTime(eqID, issKey) {
+    const assignedKey = "\\[\\+\\]" + issKey;
+
+    return TimeDB.find(
+                    { 
+                      link: eqID, 
+                      project: { $regex: new RegExp( assignedKey ) }
+                    }, 
+                    { fields: {
+                      'who':1,
+                      'startTime':1, 
+                      'stopTime':1
+                    }
+                  }).fetch();
+  },
+  
   /*
    modEqlog(eqId, iKey, logtime, logObj) {
     try {
@@ -348,8 +393,12 @@ Meteor.methods({
   },
   */
   deleteEquipment(eqId) {
-    const inUse = MaintainDB.findOne({equipId: eqId},{fields:{'_id':1}});
-    if(!inUse) {
+    const equip = EquipDB.findOne({_id: eqId},{fields:{'issues':1}});
+    const usedIS = equip.issues && equip.issues.length > 0;
+    
+    const usedPM = MaintainDB.findOne({equipId: eqId},{fields:{'_id':1}});
+    
+    if(!usedIS && !usedPM) {
       const access = Roles.userIsInRole(Meteor.userId(), 'remove');
       
       if(access) {

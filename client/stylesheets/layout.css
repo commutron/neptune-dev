@@ -696,6 +696,7 @@ n-sm-model-content {
 .dmargin {
   border-top: 48px solid var(--dark);
 }
+.bmargin { margin-bottom: 24px; }
 .wmargin { 
   margin-right: auto;
   margin-left: auto;}
@@ -1066,6 +1067,7 @@ button.numberSet {
 }
 
 .inlineRadio { height: 1.5rem; }
+.minlineRadio { height: 1rem; }
 .inlineCheckbox {
   height: 2rem;
   width: 1.5rem;

@@ -71,7 +71,7 @@ const EquipEmails = ({ id, stewards, users, selfclose })=> {
         <form onSubmit={(e)=>saveEmails(e)}>
           <span>
             <div className='vmargin'>
-              <label htmlFor='userSteward' className='emailForm'>
+              <label htmlFor='userSteward' className='emailForm'>Select {Pref.steward}s<br />
                 <MultiSelect
                   id='userSteward'
                   options={eList}
@@ -81,7 +81,7 @@ const EquipEmails = ({ id, stewards, users, selfclose })=> {
                   className='multi-select'
                   hasSelectAll={false}
                   disableSearch={false}
-              />Select {Pref.steward}s</label>
+              /></label>
             </div>
           </span>
           <p className='centreText'> 

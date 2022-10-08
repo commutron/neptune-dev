@@ -29,7 +29,7 @@ const TideFollow = ({ tOpen, canMulti })=> {
 	  }else if(goto?.startsWith('Eq')) {
       const eqstr = goto.split("<*>");
       Session.set('now', eqstr[0]);
-      Session.set('nowSV', eqstr[1]);
+      Session.set('nowSV', eqstr[1].split("[+]")[0]);
     }else{
       Session.set('now', goto);
     }
