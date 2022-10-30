@@ -34,15 +34,6 @@ const Login = ({ login, uID, username, timeClock })=> {
       
         <div className='homeNaviMini'>
 
-          {!login ?
-            <NavPlaceholder 
-              title='Account' 
-              icon="fa-solid fa-user-astronaut fa-flip-horizontal" /> :
-            <NavButton 
-              title='Account' 
-              icon='fa-solid fa-user-astronaut fa-flip-horizontal' 
-              link='/user' /> }
-      
           {!login || !timeClock ?   
             <NavPlaceholder 
               title={Pref.timeClock} 
@@ -53,6 +44,14 @@ const Login = ({ login, uID, username, timeClock })=> {
               link={timeClock} 
               blank={true} /> }
         
+          {!login ?
+            <NavPlaceholder 
+              title='Account' 
+              icon="fa-solid fa-user-astronaut fa-flip-horizontal" /> :
+            <NavButton 
+              title='Account' 
+              icon='fa-solid fa-user-astronaut fa-flip-horizontal' 
+              link='/user' /> }
         </div>
         
         <MetaLink />

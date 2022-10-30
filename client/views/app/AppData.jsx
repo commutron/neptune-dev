@@ -5,6 +5,7 @@ import { withTracker } from 'meteor/react-meteor-data';
 import { PlainFrame } from '/client/layouts/MainLayouts';
 import Spin from '../../components/tinyUi/Spin.jsx';
 import AppWrap from './AppWrap.jsx';
+import MetaSlide from './appSlides/MetaSlide';
 
 const AppView = ({
   readyDebug, // subs
@@ -40,12 +41,13 @@ const AppView = ({
   
   return(
     <PlainFrame title='Settings'>
-      <div className='centre middle'>
-        <p className='medBig centreText'>This page is limited to administrators only</p>
+      <div className='simpleContent lightTheme centre middle'>
+        <p className='medBig centreText vmargin'>App settings are limited to administrators only</p>
         <button
-          className='smallAction clear whiteT'
+          className='action blackHover'
           onClick={()=> window.history.back()}
         ><i className='fas fa-arrow-circle-left fa-lg'></i> Go Back</button>
+        <MetaSlide />
       </div>
     </PlainFrame>
   );

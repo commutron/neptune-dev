@@ -261,23 +261,17 @@ main {
   justify-content: center;
 }
 
-.homeNavi, .homeNaviA, .homeNaviMini {
+.homeNavi, .homeNaviMini {
   display: grid;
   grid-gap: var(--vh) 1vw;
   place-self: center center;
   place-items: stretch stretch;
 }
-.homeNavi, .homeNaviA {
+.homeNavi {
   grid-area: splashContent;
   grid-template-columns: repeat(4, 20vw);
 }
 .homeNavi {
-  grid-template-rows: 
-    calc(20 * var(--vh))
-    calc(20 * var(--vh))
-    calc(20 * var(--vh));
-}
-.homeNaviA {
   grid-template-rows: 
     calc(20 * var(--vh))
     calc(20 * var(--vh))
@@ -421,6 +415,29 @@ main {
   color: var(--silver);
   background-color: transparent;
   box-shadow: none;
+}
+
+.darkMenu {
+  background-color: rgb(35,35,35);
+}
+.darkMenu .slideNestedMenuButton,
+.darkMenu .slideNestedLand {
+  color: var(--silver);
+}
+.darkMenu .slideNestedSearch {
+  background-color: rgb(25,25,25);
+  color: white;
+}
+.darkMenu .slideNestedLand {
+  background-color: rgb(35,35,35);
+  border-block: 5px solid var(--silver);
+}
+.darkMenu .slideNestedMenuButton.slideOn,
+.darkMenu .slideNestedMenuButton:where(:hover,:active),
+.darkMenu .slideNestedLand.slideOn,
+.darkMenu .slideNestedLand:where(:hover,:active) {
+  color: rgb(35,35,35);
+  background-color: var(--silver);
 }
 /* ////////////////////////// */
 

@@ -108,7 +108,7 @@ export const ProWrap = ({
   const eng = user?.engaged || false;
   const etPro = eng?.task === 'PROX';
   const etMlt = eng?.task === 'MLTI';
-  // const eTime = eng?.task === 'MAINT' || eng?.task === 'EQFX';
+  // 'MAINT', 'EQFX';
   const etKey = eng?.tKey;
   const timeOpen = etPro ? 
                     (bData?.tide || []).find( x => x.tKey === etKey && x.who === Meteor.userId() ) 
@@ -125,7 +125,7 @@ export const ProWrap = ({
                       groupAlias ?
                       '/data/overview?request=groups&specify=' + groupAlias :
                       eqAlias ?
-                      '/data/overview?request=maintain&specify=' + eqAlias :
+                      '/equipment/' + eqAlias :
                       '/data/overview?request=groups';
 
   const viewContainer = standAlone ? 'pro_100' :

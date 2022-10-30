@@ -529,5 +529,60 @@ Meteor.methods({
     }
   },
   
+  fetchEqTimeReport(rangeStart, rangeEnd) {
+    const rSdate = new Date(rangeStart);
+    const rEdate = new Date(rangeEnd);
+    let branches = new Set();
+    let equips = new Set();
+    
+    let eqtimeArr = [];
+    TimeDB.find({
+      // type: 'MAINT', 'EQFX',
+      startTime: {
+        $gte: rSdate,
+        $lte: rEdate
+      }
+    }).forEach( (t)=>{
+      
+      branches.add(t.task);
+      
+      let eq = t.project.split(' ~ ')[0].split("-")[1];
+      equips.add(eq + '++' + t.task);
+      
+      eqtimeArr.push({
+        startTime: t.startTime,
+        stopTime: t.stopTime,
+        dept: t.task,
+        equip: eq,
+        type: t.type
+      });
+    });
+    
+    let eqBreakdown = [];
+    
+    for(let eq of equips) {
+      const eqX = eq.split('++');
+      let pmTotal = addTideArrayDuration( eqtimeArr.filter( f => f.type === 'MAINT' && f.equip === eqX[0] ) );
+      let fxTotal = addTideArrayDuration( eqtimeArr.filter( f => f.type === 'EQFX' && f.equip === eqX[0] ) );
+      
+      eqBreakdown.push([ eqX[0], eqX[1], pmTotal, fxTotal ]);
+      
+    }
+    
+    let brBreakdown = [];
+    
+    for(let br of branches) {
+      const breq = eqBreakdown.filter( f => f[1] === br );
+      const pmBr = breq.reduce( (arr, x)=> arr + x[2], 0);
+      const fxBr = breq.reduce( (arr, x)=> arr + x[3], 0);
+      
+      brBreakdown.push([ br, pmBr, fxBr ]);
+    }
+   
+    // console.log({eqBreakdown, brBreakdown});
+    
+    return [ eqBreakdown, brBreakdown ];
+
+  }
 
 });

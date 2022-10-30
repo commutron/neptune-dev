@@ -1,9 +1,8 @@
 import React from "react";
 import { VictoryPie } from 'victory';
-//import Pref from '/client/global/pref.js';
 import Theme from '/client/global/themeV.js';
 
-const NumStatRing = ({ total, nums, name, title, colour, maxSize, noGap, isDebug })=> {
+const NumStatRing = ({ total, nums, name, inner, title, colour, maxSize, noGap, isDebug })=> {
   
   const colours =
     colour === 'blue' ? ["#4181cb","#044289","#499eff","#0579ff","#7b9dc4"] :
@@ -31,9 +30,9 @@ const NumStatRing = ({ total, nums, name, title, colour, maxSize, noGap, isDebug
           data={nums}
           labels={(l)=>null}
         />
-        <span className='pieCore numFont'>{total}</span> 
+        <span className='pieCore numFont'>{total}{inner ? <i>{inner}</i> : null}</span> 
       </div>
-      <p className='centreText cap'>{name}</p>
+      {name ? <p className='centreText cap'>{name}</p> : null}
     </div>
   );
 };

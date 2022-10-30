@@ -15,6 +15,7 @@
 .navButtonWrap a,
 .navButtonWrap button,
 .navBarWrap a,
+/*.navBarPlaceholer*/
 .navButtonPlaceHolder {
   width: 100%;
   height: 100%;
@@ -25,6 +26,7 @@
 }
 .navButtonWrap a,
 .navButtonWrap button,
+/*.navBarPlaceholer*/
 .navButtonPlaceHolder {
   flex-direction: column;
 }
@@ -33,9 +35,10 @@
   cursor: pointer;
 }
 
-.navBarWrap {
-  grid-column: 1/-1;
-}
+.navBarflex2 { grid-column-end: span 2; }
+.navBarflex4 { grid-column-end: span 4; }
+
+/*.navBarPlaceholer*/
 .navBarWrap a {
   flex-direction: row;
   align-items: center;
@@ -82,9 +85,13 @@
 .navBarWrap:hover .navBarText {
   color: rgb(30,30,30);
 }
+/*.navBarPlaceholer*/
 .navButtonPlaceHolder {
   background-color: rgb(30,30,30);
+  cursor: default;
 }
+/*.navBarPlaceholer .navBarIcon,*/
+/*.navBarPlaceholer .navBarText*/
 .navButtonPlaceHolder .navButtonIcon,
 .navButtonPlaceHolder .navButtonText {
   color: rgb(50,50,50);

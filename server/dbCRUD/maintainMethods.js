@@ -175,7 +175,7 @@ Meteor.methods({
     const eq = EquipDB.findOne({_id: eqId, hibernate: { $ne: true } },{fields:{'online':1,'service':1}});
     const sv = eq?.service.find( s => s.serveKey === serveKey );
     
-    if(eq && sv) {
+    if(eq && sv && !sv.disable) {
       const next = nextService(sv);
       const nextMmnt = moment(next).tz(Config.clientTZ);
       
@@ -293,45 +293,47 @@ Meteor.methods({
                           {fields:{'serveKey':1}}).fetch();
           
           for(const sv of eq.service) {
-            const req = !eq.online && ( sv.timeSpan === 'day' || sv.timeSpan === 'week' ) ? 'notrequired' : false;
-      
-            const next = nextService(sv);
-            
-            const nextMmnt = moment(next).tz(Config.clientTZ);
-            const close = calcClose(nextMmnt, sv.whenOf, sv.timeSpan);
-            
-            const match = maintEq.find( m => m.serveKey === sv.serveKey );
-       
-            const open = calcOpen( close, sv.period );
-            const expire = calcExpire( close, sv.grace );
-            
-            if(!match) {
-              MaintainDB.insert({
-                equipId: eq._id,
-                serveKey: sv.serveKey,
-                orgKey: orgKey,
-                name: sv.name,
-                open: new Date( open ),
-                close: new Date( close.format() ),
-                expire: new Date( expire ),
-                status: req, // complete, notrequired, incomplete, missed
-                doneAt: false,
-                checklist: [],
-                notes: ''
-              });
-            }else{
-              MaintainDB.update({_id: match._id, 
-                $or: [ 
-                  { status: false },
-                  { status: 'notrequired' }
-                ], close: { $gt: new Date() }},{
-                $set: {
+            if(!sv.disable) {
+              const req = !eq.online && ( sv.timeSpan === 'day' || sv.timeSpan === 'week' ) ? 'notrequired' : false;
+        
+              const next = nextService(sv);
+              
+              const nextMmnt = moment(next).tz(Config.clientTZ);
+              const close = calcClose(nextMmnt, sv.whenOf, sv.timeSpan);
+              
+              const match = maintEq.find( m => m.serveKey === sv.serveKey );
+         
+              const open = calcOpen( close, sv.period );
+              const expire = calcExpire( close, sv.grace );
+              
+              if(!match) {
+                MaintainDB.insert({
+                  equipId: eq._id,
+                  serveKey: sv.serveKey,
+                  orgKey: orgKey,
                   name: sv.name,
                   open: new Date( open ),
                   close: new Date( close.format() ),
-                  expire: new Date( expire )
-                }
-              });
+                  expire: new Date( expire ),
+                  status: req, // complete, notrequired, incomplete, missed
+                  doneAt: false,
+                  checklist: [],
+                  notes: ''
+                });
+              }else{
+                MaintainDB.update({_id: match._id, 
+                  $or: [ 
+                    { status: false },
+                    { status: 'notrequired' }
+                  ], close: { $gt: new Date() }},{
+                  $set: {
+                    name: sv.name,
+                    open: new Date( open ),
+                    close: new Date( close.format() ),
+                    expire: new Date( expire )
+                  }
+                });
+              }
             }
           }
         });

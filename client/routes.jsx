@@ -24,6 +24,7 @@ import DownstreamData from './views/downstream/DownstreamData';
 import PeopleDataWrap from './views/people/PeopleDataWrap';
 import UserDataWrap from './views/user/UserDataWrap';
 import DataData from './views/data/DataData';
+import EquipData from './views/equipment/EquipData';
 import AppData from './views/app/AppData';
 
 import GeneralLabel from './views/paper/GeneralLabel';
@@ -171,11 +172,27 @@ privlegedRoutes.route('/overview', {
     });
   }
 });
-privlegedRoutes.route('/overview/:view', {
-  name: 'overview',
+// privlegedRoutes.route('/overview/:view', {
+//   name: 'overview',
+//   action: function(params) {
+//     mount(CleanLayout, {
+//       content: ( <OverviewData view={params.view} /> )
+//     });
+//   },
+// });
+
+privlegedRoutes.route('/equipment', {
+  action() {
+    mount(CleanLayout, {
+       content: (<EquipData />)
+    });
+  }
+});
+
+privlegedRoutes.route('/equipment/:view', {
   action: function(params) {
     mount(CleanLayout, {
-      content: ( <OverviewData view={params.view} /> )
+      content: (<EquipData specify={params.view} />)
     });
   },
 });

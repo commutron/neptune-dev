@@ -86,16 +86,6 @@ export const ExTaskBar = ({ subLink }) => (
       iconAdj=''
     />
     
-    <span className='flexSpace'></span>
-    
-    <TaskElement
-      title={Pref.maintain}
-      subON={subLink === 'overviewmaintain'}
-      goLink='/data/overview?request=maintain'
-      icon='fa-solid fa-screwdriver-wrench'
-      iconAdj=''
-    />
-    
   </div>
 );
 
@@ -208,7 +198,7 @@ const FilterElement = ({ title, subTitle, goLink, branchON, changeBranch, icon, 
   </button>
 );
 
-export const OverMenuBar = ({ brancheS, branchON, calView, changeBranch, light }) => {
+export const OverMenuBar = ({ brancheS, branchON, changeBranch, light }) => {
   
   const barsty = {
     colorScheme: 'dark',
@@ -231,7 +221,7 @@ export const OverMenuBar = ({ brancheS, branchON, calView, changeBranch, light }
         title='All'
         subTitle='AL'
         goLink={false}
-        branchON={!calView && branchON === false}
+        branchON={branchON === false}
         changeBranch={changeBranch}
         icon='fa-solid fa-code-branch'
         size=''
@@ -245,7 +235,7 @@ export const OverMenuBar = ({ brancheS, branchON, calView, changeBranch, light }
             title={br.branch}
             subTitle={br.common.charAt(0) + br.common.charAt(1)}
             goLink={br.branch}
-            branchON={!calView && branchON === br.branch}
+            branchON={branchON === br.branch}
             changeBranch={changeBranch}
             icon={false}
             size='vbigger'
@@ -253,16 +243,14 @@ export const OverMenuBar = ({ brancheS, branchON, calView, changeBranch, light }
           />
       )})}
       
-      <span className='flexSpace'></span>
-      
-      <TaskElement
-        title={`${Pref.maintain} Calendar`}
-        subON={calView}
-        goLink='/overview/pmcalendar'
-        icon='fa-solid fa-screwdriver-wrench'
-        shrink={brancheS.length >= 13}
-      />
-
     </div>
   );
 };
+/* <span className='flexSpace'></span>
+<TaskElement
+  title={`${} Calendar`}
+  subON={calView}
+  goLink='/overview/calendar'
+  icon='fa-solid fa-calendar'
+  shrink={brancheS.length >= 13}
+/> */

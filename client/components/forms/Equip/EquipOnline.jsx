@@ -7,7 +7,7 @@ const EquipOnline = ({ id, equip, online })=> {
     Meteor.call('onofflineEquipment', id, line, (error, reply)=>{
       error && console.log(error);
       if(reply) {
-        FlowRouter.go('/data/overview?request=maintain&specify=' + equip);
+        FlowRouter.go('/equipment/' + equip);
       }else{
         toast.warning('Not Allowed');
       }

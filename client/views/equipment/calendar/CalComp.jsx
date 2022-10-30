@@ -1,12 +1,11 @@
 import React, { useCallback } from 'react';
 import moment from 'moment';
 import 'moment-business-time';
-// import Pref from '/client/global/pref.js';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 
 const localizer = momentLocalizer(moment);
 
-const CalComp = ({ events, getEvents })=> {
+const CalComp = ({ events, getEvents, defaultView, height })=> {
   
   const dayPropGetter = useCallback(
     (date) => ({
@@ -41,9 +40,9 @@ const CalComp = ({ events, getEvents })=> {
       events={events}
       startAccessor="start"
       endAccessor="end"
-      defaultView='month'
+      defaultView={defaultView}
       views={['month', 'week']}
-      style={{ height: '75vh' }}
+      style={{ height: height }}
       onNavigate={(e)=>getEvents(e)}
       popup={true}
       dayPropGetter={dayPropGetter}

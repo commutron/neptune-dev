@@ -5,19 +5,22 @@ import Pref from '/client/global/pref.js';
 
 import EquipForm from '/client/components/forms/Equip/EquipForm';
 import NumBox from '/client/components/tinyUi/NumBox';
+import EqTimeReport from './EqTimeReport';
+
+import CalWrap from './calendar/CalWrap';
 
 const Landing = ({ equipData, maintainData, issues, app, brancheS })=> {
   
-  const week0 = useMemo( ()=> moment().startOf('week'), [app]);
-  const week6 = useMemo( ()=> moment().endOf('week'), [app]);
+  // const week0 = useMemo( ()=> moment().startOf('week'), [app]);
+  // const week6 = useMemo( ()=> moment().endOf('week'), [app]);
   
-  const thisWeek = useMemo( ()=> maintainData
-          .filter( f => !f.status &&
-            moment(f.close).isBetween( week0, week6 ) )
-          .sort((x1, x2)=>
-            x1.close < x2.close ? -1 : 
-            x1.close > x2.close ? 1 : 0 
-        ), [maintainData]);
+  // const thisWeek = useMemo( ()=> maintainData
+  //         .filter( f => !f.status &&
+  //           moment(f.close).isBetween( week0, week6 ) )
+  //         .sort((x1, x2)=>
+  //           x1.close < x2.close ? -1 : 
+  //           x1.close > x2.close ? 1 : 0 
+  //       ), [maintainData]);
   
   return(
     <div className='overscroll'>
@@ -53,7 +56,7 @@ const Landing = ({ equipData, maintainData, issues, app, brancheS })=> {
         />
       </div>
 
-      <div>
+      {/*<div>
         <h3>Upcoming Service Due</h3>
         <dl className='max400'>
         {thisWeek.map( (mn, index)=> {
@@ -72,7 +75,11 @@ const Landing = ({ equipData, maintainData, issues, app, brancheS })=> {
           }
         })}
         </dl>
-      </div>
+      </div>*/}
+      
+      <EqTimeReport />
+      
+      <CalWrap />
 
     </div>
   );

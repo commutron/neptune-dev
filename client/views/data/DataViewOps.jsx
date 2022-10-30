@@ -18,8 +18,6 @@ import TestFailPanel from './panels/TestFailPanel';
 import RadioPanel from './panels/RadioPanel';
 import ScrapPanel from './panels/ScrapPanel';
 
-import EquipData from './panels/Maintain/EquipData';
-
 import BatchesList from './lists/BatchesList';
 import ItemsListX from './lists/ItemsListX';
 
@@ -294,29 +292,6 @@ const DataViewOps = ({
         >
           <ScrapPanel 
             app={app} />
-        </TraverseWrap>
-      );
-    }else if(request === 'maintain') {
-      return(
-        <TraverseWrap
-		      batchData={false}
-          widgetData={false}
-          variantData={false}
-          groupData={false}
-          user={user}
-          app={app}
-          title={Pref.maintain}
-          subLink={subLink}
-          action='maintain'
-          base={true}
-        >
-          <EquipData
-            app={app}
-            users={users}
-            brancheS={brancheS}
-            specify={specify}
-            isDebug={isDebug}
-          />
         </TraverseWrap>
       );
     }else{

@@ -2,7 +2,7 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 
 const MetaSlide = ()=> (
-  <div className='space3v lightTheme scrollWrap'>
+  <div className='space3v lightTheme scrollWrap thinScroll'>
     <div className='monoFont centreText'>
       <p className='centre'>
         <img src='/titleLogo.svg' className='noCopy' height='200' />

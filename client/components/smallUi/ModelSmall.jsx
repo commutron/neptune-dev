@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 
 
 const ModelSmall = ({ 
-  button, title, cleanIcon,
+  button, title, cleanIcon, wrapIcon,
   icon, color, textcolor, 
   noText, inLine, lgIcon, overrideStyle,
   lock, children 
@@ -41,7 +41,9 @@ const ModelSmall = ({
           onClick={()=>reveal()}
           disabled={lock}>
           <label className={`navIcon actionIconWrap ${inLine ? 'middle' : ''}`}>
-            <i className={`fas ${icon} ${iSize} fa-fw ${color}`}></i>
+            {wrapIcon ?
+              <n-fa1><i className={`fas ${icon} ${iSize} fa-fw ${color}`}></i></n-fa1>
+            : <n-fa0><i className={`fas ${icon} ${iSize} fa-fw ${color}`}></i></n-fa0>}
             {!noText && <span className={`actionIconText ${textcolor || color}`}>{button}</span>}
           </label>
         </button>

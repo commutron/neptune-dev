@@ -24,7 +24,7 @@ const EquipFormWrapper = ({
       button={bttn}
       title={title}
       color='midnightblueT'
-      icon='fa-vault'
+      icon='fa-robot'
       lock={!access || lockOut}
       noText={noText}
       primeTopRight={primeTopRight}
@@ -70,7 +70,7 @@ const EquipForm = ({
           console.log(error);
         if(reply) {
           toast.success('Saved');
-          FlowRouter.go('/data/overview?request=maintain&specify=' + eqalias);
+          FlowRouter.go('/equipment/' + eqalias);
           selfclose();
         }else{
           toast.warning('Duplicate Name');
@@ -82,7 +82,7 @@ const EquipForm = ({
         error && console.log(error);
         if(reply) {
           toast.success('Saved');
-          FlowRouter.go('/data/overview?request=maintain&specify=' + eqalias);
+          FlowRouter.go('/equipment/' + eqalias);
           selfclose();
         }else{
           toast.warning('Duplicate Name');

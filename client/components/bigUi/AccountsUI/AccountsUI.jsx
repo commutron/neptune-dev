@@ -9,10 +9,15 @@ import NewUser from './NewUser';
 
 const AccountsUI = ({ login, uID, username })=> {
 	
+	function doLogout() {
+    Meteor.logout();
+		document.querySelector(':root').style.setProperty('--neptuneColor', null);
+	}
+	
 	const crd = { 
 		minHeight: '300px',
 		width: '300px',
-  	margin: '5vh 0 0 0'
+  	margin: '5vh 0 0 0',
 	};
 	
 	const bttn = {
@@ -36,17 +41,18 @@ const AccountsUI = ({ login, uID, username })=> {
 		<div style={crd}>
 		  
 		  {login && uID && username ?
-        <div>
-        	<p className='medBig'>Signed in as: {username}</p>
-        	<p>
-        		<button
-        			id='logout'
-        			style={bttn}
-        			className='userFormButtons loginoutButton'
-        			onClick={()=>Meteor.logout()}
-        		>Sign Out</button>
-        	</p>
-        </div>
+        <div className='navButtonWrap' title={'Sign Out\n' + username}>
+		      <button
+		        type='button'
+		        id='homeExitButton'
+		        style={{minHeight: 'calc(20 * var(--vh))'}}
+		        className='navButtonWrap'
+		        onClick={()=>doLogout()}
+		        readOnly>
+		        <i className='fas fa-sign-out-alt fa-fw navButtonIcon'></i>
+		        <i className='navButtonText'>Sign-out<br />{username}</i>
+		      </button>
+		    </div>
       :
       	<Tabs
 	        tabs={['scan in', 'sign in', 'sign up']}

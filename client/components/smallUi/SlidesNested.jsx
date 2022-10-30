@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 const SlidesNested = ({ 
   menuTitle, menu, 
-  disable, disableAll, extraClass, 
+  disable, disableAll, menuClass, extraClass, 
   topPage, defaultSlide,
   textStyle,
   children
@@ -30,7 +30,7 @@ const SlidesNested = ({
   
   return(
     <div className='slidesNestedLayout'>
-      <div className='slidesNestedMenu forceScrollStyle noPrint'>
+      <div className={`slidesNestedMenu forceScrollStyle noPrint ${menuClass}`}>
 
         <input 
           key={'1a1'} 

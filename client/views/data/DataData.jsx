@@ -45,8 +45,6 @@ const ExploreView = ({
   }
   
   localeUpdate(app);
-  
-  // const brancheS = branchesSort(app.branches);
 
   return(
     <DataViewOps

@@ -1,11 +1,10 @@
 import React, { useRef, useState, useEffect } from 'react';
 import moment from 'moment';
 import 'moment-business-time';
-// import Pref from '/client/global/pref.js';
 
 import CalComp from './CalComp';
 
-const CalWrap = ({ oB, filterBranch })=> {
+const CalWrap = ()=> {
   
   const mounted = useRef(true);
   const [ work, workSet ] = useState(false);
@@ -45,45 +44,6 @@ const CalWrap = ({ oB, filterBranch })=> {
   	getEvents( new Date() );
   }, []);
   
-  /*
-  const [ brTime, setTime ] = useState([]);
-  
-  useEffect( ()=> {
-  	
-  	let timeArr = [];
-  	
-  	if(Array.isArray(oB)) {
-      for(let b of oB) {
-        
-        Meteor.apply('branchTaskTime', [ b._id ], {wait: true}, (error, reply)=>{
-          error && console.log(error);
-          if( reply && mounted.current ) { 
-            
-            for(let t of reply.branchTime) {
-              if(t.budget) {
-                timeArr.push(
-                  [ b.batch, t.branch, Math.max( (t.budget - t.time), 0 ) ]
-                );
-              //     {
-              // 	  title: eq.alias + ' -  ' + match.name,
-              // 	  start: match.doneAt,
-              // 	  end: match.doneAt,
-              // 	  allDay: true,
-              // 	  done: true
-              // 	});
-              }
-            }
-          
-            setTime(timeArr);
-          }
-        });
-      }
-  	}
-  }, [oB]);
-  
-  console.log({brTime});
-  */
-  
   return(
 	  <div className='space3v'>
 	  	<div className='rowWrap vmarginquarter'>
@@ -95,6 +55,8 @@ const CalWrap = ({ oB, filterBranch })=> {
 	  	<CalComp
 	  	  events={events}
 	  	  getEvents={getEvents}
+	  	  defaultView='week'
+	  	  height='70vh'
 	  	/>
 	  </div>
   );

@@ -34,7 +34,7 @@ const StartView = ({user, app}) =>	{
   
   return(
     <PlainFrame title={Pref.neptuneIs} container='splashContainer'>
-      <div className={isAdmin ? 'homeNaviA' : 'homeNavi'}>
+      <div className='homeNavi'>
         {isReadOnly ?
           <NavPlaceholder 
             title='Production'
@@ -48,6 +48,14 @@ const StartView = ({user, app}) =>	{
           <NavButton title='' icon='fa-solid fa-location-arrow' link='/process' />
         : <NavPlaceholder title='' icon='fa-solid fa-location-arrow' /> }
         
+        <NavButton title='Equipment' icon='fa-solid fa-robot fa-xs' link='/equipment' shrink='1' />
+        
+        <NavButton title='Explore' icon='fa-solid fa-rocket' link='/data' />
+        
+        <NavButton title={Pref.upstream} icon='fa-solid fa-satellite-dish' link='/upstream' />
+        
+        <NavButton title='Overview' icon='fa-solid fa-globe' link='/overview' />
+        
         <NavButtonShell title='People' link='/people'
           icon={
             <span className='fa-stack fa-fw navButtonIcon navButtonLayerCorrect'>
@@ -56,20 +64,10 @@ const StartView = ({user, app}) =>	{
               <i className="fa-solid fa-user-astronaut fa-stack-1x" data-fa-transform="shrink-5 right-10 down-1"></i>
             </span>
           } />
-        
-        <NavButton title='Explore' icon='fa-solid fa-rocket' link='/data' />
-        
-        <NavButton title={Pref.upstream} icon='fa-solid fa-satellite-dish' link='/upstream' />
-        
-        <NavButton title='Overview' icon='fa-solid fa-globe' link='/overview' />
-        
+          
         <NavButton title={Pref.downstream} icon='fa-solid fa-satellite' link='/downstream' />
         
-        <NavButton title={usernice} icon='fa-solid fa-user-astronaut fa-flip-horizontal' link='/user' />
-        
         <NavButton title={Pref.docs} icon='fa-solid fa-file-invoice' link={app.instruct || ''} blank={true} />
-        
-        <NavButton title='Help' icon='fa-regular fa-question-circle' link={app.helpDocs || ''} blank={true} />
         
         {!app.timeClock || app.timeClock.trim() === '' ?  
           <NavPlaceholder 
@@ -81,10 +79,25 @@ const StartView = ({user, app}) =>	{
             link={app.timeClock || ''} 
             blank={true} /> }
         
+        <NavButton title={usernice} icon='fa-solid fa-user-astronaut fa-flip-horizontal' link='/user' />
+        
         <HomeLogout currentUser={user} />
         
+        <NavBar 
+          title='Help' 
+          icon='fa-solid fa-question-circle' 
+          link={app.helpDocs || ''} 
+          blank={true}
+          span={isAdmin ? '2' : '4'}
+        />
+        
         {isAdmin ?
-          <NavBar title='Settings' icon='fa-solid fa-sliders-h' link='/app' />
+          <NavBar 
+            title='Settings' 
+            icon='fa-solid fa-sliders-h' 
+            link='/app'
+            span='2'
+          />
         : null}
       </div>
     </PlainFrame>

@@ -3,6 +3,11 @@ import React from 'react';
 
 const PagingSelect = ({ multiArray, isSet, doChange })=> (
   <div className='centreRow vmargin'>
+    <button
+      onClick={()=>doChange(isSet-1)}
+      className='smallAction gap blackHover borderWhite transparent'
+      disabled={isSet < 1}
+    >❮</button>
     {multiArray.map( (pg, ix)=>{
       if(multiArray.length > 20 && 
         ix > 2 && 
@@ -29,6 +34,11 @@ const PagingSelect = ({ multiArray, isSet, doChange })=> (
         );
       }
     })}
+    <button
+      onClick={()=>doChange(isSet+1)}
+      className='smallAction gap blackHover borderWhite transparent'
+      disabled={isSet === multiArray.length-1 || multiArray.length === 0}
+    >❯</button>
   </div>
 );
 

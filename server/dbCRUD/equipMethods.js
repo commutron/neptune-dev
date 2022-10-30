@@ -146,7 +146,8 @@ Meteor.methods({
             recur: Number(recur),
             period: Number(period), // 1, 6, 30 // in days
             grace: Number(grace), // in days
-            tasks: []
+            tasks: [],
+            disable: false
           }
         }});
       Meteor.defer( ()=>{
@@ -177,6 +178,28 @@ Meteor.methods({
         }});
       Meteor.defer( ()=>{
         Meteor.call('pmUpdate', eqId, serveKey, accessKey);
+      });
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  disEnAbleServicePattern(eqId, serveKey, disable) {
+    if(Roles.userIsInRole(Meteor.userId(), ['equipSuper','edit'])) {
+      const accessKey = Meteor.user().orgKey;
+      
+      EquipDB.update({_id: eqId, orgKey: accessKey, 'service.serveKey': serveKey}, {
+        $set : {
+          'service.$.updatedAt': new Date(),
+          'service.$.disable': disable
+        }});
+      Meteor.defer( ()=>{
+        if(disable) {
+          MaintainDB.remove({equipId: eqId, serveKey: serveKey, status: false});
+        }else{
+          Meteor.call('pmUpdate', eqId, serveKey, accessKey);
+        }
       });
       return true;
     }else{

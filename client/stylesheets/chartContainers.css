@@ -13,7 +13,8 @@
   width: 10vmin;
   padding: 1vmin;
 }
-.chart10Shrink .pieCore { font-size: 2.5vmin; }
+.chart10Shrink .pieCore { font-size: 2vmin; }
+.chart10Shrink .pieCore > i { font-size: 0.9vmin; }
 .chart10Shrink p { 
   font-size: 1.25vmin; 
   margin: 0;
@@ -23,7 +24,8 @@
   width: 10vmax;
   padding: 1vmax;
 }
-.chart10Contain .pieCore { font-size: 2.5vmax; }
+.chart10Contain .pieCore { font-size: 2vmax; }
+.chart10Contain .pieCore > i { font-size: 0.9vmax; }
 .chart10Contain p { 
   font-size: 1.25vmax; 
   margin: 0;
@@ -33,7 +35,8 @@
   width: 15vmax;
   padding: 1vmax;
 }
-.chart15Contain .pieCore { font-size: 5vmax; }
+.chart15Contain .pieCore { font-size: 3vmax; }
+.chart15Contain .pieCore > i { font-size: 1.5vmax; }
 .chart15Contain p { 
   font-size: 1.5vmax;
   margin: 0;
@@ -44,7 +47,8 @@
   width: 20vmax;
   padding: 1vmax;
 }
-.chart20Contain .pieCore { font-size: 8vmax; }
+.chart20Contain .pieCore { font-size: 4vmax; }
+.chart20Contain .pieCore > i { font-size: 2vmax; }
 .chart20Contain p { 
   font-size: 2vmax;
   margin: 0;
@@ -58,7 +62,10 @@
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%) rotate(0deg);
+	text-align: center;
+	line-height: 1;
 }
+.pieCore > i { display: block; }
 
 .hzBarContain15,
 .hzBarContain25 {

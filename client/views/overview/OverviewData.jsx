@@ -11,7 +11,7 @@ import Spin from '../../components/tinyUi/Spin';
 import OverviewWrap from './OverviewWrap';
 
 const View = ({
-  ready, readyT, calView,
+  ready, readyT,
   user, app, isDebug,
   batchX, traceDT,
   allEquip, openMaint
@@ -45,7 +45,6 @@ const View = ({
         user={user}
         app={app}
         brancheS={brancheS}
-        calView={calView}
         isDebug={isDebug} 
       />
     </PlainFrame>
@@ -53,7 +52,7 @@ const View = ({
 };
 
 
-export default withTracker( ({ view }) => {
+export default withTracker( () => {
   let login = Meteor.userId() ? true : false;
   let user = login ? Meteor.user() : false;
   const active = user ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
@@ -70,7 +69,7 @@ export default withTracker( ({ view }) => {
     return {
       ready: sub.ready(),
       readyT: subT.ready(),
-      calView: view === 'pmcalendar',
+      // calView: view === 'pmcalendar',
       user: user,
       isDebug: isDebug,
       app: AppDB.findOne({org: org}),
