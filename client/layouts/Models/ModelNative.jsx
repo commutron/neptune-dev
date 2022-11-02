@@ -31,7 +31,7 @@ const ModelNative = ({ dialogId, title, icon, colorT, dark, children })=> {
 
 export default ModelNative;
 
-export const OpenModelNative = ({ dialogId, title, icon, colorB, colorT, lock })=> {
+export const OpenModelNative = ({ dialogId, title, icon, iconObj, colorB, colorT, lock })=> {
   
   const open = ()=> {
     const dialog = document.getElementById(dialogId);
@@ -44,7 +44,7 @@ export const OpenModelNative = ({ dialogId, title, icon, colorB, colorT, lock })
       className={`action middle ${colorB}`}
       onClick={()=>open()}
       disabled={lock}>
-      <i className={`${icon} fa-fw fa-lg gap ${colorT}`}></i>
+      {iconObj || <i className={`${icon} fa-fw fa-lg gap ${colorT}`}></i>}
       <span className={colorT}>{title}</span>
     </button>
   );

@@ -45,13 +45,13 @@ const CalWrap = ()=> {
   }, []);
   
   return(
-	  <div className='space3v'>
-	  	<div className='rowWrap vmarginquarter'>
+	  <div className='space3v vmarginhalf'>
+	  	{/*<div className='rowWrap vmarginquarter'>
 	  		<span>{work ?
           <n-fa0><i className='fas fa-spinner fa-lg fa-spin'></i></n-fa0> :
           <n-fa1><i className='fas fa-spinner fa-lg'></i></n-fa1>
         }</span>
-	  	</div>
+	  	</div>*/}
 	  	<CalComp
 	  	  events={events}
 	  	  getEvents={getEvents}

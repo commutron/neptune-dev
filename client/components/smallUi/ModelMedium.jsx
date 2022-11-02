@@ -44,7 +44,7 @@ const ModelMedium = ({
                   title='close'
                 ><i className='fas fa-times fa-lg'></i></button>
               </n-model-head>
-              <n-md-model-content className='centre forceScrollStyle'>
+              <n-md-model-content class='centre forceScrollStyle'>
                 {React.cloneElement(children,
                   { 
                     selfclose: ()=>reveal()

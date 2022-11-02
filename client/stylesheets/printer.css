@@ -63,9 +63,26 @@ n-print {
   .redGlow { background-color: var(--alizarintrans); }
   .yellowGlow { background-color: var(--sunflowerfade); }
   .greenGlow { background-color: var(--emeraldtrans); }
-
   .redGlow, .yellowGlow, .greenGlow {
     -webkit-print-color-adjust: exact;
     color-adjust: exact;
+  }
+  
+  n-model-head {
+    display: none;
+  }
+  n-md-model {
+    margin: unset;
+    max-width: unset;
+    max-height: 100%;
+  }
+  n-lg-model-content, n-md-model-content, n-sm-model-content {
+    min-height: auto;
+    max-height: unset;
+    border: none;
+    margin: 0;
+  }
+  .overlay, n-md-model {
+    background-color: white;
   }
 }

@@ -12,7 +12,7 @@ const ReportStatsTable = ({ title, dateString, rows, extraClass })=> {
       <a href={`data:text/plain;charset=UTF-8,${outputLines}`}
         download={`${filename}_${dateString}.csv`}
       >Download {title} for {dateString} to your computer as a comma-delimited CSV file</a>
-      , {autoClose: false, closeOnClick: false}
+      , {autoClose: false, closeOnClick: false, theme: 'light'}
     );
     
   }

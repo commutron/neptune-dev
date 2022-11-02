@@ -214,7 +214,6 @@
 }
 .Toastify__close-button--light {
   color: #000;
-  opacity: 0.3;
 }
 .Toastify__close-button > svg {
   fill: currentColor;
