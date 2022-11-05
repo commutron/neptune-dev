@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, useMemo, Fragment } from 'react';
+import React, { useRef, useState, useLayoutEffect, useEffect, useMemo, Fragment } from 'react';
 import moment from 'moment';
 import 'moment-business-time';
 import { toast } from 'react-toastify';
@@ -8,11 +8,11 @@ import { chunkArray } from '/client/utility/Convert';
 import UserName from '/client/utility/Username.js';
 import IssueDetail from './IssueDetail';
 
-const IssueHistory = ({ eqId, issData, isDebug, users })=>{
+const IssueHistory = ({ eqId, issData, isDebug, isEqSup, users })=>{
   
   const issSort = useMemo( ()=> issData.reverse(), [issData]);
   
-  const [ debounce, debSet ] = useState(0);
+  const [ debounce, debSet ] = useState(undefined);
   
   const [ pageState, pageSet ] = useState(0);
   const [ openState, openSet ] = useState(null);
@@ -21,28 +21,40 @@ const IssueHistory = ({ eqId, issData, isDebug, users })=>{
   const [ inpieces, inpiecesSet ] = useState([]);
   
   const timer = useRef(null);
-    
-  useEffect(() => {
-    clearTimeout(timer.current);
-    timer.current = setTimeout(() => {
-     
-      const issRel = openState ? issSort.filter( f => f.open ) :
-                 openState === false ? issSort.filter( f => !f.open ) :
-                 issSort;
-                 
-      const issRef = !textState  ? issRel : 
-                     issRel.filter( f => 
-                        f.title.toLowerCase().includes(textState.toLowerCase())
-                        ||
-                        f.problog.find( l => 
-                          l.text.toLowerCase()
-                            .includes(textState.toLowerCase()))
-                      );
   
-      inpiecesSet( chunkArray(issRef, 10) );
-      debSet(750);
-    },debounce);
-      
+  const fltrOpen = ()=> openState ? issSort.filter( f => f.open ) :
+                        openState === false ? issSort.filter( f => !f.open ) :
+                        issSort;
+  
+  const fltrText = (iss)=> !textState  ? iss : 
+                        iss.filter( f => 
+                          f.title.toLowerCase().includes(textState.toLowerCase())
+                          ||
+                          f.problog.find( l => 
+                            l.text.toLowerCase()
+                              .includes(textState.toLowerCase()))
+                        );
+                    
+  useLayoutEffect(() => {
+    const issRel = fltrOpen();
+    const issRef = fltrText(issRel);
+                    
+    inpiecesSet( chunkArray(issRef, 10) );
+    debSet(0);
+  },[issData]);
+  
+  useEffect(() => {
+    if(debounce !== undefined) {
+      clearTimeout(timer.current);
+      timer.current = setTimeout(() => {
+        
+        const issRel = fltrOpen();
+        const issRef = fltrText(issRel);
+    
+        inpiecesSet( chunkArray(issRef, 10) );
+        debSet(750);
+      },debounce);
+    }
   },[openState, textState]);
 
   isDebug && console.log(issData);
@@ -173,12 +185,12 @@ const IssueHistory = ({ eqId, issData, isDebug, users })=>{
           <span className='blk small max250'>Issue logs are permanent and non-editable</span>
         </p>
         <div className='centreText'>
-          <button type='submit' className='action midnightSolid'>Save</button>
+          <button type='submit' className='action midnightSolid'>Post</button>
         </div>
       </form>
     </div>
     
-    <BackdateIssue eqId={eqId} users={users} />
+    {isEqSup && <BackdateIssue eqId={eqId} users={users} /> }
     
     </Fragment>
   );
@@ -255,20 +267,20 @@ const BackdateIssue = ({ eqId, users })=> {
       <form id='backeqissue' onSubmit={(e)=>newBackIssue(e)}>
         <h4>Backdate New Issue</h4>
         <div className='balance gapsC'>
-        <div>
-          <p>
-            <label>Issue<br />
-              <input type='text' id='backtitle' required />
-            </label>
-            <span className='blk small max250 vmarginquarter'>Only the Point-Person will be able to edit the title.</span>
-          </p>
-          <p>
-            <label>Action / Troubleshooting<br />
-              <textarea id='backlog' rows='4' style={{maxWidth: '240px'}} required></textarea>
-            </label>
-            <span className='blk small max250'>Issue logs are permanent and non-editable</span>
-          </p>
-        </div>
+          <div>
+            <p>
+              <label>Issue<br />
+                <input type='text' id='backtitle' required />
+              </label>
+              <span className='blk small max250 vmarginquarter'>Only the Point-Person will be able to edit the title.</span>
+            </p>
+            <p>
+              <label>Action / Troubleshooting<br />
+                <textarea id='backlog' rows='4' style={{maxWidth: '240px'}} required></textarea>
+              </label>
+              <span className='blk small max250'>Issue logs are permanent and non-editable</span>
+            </p>
+          </div>
         <div>
           <p>
             <label>Date<br />
@@ -297,7 +309,7 @@ const BackdateIssue = ({ eqId, users })=> {
           </p>
           
           <p className='centreText'>
-            <button type='submit' className='action midnightSolid'>Save</button>
+            <button type='submit' className='action midnightSolid'>Post</button>
           </p>
         </div>
         </div>

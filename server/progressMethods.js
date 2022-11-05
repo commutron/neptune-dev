@@ -93,12 +93,11 @@ function collectBranchCondition(privateKey, batchID) {
                               rNC.some( x => x.where === branch.branch );
           
           const branchCon = branchSteps.length === 0 ? false :
-            conArr.includes('onHold') ? 'onHold' :
             conArr.includes('canStart') ||
             conArr.includes('stepRemain') ||
-            nonConLeft > 0 ?
-            'open'
-            :
+            nonConLeft > 0 ? 
+            'open' :
+            conArr.includes('onHold') ? 'onHold' :
             'closed';
             
           branchSets.push({

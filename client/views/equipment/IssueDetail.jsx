@@ -126,7 +126,7 @@ const IssueDetail = ({
                   </label>
                 
                   <div className='rightText'>
-                    <button type='submit' className='action midnightSolid'>Save</button>
+                    <button type='submit' className='action midnightSolid'>Post</button>
                   </div>
                 </form>
               </div>

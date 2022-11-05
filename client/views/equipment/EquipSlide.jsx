@@ -24,7 +24,7 @@ import NumStatRing from '/client/components/charts/Dash/NumStatRing.jsx';
 
 const EquipSlide = ({ 
   equipData, maintainData, 
-  app, users, isDebug, brancheS
+  app, users, isDebug, isEqSup, brancheS
 })=> {
   
   const eq = equipData;
@@ -278,6 +278,7 @@ const EquipSlide = ({
             eqId={eq._id}
             issData={eq.issues || []} 
             isDebug={isDebug}
+            isEqSup={isEqSup}
             users={users}
           />
         </div>
@@ -302,7 +303,7 @@ const EquipSlide = ({
 const EquipHotData = ({
   hotReady, // sub
   equipData, maintainData,
-  app, users, isDebug, brancheS 
+  app, users, isDebug, isEqSup, brancheS 
 })=> {
 
   if( !hotReady ) {
@@ -320,6 +321,7 @@ const EquipHotData = ({
       app={app}
       users={users}
       isDebug={isDebug}
+      isEqSup={isEqSup}
       brancheS={brancheS}
     />
   );
@@ -327,12 +329,14 @@ const EquipHotData = ({
 
 export default withTracker( ({ equipLite, app, users, isDebug, brancheS }) => {
   const hotSub = Meteor.subscribe('hotEquip', equipLite._id);
-
+  const isEqSup = Roles.userIsInRole(Meteor.userId(), ['admin','equipSuper']);
+  
   return {
     hotReady: hotSub.ready(),
     app: app,
     users: users,
     isDebug: isDebug,
+    isEqSup: isEqSup,
     brancheS: brancheS,
     equipData: EquipDB.findOne({_id: equipLite._id}, { sort: { alias: -1 } } ),
     maintainData: MaintainDB.find({equipId: equipLite._id}, { sort: { name: -1 } } ).fetch(),

@@ -37,7 +37,7 @@ function dryPriorityCalc(bQuTmBdg, mEst, bTide, shipAim, now, shipLoad) {
   return { est2tide, estSoonest, bffrRel, estEnd2fillBuffer, overQuote };
 }
 
-function collectPriority(privateKey, batchID, mockDay) {
+function collectPriority(batchID, mockDay) {
   return new Promise(resolve => {
     const now = moment().tz(Config.clientTZ);
 
@@ -140,7 +140,7 @@ function getFastPriority(bData, now, shipAim) {
 }
 
 
-function collectNonCon(privateKey, batchID) {
+function collectNonCon(batchID) {
   return new Promise(resolve => {
     let collection = false;
     const bx = XBatchDB.findOne({_id: batchID});
@@ -193,7 +193,7 @@ Meteor.methods({
       const accessKey = serverAccessKey || Meteor.user().orgKey;
       syncLocale(accessKey);
       try {
-        bundle = await collectPriority(accessKey, batchID, mockDay);
+        bundle = await collectPriority(batchID, mockDay);
         return bundle;
       }catch (err) {
         throw new Meteor.Error(err);
@@ -292,12 +292,11 @@ Meteor.methods({
     }
   },
   
-  nonconQuickStats(batchID, serverAccessKey) {
+  nonconQuickStats(batchID) {
     this.unblock();
     async function bundleNonCon(batchID) {
-      const accessKey = serverAccessKey || Meteor.user().orgKey;
       try {
-        bundle = await collectNonCon(accessKey, batchID);
+        bundle = await collectNonCon(batchID);
         return bundle;
       }catch (err) {
         throw new Meteor.Error(err);
