@@ -33,7 +33,8 @@ const EquipWrap = ({
   const menuList = equipS.map( (entry)=> {
                     const ttle = !entry.online && !entry.hibernate ? '・ ' + entry.alias : entry.alias;
                     const clss = entry.hibernate ? 'strike darkgrayT' : '';
-                    return [ttle, clss];
+                    const br = brancheS.find( b => b.brKey === entry.branchKey)?.branch || 'Facility';
+                    return [ttle, clss, br];
                   });
   
   const defaultSlide = specify ? equipS.findIndex( x => x.alias === specify ) : false;

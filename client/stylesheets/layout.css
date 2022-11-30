@@ -197,7 +197,7 @@ main {
   grid-template-columns: 
     calc(8 * var(--vh))
     calc(7 * var(--vh))
-    calc(7 * var(--vh))
+    0
     1fr 
     calc(7 * var(--vh))
     calc(7 * var(--vh));

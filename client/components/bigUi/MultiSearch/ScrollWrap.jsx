@@ -21,12 +21,12 @@ const ScrollWrap = ({ tggl, queryState, resultState }) => {
   useEffect( ()=> {
     if(resultState.length > 50) {
       document.getElementById('queryResults')
-        .addEventListener('scroll', handleScroll);
+        ?.addEventListener('scroll', handleScroll);
     }
     return ()=> {
       if(resultState.length > 50) {
         document.getElementById('queryResults')
-          .removeEventListener('scroll', handleScroll);
+          ?.removeEventListener('scroll', handleScroll);
       }
     };
   }, []);

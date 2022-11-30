@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import Pref from '/client/global/pref.js';
 
 import { ProWrap, ProWindow } from '/client/layouts/ProLayout';
@@ -127,14 +127,15 @@ const ProductionFindOps = ({
     );
   }
   
-  if(orb === Pref.docs || orb === 'docs') {
-    Session.set('now', Pref.docs);
+  if(orb === Pref.docs.toLowerCase() || orb === 'docs') {
+    Session.set('now', Pref.docs.toLowerCase());
     Session.set('nowBatch', false);
     Session.set('nowInstruct', undefined);
     return (
       <ProWindow 
         brancheS={brancheS} 
         plainBatchS={plainBatchS}
+        allEquip={allEquip}
         user={user}
         canMulti={canMulti}
       >
@@ -357,7 +358,7 @@ const ProductionFindOps = ({
         <n-sm>No Match</n-sm>
       </div>
       <QuickCards
-        orbslice={false}
+        orbslice={orb}
         canMulti={canMulti}
         user={user}
         allEquip={allEquip}
@@ -370,12 +371,14 @@ const ProductionFindOps = ({
 export default ProductionFindOps;
 
 const QuickCards = ({ orbslice, canMulti, user, allEquip, allMaint })=> (
-  <div className='balancer gapsR gapsC wide space'>
+  <div className='centre'>
     {orbslice && <PartialCard orb={orbslice} /> }
-    <QuickRecent user={user} />
-    <EquipCard equipData={allEquip} maintainData={allMaint} />
-    <EqAllCard />
-    {canMulti && <MultiCard />}
-    <SearchHelp />
+    <div className='balancer gapsR gapsC wide space'>
+      <QuickRecent user={user} />
+      <EquipCard equipData={allEquip} maintainData={allMaint} />
+      <EqAllCard />
+      {canMulti && <MultiCard />}
+      <SearchHelp />
+    </div>
   </div>
 );

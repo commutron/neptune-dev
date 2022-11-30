@@ -691,8 +691,9 @@ Meteor.publish('thinEquip', function(){
       EquipDB.find({orgKey: orgKey}, {
         fields: {
           'alias': 1,
+          'branchKey': 1,
           'hibernate': 1,
-          'online': 1
+          'online': 1,
       }}),
       MaintainDB.find({orgKey: orgKey, status: false,
                       close: { $gte: new Date(week0), $lte: new Date(week6) }

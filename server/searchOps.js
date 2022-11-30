@@ -173,13 +173,27 @@ Meteor.methods({
   proLookupPartial(orb) {
     let results = [];
     
-    XSeriesDB.find({
-      "items.serial": { $regex: new RegExp( orb ) }
-    },{fields:{'batch':1}})
-    .forEach( (srs)=> {
-      const whatIs = whatIsBatchX(srs.batch);
-      results.push([ srs.batch, whatIs[0] ]);
-    });
+    if(orb.length > 5) {
+      XSeriesDB.find({
+        "items.serial": { $regex: new RegExp( orb ) }
+      },{fields:{'batch':1}})
+      .forEach( (srs)=> {
+        const whatIs = whatIsBatchX(srs.batch);
+        results.push([ srs.batch, whatIs[0] ]);
+      });
+    }
+    
+    if(isNaN(orb) && orb.length > 2) {
+      GroupDB.find({
+        $or: [ 
+          { group: { $regex: new RegExp( orb ), $options: 'i' } },
+          { alias: { $regex: new RegExp( orb ) } }
+        ]
+      },{fields:{'alias':1}}
+      ).forEach( g => {
+        results.push([ g.alias ]);
+      });
+    }
     
     return results;
   },

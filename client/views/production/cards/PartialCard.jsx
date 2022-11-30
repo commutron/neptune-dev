@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import Pref from '/client/global/pref.js';
+import React, { Fragment, useState, useEffect } from 'react';
 
 const PartialCard = ({ orb })=> {
   
@@ -11,26 +10,31 @@ const PartialCard = ({ orb })=> {
       if(re) {
         const reS = re.sort((a,b)=> a[0] > b[0] ? 1 : a[0] < b[0] ? -1 : 0);
         lookupSet(reS);
+        if(reS.length === 1) {
+          Meteor.setTimeout(()=> Session.set('now', reS[0][0]), 500);
+        }
       }
     });
-  }, []);
+  }, [orb]);
   
   return(
-    <div className='centre pop vmargin space min200 max600'>
-      <p className='med wide bottomLine'>Possible {Pref.xBatch} matches</p>
-      <div className='centreRow vmarginhalf'>
-      {!lookup ? <em>...</em>
-      : lookup.length > 0 ?
-        lookup.map( (e, ix)=>(
-          <button 
-            key={ix}
-            className='action whiteSolid margin5 spacehalf'
-            onClick={()=>Session.set('now', e[0])}
-          >{e[0]} - {e[1].join(" ")}</button>
-        ))
-      : <p className='centreText'>No Partial Matches Found</p>
+    <div className='centre bottomLine borderGray vmarginhalf spacehalf min200 max600'>
+      {!lookup ? <em>...</em> :
+        lookup.length === 1 ? <em>~ Partial Match Auto Redirect ~</em> :
+        lookup.length === 0 ? null :
+        <Fragment>
+          <p className='med wide centreText bottomLine borderGray'>Possible partial matches</p>
+          <div className='vmarginquarter'>
+            {lookup.map( (e, ix)=>(
+              <button 
+                key={ix}
+                className='action whiteSolid margin5 spacehalf'
+                onClick={()=>Session.set('now', e[0])}
+              >{e[0]} {e[1] && " - "+e[1].join(" ")}</button>
+            ))}
+          </div>
+        </Fragment>
       }
-    </div>
    </div>
   );
 };

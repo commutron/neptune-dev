@@ -90,7 +90,7 @@ const EquipSlide = ({
           />
           
           <h3 className='spacehalf gapL cap'
-          >{!eq.branchKey ? 'other/no branch' : 
+          >{!eq.branchKey || eq.branchKey === 'false' ? 'Facility' : 
             brancheS.find( b => b.brKey === eq.branchKey).branch}
           </h3>
         </div>

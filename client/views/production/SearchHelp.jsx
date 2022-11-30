@@ -7,10 +7,11 @@ const SearchHelp = ()=> (
       <dl className='margin5'>
         <dt>Searchable</dt>
         <dd>{Pref.item} serial number</dd>
-        <dd>{'Partial serial numbers > 5 digits'}</dd>
+        <dd>{'Partial serial numbers ( >5 digits )'}</dd>
         <dd>{Pref.xBatch} number</dd>
         <dd>{Pref.group}'s abreviation</dd>
-        <dd>"docs" or "{Pref.docs}"</dd>
+        <dd>{`Partial ${Pref.group} name ( >2 characters )`}</dd>
+        <dd><em>docs</em> or <em>{Pref.docs}</em></dd>
       </dl>
       <dl className='margin5'>
         <dt>Not Searchable</dt>

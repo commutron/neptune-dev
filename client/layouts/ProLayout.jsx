@@ -155,8 +155,8 @@ export const ProWrap = ({
         {itemSerial && isFirst ?
           <div className='auxLeft firstBadge' data-steps={isFirst}>
             <span className='fa-stack'>
-              <i className="fas fa-certificate fa-stack-2x fa-fw blueT"></i>
-              <i className="fas fa-check-double fa-stack-1x fa-fw" ></i>
+              <i className="fas fa-certificate fa-stack-2x fa-fw blueT" data-fa-transform="right-1"></i>
+              <i className="fas fa-check-double fa-stack-1x fa-fw" data-fa-transform="right-12"></i>
             </span>
           </div>
         : null}

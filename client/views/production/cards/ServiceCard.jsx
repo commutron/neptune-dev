@@ -159,14 +159,14 @@ export const RepairCard = ({ eqData, brancheS, tideKey, timeOpen, engagedPro, en
                   <textarea id={atIssue+'addislog'} rows='1' className='adaptStone wetasphalt' required></textarea>
                 </label>
                 <div className='rightText'>
-                  <button type='submit' className='action wetSolid'>Save</button>
+                  <button type='submit' className='action wetSolid'>Post</button>
                 </div>
               </form>
             </div>
           :
             <label>Assign Repair Time to Specific Issue<br />
               <select id='eqissuekey'
-                className='lightTheme adaptStone'
+                className='darkTheme adaptStone'
                 onChange={()=>handleAppendIssue(this.eqissuekey.value)}
                 defaultValue={atIssue || false}
                 required>

@@ -134,6 +134,7 @@
   width: 100%;
   height: 100%;
   font-size: calc(2.5 * var(--vh));
+  z-index: 2;
 }
 @media screen and (prefers-reduced-motion: no-preference) {
   .firstBadge { animation: pulse2 500ms ease-out 1; }
@@ -153,9 +154,8 @@
   box-shadow: var(--dropShadow00);
 }
 
-
 #lookup {
-  font-size: calc(4.5 * var(--vh));
+  font-size: calc(4.25 * var(--vh));
 	color: white;
 	background-color: transparent;
   -webkit-appearance: none;
@@ -163,10 +163,10 @@
 }
 
 @media screen and (max-width: 885px){
-  #lookup { font-size: calc(4 * var(--vh)); }
+  #lookup { font-size: calc(3.75 * var(--vh)); }
 }
 @media screen and (max-width: 785px){
-  #lookup { font-size: calc(3.5 * var(--vh)); }
+  #lookup { font-size: calc(3.25 * var(--vh)); }
 }
 #lookup::selection {
 	color: white;
@@ -214,7 +214,7 @@
     grid-template-columns: 
       calc(8 * var(--vh)) 
       calc(7 * var(--vh)) 
-      calc(6 * var(--vh)) 
+      0
       1fr 
       calc(6 * var(--vh))
       calc(6 * var(--vh));

@@ -39,7 +39,7 @@ const SlidesNested = ({
           className='slideNestedSearch'
           placeholder='search'
           autoFocus={true}
-          onChange={(e)=>setFilter(e.target.value)} />
+          onChange={(e)=>setFilter(e.target.value.trim().toLowerCase())} />
         
         {menuTitle &&
           <button
@@ -54,7 +54,7 @@ const SlidesNested = ({
           ><div className='wide centreText'><b>{menuTitle}</b></div></button>}
           
         {menu.map( (entry, index)=>{
-          const showThing = !filter || entry[0].includes(filter) ? true : false;
+          const showThing = !filter || entry[0].toLowerCase().includes(filter) || entry[2]?.toLowerCase()?.includes(filter) ? true : false;
           let clss =  show === index ? 
                       'slideNestedMenuButton slideOn' : 
                       'slideNestedMenuButton';
@@ -63,9 +63,11 @@ const SlidesNested = ({
               <button
                 key={index}
                 onClick={()=>setSection(index)}
-                className={`${clss} ${entry[1]}`}
+                className={`${clss}`}
                 disabled={dA[index+1]}
-              ><b className={textStyle || 'cap'}>{entry[0]}</b></button>
+              ><b className={`${textStyle || 'cap'} ${entry[1]}`}>{entry[0]}</b>
+              {entry[2] && <div className='small'>{entry[2]}</div>}
+              </button>
             );
           }else{
             return <hr key={index} />;

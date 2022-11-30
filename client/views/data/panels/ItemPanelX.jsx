@@ -22,6 +22,17 @@ const ItemPanelX = ({
   const i = itemData;
   const b = batchData;
   
+  const doCopy = ()=> {
+    if(navigator.clipboard !== undefined) {
+      var elmFa = document.getElementById("fa-"+i.serial);
+      elmFa.classList.remove("invisible");
+  
+      navigator.clipboard.writeText(i.serial);
+      
+      Meteor.setTimeout(()=> elmFa.classList.add("invisible"), 2000);
+    }
+  };
+  
   const nc = srs.nonCon.filter( x => x.serial === i.serial );
   
   const sh = srs.shortfall.filter( x => x.serial === i.serial);
@@ -36,13 +47,16 @@ const ItemPanelX = ({
     <div className='section' key={i.serial}>
     
       <div className='balance'>
-        <div className='numFont space2v'>
+        <div className='numFont space2v' title={`${i.serial}\nclick to copy`}>
           <AnimateOnChange
             customTag='div'
-            baseClassName='cap biggest'
             animationClassName="quick-bounce-change"
             animate={i.serial}
-            >{i.serial}
+            ><button
+              id={"copy"+i.serial}
+              className='cap biggest'
+              onClick={()=>doCopy()}
+            >{i.serial}<span id={"fa-"+i.serial} className='gapL invisible'><i className="fa-regular fa-copy fa-xs"></i></span></button>
           </AnimateOnChange>
         </div>
         <div className='titleSection space2v'>
