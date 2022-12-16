@@ -26,7 +26,7 @@ const OrderScatter = ({ app })=> {
       err && console.log(err);
       if(re && mounted.current) {
         tickXYSet(re);
-        console.log(re);
+        // console.log(re);
       }
     });
     

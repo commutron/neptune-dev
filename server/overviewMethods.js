@@ -17,6 +17,7 @@ function dryPriorityCalc(bQuTmBdg, mEst, bTide, shipAim, now, shipLoad) {
   
   const totalTideMinutes = batchTideTime(bTide);
   
+  const quote2tide = mQuote - totalTideMinutes;
   const est2tide = estimatedMinutes - totalTideMinutes;
   
   const overQuote = totalTideMinutes > mQuote;
@@ -34,7 +35,7 @@ function dryPriorityCalc(bQuTmBdg, mEst, bTide, shipAim, now, shipLoad) {
 
   const bffrRel = Math.round( ( estEnd2fillBuffer / 100 ) + dayGap - shipPull );
   
-  return { est2tide, estSoonest, bffrRel, estEnd2fillBuffer, overQuote };
+  return { quote2tide, est2tide, estSoonest, bffrRel, estEnd2fillBuffer, overQuote };
 }
 
 function collectPriority(batchID, mockDay) {
@@ -121,6 +122,7 @@ function getFastPriority(bData, now, shipAim) {
       const dryCalc = dryPriorityCalc(bData.quoteTimeBudget, mEst, bData.tide, shipAim, now, shipLoad);
       
       resolve({
+        quote2tide: dryCalc.quote2tide,
         est2tide: dryCalc.est2tide,
         estSoonest: dryCalc.estSoonest.format(),
         bffrRel: dryCalc.bffrRel,
@@ -129,6 +131,7 @@ function getFastPriority(bData, now, shipAim) {
       });
     }else{
       resolve({
+        quote2tide: 0,
         est2tide: false,
         estSoonest: false,
         bffrRel: false,

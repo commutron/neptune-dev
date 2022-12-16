@@ -180,7 +180,9 @@ Meteor.methods({
     if(Roles.userIsInRole(Meteor.userId(), 'run')) {
       XBatchDB.update({_id: batchId, orgKey: accessKey}, {
   			$set : {
-  			  live: status
+  			  live: status,
+  			  updatedAt: new Date(),
+    			updatedWho: Meteor.userId()
         },
         $push : {
           altered: {

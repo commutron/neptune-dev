@@ -17,7 +17,8 @@ const AllGroups = ({
   const menuList = groupS.map( (entry)=> {
                     const clss = entry.hibernate ? 'strike darkgrayT' : '';
                     let it = entry.internal ? ' intrBlue' : '';
-                    return [entry.alias, clss+it];
+                    let nl = entry.internal && 'Internal';
+                    return [entry.alias, clss+it, nl];
                   });
   
   const defaultSlide = specify ? 

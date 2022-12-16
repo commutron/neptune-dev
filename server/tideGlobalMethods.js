@@ -379,6 +379,16 @@ Meteor.methods({
     if(stale) {
       const traces = TraceDB.find({onFloor: true},{fields:{'est2tide':1}}).fetch();
       
+      
+      // hold time
+      // not on floor time
+      // in trace = branchTime: {
+      //     branch: branch.branch,
+      //     time: brTime,
+      //     budget: compr
+      //   });
+      // clean total in trace @ quote2tide
+        
       const e2tArr = Array.from(traces, x => typeof x.est2tide === 'number' && x.est2tide );
       const e2tTotal = e2tArr.reduce( (arr, x)=> !isNaN(x) && x > 0 ? arr + x : arr, 0 );
       const totalMin = Math.round(e2tTotal);
@@ -578,11 +588,8 @@ Meteor.methods({
       
       brBreakdown.push([ br, pmBr, fxBr ]);
     }
-   
-    // console.log({eqBreakdown, brBreakdown});
     
     return [ eqBreakdown, brBreakdown ];
-
   }
 
 });

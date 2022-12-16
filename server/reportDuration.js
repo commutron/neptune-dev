@@ -3,6 +3,7 @@ import 'moment-timezone';
 import 'moment-business-time';
 
 import { avgOfArray, percentOf } from '/server/calcOps';
+import { addTideDuration } from './tideGlobalMethods.js';
 import Config from '/server/hardConfig.js';
 import { syncLocale, noIg } from './utility';
 
@@ -152,7 +153,6 @@ function splitItemTime(itemS, total, tide, perBaseTen ) {
 }
 
 
-
 Meteor.methods({
   
   oneWidgetTurnAround(wID, privateKey) {
@@ -249,6 +249,172 @@ Meteor.methods({
       avgOfArray( svtyfvPerArr ),
       avgOfArray( ntyPerArr )
     ];
+  },
+  
+  fetchNCTimeMonthly(accessKey) {
+    const orgKey = accessKey || Meteor.user().orgKey;
+    
+    const now = moment().tz(Config.clientTZ);
+    
+    const start = now.clone().subtract(1, 'day').startOf('year');
+    const endin = now.clone().subtract(1, 'day').endOf('year');
+    
+    // const app = AppDB.findOne({orgKey: orgKey},{fields:{'branches':1}});
+    
+    const reExp = RegExp(/(re-)|(rework)|(line)/i);
+    
+    let ncTimes = [];
+    let branches = new Set();
+    let subtasks = new Set();
+    
+    XBatchDB.find({
+      orgKey: orgKey,
+      $or: [ { lock: { $ne: true } },
+             { updatedAt: { $gte: new Date(start) } }
+           ],
+      tide: { $exists: true }
+    },{fields:{'tide':1}
+    }).forEach( bx => {
+      const subset = bx.tide.filter( x =>
+        x.subtask && x.subtask.match(reExp) &&
+        moment(x.startTime).isBetween(start, endin)
+      );
+      
+      for(let s of subset) {
+        branches.add(s.task);
+        subtasks.add(s.subtask);
+        
+        ncTimes.push({
+          br: s.task,
+          sb: s.subtask,
+          dr: addTideDuration(s) 
+        });
+      }
+    });
+    
+    let brBreakdown = [];
+    for(let br of branches) {
+      const totalB = ncTimes.filter( f => f.br === br )
+                      .reduce( (arr, x)=> arr + x.dr, 0);
+    
+      brBreakdown.push([ br, totalB ]);
+    }
+    
+    let sbBreakdown = [];
+    for(let sb of subtasks) {
+      const totalS = ncTimes.filter( f => f.sb === sb )
+                      .reduce( (arr, x)=> arr + x.dr, 0);
+    
+      sbBreakdown.push([ sb, totalS ]);
+    }
+    
+    return JSON.stringify([ brBreakdown, sbBreakdown ]);
+  },
+  
+  generateNCTimeBacklog(accessKey) {
+    const orgKey = accessKey || Meteor.user().orgKey;
+    
+    const now = moment().tz(Config.clientTZ);
+    const jantwentytwo = now.clone().subtract(1, 'day').startOf('year');
+    
+    const start = jantwentytwo.clone();
+    const endin = start.clone().endOf('month');
+    
+    // console.log([start, endin]);
+    // const app = AppDB.findOne({orgKey: orgKey},{fields:{'branches':1}});
+    
+    const reExp = RegExp(/(re-)|(rework)|(line)/i);
+    
+    let ncTimes = [];
+    let branches = new Set();
+    let subtasks = new Set();
+    
+    XBatchDB.find({
+      orgKey: orgKey,
+      tide: { $exists: true }
+    },{fields:{'tide':1}
+    }).forEach( bx => {
+      const subset = bx.tide.filter( x =>
+        x.subtask && x.subtask.match(reExp) &&
+        moment(x.startTime).isBetween(start, endin)
+      );
+      
+      for(let s of subset) {
+        branches.add(s.task);
+        subtasks.add(s.subtask);
+        
+        ncTimes.push({
+          br: s.task,
+          sb: s.subtask,
+          dr: addTideDuration(s) 
+        });
+      }
+    });
+    
+    let brBreakdown = [];
+    for(let br of branches) {
+      const totalB = ncTimes.filter( f => f.br === br )
+                      .reduce( (arr, x)=> arr + x.dr, 0);
+    
+      brBreakdown.push([ br, totalB ]);
+    }
+    
+    let sbBreakdown = [];
+    for(let sb of subtasks) {
+      const totalS = ncTimes.filter( f => f.sb === sb )
+                      .reduce( (arr, x)=> arr + x.dr, 0);
+    
+      sbBreakdown.push([ sb, totalS ]);
+    }
+    
+    /////////////////////////////////
+    let fixEvents = [];
+    let chkEvents = [];
+    
+    XSeriesDB.find({
+      orgKey: orgKey,
+      $where: "this.nonCon.length > 0"
+    },{fields:{'nonCon':1}
+    }).forEach( srs => {
+      
+      // advanced version is to run the events as a kind of cycle time but 
+      //  people's clicks are not that tied to the work and
+      //    the fixAll button completely throws this off.
+      // So the simplistic version is to addup based on an average time per fix
+      
+      for(let nc of srs.nonCon) {
+        if( nc.fix && moment(nc.fix.time).isBetween(start, endin) ) {
+          fixEvents.push(nc.where);
+        }else if( nc.inspect && moment(nc.inspect.time).isBetween(start, endin) ) {
+          chkEvents.push(nc.where);
+        }else if( nc.reject && moment(nc.reject.rejectTime).isBetween(start, endin) ) {
+          chkEvents.push(nc.where);
+        }else{ null }
+      }
+    });
+    
+    let fixLoc = new Set(fixEvents);
+    let fixBrk = [];
+    
+    for(let fl of fixLoc) {
+      const sec = fixEvents.filter( e => e === fl).reduce( (arr)=> arr + 10, 0);
+      const min = Math.ceil( sec / 60 );
+      if(min > 0){ fixBrk.push([ fl, min ]) }
+    }
+    
+    let chkLoc = new Set(chkEvents);
+    let chkBrk = [];
+    
+    for(let cl of chkLoc) {
+      const sec = chkEvents.filter( e => e === cl).reduce( (arr)=> arr + 5, 0);
+      const min = Math.ceil( sec / 60 );
+      if(min > 0) { chkBrk.push([ cl, min ]) }
+    }
+    
+    /////////////////////////////////
+    
+    // return JSON.stringify([ brBreakdown, sbBreakdown, fixBrk, chkBrk ]);
+    return [ brBreakdown, sbBreakdown, fixBrk, chkBrk ];
   }
 
 });

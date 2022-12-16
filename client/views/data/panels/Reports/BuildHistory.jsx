@@ -232,9 +232,7 @@ const BuildHistory = ({ allVariant, allWidget, allGroup })=> {
       
       </div>
       
-      <hr className='vmargin' />
-      
-      <div className='space'>
+      <div className='space vmarginhalf'>
         <p className='medBig line2x'
           >Which {Pref.widgets} from {insertGroup} {insertWas} built {insertInc} {I && insertNum} {insertSpan}
         </p>

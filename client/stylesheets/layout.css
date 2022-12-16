@@ -417,6 +417,19 @@ main {
   box-shadow: none;
 }
 
+@supports selector(:has(.intrBlue)) {
+  .slideNestedMenuButton:has(.intrBlue) {
+    border: 3px solid var(--neptuneColor);
+  }
+}
+@supports not selector(:has(.intrBlue)) {
+  .intrBlue { 
+    border-left: 6px solid var(--neptuneColor); 
+    padding-left: 3px; 
+  }
+}
+
+
 .darkMenu {
   background-color: rgb(35,35,35);
 }

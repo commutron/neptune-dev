@@ -47,18 +47,26 @@ const ReportStatsTable = ({ title, dateString, rows, extraClass })=> {
               }else if(Array.isArray(entry[1]) === true) {
                 return(
                   <tbody key={index}>
-                    <tr>
-                      <td className='bold noBorder'>{entry[0]}</td>
-                      <td className='noBorder'></td>
-                    </tr>
+                    {typeof entry[0] === 'string' ?
+                      <tr>
+                        <td className='bold noBorder'>{entry[0]}</td>
+                        <td className='noBorder'></td>
+                      </tr>
+                      :
+                      <tr>
+                        {entry[0].map( (h, hi)=> (
+                          <td key={'hdr'+hi} className='bold noBorder'>{h}</td>
+                        ))}
+                      </tr>
+                    }
                     {entry[1].map( (etr)=>{
                       const rndm = Math.random().toString(36).substr(2, 5);
                       return(
                         <tr key={rndm}>
                           <td className='indent'>{etr[0]}</td>
                           <td>{etr[1]}</td>
-                          {entry[2] && <td>{entry[2]}</td>}
-                          {entry[3] && <td>{entry[3]}</td>}
+                          {etr[2] && <td>{etr[2]}</td>}
+                          {etr[3] && <td>{etr[3]}</td>}
                         </tr>
                     )})}
                   </tbody>

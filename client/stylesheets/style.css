@@ -52,7 +52,7 @@
 
 .nT { color: var(--neptuneColor); }
 .nBg { background-color: var(--neptuneColor); }
-.intrBlue { border: 3px solid var(--neptuneColor); }
+.intrBlueSq { border: 3px solid var(--neptuneColor); }
 .nLineHover:hover {
   border-color: var(--neptuneColor);
 }

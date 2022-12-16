@@ -5,7 +5,7 @@ import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock';
 import { toast } from 'react-toastify';
 
 
-const ReportBasicTable = ({ title, dateString, rows })=> {
+const ReportBasicTable = ({ title, dateString, rows, extraClass })=> {
   
   function exportTable() {
     const filename = title.split(" ").join("_");
@@ -28,7 +28,7 @@ const ReportBasicTable = ({ title, dateString, rows })=> {
 
   return(
     <div className='printTable'>
-      <div className='wide'>
+      <div className={`space wide ${extraClass}`}>
         <div className='comfort middle'>
           <h3 className='cap'>
             <n-print>{dateString} </n-print>{title}

@@ -52,7 +52,7 @@ const GroupSlide = ({ groupData, widgetsList, batchDataX, app, inter, isERun })=
       <div className='wide comfort'>
       
         {g.internal &&
-          <div className='centreText comfort middle w100 vmargin intrBlue cap'>
+          <div className='centreText comfort middle w100 vmargin intrBlueSq cap'>
             <i className='fas fa-home fa-fw fa-2x nT gapL'></i>
             <h3>Internal {Pref.group}</h3>
             <i className='fas fa-globe-americas fa-fw fa-2x nT gapR'></i>
@@ -123,7 +123,7 @@ const GroupSlide = ({ groupData, widgetsList, batchDataX, app, inter, isERun })=
         
       </div>
       
-      {!groupData.emailOptIn &&
+      {groupData.emailOptIn &&
         <p className='w100 indenText'>
         <span style={mockTag}>
           <i className="fa-solid fa-envelope-circle-check fa-lg gapR"></i>Automated Emails Enabled

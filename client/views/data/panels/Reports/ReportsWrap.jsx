@@ -5,6 +5,7 @@ import DateRangeSelect from '/client/components/smallUi/DateRangeSelect';
 import PrintThis from '/client/components/tinyUi/PrintThis';
 import MonthKPIReport from './MonthKPIReport'; 
 import ProblemReport from './ProblemReport';
+import NCTimeReport from './NCTimeReport';
 import BuildHistory from './BuildHistory';
 
 const ReportsWrap = ({ 
@@ -15,15 +16,26 @@ const ReportsWrap = ({
   const [ start, startSet ] = useState(false);
   const [ end, endSet ] = useState(false);
   const [ dataset, datasetSet ] = useState('stats');
-
+  
   return(
     <div className='space'>
       
       <div className='rowWrapR noPrint'><PrintThis /></div>
       
       <div className='space'>
+        <h2 style={{marginBottom:'32px'}}>Monthly NonCon Time Report</h2>
+        <h4>Auto generated</h4>
+        
+        <NCTimeReport />
+        
+      </div>
+      
+      <hr className='vmargin' />
+      <div className='printBr' />
+      
+      <div className='space'>
         <h2 style={{marginBottom:'32px'}}>Custom Time Range Report</h2>
-        <h4>WARNING: Long Time Ranges Can Delay Production Activities</h4>
+        <h4 className='noPrint'>WARNING: Long Time Ranges Can Delay Production Activities</h4>
         <div className='noPrint'>
           <ReportRangeRequest 
             setFrom={(v)=>startSet(v)}
