@@ -254,14 +254,18 @@ Meteor.methods({
   fetchNCTimeMonthly(accessKey) {
     const orgKey = accessKey || Meteor.user().orgKey;
     
-    const now = moment().tz(Config.clientTZ);
+    const now = moment().tz(Config.clientTZ).subtract(1, 'day').startOf('year');
     
-    const start = now.clone().subtract(1, 'day').startOf('year');
-    const endin = now.clone().subtract(1, 'day').endOf('year');
+    const start = now.clone().add(7, 'month');
+    const endin = now.clone().endOf('month');
+    
+    // const start = now.clone().startOf('month');
+    // const endin = start.clone().endOf('month');
+    console.log([ start, endin ]);
     
     // const app = AppDB.findOne({orgKey: orgKey},{fields:{'branches':1}});
     
-    const reExp = RegExp(/(re-)|(rework)|(line)/i);
+    const reExp = RegExp(/(re-)|(rework)/i);
     
     let ncTimes = [];
     let branches = new Set();
@@ -317,13 +321,13 @@ Meteor.methods({
     const now = moment().tz(Config.clientTZ);
     const jantwentytwo = now.clone().subtract(1, 'day').startOf('year');
     
-    const start = jantwentytwo.clone();
+    const start = jantwentytwo.clone().add(7, 'month');
     const endin = start.clone().endOf('month');
     
-    // console.log([start, endin]);
+    console.log([start, endin]);
     // const app = AppDB.findOne({orgKey: orgKey},{fields:{'branches':1}});
     
-    const reExp = RegExp(/(re-)|(rework)|(line)/i);
+    const reExp = RegExp(/(re-)|(rework)/i);
     
     let ncTimes = [];
     let branches = new Set();
