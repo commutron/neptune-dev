@@ -28,9 +28,9 @@ const AccountsManagePanel = ({ app, users, traceDT, brancheS, isDebug })=> {
   let usersMenu = usersSort.map( (entry)=>{
     const clss = !Roles.userIsInRole(entry._id, 'active') ? 'strike darkgrayT' : '';
     const sbtl = Roles.userIsInRole(entry._id, 'admin') ? 'Org Admin' : 
-                 Roles.userIsInRole(Meteor.userId(), 'peopleSuper') ? 'People Super' :
-                 Roles.userIsInRole(Meteor.userId(), 'equipSuper') ? 'Equipment Super' :
-                 Roles.userIsInRole(Meteor.userId(), 'readOnly') ? 'Read Only' : null;
+                 Roles.userIsInRole(entry._id, 'peopleSuper') ? 'People Super' :
+                 Roles.userIsInRole(entry._id, 'equipSuper') ? 'Equipment Super' :
+                 Roles.userIsInRole(entry._id, 'readOnly') ? 'Read Only' : null;
     return [ entry.username, clss, sbtl ];
   });
   

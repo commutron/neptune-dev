@@ -257,7 +257,7 @@ Meteor.methods({
     const now = moment().tz(Config.clientTZ).subtract(1, 'day').startOf('year');
     
     const start = now.clone().add(7, 'month');
-    const endin = now.clone().endOf('month');
+    const endin = start.clone().endOf('month');
     
     // const start = now.clone().startOf('month');
     // const endin = start.clone().endOf('month');
@@ -265,7 +265,7 @@ Meteor.methods({
     
     // const app = AppDB.findOne({orgKey: orgKey},{fields:{'branches':1}});
     
-    const reExp = RegExp(/(re-)|(rework)/i);
+    const reExp = RegExp(/(re-)|(rework)|(line)/i);
     
     let ncTimes = [];
     let branches = new Set();
@@ -296,38 +296,44 @@ Meteor.methods({
       }
     });
     
-    let brBreakdown = [];
-    for(let br of branches) {
-      const totalB = ncTimes.filter( f => f.br === br )
-                      .reduce( (arr, x)=> arr + x.dr, 0);
-    
-      brBreakdown.push([ br, totalB ]);
-    }
-    
     let sbBreakdown = [];
     for(let sb of subtasks) {
       const totalS = ncTimes.filter( f => f.sb === sb )
                       .reduce( (arr, x)=> arr + x.dr, 0);
     
-      sbBreakdown.push([ sb, totalS ]);
+      if(totalS > 0) { sbBreakdown.push([ sb, totalS ]) }
     }
     
-    return JSON.stringify([ brBreakdown, sbBreakdown ]);
+    let brBreakdown = [];
+    for(let br of branches) {
+      const brTimes = ncTimes.filter( f => f.br === br );
+      
+      let brsbBreakdown = [];
+      for(let sb of subtasks) {
+        const totalS = brTimes.filter( f => f.sb === sb )
+                        .reduce( (arr, x)=> arr + x.dr, 0);
+      
+        if(totalS > 0) { brsbBreakdown.push([ sb, totalS ]) }
+      }
+    
+      brBreakdown.push([ br, brsbBreakdown ]);
+    }
+    
+    return JSON.stringify([ sbBreakdown, brBreakdown ]);
   },
   
-  generateNCTimeBacklog(accessKey) {
+  generateNCTimeBacklog(year, month, accessKey) {
     const orgKey = accessKey || Meteor.user().orgKey;
     
     const now = moment().tz(Config.clientTZ);
     const jantwentytwo = now.clone().subtract(1, 'day').startOf('year');
     
-    const start = jantwentytwo.clone().add(7, 'month');
+    const start = jantwentytwo.clone().year(year).month(month);
     const endin = start.clone().endOf('month');
-    
-    console.log([start, endin]);
+  
     // const app = AppDB.findOne({orgKey: orgKey},{fields:{'branches':1}});
     
-    const reExp = RegExp(/(re-)|(rework)/i);
+    const reExp = RegExp(/(re-)|(rework)|(line)/i);
     
     let ncTimes = [];
     let branches = new Set();
@@ -355,20 +361,27 @@ Meteor.methods({
       }
     });
     
-    let brBreakdown = [];
-    for(let br of branches) {
-      const totalB = ncTimes.filter( f => f.br === br )
-                      .reduce( (arr, x)=> arr + x.dr, 0);
-    
-      brBreakdown.push([ br, totalB ]);
-    }
-    
     let sbBreakdown = [];
     for(let sb of subtasks) {
       const totalS = ncTimes.filter( f => f.sb === sb )
                       .reduce( (arr, x)=> arr + x.dr, 0);
     
-      sbBreakdown.push([ sb, totalS ]);
+      if(totalS > 0) { sbBreakdown.push([ sb, totalS ]) }
+    }
+    
+    let brBreakdown = [];
+    for(let br of branches) {
+      const brTimes = ncTimes.filter( f => f.br === br );
+      
+      let brsbBreakdown = [];
+      for(let sb of subtasks) {
+        const totalS = brTimes.filter( f => f.sb === sb )
+                        .reduce( (arr, x)=> arr + x.dr, 0);
+      
+        if(totalS > 0) { brsbBreakdown.push([ sb, totalS ]) }
+      }
+    
+      brBreakdown.push([ br, brsbBreakdown ]);
     }
     
     /////////////////////////////////
@@ -400,8 +413,8 @@ Meteor.methods({
     let fixLoc = new Set(fixEvents);
     let fixBrk = [];
     
-    for(let fl of fixLoc) {
-      const sec = fixEvents.filter( e => e === fl).reduce( (arr)=> arr + 10, 0);
+    for(let fl of fixLoc) { // or 3.5 minutes per
+      const sec = fixEvents.filter( e => e === fl).reduce( (arr)=> arr + 60, 0);
       const min = Math.ceil( sec / 60 );
       if(min > 0){ fixBrk.push([ fl, min ]) }
     }
@@ -409,16 +422,18 @@ Meteor.methods({
     let chkLoc = new Set(chkEvents);
     let chkBrk = [];
     
-    for(let cl of chkLoc) {
-      const sec = chkEvents.filter( e => e === cl).reduce( (arr)=> arr + 5, 0);
+    for(let cl of chkLoc) { // or 4 minutes per 
+      const sec = chkEvents.filter( e => e === cl).reduce( (arr)=> arr + 60, 0);
       const min = Math.ceil( sec / 60 );
       if(min > 0) { chkBrk.push([ cl, min ]) }
     }
     
     /////////////////////////////////
     
+    console.log([start, endin, fixEvents.length]);
+    
     // return JSON.stringify([ brBreakdown, sbBreakdown, fixBrk, chkBrk ]);
-    return [ brBreakdown, sbBreakdown, fixBrk, chkBrk ];
+    return [ sbBreakdown, brBreakdown, fixBrk, chkBrk ];
   }
 
 });

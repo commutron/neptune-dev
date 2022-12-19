@@ -25,7 +25,7 @@ const ServicePanel = ()=> {
     <div className='overscroll'>
       {!equipData ?
         <div className='centreText'>
-          <p><CalcSpin /></p>
+          <CalcSpin />
           <p className='medBig line2x'>Fetching No {Pref.equip} responsibilities</p>
         </div>
       :

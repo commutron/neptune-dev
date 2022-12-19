@@ -6,12 +6,15 @@ import ReportStatsTable from '/client/components/tables/ReportStatsTable';
 
 const NCTimeReport = ({})=> {
   
-  const [ working, workingSet ] = useState(false);
-  const [ replyData, replySet ] = useState(false);
+  const [ month, monthSet ] = useState(0);
+  const [ year, yearSet ] = useState(2020);
   
+  const [ working, workingSet ] = useState(false);
+  const [ taskData, taskSet ] = useState(false);
+  const [ brchData, brchSet ] = useState(false);
   
   function testDeduce() {
-    Meteor.call('generateNCTimeBacklog', (err, reply)=> {
+    Meteor.call('generateNCTimeBacklog', year, month, (err, reply)=> {
       err && console.log(err);
       reply && console.log(reply);
     });
@@ -24,48 +27,73 @@ const NCTimeReport = ({})=> {
       if(reply) {
         const re = JSON.parse(reply);
         
-        const brtotal = re[0].reduce( (x,y)=> x + y[1], 0);
-  			const brtlhrs = min2hr(brtotal);
-  			const sbtotal = re[1].reduce( (x,y)=> x + y[1], 0);
+  			const sbtotal = re[0].reduce( (x,y)=> x + y[1], 0);
   			const sbtlhrs = min2hr(sbtotal);
 			
-        let arrange = [ 
-          [
-            [Pref.branches, 'minutes', 'hours'],
-            [
-            	['Total', brtotal, brtlhrs ],
-            	...Array.from(re[0], a =>{ return [ 
-            	  a[0], a[1], min2hr(a[1])
-            	 ]})
-            ]
-          ],
-        	 
-        	[
-          	['Task', 'minutes', 'hours'],
-          	[
-            	['Total', sbtotal, sbtlhrs ],
-            	...Array.from(re[1], a =>{ return [ 
-            	  a[0], a[1], min2hr(a[1])
-            	 ]})
-            ]
-          ]
-        ];
+        taskSet([ 
+          ['', 'minutes', 'hours'],
+          ['Total', sbtotal, sbtlhrs ],
+        	...Array.from(re[0], a =>{ return [ 
+        	  a[0], a[1], min2hr(a[1])
+        	 ]})
+        ]);
+        
+        brchSet([ 
+          ['', 'minutes', 'hours'],
+          ...Array.from(re[1], a =>{ return [ 
+          	a[0], 
+          	Array.from(a[1], b =>{ return [ 
+            	b[0], b[1], min2hr(b[1])
+            ]})
+          ]})
+        ]);
         
         workingSet(false);
-        replySet(arrange);
       }
     });
   }
+  
+  console.log(month);
     
   return(
     <div className='overscroll'>
       
-      <p className='vmargin'>
-        <button 
-            className='action nSolid'
-            onClick={(e)=>testDeduce(e)} 
-          >Test NonCon Time Estimate</button>
-      </p>
+      <div className='vmargin noPrint'>
+        <label for="backyear">set year</label>
+        <select
+          id='backyear'
+          className='gap miniIn12'
+          value={year}
+          onChange={(e)=>yearSet(Number(e.target.value))}
+          required>
+            {["2020","2021","2022"]
+              .map( (yr, index)=>(
+                <option key={'y'+index} value={index}>{yr}</option>
+            ))}
+        </select>
+        
+        <br />
+        
+        <label for="backmonth">set month</label>
+        <select
+          id='backmonth'
+          className='gap miniIn12'
+          value={month}
+          onChange={(e)=>monthSet(Number(e.target.value))}
+          required>
+            {["January","Febuary","March","April","May","June",
+              "July","August","September","October","November","December"]
+              .map( (mth, index)=>(
+                <option key={'m'+index} value={index}>{mth}</option>
+            ))}
+        </select>
+        
+        <br />
+        <button
+          className='action nSolid'
+          onClick={(e)=>testDeduce(e)} 
+        >Test NonCon Time Estimate</button>
+      </div>
       
       <p>The previous month's report is generated on the first of each month.</p>
       
@@ -80,12 +108,20 @@ const NCTimeReport = ({})=> {
       {working ?
         <p><n-fa0><i className='fas fa-spinner fa-lg fa-spin gapL'></i></n-fa0></p>
       :
-        <ReportStatsTable 
-          title='nonconformance time report' 
-          dateString={`${000} Cached Report`}
-          rows={replyData}
-          extraClass='max600' 
-        />
+        <span>
+          <ReportStatsTable 
+            title='nonconformance report - task time totals' 
+            dateString={`${000} Cached Report`}
+            rows={taskData}
+            extraClass='max600' 
+          />
+          <ReportStatsTable 
+            title='nonconformance report - branch time' 
+            dateString={`${001} Cached Report`}
+            rows={brchData}
+            extraClass='max600' 
+          />
+        </span>
       }
           
     </div>
