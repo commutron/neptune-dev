@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Pref from '/client/global/pref.js';
+// import Pref from '/client/global/pref.js';
 
 import { min2hr } from '/client/utility/Convert';
 import ReportStatsTable from '/client/components/tables/ReportStatsTable'; 
@@ -52,14 +52,12 @@ const NCTimeReport = ({})=> {
       }
     });
   }
-  
-  console.log(month);
     
   return(
     <div className='overscroll'>
       
       <div className='vmargin noPrint'>
-        <label for="backyear">set year</label>
+        <label htmlFor="backyear">set year</label>
         <select
           id='backyear'
           className='gap miniIn12'
@@ -68,13 +66,13 @@ const NCTimeReport = ({})=> {
           required>
             {["2020","2021","2022"]
               .map( (yr, index)=>(
-                <option key={'y'+index} value={index}>{yr}</option>
+                <option key={'y'+index} value={yr}>{yr}</option>
             ))}
         </select>
         
         <br />
         
-        <label for="backmonth">set month</label>
+        <label htmlFor="backmonth">set month</label>
         <select
           id='backmonth'
           className='gap miniIn12'

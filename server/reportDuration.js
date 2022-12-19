@@ -265,7 +265,7 @@ Meteor.methods({
     
     // const app = AppDB.findOne({orgKey: orgKey},{fields:{'branches':1}});
     
-    const reExp = RegExp(/(re-)|(rework)|(line)/i);
+    const reExp = RegExp(/(re-)|(rework)/i);
     
     let ncTimes = [];
     let branches = new Set();
@@ -325,115 +325,150 @@ Meteor.methods({
   generateNCTimeBacklog(year, month, accessKey) {
     const orgKey = accessKey || Meteor.user().orgKey;
     
+    const reExp = RegExp(/(re-)|(rework)/i);
+    
     const now = moment().tz(Config.clientTZ);
     const jantwentytwo = now.clone().subtract(1, 'day').startOf('year');
     
-    const start = jantwentytwo.clone().year(year).month(month);
-    const endin = start.clone().endOf('month');
-  
-    // const app = AppDB.findOne({orgKey: orgKey},{fields:{'branches':1}});
+    function buildMonthlyReport(monthStart, monthEnd) {
     
-    const reExp = RegExp(/(re-)|(rework)|(line)/i);
-    
-    let ncTimes = [];
-    let branches = new Set();
-    let subtasks = new Set();
-    
-    XBatchDB.find({
-      orgKey: orgKey,
-      tide: { $exists: true }
-    },{fields:{'tide':1}
-    }).forEach( bx => {
-      const subset = bx.tide.filter( x =>
-        x.subtask && x.subtask.match(reExp) &&
-        moment(x.startTime).isBetween(start, endin)
-      );
+      let ncTimes = [];
+      let branches = new Set();
+      let subtasks = new Set();
       
-      for(let s of subset) {
-        branches.add(s.task);
-        subtasks.add(s.subtask);
+      XBatchDB.find({
+        orgKey: orgKey,
+        tide: { $exists: true }
+      },{fields:{'tide':1}
+      }).forEach( bx => {
+        const subset = bx.tide.filter( x =>
+          x.subtask && x.subtask.match(reExp) &&
+          moment(x.startTime).isBetween(monthStart, monthEnd)
+        );
         
-        ncTimes.push({
-          br: s.task,
-          sb: s.subtask,
-          dr: addTideDuration(s) 
-        });
-      }
-    });
-    
-    let sbBreakdown = [];
-    for(let sb of subtasks) {
-      const totalS = ncTimes.filter( f => f.sb === sb )
-                      .reduce( (arr, x)=> arr + x.dr, 0);
-    
-      if(totalS > 0) { sbBreakdown.push([ sb, totalS ]) }
-    }
-    
-    let brBreakdown = [];
-    for(let br of branches) {
-      const brTimes = ncTimes.filter( f => f.br === br );
+        for(let s of subset) {
+          branches.add(s.task);
+          subtasks.add(s.subtask);
+          
+          ncTimes.push({
+            br: s.task,
+            sb: s.subtask,
+            dr: addTideDuration(s) 
+          });
+        }
+      });
       
-      let brsbBreakdown = [];
+      let sbBreakdown = [];
       for(let sb of subtasks) {
-        const totalS = brTimes.filter( f => f.sb === sb )
+        const totalS = ncTimes.filter( f => f.sb === sb )
                         .reduce( (arr, x)=> arr + x.dr, 0);
       
-        if(totalS > 0) { brsbBreakdown.push([ sb, totalS ]) }
+        if(totalS > 0) { sbBreakdown.push([ sb, totalS ]) }
       }
-    
-      brBreakdown.push([ br, brsbBreakdown ]);
-    }
-    
-    /////////////////////////////////
-    let fixEvents = [];
-    let chkEvents = [];
-    
-    XSeriesDB.find({
-      orgKey: orgKey,
-      $where: "this.nonCon.length > 0"
-    },{fields:{'nonCon':1}
-    }).forEach( srs => {
       
-      // advanced version is to run the events as a kind of cycle time but 
-      //  people's clicks are not that tied to the work and
-      //    the fixAll button completely throws this off.
-      // So the simplistic version is to addup based on an average time per fix
+      let brBreakdown = [];
+      for(let br of branches) {
+        const brTimes = ncTimes.filter( f => f.br === br );
+        
+        let brsbBreakdown = [];
+        for(let sb of subtasks) {
+          const totalS = brTimes.filter( f => f.sb === sb )
+                          .reduce( (arr, x)=> arr + x.dr, 0);
+        
+          if(totalS > 0) { brsbBreakdown.push([ sb, totalS ]) }
+        }
       
-      for(let nc of srs.nonCon) {
-        if( nc.fix && moment(nc.fix.time).isBetween(start, endin) ) {
-          fixEvents.push(nc.where);
-        }else if( nc.inspect && moment(nc.inspect.time).isBetween(start, endin) ) {
-          chkEvents.push(nc.where);
-        }else if( nc.reject && moment(nc.reject.rejectTime).isBetween(start, endin) ) {
-          chkEvents.push(nc.where);
-        }else{ null }
+        brBreakdown.push([ br, brsbBreakdown ]);
       }
-    });
+        
+      /////////////////////////////////
+      let fixEvents = [];
+      let chkEvents = [];
+      
+      XSeriesDB.find({
+        orgKey: orgKey,
+        $where: "this.nonCon.length > 0"
+      },{fields:{'nonCon':1}
+      }).forEach( srs => {
     
-    let fixLoc = new Set(fixEvents);
-    let fixBrk = [];
+        // advanced version is to run the events as a kind of cycle time but 
+        //  people's clicks are not that tied to the work and
+        //    the fixAll button completely throws this off.
+        // So the simplistic version is to addup based on an average time per fix
+        
+        for(let nc of srs.nonCon) {
+          if( nc.fix && moment(nc.fix.time).isBetween(monthStart, monthEnd) ) {
+            fixEvents.push(nc.where);
+          }else if( nc.inspect && moment(nc.inspect.time).isBetween(monthStart, monthEnd) ) {
+            chkEvents.push(nc.where);
+          }else if( nc.reject && moment(nc.reject.rejectTime).isBetween(monthStart, monthEnd) ) {
+            chkEvents.push(nc.where);
+          }else{ null }
+        }
+      });
+  
+      let fixLoc = new Set(fixEvents);
+      let fixBrk = [];
+      
+      for(let fl of fixLoc) { // or 3.5 minutes per
+        const sec = fixEvents.filter( e => e === fl).reduce( (arr)=> arr + 120, 0);
+        const min = Math.ceil( sec / 60 );
+        if(min > 0){ fixBrk.push([ fl, min ]) }
+      }
+      
+      let chkLoc = new Set(chkEvents);
+      let chkBrk = [];
+      
+      for(let cl of chkLoc) { // or 4 minutes per 
+        const sec = chkEvents.filter( e => e === cl).reduce( (arr)=> arr + 30, 0);
+        const min = Math.ceil( sec / 60 );
+        if(min > 0) { chkBrk.push([ cl, min ]) }
+      }
+      /////////////////////////////////
+      
+      return [ sbBreakdown, brBreakdown, fixBrk, chkBrk ];
+    }
+  
     
-    for(let fl of fixLoc) { // or 3.5 minutes per
-      const sec = fixEvents.filter( e => e === fl).reduce( (arr)=> arr + 60, 0);
-      const min = Math.ceil( sec / 60 );
-      if(min > 0){ fixBrk.push([ fl, min ]) }
+    let reportdataset = [];
+    
+    for(let i = 2020; i < 2023; i++) {
+      
+      for(let j = 0; j < 12; j++) {
+        
+        const start = jantwentytwo.clone().year(i).month(j);
+        const endin = start.clone().endOf('month');
+        
+        if( i === 2022 && j === 11 ) {
+          null;
+        }else{
+          reportdataset.push({
+            year: i,
+            month: j,
+            report: buildMonthlyReport(start, endin)
+          });
+        }
+      }
     }
     
-    let chkLoc = new Set(chkEvents);
-    let chkBrk = [];
+    // CacheDB.upsert({orgKey: accessKey, dataName: 'nctimereports'}, {
+    //   $set : {
+    //     orgKey: accessKey,
+    //     lastUpdated: new Date(),
+    //     dataName: 'nctimereports',
+    //     dataSet: reportdataset,
+    // }});
     
-    for(let cl of chkLoc) { // or 4 minutes per 
-      const sec = chkEvents.filter( e => e === cl).reduce( (arr)=> arr + 60, 0);
-      const min = Math.ceil( sec / 60 );
-      if(min > 0) { chkBrk.push([ cl, min ]) }
-    }
+    return reportdataset;
     
-    /////////////////////////////////
-    
-    console.log([start, endin, fixEvents.length]);
+    // console.log([start, endin, fixEvents.length]);
     
     // return JSON.stringify([ brBreakdown, sbBreakdown, fixBrk, chkBrk ]);
-    return [ sbBreakdown, brBreakdown, fixBrk, chkBrk ];
+    // return [ sbBreakdown, brBreakdown, fixBrk, chkBrk ];
+    
+    /////
+    
+    
   }
 
 });
