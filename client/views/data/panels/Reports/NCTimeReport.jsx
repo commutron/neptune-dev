@@ -13,10 +13,59 @@ const NCTimeReport = ({})=> {
   const [ taskData, taskSet ] = useState(false);
   const [ brchData, brchSet ] = useState(false);
   
+  const [ lgcyData, lgcySet ] = useState(false);
+  
   function testDeduce() {
     Meteor.call('generateNCTimeBacklog', year, month, (err, reply)=> {
       err && console.log(err);
       reply && console.log(reply);
+      
+      
+      if(reply) {
+        const re = reply[reply.length-2].report;//JSON.parse(reply);
+        
+  			const sbtotal = re[0].reduce( (x,y)=> x + y[1], 0);
+  			const sbtlhrs = min2hr(sbtotal);
+			
+        taskSet([ 
+          ['', 'minutes', 'hours'],
+          ['Total', sbtotal, sbtlhrs ],
+        	...Array.from(re[0], a =>{ return [ 
+        	  a[0], a[1], min2hr(a[1])
+        	 ]})
+        ]);
+        
+        brchSet([ 
+          ['', 'minutes', 'hours'],
+          ...Array.from(re[1], a =>{ return [ 
+          	a[0], 
+          	Array.from(a[1], b =>{ return [ 
+            	b[0], b[1], min2hr(b[1])
+            ]})
+          ]})
+        ]);
+        
+        if(re[2]) {
+          const lgtotal = re[2][0].reduce( (x,y)=> x + y[1], 0);
+  			  const lgtlhrs = min2hr(lgtotal);
+  			
+          lgcySet([ 
+          ['', 'minutes', 'hours'],
+          ['Total', lgtotal, lgtlhrs ],
+          ...Array.from(re[2], a =>{ return [ 
+          	a[0], 
+          	Array.from(a[1], b =>{ return [ 
+            	b[0], b[1], min2hr(b[1])
+            ]})
+          ]})
+        ]);
+          
+          
+        }else{
+          lgcySet(false);
+        }
+        
+      }
     });
   }
   

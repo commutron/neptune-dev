@@ -382,6 +382,7 @@ Meteor.methods({
       }
         
       /////////////////////////////////
+      let legacywhere = new Set();
       let fixEvents = [];
       let chkEvents = [];
       
@@ -391,12 +392,12 @@ Meteor.methods({
       },{fields:{'nonCon':1}
       }).forEach( srs => {
     
-        // advanced version is to run the events as a kind of cycle time but 
-        //  people's clicks are not that tied to the work and
-        //    the fixAll button completely throws this off.
-        // So the simplistic version is to addup based on an average time per fix
+        // cyle time imposible as clicks are not that tied 1-to-1 to the repair process
+        // So the simplistic option is to addup based on an average time per fix
         
         for(let nc of srs.nonCon) {
+          legacywhere.add(ncWhere);
+          
           if( nc.fix && moment(nc.fix.time).isBetween(monthStart, monthEnd) ) {
             fixEvents.push(nc.where);
           }else if( nc.inspect && moment(nc.inspect.time).isBetween(monthStart, monthEnd) ) {
@@ -406,7 +407,31 @@ Meteor.methods({
           }else{ null }
         }
       });
-  
+      
+      let legacyBreakdown = [];
+      let fixTotal = 0;
+      let chkTotal = 0;
+      
+      for(let lgwh of legacywhere) {
+        
+        const fix = fixEvents.filter( e => e === lgwh).reduce( (arr)=> arr + 60, 0);
+        const fmn = Math.ceil( fix / 60 );
+        
+        const chk = chkEvents.filter( e => e === lgwh).reduce( (arr)=> arr + 60, 0);
+        const cmn = Math.ceil( chk / 60 );
+        
+        if(fix > 0 || chk > 0) { 
+          legacyBreakdown.push([ lgwh, [ ['Repair', fmn], ['Re-Inspect', cmn] ] ]);
+          fixTotal += fmn;
+          chkTotal += cmn;
+        }
+      }
+      
+      legacyBreakdown.unshift([ 'Totals', [ ['Repair', fixTotal], ['Re-Inspect', chkTotal] ] ]);
+      
+      
+      
+      /*
       let fixLoc = new Set(fixEvents);
       let fixBrk = [];
       
@@ -424,9 +449,10 @@ Meteor.methods({
         const min = Math.ceil( sec / 60 );
         if(min > 0) { chkBrk.push([ cl, min ]) }
       }
+      */
       /////////////////////////////////
       
-      return [ sbBreakdown, brBreakdown, fixBrk, chkBrk ];
+      return [ sbBreakdown, brBreakdown, legacyBreakdown ];
     }
   
     
