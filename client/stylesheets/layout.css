@@ -541,6 +541,12 @@ n-model-head {
   font-size: 2.25vmax;
   font-weight: 600;
   white-space: nowrap;
+  column-gap: 6px;
+}
+n-model-head > span {
+  max-width: 32ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 n-lg-model-content, n-md-model-content, n-sm-model-content {
   overflow-y: auto;
@@ -1234,6 +1240,7 @@ n-col-table-head > span {
 .maxW50 { max-width: 50vw; }
 .maxW30 { max-width: 30vw; }
 
+.block { display: block; }
 .inline { display: inline-block; }
 .flxGrow { flex-grow: 2; }
 

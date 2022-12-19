@@ -35,7 +35,7 @@ const EquipMenuCore = ({ user, brancheS, allEquip })=> {
   
   return(
     <div className='min600 max750 vmargin'>
-      {brancheS.map( (br)=> {
+      {[{brKey: false, branch: 'Facility'},...brancheS].map( (br)=> {
         const brEq = allEquip.filter( e => e.branchKey === br.brKey );
         if(brEq.length > 0) {
           return(

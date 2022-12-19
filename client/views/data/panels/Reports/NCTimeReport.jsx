@@ -46,7 +46,7 @@ const NCTimeReport = ({})=> {
         ]);
         
         if(re[2]) {
-          const lgtotal = re[2][0].reduce( (x,y)=> x + y[1], 0);
+          const lgtotal = re[2][0][1].reduce( (x,y)=> x + y[1], 0);
   			  const lgtlhrs = min2hr(lgtotal);
   			
           lgcySet([ 
@@ -168,6 +168,15 @@ const NCTimeReport = ({})=> {
             rows={brchData}
             extraClass='max600' 
           />
+          
+          {lgcyData &&
+            <ReportStatsTable 
+              title='nonconformance report - legacy data' 
+              dateString={`${002} Cached Report`}
+              rows={lgcyData}
+              extraClass='max600' 
+            />
+          }
         </span>
       }
           

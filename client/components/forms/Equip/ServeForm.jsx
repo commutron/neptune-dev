@@ -107,16 +107,16 @@ const ServeForm = ({
           <input
             type='text'
             id='pName'
-            className='gap miniIn18'
+            className='gap miniIn24'
             defaultValue={name}
-            maxLength='32'
+            maxLength='64'
             minLength='1'
             onChange={(e)=>setName(e.target.value)}
             required /></label>
         </span>
-        <div className='max400 vmarginquarter'>
+        <span className='block max400 vmarginquarter'>
           <n-sm>Should match references in instructions.</n-sm>
-        </div>
+        </span>
       </p>
       
       <p>
@@ -158,9 +158,9 @@ const ServeForm = ({
               onChange={(e)=>setNext(e.target.value)}
               required 
             /></label>
-            <div className='max400 vmarginquarter'>
+            <span className='block max400 vmarginquarter'>
               <n-sm>Future service will be counted from this day.</n-sm>
-            </div>
+            </span>
           </span>
         </p>
       }
@@ -203,9 +203,9 @@ const ServeForm = ({
             : null}
           </select></label>
           {timeSpan === 'month' &&
-          <div className='max400 vmarginquarter'>
+          <span className='block max400 vmarginquarter'>
             <n-sm> Nonexistent days flow into the next month. For example, June 31st becomes July 1st.</n-sm>
-          </div>}
+          </span>}
         </span>
       </p>
       
@@ -224,9 +224,9 @@ const ServeForm = ({
             required
           /></label>
         </span>
-        <div className='max400 vmarginquarter'>
+        <span className='block max400 vmarginquarter'>
           <n-sm>Eg. If service is due Friday and has two days to complete then service is from the start of Thursday to the end of Friday.</n-sm>
-        </div>
+        </span>
       </p>
       
       <p>
@@ -245,9 +245,9 @@ const ServeForm = ({
             onChange={(e)=>setGrace(Number(e.target.value))}
             required /></label>
         </span>
-        <div className='max400 vmarginquarter'>
+        <span className='block max400 vmarginquarter'>
           <n-sm>After the grace period an incomplete service is considered missed.</n-sm>
-        </div>
+        </span>
       </p>
       
       {serveKey && servicing ?

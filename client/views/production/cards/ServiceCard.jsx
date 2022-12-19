@@ -40,7 +40,7 @@ const ServiceCard = ({ eqData, maintData, brancheS, tideKey, timeOpen, engagedPr
           taskOptions={[]}
           subOptions={[]}
           forceSelect={true}
-          forceTask={brancheS.find( b=> b.brKey === eqData.branchKey)?.branch}
+          forceTask={brancheS.find( b=> b.brKey === eqData.branchKey)?.branch || 'Facility'}
           forceSubTask={Pref.premaintain}
           lockOut={moment().isAfter(maintData.expire)}
         />  
@@ -130,7 +130,7 @@ export const RepairCard = ({ eqData, brancheS, tideKey, timeOpen, engagedPro, en
           taskOptions={[]}
           subOptions={[]}
           forceSelect={true}
-          forceTask={brancheS.find( b=> b.brKey === eqData.branchKey)?.branch}
+          forceTask={brancheS.find( b=> b.brKey === eqData.branchKey)?.branch || 'Facility'}
           forceSubTask={Pref.fixmaintain}
           lockOut={false}
         />  

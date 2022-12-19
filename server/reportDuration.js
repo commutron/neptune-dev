@@ -396,7 +396,7 @@ Meteor.methods({
         // So the simplistic option is to addup based on an average time per fix
         
         for(let nc of srs.nonCon) {
-          legacywhere.add(ncWhere);
+          legacywhere.add(nc.where);
           
           if( nc.fix && moment(nc.fix.time).isBetween(monthStart, monthEnd) ) {
             fixEvents.push(nc.where);
@@ -421,13 +421,13 @@ Meteor.methods({
         const cmn = Math.ceil( chk / 60 );
         
         if(fix > 0 || chk > 0) { 
-          legacyBreakdown.push([ lgwh, [ ['Repair', fmn], ['Re-Inspect', cmn] ] ]);
+          legacyBreakdown.push([ lgwh, [ ['Rework', fmn], ['Re-Inspect', cmn] ] ]);
           fixTotal += fmn;
           chkTotal += cmn;
         }
       }
       
-      legacyBreakdown.unshift([ 'Totals', [ ['Repair', fixTotal], ['Re-Inspect', chkTotal] ] ]);
+      legacyBreakdown.unshift([ 'Tasks', [ ['Rework', fixTotal], ['Re-Inspect', chkTotal] ] ]);
       
       
       
