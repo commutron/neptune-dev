@@ -115,6 +115,7 @@ const BuildHistory = ({ allVariant, allWidget, allGroup })=> {
     
   }, [vPack, groupState, wasState, incState, numState, spanState]);
 
+  const blend = { width: '10ch', border: 'none', lineHeight: 2 };
   
   const insertGroup = 
           <GroupSelector
@@ -125,7 +126,7 @@ const BuildHistory = ({ allVariant, allWidget, allGroup })=> {
             
   const insertWas = 
           <select
-            style={ { width: '10ch', border: 'none', lineHeight: 2 } }
+            style={blend}
             defaultValue={wasState}
             onChange={(e)=>wasSet(e.target.value === 'false' ? false : true)}>
             <option value={true}>were</option>
@@ -134,7 +135,7 @@ const BuildHistory = ({ allVariant, allWidget, allGroup })=> {
   
   const insertInc = 
           <select
-            style={ { width: '10ch', border: 'none', lineHeight: 2 } }
+            style={blend}
             defaultValue={incState}
             onChange={(e)=>incSet(e.target.value)}>
             <option value='this'>this</option>
@@ -173,17 +174,17 @@ const BuildHistory = ({ allVariant, allWidget, allGroup })=> {
       <div className='space'>
 
         <p>
-          <i className='medBig line2x'>When was </i>
+          <i className='med line2x'>When was </i>
           
           <select
-            style={ { width: '10ch', border: 'none', lineHeight: 2 } }
+            style={blend}
             defaultValue={scopeState}
             onChange={(e)=>scopeSet(e.target.value)}>
             <option value='group'>{Pref.group}</option>
             <option value='widget'>{Pref.widget}</option>
           </select>
             
-          <i className='medBig line2x'> </i>
+          <i className='med line2x'> </i>
       
           {scopeState === 'widget' ?
             <Fragment><input
@@ -216,7 +217,7 @@ const BuildHistory = ({ allVariant, allWidget, allGroup })=> {
                 ))}
               </datalist></Fragment>}
             
-          <i className='medBig line2x'> built last?</i>
+          <i className='med line2x'> built last?</i>
         </p>
         
         <span className='overscroll minH60'>
@@ -233,7 +234,7 @@ const BuildHistory = ({ allVariant, allWidget, allGroup })=> {
       </div>
       
       <div className='space vmarginhalf'>
-        <p className='medBig line2x'
+        <p className='med line2x'
           >Which {Pref.widgets} from {insertGroup} {insertWas} built {insertInc} {I && insertNum} {insertSpan}
         </p>
         

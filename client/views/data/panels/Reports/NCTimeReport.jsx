@@ -7,8 +7,12 @@ import ReportStatsTable from '/client/components/tables/ReportStatsTable';
 
 const NCTimeReport = ({})=> {
   
-  const [ month, monthSet ] = useState(0);
-  const [ year, yearSet ] = useState(2020);
+  const n = moment();
+  const m = n.month()-1;
+  const y = n.year();
+  
+  const [ month, monthSet ] = useState( m >= 0 ? m : 11 );
+  const [ year, yearSet ] = useState( m >= 0 ? y : y-1 );
   
   const [ working, workingSet ] = useState(false);
   const [ taskData, taskSet ] = useState(false);
@@ -17,8 +21,8 @@ const NCTimeReport = ({})=> {
   const [ lgcyData, lgcySet ] = useState(false);
   
   const yrs = [];
-  for(let i = 2020; i > moment().year()+1; i++) {
-    yrs.push(i);
+  for(let i = 2020; i < y+1; i++) {
+    yrs.unshift(i);
   }
   
   
@@ -26,35 +30,6 @@ const NCTimeReport = ({})=> {
     Meteor.call('generateNCTimeBacklog', (err, reply)=> {
       err && console.log(err);
       reply && console.log(reply);
-      
-      
-      if(reply) {
-        const re = reply[reply.length-2].report;//JSON.parse(reply);
-        
-  			const sbtotal = re[0].reduce( (x,y)=> x + y[1], 0);
-  			const sbtlhrs = min2hr(sbtotal);
-			
-        taskSet([ 
-          ['', 'minutes', 'hours'],
-          ['Total', sbtotal, sbtlhrs ],
-        	...Array.from(re[0], a =>{ return [ 
-        	  a[0], a[1], min2hr(a[1])
-        	 ]})
-        ]);
-        
-        brchSet([ 
-          ['', 'minutes', 'hours'],
-          ...Array.from(re[1], a =>{ return [ 
-          	a[0], 
-          	Array.from(a[1], b =>{ return [ 
-            	b[0], b[1], min2hr(b[1])
-            ]})
-          ]})
-        ]);
-        
-        
-        
-      }
     });
   }
   
@@ -117,6 +92,7 @@ const NCTimeReport = ({})=> {
     });
   }
   
+  const blend = { border: 'none', lineHeight: 2 };
   const gen = Roles.userIsInRole(Meteor.userId(), 'admin') &&
               Roles.userIsInRole(Meteor.userId(), 'debug');
               
@@ -134,44 +110,49 @@ const NCTimeReport = ({})=> {
       }
       
       <div className='vmargin noPrint'>
-        <label htmlFor="backyear">set year</label>
-        <select
-          id='backyear'
-          className='gap miniIn12'
-          value={year}
-          onChange={(e)=>yearSet(Number(e.target.value))}
-          required>
-            {yrs.map( (yr, index)=>(
-              <option key={'y'+index} value={yr}>{yr}</option>
-            ))}
-        </select>
         
-        <br />
+        <p className='med line2x'>Fetch Report for
         
-        <label htmlFor="backmonth">set month</label>
-        <select
-          id='backmonth'
-          className='gap miniIn12'
-          value={month}
-          onChange={(e)=>monthSet(Number(e.target.value))}
-          required>
-            {["January","Febuary","March","April","May","June",
-              "July","August","September","October","November","December"]
-              .map( (mth, index)=>(
-                <option key={'m'+index} value={index}>{mth}</option>
-            ))}
-        </select>
+          <i className='med line2x'> </i>
+          
+          <select
+            id='backmonth'
+            className='gap miniIn12'
+            style={blend}
+            value={month}
+            onChange={(e)=>monthSet(Number(e.target.value))}
+            required>
+              {["January","Febuary","March","April","May","June",
+                "July","August","September","October","November","December"]
+                .map( (mth, index)=>(
+                  <option key={'m'+index} value={index}>{mth}</option>
+              ))}
+          </select>
+          
+          <i className='med line2x'> </i>
+          
+          <select
+            id='backyear'
+            className='gap miniIn8'
+            style={blend}
+            value={year}
+            onChange={(e)=>yearSet(Number(e.target.value))}
+            required>
+              {yrs.map( (yr, index)=>(
+                <option key={'y'+index} value={yr}>{yr}</option>
+              ))}
+          </select>
+          
+          <i className='med line2x'> </i>
+          
+          <button 
+            className='action blackSolid'
+            onClick={(e)=>getReport(e)} 
+            disabled={working}
+          >Fetch Report</button>
         
-      </div>
-      
-      <p className='noPrint'>The previous month's report is generated on the first of each month.</p>
-      
-      <div className='vmarginhalf noPrint'>
-        <button 
-          className='action blackSolid'
-          onClick={(e)=>getReport(e)} 
-          disabled={working}
-        >Fetch NonCon Time Report</button>
+        </p>
+        
       </div>
         
       {working ?

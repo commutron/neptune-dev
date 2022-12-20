@@ -378,13 +378,13 @@ Meteor.methods({
                           .reduce( (arr, x)=> arr + x.dr, 0);
         
           if(br === 'surface mount') {
-            if(sb === 'Re-Inspect') {
+            if(sb === 'Re-inspection') {
               testSMTchkTIME += totalS;
             }else{
               testSMTfixTIME += totalS;
             }
           }else{
-            if(sb === 'Re-Inspect') {
+            if(sb === 'Re-inspection') {
               testOTHERchkTIME += totalS;
             }else if(sb === 'Rework') {
               testOTHERfixTIME += totalS;
@@ -456,11 +456,11 @@ Meteor.methods({
           
           if(ncTimes.length > 0) {
             if(lgwh === 'surface mount') {
-              testSMTchkTOTAL += chkfilter.length;
-              testSMTfixTOTAL += fixfilter.length;
+              testSMTchkTOTAL += chkfilter.reduce( (arr, x)=> arr + (x.units || 1), 0);
+              testSMTfixTOTAL += fixfilter.reduce( (arr, x)=> arr + (x.units || 1), 0);
             }else{
-              testOTHERchkTOTAL += chkfilter.length;
-              testOTHERfixTOTAL += fixfilter.length;
+              testOTHERchkTOTAL += chkfilter.reduce( (arr, x)=> arr + (x.units || 1), 0);
+              testOTHERfixTOTAL += fixfilter.reduce( (arr, x)=> arr + (x.units || 1), 0);
             }
           }
           
