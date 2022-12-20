@@ -35,7 +35,8 @@ export const FocusSelect = ({ gList, focusState, changeFunc })=> (
 );
 
 export const FilterSelect = ({ 
-  unqID, title, selectList, selectState, falsey, changeFunc, extraClass, icon
+  unqID, title, selectList, selectState, falsey, changeFunc, 
+  extraClass, icon, optgroup
 })=> (
   <span className='liteTipW' data-tip={title}>
     <i className={`${icon || 'fas fa-filter'} fa-fw darkgrayT`}></i>
@@ -48,17 +49,35 @@ export const FilterSelect = ({
       {falsey !== undefined &&
         <option value={false}>{falsey}</option>
       }
-      {selectList.map( (op, ix)=> {
-        if(Array.isArray(op)) {
-          return(
-            <option key={op[0]+'x'+ix} value={op[0]}>{op[1]}</option>
-          );
-        }else{
-          return(
-            <option key={op+'x'+ix}>{op}</option>
-          );
-        }
-      })}
+      {optgroup ?
+        selectList.map( (lset, sindex)=> (
+          <optgroup key={'gr'+sindex} label={lset[0]}>
+            {lset[1].map( (op, ix)=> {
+              if(Array.isArray(op)) {
+                return(
+                  <option key={op[0]+'x'+ix} value={op[0]}>{op[1]}</option>
+                );
+              }else{
+                return(
+                  <option key={op+'x'+ix}>{op}</option>
+                );
+              }
+            })}
+          </optgroup>
+        ))
+      :
+        selectList.map( (op, ix)=> {
+          if(Array.isArray(op)) {
+            return(
+              <option key={op[0]+'x'+ix} value={op[0]}>{op[1]}</option>
+            );
+          }else{
+            return(
+              <option key={op+'x'+ix}>{op}</option>
+            );
+          }
+        })
+      }
     </select>
   </span>
 );

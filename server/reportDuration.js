@@ -251,7 +251,7 @@ Meteor.methods({
     ];
   },
   
-  fetchNCTimeMonthly(accessKey) {
+  generateNCTimeMonthly(accessKey) {
     const orgKey = accessKey || Meteor.user().orgKey;
     
     const now = moment().tz(Config.clientTZ);
@@ -259,9 +259,7 @@ Meteor.methods({
     const start = now.clone().subtract(1, 'month').startOf('month');
     const endin = start.clone().endOf('month');
     
-    console.log([ start, endin ]);
-    
-    const reExp = RegExp(/(re-)|(rework)/i);
+    const reExp = RegExp(/(re-)|(Re-)|(rework)|(Rework)/);
     
     let ncTimes = [];
     let branches = new Set();
@@ -315,13 +313,24 @@ Meteor.methods({
       brBreakdown.push([ br, brsbBreakdown ]);
     }
     
-    return JSON.stringify([ sbBreakdown, brBreakdown ]);
+    const newreport = {
+      year: start.year(),
+      month: start.month(),
+      report: [ sbBreakdown, brBreakdown, [] ]
+    };
+    
+    CacheDB.update({orgKey: orgKey, dataName: 'nctimereports'}, {
+      $push : {
+        dataSet: newreport,
+    }});
+    
+    return true;
   },
   
   generateNCTimeBacklog() {
     const accessKey = Meteor.user().orgKey;
     
-    const reExp = RegExp(/(re-)|(rework)/i);
+    const reExp = RegExp(/(re-)|(Re-)|(rework)|(Rework)/);
     
     const now = moment().tz(Config.clientTZ);
     const jantwentytwo = now.clone().subtract(1, 'day').startOf('year');
@@ -362,12 +371,6 @@ Meteor.methods({
         if(totalS > 0) { sbBreakdown.push([ sb, totalS ]) }
       }
       
-      let testSMTfixTIME = 0;
-      let testSMTchkTIME = 0;
-      let testOTHERfixTIME = 0;
-      let testOTHERchkTIME = 0;
-      
-      
       let brBreakdown = [];
       for(let br of branches) {
         const brTimes = ncTimes.filter( f => f.br === br );
@@ -377,111 +380,63 @@ Meteor.methods({
           const totalS = brTimes.filter( f => f.sb === sb )
                           .reduce( (arr, x)=> arr + x.dr, 0);
         
-          if(br === 'surface mount') {
-            if(sb === 'Re-inspection') {
-              testSMTchkTIME += totalS;
-            }else{
-              testSMTfixTIME += totalS;
-            }
-          }else{
-            if(sb === 'Re-inspection') {
-              testOTHERchkTIME += totalS;
-            }else if(sb === 'Rework') {
-              testOTHERfixTIME += totalS;
-            }else{
-              null;
-            }
-          }
-        
-        
-        
           if(totalS > 0) { brsbBreakdown.push([ sb, totalS ]) }
         }
       
         brBreakdown.push([ br, brsbBreakdown ]);
       }
-        
-      /////////////////////////////////
-      let legacywhere = new Set();
-      let fixEvents = [];
-      let chkEvents = [];
       
-      XSeriesDB.find({
-        orgKey: accessKey,
-        $where: "this.nonCon.length > 0"
-      },{fields:{'nonCon':1}
-      }).forEach( srs => {
-    
-        // cyle time imposible as clicks are not that tied 1-to-1 to the repair process
-        // So the simplistic option is to addup based on an average time per fix
-        
-        for(let nc of srs.nonCon) {
-          legacywhere.add(nc.where);
-          
-          if( nc.fix && moment(nc.fix.time).isBetween(monthStart, monthEnd) ) {
-            fixEvents.push(nc.where);
-          }else if( nc.inspect && moment(nc.inspect.time).isBetween(monthStart, monthEnd) ) {
-            chkEvents.push(nc.where);
-          }else if( nc.reject && moment(nc.reject.rejectTime).isBetween(monthStart, monthEnd) ) {
-            chkEvents.push(nc.where);
-          }else{ null }
-        }
-      });
       
       let legacyBreakdown = [];
-      let fixTotal = 0;
-      let chkTotal = 0;
       
-      
-      let testSMTfixTOTAL = 0;
-      let testSMTchkTOTAL = 0;
-      let testOTHERfixTOTAL = 0;
-      let testOTHERchkTOTAL = 0;
-      
-      
-      for(let lgwh of legacywhere) {
+      if(sbBreakdown.length === 0) {
+        let legacywhere = new Set();
+        let fixEvents = [];
+        let chkEvents = [];
         
-        const fixfilter = fixEvents.filter( e => e === lgwh);
-        const fix = fixfilter.reduce( (arr)=> arr + 60, 0);
-        const fmn = Math.ceil( fix / 60 );
-        
-        const chkfilter = chkEvents.filter( e => e === lgwh);
-        const chk = chkfilter.reduce( (arr)=> arr + 60, 0);
-        const cmn = Math.ceil( chk / 60 );
-        
-        if(fix > 0 || chk > 0) { 
-          legacyBreakdown.push([ lgwh, [ ['Rework', fmn], ['Re-Inspect', cmn] ] ]);
-          fixTotal += fmn;
-          chkTotal += cmn;
-          
-          if(ncTimes.length > 0) {
-            if(lgwh === 'surface mount') {
-              testSMTchkTOTAL += chkfilter.reduce( (arr, x)=> arr + (x.units || 1), 0);
-              testSMTfixTOTAL += fixfilter.reduce( (arr, x)=> arr + (x.units || 1), 0);
-            }else{
-              testOTHERchkTOTAL += chkfilter.reduce( (arr, x)=> arr + (x.units || 1), 0);
-              testOTHERfixTOTAL += fixfilter.reduce( (arr, x)=> arr + (x.units || 1), 0);
-            }
+        XSeriesDB.find({
+          orgKey: accessKey,
+          $where: "this.nonCon.length > 0"
+        },{fields:{'nonCon':1}
+        }).forEach( srs => {
+  
+          for(let nc of srs.nonCon) {
+            legacywhere.add(nc.where);
+            
+            if( nc.fix && moment(nc.fix.time).isBetween(monthStart, monthEnd) ) {
+              fixEvents.push(nc.where);
+            }else if( nc.inspect && moment(nc.inspect.time).isBetween(monthStart, monthEnd) ) {
+              chkEvents.push(nc.where);
+            }else if( nc.reject && moment(nc.reject.rejectTime).isBetween(monthStart, monthEnd) ) {
+              chkEvents.push(nc.where);
+            }else{ null }
           }
+        });
+        
+        let fixTotal = 0;
+        let chkTotal = 0;
+        
+        // cyle time imposible as clicks are not that tied 1-to-1 to the repair process
+        // So the simplistic option is to addup based on an average time per fix
           
+        for(let lgwh of legacywhere) {
+          const sec = lgwh === 'surface mount' ? 240 : 120;
+          
+          const fix = fixEvents.filter( e => e === lgwh).reduce( (arr)=> arr + sec, 0);
+          const fmn = Math.ceil( fix / 60 );
+          
+          const chk = chkEvents.filter( e => e === lgwh).reduce( (arr)=> arr + 180, 0);
+          const cmn = Math.ceil( chk / 60 );
+          
+          if(fix > 0 || chk > 0) { 
+            legacyBreakdown.push([ lgwh, [ ['Rework', fmn], ['Re-Inspect', cmn] ] ]);
+            fixTotal += fmn;
+            chkTotal += cmn;
+          }
         }
+        
+        legacyBreakdown.unshift([ 'All', [ ['Rework', fixTotal], ['Re-Inspect', chkTotal] ] ]);
       }
-      
-      legacyBreakdown.unshift([ 'Tasks', [ ['Rework', fixTotal], ['Re-Inspect', chkTotal] ] ]);
-      
-      /////////////////////////////////
-      
-      if(ncTimes.length > 0) {
-        const smtFIXavg = testSMTfixTIME / testSMTfixTOTAL;
-        const smtCHKavg = testSMTchkTIME / testSMTchkTOTAL;
-        const othFIXavg = testOTHERfixTIME / testOTHERfixTOTAL;
-        const othCHKavg = testOTHERchkTIME / testOTHERchkTOTAL;
-      
-        console.log({smtFIXavg, smtCHKavg, othFIXavg, othCHKavg});
-      }
-       
-      
-      ///////////////////////////////
       
       return [ sbBreakdown, brBreakdown, legacyBreakdown ];
     }
@@ -496,7 +451,7 @@ Meteor.methods({
         const start = jantwentytwo.clone().year(i).month(j);
         const endin = start.clone().endOf('month');
         
-        if( i === 2022 && j === 11 ) {
+        if( i === 2022 && ( j === 10 || j === 11 ) ) {
           null;
         }else{
           reportdataset.push({
@@ -508,24 +463,35 @@ Meteor.methods({
       }
     }
     
-    // CacheDB.upsert({orgKey: accessKey, dataName: 'nctimereports'}, {
-    //   $set : {
-    //     orgKey: accessKey,
-    //     lastUpdated: new Date(),
-    //     dataName: 'nctimereports',
-    //     dataSet: reportdataset,
-    // }});
+    CacheDB.upsert({orgKey: accessKey, dataName: 'nctimereports'}, {
+      $set : {
+        orgKey: accessKey,
+        lastUpdated: new Date(),
+        dataName: 'nctimereports',
+        dataSet: reportdataset,
+    }});
     
     return reportdataset;
-    
-    // console.log([start, endin, fixEvents.length]);
-    
-    // return JSON.stringify([ brBreakdown, sbBreakdown, fixBrk, chkBrk ]);
-    // return [ sbBreakdown, brBreakdown, fixBrk, chkBrk ];
-    
-    /////
-    
-    
+  },
+  
+  fetchCachedNcTimeReport(month, year) {
+    if( !isNaN(month) && !isNaN(year) ) {
+      const cache = CacheDB.findOne({orgKey: Meteor.user().orgKey, dataName: 'nctimereports'});
+      
+      if( cache ) {
+        const report = cache.dataSet.find( r => r.month === month && r.year === year );
+        
+        if( report ) {
+          return report.report;
+        }else{
+          return false;
+        }
+      }else{
+        return false;
+      }
+    }else{
+      return false;
+    }
   }
 
 });

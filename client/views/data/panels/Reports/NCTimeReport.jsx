@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import moment from 'moment';
-// import Pref from '/client/global/pref.js';
+import Pref from '/client/global/pref.js';
 
 import { min2hr } from '/client/utility/Convert';
 import ReportStatsTable from '/client/components/tables/ReportStatsTable'; 
@@ -15,6 +15,7 @@ const NCTimeReport = ({})=> {
   const [ year, yearSet ] = useState( m >= 0 ? y : y-1 );
   
   const [ working, workingSet ] = useState(false);
+  const [ none, noneSet ] = useState(false);
   const [ taskData, taskSet ] = useState(false);
   const [ brchData, brchSet ] = useState(false);
   
@@ -33,43 +34,51 @@ const NCTimeReport = ({})=> {
     });
   }
   
+  function generateMonth() {
+    Meteor.call('generateNCTimeMonthly', (err, reply)=> {
+      err && console.log(err);
+      reply && console.log(reply);
+    });
+  }
+  
   function getReport() {
     workingSet(true);
-    Meteor.call('fetchNCTimeMonthly', (err, reply)=> {
+    Meteor.call('fetchCachedNcTimeReport', month, year, (err, reply)=> {
       err && console.log(err);
-      if(reply) {
-        const re = JSON.parse(reply);
+      if(reply === false) {
+        noneSet(true);
+        taskSet(false);
+        brchSet(false);
+        lgcySet(false);
+        workingSet(false);
+      }else if(reply) {
+        const re = reply;
         
   			const sbtotal = re[0].reduce( (x,y)=> x + y[1], 0);
   			const sbtlhrs = min2hr(sbtotal);
 			  
-			  if(re[0].length > 0) {
-          taskSet([ 
-            ['', 'minutes', 'hours'],
-            ['Total', sbtotal, sbtlhrs ],
-          	...Array.from(re[0], a =>{ return [ 
-          	  a[0], a[1], min2hr(a[1])
-          	 ]})
-          ]);
-			  }else{
-			    taskSet(false);
-			  }
-        
-        if(re[1].length > 0) {
-          brchSet([ 
-            ['', 'minutes', 'hours'],
-            ...Array.from(re[1], a =>{ return [ 
-            	a[0], 
-            	Array.from(a[1], b =>{ return [ 
-              	b[0], b[1], min2hr(b[1])
-              ]})
+        taskSet([ 
+          ['', 'minutes', 'hours'],
+          ['Total', sbtotal, sbtlhrs ],
+        	...Array.from(re[0], a =>{ return [ 
+        	  a[0], a[1], min2hr(a[1])
+        	 ]})
+        ]);
+
+        brchSet([ 
+          ['', 'minutes', 'hours'],
+          ...Array.from(re[1], a =>{ return [ 
+          	a[0], 
+          	Array.from(a[1], b =>{ return [ 
+            	b[0], b[1], min2hr(b[1])
             ]})
-          ]);
-        }else{
-			    brchSet(false);
-			  }
+          ]})
+        ]);
 			  
         if(re[2].length > 0) {
+          taskSet(false);
+          brchSet(false);
+          
           const lgtotal = re[2][0][1].reduce( (x,y)=> x + y[1], 0);
   			  const lgtlhrs = min2hr(lgtotal);
   			
@@ -87,6 +96,7 @@ const NCTimeReport = ({})=> {
           lgcySet(false);
         }
         
+        noneSet(false);
         workingSet(false);
       }
     });
@@ -102,16 +112,26 @@ const NCTimeReport = ({})=> {
       {gen &&
         <div className='vmargin noPrint'>
           <button
-            className='action nSolid'
+            className='action tealSolid'
             onClick={(e)=>generateBacklog(e)}
             disabled={!gen}
-          >Generate NonCon Time Reports</button>
+          >Generate Backlog NonCon Time Reports</button>
+        </div>
+      }
+      
+      {gen &&
+        <div className='vmargin noPrint'>
+          <button
+            className='action nSolid'
+            onClick={(e)=>generateMonth(e)}
+            disabled={!gen}
+          >Generate First Monthly NonCon Time Reports</button>
         </div>
       }
       
       <div className='vmargin noPrint'>
         
-        <p className='med line2x'>Fetch Report for
+        <p className='med line2x'>Logged {Pref.nonCon} time for
         
           <i className='med line2x'> </i>
           
@@ -146,7 +166,7 @@ const NCTimeReport = ({})=> {
           <i className='med line2x'> </i>
           
           <button 
-            className='action blackSolid'
+            className='action blackSolid gap'
             onClick={(e)=>getReport(e)} 
             disabled={working}
           >Fetch Report</button>
@@ -184,6 +204,10 @@ const NCTimeReport = ({})=> {
             </span>
           }
         </span>
+      }
+      
+      {none &&
+        <p className='bold centreText'>No Report Found</p>
       }
           
     </div>
