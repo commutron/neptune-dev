@@ -48,7 +48,6 @@ const BatchDetails = ({
             <ServeDetailChunk
               key={`${entry.mId}serve${index}`}
               sv={entry}
-              app={app}
               isRO={isRO}
               isDebug={isDebug}
               dense={dense}

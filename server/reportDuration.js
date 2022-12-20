@@ -254,16 +254,12 @@ Meteor.methods({
   fetchNCTimeMonthly(accessKey) {
     const orgKey = accessKey || Meteor.user().orgKey;
     
-    const now = moment().tz(Config.clientTZ).subtract(1, 'day').startOf('year');
+    const now = moment().tz(Config.clientTZ);
     
-    const start = now.clone().add(7, 'month');
+    const start = now.clone().subtract(1, 'month').startOf('month');
     const endin = start.clone().endOf('month');
     
-    // const start = now.clone().startOf('month');
-    // const endin = start.clone().endOf('month');
     console.log([ start, endin ]);
-    
-    // const app = AppDB.findOne({orgKey: orgKey},{fields:{'branches':1}});
     
     const reExp = RegExp(/(re-)|(rework)/i);
     
@@ -322,8 +318,8 @@ Meteor.methods({
     return JSON.stringify([ sbBreakdown, brBreakdown ]);
   },
   
-  generateNCTimeBacklog(year, month, accessKey) {
-    const orgKey = accessKey || Meteor.user().orgKey;
+  generateNCTimeBacklog() {
+    const accessKey = Meteor.user().orgKey;
     
     const reExp = RegExp(/(re-)|(rework)/i);
     
@@ -337,7 +333,7 @@ Meteor.methods({
       let subtasks = new Set();
       
       XBatchDB.find({
-        orgKey: orgKey,
+        orgKey: accessKey,
         tide: { $exists: true }
       },{fields:{'tide':1}
       }).forEach( bx => {
@@ -366,6 +362,12 @@ Meteor.methods({
         if(totalS > 0) { sbBreakdown.push([ sb, totalS ]) }
       }
       
+      let testSMTfixTIME = 0;
+      let testSMTchkTIME = 0;
+      let testOTHERfixTIME = 0;
+      let testOTHERchkTIME = 0;
+      
+      
       let brBreakdown = [];
       for(let br of branches) {
         const brTimes = ncTimes.filter( f => f.br === br );
@@ -374,6 +376,24 @@ Meteor.methods({
         for(let sb of subtasks) {
           const totalS = brTimes.filter( f => f.sb === sb )
                           .reduce( (arr, x)=> arr + x.dr, 0);
+        
+          if(br === 'surface mount') {
+            if(sb === 'Re-Inspect') {
+              testSMTchkTIME += totalS;
+            }else{
+              testSMTfixTIME += totalS;
+            }
+          }else{
+            if(sb === 'Re-Inspect') {
+              testOTHERchkTIME += totalS;
+            }else if(sb === 'Rework') {
+              testOTHERfixTIME += totalS;
+            }else{
+              null;
+            }
+          }
+        
+        
         
           if(totalS > 0) { brsbBreakdown.push([ sb, totalS ]) }
         }
@@ -387,7 +407,7 @@ Meteor.methods({
       let chkEvents = [];
       
       XSeriesDB.find({
-        orgKey: orgKey,
+        orgKey: accessKey,
         $where: "this.nonCon.length > 0"
       },{fields:{'nonCon':1}
       }).forEach( srs => {
@@ -412,45 +432,56 @@ Meteor.methods({
       let fixTotal = 0;
       let chkTotal = 0;
       
+      
+      let testSMTfixTOTAL = 0;
+      let testSMTchkTOTAL = 0;
+      let testOTHERfixTOTAL = 0;
+      let testOTHERchkTOTAL = 0;
+      
+      
       for(let lgwh of legacywhere) {
         
-        const fix = fixEvents.filter( e => e === lgwh).reduce( (arr)=> arr + 60, 0);
+        const fixfilter = fixEvents.filter( e => e === lgwh);
+        const fix = fixfilter.reduce( (arr)=> arr + 60, 0);
         const fmn = Math.ceil( fix / 60 );
         
-        const chk = chkEvents.filter( e => e === lgwh).reduce( (arr)=> arr + 60, 0);
+        const chkfilter = chkEvents.filter( e => e === lgwh);
+        const chk = chkfilter.reduce( (arr)=> arr + 60, 0);
         const cmn = Math.ceil( chk / 60 );
         
         if(fix > 0 || chk > 0) { 
           legacyBreakdown.push([ lgwh, [ ['Rework', fmn], ['Re-Inspect', cmn] ] ]);
           fixTotal += fmn;
           chkTotal += cmn;
+          
+          if(ncTimes.length > 0) {
+            if(lgwh === 'surface mount') {
+              testSMTchkTOTAL += chkfilter.length;
+              testSMTfixTOTAL += fixfilter.length;
+            }else{
+              testOTHERchkTOTAL += totalS.length;
+              testOTHERfixTOTAL += fixfilter.length;
+            }
+          }
+          
         }
       }
       
       legacyBreakdown.unshift([ 'Tasks', [ ['Rework', fixTotal], ['Re-Inspect', chkTotal] ] ]);
       
-      
-      
-      /*
-      let fixLoc = new Set(fixEvents);
-      let fixBrk = [];
-      
-      for(let fl of fixLoc) { // or 3.5 minutes per
-        const sec = fixEvents.filter( e => e === fl).reduce( (arr)=> arr + 120, 0);
-        const min = Math.ceil( sec / 60 );
-        if(min > 0){ fixBrk.push([ fl, min ]) }
-      }
-      
-      let chkLoc = new Set(chkEvents);
-      let chkBrk = [];
-      
-      for(let cl of chkLoc) { // or 4 minutes per 
-        const sec = chkEvents.filter( e => e === cl).reduce( (arr)=> arr + 30, 0);
-        const min = Math.ceil( sec / 60 );
-        if(min > 0) { chkBrk.push([ cl, min ]) }
-      }
-      */
       /////////////////////////////////
+      
+      if(ncTimes.length > 0) {
+        const smtFIXavg = testSMTfixTIME / testSMTfixTOTAL;
+        const smtCHKavg = testSMTchkTIME / testSMTchkTOTAL;
+        const othFIXavg = testOTHERfixTIME / testOTHERfixTOTAL;
+        const othCHKavg = testOTHERchkTIME / testOTHERchkTOTAL;
+      
+        console.log({smtFIXavg, smtCHKavg, othFIXavg, othCHKavg});
+      }
+       
+      
+      ///////////////////////////////
       
       return [ sbBreakdown, brBreakdown, legacyBreakdown ];
     }

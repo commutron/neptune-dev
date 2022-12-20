@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import moment from 'moment';
 // import Pref from '/client/global/pref.js';
 
 import { min2hr } from '/client/utility/Convert';
@@ -15,8 +16,14 @@ const NCTimeReport = ({})=> {
   
   const [ lgcyData, lgcySet ] = useState(false);
   
+  const yrs = [];
+  for(let i = 2020; i > moment().year()+1; i++) {
+    yrs.push(i);
+  }
+  
+  
   function testDeduce() {
-    Meteor.call('generateNCTimeBacklog', year, month, (err, reply)=> {
+    Meteor.call('generateNCTimeBacklog', (err, reply)=> {
       err && console.log(err);
       reply && console.log(reply);
       
@@ -113,9 +120,8 @@ const NCTimeReport = ({})=> {
           value={year}
           onChange={(e)=>yearSet(Number(e.target.value))}
           required>
-            {["2020","2021","2022"]
-              .map( (yr, index)=>(
-                <option key={'y'+index} value={yr}>{yr}</option>
+            {yrs.map( (yr, index)=>(
+              <option key={'y'+index} value={yr}>{yr}</option>
             ))}
         </select>
         

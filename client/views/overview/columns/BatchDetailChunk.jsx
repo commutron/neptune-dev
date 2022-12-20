@@ -10,6 +10,7 @@ import { PerformanceSquare } from '/client/components/smallUi/StatusBlocks/Perfo
 import BranchProgress from './BranchProgress';
 import NonConCounts from './NonConCounts';
 import ProJump, { SrvJump } from '/client/components/smallUi/ProJump';
+import { round1Decimal } from '/client/utility/Convert';
 
 const BatchDetailChunk = ({ 
   rowIndex, oB, tBatch,
@@ -108,7 +109,7 @@ const BatchDetailChunk = ({
 
 export default BatchDetailChunk;
 
-export const ServeDetailChunk = ({ sv, app, isRO, isDebug, dense })=> {
+export const ServeDetailChunk = ({ sv, isRO, isDebug, dense })=> {
   
   const [ active, activeSet ] = useState(false);
   
@@ -153,7 +154,7 @@ export const ServeDetailChunk = ({ sv, app, isRO, isDebug, dense })=> {
       <div className='infoSquareOuter noCopy center' title={lattl}>
         {late ?
           <n-fa5><i className='fa-solid fa-clock fa-2x fa-fw redT'></i></n-fa5>
-        : <i className='medSm'>{moment(sv.due).workingDiff(moment(), 'days', true)}</i>}
+        : <i className='medSm'>{round1Decimal(moment(sv.due).workingDiff(moment(), 'days', true))}</i>}
         <i className='label infoSquareLabel'>{lattl}</i>
       </div>
       

@@ -21,7 +21,7 @@ const EquipCard = ({ equipData, maintainData })=> {
         {sorts.map( (m, ix)=> (
           <button 
             key={ix}
-            className='action whiteSolid margin5 letterSpaced spacehalf'
+            className='action whiteSolid margin5 leftText letterSpaced spacehalf'
             onClick={()=>{Session.set('now', m.find);Session.set('nowSV', m.mId)}}
           >{m.flg === 'notrequired' ?
             <n-fa2><i className='fa-solid fa-ban fa-fw orangeT gapR'></i></n-fa2>

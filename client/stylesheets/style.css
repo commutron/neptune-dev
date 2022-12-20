@@ -243,7 +243,10 @@
 .em { font-style: italic; }
 .nsty { font-style: normal; }
 
-.letterSpaced { letter-spacing: 2px; }
+.letterSpaced { 
+  letter-spacing: 2px;
+  line-height: 1.1;
+}
 
 .strike { text-decoration: line-through; }
 .underline { text-decoration: underline; }
