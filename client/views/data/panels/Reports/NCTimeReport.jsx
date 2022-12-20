@@ -53,27 +53,6 @@ const NCTimeReport = ({})=> {
       }else if(reply) {
         const re = reply;
         
-  			const sbtotal = re[0].reduce( (x,y)=> x + y[1], 0);
-  			const sbtlhrs = min2hr(sbtotal);
-			  
-        taskSet([ 
-          ['', 'minutes', 'hours'],
-          ['Total', sbtotal, sbtlhrs ],
-        	...Array.from(re[0], a =>{ return [ 
-        	  a[0], a[1], min2hr(a[1])
-        	 ]})
-        ]);
-
-        brchSet([ 
-          ['', 'minutes', 'hours'],
-          ...Array.from(re[1], a =>{ return [ 
-          	a[0], 
-          	Array.from(a[1], b =>{ return [ 
-            	b[0], b[1], min2hr(b[1])
-            ]})
-          ]})
-        ]);
-			  
         if(re[2].length > 0) {
           taskSet(false);
           brchSet(false);
@@ -93,6 +72,27 @@ const NCTimeReport = ({})=> {
           ]);
         }else{
           lgcySet(false);
+          
+    			const sbtotal = re[0].reduce( (x,y)=> x + y[1], 0);
+    			const sbtlhrs = min2hr(sbtotal);
+  			  
+          taskSet([ 
+            ['', 'minutes', 'hours'],
+            ['Total', sbtotal, sbtlhrs ],
+          	...Array.from(re[0], a =>{ return [ 
+          	  a[0], a[1], min2hr(a[1])
+          	 ]})
+          ]);
+  
+          brchSet([ 
+            ['', 'minutes', 'hours'],
+            ...Array.from(re[1], a =>{ return [ 
+            	a[0], 
+            	Array.from(a[1], b =>{ return [ 
+              	b[0], b[1], min2hr(b[1])
+              ]})
+            ]})
+          ]);
         }
         
         noneSet(false);

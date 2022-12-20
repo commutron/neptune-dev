@@ -386,10 +386,9 @@ Meteor.methods({
         brBreakdown.push([ br, brsbBreakdown ]);
       }
       
-      
       let legacyBreakdown = [];
       
-      // if(sbBreakdown.length === 0) {
+      if(ncTimes.length === 0) {
         let legacywhere = new Set();
         let fixEvents = [];
         let chkEvents = [];
@@ -436,7 +435,9 @@ Meteor.methods({
         }
         
         legacyBreakdown.unshift([ 'All', [ ['Rework', fixTotal], ['Re-Inspect', chkTotal] ] ]);
-      // }
+      }else{
+        null;
+      }
       
       return [ sbBreakdown, brBreakdown, legacyBreakdown ];
     }
