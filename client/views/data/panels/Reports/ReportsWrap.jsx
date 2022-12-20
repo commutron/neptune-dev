@@ -24,10 +24,7 @@ const ReportsWrap = ({
       
       <div className='space'>
         <h2 style={{marginBottom:'32px'}}>Monthly NonCon Time Report</h2>
-        <h4 className='noPrint'>Auto generated on the first of each month.</h4>
-        
         <NCTimeReport />
-        
       </div>
       
       <hr className='vmargin' />

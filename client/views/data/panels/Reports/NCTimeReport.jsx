@@ -33,13 +33,6 @@ const NCTimeReport = ({})=> {
     });
   }
   
-  function generateMonth() {
-    Meteor.call('generateNCTimeMonthly', (err, reply)=> {
-      err && console.log(err);
-      reply && console.log(reply);
-    });
-  }
-  
   function getReport() {
     workingSet(true);
     Meteor.call('fetchCachedNcTimeReport', month, year, (err, reply)=> {
@@ -115,16 +108,6 @@ const NCTimeReport = ({})=> {
             onClick={(e)=>generateBacklog(e)}
             disabled={!gen}
           >Generate Backlog NonCon Time Reports</button>
-        </div>
-      }
-      
-      {gen &&
-        <div className='vmargin noPrint'>
-          <button
-            className='action nSolid'
-            onClick={(e)=>generateMonth(e)}
-            disabled={!gen}
-          >Generate First Monthly NonCon Time Reports</button>
         </div>
       }
       
@@ -206,7 +189,10 @@ const NCTimeReport = ({})=> {
       }
       
       {none &&
-        <p className='med bold centreText'>No Report Found</p>
+        <span className='med centreText'>
+          <p className='bold'>No Report Found.</p>
+          <p>Reports are auto generated at the end of each month.</p>
+        </span>
       }
           
     </div>

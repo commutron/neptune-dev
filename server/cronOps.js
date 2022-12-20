@@ -43,6 +43,8 @@ SyncedCron.add({
   job: ()=> goDo('fetchOverRun')
 });
 
+// set time for apxOpenTime
+
 SyncedCron.add({
   name: 'Daily Trend Loops',
   schedule: (parser)=> parser.text('at 6:10 am every weekday'),
@@ -67,6 +69,11 @@ SyncedCron.add({
   job: ()=> goDo('updateAllWidgetAvg')
 });
 
+SyncedCron.add({
+  name: 'NonCon Time Report',
+  schedule: (parser)=> parser.text('on the first day of the month at 6:30 am'),
+  job: ()=> goDo('generateNCTimeMonthly')
+});
 
 SyncedCron.start();
   

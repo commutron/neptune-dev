@@ -73,7 +73,12 @@ const CRONSlide = ()=> {
             <td>{isLocal('6:25')}</td>
             <td>Widget Averages</td>
           </tr>
-          
+          <tr>
+            <td>1st of the Month</td>
+            <td>6:30</td>
+            <td>{isLocal('6:30')}</td>
+            <td>NonCon Time Report</td>
+          </tr>
         </tbody>
       </table>
       

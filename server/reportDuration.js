@@ -327,6 +327,7 @@ Meteor.methods({
     return true;
   },
   
+  /// ON TIME FUNCTION \\\
   generateNCTimeBacklog() {
     const accessKey = Meteor.user().orgKey;
     
@@ -340,6 +341,10 @@ Meteor.methods({
       let ncTimes = [];
       let branches = new Set();
       let subtasks = new Set();
+      
+      let sbBreakdown = [];
+      let brBreakdown = [];
+      let legacyBreakdown = [];
       
       XBatchDB.find({
         orgKey: accessKey,
@@ -363,32 +368,31 @@ Meteor.methods({
         }
       });
       
-      let sbBreakdown = [];
-      for(let sb of subtasks) {
-        const totalS = ncTimes.filter( f => f.sb === sb )
-                        .reduce( (arr, x)=> arr + x.dr, 0);
-      
-        if(totalS > 0) { sbBreakdown.push([ sb, totalS ]) }
-      }
-      
-      let brBreakdown = [];
-      for(let br of branches) {
-        const brTimes = ncTimes.filter( f => f.br === br );
+      if(ncTimes.length > 0) {
         
-        let brsbBreakdown = [];
         for(let sb of subtasks) {
-          const totalS = brTimes.filter( f => f.sb === sb )
+          const totalS = ncTimes.filter( f => f.sb === sb )
                           .reduce( (arr, x)=> arr + x.dr, 0);
         
-          if(totalS > 0) { brsbBreakdown.push([ sb, totalS ]) }
+          if(totalS > 0) { sbBreakdown.push([ sb, totalS ]) }
         }
       
-        brBreakdown.push([ br, brsbBreakdown ]);
-      }
-      
-      let legacyBreakdown = [];
-      
-      if(ncTimes.length === 0) {
+        for(let br of branches) {
+          const brTimes = ncTimes.filter( f => f.br === br );
+          
+          let brsbBreakdown = [];
+          for(let sb of subtasks) {
+            const totalS = brTimes.filter( f => f.sb === sb )
+                            .reduce( (arr, x)=> arr + x.dr, 0);
+          
+            if(totalS > 0) { brsbBreakdown.push([ sb, totalS ]) }
+          }
+        
+          brBreakdown.push([ br, brsbBreakdown ]);
+        }
+        
+      }else{
+        
         let legacywhere = new Set();
         let fixEvents = [];
         let chkEvents = [];
@@ -435,8 +439,6 @@ Meteor.methods({
         }
         
         legacyBreakdown.unshift([ 'All', [ ['Rework', fixTotal], ['Re-Inspect', chkTotal] ] ]);
-      }else{
-        null;
       }
       
       return [ sbBreakdown, brBreakdown, legacyBreakdown ];
@@ -452,7 +454,7 @@ Meteor.methods({
         const start = jantwentytwo.clone().year(i).month(j);
         const endin = start.clone().endOf('month');
         
-        if( i === 2022 && ( j === 10 || j === 11 ) ) {
+        if( i === 2022 && j === 11 ) {
           null;
         }else{
           reportdataset.push({
@@ -474,6 +476,7 @@ Meteor.methods({
     
     return reportdataset;
   },
+  //////////////\\\\\\\\\\\\\
   
   fetchCachedNcTimeReport(month, year) {
     if( !isNaN(month) && !isNaN(year) ) {
