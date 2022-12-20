@@ -333,7 +333,7 @@ Meteor.methods({
     const reExp = RegExp(/(re-)|(Re-)|(rework)|(Rework)/);
     
     const now = moment().tz(Config.clientTZ);
-    const jantwentytwo = now.clone().subtract(1, 'day').startOf('year');
+    const jantwentytwo = now.clone().startOf('year');
     
     function buildMonthlyReport(monthStart, monthEnd) {
     
@@ -389,7 +389,7 @@ Meteor.methods({
       
       let legacyBreakdown = [];
       
-      if(sbBreakdown.length === 0) {
+      // if(sbBreakdown.length === 0) {
         let legacywhere = new Set();
         let fixEvents = [];
         let chkEvents = [];
@@ -436,7 +436,7 @@ Meteor.methods({
         }
         
         legacyBreakdown.unshift([ 'All', [ ['Rework', fixTotal], ['Re-Inspect', chkTotal] ] ]);
-      }
+      // }
       
       return [ sbBreakdown, brBreakdown, legacyBreakdown ];
     }

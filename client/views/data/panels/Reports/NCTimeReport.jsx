@@ -26,7 +26,6 @@ const NCTimeReport = ({})=> {
     yrs.unshift(i);
   }
   
-  
   function generateBacklog() {
     Meteor.call('generateNCTimeBacklog', (err, reply)=> {
       err && console.log(err);
@@ -194,7 +193,7 @@ const NCTimeReport = ({})=> {
           
           {lgcyData &&
             <span>
-              <p>No direct time records available. Estimate infered from nonCon records</p>
+              <p className='centreText'><em>No direct time records available. Estimate inferred from nonCon records.</em></p>
               <ReportStatsTable 
                 title='nonconformance report - Legacy Estimate' 
                 dateString={`${002} Cached Report`}
@@ -207,7 +206,7 @@ const NCTimeReport = ({})=> {
       }
       
       {none &&
-        <p className='bold centreText'>No Report Found</p>
+        <p className='med bold centreText'>No Report Found</p>
       }
           
     </div>
