@@ -459,7 +459,7 @@ Meteor.methods({
               testSMTchkTOTAL += chkfilter.length;
               testSMTfixTOTAL += fixfilter.length;
             }else{
-              testOTHERchkTOTAL += totalS.length;
+              testOTHERchkTOTAL += chkfilter.length;
               testOTHERfixTOTAL += fixfilter.length;
             }
           }

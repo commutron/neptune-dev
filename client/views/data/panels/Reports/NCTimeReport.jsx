@@ -22,7 +22,7 @@ const NCTimeReport = ({})=> {
   }
   
   
-  function testDeduce() {
+  function generateBacklog() {
     Meteor.call('generateNCTimeBacklog', (err, reply)=> {
       err && console.log(err);
       reply && console.log(reply);
@@ -52,25 +52,7 @@ const NCTimeReport = ({})=> {
           ]})
         ]);
         
-        if(re[2]) {
-          const lgtotal = re[2][0][1].reduce( (x,y)=> x + y[1], 0);
-  			  const lgtlhrs = min2hr(lgtotal);
-  			
-          lgcySet([ 
-          ['', 'minutes', 'hours'],
-          ['Total', lgtotal, lgtlhrs ],
-          ...Array.from(re[2], a =>{ return [ 
-          	a[0], 
-          	Array.from(a[1], b =>{ return [ 
-            	b[0], b[1], min2hr(b[1])
-            ]})
-          ]})
-        ]);
-          
-          
-        }else{
-          lgcySet(false);
-        }
+        
         
       }
     });
@@ -85,32 +67,71 @@ const NCTimeReport = ({})=> {
         
   			const sbtotal = re[0].reduce( (x,y)=> x + y[1], 0);
   			const sbtlhrs = min2hr(sbtotal);
-			
-        taskSet([ 
-          ['', 'minutes', 'hours'],
-          ['Total', sbtotal, sbtlhrs ],
-        	...Array.from(re[0], a =>{ return [ 
-        	  a[0], a[1], min2hr(a[1])
-        	 ]})
-        ]);
+			  
+			  if(re[0].length > 0) {
+          taskSet([ 
+            ['', 'minutes', 'hours'],
+            ['Total', sbtotal, sbtlhrs ],
+          	...Array.from(re[0], a =>{ return [ 
+          	  a[0], a[1], min2hr(a[1])
+          	 ]})
+          ]);
+			  }else{
+			    taskSet(false);
+			  }
         
-        brchSet([ 
-          ['', 'minutes', 'hours'],
-          ...Array.from(re[1], a =>{ return [ 
-          	a[0], 
-          	Array.from(a[1], b =>{ return [ 
-            	b[0], b[1], min2hr(b[1])
+        if(re[1].length > 0) {
+          brchSet([ 
+            ['', 'minutes', 'hours'],
+            ...Array.from(re[1], a =>{ return [ 
+            	a[0], 
+            	Array.from(a[1], b =>{ return [ 
+              	b[0], b[1], min2hr(b[1])
+              ]})
             ]})
-          ]})
-        ]);
+          ]);
+        }else{
+			    brchSet(false);
+			  }
+			  
+        if(re[2].length > 0) {
+          const lgtotal = re[2][0][1].reduce( (x,y)=> x + y[1], 0);
+  			  const lgtlhrs = min2hr(lgtotal);
+  			
+          lgcySet([ 
+            ['', 'minutes', 'hours'],
+            ['Total', lgtotal, lgtlhrs ],
+            ...Array.from(re[2], a =>{ return [ 
+            	a[0], 
+            	Array.from(a[1], b =>{ return [ 
+              	b[0], b[1], min2hr(b[1])
+              ]})
+            ]})
+          ]);
+        }else{
+          lgcySet(false);
+        }
         
         workingSet(false);
       }
     });
   }
-    
+  
+  const gen = Roles.userIsInRole(Meteor.userId(), 'admin') &&
+              Roles.userIsInRole(Meteor.userId(), 'debug');
+              
   return(
     <div className='overscroll'>
+      
+      {gen &&
+        <div className='vmargin noPrint'>
+          <button
+            className='action nSolid'
+            onClick={(e)=>generateBacklog(e)}
+            disabled={!gen}
+          >Generate NonCon Time Reports</button>
+        </div>
+      }
       
       <div className='vmargin noPrint'>
         <label htmlFor="backyear">set year</label>
@@ -141,14 +162,9 @@ const NCTimeReport = ({})=> {
             ))}
         </select>
         
-        <br />
-        <button
-          className='action nSolid'
-          onClick={(e)=>testDeduce(e)} 
-        >Test NonCon Time Estimate</button>
       </div>
       
-      <p>The previous month's report is generated on the first of each month.</p>
+      <p className='noPrint'>The previous month's report is generated on the first of each month.</p>
       
       <div className='vmarginhalf noPrint'>
         <button 
@@ -176,12 +192,15 @@ const NCTimeReport = ({})=> {
           />
           
           {lgcyData &&
-            <ReportStatsTable 
-              title='nonconformance report - legacy data' 
-              dateString={`${002} Cached Report`}
-              rows={lgcyData}
-              extraClass='max600' 
-            />
+            <span>
+              <p>No direct time records available. Estimate infered from nonCon records</p>
+              <ReportStatsTable 
+                title='nonconformance report - Legacy Estimate' 
+                dateString={`${002} Cached Report`}
+                rows={lgcyData}
+                extraClass='max600' 
+              />
+            </span>
           }
         </span>
       }
