@@ -171,7 +171,7 @@ const BuildHistory = ({ allVariant, allWidget, allGroup })=> {
   
   return(
     <div>
-      <div className='space'>
+      <div className='vspace'>
 
         <p>
           <i className='med line2x'>When was </i>
@@ -233,7 +233,7 @@ const BuildHistory = ({ allVariant, allWidget, allGroup })=> {
       
       </div>
       
-      <div className='space vmarginhalf'>
+      <div className='vspace'>
         <p className='med line2x'
           >Which {Pref.widgets} from {insertGroup} {insertWas} built {insertInc} {I && insertNum} {insertSpan}
         </p>

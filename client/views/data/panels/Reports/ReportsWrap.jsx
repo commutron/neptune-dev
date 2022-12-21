@@ -23,7 +23,7 @@ const ReportsWrap = ({
       <div className='rowWrapR noPrint'><PrintThis /></div>
 
       <div className='space'>
-        <h2 style={{marginBottom:'32px'}}>Current Work In Progress Report</h2>
+        <h2 style={{marginBottom:'32px'}}>Remaining Work In Progress Report</h2>
         <WIPReport />
       </div>
       
@@ -68,13 +68,15 @@ const ReportsWrap = ({
       <hr className='vmargin' />
       <div className='printBr' />
       
-      <h2 style={{paddingLeft:'24px'}}>Build History Report</h2>
-      <BuildHistory
-        allVariant={allVariant}
-        allWidget={allWidget}
-        allGroup={allGroup} 
-        app={app} 
-      />
+      <div className='space'>
+        <h2>Build History Report</h2>
+        <BuildHistory
+          allVariant={allVariant}
+          allWidget={allWidget}
+          allGroup={allGroup} 
+          app={app} 
+        />
+      </div>
 
     </div>
   );

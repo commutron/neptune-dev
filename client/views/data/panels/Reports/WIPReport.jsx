@@ -2,52 +2,32 @@ import React, { useState } from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
 
-import { min2hr } from '/client/utility/Convert';
 import ReportStatsTable from '/client/components/tables/ReportStatsTable'; 
 
 const WIPReport = ({})=> {
   
-  const n = moment();
-  
   const [ working, workingSet ] = useState(false);
-  const [ none, noneSet ] = useState(false);
   const [ wipData, wipSet ] = useState(false);
   
   function getReport() {
     workingSet(true);
     Meteor.call('fetchOpenApproxTime', (err, reply)=> {
       err && console.log(err);
-      
-      
-      ////////////////////
-      if(reply === false) {
-        noneSet(true);
-        wipSet(false);
-        workingSet(false);
-      }else if(reply) {
-        const re = reply;
-        
-        
-        console.log(re);
-        
+      if(reply) {
           wipSet([ 
-            ['', 'Quoted Hours', 'Estimated Hours'],
-          	...re
+            ['', Pref.xBatchs, 'Quoted Hours', 'Estimated Hours'],
+          	...reply
           ]);
-        
-        noneSet(false);
         workingSet(false);
-      }
+      }else{null}
     });
   }
              
   return(
-    <div className='overscroll'>
-      
+    <div>
       <div className='vmargin noPrint'>
         
-        <p className='med line2x'>Current
-        
+        <p className='med line2x'>Hours of work remaining for all live {Pref.xBatchs}.
           <i className='med line2x'> </i>
           
           <button 
@@ -55,32 +35,24 @@ const WIPReport = ({})=> {
             onClick={(e)=>getReport(e)} 
             disabled={working}
           >Fetch Report</button>
-        
         </p>
         
+        {wipData &&
+          <p className='smTxt vmarginquarter max600'>"Estimated Hours" incorporates previous product orders, process cycle times and the nonconformance rate. (The same calculation used for priority ranking.)</p>}
       </div>
         
       {working ?
         <p><n-fa0><i className='fas fa-spinner fa-lg fa-spin gapL'></i></n-fa0></p>
       :
         <ReportStatsTable 
-          title='Current Work In Progress Report' 
-          dateString={n.format('MMMM D YYYY')}
+          title='Remaining WIP Report'
+          dateString={moment().format('MMMM D YYYY')}
           rows={wipData}
-          extraClass='max600' 
+          extraClass='max750' 
         />
       }
-      
-      {none &&
-        <span className='med centreText'>
-          <p className='bold'>No Report Found.</p>
-          <p>Reports are auto generated at the end of each month.</p>
-        </span>
-      }
-          
     </div>
   );
 };
 
 export default WIPReport;
-

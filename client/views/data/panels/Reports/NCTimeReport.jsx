@@ -101,7 +101,7 @@ const NCTimeReport = ({})=> {
   const nicedate = moment().year(year).month(month).format('MMMM YYYY');
   
   return(
-    <div className='overscroll'>
+    <div>
       
       {gen &&
         <div className='vmargin noPrint'>

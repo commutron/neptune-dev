@@ -91,6 +91,16 @@ const TideFollow = ({ tOpen, canMulti })=> {
           <i className='fas fa-user-astronaut fa-flip-horizontal fa-fw'></i>
           <i className='noCopy'> {usernice}</i>
         </MenuItem>
+        
+        <MenuItem onClick={()=>FlowRouter.go('/user')} className='noCopy comfort'>
+          <span>
+            <i className='fas fa-envelope fa-fw'></i>
+            <i> Messages</i>
+          </span>
+          <strong>{user.inbox?.length}</strong>
+        </MenuItem>
+        
+        
         <MenuItem divider />
         
         {canMulti ?

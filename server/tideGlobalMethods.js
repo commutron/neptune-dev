@@ -374,53 +374,54 @@ Meteor.methods({
 
     const apxOpenShade = CacheDB.findOne({orgKey: accessKey, dataName: 'apxOpenTime'});
     const apxtime = apxOpenShade ? apxOpenShade.lastUpdated : null;
-    const stale = !apxtime ? true :
-              moment.duration(moment().diff(moment(apxtime))).as('hours') > Config.freche * 2;
-    if(true) {
-      const fnc = (trArr, key)=> {
-        const cln = trArr.filter( x => x[key] && !isNaN(x[key]) && x[key] > 0 );
-        const rdc = cln.reduce( (arr, x)=> arr + x[key], 0 );
-        const rnd = round2Decimal( moment.duration(rdc, "minutes").asHours() );
-        return rnd;
-      };
+    
+    const fnc = (trArr, key)=> {
+      const cln = trArr.filter( x => x[key] && !isNaN(x[key]) && x[key] > 0 );
+      const rdc = cln.reduce( (arr, x)=> arr + x[key], 0 );
+      const rnd = round2Decimal( moment.duration(rdc, "minutes").asHours() );
+      return rnd;
+    };
       
-      const traces = TraceDB.find({live: true},
-                       {fields:{'hold':1,'onFloor':1,'est2tide':1,'quote2tide':1}
-                     }).fetch();
-      
-      const onFloorOpen = traces.filter( t => t.onFloor && !t.hold );
-      const oFOq2t = fnc(onFloorOpen, 'quote2tide');
-      const oFOe2t = fnc(onFloorOpen, 'est2tide');
-      
-      const onFloorHold = traces.filter( t => t.onFloor && t.hold );
-      const oFHq2t = fnc(onFloorHold, 'quote2tide');
-      const oFHe2t = fnc(onFloorHold, 'est2tide');
-      
-      const kitOpen = traces.filter( t => !t.onFloor && !t.hold );
-      const kOq2t = fnc(kitOpen, 'quote2tide');
-      const kOe2t = fnc(kitOpen, 'est2tide');
-      
-      const kitHold = traces.filter( t => !t.onFloor && t.hold );
-      const kHq2t = fnc(kitHold, 'quote2tide');
-      const kHe2t = fnc(kitHold, 'est2tide');
+    const traces = TraceDB.find({live: true},
+                     {fields:{'hold':1,'onFloor':1,'est2tide':1,'quote2tide':1}
+                   }).fetch();
+    
+    const onFloorOpen = traces.filter( t => t.onFloor && !t.hold );
+    const oFOq2t = fnc(onFloorOpen, 'quote2tide');
+    const oFOe2t = fnc(onFloorOpen, 'est2tide');
+    
+    const onFloorHold = traces.filter( t => t.onFloor && t.hold );
+    const oFHq2t = fnc(onFloorHold, 'quote2tide');
+    const oFHe2t = fnc(onFloorHold, 'est2tide');
+    
+    const kitOpen = traces.filter( t => !t.onFloor && !t.hold );
+    const kOq2t = fnc(kitOpen, 'quote2tide');
+    const kOe2t = fnc(kitOpen, 'est2tide');
+    
+    const kitHold = traces.filter( t => !t.onFloor && t.hold );
+    const kHq2t = fnc(kitHold, 'quote2tide');
+    const kHe2t = fnc(kitHold, 'est2tide');
 
-      const totalQ = oFOq2t + oFHq2t + kOq2t + kHq2t;
-      const totalE = oFOe2t + oFHe2t + kOe2t + kHe2t;
-      
-      const runningQ = apxOpenShade ? apxOpenShade.dataNum : 0;
-      const trendQ = diffTrend(totalQ, runningQ);
-      const runningE = apxOpenShade ? apxOpenShade.dataNumEst : 0;
-      const trendE = diffTrend(totalE, runningE);
-      
-      const report = [
-        ['Trending', trendQ, trendE],
-        ['Total', totalQ, totalE],
-        ['On Floor Open', oFOq2t, oFOe2t],
-        ['On Floor On Hold', oFHq2t, oFHe2t],
-        ['Upstream Open', kOq2t, kOe2t],
-        ['Upstream On Hold', kHq2t, kHe2t],
-      ];
-      
+    const totalQ = oFOq2t + oFHq2t + kOq2t + kHq2t;
+    const totalE = oFOe2t + oFHe2t + kOe2t + kHe2t;
+    
+    const runningQ = apxOpenShade ? apxOpenShade.dataNum : 0;
+    const trendQ = diffTrend(totalQ, runningQ);
+    const runningE = apxOpenShade ? apxOpenShade.dataNumEst : 0;
+    const trendE = diffTrend(totalE, runningE);
+    
+    const report = [
+      ['Trending', '', trendQ, trendE],
+      ['Total', traces.length, totalQ, totalE],
+      ['WIP - available', onFloorOpen.length, oFOq2t, oFOe2t],
+      ['WIP - On Hold', onFloorHold.length, oFHq2t, oFHe2t],
+      ['Upstream - available)', kitOpen.length, kOq2t, kOe2t],
+      ['Upstream - On Hold', kitHold.length, kHq2t, kHe2t],
+    ];
+    
+    const stale = !apxtime ? true :
+            moment.duration(moment().diff(moment(apxtime))).as('hours') > Config.freche * 2;
+    if(stale) {
       CacheDB.upsert({dataName: 'apxOpenTime'}, {
         $set : {
           orgKey: accessKey,
@@ -430,13 +431,11 @@ Meteor.methods({
           dataTrend: trendQ,
           dataNumEst: Number(totalE),
           dataTrendEst: trendE,
-          dataSet: report
+          // dataSet: report
       }});
+    }else{null}
       
-      return report;
-    }else{
-      return apxOpenShade.dataSet;
-    }
+    return report;
   },
   
   fetchOverRun() {

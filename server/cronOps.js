@@ -43,8 +43,6 @@ SyncedCron.add({
   job: ()=> goDo('fetchOverRun')
 });
 
-// set time for apxOpenTime
-
 SyncedCron.add({
   name: 'Daily Trend Loops',
   schedule: (parser)=> parser.text('at 6:10 am every weekday'),
