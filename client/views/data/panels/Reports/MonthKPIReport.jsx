@@ -12,7 +12,7 @@ const MonthKPIReport = ({ start, end, dataset, isDebug })=> {
     dataSet(false);
   },[start, end, dataset]);
   
-  function handleRun(fresh) {
+  function handleRun() {
     workingSet(true);
     Meteor.call('reportOnMonth', start, end, (err, reply)=>{
 	    err && console.log(err);
@@ -53,7 +53,7 @@ const MonthKPIReport = ({ start, end, dataset, isDebug })=> {
         <p>This may take a while...<n-fa0><i className='fas fa-spinner fa-lg fa-spin gapL'></i></n-fa0></p>
       :   
         <ReportStatsTable 
-          title='Overall report'
+          title='KPI report (Basic Summary)'
           dateString={`${start} to ${end}`}
           rows={dataState}
           extraClass='max500' 

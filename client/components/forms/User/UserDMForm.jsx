@@ -18,19 +18,23 @@ const UserDMForm = ({ userID })=> {
   
   return(
     <div>
-      <h3 className='cap'>Send a Notification</h3>
+      <h3 className='cap'>Send an Internal Message</h3>
       <i>Causes a toast pop and a message in the user's inbox</i>
       <form>
-        <label htmlFor='tiTle'>Title</label><br />
-        <input type='text' id='tiTle' required/>
-        <br />
-        <label htmlFor='mesSage'>Message</label><br />
-        <textarea id='mesSage'></textarea>
-        <br />
-        <button
-          className='action nSolid'
-          onClick={(e)=>sendAdirect(e)}
-        >Send Direct Message to THIS user</button>
+        <p>
+          <label htmlFor='tiTle'>Title</label><br />
+          <input type='text' id='tiTle' required/>
+        </p>
+        <p>
+          <label htmlFor='mesSage'>Message</label><br />
+          <textarea id='mesSage' rows={5}></textarea>
+        </p>
+        <p>
+          <button
+            className='action nSolid'
+            onClick={(e)=>sendAdirect(e)}
+          >Send Direct Message</button>
+        </p>
       </form>
     </div>
   );

@@ -23,7 +23,7 @@ const FindBox = ({ orb, user, append })=> {
   },[]);
   
   let holder = !append ? orb?.startsWith('Eq') ?
-                         orb.split("-")[1] : orb :
+                         orb.substring(orb.indexOf("-")+1) : orb :
                 append + ' ~ ' + orb;
   let last = holder || 'Search';
   let lock = user ? false : true;

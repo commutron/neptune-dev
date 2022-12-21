@@ -59,7 +59,7 @@ const AccountsManagePanel = ({ app, users, traceDT, brancheS, isDebug })=> {
                 ]}
                 wide={false}
                 hold={false}
-                disable={[ (!isPeopleSuper && !isAdmin), !isAdmin, !isAdmin]}>
+                disable={[ (!isPeopleSuper && !isAdmin), !isAdmin, (!isPeopleSuper && !isAdmin)]}>
                 
                 <ActivityPanel
                   key={0}

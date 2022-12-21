@@ -3,14 +3,14 @@ import Pref from '/client/global/pref.js';
 
 import DateRangeSelect from '/client/components/smallUi/DateRangeSelect';
 import PrintThis from '/client/components/tinyUi/PrintThis';
-import MonthKPIReport from './MonthKPIReport'; 
+import WIPReport from './WIPReport';
+import MonthKPIReport from './MonthKPIReport';
 import ProblemReport from './ProblemReport';
 import NCTimeReport from './NCTimeReport';
 import BuildHistory from './BuildHistory';
 
 const ReportsWrap = ({ 
-  allXBatch, allWidget, allVariant, allGroup,
-  app, isDebug
+  allWidget, allVariant, allGroup, app, isDebug
 })=> {
   
   const [ start, startSet ] = useState(false);
@@ -18,20 +18,20 @@ const ReportsWrap = ({
   const [ dataset, datasetSet ] = useState('stats');
   
   return(
-    <div className='space'>
+    <div className='space overscroll'>
       
       <div className='rowWrapR noPrint'><PrintThis /></div>
-      
+
       <div className='space'>
-        <h2 style={{marginBottom:'32px'}}>Monthly NonCon Time Report</h2>
-        <NCTimeReport />
+        <h2 style={{marginBottom:'32px'}}>Current Work In Progress Report</h2>
+        <WIPReport />
       </div>
       
       <hr className='vmargin' />
       <div className='printBr' />
       
       <div className='space'>
-        <h2 style={{marginBottom:'32px'}}>Custom Time Range Report</h2>
+        <h2 style={{marginBottom:'32px'}}>KPI Report</h2>
         <h4 className='noPrint'>WARNING: Long Time Ranges Can Delay Production Activities</h4>
         <div className='noPrint'>
           <ReportRangeRequest 
@@ -60,8 +60,15 @@ const ReportsWrap = ({
       <hr className='vmargin' />
       <div className='printBr' />
       
-      <h2 style={{paddingLeft:'24px'}}>Build History Report</h2>
+      <div className='space'>
+        <h2 style={{marginBottom:'32px'}}>Monthly NonCon Time Report</h2>
+        <NCTimeReport />
+      </div>
       
+      <hr className='vmargin' />
+      <div className='printBr' />
+      
+      <h2 style={{paddingLeft:'24px'}}>Build History Report</h2>
       <BuildHistory
         allVariant={allVariant}
         allWidget={allWidget}
@@ -89,7 +96,17 @@ const ReportRangeRequest = ({
           onChange={()=>setData('stats')}
           defaultChecked={true} 
         />
-        <label htmlFor='inputStats'>Overall Stats</label>
+        <label htmlFor='inputStats'>Basic Summary</label>
+      </span>
+      <em>or</em>
+      <span className='middle'>
+        <input
+          type='radio'
+          id='inputDN'
+          name='inputData'
+          onChange={()=>setData('completed')}
+        />
+        <label htmlFor='inputDN'>Completed Items</label>
       </span>
       <em>or</em>
       <span className='middle'>
@@ -110,16 +127,6 @@ const ReportRangeRequest = ({
           onChange={()=>setData('short')}
         />
         <label htmlFor='inputSH'>{Pref.shortfalls}</label>
-      </span>
-      <em>or</em>
-      <span className='middle'>
-        <input
-          type='radio'
-          id='inputDN'
-          name='inputData'
-          onChange={()=>setData('completed')}
-        />
-        <label htmlFor='inputDN'>Completed Items Only</label>
       </span>
     </p>
     

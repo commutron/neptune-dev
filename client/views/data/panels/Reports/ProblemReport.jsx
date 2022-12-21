@@ -86,6 +86,10 @@ const ProblemReport = ({ start, end, dataset })=> {
       }
     });
   }
+  
+  const title = dataset === 'noncon' ? Pref.nonCons :
+                dataset === 'short' ? Pref.shortfalls :
+                'Completed Items';
     
   return(
     <div className='overscroll'>
@@ -102,7 +106,7 @@ const ProblemReport = ({ start, end, dataset })=> {
         <p>This may take a while...<n-fa0><i className='fas fa-spinner fa-lg fa-spin gapL'></i></n-fa0></p>
       :
         <ReportStatsTable 
-          title='problem report' 
+          title={`KPI report (${title})`}
           dateString={`${start} to ${end}`}
           rows={replyData}
           extraClass='max600' 

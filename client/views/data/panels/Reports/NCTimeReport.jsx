@@ -97,7 +97,9 @@ const NCTimeReport = ({})=> {
   const blend = { border: 'none', lineHeight: 2 };
   const gen = Roles.userIsInRole(Meteor.userId(), 'admin') &&
               Roles.userIsInRole(Meteor.userId(), 'debug');
-              
+  
+  const nicedate = moment().year(year).month(month).format('MMMM YYYY');
+  
   return(
     <div className='overscroll'>
       
@@ -163,13 +165,13 @@ const NCTimeReport = ({})=> {
         <span>
           <ReportStatsTable 
             title='nonconformance report - task time totals' 
-            dateString={`${000} Cached Report`}
+            dateString={nicedate}
             rows={taskData}
             extraClass='max600' 
           />
           <ReportStatsTable 
             title='nonconformance report - branch time' 
-            dateString={`${001} Cached Report`}
+            dateString={nicedate}
             rows={brchData}
             extraClass='max600' 
           />
@@ -177,9 +179,10 @@ const NCTimeReport = ({})=> {
           {lgcyData &&
             <span>
               <p className='centreText'><em>No direct time records available. Estimate inferred from nonCon records.</em></p>
+              <p className='centreText'><em>Based on: SMT Rework avgerages 4 minutes per, Other Rework averages 2 minutes per, Re-Inspection averages 3 minutes per.</em></p>
               <ReportStatsTable 
-                title='nonconformance report - Legacy Estimate' 
-                dateString={`${002} Cached Report`}
+                title='nonconformance report - legacy estimate' 
+                dateString={nicedate}
                 rows={lgcyData}
                 extraClass='max600' 
               />

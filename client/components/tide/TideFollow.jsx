@@ -68,7 +68,7 @@ const TideFollow = ({ tOpen, canMulti })=> {
                  engaged.task === 'MLTI' ?
                  `${Pref.xBatchs} ${engaged.tName[0]} & ${engaged.tName[1]}` :
                  engaged.tName.startsWith('Eq') ? 
-                 `${engaged.tName.split("<*>")[0].split("-")[1]}${taskT}${taskS}` :
+                 `${engaged.tName.split("<*>")[0].substring(engaged.tName.indexOf("-")+1)}${taskT}${taskS}` :
 	               `${Pref.xBatch} ${engaged.tName}${taskT}${taskS}`;
 	
   return(
@@ -109,7 +109,7 @@ const TideFollow = ({ tOpen, canMulti })=> {
         {recent.map( (val, ix)=>(  
           <MenuItem key={ix} onClick={()=>go(val)} className='indent3'>
             <i>{val.startsWith('Eq') ? 
-              val.split("<*>")[0].split("-")[1] : val
+              val.split("<*>")[0].substring(val.indexOf("-")+1) : val
             }</i>
           </MenuItem>
         ))}

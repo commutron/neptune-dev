@@ -1,27 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 import PrintThis from '/client/components/tinyUi/PrintThis';
 import OnTargetTrend from './OnTargetTrend'; 
-import AvgStat from '/client/components/tinyUi/AvgStat';
 
 const TrendWrap = ({ app, isDebug })=> {
   
-  const [ rate, rateSet ] = useState([0,'flat']);
-  
-  useEffect(() => {
-    Meteor.call('fetchOpenApproxTime', (err, rtn)=>{
-	    err && console.log(err);
-      rateSet(rtn);
-	  });
-  }, []);
-  
   return(
     <div className='space36v'>
-      <div className='comfort vmarginquarter noPrint'>
-        <AvgStat 
-          num={rate[0]} 
-          trend={rate[1]}
-          type='approx. hours on the floor' />
+      <div className='rowWrapR vmarginquarter noPrint'>
         <PrintThis />
       </div>
       
