@@ -49,22 +49,6 @@ Meteor.methods({
     }
   },
   
-  sendErrorMail(errorTitle, errorTime, errorUser, agent, sessionID, errorMessage) {
-    Meteor.users.update({ roles: { $in: ["admin"] } }, {
-        $push : { inbox : {
-          notifyKey: new Meteor.Collection.ObjectID().valueOf(),
-          keyword: 'Error',
-          type: 'ERROR',
-          title: errorTitle,
-          detail: `${errorTime}, ${errorUser}, ${agent}, (session ${sessionID}), ${errorMessage}`,
-          time: new Date(),
-          unread: true
-        }
-      }},{multi: true});
-      
-  },
-  
-  
  ///////////// Repair \\\\\\\\\\\\\\\\\\\\\
   
   resetALLCacheDB() {

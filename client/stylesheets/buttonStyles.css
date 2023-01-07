@@ -426,8 +426,12 @@ label.qdpplRound {
   font-weight: 600;
   border: 0.2em solid var(--wetasphalt);
   border-radius: 50px;
-  padding: 0 0.25em 0 0;
+  padding: 2px 0.25em 2px 0;
   line-height: 1;
+}
+.holdpill > .react-contextmenu-wrapper {
+  display: flex;
+  align-items: center;
 }
 .holdblock {
   background-color: var(--asbestos);

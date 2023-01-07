@@ -225,7 +225,7 @@ export const OverMenuBar = ({ brancheS, branchON, changeBranch, light }) => {
         changeBranch={changeBranch}
         icon='fa-solid fa-code-branch'
         size=''
-        shrink={brancheS.length >= 13}
+        shrink={brancheS.length >= 14}
       />
       
       {brancheS.map( (br, ix)=> {
@@ -239,7 +239,7 @@ export const OverMenuBar = ({ brancheS, branchON, changeBranch, light }) => {
             changeBranch={changeBranch}
             icon={false}
             size='vbigger'
-            shrink={brancheS.length >= 11}
+            shrink={brancheS.length >= 12}
           />
       )})}
       

@@ -31,7 +31,10 @@ const InboxPanel = ({ app, user, users })=> {
                   }
                 </td>
                 <td className='noRightBorder'>
-                  <b>{entry.title}</b> - {entry.detail}
+                  <b>{entry.title}</b>
+                </td>
+                <td className='noRightBorder'>
+                  <pre>{entry.detail}</pre>
                 </td>
                 <td className='noRightBorder'>
                   {moment(entry.time).calendar()}

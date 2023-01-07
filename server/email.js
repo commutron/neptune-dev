@@ -159,10 +159,37 @@ Meteor.methods({
     }
   },
   
+  handleErrorEmail(errorTitle, errorTime, errorUser, agent, sessionID, errorMessage) {
+    this.unblock();
+    const app = AppDB.findOne({},{fields:{'emailGlobal':1,'devEmail':1}});
+    const emailGlobal = app && app.emailGlobal && app.devEmail;
+    
+    if(emailGlobal) {
+      
+      const to = app.devEmail;
+        
+      const cc = undefined;
+      
+      const subject = 'Neptune Error Report';
+      
+      const date = moment().tz(Config.clientTZ).format('h:mm a, dddd, MMM Do YYYY');
+      
+      const body = `${errorTitle} — ${'<pre>'}${errorMessage}${'</pre>'}`;
+      const foot = `${errorTime}, ${errorUser}, ${agent}, (session ${sessionID})`;
+      
+      const plainbody = `${errorTitle} — ${errorMessage}`;
+      
+      sendExternalEmail( to, cc, subject, date, body, foot, plainbody );
+      
+      return true;
+    }else{
+      return false;
+    }
+  },
   
   handleExternalEmail(accessKey, emailPrime, emailSecond, isW, salesOrder) {
     this.unblock();
-    const app = AppDB.findOne({orgKey: accessKey},{fields:{'emailGlobal':1,'describe':1}});
+    const app = AppDB.findOne({orgKey: accessKey},{fields:{'emailGlobal':1}});
     const emailGlobal = app && app.emailGlobal;
     
     if(emailGlobal) {

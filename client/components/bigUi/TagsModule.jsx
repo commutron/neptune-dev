@@ -211,7 +211,7 @@ export const HoldFlag = ({ id, canRun })=> {
   
   return(
     <div 
-      className='centreRow medBig max250 vmarginhalf holdpill' 
+      className='medBig max250 vmarginhalf holdpill' 
       title={`${Pref.xBatch} is ${Pref.isHold}`}
     >
       <ContextMenuTrigger

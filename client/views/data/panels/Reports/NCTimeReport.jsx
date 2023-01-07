@@ -26,13 +26,6 @@ const NCTimeReport = ({})=> {
     yrs.unshift(i);
   }
   
-  function generateBacklog() {
-    Meteor.call('generateNCTimeBacklog', (err, reply)=> {
-      err && console.log(err);
-      reply && console.log(reply);
-    });
-  }
-  
   function getReport() {
     workingSet(true);
     Meteor.call('fetchCachedNcTimeReport', month, year, (err, reply)=> {
@@ -95,24 +88,11 @@ const NCTimeReport = ({})=> {
   }
   
   const blend = { border: 'none', lineHeight: 2 };
-  const gen = Roles.userIsInRole(Meteor.userId(), 'admin') &&
-              Roles.userIsInRole(Meteor.userId(), 'debug');
   
   const nicedate = moment().year(year).month(month).format('MMMM YYYY');
   
   return(
     <div>
-      
-      {gen &&
-        <div className='vmargin noPrint'>
-          <button
-            className='action tealSolid'
-            onClick={(e)=>generateBacklog(e)}
-            disabled={!gen}
-          >Generate Backlog NonCon Time Reports</button>
-        </div>
-      }
-      
       <div className='vmargin noPrint'>
         
         <p className='med line2x'>Logged {Pref.nonCon} time for

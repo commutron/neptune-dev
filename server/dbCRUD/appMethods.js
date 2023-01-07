@@ -26,6 +26,7 @@ Meteor.methods({
       org: 'crew',
       orgKey: orgKey,
       orgPIN: '0000',
+      devEmail: false,
       createdAt: new Date(),
       tideWall: new Date(),
       branches: [
@@ -689,6 +690,18 @@ Meteor.methods({
       AppDB.update({orgKey: Meteor.user().orgKey}, {
         $set : { 
           partsGlobal : setOp
+      }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  setDevEmail(emailVal) {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      AppDB.update({orgKey: Meteor.user().orgKey}, {
+        $set : { 
+          devEmail : emailVal
       }});
       return true;
     }else{

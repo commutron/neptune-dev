@@ -149,7 +149,7 @@ const DataRepair = ({ app, users })=> {
       />
       
       <DoCard
-        title='Run TraceDB Live Movment Update'
+        title='Run TraceDB Live Movement Update'
         sub='Runs every Weekday at 12:05am (CST) and 12:00pm (CST)'
         icon='sync'
         color='tealSolid'

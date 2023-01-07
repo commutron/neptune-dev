@@ -13,8 +13,8 @@ const FindBox = ({ orb, user, append })=> {
   }
   
   useEffect( ()=> {
-    addEventListener('click', (evt)=> {
-      if(evt.detail === 3) {
+    addEventListener('click', (ev)=> {
+      if(ev.detail === 3 && ev.target.id === 'lookup') {
         Session.set('now', null);
         this.lookup.value = '';
         this.lookup.select();

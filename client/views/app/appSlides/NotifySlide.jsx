@@ -32,6 +32,15 @@ const NotifySlide = ({ app })=> {
     });
   }
   
+  function handleDevEmail(e) {
+    e.preventDefault();
+    const to = this.setDev.value;
+    Meteor.call('setDevEmail', to, (error, reply)=>{
+      error && console.log(error);
+      reply && toast.success('Saved');
+    });
+  }
+  
   function sendTestEmail(e) {
     e.preventDefault();
     
@@ -94,6 +103,27 @@ const NotifySlide = ({ app })=> {
           />
           <label htmlFor='appEmailDo'>Enable Email</label>
         </p>
+        
+        <hr className='vmargin' />
+        
+        <h3 className='cap'><i className="fa-solid fa-terminal gapR"></i>Dev Email for Error Reports</h3>
+        <form onSubmit={(e)=>handleDevEmail(e)}>
+          <p>
+            <label htmlFor='toEmail'>Developer email address<br />
+              <input
+                id='setDev'
+                type='email'
+                defaultValue={app.devEmail || ''}
+              />
+            </label>
+          </p>
+          <p>
+            <button
+              className='smallAction blueHover'
+              type='submit'
+            >Save Email</button>
+          </p>
+        </form>
         
         <hr className='vmargin' />
         

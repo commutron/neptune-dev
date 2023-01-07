@@ -402,8 +402,8 @@ Meteor.methods({
     const kHq2t = fnc(kitHold, 'quote2tide');
     const kHe2t = fnc(kitHold, 'est2tide');
 
-    const totalQ = oFOq2t + oFHq2t + kOq2t + kHq2t;
-    const totalE = oFOe2t + oFHe2t + kOe2t + kHe2t;
+    const totalQ = round2Decimal( oFOq2t + oFHq2t + kOq2t + kHq2t );
+    const totalE = round2Decimal( oFOe2t + oFHe2t + kOe2t + kHe2t );
     
     const runningQ = apxOpenShade ? apxOpenShade.dataNum : 0;
     const trendQ = diffTrend(totalQ, runningQ);
@@ -415,7 +415,7 @@ Meteor.methods({
       ['Total', traces.length, totalQ, totalE],
       ['WIP - available', onFloorOpen.length, oFOq2t, oFOe2t],
       ['WIP - On Hold', onFloorHold.length, oFHq2t, oFHe2t],
-      ['Upstream - available)', kitOpen.length, kOq2t, kOe2t],
+      ['Upstream - available', kitOpen.length, kOq2t, kOe2t],
       ['Upstream - On Hold', kitHold.length, kHq2t, kHe2t],
     ];
     

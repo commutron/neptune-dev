@@ -1,24 +1,13 @@
 import React, { Fragment } from 'react';
-import { toast } from 'react-toastify';
 import Pref from '/client/global/pref.js';
-import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
+
+import ModelUser from '/client/layouts/Models/ModelUser';
 
 
 const TideFollow = ({ tOpen, canMulti })=> {
   
-  function doLogout() {
-	  if(Meteor.user().engaged) {
-      toast.warning(`You are ${Pref.engaged} on ${Meteor.user().engaged.tName.toString().split("<*>")[0]}\nCLICK TO SIGN OUT IMMEDIATELY`, 
-        { autoClose: 10000,
-         onClose: ()=> Meteor.logout()
-        });
-    }else{
-		  Meteor.logout();
-		  document.querySelector(':root').style.setProperty('--neptuneColor', null);
-	  }
-	}
-  
 	const go = (goto)=> {
+	  document.getElementById('userRightPanel')?.close();
 	  if(typeof goto !== 'string') {
 	    if(tOpen) {
 	      openMutiTide();
@@ -36,7 +25,13 @@ const TideFollow = ({ tOpen, canMulti })=> {
     FlowRouter.go('/production');
 	};
 	
+	const openPanel = ()=> {
+    const dialog = document.getElementById('userRightPanel');
+    dialog?.showModal();
+  };
+  
 	const openMutiTide = ()=> {
+	  document.getElementById('userRightPanel')?.close();
     const dialog = document.getElementById('multiprojdialog');
     dialog?.showModal();
   };
@@ -51,14 +46,10 @@ const TideFollow = ({ tOpen, canMulti })=> {
     .setProperty('--neptuneColor', user.customColor || null);
 	
 	const username = user.username;
-	const usernice = username.replace(Pref.usrCut, " ");
 	
 	const uFl = username.charAt(0);
 	const usp = username.split('.');
 	const uLl = usp[1] ? usp[1].charAt(0) : username.charAt(1);
-	
-	const tpool = user.tidepools;
-  const recent = [...new Set(tpool)];
 	
 	const engaged = user.engaged;
   
@@ -66,68 +57,41 @@ const TideFollow = ({ tOpen, canMulti })=> {
   const taskS = !engaged?.tSubt ? '' : `, ${engaged.tSubt}`;
   const tootip = !engaged ? `No Active ${Pref.xBatch}` : 
                  engaged.task === 'MLTI' ?
-                 `${Pref.xBatchs} ${engaged.tName[0]} & ${engaged.tName[1]}` :
+                 `${Pref.XBatchs} ${engaged.tName[0]} & ${engaged.tName[1]}` :
                  engaged.tName.startsWith('Eq') ? 
                  `${engaged.tName.split("<*>")[0].substring(engaged.tName.indexOf("-")+1)}${taskT}${taskS}` :
-	               `${Pref.xBatch} ${engaged.tName}${taskT}${taskS}`;
+	               `${Pref.XBatch} ${engaged.tName}${taskT}${taskS}`;
 	
   return(
     <Fragment>
-      <ContextMenuTrigger
-  			id='tideF0ll0w1'
-  			holdToDisplay={!engaged ? 1 : 500}
-  			attributes={ {className: 'proRight'} }>
-        <button 
+      
+      <div
+        id='tideF0ll0w1'
+        className='proRight'
+        ><button
           aria-label={tootip}
-          onClick={()=>!engaged ? null : go(engaged?.tName)}
+          onContextMenu={(e)=>{
+            e.preventDefault();
+            !engaged ? openPanel() : go(engaged?.tName);
+          }}
+          onClick={()=>openPanel()}
           className={`taskLink followTask tideFollowTip ${!engaged ? '' : 'fGreen'}`}
         ><i className='numFont up'>{uFl}{uLl}</i>
          <i className={!engaged ? '' : !tOpen ? 'spin2' : 'turn'}></i>
         </button>
-      </ContextMenuTrigger>
+      </div>
       
-      <ContextMenu id='tideF0ll0w1' className='noCopy cap vbig'>
-        <MenuItem onClick={()=>FlowRouter.go('/user')}>
-          <i className='fas fa-user-astronaut fa-flip-horizontal fa-fw'></i>
-          <i className='noCopy'> {usernice}</i>
-        </MenuItem>
-        
-        <MenuItem onClick={()=>FlowRouter.go('/user')} className='noCopy comfort'>
-          <span>
-            <i className='fas fa-envelope fa-fw'></i>
-            <i> Messages</i>
-          </span>
-          <strong>{user.inbox?.length}</strong>
-        </MenuItem>
-        
-        
-        <MenuItem divider />
-        
-        {canMulti ?
-          <Fragment>
-            <MenuItem onClick={()=>openMutiTide()} className='line2x'>
-              <i className='fa-solid fa-layer-group fa-fw gapR tealT'></i>
-              <i className='noCopy cap'>Multi {Pref.xBatch} Mode</i>
-            </MenuItem>
-            <MenuItem divider />
-          </Fragment>
-        : null}
-        
-        <MenuItem disabled={true}>
-          <i className="fas fa-street-view fa-fw"></i><i> Recent</i>
-        </MenuItem>
-        {recent.map( (val, ix)=>(  
-          <MenuItem key={ix} onClick={()=>go(val)} className='indent3'>
-            <i>{val.startsWith('Eq') ? 
-              val.split("<*>")[0].substring(val.indexOf("-")+1) : val
-            }</i>
-          </MenuItem>
-        ))}
-        <MenuItem divider />
-        <MenuItem onClick={()=>doLogout()}>
-          <i className='fas fa-sign-out-alt fa-fw'></i><i className='noCopy'> Sign-out</i>
-        </MenuItem>
-      </ContextMenu>
+      <ModelUser 
+        user={user}
+        username={username+fake}
+        userinitial={uFl+uLl}
+        tootip={tootip}
+        engaged={engaged}
+        tOpen={tOpen}
+        go={(e)=>go(e)}
+        openMutiTide={()=>openMutiTide()}
+        canMulti={canMulti}
+      />
     </Fragment>
   );
 };

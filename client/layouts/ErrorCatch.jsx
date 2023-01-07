@@ -31,7 +31,7 @@ export default class ErrorCatch extends Component	{
     }
   }
   
-  sendToAdmin(e) {
+  sendToDev(e) {
     e.preventDefault();
     this.setState({ sendMess: true });
     const size = window.innerWidth + 'px';
@@ -40,7 +40,7 @@ export default class ErrorCatch extends Component	{
     const sessionID = Meteor.connection._lastSessionId;
   	
     Meteor.call(
-      'sendErrorMail', 
+      'handleErrorEmail', 
       this.state.errorHeader, 
       this.state.errorTime,
       Meteor.user().username,
@@ -58,8 +58,8 @@ export default class ErrorCatch extends Component	{
            <button onClick={()=>window.location.reload()} className='textLinkButton'
            > Reload</button> the page and try again or&nbsp;
             <button onClick={()=>{FlowRouter.go('/');window.location.reload();}} className='textLinkButton'>go home</button> and try again later. If you like,&nbsp;
-            <button onClick={(e)=>this.sendToAdmin(e)} className='textLinkButton'
-            >send</button> a notice to the Neptune admins.
+            <button onClick={(e)=>this.sendToDev(e)} className='textLinkButton'
+            >send</button> a notice to the Neptune developer.
           </p>
           {this.state.sendMess ? <p>Thank you for helping make Neptune better.</p> : null}
           <details>
@@ -70,7 +70,7 @@ export default class ErrorCatch extends Component	{
               username "{Meteor.user().username}"<br />
               view "{window.innerWidth}px {window.navigator.maxTouchPoints > 1 ? 'touch' : 'no-touch'}"<br />
               Meteor session ID "{Meteor.connection._lastSessionId}"<br /><br />
-              {this.state.errorInfo}
+              <pre>{this.state.errorInfo}</pre>
             </div>
           </details>
         </div>
