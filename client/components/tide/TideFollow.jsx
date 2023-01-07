@@ -57,10 +57,10 @@ const TideFollow = ({ tOpen, canMulti })=> {
   const taskS = !engaged?.tSubt ? '' : `, ${engaged.tSubt}`;
   const tootip = !engaged ? `No Active ${Pref.xBatch}` : 
                  engaged.task === 'MLTI' ?
-                 `${Pref.XBatchs} ${engaged.tName[0]} & ${engaged.tName[1]}` :
+                 `${Pref.xBatchs} ${engaged.tName[0]} & ${engaged.tName[1]}` :
                  engaged.tName.startsWith('Eq') ? 
                  `${engaged.tName.split("<*>")[0].substring(engaged.tName.indexOf("-")+1)}${taskT}${taskS}` :
-	               `${Pref.XBatch} ${engaged.tName}${taskT}${taskS}`;
+	               `${Pref.xBatch} ${engaged.tName}${taskT}${taskS}`;
 	
   return(
     <Fragment>
@@ -83,7 +83,7 @@ const TideFollow = ({ tOpen, canMulti })=> {
       
       <ModelUser 
         user={user}
-        username={username+fake}
+        username={username}
         userinitial={uFl+uLl}
         tootip={tootip}
         engaged={engaged}

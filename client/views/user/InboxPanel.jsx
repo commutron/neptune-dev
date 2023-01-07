@@ -18,7 +18,7 @@ const InboxPanel = ({ app, user, users })=> {
                         '/data/batch?request=' + entry.keyword
                       : '';
           return(
-            <tbody key={index} className=''>
+            <tbody key={index5} className=''>
               <tr>
                 <td className='noRightBorder'>
                   <UnReadButton nKey={entry.notifyKey} unread={entry.unread} />
