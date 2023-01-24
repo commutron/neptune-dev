@@ -1,9 +1,8 @@
-import React, { useLayoutEffect } from 'react';
+import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import Pref from '/client/global/pref.js';
 
-import InboxToastPop from '/client/utility/InboxToastPop.js';
 import { localeUpdate } from '/client/utility/WorkTimeCalc';
 
 import StreamLayout from '/client/layouts/StreamLayout';
@@ -14,10 +13,6 @@ const View = ({
   user, app, isDebug,
   traceDT, dayTime, dayIFin
 })=> {
-  
-  useLayoutEffect( ()=>{
-    InboxToastPop(user);
-  }, [user]);
     
   if( !readyT || !app || !user ) {
     return(

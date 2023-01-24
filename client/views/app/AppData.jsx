@@ -43,10 +43,10 @@ const AppView = ({
     <PlainFrame title='Settings'>
       <div className='simpleContent lightTheme centre middle'>
         <p className='medBig centreText vmargin'>App settings are limited to administrators only</p>
-        <button
+        <p><button
           className='action blackHover'
           onClick={()=> window.history.back()}
-        ><i className='fas fa-arrow-circle-left fa-lg'></i> Go Back</button>
+        ><i className='fas fa-arrow-circle-left fa-lg'></i> Go Back</button></p>
         <MetaSlide />
       </div>
     </PlainFrame>

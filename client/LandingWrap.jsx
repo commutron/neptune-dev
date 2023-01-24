@@ -1,8 +1,7 @@
-import React, { useLayoutEffect } from 'react';
+import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import Pref from '/client/global/pref.js';
-import InboxToastPop from '/client/utility/InboxToastPop.js';
 import Spin from '/client/components/tinyUi/Spin';
 
 import { PlainFrame } from '/client/layouts/MainLayouts';
@@ -11,10 +10,6 @@ import HomeLogout from '/client/layouts/NavButton/HomeLogout';
 import NavButton, { NavButtonShell, NavBar, NavPlaceholder } from '/client/layouts/NavButton/NavButton';
 
 const StartView = ({user, app}) =>	{
-  
-  useLayoutEffect( ()=>{
-    InboxToastPop(user);
-  }, [user]);
   
   if( !user || !app ) {
     return(

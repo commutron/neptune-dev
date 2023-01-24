@@ -1,12 +1,5 @@
-function find(id) {
-  const user = Meteor.users.findOne({_id : id});
-  let nice = 'not found';
-  user ? nice = user.username : false;
-  return nice;
-}
-    
 const UserName = (id, nice) => {
-  const user = find(id);
+  const user = Meteor.users.findOne({_id : id})?.username || 'not found';
   return nice ? user.replace('.', ' ').replace('_', ' ') : user;
 };
 

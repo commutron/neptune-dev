@@ -1,9 +1,7 @@
-import React, { useLayoutEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import Pref from '/client/global/pref.js';
-
-import InboxToastPop from '/client/utility/InboxToastPop.js';
 
 import { SpinWrap } from '/client/components/tinyUi/Spin';
 import { branchesOpenSort } from '/client/utility/Arrays.js';
@@ -18,10 +16,6 @@ const ProdData = ({
   allxBatch,
   hotxBatch, hotxSeries, hotxRapids
 })=> {
-
-  useLayoutEffect( ()=>{
-    InboxToastPop(user);
-  }, [user]);
   
   const activeUsers = useMemo( ()=> users?.filter( x => 
                         Roles.userIsInRole(x._id, 'active') === true &&

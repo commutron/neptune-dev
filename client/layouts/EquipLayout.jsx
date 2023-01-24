@@ -1,16 +1,14 @@
 import React, { useEffect, useState, useMemo }from 'react';
 import Pref from '/client/global/pref.js';
 
-import { ToastContainer } from 'react-toastify';
-
 import HomeIcon from '/client/layouts/HomeIcon';
 import TideFollow from '/client/components/tide/TideFollow';
 
 import SlidesNested from '/client/components/smallUi/SlidesNested';
-import Landing from './Landing';
-import EquipSlide from './EquipSlide';
+import Landing from '/client/views/equipment/Landing';
+import EquipSlide from '/client/views/equipment/EquipSlide';
 
-const EquipWrap = ({ 
+const EquipLayout = ({ 
   equipData, maintainData,
   app, users, isDebug, brancheS, specify 
 }) => {
@@ -41,10 +39,6 @@ const EquipWrap = ({
   
   return(
     <div className='simpleContainer'>
-      <ToastContainer
-        position="top-center"
-        theme='colored'
-        newestOnTop />
       <div className='tenHeader noPrint'>
         <div className='topBorder' />
         <HomeIcon />
@@ -100,4 +94,4 @@ const EquipWrap = ({
   );
 };
 
-export default EquipWrap;
+export default EquipLayout;

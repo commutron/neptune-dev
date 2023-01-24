@@ -1,8 +1,7 @@
-import React, { useLayoutEffect } from 'react';
+import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 
-import InboxToastPop from '/client/utility/InboxToastPop.js';
 import { branchesSort } from '/client/utility/Arrays.js';
 
 import { PlainFrame } from '/client/layouts/MainLayouts';
@@ -17,14 +16,10 @@ import UserSettings from '/client/components/forms/User/UserSettings';
 
 
 const UserDataWrap = ({
-  readybNames,
+  readybNames, slide,
   user, isAdmin, isDebug, app,
   traceDT, users
 })=> {
-  
-  useLayoutEffect( ()=>{
-    InboxToastPop(user);
-  }, [user]);
   
   if( !readybNames || !app || !app.branches || !user || !user.roles ) {
     return( 
@@ -47,13 +42,13 @@ const UserDataWrap = ({
       
         <Slides
           menu={[
-            <b><i className='fas fa-user-clock fa-fw gapR'></i>Project Activity</b>,
-            <b><i className='fas fa-user-cog fa-fw gapR'></i>Equipment</b>,
-            <b><i className='fas fa-user-cog fa-fw gapR'></i>Preferences</b>,
-            <b><i className='fas fa-user-shield fa-fw gapR'></i>Access & Privacy</b>,
-            <b><i className='fas fa-envelope fa-fw gapR'></i>Messages{iL}</b>
+            <b><i className='fas fa-clock fa-fw gapR'></i>Project Activity</b>,
+            <b><i className='fas fa-gears fa-fw gapR'></i>Equipment</b>,
+            <b><i className='fas fa-sliders fa-fw gapR'></i>Preferences</b>,
+            <b><i className='fas fa-key fa-fw gapR'></i>Access & Privacy</b>,
+            <b><i className='fas fa-bell fa-fw gapR'></i>Notifications{iL}</b>
           ]}
-          extraClass='space5x5'>
+          slide={slide}>
             
           <ActivityPanel
             key={1}
@@ -95,7 +90,7 @@ const UserDataWrap = ({
   );
 };
 
-export default withTracker( () => {
+export default withTracker( ({ query }) => {
   let login = Meteor.userId() ? true : false;
   let user = login ? Meteor.user() : false;
   let org = user ? user.org : false;
@@ -109,6 +104,7 @@ export default withTracker( () => {
   }else{
     return {
       readybNames: bNameSub.ready(),
+      slide: query?.slide || 0,
       user: user,
       isAdmin: isAdmin,
       isDebug: isDebug,

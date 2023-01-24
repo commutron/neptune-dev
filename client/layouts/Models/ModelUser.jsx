@@ -1,12 +1,19 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { useState, Fragment, useEffect } from 'react';
+import moment from 'moment';
 import { toast } from 'react-toastify';
+import InboxToastWatch from '/client/utility/InboxToastPop.js';
 import Pref from '/client/global/pref.js';
 import { toCap } from '/client/utility/Convert';
+
 
 const ModelUser = ({ 
   user, username, userinitial, tootip,
   engaged, tOpen, go, openMutiTide, canMulti 
 })=> {
+  
+  useEffect( ()=> {
+    InboxToastWatch(user);
+  }, [user.inbox]);
   
   const close = ()=> {
     const dialog = document.getElementById('userRightPanel');
@@ -23,8 +30,8 @@ const ModelUser = ({
 	  if(Meteor.user().engaged) {
       toast.warning(`You are ${Pref.engaged} on ${Meteor.user().engaged.tName.toString().split("<*>")[0]}\nCLICK TO SIGN OUT IMMEDIATELY`, 
         { autoClose: 10000,
-         onClose: ()=> Meteor.logout(),
-         onClick: ()=> Meteor.logout()
+          onClose: ()=> Meteor.logout(),
+          onClick: ()=> Meteor.logout()
         });
     }else{
 		  Meteor.logout();
@@ -32,6 +39,7 @@ const ModelUser = ({
 	  }
 	};
 	
+	const unice = toCap(username.replace(Pref.usrCut, " "));
   const tpool = user.tidepools;
   const recent = [...new Set(tpool)];
 	
@@ -64,6 +72,12 @@ const ModelUser = ({
           </span>
         </span>
         
+        <UserMenuElement
+          title={unice}
+          doFunc={()=>FlowRouter.go('/user')}
+          icon='fas fa-user-astronaut fa-flip-horizontal'
+        />
+        
         <Divider />
         
         {canMulti ?
@@ -72,7 +86,7 @@ const ModelUser = ({
               title={`Multi ${Pref.XBatch} Mode`}
               doFunc={()=>openMutiTide()}
               icon='fa-solid fa-layer-group tealT'
-              addclass='line2x'
+              addclass='thick'
             />
             <Divider />
           </Fragment>
@@ -95,26 +109,18 @@ const ModelUser = ({
         
         <Divider />
         
-        <div className='subsection noCopy cap'>
-          <i className="fas fa-user-astronaut fa-flip-horizontal fa-fw gapR"></i><i>{username.replace(Pref.usrCut, " ")}</i>
-        </div>
-        
         <UserMenuElement
-          title='Account'
-          doFunc={()=>FlowRouter.go('/user')}
-          icon='fas fa-user-clock'
-          addclass='indent'
+          title='Notifications'
+          doFunc={()=>FlowRouter.go('/user?slide=4')}
+          icon='fa-solid fa-bell'
+          tag={user.inbox?.length}
         />
         
-        <div>
-        
-          <UserMenuElement
-            title='Messages'
-            doFunc={()=>FlowRouter.go('/user')}
-            icon='fas fa-envelope'
-            tag={user.inbox?.length}
+        <div className='userMenuPing thinScroll'> 
+          <NotifyMini
+            inbox={user.inbox}
+            unice={unice}
           />
-        
         </div>
          
         <div className='flexSpace' />
@@ -125,7 +131,7 @@ const ModelUser = ({
           title='Sign-out'
           doFunc={()=>doLogout()}
           icon='fas fa-sign-out-alt'
-          addclass='line2x'
+          addclass='thick'
         />
        
       </div>
@@ -154,6 +160,99 @@ const Divider = ()=> (
     marginBottom: '4px',
     paddingTop: '4px',
     borderBottom: '1px solid rgb(100,100,100)',
-    borderBottom: '1px solid rgba(100,100,100,0.5)',
+    borderBottom: '1px solid rgba(100,100,100,0.5)'
   }}></div>
 );
+
+const NotifyMini = ({ unice, inbox })=> {
+  
+  const [ tab, tabSet ] = useState(0);
+  const [ uList, uListSet ] = useState([]);
+  
+  useEffect( ()=>{
+    if(tab) {
+      const users = Meteor.users.find({}, {sort: {username:1}}).fetch();
+      const liveUsers = users.filter( x => Roles.userIsInRole(x._id, 'active') );
+      
+      let listUsers = [];
+      for(let x of liveUsers) {
+        listUsers.push({ 
+          label: toCap(x.username.replace(Pref.usrCut, " ")),
+          value: x._id
+        });
+      }
+      uListSet(listUsers);
+    }
+  }, [tab]);
+  
+  function sendOneToOne(e) {
+    e.preventDefault();
+    
+    const userVal = this.userSend.value;
+    const message = this.typedMssg.value;
+  
+    Meteor.call('sendUserDM', userVal, unice, message, (error)=>{
+      error && console.log(error);
+      this.typedMssg.value = "";
+      this.userSend.value = false;
+    });
+  }
+	
+  
+  return(
+    <div>
+      <div className='notifytabs'>
+        <button className={!tab ? 'on' : ''} onClick={()=>tabSet(0)}>Received</button>
+        <button className={tab ? 'on' : ''} onClick={()=>tabSet(1)}>Send</button>
+      </div>
+      
+      {tab ?
+        <div>
+         
+         <form onSubmit={(e)=>sendOneToOne(e)}>
+            <p>
+              <label htmlFor='userSend'>Send To</label><br />
+              <select id='userSend' required>
+              <option></option>
+              {uList.map( (u)=>(
+                <option 
+                  key={u.value} 
+                  value={u.value}
+                >{u.label}</option>
+              ))}
+              </select>
+          
+            </p>
+            <p>
+              <label htmlFor='typedMssg'>Message</label><br />
+              <textarea id='typedMssg' rows={2}
+                required></textarea>
+            </p>
+            <p>
+              <button
+                type='submit'
+                className='darkMenu'
+              >Send</button>
+            </p>
+          </form>
+          
+          
+         
+        
+        </div>
+        
+        :
+        
+        <div>
+          {(inbox || []).map( (entry)=> (
+            <div key={entry.notifyKey} className={`bottomLine ${entry.unread ? 'nSolid' : ''}`}>
+              <p><b>{entry.title}</b></p>
+              <p>{entry.detail}</p>
+              <small>{moment(entry.time).calendar()}</small>
+            </div>
+          ))}
+        </div>
+      }
+    </div>
+  );
+};

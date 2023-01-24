@@ -39,7 +39,7 @@ const ActivityPanel = ({ app, brancheS, user, isDebug, users, traceDT })=> {
   const ancOptionS = app.ancillaryOption.sort();
     
   return(
-    <div className='overscroll'>
+    <div className='space5x5'>
       <div className='med vbreak comfort middle'>
         <WeekBrowse
           sendUp={(i)=>getBack(i)}
@@ -75,10 +75,10 @@ const ActivityPanel = ({ app, brancheS, user, isDebug, users, traceDT })=> {
       </table>
       }
       <div className='dropCeiling smTxt'>
-        <p><sup>i.</sup>Times are displayed for timezone: {moment.tz.guess()}</p>
-        <p><sup>ii.</sup>Durations are rounded to the nearest minute</p>
-        <p><sup>o.</sup>Piece bar is 10 minute chunks for the whole day including breaks, lunch and overtime</p>
-        <p><sup>oo.</sup>Progress bars are scaled to your expected Production Time percentage</p>
+        <p className='smTxt'><sup>i.</sup>Times are displayed for timezone: {moment.tz.guess()}</p>
+        <p className='smTxt'><sup>ii.</sup>Durations are rounded to the nearest minute</p>
+        <p className='smTxt'><sup>o.</sup>Piece bar is 10 minute chunks for the whole day including breaks, lunch and overtime</p>
+        <p className='smTxt'><sup>oo.</sup>Progress bars are scaled to your expected Production Time percentage</p>
       </div>
     </div>
   );

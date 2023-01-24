@@ -1,7 +1,6 @@
-import React, { useLayoutEffect } from 'react';
+import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
-import InboxToastPop from '/client/utility/InboxToastPop.js';
 import { localeUpdate } from '/client/utility/WorkTimeCalc';
 import { branchesSort } from '/client/utility/Arrays.js';
 import { PlainFrame } from '/client/layouts/MainLayouts';
@@ -25,10 +24,6 @@ const PeopleDataWrap = ({
   org, users, app,
   traceDT
 })=> {
-  
-  useLayoutEffect( ()=>{
-    InboxToastPop(user);
-  }, [user]);
     
   if( !readybName || !readyPeople || !app ) {
     return( 
@@ -61,12 +56,12 @@ const PeopleDataWrap = ({
             <b><i className='fas fa-history fa-fw gapR'></i>Daily History</b>,
             <b><i className='fas fa-tachometer-alt fa-fw gapR'></i>Weekly Utilization</b>,
             <b><i className='far fa-calendar-alt fa-fw gapR'></i>Work Schedule</b>,
-            <b><i className='fas fa-hourglass-end fa-fw gapR'></i>Overtime Errors</b>,
-            <b><i className='fas fa-users-cog fa-fw gapR'></i>Accounts Manager</b>,
             <b><i className='fas fa-user-lock fa-fw gapR'></i>Permissions</b>,
+            <b><i className='fas fa-users-cog fa-fw gapR'></i>Accounts Manager</b>,
+            <b><i className='fas fa-hourglass-end fa-fw gapR'></i>Overtime Errors</b>,
             <b><i className='fas fa-dice fa-fw gapR'></i>Revolving PIN</b>,
           ]}
-          disable={[false, false, false, false, antiAuth, antiAuth, false, antiAuth]}>
+          disable={[false, false, false, false, false, antiAuth, antiAuth, antiAuth]}>
           
           <DashSlide
             key={0}
@@ -104,9 +99,12 @@ const PeopleDataWrap = ({
             isAdmin={isAdmin}
             isPeopleSuper={isPeopleSuper} />
           
-          {isAdmin || isPeopleSuper ?
-            <TimeErrorCheck key={6} />
-          : null }
+          <div key={4}>
+            <PermissionHelp 
+              auths={[...Pref.auths,...Pref.areas,'BRKt3rm1n2t1ng8r2nch']} 
+              admin={false} 
+            />
+          </div>
           
           {isAdmin || isPeopleSuper ?
             <AccountsManagePanel 
@@ -118,12 +116,9 @@ const PeopleDataWrap = ({
               isDebug={isDebug} />
           : null }
           
-          <div key={4}>
-            <PermissionHelp 
-              auths={[...Pref.auths,...Pref.areas,'BRKt3rm1n2t1ng8r2nch']} 
-              admin={false} 
-            />
-          </div>
+          {isAdmin || isPeopleSuper ?
+            <TimeErrorCheck key={6} />
+          : null }
           
           {isAdmin || isPeopleSuper ?
             <RevolvingPINCheck 

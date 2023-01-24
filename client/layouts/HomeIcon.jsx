@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import Pref from '/client/global/pref.js';
 import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
+import { ToastContainer } from 'react-toastify';
 
 const HomeIcon = () => {
 
@@ -78,6 +79,11 @@ const HomeIcon = () => {
         : null}
       </ContextMenu>
       
+      <ToastContainer
+        position="top-right"
+        theme='colored'
+        newestOnTop 
+      />
     </div>
   );
 };

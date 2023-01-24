@@ -474,6 +474,11 @@ Meteor.methods({
     }
   },
   
+  getUsername(id) {
+    const user = Meteor.users.findOne({_id : id},{'username':1});
+    return user ? user.username : 'unknown';
+  },
+  
   sendUserDM(userID, title, message) {
     const mssgTitle = title || '';
     const mssgDetail = message || '';

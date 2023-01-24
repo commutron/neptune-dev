@@ -1,6 +1,5 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
-import { ToastContainer } from 'react-toastify';
 
 import HomeIcon from '/client/layouts/HomeIcon';
 import TideFollow from '/client/components/tide/TideFollow';
@@ -42,10 +41,6 @@ export const TraverseWrap = ({
   
   return(
     <div className='containerEx'>
-      <ToastContainer
-        position="top-center"
-        theme='colored'
-        newestOnTop />
       <div className='tenHeader noPrint'>
         <div className='topBorder' />
         <HomeIcon />

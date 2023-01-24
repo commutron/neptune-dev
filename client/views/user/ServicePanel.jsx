@@ -22,7 +22,7 @@ const ServicePanel = ()=> {
   }, []);
   
   return(
-    <div className='overscroll'>
+    <div className='space5x5'>
       {!equipData ?
         <div className='centreText'>
           <CalcSpin />

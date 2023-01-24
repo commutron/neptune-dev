@@ -1,7 +1,6 @@
-import React, { useLayoutEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
-import InboxToastPop from '/client/utility/InboxToastPop.js';
 import { localeUpdate } from '/client/utility/WorkTimeCalc';
 
 import { TraverseWrap } from '/client/layouts/DataExploreLayout';
@@ -17,10 +16,6 @@ const ExploreView = ({
   allXBatch, hotXBatch, hotXSeries, hotXRapids, // relevant
   view, request, specify, subLink // routing
 })=> {
-  
-  useLayoutEffect( ()=>{
-    InboxToastPop(user);
-  }, [user]);
   
   const brancheS = useMemo( ()=> branchesSort(app?.branches || []), [app]);
   

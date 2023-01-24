@@ -89,7 +89,6 @@ Meteor.publish('appData', function(){
       Meteor.users.find({orgKey: orgKey},
         {fields: {
           'username': 1,
-          'org': 1,
           'roles': 1
         }}),
     ];
@@ -146,18 +145,33 @@ Meteor.publish('bNameData', function(){
 Meteor.publish('peopleData', function(){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
+  // const admin = Roles.userIsInRole(this.userId, 'admin');
+  // const pplSp = Roles.userIsInRole(this.userId, 'peopleSuper');
   if(!this.userId){
     return this.ready();
+  // }else if(admin || pplSp) {
+  //   return [
+  //     Meteor.users.find({orgKey: orgKey},
+  //       {fields: {
+  //         'username': 1,
+  //         'org': 1,
+  //         'roles': 1,
+  //         'engaged': 1,
+  //         'proTimeShare': 1,
+  //         'inbox': 1
+  //      }}),
+  //   ];
   }else{
     return [
+      // Meteor.users.find({orgKey: orgKey, roles: { $in: ["active"] }},
       Meteor.users.find({orgKey: orgKey},
         {fields: {
           'username': 1,
           'org': 1,
           'roles': 1,
           'engaged': 1,
-          'proTimeShare' : 1
-        }}),
+          'proTimeShare': 1
+      }}),
     ];
   }
 });

@@ -5,13 +5,12 @@ import Spin from '/client/components/tinyUi/Spin';
 import { UpTaskBar, DownTaskBar } from './TaskBars/TaskBars';
 
 const StreamLayout = ({
-  load,
   user, app,
   title, subLink, tag,
   navBar,
   isAuth,
   children
-})=>	{
+})=> {
   
   if(!user || !app) {
     return(

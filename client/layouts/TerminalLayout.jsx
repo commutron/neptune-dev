@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useLayoutEffect, Fragment } from 'react';
 import { Meteor } from 'meteor/meteor';
-import { ToastContainer } from 'react-toastify';
 
 import { ScanListenerUtility, ScanListenerOff } from '/client/utility/ScanListener.js';
 
@@ -101,10 +100,6 @@ const TerminalWrap = ({
   
   return(
     <div className='pro_100 containerPro'>
-      <ToastContainer
-        position="top-center"
-        theme='colored'
-        newestOnTop />
       <div className='tenHeader'>
         <div className='topBorder' />
         <HomeIcon />
@@ -137,7 +132,7 @@ const TerminalWrap = ({
             <i className='fas fa-rocket' data-fa-transform='left-1 down-1'></i>
           </button>
         </div>
-        <TideFollow proRoute={bData && bData.batch} user={user} />
+        <TideFollow proRoute={bData && bData.batch} />
       </div>
     
         <div className='proPrime forceScrollStyle darkTheme'>

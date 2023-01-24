@@ -140,9 +140,9 @@ privlegedRoutes.route('/app', {
 });
 
 privlegedRoutes.route('/user', {
-  action() {
+  action: function(p, query) {
     mount(CleanLayout, {
-       content: (<UserDataWrap />)
+       content: (<UserDataWrap query={query} />)
     });
   }
 });

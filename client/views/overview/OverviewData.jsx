@@ -1,9 +1,8 @@
-import React, { useLayoutEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import { localeUpdate } from '/client/utility/WorkTimeCalc';
 
-import InboxToastPop from '/client/utility/InboxToastPop.js';
 import { branchesOpenSort } from '/client/utility/Arrays.js';
 
 import { PlainFrame } from '/client/layouts/MainLayouts';
@@ -16,10 +15,6 @@ const View = ({
   batchX, traceDT,
   allEquip, openMaint
 })=> {
-  
-  useLayoutEffect( ()=>{
-    InboxToastPop(user);
-  }, [user]);
   
   const brancheS = useMemo( ()=> branchesOpenSort(app?.branches || []), [app]);
   

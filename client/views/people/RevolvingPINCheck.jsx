@@ -17,7 +17,7 @@ const RevolvingPINCheck = ({ isAdmin, isPeopleSuper })=> {
   if(!isAdmin && !isPeopleSuper) {
     return(
       <div className='centre centreText space5x5'>
-        <h3>ADMIN or PEOPLESUPER Access Is Required</h3>
+        <h3>Administrator or PeopleSuper Access Is Required</h3>
       </div>
     );
   }

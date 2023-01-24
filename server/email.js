@@ -115,8 +115,8 @@ function sortInternalRecipient(emailUserIDs, subject, date, title, body, asid, f
       Meteor.users.update(inboxID, {
         $push : { inbox : {
           notifyKey: new Meteor.Collection.ObjectID().valueOf(),
-          keyword: 'direct',
-          type: 'direct',
+          keyword: 'automated',
+          type: 'automated',
           title: subject,
           detail: mssgDetail,
           time: new Date(),
@@ -167,19 +167,16 @@ Meteor.methods({
     if(emailGlobal) {
       
       const to = app.devEmail;
-        
-      const cc = undefined;
-      
-      const subject = 'Neptune Error Report';
-      
+    
+      const subject = 'NEPTUNE ERROR REPORT';
       const date = moment().tz(Config.clientTZ).format('h:mm a, dddd, MMM Do YYYY');
+      const title = errorTitle;
       
-      const body = `${errorTitle} — ${'<pre>'}${errorMessage}${'</pre>'}`;
-      const foot = `${errorTime}, ${errorUser}, ${agent}, (session ${sessionID})`;
+      const body = `${'<pre>'}${errorMessage}${'</pre>'}`;
+      const foot = `${errorTime} (session ${sessionID})`;
+      const link = `${errorUser}, ${agent}`;
       
-      const plainbody = `${errorTitle} — ${errorMessage}`;
-      
-      sendExternalEmail( to, cc, subject, date, body, foot, plainbody );
+      sendInternalEmail(to, subject, date, title, body, "-", foot, link, "-");
       
       return true;
     }else{
@@ -222,7 +219,6 @@ Meteor.methods({
       return false;
     }
   },
-  
   
   handleInternalEmail(accessKey, emailUsers, name, isG, isW, variant, wiki) {
     this.unblock();

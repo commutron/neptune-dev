@@ -1,11 +1,10 @@
-import React, { useLayoutEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
 // import Pref from '/client/global/pref.js';
-import InboxToastPop from '/client/utility/InboxToastPop.js';
 import { localeUpdate } from '/client/utility/WorkTimeCalc';
 import { branchesSort } from '/client/utility/Arrays.js';
 
-import EquipWrap from './EquipWrap';
+import EquipLayout from '/client/layouts/EquipLayout';
 import { PlainFrame } from '/client/layouts/MainLayouts';
 import Spin from '/client/components/tinyUi/Spin';
 
@@ -14,10 +13,6 @@ const EquipData = ({
   equipData, maintainData,
   user, app, users, isDebug, specify 
 })=> {
-  
-  useLayoutEffect( ()=>{
-    InboxToastPop(user);
-  }, [user]);
   
   const brancheS = useMemo( ()=> branchesSort(app?.branches || []), [app]);
   
@@ -34,7 +29,7 @@ const EquipData = ({
   localeUpdate(app);
   
   return(
-    <EquipWrap
+    <EquipLayout
       equipData={equipData}
       maintainData={maintainData}
       app={app}

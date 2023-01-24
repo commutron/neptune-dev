@@ -1,7 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import React from 'react';
 import Pref from '/client/global/pref.js';
-import { ToastContainer } from 'react-toastify';
 import ErrorCatch from '/client/layouts/ErrorCatch';
 import HomeIcon from '/client/layouts/HomeIcon';
 import TideFollow from '/client/components/tide/TideFollow';
@@ -27,13 +26,6 @@ export const CleanLayout = ({content}) => (
 export const PlainFrame = ({ title, tag, container, noToast, children })=> (
   <ErrorCatch>
     <div className={container || 'simpleContainer'}>
-      {!noToast &&
-        <ToastContainer
-          position="top-center"
-          theme='colored'
-          newestOnTop
-        />
-      }
       <div className='tenHeader noPrint'>
         <div className='topBorder' />
         <HomeIcon />

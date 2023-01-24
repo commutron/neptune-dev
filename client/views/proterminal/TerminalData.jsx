@@ -1,9 +1,7 @@
-import React, { useLayoutEffect} from 'react';
+import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import Pref from '/client/global/pref.js';
-
-import InboxToastPop from '/client/utility/InboxToastPop.js';
 
 import { SpinWrap } from '/client/components/tinyUi/Spin';
 import TerminalFindOps from './TerminalFindOps';
@@ -16,10 +14,6 @@ const TerminalData = ({
   allxBatch,
   hotxBatch, hotxSeries, hotxRapids
 })=> {
-
-  useLayoutEffect( ()=>{
-    InboxToastPop(user);
-  }, [user]);
   
 
   if( !coldReady || !hotReady || !user || !app ) {

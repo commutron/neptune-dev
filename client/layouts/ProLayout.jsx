@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useLayoutEffect, Fragment } from 'react';
 import { Meteor } from 'meteor/meteor';
-import { ToastContainer } from 'react-toastify';
 
 import { ScanListenerUtility, ScanListenerOff } from '/client/utility/ScanListener.js';
 
@@ -134,10 +133,6 @@ export const ProWrap = ({
                         
   return(
     <div className={viewContainer + ' containerPro'}>
-      <ToastContainer
-        position="top-center"
-        theme='colored'
-        newestOnTop />
       <div className='tenHeader'>
         <div className='topBorder' />
         <HomeIcon />
@@ -251,11 +246,6 @@ export const ProWindow = ({ brancheS, plainBatchS, allEquip, canMulti, user, chi
   
   return(
     <section className='windowPro'>
-      <ToastContainer
-        position="top-right"
-        theme='colored'
-        autoClose={2500}
-        newestOnTop />
       <div className='tenHeader'>
         <div className='topBorder' />
         <HomeIcon />

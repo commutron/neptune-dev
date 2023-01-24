@@ -1,25 +1,21 @@
 import React from 'react';
 import { toast } from 'react-toastify';
 
-export default function InboxToastPop(currUser) {
-  if(currUser) {
-    const uID = currUser._id;
-    if(currUser.inbox) {
-      for( let inbox of currUser.inbox ) {
-        if(inbox.unread) {
-          const nKey = inbox.notifyKey;
-          toast(
-            <div>
-              <i className="fas fa-envelope-square fa-lg fa-fw"></i><b>New Message</b><br />
-              <h4>{inbox.title}</h4>
-              <hr />
-              <p>{inbox.detail}</p>
-            </div>, {
-            toastId: nKey+uID,
-            autoClose: false,
-            onClose: ()=>{ Meteor.call('setReadToast', uID, nKey) },
-          } );
-        }
+export default function InboxToastWatch(user) {
+  if(user?.inbox && document.querySelector('.Toastify')) {
+    const uID = user._id;
+    for( let note of user.inbox ) {
+      if(note.unread) {
+        const nKey = note.notifyKey;
+        toast(
+          <div className='line15x'>
+            <i className="fa-solid fa-bell fa-lg fa-fw gapR"></i><b>{note.title}</b><br />
+            <p>{note.detail}</p>
+          </div>, {
+          toastId: nKey+uID,
+          autoClose: false,
+          onClick: ()=>{ Meteor.call('setReadToast', uID, nKey) },
+        } );
       }
     }
   }

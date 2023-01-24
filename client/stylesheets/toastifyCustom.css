@@ -16,7 +16,7 @@
   --toastify-toast-max-height: 800px;
   --toastify-font-family: sans-serif;
   --toastify-z-index: 9999;
-  --toastify-text-color-light: #757575;
+  --toastify-text-color-light: #5c5b5b;
   --toastify-text-color-dark: #fff;
   --toastify-text-color-info: #fff;
   --toastify-text-color-success: #fff;
@@ -209,16 +209,15 @@
   cursor: pointer;
   opacity: 0.7;
   transition: 0.3s ease;
-  /*-ms-flex-item-align: start;*/
-      align-self: flex-start;
+  align-self: flex-start;
 }
 .Toastify__close-button--light {
   color: #000;
 }
 .Toastify__close-button > svg {
-  fill: currentColor;
-  height: 16px;
-  width: 14px;
+  /*fill: currentColor;*/
+  height: 20px;
+  width: 18px;
 }
 .Toastify__close-button:hover, .Toastify__close-button:focus {
   opacity: 1;
