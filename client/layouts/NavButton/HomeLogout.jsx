@@ -14,7 +14,6 @@ const HomeLogout = ({ currentUser })=> {
         });
     }else{
 		  Meteor.logout();
-		  document.querySelector(':root').style.setProperty('--neptuneColor', null);
 	  }
 	}
 	

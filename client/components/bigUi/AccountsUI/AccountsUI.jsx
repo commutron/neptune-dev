@@ -9,11 +9,6 @@ import NewUser from './NewUser';
 
 const AccountsUI = ({ login, uID, username })=> {
 	
-	function doLogout() {
-    Meteor.logout();
-		document.querySelector(':root').style.setProperty('--neptuneColor', null);
-	}
-	
 	const crd = { 
 		minHeight: '300px',
 		width: '300px',
@@ -47,7 +42,7 @@ const AccountsUI = ({ login, uID, username })=> {
 		        id='homeExitButton'
 		        style={{minHeight: 'calc(20 * var(--vh))'}}
 		        className='navButtonWrap'
-		        onClick={()=>doLogout()}
+		        onClick={()=>Meteor.logout()}
 		        readOnly>
 		        <i className='fas fa-sign-out-alt fa-fw navButtonIcon'></i>
 		        <i className='navButtonText'>Sign-out<br />{username}</i>

@@ -9,6 +9,7 @@ import { PublicLayout } from './layouts/MainLayouts.jsx';
 import { SplashLayout } from './layouts/MainLayouts.jsx';
 import { CleanLayout } from './layouts/MainLayouts.jsx';
 import { LabelLayout } from './layouts/MainLayouts.jsx';
+import NesoView from './layouts/Neso/NesoView';
 
 import Login from './views/Login';
 import MetaSlide from './views/app/appSlides/MetaSlide';
@@ -50,7 +51,7 @@ TraceDB = new Mongo.Collection('tracedb');
 
 SubMngr = new SubsManager({
   // maximum number of cache subscriptions
-  cacheLimit: 3,
+  cacheLimit: 5,
   // expire after 5 minute, if it's not subscribed again
   expireIn: 5
 });
@@ -104,6 +105,38 @@ const privlegedRoutes = FlowRouter.group({
   subscriptions: function(params, queryParams) {
     this.register('routerSubSelf', SubMngr.subscribe('selfData'));
     this.register('routerSubApp', SubMngr.subscribe('appData'));
+  }
+});
+
+const limitedRoutes = FlowRouter.group({
+  triggersEnter: [
+    ()=> {
+      // let route = FlowRouter.current();
+      Session.set('redirectAfterLogin', '/ne');
+      /*
+      if(Meteor.loggingIn() || route.route.name === 'login') {
+        null;
+      }else if(!Meteor.userId()) {
+        Session.set('redirectAfterLogin', route.path);
+        FlowRouter.go('login');
+      }else{
+        Session.set('redirectAfterLogin', route.path);
+      }
+      */
+    }
+  ],
+  subscriptions: function() {
+    this.register('routerSubSelf', SubMngr.subscribe('selfData'));
+    this.register('routerSubUsers', SubMngr.subscribe('ltdUserData'));
+  }
+});
+limitedRoutes.route('/ne', {
+  name: 'neso',
+  action() {
+    mount(CleanLayout, {
+      content: (<NesoView />),
+      title: Pref.neptuneIs
+    });
   }
 });
 
@@ -329,6 +362,10 @@ FlowRouter.globals.push({
       name: "apple-mobile-web-app-capable" ,
       content: "yes"
     },
+    meta4: {
+      name: "viewport" ,
+      content: "width=device-width, initial-scale=1"
+    },
   }
 });
 
@@ -362,9 +399,11 @@ function disconnectIfHidden() {
 function createDisconnectTimeout() {
   removeDisconnectTimeout();
 
-  disconnectTimer = setTimeout(function () {
+  disconnectTimer = FlowRouter.current().path === "/ne" ? null :
+  setTimeout(function () {
     Meteor.disconnect();
-  },1000 * 60 * Pref.blurOut);
+    console.log("DDP Disconnected in the background");
+  },1000 * 60 /* Pref.blurOut */);
 }
 
 function removeDisconnectTimeout() {
@@ -375,7 +414,7 @@ function removeDisconnectTimeout() {
 
 Accounts.onLogin( ()=>{
 	let redirect = Session.get('redirectAfterLogin');
-  if(!redirect || redirect === '/login') {
+  if(!redirect || redirect === '/login' || redirect === '/ne') {
   	null;
   }else {
     FlowRouter.go(redirect);
@@ -390,6 +429,10 @@ Accounts.onLogin( ()=>{
 });
 
 Accounts.onLogout( ()=>{
-  Session.set('redirectAfterLogin', FlowRouter.current().path);
-  FlowRouter.go('login');
+  document.querySelector(':root').style.setProperty('--neptuneColor', null);
+  
+  if(FlowRouter.current().path !== "/ne") {
+    Session.set('redirectAfterLogin', FlowRouter.current().path);
+    FlowRouter.go('login');
+  }
 });

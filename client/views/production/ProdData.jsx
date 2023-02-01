@@ -6,7 +6,7 @@ import Pref from '/client/global/pref.js';
 import { SpinWrap } from '/client/components/tinyUi/Spin';
 import { branchesOpenSort } from '/client/utility/Arrays.js';
 import ProductionFindOps from './ProductionFindOps';
-
+import { ProWindow } from '/client/layouts/ProLayout';
 
 const ProdData = ({
   coldReady, hotReady,
@@ -37,7 +37,16 @@ const ProdData = ({
         }, [coldReady]);
     
   if( !coldReady || !hotReady || !user || !app ) {
-    return( <SpinWrap /> );
+    return( 
+      <ProWindow 
+        brancheS={[]} 
+        plainBatchS={[]}
+        user={null}
+        allEquip={[]}
+      >
+        <SpinWrap />
+      </ProWindow>
+    );
   }
   
   return (

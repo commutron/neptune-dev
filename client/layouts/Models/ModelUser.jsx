@@ -8,7 +8,8 @@ import { toCap } from '/client/utility/Convert';
 
 const ModelUser = ({ 
   user, username, userinitial, tootip,
-  engaged, tOpen, go, openMutiTide, canMulti 
+  engaged, tOpen, go, openMutiTide, canMulti,
+  users
 })=> {
   
   useEffect( ()=> {
@@ -35,11 +36,10 @@ const ModelUser = ({
         });
     }else{
 		  Meteor.logout();
-		  document.querySelector(':root').style.setProperty('--neptuneColor', null);
 	  }
 	};
 	
-	const unice = toCap(username.replace(Pref.usrCut, " "));
+	const unice = toCap(username.replace(Pref.usrCut, " "), true);
   const tpool = user.tidepools;
   const recent = [...new Set(tpool)];
 	
@@ -120,6 +120,7 @@ const ModelUser = ({
           <NotifyMini
             inbox={user.inbox}
             unice={unice}
+            users={users}
           />
         </div>
          
@@ -164,64 +165,75 @@ const Divider = ()=> (
   }}></div>
 );
 
-const NotifyMini = ({ unice, inbox })=> {
+const NotifyMini = ({ unice, inbox, users })=> {
   
-  const [ tab, tabSet ] = useState(0);
+  const [ tab, tabSet ] = useState(1);
   const [ uList, uListSet ] = useState([]);
   
   useEffect( ()=>{
-    if(tab) {
-      const users = Meteor.users.find({}, {sort: {username:1}}).fetch();
+    if(users.length > 1) {
       const liveUsers = users.filter( x => Roles.userIsInRole(x._id, 'active') );
       
       let listUsers = [];
       for(let x of liveUsers) {
         listUsers.push({ 
-          label: toCap(x.username.replace(Pref.usrCut, " ")),
+          label: toCap(x.username.replace(Pref.usrCut, " "), true),
           value: x._id
         });
       }
       uListSet(listUsers);
     }
-  }, [tab]);
+  }, [users]);
+  
+  function userCheck(target) {
+    let match = uList.find( x => x.label === target.value);
+    let message = !match ? 'Exact match not found. Please choose user from the list' : '';
+    target.setCustomValidity(message);
+  }
   
   function sendOneToOne(e) {
     e.preventDefault();
-    
-    const userVal = this.userSend.value;
-    const message = this.typedMssg.value;
   
-    Meteor.call('sendUserDM', userVal, unice, message, (error)=>{
-      error && console.log(error);
-      this.typedMssg.value = "";
-      this.userSend.value = false;
-    });
+    const message = this.typedMssg.value;
+    const userVal = uList.find( u => u.label === this.userSend.value)?.value;
+    
+    if(userVal) {
+      Meteor.call('sendUserDM', userVal, unice, message, (error)=>{
+        error && console.log(error);
+        this.typedMssg.value = "";
+      });
+    }
   }
 	
   
   return(
     <div>
       <div className='notifytabs'>
-        <button className={!tab ? 'on' : ''} onClick={()=>tabSet(0)}>Received</button>
         <button className={tab ? 'on' : ''} onClick={()=>tabSet(1)}>Send</button>
+        <button className={!tab ? 'on' : ''} onClick={()=>tabSet(0)}>Inbox</button>
       </div>
       
       {tab ?
         <div>
-         
-         <form onSubmit={(e)=>sendOneToOne(e)}>
+          <form onSubmit={(e)=>sendOneToOne(e)}>
             <p>
               <label htmlFor='userSend'>Send To</label><br />
-              <select id='userSend' required>
-              <option></option>
-              {uList.map( (u)=>(
+              <input 
+                id='userSend'
+                type='search'
+                list='userDatalist'
+                onInput={(e)=>userCheck(e.target)}
+                required
+                autoComplete={navigator.userAgent.indexOf("Firefox") !== -1 ? "off" : ""}
+              />
+              <datalist id='userDatalist'>
+              {uList.map( (e)=>(
                 <option 
-                  key={u.value} 
-                  value={u.value}
-                >{u.label}</option>
+                  key={e.value}
+                  value={e.label}
+                />
               ))}
-              </select>
-          
+              </datalist>
             </p>
             <p>
               <label htmlFor='typedMssg'>Message</label><br />
@@ -235,20 +247,14 @@ const NotifyMini = ({ unice, inbox })=> {
               >Send</button>
             </p>
           </form>
-          
-          
-         
-        
         </div>
-        
         :
-        
         <div>
-          {(inbox || []).map( (entry)=> (
-            <div key={entry.notifyKey} className={`bottomLine ${entry.unread ? 'nSolid' : ''}`}>
-              <p><b>{entry.title}</b></p>
-              <p>{entry.detail}</p>
-              <small>{moment(entry.time).calendar()}</small>
+          {(inbox || []).reverse().map( (entry)=> (
+            <div key={entry.notifyKey} className={`mininboxCard ${entry.unread ? 'new' : ''}`}>
+              <div><i>{entry.title}</i></div>
+              <span>{entry.detail}</span>
+              <div>{moment(entry.time).calendar()}</div>
             </div>
           ))}
         </div>

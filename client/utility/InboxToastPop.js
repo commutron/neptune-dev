@@ -1,7 +1,7 @@
 import React from 'react';
 import { toast } from 'react-toastify';
 
-export default function InboxToastWatch(user) {
+export default function InboxToastWatch(user, autoClose, blam) {
   if(user?.inbox && document.querySelector('.Toastify')) {
     const uID = user._id;
     for( let note of user.inbox ) {
@@ -13,9 +13,13 @@ export default function InboxToastWatch(user) {
             <p>{note.detail}</p>
           </div>, {
           toastId: nKey+uID,
-          autoClose: false,
+          autoClose: autoClose || false,
           onClick: ()=>{ Meteor.call('setReadToast', uID, nKey) },
         } );
+        if(blam) {
+          console.log('blam');
+          window.focus();
+        }
       }
     }
   }

@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { withTracker } from 'meteor/react-meteor-data';
+// import { withTracker } from 'meteor/react-meteor-data';
 import Pref from '/client/global/pref.js';
 // import { ToastContainer } from 'react-toastify';
 import ModelUser from '/client/layouts/Models/ModelUser';
@@ -7,6 +7,7 @@ import ModelUser from '/client/layouts/Models/ModelUser';
 const TideFollow = ({ tOpen, canMulti })=> {
   
   const user = Meteor.user();
+  const users = Meteor.users.find({}, {sort: {username:1}}).fetch();
   
 	const go = (goto)=> {
 	  document.getElementById('userRightPanel')?.close();
@@ -38,7 +39,7 @@ const TideFollow = ({ tOpen, canMulti })=> {
     dialog?.showModal();
   };
 	
-	if(!user) {
+	if(!user || !users) {
 	  return null;
 	}
 	
@@ -91,6 +92,7 @@ const TideFollow = ({ tOpen, canMulti })=> {
         go={(e)=>go(e)}
         openMutiTide={()=>openMutiTide()}
         canMulti={canMulti}
+        users={users}
       />
     </Fragment>
   );

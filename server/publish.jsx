@@ -55,6 +55,19 @@ Meteor.publish('selfData', function(){
   }
 });
 
+Meteor.publish('ltdUserData', function(){
+  if(!this.userId){
+    return this.ready();
+  }else{
+    return [
+      Meteor.users.find({ roles: { $in: ["active"] }},
+        {fields: {
+          'username': 1
+      }})
+    ];
+  }
+});
+
 Meteor.publish('appData', function(){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;

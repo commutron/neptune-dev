@@ -1,7 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import React from 'react';
-import { ToastContainer } from 'react-toastify';
 import Pref from '/client/global/pref.js';
 
 import AccountsUI from '/client/components/bigUi/AccountsUI/AccountsUI.jsx';
@@ -22,10 +21,6 @@ const Login = ({ login, uID, username, timeClock })=> {
   
   return(
     <div>
-      <ToastContainer
-        position="top-center"
-        autoClose={10000}
-        newestOnTop />
       <div className='centre darkTheme'>
         <AccountsUI
           login={login}

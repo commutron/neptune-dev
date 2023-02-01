@@ -364,20 +364,23 @@ main {
   text-align: center;
 }
 .userMenuPing textarea,
-.userMenuPing select {
+.userMenuPing input {
   max-width: 100%;
   min-width: 100%;
+  border: 1px solid black;
+  background-color: rgb(20,20,20);
 }
 .userMenuPing textarea, 
-.userMenuPing select, 
+.userMenuPing input, 
 .userMenuPing button {
   font-size: clamp(0.8rem, calc(1.75 * var(--vh)), 3rem);
+  width: 100%;
 }
 .userMenuPing label {
   font-size: clamp(1rem, calc(1.5 * var(--vh)), 3rem);
 }
-.userMenuPing select {
-  min-height: 1.75rem;
+.userMenuPing input {
+  min-height: 2rem;
   height: calc(3 * var(--vh));
 }
 .notifytabs > button,
@@ -425,6 +428,36 @@ main {
 }
 .userMenuTop .usermenuaction:hover {
   background-color: rgb(39, 174, 96, 0.2);
+}
+.mininboxCard {
+  margin-block: 0.5rem;
+  background-color: rgb(15,15,15);
+  border: 1px solid rgb(0,0,0);
+}
+.mininboxCard > span {
+  display: block;
+  font-size: clamp(0.9rem, calc(1 * var(--vh)), 1rem);
+  margin-block: 0.4rem;
+  margin-inline: 0.9rem;
+}
+.mininboxCard > div:first-child {
+  display: flex;
+  justify-content: space-between;
+  font-size: clamp(1rem, calc(1 * var(--vh)), 1.2rem);
+  border-bottom: 1px solid rgb(200,200,200,0.1);
+  margin-inline: 0.3rem;
+  padding-block: 0.4rem;
+  text-indent: 1ch;
+}
+.mininboxCard > div:last-child {
+  font-size: clamp(0.5rem, calc(1 * var(--vh)), 0.7rem);
+  margin-inline: 0.3rem;
+  padding: 0.3rem;
+  text-align: end;
+  border-top: 1px solid rgb(200,200,200,0.1);
+}
+.mininboxCard.new {
+  border-color: var(--neptuneColor);
 }
 
 .centreSpash {
@@ -958,6 +991,63 @@ n-sm-model-content {
   padding-left: 8px;
 }
 
+.inboxCard {
+  margin-bottom: 1rem;
+  background-color: rgb(40,40,40);
+  border: 1px solid;
+  border-color: rgb(30,30,30);
+  border-radius: 2px;
+}
+.inboxCard.light {
+  background-color: rgb(250,250,250);
+  border-color: rgb(255,255,255);
+}
+.inboxCard.new {
+  border-color: var(--neptuneColor);
+}
+.inboxCard > span {
+  display: block;
+  font-size: 1.1rem;
+  margin-block: 0.5rem;
+  margin-inline: 1rem;
+}
+.inboxCard > div:first-child {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.2rem;
+  border-bottom: 1px solid rgb(0,0,0,0.5);
+  margin-inline: 0.4rem;
+  padding-block: 0.5rem;
+  text-indent: 1ch;
+}
+.inboxCard > div:last-child {
+  font-size: 0.8rem;
+  margin-inline: 0.4rem;
+  padding: 0.4rem;
+  text-align: end;
+  border-top: 1px solid rgb(0,0,0,0.4);
+}
+.inboxCard.light > div:first-child {
+  font-size: larger;
+  border-bottom: 1px solid rgb(200,200,200,0.5);
+}
+.inboxCard.light > span {
+  font-size: inherit;
+}
+.inboxCard.light > div:last-child {
+  font-size: smaller;
+  border-top: 1px solid rgb(200,200,200,0.4);
+}
+.inboxCard button {
+	min-width: 1rem;
+  min-height: 1rem;
+  padding-inline: 0.5rem;
+  font-size: 1rem;
+  border-color: transparent;
+  background-color: transparent;
+  cursor: pointer;
+}
+
 .footnotes {
   box-shadow: none;
   font-size: var(--sm8);
@@ -1399,10 +1489,10 @@ n-col-table-head > span {
   .simpleContainer .tenHeader,
   .splashContainer .tenHeader {
     grid-template-rows: 1vmin 7vmin;
-    grid-template-columns: 8vmin 1fr 8vmin;
+    grid-template-columns: 8vmin 1fr 8vmin 8vmin;
     grid-template-areas: 
-      'topBorder topBorder topBorder'
-      'homeIcon frontCenter proRight';
+      'topBorder topBorder topBorder topBorder'
+      'homeIcon frontCenter auxRight proRight';
   }
   .homeIcon {
     grid-area: topBorder / topBorder / homeIcon / homeIcon;

@@ -9,7 +9,6 @@ import Tabs from '/client/components/smallUi/Tabs/Tabs';
 import AccountsTop from './AccountsTop';
 import ActivityPanel from '/client/views/user/ActivityPanel';
 import UserManageForm from '/client/components/forms/User/UserManageForm';
-import UserDMForm from '/client/components/forms/User/UserDMForm';
 
 import { ForceStopEngage } from '/client/views/app/appSlides/DataRepair';
 
@@ -55,7 +54,6 @@ const AccountsManagePanel = ({ app, users, traceDT, brancheS, isDebug })=> {
                 tabs={[
                   <b><i className='far fa-clock fa-fw'></i>   Time</b>,
                   <b><i className='fas fa-key fa-fw'></i>  Access</b>,
-                  <b><i className='far fa-envelope fa-fw'></i>  Message</b>
                 ]}
                 wide={false}
                 hold={false}
@@ -96,11 +94,6 @@ const AccountsManagePanel = ({ app, users, traceDT, brancheS, isDebug })=> {
                   </Fragment>
                 : noAccess}
                 </div>
-                
-                <div key={2} className='vspace'>
-                  <UserDMForm userID={entry._id} />
-                </div>
-
               </Tabs>
             </div>
           );
