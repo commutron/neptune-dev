@@ -111,18 +111,7 @@ const privlegedRoutes = FlowRouter.group({
 const limitedRoutes = FlowRouter.group({
   triggersEnter: [
     ()=> {
-      // let route = FlowRouter.current();
       Session.set('redirectAfterLogin', '/ne');
-      /*
-      if(Meteor.loggingIn() || route.route.name === 'login') {
-        null;
-      }else if(!Meteor.userId()) {
-        Session.set('redirectAfterLogin', route.path);
-        FlowRouter.go('login');
-      }else{
-        Session.set('redirectAfterLogin', route.path);
-      }
-      */
     }
   ],
   subscriptions: function() {
@@ -402,8 +391,8 @@ function createDisconnectTimeout() {
   disconnectTimer = FlowRouter.current().path === "/ne" ? null :
   setTimeout(function () {
     Meteor.disconnect();
-    console.log("DDP Disconnected in the background");
-  },1000 * 60 /* Pref.blurOut */);
+    // console.log("DDP Disconnected in the background");
+  },1000 * 60 * Pref.blurOut);
 }
 
 function removeDisconnectTimeout() {

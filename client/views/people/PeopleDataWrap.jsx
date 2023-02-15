@@ -14,6 +14,8 @@ import PerformanceSlide from './PerformanceSlide';
 import HistorySlide from './HistorySlide';
 import ScheduleSlide from './ScheduleSlide';
 import AccountsManagePanel, { PermissionHelp } from './AccountsManagePanel';
+import EmailLogSlide from './EmailLogSlide';
+import DMLogSlide from './DMLogSlide';
 import TimeErrorCheck from './TimeErrorCheck';
 import RevolvingPINCheck from './RevolvingPINCheck';
 
@@ -21,7 +23,7 @@ import RevolvingPINCheck from './RevolvingPINCheck';
 const PeopleDataWrap = ({
   readybName, readyPeople,
   user, active, isDebug,
-  org, users, app,
+  org, users, loggedIn, app,
   traceDT
 })=> {
     
@@ -59,15 +61,19 @@ const PeopleDataWrap = ({
             <b><i className='fas fa-user-lock fa-fw gapR'></i>Permissions</b>,
             <b><i className='fas fa-users-cog fa-fw gapR'></i>Accounts Manager</b>,
             <b><i className='fas fa-hourglass-end fa-fw gapR'></i>Overtime Errors</b>,
+            <b><i className='fas fa-envelopes-bulk fa-fw gapR'></i>Email Log</b>,
+            <b><i className='fas fa-comments fa-fw gapR'></i>Message Log</b>,
             <b><i className='fas fa-dice fa-fw gapR'></i>Revolving PIN</b>,
           ]}
-          disable={[false, false, false, false, false, antiAuth, antiAuth, antiAuth]}>
+          disable={[
+            false, false, false, false, false,
+            antiAuth, antiAuth, antiAuth, antiAuth, antiAuth
+          ]}>
           
           <DashSlide
             key={0}
-            app={app}
-            user={user}
             users={userS}
+            loggedIn={loggedIn}
             traceDT={traceDT}
             brancheS={brancheS}
             isDebug={isDebug} />
@@ -121,8 +127,16 @@ const PeopleDataWrap = ({
           : null }
           
           {isAdmin || isPeopleSuper ?
+            <EmailLogSlide key={7} />
+          : null }
+          
+          {isAdmin || isPeopleSuper ?
+            <DMLogSlide key={8} />
+          : null }
+          
+          {isAdmin || isPeopleSuper ?
             <RevolvingPINCheck 
-              key={7}
+              key={9}
               isAdmin={isAdmin}
               isPeopleSuper={isPeopleSuper} />
           : null }
@@ -162,7 +176,8 @@ export default withTracker( () => {
       org: org,
       app: AppDB.findOne({org: org}),
       traceDT: TraceDB.find({}).fetch(),
-      users: Meteor.users.find({}).fetch()
+      users: Meteor.users.find({}).fetch(),
+      loggedIn: CacheDB.findOne({dataName: 'userLogin_status'})?.dataArray
     };
   }
 })(PeopleDataWrap);

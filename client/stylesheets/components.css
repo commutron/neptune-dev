@@ -14,7 +14,7 @@
   border-radius:.25rem;
   outline: none;
   pointer-events: none;
-  transition: opacity 250ms ease !important;
+  transition: opacity 125ms ease !important;
   z-index: 99;
   box-shadow: var(--dropShadow0);
 }

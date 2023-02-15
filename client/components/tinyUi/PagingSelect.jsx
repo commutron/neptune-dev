@@ -2,7 +2,7 @@ import React from 'react';
 
 
 const PagingSelect = ({ multiArray, isSet, doChange })=> (
-  <div className='centreRow vmargin'>
+  <div className='noPrint centreRow vmargin'>
     <button
       onClick={()=>doChange(isSet-1)}
       className='smallAction gap blackHover borderWhite transparent'

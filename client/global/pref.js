@@ -10,7 +10,7 @@ class Pref {
     
     this.InitialAppSetup = false;
     
-    this.neptuneVersion = '3.14.1';
+    this.neptuneVersion = '3.15.0';
     this.neptuneIs = 'Neptune Process Tracking';
 
     this.prefName = 'default';
@@ -228,6 +228,12 @@ class Pref {
     this.eqhib = 'Disconnected';
     this.estop = 'breakdown';
     this.eqissue = 'issues';
+    
+    // Replies
+    this.autoreply = [
+      "👍 Yes", "👎 No", "👌 Okay",
+      "💙 Thank You", "⏱ On My Way"
+    ];
   }
 }
 

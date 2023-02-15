@@ -26,8 +26,14 @@ SyncedCron.add({
 });
 
 SyncedCron.add({
-  name: 'Daily Maintain Events',
+  name: 'Delete 90+ Day Old Messages',
   schedule: (parser)=> parser.text('at 6:01 am'),
+  job: ()=> goDo('removeOldDMLog')
+});
+
+SyncedCron.add({
+  name: 'Daily Maintain Events',
+  schedule: (parser)=> parser.text('at 6:02 am'),
   job: ()=> goDo('pmRobot')
 });
 

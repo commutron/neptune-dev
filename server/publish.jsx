@@ -185,6 +185,7 @@ Meteor.publish('peopleData', function(){
           'engaged': 1,
           'proTimeShare': 1
       }}),
+      CacheDB.find({dataName: 'userLogin_status'})
     ];
   }
 });

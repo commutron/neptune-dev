@@ -84,6 +84,20 @@ const HomeIcon = () => {
         theme='colored'
         newestOnTop 
       />
+      
+      {Meteor.userId() && localStorage.getItem("tdfollow_help") !== "checked" ?
+        <div id='tdfollow_tag' className='helpFloatTag floatTR'>
+          <p><big>➚</big></p>
+          <p>Click<br />to open user menu</p>
+          <p>Right Click<br />to go to current or last project</p>
+          <p><button
+            onClick={()=>{
+              document.querySelector('#tdfollow_tag')?.classList.add('hide');
+              localStorage.setItem("tdfollow_help", "checked");
+            }}
+          >Got It</button></p>
+        </div>
+      :null}
     </div>
   );
 };

@@ -1,30 +1,47 @@
-import React from 'react';
+import React, { useState } from 'react';
 import moment from 'moment';
+import Pref from '/client/global/pref.js';
+import { toCap } from '/client/utility/Convert';
 
 
 const InboxPanel = ({ app, user, users })=> {
   
-  const orderedInbox = user.inbox.sort((t1, t2)=>
-                        moment(t1.time).isAfter(t2.time) ? -1 :
-                        moment(t1.time).isBefore(t2.time) ? 1 : 0 );
+  const unice = toCap(user.username.replace(Pref.usrCut, " "), true);
+  
+  function bulkAction(action) {
+    Meteor.call(action, (error)=>{
+      error && console.log(error);
+    });
+  }
   
   return(
     <div className='space5x5'>
-      {user.inbox.length === 0 && 
-        <p className='centreText medBig darkgrayT'>No Messages <i className="fas fa-inbox"></i></p>}
-      <div className='wide'>
-        {orderedInbox.map( (entry)=> (
-          <div key={entry.notifyKey} className={`inboxCard light ${entry.unread ? 'new' : ''}`}>
-            <div><i>{entry.title}</i>
-              <span>
-                <RemoveNotifyButton nKey={entry.notifyKey} />
-                <UnReadButton nKey={entry.notifyKey} unread={entry.unread} />
-              </span>
-            </div>
-            <span>{entry.detail}</span>
-            <div>{moment(entry.time).calendar()}</div>
-          </div>
+      <p className='rightText vmargin'><a href={'/ne'} target='_blank'>Open Standalone Message Center</a></p>
+      {user.inbox.length === 0 &&
+        <p className='centreText medBig darkgrayT'>No Messages <i className="fas fa-inbox"></i></p>
+      }
+      <div className='wide max875'>
+        {(user.inbox || []).slice(0).reverse().map( (entry)=> (
+          <InboxCardWrap 
+            key={entry.notifyKey} 
+            entry={entry}
+            unice={unice} 
+          />
         ))}
+        {user.inbox.length > 0 &&
+          <div className='inboxCard light vmargin'>
+            <div><i></i>
+              <div>
+                <button onClick={()=>bulkAction('setReadAllInbox')}
+                ><i className="far fa-circle-check nT gapR"></i>READ ALL
+                </button>
+                <button onClick={()=>bulkAction('removeAllInbox')}
+                ><i className="fas fa-trash-can redT gapR"></i>DELETE ALL
+                </button>
+              </div>
+            </div>
+          </div>
+        }
       </div>
     </div>
   );
@@ -32,7 +49,45 @@ const InboxPanel = ({ app, user, users })=> {
 
 export default InboxPanel;
 
-
+const InboxCardWrap = ({ entry, unice })=> {
+  
+  const [ re, reSet ] = useState(false);
+  
+  function sendReply(uID, unice, text) {
+    Meteor.call('sendUserDM', uID, unice, text, true, (err)=>{
+      err && console.log(err);
+      reSet(false);
+    });
+  }
+  
+  return(
+    <div key={entry.notifyKey} className={`inboxCard light ${entry.unread ? 'new' : ''}`}>
+      <div><i>{entry.title}</i>
+        <div>
+          {entry.replyId &&
+            <button title='reply' onClick={()=>reSet(!re)}
+              ><i className="fas fa-reply blueT"></i>
+            </button>
+          }
+          <UnReadButton nKey={entry.notifyKey} unread={entry.unread} />
+          <RemoveNotifyButton nKey={entry.notifyKey} />
+        </div>
+      </div>
+      <span>{entry.detail}</span>
+      <div>{moment(entry.time).calendar()}</div>
+      {re && 
+        <p>{Pref.autoreply.map( (rep, ix)=>(
+          <button 
+            key={ix}
+            className='chip'
+            onClick={()=>sendReply(entry.replyId, unice, rep)}
+          >{rep}</button>
+        ))}</p>
+      }
+    </div>
+  );
+};
+  
 const UnReadButton = ({nKey, unread})=> {
   
   function changeRead(nKey, read) {
@@ -48,13 +103,13 @@ const UnReadButton = ({nKey, unread})=> {
           key={'readButton' + nKey}
           title='read'
           onClick={()=>changeRead(nKey, unread)}
-        ><i className="far fa-circle fa-lg nT"></i></button>
+        ><i className="far fa-circle nT"></i></button>
       :
         <button
           key={'unreadButton' + nKey}
           title='unread'
           onClick={()=>changeRead(nKey, unread)}
-        ><i className="fas fa-circle fa-lg nT"></i></button>
+        ><i className="fas fa-circle nT"></i></button>
       }
     </span>
   );
@@ -74,7 +129,7 @@ const RemoveNotifyButton = ({nKey})=> {
         key={'removeButton' + nKey}
         title='remove'
         onClick={()=>removeNotify(nKey)}
-      ><i className="far fa-trash-can fa-lg redT"></i></button>
+      ><i className="far fa-trash-can redT"></i></button>
     </span>
   );
 };

@@ -49,6 +49,35 @@ Accounts.onCreateUser((options, user) => {
   }
 });
 
+Accounts.onLogin( ()=>{
+	const orgKey = Meteor.user().orgKey;
+	const userId = Meteor.userId();
+	
+	Meteor.defer( ()=>{
+    CacheDB.upsert({dataName: 'userLogin_status'}, {
+      $set : {
+        orgKey: orgKey,
+        lastUpdated: new Date(),
+        dataName: 'userLogin_status'
+      },
+      $push : {
+        dataArray: userId
+    }});
+  });
+});
+
+Accounts.onLogout( ()=>{
+  const userId = Meteor.userId();
+  
+  Meteor.defer( ()=>{
+    CacheDB.update({dataName: 'userLogin_status'}, {
+      $pull : { 
+        dataArray: userId
+      }
+    });
+  });
+});
+
 Meteor.methods({
   
   verifyOrgJoin(orgName, pin) {
@@ -412,8 +441,9 @@ Meteor.methods({
   },
   
   setNotifyAsRead(nKey, read) {
+    const uID = Meteor.userId();
     const change = !read;
-    Meteor.users.update({_id: Meteor.userId(), 'inbox.notifyKey': nKey}, {
+    Meteor.users.update({_id: uID, 'inbox.notifyKey': nKey}, {
       $set: {
         'inbox.$.unread': change,
       }
@@ -433,6 +463,43 @@ Meteor.methods({
       }
     });
   },
+  
+  setReadAllInbox() {
+    const user = Meteor.users.findOne({_id: Meteor.userId()});
+    const inbox = (user?.inbox || []).filter( x => x.unread === true );
+    for(let ix of inbox) {
+      Meteor.users.update({_id: Meteor.userId(), 'inbox.notifyKey': ix.notifyKey}, {
+        $set: {
+          'inbox.$.unread': false,
+        },
+      });
+    }
+  },
+  removeAllInbox() {
+    Meteor.users.update(Meteor.userId(), {
+      $set : {
+        inbox: []
+      }
+    });
+  },
+  
+  // readFeedback(uID, nKey) {
+  //   const user = Meteor.users.findOne({_id: uID});
+  //   const notify = (user?.inbox || []).find( x => x.notifyKey === nKey );
+  //   if(notify && notify.type === 'direct' && notify.replyId) {
+  //     Meteor.users.update(uID, {
+  //       $push : { inbox : {
+  //         notifyKey: new Meteor.Collection.ObjectID().valueOf(),
+  //         keyword: 'replyread',
+  //         type: 'replyread',
+  //         title: notify.title,
+  //         detail: `${notify.title} has read "${notify.detail.slice(0, 25)}"...`,
+  //         time: new Date(),
+  //         unread: true,
+  //       }
+  //     }});
+  //   }
+  // },
   		
   clearBreadcrumbsRepair() {
     Meteor.users.update(Meteor.userId(), {
@@ -479,7 +546,10 @@ Meteor.methods({
     return user ? user.username : 'unknown';
   },
   
-  sendUserDM(userID, title, message) {
+  sendUserDM(userID, title, message, rere) {
+    const orgKey = Meteor.user().orgKey;
+    const thisID = Meteor.userId();
+    const sentTime = new Date();
     const mssgTitle = title || '';
     const mssgDetail = message || '';
     try {
@@ -490,12 +560,66 @@ Meteor.methods({
           type: 'direct',
           title: mssgTitle,
           detail: mssgDetail,
-          time: new Date(),
-          unread: true
+          time: sentTime,
+          unread: true,
+          replyId: thisID,
+          reply: rere
         }
       }});
+      
+      Meteor.defer( ()=>{
+        CacheDB.upsert({dataName: 'internalDM_log'}, {
+          $set : {
+            orgKey: orgKey,
+            lastUpdated: new Date(),
+            dataName: 'internalDM_log'
+          },
+          $push : {
+            dataArray: {
+              time: sentTime,
+              fromId: thisID,
+              fromName: mssgTitle,
+              toId: userID,
+              content: mssgDetail
+            }
+        }});
+      });
+      
+      if(!CacheDB.findOne({dataName: 'userLogin_status', dataArray: { $in: [userID]}})) {
+        return 'ether';
+      }else{
+        return true;
+      }
     }catch (err) {
       throw new Meteor.Error(err);
+    }
+  },
+  
+  fetchDMLog() {
+    if(Roles.userIsInRole(Meteor.userId(), ['admin','peopleSuper'])) {
+      const cache = CacheDB.findOne({dataName: 'internalDM_log'});
+      const logs = !cache ? [] : cache.dataArray;
+      
+      return JSON.stringify(logs);
+    }else{ 
+      return JSON.stringify([]);
+    }
+  },
+  
+  removeOldDMLog() {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      const cutoff = ( d => new Date(d.setDate(d.getDate()-90)) )(new Date);
+
+      CacheDB.update({dataName: 'internalDM_log'}, {
+        $pull : { 
+          dataArray: { 
+            time: { 
+              $lt: cutoff
+            }
+          }
+        }
+      });
+      return true;
     }
   }
   

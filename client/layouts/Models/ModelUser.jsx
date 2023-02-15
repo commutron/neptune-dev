@@ -12,9 +12,14 @@ const ModelUser = ({
   users
 })=> {
   
+  const unice = toCap(username.replace(Pref.usrCut, " "), true);
+  const tpool = user.tidepools;
+  const recent = [...new Set(tpool)];
+  
+  const [ ibxLength, ibxSet ] = useState(0);
   useEffect( ()=> {
-    InboxToastWatch(user);
-  }, [user.inbox]);
+    ibxSet(InboxToastWatch(user, unice, ibxLength) || 0);
+  }, [user.inbox?.length]);
   
   const close = ()=> {
     const dialog = document.getElementById('userRightPanel');
@@ -39,10 +44,6 @@ const ModelUser = ({
 	  }
 	};
 	
-	const unice = toCap(username.replace(Pref.usrCut, " "), true);
-  const tpool = user.tidepools;
-  const recent = [...new Set(tpool)];
-	
   return(
     <dialog 
       id='userRightPanel'
@@ -62,7 +63,7 @@ const ModelUser = ({
             <button
               onContextMenu={(e)=>{
                 e.preventDefault();
-                !engaged ? close() : go(engaged?.tName);
+                !engaged ? user.tidepools ? go(user.tidepools?.[0]) : close() : go(engaged?.tName);
               }}
               onClick={()=>close()}
               className={`taskLink followTask ${!engaged ? '' : 'fGreen'}`}
@@ -110,9 +111,9 @@ const ModelUser = ({
         <Divider />
         
         <UserMenuElement
-          title='Notifications'
+          title='Messages'
           doFunc={()=>FlowRouter.go('/user?slide=4')}
-          icon='fa-solid fa-bell'
+          icon='fa-solid fa-message'
           tag={user.inbox?.length}
         />
         
@@ -195,17 +196,29 @@ const NotifyMini = ({ unice, inbox, users })=> {
     e.preventDefault();
   
     const message = this.typedMssg.value;
-    const userVal = uList.find( u => u.label === this.userSend.value)?.value;
+    const tousrnm = this.userSend.value;
+    
+    const userVal = uList.find( u => u.label === tousrnm)?.value;
     
     if(userVal) {
-      Meteor.call('sendUserDM', userVal, unice, message, (error)=>{
+      Meteor.call('sendUserDM', userVal, unice, message, (error, re)=>{
         error && console.log(error);
         this.typedMssg.value = "";
+        
+        if(re === 'ether') {
+          toast(
+            <div className='line15x'>
+              <i className="fa-solid fa-ghost fa-lg fa-fw gapR"></i><b>{tousrnm} Is Away</b><br />
+              <p><small>Message is delivered but the recipient is not currently logged in.</small></p>
+            </div>, {
+            autoClose: 10000,
+            icon: false
+          });
+        }
       });
     }
   }
 	
-  
   return(
     <div>
       <div className='notifytabs'>
@@ -247,10 +260,13 @@ const NotifyMini = ({ unice, inbox, users })=> {
               >Send</button>
             </p>
           </form>
+          
+          <p className='smaller darkgrayT line15x'
+          >Messages are temporarily logged for the purposes of management oversight and user safety.  Message logs can be accessed by administrators and management.  Logs are subject to Commutron policy and Canadian privacy laws.  Logs are automatically deleted after 90 days.</p>
         </div>
         :
         <div>
-          {(inbox || []).reverse().map( (entry)=> (
+          {(inbox || []).slice(0).reverse().map( (entry)=> (
             <div key={entry.notifyKey} className={`mininboxCard ${entry.unread ? 'new' : ''}`}>
               <div><i>{entry.title}</i></div>
               <span>{entry.detail}</span>

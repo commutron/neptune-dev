@@ -17,10 +17,10 @@ const Slides = ({ menu, slide, disable, extraClass, children })=> {
     <div className='slidesLayout'>
       <div className='slidesMenu forceScrollStyle noPrint'>
         {menu.map( (entry, index)=>{
-          let clss =  section === index ? 
+          let clss =  section == index ? 
                       'slideMenuButton cap slideOn' : 
                       'slideMenuButton cap slideOff';
-          return (
+          return(
             <button
               key={index}
               onClick={()=>handleClick(index)}

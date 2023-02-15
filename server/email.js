@@ -104,7 +104,7 @@ function sortInternalRecipient(emailUserIDs, subject, date, title, body, asid, f
       subject: subject,
       to: addresses.toString(),
       cc: undefined,
-      text: body
+      text: title + ' - ' + body
     });
   }
   
@@ -288,21 +288,22 @@ Meteor.methods({
   },
   
   fetchEmailLog() {
-    if(Roles.userIsInRole(Meteor.userId(), ['admin','run','kitting','sales'])) {
+    if(Roles.userIsInRole(Meteor.userId(), ['admin','peopleSuper'])) {
       const logs = EmailDB.find({}).fetch();
       
       const flat = JSON.stringify(logs);
       
       return flat;
+    }else{ 
+      return JSON.stringify([]);
     }
   },
   
   removeEmailLog() {
-    if(Roles.userIsInRole(Meteor.userId(), ['admin','run','kitting'])) {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
       EmailDB.remove({});
       return true;
     }
   }
-  
   
 });

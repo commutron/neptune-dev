@@ -1,7 +1,5 @@
 import React, { Fragment } from 'react';
-// import { withTracker } from 'meteor/react-meteor-data';
 import Pref from '/client/global/pref.js';
-// import { ToastContainer } from 'react-toastify';
 import ModelUser from '/client/layouts/Models/ModelUser';
 
 const TideFollow = ({ tOpen, canMulti })=> {
@@ -65,7 +63,6 @@ const TideFollow = ({ tOpen, canMulti })=> {
 	
   return(
     <Fragment>
-        
       <div
         id='tideF0ll0w1'
         className='proRight'
@@ -73,7 +70,7 @@ const TideFollow = ({ tOpen, canMulti })=> {
           aria-label={tootip}
           onContextMenu={(e)=>{
             e.preventDefault();
-            !engaged ? openPanel() : go(engaged?.tName);
+            !engaged ? user.tidepools ? go(user.tidepools?.[0]) : openPanel() : go(engaged?.tName);
           }}
           onClick={()=>openPanel()}
           className={`taskLink followTask tideFollowTip ${!engaged ? '' : 'fGreen'}`}
@@ -107,14 +104,3 @@ function areEqual(prevProps, nextProps) {
 }
 
 export default React.memo(TideFollow, areEqual);
-
-// export default withTracker( ({ tOpen, canMulti }) => {
-//   let user = Meteor.user();
-  
-//   return {
-//     tOpen: tOpen, 
-//     canMulti: canMulti,
-//     user: user,
-//     // users: Meteor.users.find({}, {sort: {username:1}}).fetch()
-//   };
-// })(TideFollow);

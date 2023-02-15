@@ -631,9 +631,9 @@ main {
 }
 /* ////////////////////////// */
 
-.gap { margin: 0 5px; }
-.gapR { margin: 0 5px 0 0; }
-.gapL { margin: 0 0 0 5px; }
+.gap { margin-inline: 5px; }
+.gapR { margin-inline-end: 5px; }
+.gapL { margin-inline-start: 5px; }
 .gapsR { row-gap: 2vh; }
 .gapsC { column-gap: 2vw; }
 
@@ -967,6 +967,11 @@ n-sm-model-content {
 .overscroll { margin-bottom: 5vh; }
 .overscroll2x { margin-bottom: 10vh; }
 
+.topLine {
+  padding-top: 0.5rem;
+  border-top: 1px solid lightgray;
+  margin-top: 0.5rem;
+}
 .bottomLine {
   padding-bottom: 0.5rem;
   border-bottom: 1px solid lightgray;
@@ -992,6 +997,7 @@ n-sm-model-content {
 }
 
 .inboxCard {
+  position: relative;
   margin-bottom: 1rem;
   background-color: rgb(40,40,40);
   border: 1px solid;
@@ -1011,7 +1017,7 @@ n-sm-model-content {
   margin-block: 0.5rem;
   margin-inline: 1rem;
 }
-.inboxCard > div:first-child {
+.inboxCard > div:first-of-type {
   display: flex;
   justify-content: space-between;
   font-size: 1.2rem;
@@ -1020,12 +1026,18 @@ n-sm-model-content {
   padding-block: 0.5rem;
   text-indent: 1ch;
 }
-.inboxCard > div:last-child {
+.inboxCard > div:last-of-type {
   font-size: 0.8rem;
   margin-inline: 0.4rem;
   padding: 0.4rem;
   text-align: end;
   border-top: 1px solid rgb(0,0,0,0.4);
+}
+.inboxCard > p:last-child {
+  margin: 0;
+  padding: 0.2rem 0.4rem;
+  border-top: 1px solid rgb(0,0,0,0.3);
+  background-color: rgb(35,35,35);
 }
 .inboxCard.light > div:first-child {
   font-size: larger;
@@ -1034,14 +1046,18 @@ n-sm-model-content {
 .inboxCard.light > span {
   font-size: inherit;
 }
-.inboxCard.light > div:last-child {
+.inboxCard.light > div:last-of-type {
   font-size: smaller;
   border-top: 1px solid rgb(200,200,200,0.4);
+}
+.inboxCard.light > p:last-child {
+  border-top: 1px solid rgb(200,200,200,0.3);
+  background-color: transparent;
 }
 .inboxCard button {
 	min-width: 1rem;
   min-height: 1rem;
-  padding-inline: 0.5rem;
+  margin-inline: 0.5rem;
   font-size: 1rem;
   border-color: transparent;
   background-color: transparent;
@@ -1547,4 +1563,46 @@ n-col-table-head > span {
     height: 5.5vmin;
     font-size: 2.25vmin;
   }
+}
+
+.helpFloatTag {
+  display: block;
+  position: absolute;
+  z-index: 1000;
+  max-width: 225px;
+  padding: 0 1rem;
+  font-family: cursive;
+  overflow: hidden;
+  white-space: break-spaces;
+  text-align: center;
+  background-color: rgb(0,0,0);
+  border: 10px solid rgb(0,0,0,0.5);
+  border-radius: 25px;
+  box-shadow: 0 0 25px 10px rgba(0,0,0);
+}
+.floatTR {
+  top: 6%;
+  right: 3%;
+}
+.helpFloatTag p,
+.helpFloatTag button {
+  color: white;
+  font-size: 1.1em;
+  text-shadow: 7px 8px 9px rgb(0 0 0);
+}
+.helpFloatTag p:has(big),
+.helpFloatTag p:has(big) > big {
+  font-size: 2.25em;
+  margin: 0;
+  padding: 0;
+  line-height: 0.75;
+  text-align: right;
+}
+.helpFloatTag button {
+  font-family: monospace;
+  background-color: transparent;
+  padding: 2px 4px;
+  border-width: 1px 1px 2px 1px;
+  border-style: solid;
+  border-color: white;
 }

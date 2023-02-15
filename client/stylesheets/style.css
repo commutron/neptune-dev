@@ -42,8 +42,11 @@
   box-shadow: none;
 }
 
-.pop {
-  box-shadow: var(--dropShadow1);
+.pop { box-shadow: var(--dropShadow1); }
+.chip { 
+  margin: 4px;
+  padding: 2px 4px;
+  box-shadow: var(--dropShadow000);
 }
 
 .transparent {

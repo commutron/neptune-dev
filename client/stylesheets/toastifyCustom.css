@@ -75,10 +75,10 @@
     left: 0;
     margin: 0;
   }
-  /*.Toastify__toast-container--top-left, .Toastify__toast-container--top-center, .Toastify__toast-container--top-right {*/
-  /*  top: 0;*/
-  /*  transform: translateX(0);*/
-  /*}*/
+  .Toastify__toast-container--top-left, .Toastify__toast-container--top-center, .Toastify__toast-container--top-right {
+    top: 0;
+    transform: translateX(0);
+  }
   .Toastify__toast-container--bottom-left, .Toastify__toast-container--bottom-center, .Toastify__toast-container--bottom-right {
     bottom: 0;
     transform: translateX(0);

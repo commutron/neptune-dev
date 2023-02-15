@@ -1,4 +1,5 @@
 .nesoMain {
+	position: relative;
 	display: grid;
   max-width: 100vw;
   grid-template-rows: auto 2fr;
@@ -15,7 +16,7 @@
 	display: grid;
   max-width: 100vw;
   grid-template-rows: 2fr auto;
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: minmax(250px, 1fr) 2fr;
   grid-template-areas: 
     'nesoleft nesoright'
     'nesofoot nesofoot';
@@ -25,6 +26,7 @@
 
 .nesoHead {
 	grid-area: nesohead;
+	width: 100%;
 }
 .nesoLeft {
 	grid-area: nesoleft;

@@ -1,17 +1,16 @@
 import React, { Fragment, useEffect, useState }from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
+import { toast, ToastContainer } from 'react-toastify';
 import moment from 'moment';
-import { ToastContainer } from 'react-toastify';
-import InboxToastWatch from '/client/utility/InboxToastPop.js';
 import Pref from '/client/global/pref.js';
 import { toCap } from '/client/utility/Convert';
 
-import Spin, { SpinWrap } from '/client/components/tinyUi/Spin';
+import { SpinWrap } from '/client/components/tinyUi/Spin';
 import SignIn from '/client/components/bigUi/AccountsUI/SignIn';
 
 import './style';
 
-const NesoView = ({ login, uID, user, username, users })=> {
+const NesoView = ({ login, user, username, users })=> {
 	
 	if(Meteor.loggingIn()) {
     return(
@@ -59,15 +58,17 @@ const NesoView = ({ login, uID, user, username, users })=> {
     
   document.querySelector(':root').style
     .setProperty('--neptuneColor', user.customColor || null);
-
+  
 	const unice = toCap(username.replace(Pref.usrCut, " "), true);
-	
+  
 	return(
 	  <Fragment>
 			<ToastContainer
-        position="top-center"
+        position="top-right"
         theme='colored'
         newestOnTop
+        pauseOnVisibilityChange
+        pauseOnHover
       />
       <div className='nesoMain darkTheme'> 
   			<TopBar />
@@ -75,18 +76,17 @@ const NesoView = ({ login, uID, user, username, users })=> {
   			<div className='nesoCenter thinScroll'>
     			<NotifySend unice={unice} users={users} />
     				
-    			<NotifyList user={user} />
+    			<NotifyList user={user} unice={unice} />
     			
     			<BotBar unice={unice} />
     		</div>
   			
   			<NavBar user={true} />
   		</div>
-		</Fragment>
+  	</Fragment>
   );
 };
-	
-	
+
 	
 export default withTracker( ({}) => {
   let login = Meteor.userId() ? true : false;
@@ -123,36 +123,93 @@ const BotBar = ({unice})=> (
 );
 
 const NavBar = ({ user })=> {
-  const [ pos, posSet ] = useState(undefined);
   if(user) {
     return(
     	<div className='nesoNav textbar noCopy'>
-    	  <FakeLink name='Send' linkid='#nesend' on={!pos || pos == '#nesend'} posSet={posSet} /> 
-    	  <FakeLink name='Inbox' linkid='#neinbox' on={pos == '#neinbox'} posSet={posSet} /> 
-    	  <FakeLink name='Links' linkid='#nelinks' on={pos == '#nelinks'} posSet={posSet} /> 
+    	  <FakeLink name='Send' linkid='#nesend' /> 
+    	  <FakeLink name='Inbox' linkid='#neinbox' /> 
+    	  <FakeLink name='Links' linkid='#nelinks' /> 
     	</div>
     );
   }
   return(
   	<div className='nesoNav textbar noCopy'>
-  	  <FakeLink name='Sign In' linkid='#nesignin' on={!pos || pos == '#nesignin'} posSet={posSet} /> 
-  	  <FakeLink name='Links' linkid='#nelinks' on={pos == '#nelinks'} posSet={posSet} /> 
+  	  <FakeLink name='Sign In' linkid='#nesignin' /> 
+  	  <FakeLink name='Links' linkid='#nelinks' /> 
   	</div>
   );
 };
-const FakeLink = ({ name, linkid, on, posSet })=> (
+const FakeLink = ({ name, linkid })=> (
   <button 
-    className={`foottext textclick navclick ${on ? 'on' : ''}`}
-    onClick={()=>{window.location.href=linkid;posSet(linkid)}}
+    className='foottext textclick navclick'
+    onClick={()=>window.location.href=linkid}
     type="button"
   >{name}</button>
 );
 
-const NotifyList = ({ user })=> {
+const NotifyList = ({ user, unice })=> {
 	
+	const [ ibxLength, ibxSet ] = useState(0);
 	useEffect( ()=> {
-    InboxToastWatch(user, 5000, true);
-  }, [user.inbox]);
+    if(user?.inbox) {
+      for( let note of user.inbox ) {
+        if(note.unread) {
+          if(user.inbox.length > ibxLength) {
+            const cue = note.reply ? '/UIAlert_short.mp3' : '/UIAlert_long.mp3';
+            const audioObj = new Audio(cue);
+            audioObj.addEventListener("canplay", event => {
+              audioObj.play();
+            });
+            window.location.href='#neinbox';
+          }
+        }
+      }
+      ibxSet(user.inbox.length);
+    }
+  }, [user.inbox?.length]);
+  
+  function bulkAction(action) {
+    Meteor.call(action, (error)=>{
+      error && console.log(error);
+    });
+  }
+  
+  return(
+    <div id="neinbox" className='nesoRight'>
+      <i className='texttitle subtext'>Inbox</i>
+      <div className='inboxFeed thinScroll'>
+        {!(user.inbox || []).length &&
+          <p className='centreText foottext'>No Messages <i className="fas fa-inbox"></i></p>
+        }
+        {(user.inbox || []).slice(0).reverse().map( (entry)=> (
+          <NotifyCardWrap 
+            key={entry.notifyKey} 
+            entry={entry}
+            unice={unice} 
+          />
+        ))}
+        {(user.inbox || []).length > 0 &&
+          <div className='inboxCard vmargin'>
+            <div><i></i>
+              <div>
+                <button onClick={()=>bulkAction('setReadAllInbox')}
+                ><i className="far fa-circle-check darkgrayT fade gapR"></i>READ ALL
+                </button>
+                <button onClick={()=>bulkAction('removeAllInbox')}
+                ><i className="fas fa-trash-can darkgrayT fade gapR"></i>DELETE ALL
+                </button>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  );
+};
+
+const NotifyCardWrap = ({ entry, unice })=> {
+  
+  const [ re, reSet ] = useState(false);
   
   function removeNotify(nKey) {
     Meteor.call('removeNotify', nKey, (error)=>{
@@ -165,44 +222,54 @@ const NotifyList = ({ user })=> {
       error && console.log(error);
     });
   }
-    
+  
+  function sendReply(uID, unice, text) {
+    Meteor.call('sendUserDM', uID, unice, text, true, (err)=>{
+      err && console.log(err);
+      reSet(false);
+    });
+  }
+  
   return(
-    <div id="neinbox" className='nesoRight'>
-      <i className='texttitle subtext'>Inbox</i>
-      <div className='inboxFeed thinScroll'>
-        {!(user.inbox || []).length &&
-          <p className='centreText foottext'>No Messages <i className="fas fa-inbox"></i></p>
-        }
-        {(user.inbox || []).reverse().map( (entry)=> (
-          <div key={entry.notifyKey} className={`inboxCard ${entry.unread ? 'new' : ''}`}>
-            <div><i>{entry.title}</i>
-              <span>
-                <button
-                  key={'removeButton' + entry.notifyKey}
-                  title='remove'
-                  onClick={()=>removeNotify(entry.notifyKey)}
-                ><i className="far fa-trash-can darkgrayT fade"></i></button>
-                {entry.unread ?
-                  <button
-                    key={'readButton' + entry.notifyKey}
-                    title='read'
-                    onClick={()=>changeRead(entry.notifyKey, true)}
-                  ><i className="fas fa-circle nT"></i></button>
-                :
-                  <button
-                    key={'unreadButton' + entry.notifyKey}
-                    title='unread'
-                    onClick={()=>changeRead(entry.notifyKey, false)}
-                  ><i className="far fa-circle darkgrayT fade"></i></button>
-                }
-              </span>
-            </div>
-            <span>{entry.detail}</span>
-            <div>{moment(entry.time).calendar()}</div>
-          </div>
-        ))}
+    <div className={`inboxCard ${entry.unread ? 'new' : ''}`}>
+      <div><i>{entry.title}</i>
+        <div>
+          {entry.replyId &&
+            <button title='reply' onClick={()=>reSet(!re)}
+              ><i className="fas fa-reply darkgrayT fade"></i>
+            </button>
+          }
+          {entry.unread ?
+            <button
+              key={'readButton' + entry.notifyKey}
+              title='read'
+              onClick={()=>changeRead(entry.notifyKey, true)}
+            ><i className="fas fa-circle nT"></i></button>
+          :
+            <button
+              key={'unreadButton' + entry.notifyKey}
+              title='unread'
+              onClick={()=>changeRead(entry.notifyKey, false)}
+            ><i className="far fa-circle darkgrayT fade"></i></button>
+          }
+          <button
+            key={'removeButton' + entry.notifyKey}
+            title='remove'
+            onClick={()=>removeNotify(entry.notifyKey)}
+          ><i className="far fa-trash-can darkgrayT fade"></i></button>
+        </div>
       </div>
-
+      <span>{entry.detail}</span>
+      <div>{moment(entry.time).calendar()}</div>
+      {re && 
+        <p>{Pref.autoreply.map( (rep, ix)=>(
+          <button 
+            key={ix}
+            className='chip'
+            onClick={()=>sendReply(entry.replyId, unice, rep)}
+          >{rep}</button>
+        ))}</p>
+      }
     </div>
   );
 };
@@ -234,12 +301,25 @@ const NotifySend = ({ unice, users })=> {
     e.preventDefault();
     
     const message = this.typedMssg.value;
-    const userVal = uList.find( u => u.label === this.userInput.value)?.value;
+    const tousrnm = this.userInput.value;
+    
+    const userVal = uList.find( u => u.label === tousrnm)?.value;
     
     if(userVal) {
-      Meteor.call('sendUserDM', userVal, unice, message, (error)=>{
+      Meteor.call('sendUserDM', userVal, unice, message, (error, re)=>{
         error && console.log(error);
         this.typedMssg.value = "";
+        
+        if(re === 'ether') {
+          toast(
+            <div className='line15x'>
+              <i className="fa-solid fa-ghost fa-lg fa-fw gapR"></i><b>{tousrnm} Is Away</b><br />
+              <p><small>Message is delivered but the recipient is not currently logged in.</small></p>
+            </div>, {
+            autoClose: 10000,
+            icon: false
+          });
+        }
       });
     }
   }
@@ -283,8 +363,10 @@ const NotifySend = ({ unice, users })=> {
               className='darkMenu'
             >Send</button>
           </p>
+        
+          <p className='vmargin smaller darkgrayT line15x'
+          >Messages are temporarily logged for the purposes of management oversight and user safety.  Message logs can be accessed by administrators and management.  Logs are subject to Commutron policy and Canadian privacy laws.  Logs are automatically deleted after 90 days.</p>
         </form>
-
       </div>
     </div>
   );

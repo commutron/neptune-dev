@@ -35,6 +35,12 @@ const CRONSlide = ()=> {
             <td>Everyday</td>
             <td>6:01</td>
             <td>{isLocal('6:01')}</td>
+            <td>Clear 90+ Day Message Log</td>
+          </tr>
+          <tr>
+            <td>Everyday</td>
+            <td>6:02</td>
+            <td>{isLocal('6:02')}</td>
             <td>Maintenance Auto-Scheduler</td>
           </tr>
           <tr>

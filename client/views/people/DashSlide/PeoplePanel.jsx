@@ -5,7 +5,7 @@ import UserNice from '/client/components/smallUi/UserNice';
 import PersonChunk from './PersonChunk';
 
 const PeoplePanel = ({ 
-  eUsers, dUsers, openTBlockState, traceDT,
+  eUsers, lUsers, dUsers, openTBlockState, traceDT,
   updateBranches, removeBranch, update, isDebug
 })=> {
   
@@ -41,21 +41,27 @@ const PeoplePanel = ({
           )})}
         </tbody>
       </table>
-
-      <div className='w100 vmargin cap'>
-        <h3 className='med indent10'>{Pref.engagedNot}</h3>
-        <ul className='autoGrid'>
-          {dUsers.map( (entry)=>{
-            if(entry.proTimeShare && entry.proTimeShare[0].timeAsDecimal > 0) {
-              return(
-                <li key={entry._id} className='leftText line2x'>
-                  <UserNice id={entry._id} />
-                </li>
-          )}})}
-        </ul>
-      </div>
+    
+      <IdleList userList={lUsers} title={`Logged In - ${Pref.engagedNot}`} />
+      
+      <IdleList userList={dUsers} title='Logged Out' />
     </div>
   );
 };
 
 export default PeoplePanel;
+
+const IdleList = ({ userList, title })=> (
+  <div className='w100 vmargin cap'>
+    <h3 className='med indent10'>{title}</h3>
+    <ul className='autoGrid'>
+      {(userList || []).map( (entry)=>{
+        const np = entry.proTimeShare && entry.proTimeShare[0].timeAsDecimal > 0;
+        return(
+          <li key={entry._id} className='leftText line2x'>
+            <UserNice id={entry._id} />{np && <em className='smTxt' title='non-production'> (NP)</em>}
+          </li>
+      )})}
+    </ul>
+  </div>
+);

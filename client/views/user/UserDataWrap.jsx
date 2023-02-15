@@ -46,7 +46,7 @@ const UserDataWrap = ({
             <b><i className='fas fa-gears fa-fw gapR'></i>Equipment</b>,
             <b><i className='fas fa-sliders fa-fw gapR'></i>Preferences</b>,
             <b><i className='fas fa-key fa-fw gapR'></i>Access & Privacy</b>,
-            <b><i className='fas fa-bell fa-fw gapR'></i>Notifications{iL}</b>
+            <b><i className='fas fa-message fa-fw gapR'></i>Messages{iL}</b>
           ]}
           slide={slide}>
             

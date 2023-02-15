@@ -6,7 +6,7 @@ import StreamLayout from '/client/layouts/StreamLayout';
 import UpstreamView from '/client/views/upstream/UpstreamTask/UpstreamView';
 import CompSearchData from '/client/views/upstream/CompSearch/CompSearchData';
 import CompValuesSlide from '/client/views/upstream/CompValues/CompValuesSlide';
-import EmailLogSlide from '/client/views/upstream/EmailLogSlide';
+import EmailRec from '/client/views/upstream/EmailRec';
 import ReportShort from '/client/views/upstream/ReportShort';
 
 const UpstreamWrap = ({ 
@@ -73,17 +73,17 @@ const UpstreamWrap = ({
     );
   }
   
-  if(view === 'emaillog' && (isAuth || Roles.userIsInRole(Meteor.userId(), 'admin')) ) {
+  if(view === 'emailrec' && (isAuth || Roles.userIsInRole(Meteor.userId(), 'admin')) ) {
     return (
       <StreamLayout
         user={user}
         app={app}
-        title='Email Log'
+        title='PCB Emails'
         subLink={view}
         action={false}
         isAuth={isAuth}
       >
-        <EmailLogSlide
+        <EmailRec
           app={app}
           users={users}
         />

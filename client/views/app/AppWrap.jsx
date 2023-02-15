@@ -35,9 +35,9 @@ const AppWrap = ({ isAdmin, isDebug, users, app })=> {
           <b><i className='fas fa-times-circle fa-fw gapR'></i>NonCon Types</b>,
           <b><i className='fas fa-ruler-horizontal fa-fw gapR'></i>Scales & Tags</b>,
           <b><i className='fas fa-link fa-fw gapR'></i>Page Links</b>,
-          <b><i className='fas fa-toolbox fa-fw gapR'></i>Data Repair</b>,
           <b><i className='fas fa-bell fa-fw gapR'></i>Notifications</b>,
           <b><i className='fas fa-robot fa-fw gapR'></i>CRON Jobs</b>,
+          <b><i className='fas fa-toolbox fa-fw gapR'></i>Data Repair</b>,
           <b><i className='fas fa-copyright fa-fw gapR'></i>Meta</b>
         ]}>
           
@@ -55,9 +55,9 @@ const AppWrap = ({ isAdmin, isDebug, users, app })=> {
         <NCTypeSlide key={4} app={app} />
         <ScalesTagsSlide key={5} app={app} />
         <AddressSlide key={6} app={app} />
-        <DataRepair key={7} app={app} users={users} />
         <NotifySlide key={8} app={app} />
         <CRONSlide key={9} />
+        <DataRepair key={7} app={app} users={users} />
         <MetaSlide key={10} />
         
       </Slides>

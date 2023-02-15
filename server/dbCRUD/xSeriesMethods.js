@@ -319,7 +319,7 @@ Meteor.methods({
     }
   },
   
-  removeNCX(seriesId, ncKey, override) {
+  removeNCX(seriesId, ncKey) {
     const auth = Roles.userIsInRole(Meteor.userId(), ['remove', 'qa']);
     if(auth) {
       XSeriesDB.update({_id: seriesId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {

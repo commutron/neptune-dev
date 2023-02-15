@@ -4,11 +4,12 @@ import NumStatRing from '/client/components/charts/Dash/NumStatRing';
 import PeoplePanel from './PeoplePanel';
 
 
-const DashSlide = ({ app, user, users, traceDT, brancheS, isDebug })=> {
+const DashSlide = ({ users, loggedIn, traceDT, brancheS, isDebug })=> {
   
   const [ update, forceUpdate] = useState(false);
   
   const [ eUsersState, eUsersSet ] = useState([]);
+  const [ lUsersState, lUsersSet ] = useState([]);
   const [ dUsersState, dUsersSet ] = useState([]);
   
   const [ openTBlockState, openTBlockSet ] = useState("[]");
@@ -53,7 +54,9 @@ const DashSlide = ({ app, user, users, traceDT, brancheS, isDebug })=> {
                                         !Roles.userIsInRole(x._id, 'readOnly') );
     const eUsers = liveUsers.filter( x => x.engaged );
     eUsersSet( eUsers );
-    const dUsers = liveUsers.filter( x => !x.engaged );
+    const lUsers = liveUsers.filter( x => !x.engaged && loggedIn.includes(x._id) );
+    lUsersSet( lUsers );
+    const dUsers = liveUsers.filter( x => !x.engaged && !loggedIn.includes(x._id) );
     dUsersSet( dUsers );
     
     isDebug && console.log({eUsers});
@@ -146,6 +149,7 @@ const DashSlide = ({ app, user, users, traceDT, brancheS, isDebug })=> {
          
         <PeoplePanel
           eUsers={eUsersState}
+          lUsers={lUsersState}
           dUsers={dUsersState}
           openTBlockState={openTBlockState}
           traceDT={traceDT}
