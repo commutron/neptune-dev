@@ -4,11 +4,11 @@ import 'moment-business-time';
 
 import Config from '/server/hardConfig.js';
 
-export function getShipAim(batchId, salesEnd) {
+export function getShipAim(batchId, salesEnd, recalc) {
   const b = XBatchDB.findOne({_id: batchId, completed: true},{fields:{'finShipAim':1}});
   const finAim = b ? b.finShipAim || null : null;
   
-  if(finAim) {
+  if(finAim && !recalc) {
     return finAim;
   }else{
     const endDay = moment.tz(salesEnd, Config.clientTZ);
@@ -21,11 +21,11 @@ export function getShipAim(batchId, salesEnd) {
   }
 }
 
-export function getShipDue(batchId, salesEnd) {
+export function getShipDue(batchId, salesEnd, recalc) {
   const b = XBatchDB.findOne({_id: batchId, completed: true},{fields:{'finShipDue':1}});
   const finDue = b ? b.finShipDue || null : null;
   
-  if(finDue) {
+  if(finDue && !recalc) {
     return finDue;
   }else{
     const endDay = moment.tz(salesEnd, Config.clientTZ);
@@ -38,11 +38,11 @@ export function getShipDue(batchId, salesEnd) {
   }
 }
 
-export function getEndWork(batchId, salesEnd) {
+export function getEndWork(batchId, salesEnd, recalc) {
   const b = XBatchDB.findOne({_id: batchId, completed: true},{fields:{'finEndWork':1}});
   const finWork = b ? b.finEndWork || null : null;
   
-  if(finWork) {
+  if(finWork && !recalc) {
     return finWork;
   }else{
     const endDay = moment.tz(salesEnd, Config.clientTZ);

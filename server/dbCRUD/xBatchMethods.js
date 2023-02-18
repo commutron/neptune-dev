@@ -1,7 +1,8 @@
 import moment from 'moment';
+import Config from '/server/hardConfig.js';
 import { batchTideTime } from '/server/tideGlobalMethods';
 import { syncLocale } from '/server/utility.js';
-import { getShipDue, getEndWork } from '/server/shipOps';
+import { getShipAim, getShipDue, getEndWork } from '/server/shipOps';
 
 Meteor.methods({
 
@@ -660,17 +661,18 @@ Meteor.methods({
   
   saveEndState(batchId, privateKey) {
     this.unblock();
-    const b = XBatchDB.findOne({_id: batchId},{fields:{'salesEnd':1}});
-    if(b) {
+    const bData = XBatchDB.findOne({_id: batchId});
+    if(bData) {
       syncLocale(privateKey);
+      const now = moment().tz(Config.clientTZ);
       
-      const endPriority = Meteor.call('priorityRank', batchId, privateKey);
+      const endShipAim = getShipAim(batchId, bData.salesEnd, true);
       
+      const endPriority = Meteor.call('getFastPriority', bData, now, endShipAim);
       const endBffrRel = endPriority.bffrRel;
-      const endShipAim = endPriority.shipAim;
-
-      const endShipDue = getShipDue(batchId, b.salesEnd);
-      const endEndWork = getEndWork(batchId, b.salesEnd);
+      
+      const endShipDue = getShipDue(batchId, bData.salesEnd, true);
+      const endEndWork = getEndWork(batchId, bData.salesEnd, true);
       
       XBatchDB.update(batchId, {
   			$set : { 

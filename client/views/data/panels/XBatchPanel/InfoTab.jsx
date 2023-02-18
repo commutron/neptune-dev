@@ -32,7 +32,7 @@ const InfoTab = ({
   
   const endDay = moment(b.salesEnd);
   
-  const shipDue =  b.finShipDue ? moment(b.finShipDue) :
+  const shipDue =  b.completed && b.finShipDue ? moment(b.finShipDue) :
                     endDay.isShipDay() ?
                       endDay.clone().endOf('day').lastShippingTime() :
                       endDay.clone().lastShippingTime();

@@ -191,12 +191,12 @@ function collectNonCon(batchID) {
 
 Meteor.methods({
   
-  priorityRank(batchID, serverAccessKey, mockDay) {
+  priorityRank(batchID, serverAccessKey, mockDay, recalc) {
     async function bundlePriority() {
       const accessKey = serverAccessKey || Meteor.user().orgKey;
       syncLocale(accessKey);
       try {
-        bundle = await collectPriority(batchID, mockDay);
+        bundle = await collectPriority(batchID, mockDay, recalc);
         return bundle;
       }catch (err) {
         throw new Meteor.Error(err);
