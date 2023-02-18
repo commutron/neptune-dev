@@ -131,10 +131,10 @@
   width: 100%;
   max-width: 100%;
   border: 1px solid rgb(0,0,0);
+  background-color: #3B3B3B;
 }
 .nesoSend button {
   padding-inline: 1rem;
-  background-color: #3B3B3B;
 }
 .nesoSend button:hover {
   background-color: var(--neptuneColor);

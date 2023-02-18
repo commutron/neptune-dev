@@ -12,7 +12,7 @@ const Slides = ({ menu, slide, disable, extraClass, children })=> {
   };
 
   const dA = Array.isArray(disable) ? disable : [];
-    
+
   return(
     <div className='slidesLayout'>
       <div className='slidesMenu forceScrollStyle noPrint'>

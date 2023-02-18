@@ -49,10 +49,27 @@ const AssemblyList = ({ variantData, widgetData, groupData })=> {
   return(
     <details open={false} className='blueBorder vmarginhalf'>
       <summary>
-        <i className='cap miniAction'>{Pref.comp}s:</i>
+        <i className='cap'>{Pref.comp}s:</i>
         <i className='numFont gap'>{v.assembly.length}</i>
       </summary>
-      <span className='rowWrap vmarginhalf'>
+      
+      <dl className='up readlines spacehalf'>
+        {vAssmbl.map((entry, index)=>{
+          return(
+            <dt key={index} className='letterSpaced'>
+              {entry.component}
+              {rmvState &&
+                <button
+                  className='miniAction redT'
+                  onClick={()=>removeComp(entry.component)}
+                  disabled={!Roles.userIsInRole(Meteor.userId(), 'remove')}>
+                <i className='fas fa-times fa-fw'></i></button>
+              }
+            </dt>
+        )})}
+      </dl>
+      
+      <span className='balancer vmarginhalf'>
         
         <CompForm 
           vID={variantData._id}
@@ -77,23 +94,6 @@ const AssemblyList = ({ variantData, widgetData, groupData })=> {
           lockOut={false} />
           
       </span>
-      
-      <dl className='up readlines'>
-        {vAssmbl.map((entry, index)=>{
-          return(
-            <dt key={index} className='letterSpaced'>
-              {entry.component}
-              {rmvState &&
-                <button
-                  className='miniAction redT'
-                  onClick={()=>removeComp(entry.component)}
-                  disabled={!Roles.userIsInRole(Meteor.userId(), 'remove')}>
-                <i className='fas fa-times fa-fw'></i></button>
-              }
-            </dt>
-        )})}
-      </dl>
-
     </details>
   );
 };

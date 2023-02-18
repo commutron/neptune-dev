@@ -156,6 +156,10 @@ form:focus {
   border-color: rgb(28,117,188);
 }
 
+form p {
+  padding: 10px 0;
+}
+
 fieldset {
   margin: 15px 0;
   border: 1px dashed;
@@ -301,14 +305,29 @@ select:focus + label {
   color: var(--neptuneColor);
 }
 
-form p {
-  padding: 10px 0;
+input::-webkit-inner-spin-button,
+input::-webkit-outer-spin-button {
+  opacity: 1;
 }
+input[type='date']::-webkit-inner-spin-button,
+input[type='date']::-webkit-outer-spin-button {
+  display: none;
+}
+input[type='search'] { 
+  border-radius: 0;
+}
+input[type='search']::-webkit-search-cancel-button {
+  background-color: pink;
+}
+
 
 hr {
   opacity: 0.4; 
 }
 
+pre {
+  white-space: pre-wrap;
+}
 details {
   line-height: 1;
   font-size: 1rem;
@@ -350,21 +369,6 @@ dialog::backdrop {
 }
 dialog > div:first-child .action {
   border-radius: 4px;
-}
-
-input::-webkit-inner-spin-button,
-input::-webkit-outer-spin-button {
-  opacity: 1;
-}
-input[type='date']::-webkit-inner-spin-button,
-input[type='date']::-webkit-outer-spin-button {
-  display: none;
-}
-input[type='search'] { 
-  border-radius: 0;
-}
-input[type='search']::-webkit-search-cancel-button {
-  background-color: pink;
 }
 
 img {

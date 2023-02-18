@@ -26,7 +26,7 @@ const VariantCard = ({
   const calFunc = (d)=> moment(d).calendar(null, {sameElse: calString});
   
   return(
-    <div className='min300 max300'>
+    <div className='min300 max400'>
       <div className='comfort'>
         
         <div className='wordBr vmarginhalf middle'>
@@ -90,7 +90,10 @@ const VariantCard = ({
             sourceId={v._id}
             noteObj={v.notes}
             editMethod='setVariantNote'
-            cal={calFunc} />
+            cal={calFunc}
+            pocket={true} 
+            lines={15}
+          />
           
           {app.partsGlobal &&
             <AssemblyList
@@ -215,12 +218,14 @@ const InlineForm = ({ widgetData, variantData, rootURL })=> {
           
       <span className='rightRow'>
         <button
+          title='cancel'
           type='button'
           className='miniAction gap'
           onClick={()=>editSet(false)}
         ><i className='far fa-edit'></i> cancel</button>
       
         <button
+          title='save'
           type='submit'
           className='miniAction gap greenLineHover'
         ><i className='fas fa-check'></i> save</button>

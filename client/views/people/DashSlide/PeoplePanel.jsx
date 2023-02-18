@@ -56,10 +56,10 @@ const IdleList = ({ userList, title })=> (
     <h3 className='med indent10'>{title}</h3>
     <ul className='autoGrid'>
       {(userList || []).map( (entry)=>{
-        const np = entry.proTimeShare && entry.proTimeShare[0].timeAsDecimal > 0;
+        const pro = entry.proTimeShare && entry.proTimeShare[0].timeAsDecimal > 0;
         return(
           <li key={entry._id} className='leftText line2x'>
-            <UserNice id={entry._id} />{np && <em className='smTxt' title='non-production'> (NP)</em>}
+            <UserNice id={entry._id} />{!pro && <em className='smTxt' title='non-production'> (NP)</em>}
           </li>
       )})}
     </ul>

@@ -28,6 +28,7 @@ main {
   background-color: var(--navIndicatorB);
 }
 .forceScrollStyle {
+  scrollbar-width: thin;
   scrollbar-color: var(--navIndicatorA) var(--navIndicatorB);
 }
 
@@ -42,6 +43,7 @@ main {
   background-color: var(--navIndicatorB);
 }
 .thinScroll {
+  scrollbar-width: thin;
   scrollbar-color: var(--navIndicatorA) var(--navIndicatorB);
 }
 .scrollWrap {

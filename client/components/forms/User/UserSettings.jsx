@@ -41,11 +41,11 @@ const UserSettings = ({ app, user, isAdmin, brancheS })=> {
       <div className='cardSelf settingColumn noPrint'>  
         
         <span className='comfort w100'>
-          <a className='margin5 blackT underdotline' href='#uipref'>Interface Preferences</a>
-          <a className='margin5 blackT underdotline' href='#usernamechng'>Username</a>
-          <a className='margin5 blackT underdotline' href='#emailchng'>Email Address</a>
-          <a className='margin5 blackT underdotline' href='#passwordchng'>Password</a>
-          <a className='margin5 blackT underdotline' href='#adminpwr'>Admin Status</a>
+          <MenuSkip id='uipref' title='Interface Preferences' />
+          <MenuSkip id='usernamechng' title='Username' />
+          <MenuSkip id='emailchng' title='Email Address' />
+          <MenuSkip id='passwordchng' title='Password' />
+          {isAdmin && <MenuSkip id='adminpwr' title='Admin Status' />}
         </span>
       
         <div id='uipref'>
@@ -169,6 +169,24 @@ const UserSettings = ({ app, user, isAdmin, brancheS })=> {
 };
 
 export default UserSettings;
+
+const MenuSkip = ({ id, title })=> {
+  
+  function scrollTo(elId) {
+    const el = document.getElementById(elId);
+    el?.scrollIntoView({
+      block: 'start',
+      behavior: 'smooth'
+    });
+  }
+  
+  return(
+    <button 
+      className='smallAction margin5 blackT underdotline' 
+      onClick={()=>scrollTo(id)}
+    >{title}</button>
+  );     
+};
 
 const UserColorSetting = ({ userSetting, labelText, helpText, callMethod })=> {
   function handle(val) {
