@@ -5,6 +5,7 @@ import { countWaterfall } from '/client/utility/Arrays';
   
 function flowLoop(river, items, firstsFlat, wndw) {
   const byKey = (t, ky)=> { return ( k => k.key === ky && k.good === true )};
+  const byNew = (t, ky)=> { return ( k => k.key === ky && wndw(k.time) && k.good === true )};
   
   const doneItems = items.filter( x => x.completed );
   const wipItems = items.filter( x => !x.completed && x.history.length > 0 );
@@ -37,15 +38,12 @@ function flowLoop(river, items, firstsFlat, wndw) {
       
       for(var dix = doneItems.length-1; dix>=0; dix--){
         const di = doneItems[dix];
-        // itemCount += 1;
-        // unitCount += di.units;
         
         di.history.find( byKey(this, step.key) ) ? 
                           (itemCount += 1, unitCount += di.units ) : 
                           (itemPassd += 1, unitPassd += di.units );
         
-        const hNew = di.history.filter( q => wndw(q.time) === true && q.good === true );
-        hNew.find( byKey(this, step.key) ) ? (itemCountNew += 1, unitCountNew += di.units ) : null;
+        di.history.find( byNew(this, step.key) ) ? (itemCountNew += 1, unitCountNew += di.units ) : null;
       }
       
       for(var wix = wipItems.length-1; wix>=0; wix--){
@@ -53,8 +51,7 @@ function flowLoop(river, items, firstsFlat, wndw) {
         
         wi.history.find( byKey(this, step.key) ) ? (itemCount += 1, unitCount += wi.units ) : null;
         
-        const hNew = wi.history.filter( q => wndw(q.time) === true && q.good === true );
-        hNew.find( byKey(this, step.key) ) ? (itemCountNew += 1, unitCountNew += wi.units ) : null;
+        wi.history.find( byNew(this, step.key) ) ? (itemCountNew += 1, unitCountNew += wi.units ) : null;
       }
     
       stepsData.push({
