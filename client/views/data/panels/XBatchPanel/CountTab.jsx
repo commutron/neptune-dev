@@ -90,7 +90,7 @@ const FallsHistory = ({ entry, count, quantity })=> {
 	if(type === 'inspect'){
 		borderColor = 'borderGreen';
 		barColor = 'proGreen';
-  }else if(type === 'checkpoint'){
+  }else if(type === 'generic'){
 		borderColor = 'borderGray';
 		barColor = 'proGray';
   }else if(type === 'test'){

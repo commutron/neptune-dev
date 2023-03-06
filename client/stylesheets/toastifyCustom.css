@@ -116,6 +116,7 @@
   display: flex;
   align-items: center;
 }
+.Toastify__toast-body div,
 .Toastify__toast-body p {
   word-break: break-word;
   overflow-wrap: break-word;

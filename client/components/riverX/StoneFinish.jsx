@@ -58,6 +58,12 @@ const StoneFinish = ({
 			});
 		}
 	}
+	
+	let sstyle = {
+	  'backgroundImage': 'url(fin.svg)',
+	  'backgroundColor': 'var(--wisteria)',
+	  '--high-color': 'var(--amethyst)'
+	};
     
   return(
 		<div className={topClass + ' stoneFrame noCopy'} title={topTitle}>
@@ -72,7 +78,8 @@ const StoneFinish = ({
         lockout={lockout}
       >
       	<button
-      	  className='stone iFinish'
+      	  className='stone'
+      	  style={sstyle}
       	  name={rapIs ? `${step} Extension` : step }
   				id='stoneButton'
   				onClick={()=>finish()}

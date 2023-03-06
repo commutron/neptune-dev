@@ -152,7 +152,7 @@ button.stoneExtra {
 .stone:where(:focus,:hover),
 .crackedTop:where(:focus,:hover), 
 .crackedBot:where(:focus,:hover) { 
-  background-color: var(--high-color); 
+  background-color: var(--high-color) !important; 
 }
 
 .stone::after,
@@ -363,39 +363,6 @@ button.stoneExtra {
 }
 .riverNG:where(:hover,:active) {
   background-color: var(--alizarin);
-}
-
-.iFirst {
-  background-image: url(first.svg);
-  background-color: var(--belizeHole);
-  --high-color: var(--peterriver);
-}
-.iCheck {
-  background-image: url(inspect.svg);
-  background-color: var(--nephritis);
-  --high-color: var(--emerald);
-}
-.iTest {
-  background-image: url(test.svg);
-  background-color: var(--greenSea);
-  --high-color: var(--turquoise);
-}
-.iBuild {
-  background-image: url(build.svg);
-  background-color: transparent;
-  border-color: var(--belizeHole);
-  --high-color: var(--peterriver);
-}
-.iPoint {
-  background-image: url(first.svg);
-  background-color: transparent;
-  border-color: var(--asbestos);
-  --high-color: var(--silver);
-}
-.iFinish {
-  background-image: url(inspect.svg);
-  background-color: var(--wisteria);
-  --high-color: var(--amethyst);
 }
 
 n-trib-row, n-short-row, .testFail {
@@ -663,9 +630,16 @@ n-trib-action-all {
 .flowForm .item-renderer,
 .emailForm .item-renderer,
 .stoneForm .item-renderer {
-  display: flex !important;
+  display: grid !important;
   align-items: center !important;
   color: black !important;
+  grid-auto-flow: column;
+  justify-content: left;
+}
+.flowForm .item-renderer > input,
+.emailForm .item-renderer > input,
+.stoneForm .item-renderer > input {
+  width: 1rem;
 }
 .stoneForm .dropdown-content {
   width: -moz-fit-content;
@@ -831,7 +805,6 @@ n-trib-action-all {
 .checkboxList > label:active {
   background-color: var(--wetasphalt);
 }
-
 
 @media screen and (prefers-reduced-motion: reduce) { 
   .stone, .crackedTop, .crackedBot {

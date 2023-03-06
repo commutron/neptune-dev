@@ -206,7 +206,7 @@ const BranchEditRow = ({ branch, isDebug })=> {
   );
 };
 
-export const BranchListEditor = ({ app, isDebug })=> {
+export const BranchListEditor = ({ app })=> {
   
   const branches = app.branches || [];
   const branchesSort = branches.sort((b1, b2)=>
@@ -221,7 +221,7 @@ export const BranchListEditor = ({ app, isDebug })=> {
             <BranchListRow 
               key={index+br.brKey} 
               branch={br}
-              isDebug={isDebug} />                      
+            />                      
         )})}
       </div>
     </div>
@@ -239,7 +239,7 @@ const BranchListHead = ()=> (
   </div>
 );
 
-const BranchListRow = ({ branch, isDebug })=> {
+const BranchListRow = ({ branch })=> {
   
   const br = branch;
   const id = br.brKey;

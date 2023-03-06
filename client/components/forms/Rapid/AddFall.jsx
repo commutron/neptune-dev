@@ -31,7 +31,7 @@ const AddFall = ({ rapidData, editAuth })=> {
     editSet(false);
   }
   
-  const onP = csc.find( w => w.type === 'checkpoint' );
+  const onP = csc.find( w => w.type === 'generic' );
   const onB = csc.find( w => w.type === 'build' );
   const onI = csc.find( w => w.type === 'inspect' );
   const onT = csc.find( w => w.type === 'test' );

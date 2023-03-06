@@ -4,7 +4,7 @@ import { VictoryPie } from 'victory';
 import AnimateOnChange from 'react-animate-on-change';
 
 const StoneProgRing = ({ 
-  sKey, step, type, 
+  sKey, type, 
   flowCounts,
   workingState, lockout,
   children
@@ -38,8 +38,8 @@ const StoneProgRing = ({
   const color0 = 'rgb(40,40,40)';
   const color1 =
     type === 'build' ? 'rgb(41, 128, 185)' :
-    type === 'checkpoint' ? 'rgb(127, 140, 141)' :
     type === 'test' ? 'rgb(22, 160, 133)' :
+    type === 'checkpoint' ? 'rgb(142, 68, 173)' :
     type === 'finish' ? 'rgb(142, 68, 173)' :
     'rgb(39, 174, 96)';
     

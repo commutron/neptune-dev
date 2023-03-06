@@ -58,6 +58,12 @@ const StoneTest = ({
     }
   }
   
+  let sstyle = {
+	  'backgroundImage': 'url(test.svg)',
+	  'backgroundColor': 'var(--greenSea)',
+	  '--high-color': 'var(--turquoise)'
+	};
+  
   return(
    	<Fragment>
   		<div className={topClass + ' stoneFrame noCopy'} title={topTitle}>
@@ -73,7 +79,8 @@ const StoneTest = ({
         >
 					<div className='centre'>
 						<button
-		      	  className='crackedTop iTest'
+		      	  className='crackedTop'
+		      	  style={sstyle}
 		  				name={step + ' pass'}
 		  				id='stonepassButton'
 		  				onClick={()=>passT(true, false)}

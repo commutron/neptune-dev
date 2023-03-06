@@ -32,11 +32,17 @@ function flowLoop(river, items, firstsFlat, wndw) {
       let unitCount = 0;
       let itemCountNew = 0;
       let unitCountNew = 0;
+      let itemPassd = 0;
+      let unitPassd = 0;
       
       for(var dix = doneItems.length-1; dix>=0; dix--){
         const di = doneItems[dix];
-        itemCount += 1;
-        unitCount += di.units;
+        // itemCount += 1;
+        // unitCount += di.units;
+        
+        di.history.find( byKey(this, step.key) ) ? 
+                          (itemCount += 1, unitCount += di.units ) : 
+                          (itemPassd += 1, unitPassd += di.units );
         
         const hNew = di.history.filter( q => wndw(q.time) === true && q.good === true );
         hNew.find( byKey(this, step.key) ) ? (itemCountNew += 1, unitCountNew += di.units ) : null;
@@ -61,7 +67,9 @@ function flowLoop(river, items, firstsFlat, wndw) {
         items: itemCount,
         units: unitCount,
         itemsNew: itemCountNew,
-        unitsNew: unitCountNew
+        unitsNew: unitCountNew,
+        itemPassd: itemPassd,
+        unitPassd: unitPassd
       });
     }
   } 
@@ -156,8 +164,7 @@ export function FallCounter(batchData) {
       countNew: nwCount
     });
   }
-  const fallCounts = countData.sort((w1, w2)=> 
-                              w1.pos < w2.pos ? -1 : w1.pos > w2.pos ? 1 : 0 );
+  const fallCounts = countData.sort((w1, w2)=> w1.pos < w2.pos ? -1 : w1.pos > w2.pos ? 1 : 0 );
   return {
     fallProg: fallCounts,
     allFall: doneCheck.length === 0 ? true :

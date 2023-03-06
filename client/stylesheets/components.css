@@ -235,7 +235,8 @@ n-timeline-item:last-child n-timeline-marker:after {
 }
 .miniStack::after {
   content: attr(data-new) '\a' 
-           attr(data-not) '\a' 
+           attr(data-not) '\a'
+           attr(data-by)
            attr(data-tips);
   position: absolute;
   z-index: 2;

@@ -99,7 +99,7 @@ const Clif = ({
 	if(type === 'inspect'){
 		borderColor = 'borderGreen';
 		fadeColor = 'Green';
-  }else if(type === 'checkpoint'){
+  }else if(type === 'generic'){
 		borderColor = 'borderGray';
 		fadeColor = 'Concrete';
   }else if(type === 'test'){

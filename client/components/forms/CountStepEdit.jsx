@@ -40,10 +40,10 @@ const CountStepEdit = ({ app, branchesSort, data })=> {
           className='tableAction' 
           required
         >
+          <option value='generic'>generic</option>
           <option value='build'>build</option>
           <option value='inspect'>inspect</option>
           <option value='test'>test</option>
-          <option value='checkpoint'>checkpoint</option>
           <option value='finish'>finish</option>
         </select>
       </label>

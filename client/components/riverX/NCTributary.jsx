@@ -2,27 +2,26 @@ import React, { useState, Fragment } from 'react';
 import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 import Pref from '/client/global/pref.js';
 
-const NCTributary = ({ seriesId, serial, nonCons, sType })=> {
+const NCTributary = ({ seriesId, nonCons, sType })=> {
 
   function handleAction(ncKey, ACT, extra) {
     Meteor.call('runNCAction', seriesId, ncKey, ACT, extra, (error)=> {
 			error && console.log(error);
 		});
-		let findBox = document.getElementById('lookup');
-		findBox.focus();
+		document.getElementById('lookup').focus();
   }
   
   function handleCluster(ncKeys, ACT) {
     Meteor.call('loopNCActions', seriesId, ncKeys, ACT, (error)=> {
 			error && console.log(error);
 		});
-		let findBox = document.getElementById('lookup');
-		findBox.focus();
+		document.getElementById('lookup').focus();
   }
   
   const inspector = Roles.userIsInRole(Meteor.userId(), 'inspect');
   const verifier = Roles.userIsInRole(Meteor.userId(), 'verify');
- 
+  const rest = sType === 'finish' || sType === 'checkpoint';
+  
   const chunkNC = Object.entries( _.groupBy(nonCons, x=> x.type) )
                     .sort((a,b)=>a[0] > b[0] ? 1 : a[0] < b[0] ? -1 : 0);
   
@@ -38,11 +37,10 @@ const NCTributary = ({ seriesId, serial, nonCons, sType })=> {
           return(
             <NCCluster
               key={'cluster'+chindex}
-              seriesId={seriesId}
               chunk={chunk}
               chindex={chindex}
-              sType={sType}
               allFixed={allFixed}
+              rest={rest}
               inspector={inspector}
               verifier={verifier}
               handleCluster={handleCluster}
@@ -53,14 +51,13 @@ const NCTributary = ({ seriesId, serial, nonCons, sType })=> {
           return(
             <Fragment key={'cluster'+chindex}>
               {chunk[1].map( (entry)=>{
-                sType === 'finish' && entry.snooze === true ?
+                rest && entry.snooze === true ?
                   handleAction(entry.key, 'WAKE') : null;
                 return(
                   <NCStream
                     key={'indie'+entry.key}
                     entry={entry}
-                    seriesId={seriesId}
-                    end={sType === 'finish'}
+                    rest={rest}
                     doAction={(act, extra)=>handleAction(entry.key, act, extra)}
                     inspector={inspector}
                     verifier={verifier}
@@ -77,8 +74,8 @@ const NCTributary = ({ seriesId, serial, nonCons, sType })=> {
 export default NCTributary;
 
 const NCCluster = ({ 
-  seriesId, chunk, chindex, sType,
-  allFixed, inspector, verifier,
+  chunk, chindex,
+  allFixed, rest, inspector, verifier,
   handleCluster, handleAction
 })=> {
   
@@ -126,15 +123,14 @@ const NCCluster = ({
         </n-trib-cluster-head>
       </summary>
       
-      {chunk[1].map( (entry, index)=>{
-        sType === 'finish' && entry.snooze === true ?
+      {chunk[1].map( (entry)=>{
+        rest && entry.snooze === true ?
           handleAction(entry.key, 'WAKE') : null;
         return(
           <NCStream
             key={'cluster'+chindex+entry.key}
             entry={entry}
-            seriesId={seriesId}
-            end={sType === 'finish'}
+            rest={rest}
             doAction={(act, extra)=> handleAction(entry.key, act, extra)}
             inspector={inspector}
             verifier={verifier}
@@ -144,7 +140,7 @@ const NCCluster = ({
   );
 };
 
-const NCStream = ({ entry, seriesId, end, doAction, inspector, verifier })=>{
+const NCStream = ({ entry, rest, doAction, inspector, verifier })=>{
   
   const [ selfLock, selfLockSet ] = useState(false);
   const [ commState, commSet ] = useState(false);
@@ -153,8 +149,8 @@ const NCStream = ({ entry, seriesId, end, doAction, inspector, verifier })=>{
     val !== '' ? doAction('COMM', val) : null;
   };
   
-  function handleClick(ACT, extra) {
-    ACT !== 'REJECT' && selfLockSet(true);
+  function handleClick(ACT, extra, lockit) {
+    selfLockSet(lockit);
     doAction(ACT, extra);
   }
     
@@ -188,7 +184,7 @@ const NCStream = ({ entry, seriesId, end, doAction, inspector, verifier })=>{
                 id='inspectline'
                 data-name='OK'
                 className='ncAct riverG'
-                onClick={()=>handleClick('INSPECT')}
+                onClick={()=>handleClick('INSPECT', null, true)}
                 readOnly={true}
                 disabled={lockI || selfLock}>
               </button>
@@ -198,7 +194,7 @@ const NCStream = ({ entry, seriesId, end, doAction, inspector, verifier })=>{
                 id='fixline'
                 data-name={Pref.fix}
                 className='ncAct riverInfo'
-                onClick={()=>handleClick('FIX')}
+                onClick={()=>handleClick('FIX', null, true)}
                 readOnly={true}
                 disabled={fixed === true || selfLock}>
               </button>
@@ -215,22 +211,22 @@ const NCStream = ({ entry, seriesId, end, doAction, inspector, verifier })=>{
           <ContextMenu id={entry.key}>
           {!fixed &&
             <MenuItem 
-              onClick={()=>handleClick('INSPECT')} 
+              onClick={()=>handleClick('INSPECT', null, true)} 
               disabled={!verifier}>
               Inspected, no repair required
             </MenuItem> }
             <MenuItem 
-              onClick={()=>handleClick('REJECT', [entry.fix.time, entry.fix.who])} 
+              onClick={()=>handleClick('REJECT', [entry.fix.time, entry.fix.who], false)} 
               disabled={lockI || !fixed}>
               {Pref.reject}
             </MenuItem>      
             <MenuItem 
-              onClick={()=>handleClick('SNOOZE')}
-              disabled={snooze !== false || end}>
+              onClick={()=>handleClick('SNOOZE', null, false)}
+              disabled={snooze !== false || rest}>
               Snooze, repair later
             </MenuItem>
             <MenuItem 
-              onClick={()=>handleClick('WAKE')} 
+              onClick={()=>handleClick('WAKE', null, false)} 
               disabled={!snooze}>
               Wake Up, repair now
             </MenuItem>

@@ -5,15 +5,16 @@ import { VictoryBar, VictoryStack } from 'victory';
 
 const MiniStack = ({ 
   title, subtitle, 
-  count, countNew, total,
+  count, countNew, countPass, total,
   tips, truncate
 })=> {
   
   const v = count;
   const vX = countNew;
+  const vO = countPass || 0;
   let t = total === 'percent' ? 100 : total;
   
-  const dataArr = [ [v - vX], [vX], [Math.max(0, t - v)] ];
+  const dataArr = [ [vO], [v - vX], [vX], [Math.max(0, t - v - vO)] ];
 
   let name = {
     fontSize: '0.9rem',
@@ -29,13 +30,14 @@ const MiniStack = ({
     <div 
       className={`wide miniStack meterprogStack noCopy ${t === 0 ? 'empty' : ''}`}
       data-new={vX + ' New'}
-      data-not={dataArr[2] + ' Remain'}
+      data-not={dataArr[3] + ' Remain'}
+      data-by={dataArr[0][0] ? dataArr[0] + ' Bypassed' : ''}
       data-tips={tips ? tips.join(`\n`) : ''}
       >
       <p style={name} className='cap'>{title}</p>
 
       <VictoryStack
-        colorScale={["rgb(39, 174, 96)", "rgb(46, 204, 113)", "white"]}
+        colorScale={["rgb(200,200,200)", "rgb(39,174,96)", "rgb(46,204,113)", "white"]}
         horizontal={true}
         padding={0}
         height={12}
@@ -44,12 +46,16 @@ const MiniStack = ({
           data={dataArr[0]}
           barRatio={5}
         />
-        <VictoryBar
+        <VictoryBar 
           data={dataArr[1]}
           barRatio={5}
         />
         <VictoryBar
           data={dataArr[2]}
+          barRatio={5}
+        />
+        <VictoryBar
+          data={dataArr[3]}
           barRatio={5}
           style={ { height: '20px' } }
         />

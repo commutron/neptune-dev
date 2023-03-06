@@ -59,6 +59,12 @@ const NesoView = ({ login, user, username, users })=> {
   document.querySelector(':root').style
     .setProperty('--neptuneColor', user.customColor || null);
   
+  if(!("Notification" in window)) {
+    console.log("This browser does not support desktop notification");
+  }else if (Notification.permission !== "denied") {
+    Notification.requestPermission();
+  }
+    
 	const unice = toCap(username.replace(Pref.usrCut, " "), true);
   
 	return(
@@ -155,11 +161,23 @@ const NotifyList = ({ user, unice })=> {
       for( let note of user.inbox ) {
         if(note.unread) {
           if(user.inbox.length > ibxLength) {
-            const cue = note.reply ? '/UIAlert_short.mp3' : '/UIAlert_long.mp3';
-            const audioObj = new Audio(cue);
-            audioObj.addEventListener("canplay", event => {
-              audioObj.play();
-            });
+            if (
+              ( !(navigator.userAgent.match(/Android/i) ||
+              navigator.userAgent.match(/iPhone/i) ||
+              navigator.userAgent.match(/iPad/i)) )
+              && Notification?.permission === "granted"
+            ) {
+              new Notification(note.title, {
+                silent: false,
+                body: note.detail,
+              });
+            }else{
+              const cue = note.reply ? '/UIAlert_short.mp3' : '/UIAlert_long.mp3';
+              const audioObj = new Audio(cue);
+              audioObj.addEventListener("canplay", event => {
+                audioObj.play();
+              });
+            }
             window.location.href='#neinbox';
           }
         }

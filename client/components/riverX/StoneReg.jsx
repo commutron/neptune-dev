@@ -19,7 +19,7 @@ const StoneReg = ({
 })=> { 
 	
 	//// Action for standard step
-  function passS(pass, doComm) {
+  function passS(pass) {
 	  enactEntry();
     let comm = commTxtState;
    
@@ -38,17 +38,25 @@ const StoneReg = ({
 		});
   }
   
-	let shape = '';
-	
-	//// Style the Stone Accordingly \\\\
-	if(type === 'inspect'){
-		shape = 'stone iCheck';
-  }else if(type === 'build'){
-		shape = 'stone iBuild';
-  }else if(type === 'checkpoint'){
-		shape = 'stone iPoint';
-  }else{
-    null }
+  let sstyle = {
+  	build: {
+		  'backgroundImage': 'url(build.svg)',
+		  'backgroundColor': 'transparent',
+		  'borderColor': 'var(--belizeHole)',
+		  '--high-color': 'var(--peterriver)'
+		},
+		inspect: {
+		  'backgroundImage': 'url(inspect.svg)',
+		  'backgroundColor': 'var(--nephritis)',
+		  '--high-color': 'var(--emerald)'
+		},
+	  checkpoint: {
+			'backgroundImage': 'url(first.svg)',
+  		'backgroundColor': 'transparent',
+  		'borderColor': 'var(--wisteria)',
+  		'--high-color': 'var(--amethystfade)'
+		}
+  };
     
 	let prepend = type === 'build' ? <label>{type}</label> : null;
 	let apend = type === 'inspect' ? <label>{type}</label> : null;
@@ -68,10 +76,11 @@ const StoneReg = ({
         lockout={lockout}
       >
       	<button
-      	  className={shape}
+      	  className='stone'
+      	  style={sstyle[type]}
   				name={step}
   				id='stoneButton'
-  				onClick={()=>passS(true, false)}
+  				onClick={()=>passS(true)}
   				tabIndex={-1}
   				disabled={lockout}>
   				{prepend}

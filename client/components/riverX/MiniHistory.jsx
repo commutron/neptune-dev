@@ -12,8 +12,9 @@ const MiniHistory = ({ history, iAlt, altitle })=> {
     inspect: 'borderGreen',
     test: 'borderTeal',
     nest: 'borderTeal',
+    checkpoint: 'borderPurple',
     finish: 'borderPurple'
-  }
+  };
   
   return(
     <div>

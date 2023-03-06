@@ -1292,6 +1292,10 @@ input.miniIn24, select.miniIn24 { width: 24ch; }
   font-size: 1rem;
 }
 
+.rmsc .panel-content {
+  min-width: fit-content;
+}
+
 .numberSet {
   min-height: var(--txx0);
   line-height: 1.1;

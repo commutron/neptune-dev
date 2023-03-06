@@ -668,7 +668,7 @@ Meteor.methods({
       
       const endShipAim = getShipAim(batchId, bData.salesEnd, true);
       
-      const endPriority = Meteor.call('getFastPriority', bData, now, endShipAim);
+      const endPriority = Meteor.call('priorityFast', privateKey, bData, now, endShipAim);
       const endBffrRel = endPriority.bffrRel;
       
       const endShipDue = getShipDue(batchId, bData.salesEnd, true);

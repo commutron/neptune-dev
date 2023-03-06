@@ -137,6 +137,7 @@ const StepsProgressX  = ({
           }else{
             let count = calcItem ? entry.items : entry.units;
             let countNew = calcItem ? entry.itemsNew : entry.unitsNew;
+            let countPass = calcItem ? entry.itemPassd : entry.unitPassd;
             let total = calcItem ? totalI : totalIU;
             return(
               <MiniStack
@@ -145,6 +146,7 @@ const StepsProgressX  = ({
                 subtitle={brch ? brch.branch : ''}
                 count={count}
                 countNew={countNew}
+                countPass={countPass}
                 total={total}
                 truncate={truncate} />
             );

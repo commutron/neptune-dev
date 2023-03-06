@@ -11,6 +11,12 @@ const StoneVerify = ({
   function reveal() {
     handleVerify(sKey, true);
   }
+  
+  let sstyle = {
+	  'backgroundImage': 'url(first.svg)',
+	  'backgroundColor': 'var(--belizeHole)',
+	  '--high-color': 'var(--peterriver)'
+	};
 	
   return(
 		<div className={topClass + ' stoneFrame noCopy'} title={topTitle}>
@@ -23,7 +29,8 @@ const StoneVerify = ({
         <div>
 					<div className='centre'>
 		      	<button
-		      	  className='stone iFirst'
+		      	  className='stone'
+		      	  style={sstyle}
 		  				name={step}
 		  				id='stoneButton'
 		  				onClick={()=>reveal()}

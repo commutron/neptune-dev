@@ -12,15 +12,14 @@ const Shortfalls = ({ seriesId, shortfalls, lock })=> {
   
   return(
     <Fragment>
-      {!shortfalls || shortfalls.map( (entry)=>{
-        return (
-          <ShortLine
-            key={entry.key}
-            entry={entry}
-            doSet={(a, b)=>handleChange(entry.key, a, b)}
-            lock={lock || !Roles.userIsInRole(Meteor.userId(), 'verify')}
-          />
-        )})}
+      {!shortfalls || shortfalls.map( (entry)=>(
+        <ShortLine
+          key={entry.key}
+          entry={entry}
+          doSet={(a, b)=>handleChange(entry.key, a, b)}
+          lock={lock || !Roles.userIsInRole(Meteor.userId(), 'verify')}
+        />
+      ))}
     </Fragment>
   );
 };
