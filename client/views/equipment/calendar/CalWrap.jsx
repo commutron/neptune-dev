@@ -7,18 +7,19 @@ import CalComp from './CalComp';
 const CalWrap = ()=> {
   
   const mounted = useRef(true);
-  const [ work, workSet ] = useState(false);
+  // const [ work, workSet ] = useState(false);
   const [ float, floatSet ] = useState( false );
   
   const [ events, eventsSet ] = useState([]);
   
   function getEvents(dateStr) {
-  	workSet(true);
+  	// workSet(true);
   	
   	const date = new Date(dateStr);
 		
 		if( date.getMonth() === ( float && float.getMonth() ) ) {
-		  workSet(false);
+			null;
+		  // workSet(false);
 		}else{
 		  floatSet(date);
     	const startDate = moment(date).startOf('month').startOf('week').format();
@@ -31,7 +32,7 @@ const CalWrap = ()=> {
     		(err, re)=>{
     		err && console.log(err);
     		if(mounted.current) {
-    			workSet(false);
+    			// workSet(false);
     			if(re) {
     				eventsSet(re);
     			}

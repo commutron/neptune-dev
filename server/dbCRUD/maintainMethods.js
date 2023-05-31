@@ -358,7 +358,7 @@ Meteor.methods({
     
     let futureEvents = [];
     
-    EquipDB.find({hibernate: { $ne: true}},{fields:{'alias':1,'service':1}})
+    EquipDB.find({hibernate: { $ne: true}},{fields:{'alias':1,'service':1,'online':1}})
       .forEach( (eq)=> {
         
         if(!incNext) {
@@ -371,6 +371,8 @@ Meteor.methods({
             fields: { 'name': 1, 'doneAt': 1 }
           }).forEach( (mn)=> {
             futureEvents.push({
+              mId: mn._id,
+              link: 'Eq-' + eq.alias +' ~ '+ mn.name,
           	  title: eq.alias + ' - ' + mn.name,
           	  start: mn.doneAt,
           	  end: mn.doneAt,
@@ -388,6 +390,8 @@ Meteor.methods({
             fields: { 'name': 1, 'close': 1 }
           }).forEach( (mn)=> {
             futureEvents.push({
+              mId: mn._id,
+              link: 'Eq-' + eq.alias +' ~ '+ mn.name,
           	  title: eq.alias + ' - ' + mn.name,
           	  start: mn.close,
           	  end: mn.close,
@@ -396,9 +400,10 @@ Meteor.methods({
           	});
           });
         }else{
-      
+          
           for(const sv of eq.service) {
-              
+            const req = !eq.online && ( sv.timeSpan === 'day' || sv.timeSpan === 'week' );
+
             const next = futureService(sv, startDate, endDate);
             
             for( let nx of next ) {
@@ -417,9 +422,17 @@ Meteor.methods({
                   open: nx[0], close: nx[1]
               }, { fields: { 'name': 1, 'close': 1 } });
               
+              const matchis = !incDone || matchdone || matchpass || nx[0] > new Date() ? false :
+                MaintainDB.findOne({
+                  serveKey: sv.serveKey, 
+                  open: nx[0], close: nx[1]
+              }, { fields: { '_id': 1 } });
+              
               if(matchdone) {
                 futureEvents.push({
-              	  title: eq.alias + ' -  ' + matchdone.name,
+                  mId: matchdone._id,
+                  link: 'Eq-' + eq.alias +' ~ '+ matchdone.name,
+              	  title: eq.alias + ' - ' + matchdone.name,
               	  start: matchdone.doneAt,
               	  end: matchdone.doneAt,
               	  allDay: true,
@@ -427,7 +440,9 @@ Meteor.methods({
               	});
               }else if(matchpass) {
                 futureEvents.push({
-              	  title: eq.alias + ' -  ' + matchpass.name,
+                  mId: matchpass._id,
+                  link: 'Eq-' + eq.alias +' ~ '+ matchpass.name,
+              	  title: eq.alias + ' - ' + matchpass.name,
               	  start: matchpass.close,
               	  end: matchpass.close,
               	  allDay: true,
@@ -435,10 +450,13 @@ Meteor.methods({
               	});
               }else if( nx[1] >= new Date() ) {
                 futureEvents.push({
+                  mId: matchis ? matchis._id : undefined,
+                  link: matchis ? 'Eq-' + eq.alias +' ~ '+ sv.name : undefined,
               	  title: eq.alias + ' - ' + sv.name,
               	  start: nx[0],
               	  end: nx[1],
-              	  allDay: true
+              	  allDay: true,
+              	  pass: req
               	});
               }else{
                 null;

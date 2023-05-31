@@ -10,9 +10,9 @@
   grid-area: proLeft / proLeft / frontCenter / frontCenter;
   background-color: rgb(25,25,25);
   width: 100%;
-  max-width: calc( 100vw - (20 * var(--vh)) );
+  max-width: calc(100vw - 20dvh);
   height: 100%;
-  max-height: calc(8 * var(--vh));
+  max-height: 8dvh;
   padding: 0;
 }
 

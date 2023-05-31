@@ -7,7 +7,7 @@
 
 .windowPro {
   display: grid;
-  grid-template-rows: calc(8 * var(--vh)) calc(92 * var(--vh));
+  grid-template-rows: 8dvh 92dvh;
   grid-template-columns: auto;
   grid-template-areas: 
     "tenHeader"
@@ -21,8 +21,8 @@
 .containerPro {
   display: grid;
   grid-template-rows: 
-    calc(8 * var(--vh)) 
-    calc(92 * var(--vh) - 65px)
+    8dvh 
+    calc(92dvh - 65px)
     65px;
   grid-template-areas: 
     "tenHeader tenHeader"
@@ -133,7 +133,7 @@
 .firstBadge {
   width: 100%;
   height: 100%;
-  font-size: calc(2.5 * var(--vh));
+  font-size: 2.5dvh;
   z-index: 2;
 }
 @media screen and (prefers-reduced-motion: no-preference) {
@@ -143,10 +143,10 @@
   content: "𝗙𝗶𝗿𝘀𝘁\a" attr(data-steps);
   position: fixed;
   z-index: 10;
-  top: calc(1 * var(--vh));
-  left: calc(21.6 * var(--vh));
+  top: 1dvh;
+  left: 21.6dvh;
   min-width: 75px;
-  margin: calc(0.5 * var(--vh)) 0;
+  margin: 0.5dvh 0;
   background-color: var(--peterriver);
   color: black;
   white-space: pre-wrap;
@@ -155,7 +155,7 @@
 }
 
 #lookup {
-  font-size: calc(4.25 * var(--vh));
+  font-size: 4.25dvh;
 	color: white;
 	background-color: transparent;
   -webkit-appearance: none;
@@ -163,10 +163,14 @@
 }
 
 @media screen and (max-width: 885px){
-  #lookup { font-size: calc(3.75 * var(--vh)); }
+  #lookup { 
+    font-size: 3.75dvh;
+  }
 }
 @media screen and (max-width: 785px){
-  #lookup { font-size: calc(3.25 * var(--vh)); }
+  #lookup {
+    font-size: 3.25dvh; 
+  }
 }
 #lookup::selection {
 	color: white;
@@ -192,14 +196,14 @@
 @media (orientation: portrait) {
   .windowPro {
     grid-template-rows: 
-      calc(8 * var(--vh)) 
-      calc(92 * var(--vh));
+      8dvh 
+      92dvh;
   }
   .containerPro {
     display: grid;
     grid-template-rows: 
-      calc(8 * var(--vh)) 
-      calc(92 * var(--vh) - 65px) 
+      8dvh 
+      calc(92dvh - 65px) 
       65px;
     grid-template-areas: 
       "tenHeader tenHeader"
@@ -209,15 +213,15 @@
   .windowPro .tenHeader,
   .containerPro .tenHeader {
     grid-template-rows: 
-      calc(1 * var(--vh)) 
-      calc(7 * var(--vh));
+      1dvh 
+      7dvh;
     grid-template-columns: 
-      calc(8 * var(--vh)) 
-      calc(7 * var(--vh)) 
+      8dvh 
+      7dvh 
       0
       1fr 
-      calc(6 * var(--vh))
-      calc(6 * var(--vh));
+      6dvh
+      6dvh;
     grid-template-areas: 
       'topBorder topBorder topBorder topBorder topBorder topBorder'
       'homeIcon proLeft auxLeft frontCenter auxRight proRight';
@@ -226,30 +230,30 @@
   .windowPro .homeIconLogo,
   .containerPro .homeIconLink, 
   .containerPro .homeIconLogo {
-    width: calc(8 * var(--vh));
-    height: calc(8 * var(--vh));
-    padding: var(--vh);
+    width: 8dvh;
+    height: 8dvh;
+    padding: 1dvh;
   }
   .windowPro .frontCenterTitle,
   .containerPro .frontCenterTitle {
-    max-width: calc(100vw - (16 * var(--vh)));
-    height: calc(7 * var(--vh));
-    font-size: calc(4 * var(--vh));
+    max-width: calc(100vw - 16dvh);
+    height: 7dvh;
+    font-size: 4dvh;
   }
   .windowPro .taskLink,
   .containerPro .taskLink {
-    margin: var(--vh) 0;
-    width: calc(5 * var(--vh));
-    height: calc(5 * var(--vh));
-    font-size: calc(3 * var(--vh));
+    margin: 1dvh 0;
+    width: 5dvh;
+    height: 5dvh;
+    font-size: 3dvh;
   }
   .windowPro  .followTask i,
   .containerPro .followTask i {
-    width: calc(5 * var(--vh));
-    height: calc(5 * var(--vh));
-    font-size: calc(2 * var(--vh));
+    width: 5dvh;
+    height: 5dvh;
+    font-size: 2dvh;
   }
   .firstBadge::after {
-    left: calc(21.1 * var(--vh));
+    left: 21.1dvh;
   }
 }

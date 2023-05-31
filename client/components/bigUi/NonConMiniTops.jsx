@@ -1,27 +1,26 @@
 import React from 'react';
-import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import NumStat from '/client/components/tinyUi/NumStat.jsx';
 import { countMulti } from '/client/utility/Arrays';
 
-const NonConMiniTops = ({ noncons, items, user, app })=> (
-  <div className='centre'>
-    <HasNonCon noncons={ncG} items={items} />
+// const NonConMiniTops = ({ noncons, items, user, app })=> (
+//   <div className='centre'>
+//     <HasNonCon noncons={noncons} items={items} />
     
-    <NonConPer noncons={ncG} items={items} />
+//     <NonConPer noncons={noncons} items={items} />
 
-    <MostNonCon noncons={ncG} app={app} />
+//     <MostNonCon noncons={noncons} app={app} />
     
-    <TodayNonCon noncons={ncG} />
+//     <TodayNonCon noncons={noncons} />
     
-    <LeftFxNonCon noncons={ncG} />
+//     <LeftFxNonCon noncons={noncons} />
     
-    <LeftInNonCon noncons={ncG} />
+//     <LeftInNonCon noncons={noncons} />
     
-    {/*<UserNonCon noncons={noncons} user={user} />*/}
-  </div>
-);
-export default NonConMiniTops;
+//     {/*<UserNonCon noncons={noncons} user={user} />*/}
+//   </div>
+// );
+// export default NonConMiniTops;
 
 
 export const HasNonCon = ({ noncons, items })=> {
@@ -71,9 +70,9 @@ export const MostNonCon = ({ noncons, app })=> {
 
 export const TodayNonCon = ({ noncons })=> {
   const ncG = noncons.filter( n => !n.trash );
-  const now = moment().format();
+  const now = new Date().toDateString();
   const foundToday = ncG.filter( x => 
-    moment(x.time).isSame(now, 'day') === true );
+    new Date(x.time).toDateString() === now );
   const todayCount = countMulti(foundToday);
   return(
     <NumStat

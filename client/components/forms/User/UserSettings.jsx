@@ -188,7 +188,7 @@ const MenuSkip = ({ id, title })=> {
   );     
 };
 
-const UserColorSetting = ({ userSetting, labelText, helpText, callMethod })=> {
+const UserColorSetting = ({ userSetting, labelText, helpText })=> {
   function handle(val) {
     Meteor.call('setColor', val, (error)=>{
       error && console.log(error);
@@ -226,7 +226,6 @@ const UserToggleSetting = ({ userSetting, labelText, yesText, noText, callMethod
       error && console.log(error);
     });
   }
-  let color = userSetting ? 'blueT' : 'grayT';
   let icon = userSetting ? 
               <n-fa0><i className='fas fa-check-circle fa-2x'></i></n-fa0> : 
               <n-fa1><i className='far fa-check-circle fa-2x'></i></n-fa1>;
@@ -236,7 +235,7 @@ const UserToggleSetting = ({ userSetting, labelText, yesText, noText, callMethod
       <div>{labelText}</div>
       <div>
         <button
-          className={color}
+          className='nT'
           onClick={()=>handle()}
         >{icon}</button>
       </div>

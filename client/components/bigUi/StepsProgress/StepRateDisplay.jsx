@@ -22,4 +22,11 @@ const StepRateDisplay = ({ step, subtitle, gFirst, ngFirst, truncate })=> {
   );
 };
 
-export default StepRateDisplay;
+function areEqual(prevProps, nextProps) {
+	if( prevProps !== nextProps	) {
+  	return false;
+	}else{
+		return true;
+	}
+}
+export default React.memo(StepRateDisplay, areEqual);

@@ -1,5 +1,4 @@
 import React from 'react';
-// import moment from 'moment';
 import { avgOfArray } from '/client/utility/Convert';
 import { countWaterfall } from '/client/utility/Arrays';
   
@@ -92,8 +91,6 @@ function getFirsts(items) {
 function FlowCounter(flow, seriesData) {
   const srsItems = seriesData && Array.isArray(seriesData.items) ? seriesData.items : [];
   
-  // const now = moment().format();
-  // const wndw = (t)=>moment(t).isSame(now, 'day');
   const now = new Date().toDateString();
   const wndw = (t)=> new Date(t).toDateString() === now;
   

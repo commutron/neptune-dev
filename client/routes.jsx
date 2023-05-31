@@ -362,14 +362,14 @@ FlowRouter.globals.push({
 
 var disconnectTimer = null;
 
-function customViewHeight() { 
-  document.querySelector(':root').style
-    .setProperty('--vh', window.innerHeight/100 + 'px');
-}
+// function customViewHeight() { 
+//   document.querySelector(':root').style
+//     .setProperty('--vh', window.innerHeight/100 + 'px');
+// }
 
-Meteor.startup(customViewHeight);
+// Meteor.startup(customViewHeight);
 
-window.addEventListener('resize', customViewHeight);
+// window.addEventListener('resize', customViewHeight);
 
 Meteor.startup(disconnectIfHidden);
 

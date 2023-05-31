@@ -1,14 +1,11 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import moment from 'moment';
 
 import LeapButton from '/client/components/tinyUi/LeapButton';
 import FilterItemsX from '/client/components/bigUi/FilterItemsX';
 import { SeriesDelete } from '/client/components/forms/ItemSerialsX/SeriesForm';
 
-
 const ItemsListX = ({ 
-  seriesData, batchData, rapidsData, widgetData, flowData,
-  orb, isDebug
+  seriesData, batchData, rapidsData, flowData, isDebug
 })=> {
   
   if(!seriesData) {
@@ -61,6 +58,8 @@ const ItemsListX = ({
   }
 
   // Sort Filters
+  const wndw = (t, mod)=> new Date(t).toDateString() === mod;
+  
   function fDone(items, timeMod, notMod) {
     if(!timeMod || timeMod === '') {
       if(notMod === true) {
@@ -69,14 +68,14 @@ const ItemsListX = ({
         return items.filter( x => x.completed === true );
       }
     }else{
+      const tmod = new Date(timeMod+'T00:00:00').toDateString();
+      
       if(notMod === true) {
         return items.filter( x => x.completed === false ||
-                !moment(moment(x.completedAt).format('YYYY-MM-DD'))
-                  .isSame(timeMod, 'day') );
+                !wndw(x.completedAt, tmod) );
       }else{
         return items.filter( x => x.completed === true &&
-                moment(moment(x.completedAt).format('YYYY-MM-DD'))
-                  .isSame(timeMod, 'day') );
+                wndw(x.completedAt, tmod) );
       }
     }
   }
@@ -89,14 +88,15 @@ const ItemsListX = ({
         return items.filter( x => x.completed === false );
       }
     }else{
+      const tmod0 = new Date(timeMod+'T00:00:00');
+      const tmod1 = new Date(timeMod+'T23:59:59');
+      
       if(notMod === true) {
-        return items.filter( x => x.completed === true ||
-                moment(moment(x.createdAt).format('YYYY-MM-DD'))
-                  .isAfter(timeMod, 'day') );
+        return items.filter( x => new Date(x.createdAt) > tmod1
+                  || ( x.completed === true && new Date(x.completedAt) <= tmod0 ) );
       }else{
-        return items.filter( x => x.completed === false &&
-                moment(moment(x.createdAt).format('YYYY-MM-DD'))
-                  .isSameOrBefore(timeMod, 'day') );
+        return items.filter( x => new Date(x.createdAt) <= tmod1
+                  && ( x.completed === false || new Date(x.completedAt) >= tmod0 ) );
       }
     }
   }
@@ -114,18 +114,18 @@ const ItemsListX = ({
                     .length > 0 );
       }
     }else{
+      const tmod = new Date(timeMod+'T00:00:00').toDateString();
+      
       if(notMod === true) {
         filtered = items.filter( 
                     x => x.history.filter( y => y.type === 'first' &&
-                      moment(moment(y.time).format('YYYY-MM-DD'))
-                        .isSame(timeMod, 'day') )
-                      .length === 0 );
+                          wndw(y.time, tmod) )
+                            .length === 0 );
       }else{
         filtered = items.filter( 
                   x => x.history.filter( y => y.type === 'first' &&
-                    moment(moment(y.time).format('YYYY-MM-DD'))
-                      .isSame(timeMod, 'day') )
-                    .length > 0 );
+                        wndw(y.time, tmod) )
+                          .length > 0 );
       }
     }
     return filtered; 
@@ -144,18 +144,18 @@ const ItemsListX = ({
                     .length > 0 );
       }
     }else{
+      const tmod = new Date(timeMod+'T00:00:00').toDateString();
+      
       if(notMod === true) {
         filtered = items.filter( 
                     x => nonCon.filter( y => y.serial === x.serial &&
-                      moment(moment(y.time).format('YYYY-MM-DD'))
-                        .isSame(timeMod, 'day') )
-                      .length === 0 );
+                          wndw(y.time, tmod) )
+                            .length === 0 );
       }else{
         filtered = items.filter(
                   x => nonCon.filter( y => y.serial === x.serial &&
-                    moment(moment(y.time).format('YYYY-MM-DD'))
-                      .isSame(timeMod, 'day') )
-                    .length > 0 );
+                        wndw(y.time, tmod) )
+                          .length > 0 );
       }
     }
     return filtered;
@@ -174,18 +174,18 @@ const ItemsListX = ({
                     .length > 0 );
       }
     }else{
+      const tmod = new Date(timeMod+'T00:00:00').toDateString();
+      
       if(notMod === true) {
         filtered = items.filter( 
                     x => short.filter( y => y.serial === x.serial &&
-                      moment(moment(y.cTime).format('YYYY-MM-DD'))
-                        .isSame(timeMod, 'day') )
-                      .length === 0 );
+                          wndw(y.cTime, tmod) )
+                            .length === 0 );
       }else{
         filtered = items.filter(
                   x => short.filter( y => y.serial === x.serial &&
-                    moment(moment(y.cTime).format('YYYY-MM-DD'))
-                      .isSame(timeMod, 'day') )
-                    .length > 0 );
+                        wndw(y.cTime, tmod) )
+                          .length > 0 );
       }
     }
     return filtered;
@@ -222,18 +222,18 @@ const ItemsListX = ({
                     .length > 0 );
       }
     }else{
+      const tmod = new Date(timeMod+'T00:00:00').toDateString();
+      
       if(notMod === true) {
         iList = items.filter( 
                     x => x.history.filter( y => y.type === 'scrap' &&
-                      moment(moment(y.time).format('YYYY-MM-DD'))
-                        .isSame(timeMod, 'day') )
-                      .length === 0 );
+                          wndw(y.time, tmod) )
+                            .length === 0 );
       }else{
         iList = items.filter( 
                   x => x.history.filter( y => y.type === 'scrap' &&
-                    moment(moment(y.time).format('YYYY-MM-DD'))
-                      .isSame(timeMod, 'day') )
-                    .length > 0 );
+                        wndw(y.time, tmod) )
+                          .length > 0 );
       }
     }
     return iList;
@@ -255,18 +255,18 @@ const ItemsListX = ({
                     .length > 0 );
       }
     }else{
+      const tmod = new Date(timeMod+'T00:00:00').toDateString();
+      
       if(notMod === true) {
         filtered = items.filter( 
                     x => x.history.filter( y => y.key === key && y.good === true &&
-                      moment(moment(y.time).format('YYYY-MM-DD'))
-                        .isSame(timeMod, 'day') )
-                      .length === 0 );
+                          wndw(y.time, tmod) )
+                            .length === 0 );
       }else{
         filtered = items.filter( 
                   x => x.history.filter( y => y.key === key && y.good === true &&
-                    moment(moment(y.time).format('YYYY-MM-DD'))
-                      .isSame(timeMod, 'day') )
-                    .length > 0 );
+                        wndw(y.time, tmod) )
+                          .length > 0 );
       }
     }
     return filtered;                                 

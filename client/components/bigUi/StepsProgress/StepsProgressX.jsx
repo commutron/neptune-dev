@@ -184,4 +184,11 @@ const StepsProgressX  = ({
   );
 };
 
-export default StepsProgressX;
+function areEqual(prevProps, nextProps) {
+	if( prevProps !== nextProps	) {
+  	return false;
+	}else{
+		return true;
+	}
+}
+export default React.memo(StepsProgressX, areEqual);

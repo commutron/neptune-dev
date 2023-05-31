@@ -10,7 +10,6 @@ import SearchHelp from './SearchHelp';
 import XDoProCard from './cards/XDoProCard';
 import PartialCard from './cards/PartialCard';
 import EquipCard from './cards/EquipCard';
-import EqAllCard from './cards/EqAllCard';
 import MultiCard from './cards/MultiCard';
 import ServiceCard, { RepairCard } from './cards/ServiceCard';
 
@@ -375,9 +374,8 @@ const QuickCards = ({ orbslice, canMulti, user, allEquip, allMaint })=> (
     {orbslice && <PartialCard orb={orbslice} /> }
     <div className='balancer gapsR gapsC wide space'>
       <QuickRecent user={user} />
-      <EquipCard equipData={allEquip} maintainData={allMaint} />
-      <EqAllCard />
       {canMulti && <MultiCard />}
+      <EquipCard equipData={allEquip} maintainData={allMaint} />
       <SearchHelp />
     </div>
   </div>

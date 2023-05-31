@@ -31,7 +31,7 @@ const DataViewOps = ({
   user, isDebug, app, brancheS, users,
   hotXBatch, hotXSeries, hotXRapids,
   view, request, specify,
-  subLink, orb
+  subLink
 })=> {
   
   function allLinkedBatches(wId) {
@@ -362,10 +362,8 @@ const DataViewOps = ({
               seriesData={hotXSeries}
               batchData={hotXBatch}
               rapidsData={rapXData}
-              widgetData={widget}
               flowData={flowData}
               fallData={fallData}
-              orb={orb}
               isDebug={isDebug} />
           </TraverseWrap>
         );
@@ -437,10 +435,8 @@ const DataViewOps = ({
             seriesData={hotXSeries}
 		        batchData={hotXBatch}
 		        rapidsData={rapXData}
-		        widgetData={widget}
 		        flowData={flowData}
 		        fallData={fallData}
-		        orb={orb}
 		        isDebug={isDebug} />
         </TraverseWrap>
       );

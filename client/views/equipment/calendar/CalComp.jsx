@@ -23,14 +23,30 @@ const CalComp = ({ events, getEvents, defaultView, height })=> {
   );
   
   const eventPropGetter = useCallback(
-    ({done, pass}) => ({
+    ({done, pass, mId}) => ({
+      ...(mId !== undefined && {
+        className: 'midnightblue miniAction'
+      }),
       ...(done && {
-        className: 'green'
+        className: `green ${mId ? 'miniAction' : ''}`
       }),
       ...(pass && {
-        className: 'orange'
+        className: `orange ${mId ? 'miniAction' : ''}`
       })
     }),
+    []
+  );
+  
+  const handleSelectEvent = useCallback(
+    (event) => {
+      if(event.mId) {
+        if(moment().isBetween(event.start, event.end) || moment().isSame(event.end, 'day')) {
+          Session.set('now', event.link);
+          Session.set('nowSV', event.mId);
+          FlowRouter.go('/production');
+        }
+      }
+    },
     []
   );
   
@@ -47,6 +63,8 @@ const CalComp = ({ events, getEvents, defaultView, height })=> {
       popup={true}
       dayPropGetter={dayPropGetter}
       eventPropGetter={eventPropGetter}
+      onSelectEvent={handleSelectEvent}
+      // onDoubleClickEvent={handleSelectEvent}
   	/>
   );
 };

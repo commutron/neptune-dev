@@ -1,9 +1,9 @@
 .containerEx {
   display: grid;
   grid-template-rows: 
-    calc(8 * var(--vh)) 
-    calc(92 * var(--vh));
-  grid-template-columns: calc(8 * var(--vh)) auto;
+    8dvh
+    92dvh;
+  grid-template-columns: 8dvh auto;
   grid-template-areas: 
     'tenHeader tenHeader'
     'taskBar contentArea';
@@ -42,21 +42,21 @@
   grid-template-columns: auto;
 }
 .baseContainer {
-  grid-template-rows: calc(92 * var(--vh)) 0px;
+  grid-template-rows: 92dvh 0px;
   grid-template-areas: 
     'traverseContent'
     'traverseContent';
 }
 .midTraverseContainer {
   grid-template-columns: auto minmax(10vmin, 14vmax);
-  grid-template-rows: calc(92 * var(--vh));
+  grid-template-rows: 92dvh;
   grid-template-areas: 
     'traverseContent traverseList';
 }
 
 .traverseContainer {
   grid-template-columns: auto minmax(10vmin, 14vmax);
-  grid-template-rows: calc( (92 * var(--vh)) - 48px) 48px;
+  grid-template-rows: calc(92dvh - 48px) 48px;
   grid-template-areas: 
     'traverseContent traverseList'
     'actionBarEx actionBarEx';
@@ -157,7 +157,7 @@
 
 .relativeWrap { position: relative; }
 .fixedResults {
-  max-height: calc( (92 * var(--vh)) - 2vmax - 110px);
+  max-height: calc(92dvh - 2vmax - 110px);
   overflow-y: scroll;
   box-shadow: var(--navIndicatorIn);
 }
@@ -193,7 +193,7 @@
 
 @media (orientation: portrait) {
   .containerEx {
-    grid-template-rows: 8vmin calc( (100 * var(--vh)) - 8vmin);
+    grid-template-rows: 8vmin calc(100dvh - 8vmin);
     grid-template-columns: 8vmin auto;
   }
   .containerEx .tenHeader {
@@ -204,12 +204,12 @@
       'homeIcon frontCenter auxRight proRight';
   }
   .baseContainer {
-    grid-template-rows: calc( (100 * var(--vh)) - 8vmin) 0px;
+    grid-template-rows: calc(100dvh - 8vmin) 0px;
   }
   .midTraverseContainer {
-    grid-template-rows: calc( (100 * var(--vh)) - 8vmin);
+    grid-template-rows: calc(100dvh - 8vmin);
   }
   .traverseContainer {
-    grid-template-rows: calc( (100 * var(--vh)) - 8vmin - 48px) 48px;
+    grid-template-rows: calc(100dvh - 8vmin - 48px) 48px;
   }
 }

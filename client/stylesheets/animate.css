@@ -278,8 +278,8 @@
 .loading > .logoSVG {
   opacity: 0.2;
   animation: spinAround 6s infinite linear;
-  width: calc(60 * var(--vh));
-  height: calc(60 * var(--vh));
+  width: 60dvh;
+  height: 60dvh;
   -webkit-filter: drop-shadow( -5px -5px 5px #000 );
           filter: drop-shadow( -5px -5px 5px #000 );
 }

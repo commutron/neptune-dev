@@ -162,18 +162,6 @@ Meteor.publish('peopleData', function(){
   // const pplSp = Roles.userIsInRole(this.userId, 'peopleSuper');
   if(!this.userId){
     return this.ready();
-  // }else if(admin || pplSp) {
-  //   return [
-  //     Meteor.users.find({orgKey: orgKey},
-  //       {fields: {
-  //         'username': 1,
-  //         'org': 1,
-  //         'roles': 1,
-  //         'engaged': 1,
-  //         'proTimeShare': 1,
-  //         'inbox': 1
-  //      }}),
-  //   ];
   }else{
     return [
       // Meteor.users.find({orgKey: orgKey, roles: { $in: ["active"] }},

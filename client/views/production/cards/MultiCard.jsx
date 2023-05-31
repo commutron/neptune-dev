@@ -11,11 +11,10 @@ const MultiCard = ({  })=> {
   return(
     <div className='centre pop vmargin space min200 max875 tealGlow'>
       <p className='med wide bottomLine cap centreText'>Multi {Pref.xBatch} mode</p>
-      <div className='rowWrap vmarginhalf'>
-      <span>
+      <div className='centre vmarginhalf w100' style={{flex:'auto'}}>
   	    <button
   	      title='Multiple Projects'
-  	      className='tideMulti spacehalf blackblack'
+  	      className='tideMulti spacehalf blackblack margin5'
   	      onClick={()=>openMutiTide()}
   	    >
   	    <b>
@@ -25,7 +24,6 @@ const MultiCard = ({  })=> {
   	      </span>
   	    </b>
 	    </button>
-    </span>
     </div>
    </div>
   );

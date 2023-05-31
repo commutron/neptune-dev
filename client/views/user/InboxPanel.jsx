@@ -16,11 +16,8 @@ const InboxPanel = ({ app, user, users })=> {
   
   return(
     <div className='space5x5'>
-      <p className='rightText vmargin'><a href={'/ne'} target='_blank'>Open Standalone Message Center</a></p>
-      {user.inbox.length === 0 &&
-        <p className='centreText medBig darkgrayT'>No Messages <i className="fas fa-inbox"></i></p>
-      }
       <div className='wide max875'>
+        <p className='rightText vmargin'><a href={'/ne'} target='_blank'>Open Standalone Message Center</a></p>
         {(user.inbox || []).slice(0).reverse().map( (entry)=> (
           <InboxCardWrap 
             key={entry.notifyKey} 
@@ -28,9 +25,9 @@ const InboxPanel = ({ app, user, users })=> {
             unice={unice} 
           />
         ))}
-        {user.inbox.length > 0 &&
+        {user.inbox.length > 0 ?
           <div className='inboxCard light vmargin'>
-            <div><i></i>
+            <div><span></span>
               <div>
                 <button onClick={()=>bulkAction('setReadAllInbox')}
                 ><i className="far fa-circle-check nT gapR"></i>READ ALL
@@ -41,6 +38,8 @@ const InboxPanel = ({ app, user, users })=> {
               </div>
             </div>
           </div>
+          :
+          <p className='centreText medBig darkgrayT'>No Messages <i className="fas fa-inbox"></i></p>
         }
       </div>
     </div>

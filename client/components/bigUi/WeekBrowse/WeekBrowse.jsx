@@ -48,36 +48,48 @@ const WeekBrowse = ({ sendUp, app })=> {
     Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({ yearNum, weekNum });
   }, [yearNum, weekNum]);
   
+  const BTTNtxtBTTN = {
+    lineHeight: '1',
+    letterSpacing: '1px',
+    minWidth: '2vmax',
+  	height: '2.5vmax',
+  	fontSize: '1.5vmax',
+  	padding: '0 10px',
+  };
   
   return(
     <span>
      
       <button 
         title='First'
-        className='BTTNtxtBTTN smallAction blackHover'
+        className='smallAction blackHover'
+        style={{...BTTNtxtBTTN,borderRight: 'none'}}
         onClick={()=>tickWeek(false)} 
         disabled={backwardLock}
       ><i className="fas fa-angle-double-left fa-fw"></i></button>
    
       <button 
         title='Previous'
-        className='BTTNtxtBTTN smallAction blackHover'
+        className='smallAction blackHover'
+        style={BTTNtxtBTTN}
         onClick={()=>tickWeek('down')} 
         disabled={backwardLock}
       ><i className="fas fa-angle-left fa-fw"></i></button>
       
-      <span className='bttnTXTbttn numFont'> {yearNum}<sub>w</sub>{weekNum} </span>
+      <span className='numFont' style={{fontSize: '2.5vmax',verticalAlign: 'middle'}}> {yearNum}<sub>w</sub>{weekNum} </span>
       
       <button 
         title='Next'
-        className='BTTNtxtBTTN smallAction blackHover'
+        className='smallAction blackHover'
+        style={BTTNtxtBTTN}
         onClick={()=>tickWeek('up')} 
         disabled={forwardLock}
       ><i className="fas fa-angle-right fa-fw"></i></button>
     
       <button 
         title='This week'
-        className='BTTNtxtBTTN smallAction blackHover'
+        className='smallAction blackHover'
+        style={{...BTTNtxtBTTN,borderLeft: 'none'}}
         onClick={()=>tickWeek('now')} 
         disabled={forwardLock}
       ><i className="fas fa-angle-double-right fa-fw"></i></button>

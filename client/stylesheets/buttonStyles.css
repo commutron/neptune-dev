@@ -310,7 +310,7 @@
 .leapBonus::before {
   content: attr(data-bonus);
   position: absolute;
-  top: calc(8.25 * var(--vh));
+  top: 8.25dvh;
   right: 15vmax;
   z-index: 11;
   padding: 0.5em 1ch;
@@ -454,11 +454,11 @@ button.variableInput.biggest { height: 64px; }
 .buttonLayerCorrect { height: 1em; }
 
 .taskLink {
-  margin: calc(0.75 * var(--vh)) 0;
-  width: calc(5.5 * var(--vh));
-  min-height: calc(5.5 * var(--vh));
+  margin: 0.75dvh 0;
+  width: 5.5dvh;
+  min-height: 5.5dvh;
   border-radius: 50%;
-  font-size: calc(3.5 * var(--vh));
+  font-size: 3.5dvh;
   cursor: pointer;
 }
 
@@ -506,7 +506,7 @@ button.variableInput.biggest { height: 64px; }
 .auxTipScale::before {
   position: absolute;
   content: attr(aria-label);
-  margin: calc(0.25 * var(--vh)) 0;
+  margin: 0.25dvh 0;
   max-width: -webkit-fill-available;
   max-width: max-content;
   background-color: var(--task-front-color);
@@ -515,11 +515,11 @@ button.variableInput.biggest { height: 64px; }
   z-index: 11;
 }
 .taskTip::after {
-  left: calc(7.5 * var(--vh));
+  left: 7.5dvh;
 }
 .auxTip::before, 
 .auxTipScale::before {
-  right: calc(14 * var(--vh));
+  right: 14dvh;
 }
 
 @media (orientation: portrait) {
@@ -528,8 +528,8 @@ button.variableInput.biggest { height: 64px; }
     margin: 0;
   }
   .auxTip::before {
-    margin: calc(0.15 * var(--vh)) 0;
-    right: calc(12 * var(--vh));
+    margin: 0.15dvh 0;
+    right: 12dvh;
   }
   .auxTipScale::before {
     margin: 0.25vmin 0;
@@ -585,9 +585,9 @@ button.variableInput.biggest { height: 64px; }
   display: flex;
   align-items: center;
   justify-content: center;
-  width: calc(5.5 * var(--vh));
-  height: calc(5.5 * var(--vh));
-  font-size: calc(2.5 * var(--vh));
+  width: 5.5dvh;
+  height: 5.5dvh;
+  font-size: 2.5dvh;
   font-weight: 600;
   color: var(--task-front-color);
   transition: all 150ms ease-in-out;
@@ -658,7 +658,7 @@ button.variableInput.biggest { height: 64px; }
 
 .liteToolOn, 
 .liteToolOff {
-  min-height: calc(3 * var(--vh));
+  min-height: 3dvh;
   padding: 0 5px;
   line-height: 1.5;
   font-size: var(--tx0);

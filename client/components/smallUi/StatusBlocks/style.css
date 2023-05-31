@@ -32,11 +32,11 @@
 
 .overGridRowScroll .perf,
 .downRowScroll  .perf {
-  font-size: calc(2 * var(--vh));
+  font-size: 2dvh;
 }
 .minifyed .overGridRowScroll .perf,
 .minifyed .downRowScroll .perf {
-  font-size: calc(1.5 * var(--vh));
+  font-size: 1.5dvh;
 }
 .darkTheme .perf {
   color: var(--clouds);
