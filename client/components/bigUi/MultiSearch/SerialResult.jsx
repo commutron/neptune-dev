@@ -13,16 +13,18 @@ const SerialResult = ({ queryState, resultState, listLimit })=> {
       :
         re.map( (entry, index)=> {
           if(index <= listLimit) {
-            if(entry[4] === true) {
+            if(entry[4]) {
               return(
                 <LeapLine
-                  key='1a'
+                  key={entry[4]}
                   title={entry[0]}
                   cTwo={entry[1]}
                   cThree={`${entry[2].toUpperCase()} ${entry[3]}`}
-                  cFour={queryState}
-                  sty='greenB'
-                  address={'/data/batch?request=' + entry[0] + '&specify=' + queryState}
+                  cFour={<span>{entry[4]} {queryState === entry[4] ? 
+                    <i className="fas fa-shapes fa-lg fa-fw nT" title='Item'></i> :
+                    <i className="fas fa-object-group fa-fw nT" title='Nested Parent'></i>
+                  }</span>}
+                  address={'/data/batch?request=' + entry[0] + '&specify=' + entry[4]}
                 />
               );
             }else{

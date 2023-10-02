@@ -814,6 +814,7 @@ Meteor.methods({
   FORCEfinishBatchX(batchId, 
     doneScrap, remainScrap, unstartDelete, unstartScrap, comm, pinInput
   ) {
+    this.unblock();
     if(Roles.userIsInRole(Meteor.userId(), "qa") ) {
       const accessKey = Meteor.user().orgKey;
       

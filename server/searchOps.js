@@ -157,15 +157,18 @@ Meteor.methods({
         { "items.serial": { $regex: new RegExp( orb ) } },
         { "items.subItems": { $in: [ orb ] } }
       ]
-    },{fields:{'batch':1,'items.serial':1}}).fetch();
+    },{fields:{'batch':1,'items.serial':1,'items.subItems':1}}).fetch();
                         
     const single = itemsSeries.length === 1 || itemsSeries.length === 2;
 
     let results = [];
     for(let iS of itemsSeries) {
       const whatIs = whatIsBatchX(iS.batch);
-      const exact = !single ? false : iS.items.findIndex( x => x.serial === orb ) >= 0;
-      results.push([ iS.batch, ...whatIs[0], exact ]);
+      const exact = !single ? null : iS.items.find( x => x.serial === orb || (x.subItems && x.subItems.includes(orb)) );
+      
+      const record = exact ? exact.serial : null;
+      
+      results.push([ iS.batch, ...whatIs[0], record ]);
     }
     return results;
   },

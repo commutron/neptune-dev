@@ -126,8 +126,8 @@ const UpstreamDetailChunk = ({
   
   return(
     <div className={`overGridRowScroll ${highG} ${highT}`}>
-      <div>
-        <i><i className='label' title={Pref.salesOrder}
+      <div title={Pref.salesOrder}>
+        <i><i className='label' 
           >{Pref.SO}:<br /></i>{oB.salesOrder}</i>
       </div>
       

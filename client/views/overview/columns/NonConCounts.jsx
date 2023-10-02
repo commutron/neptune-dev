@@ -67,14 +67,14 @@ const NonConCounts = ({
         <NumStat
           num={ncData.itemIsScrap}
           name={Pref.scrapped}
-          title=''
+          title={Pref.scrapped}
           color='redT'
           size='big' 
         />
         <NumStat
           num={ncData.itemHasRMA}
           name={Pref.rapidExd}
-          title=''
+          title={Pref.rapidExd}
           color='redT'
           size='big' 
         />

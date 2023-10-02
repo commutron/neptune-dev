@@ -28,7 +28,7 @@ const KittingChecks = ({
           const bstep = tBatch.branchCondition.find( bc => bc.brKey === br.brKey );
           if(!bstep.condition) {
             return(
-              <div title='N/A' key={'skipBRK'+br.brKey+ix}>
+              <div title={`${br.common} N/A`} key={'skipBRK'+br.brKey+ix}>
               <div className='infoSquareOuter noCopy'>
                 <i className='fas fa-minus fa-2x fa-fw darkgrayT fade'></i>
                 <i className='label infoSquareLabel'></i>
@@ -68,7 +68,7 @@ const KittingChecks = ({
         })}
         
         {!tBatch.serialize ?
-          <div title='N/A'>
+          <div title={`${Pref.baseSerialPart}s N/A`}>
             <div className='infoSquareOuter noCopy'>
               <i className='fas fa-minus fa-2x fa-fw darkgrayT fade'></i>
               <i className='label infoSquareLabel'></i>
@@ -132,7 +132,7 @@ const KittingChecks = ({
     <Fragment>
       {kitCols.map( (st, index)=>{
         return(
-          <div key={batchID + st + index + 'x'}>
+          <div key={batchID + st + index + 'x'} title={st}>
             <i className='fade small label'>{st}</i>
           </div>
       )})}

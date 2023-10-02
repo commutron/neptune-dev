@@ -12,7 +12,7 @@ import AlterFulfill from '/client/components/forms/Batch/AlterFulfill';
 const DownstreamDetails = ({
   indexKey, oB, traceDT,
   user, app,
-  isDebug, isNightly, canDo,
+  isDebug, canDo,
   focusBy, tagBy, prog, dense, stormy, progCols, ncCols, updateTrigger
 })=> (
   <Fragment>
@@ -73,8 +73,8 @@ const DownstreamScrollChunk = ({
   return(
     <div className={`downRowScroll ${highG} ${highT} ${storm}`}>
       
-      <div>
-        <i><i className='label' title={Pref.salesOrder}
+      <div title={Pref.salesOrder}>
+        <i><i className='label'
           >{Pref.SO}:<br /></i>{ck.salesOrder}</i>
       </div>
       
@@ -92,9 +92,9 @@ const DownstreamScrollChunk = ({
       </div>
       
       {isDone ? 
-        ck.oRapid ? <div>{Pref.xBatch} {Pref.rapidExd}</div> :
-        <div>{Pref.xBatch} {Pref.isDone}</div> :
-        <div title={`${Math.round(e2t)} minutes`}>{e2tStatus}</div>}
+        ck.oRapid ? <div title='status'>{Pref.xBatch} {Pref.rapidExd}</div> :
+        <div title='status'>{Pref.xBatch} {Pref.isDone}</div> :
+        <div title={`Estimate\n${Math.round(e2t)} minutes`}>{e2tStatus}</div>}
       
       <BranchProgress
         batchID={ck.batchID}

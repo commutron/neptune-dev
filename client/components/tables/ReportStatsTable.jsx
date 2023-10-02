@@ -65,8 +65,8 @@ const ReportStatsTable = ({ title, dateString, rows, extraClass })=> {
                         <tr key={rndm}>
                           <td className='indent'>{etr[0]}</td>
                           <td>{etr[1]}</td>
-                          {etr[2] && <td>{etr[2]}</td>}
-                          {etr[3] && <td>{etr[3]}</td>}
+                          {etr[2] !== undefined && <td>{etr[2]}</td>}
+                          {etr[3] !== undefined && <td>{etr[3]}</td>}
                         </tr>
                     )})}
                   </tbody>
@@ -77,8 +77,8 @@ const ReportStatsTable = ({ title, dateString, rows, extraClass })=> {
                     <tr>
                       <th>{entry[0]}</th>
                       <th>{entry[1]}</th>
-                      {entry[2] && <th>{entry[2]}</th>}
-                      {entry[3] && <th>{entry[3]}</th>}
+                      {entry[2] !== undefined && <th>{entry[2]}</th>}
+                      {entry[3] !== undefined && <th>{entry[3]}</th>}
                     </tr>
                   </thead>
                 );
@@ -88,8 +88,8 @@ const ReportStatsTable = ({ title, dateString, rows, extraClass })=> {
                     <tr>
                       <td>{entry[0]}</td>
                       <td>{entry[1]}</td>
-                      {entry[2] && <td>{entry[2]}</td>}
-                      {entry[3] && <td>{entry[3]}</td>}
+                      {entry[2] !== undefined && <td>{entry[2]}</td>}
+                      {entry[3] !== undefined && <td>{entry[3]}</td>}
                     </tr>
                   </tbody>
             )}})}
@@ -103,4 +103,3 @@ const ReportStatsTable = ({ title, dateString, rows, extraClass })=> {
 };
 
 export default ReportStatsTable;
-

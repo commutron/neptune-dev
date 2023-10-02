@@ -63,7 +63,7 @@ export const PerformanceSquare = ({ perf })=> {
     <NumStat
       num={<span className='perf'>{golden}{pfRank}</span>}
       name='Performance'
-      title={pfText}
+      title={`Performance: ${pfText}`}
       color='blackblackT'
       size='bold bigger'
     />

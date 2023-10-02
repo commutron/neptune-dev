@@ -232,7 +232,7 @@ const YrWkPnItemFormX = ({
           </p>
         </form>
         
-      <div className='centre vspace numFont'>
+      <div className='centre vspace numFont max500'>
         <dl className='letterSpaced noindent'>
           {previewListStart.map( (ent, ix)=>{
             return(<dd key={ix+'s'}>{ent}</dd>);

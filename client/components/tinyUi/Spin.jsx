@@ -1,17 +1,14 @@
 import React from 'react';
 
-const Spin = ({ color, message }) => {
-  let img = !color ? '/neptune-logo-white.svg' : '/neptune-logo-color.svg';
-  let sty = { height: '50vh' };
-  
+const Spin = ({ message }) => {
   let text = message || '';
   
   return (
     <div className='loading'>
       <img
-        src={img}
+        src='/neptune-logo-white.svg'
         className='logoSVG shadow'
-        style={sty} />
+        style={{ height: '50vh' }} />
       <br />
       <p className='centreText darkgrayT'>{text}</p>
     </div>
@@ -20,26 +17,23 @@ const Spin = ({ color, message }) => {
 
 export default Spin;
 
-export const SpinWrap = ({ color, message })=> (
+export const SpinWrap = ({ message })=> (
   <div className='centreContainer'>
     <div className='centrecentre'>
-      <Spin color={color} message={message} />
+      <Spin message={message} />
     </div>
   </div>
 );
 
-export const CalcSpin = () => {
-  let sty = { height: '50px' };
-  return(
-    <div className='centre'>
-      <p className='centreText'>
-        <img
-          src='/neptuneMiniSpin.svg'
-          className='minispinLogoSVG'
-          style={sty} />
-        <br />
-        <em>Loading...</em>
-      </p>
-    </div>
-  );
-};
+export const CalcSpin = () => (
+  <div className='centre'>
+    <p className='centreText'>
+      <img
+        src='/neptuneMiniSpin.svg'
+        className='minispinLogoSVG'
+        style={{ height: '50px' }} />
+      <br />
+      <em>Loading...</em>
+    </p>
+  </div>
+);

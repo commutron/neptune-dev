@@ -15,9 +15,8 @@ const UpstreamView = ({ batchX, traceDT, user, app, brancheS, isAuth, isDebug })
   
   const [ loadTime, loadTimeSet ] = useState( moment() );
                         
-  const sessionDense = Session.get(sessionSticky+'dense');
-  const defaultDense = sessionDense !== undefined ? sessionDense :
-                        user.miniAction || false;
+  // const sessionDense = Session.get(sessionSticky+'dense');
+  // const defaultDense = sessionDense !== undefined ? sessionDense : user.miniAction || false;
                         
   const sessionLight = Session.get(sessionSticky+'lightTheme');
   const defaultLight =  sessionLight !== undefined ? sessionLight :
@@ -28,7 +27,7 @@ const UpstreamView = ({ batchX, traceDT, user, app, brancheS, isAuth, isDebug })
   const [ sortBy, sortBySet ] = useState( Session.get(sessionSticky+'sort') || 'priority' );
   const [ tagBy, tagBySet ] = useState( Session.get(sessionSticky+'tags') || false );
   
-  const [ dense, denseSet ] = useState( defaultDense );
+  const [ dense, denseSet ] = useState( true );
   const [ light, themeSet ] = useState( defaultLight );
   
   const [ liveState, liveSet ] = useState( false );
@@ -80,10 +79,10 @@ const UpstreamView = ({ batchX, traceDT, user, app, brancheS, isAuth, isDebug })
     Session.set(sessionSticky+'tags', tag);
   }
   
-  function changeDense(val) {
-    denseSet( val );
-    Session.set(sessionSticky+'dense', val);
-  }
+  // function changeDense(val) {
+  //   denseSet( val );
+  //   Session.set(sessionSticky+'dense', val);
+  // }
   function changeTheme(val) {
     themeSet( val );
     Session.set(sessionSticky+'lightTheme', val);
@@ -166,8 +165,8 @@ const UpstreamView = ({ batchX, traceDT, user, app, brancheS, isAuth, isDebug })
         changeTagsUP={(e)=>changeTag(e)} 
         sortByUP={sortBy}
         changeSortUP={(e)=>changeSort(e)}
-        denseUP={dense}
-        denseSetUP={(e)=>changeDense(e)}
+        // denseUP={dense}
+        // denseSetUP={(e)=>changeDense(e)}
         lightUP={light}
         themeSetUP={(e)=>changeTheme(e)}
         doThing={()=>updateTriggerSet(!updateTrigger)}

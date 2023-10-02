@@ -3,7 +3,8 @@ import Pref from '/client/global/pref.js';
 import ClockString from '/client/components/smallUi/ClockString';
 import { 
   FocusSelect, FilterSelect, ProgSwitch,
-  LayoutSwitch, ThemeSwitch, StormySwitch
+  // LayoutSwitch, 
+  ThemeSwitch, StormySwitch
 } from '/client/components/smallUi/ToolBarTools';
 
 
@@ -15,7 +16,8 @@ const DownstreamTools = ({
   tagBy, changeTagsUP,
   stormy, stormySet, 
   progUP, progSetUP,
-  denseUP, denseSetUP, lightUP, themeSetUP,
+  // denseUP, denseSetUP,
+  lightUP, themeSetUP,
   doThing
 })=> {
   const gList = _.uniq( Array.from(traceDT, g =>
@@ -86,10 +88,12 @@ const DownstreamTools = ({
         changeFunc={stormySet} 
       />
       
+      {/*
       <LayoutSwitch
         denseState={denseUP}
         changeFunc={denseSetUP}
       />
+      */}
       
       <ThemeSwitch
         themeState={lightUP}

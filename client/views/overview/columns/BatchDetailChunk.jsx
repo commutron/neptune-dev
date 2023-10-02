@@ -39,8 +39,8 @@ const BatchDetailChunk = ({
       
   return(
     <div className={`overGridRowScroll ${highG} ${highT} ${storm} ${rTFghostC}`} title={rTFghostT}>
-      <div className='med'>
-        <i><i className='label' title={Pref.salesOrder}
+      <div className='med' title={Pref.salesOrder}>
+        <i><i className='label'
           >{Pref.SO}:<br /></i>{oB.salesOrder}</i>
       </div>
       
@@ -147,7 +147,7 @@ export const ServeDetailChunk = ({ sv, isRO, isDebug, dense })=> {
         <i className='label infoSquareLabel'>{acttl}</i>
       </div>
 
-      <div className='med'>
+      <div className='med' title='Service Due'>
         <i><i className='label'>Due:<br /></i>{moment(sv.due).format("MMM Do")}</i>
       </div>
       

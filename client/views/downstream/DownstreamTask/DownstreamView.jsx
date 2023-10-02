@@ -17,9 +17,8 @@ const DownstreamView = ({ traceDT, dayTime, user, app, isDebug })=> {
   const defaultProgs = sessionProgs !== undefined ? sessionProgs :
                         user.progType || false;
                         
-  const sessionDense = Session.get(sessionSticky+'dense');
-  const defaultDense = sessionDense !== undefined ? sessionDense :
-                        user.miniAction || false;
+  // const sessionDense = Session.get(sessionSticky+'dense');
+  // const defaultDense = sessionDense !== undefined ? sessionDense : user.miniAction || false;
                         
   const sessionLight = Session.get(sessionSticky+'lightTheme');
   const defaultLight =  sessionLight !== undefined ? sessionLight :
@@ -32,7 +31,7 @@ const DownstreamView = ({ traceDT, dayTime, user, app, isDebug })=> {
   const [ tagBy, tagBySet ] = useState( Session.get(sessionSticky+'tags') || false );
   const [ stormy, stormySet ] = useState(false);
   const [ prog, progSet ] = useState( defaultProgs );
-  const [ dense, denseSet ] = useState( defaultDense );
+  const [ dense, denseSet ] = useState( true );
   const [ light, themeSet ] = useState( defaultLight );
   
   const [ updateTrigger, updateTriggerSet ] = useState(true);
@@ -121,8 +120,8 @@ const DownstreamView = ({ traceDT, dayTime, user, app, isDebug })=> {
         stormySet={stormySet}
         progUP={prog}
         progSetUP={(e)=>changeState(e, 'prog')}
-        denseUP={dense}
-        denseSetUP={(e)=>changeState(e, 'dense')}
+        // denseUP={dense}
+        // denseSetUP={(e)=>changeState(e, 'dense')}
         lightUP={light}
         themeSetUP={(e)=>changeState(e, 'lightTheme')}
         doThing={()=>updateTriggerSet(!updateTrigger)}

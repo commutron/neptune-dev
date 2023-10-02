@@ -97,7 +97,7 @@ const ToggleSearch = ({
         <input
           id='multiSearch'
           type='search'
-          pattern='[A-Za-z0-9\.()_\-\s#,:[\]/\\]*'
+          pattern='\[A-Za-z0-9\\\.\(\)_\\-\\s#,:\[\\\]/\\\\\]\*'
           minLength={tggl === false ? '5' : '3'}
           className='variableInput big'
           onChange={(e)=>handle(e)}
@@ -107,7 +107,7 @@ const ToggleSearch = ({
       </p>
       
       <p>{tggl ? `Find by number, ${Pref.group}, ${Pref.widget}, sales order, tag, ${Pref.radio}, Notes content, ${Pref.shortfall} ${Pref.comp}, ${Pref.rapidEx} ID or issue.` : 
-          tggl === false ? 'Find an item by whole or partial serial number.' :
+          tggl === false ? 'Find an item by whole or partial serial number. Primary or nested.' :
           `Find by ${Pref.trackFirst}, ${Pref.method}, ${Pref.consume} or `}
           {tggl === null && <abbr title="only by exact user ID">{Pref.builder}</abbr>}.
       </p>

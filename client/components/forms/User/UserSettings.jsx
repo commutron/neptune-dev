@@ -64,14 +64,16 @@ const UserSettings = ({ app, user, isAdmin, brancheS })=> {
               yesText='Overview and Streams default to the task time view.'
               noText='Overview and Streams default to the progress view.'
               callMethod='setUserProgPrefer' />
-              
+            
+            {/*
             <UserToggleSetting
               userSetting={Meteor.user().miniAction}
               labelText='Prefer Dense View'
               yesText='Overview and Streams default to the minifyed view.'
               noText='Overview and Streams default to the comfort view.'
               callMethod='setUserMiniPrefer' />
-              
+            */}
+            
             <UserToggleSetting
               userSetting={Meteor.user().preferLight}
               labelText='Prefer Light Theme'

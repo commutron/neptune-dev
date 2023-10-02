@@ -2,7 +2,8 @@ import React from 'react';
 import ClockString from '/client/components/smallUi/ClockString';
 import { 
   FocusSelect, FilterSelect, SortSelect,
-  LayoutSwitch, ThemeSwitch
+  // LayoutSwitch,
+  ThemeSwitch
 } from '/client/components/smallUi/ToolBarTools';
 
 const UpstreamTools = ({
@@ -11,7 +12,7 @@ const UpstreamTools = ({
   salesByUP, changeSalesUP, 
   sortByUP, changeSortUP, 
   tagBy, changeTagsUP,
-  denseUP, denseSetUP, 
+  // denseUP, denseSetUP, 
   lightUP, themeSetUP,
   doThing
 })=> {
@@ -64,11 +65,13 @@ const UpstreamTools = ({
           extraClass='miniIn12'
         />
       }
-        
+      
+      {/* 
       <LayoutSwitch
         denseState={denseUP}
         changeFunc={denseSetUP}
       />
+      */}
       
       <ThemeSwitch
         themeState={lightUP}

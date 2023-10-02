@@ -31,7 +31,7 @@ const BatchTopStatus = ({
 
   return(
     <Fragment>
-      <div className='med'>
+      <div className='med' title='Shipping Due Date'>
         <i><i className='label'>Due:<br /></i>{dueDateShip}</i>
       </div>
 
@@ -45,12 +45,14 @@ const BatchTopStatus = ({
                 weekDaysRemain === 1 ?
                   'Workday Remaining' :
                   'Workdays Remaining'}
+        title='Remaining Workdays'
         color={weekDaysRemain < 0 ? 'orangeT' : 'blackT'}
         size='big' />
       
       <NumStat
         num={tBatch.quantity || '?'}
         name='Total Items'
+        title='Total Items Quantity'
         color='blueT'
         size='big' />
       

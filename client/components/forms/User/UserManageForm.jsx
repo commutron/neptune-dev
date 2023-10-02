@@ -187,11 +187,13 @@ const SetCheckSuper = ({ user, role, roleName })=>	{
   }
   return(
     <dd>
-      <label htmlFor={role} className='middle'>
+      <label 
+        htmlFor={role}
+        title={`Only ${Pref.allowedSupers} user can have a 'super' permission at a time`}
+        className='middle'>
         <input
           type='checkbox'
           id={role}
-          title="only one user can have a 'super' permission at a time"
           defaultChecked={check}
           onChange={()=>changeSuper()}
           readOnly
@@ -215,9 +217,7 @@ const SetCheck = ({ user, role, roleName })=> {
     });
   }
   
-  const lockout = role === 'active' && 
-                  user === Meteor.userId() ?
-                  true : false;
+  const lockout = role === 'active' && user === Meteor.userId();
     
   return(
     <dd>

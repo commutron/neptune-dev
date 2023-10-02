@@ -29,9 +29,8 @@ const OverviewWrap = ({
   const defaultProgs = sessionProgs !== undefined ? sessionProgs :
                         user.progType || false;
                         
-  const sessionDense = Session.get(sessionSticky+'dense');
-  const defaultDense = sessionDense !== undefined ? sessionDense :
-                        user.miniAction || false;
+  // const sessionDense = Session.get(sessionSticky+'dense');
+  // const defaultDense = sessionDense !== undefined ? sessionDense : user.miniAction || false;
                         
   const sessionLight = Session.get(sessionSticky+'lightTheme');
   const defaultLight =  sessionLight !== undefined ? sessionLight :
@@ -46,7 +45,7 @@ const OverviewWrap = ({
   
   const [ ghost, ghostSet ] = useState( defaultGhost );
   const [ prog, progSet ] = useState( defaultProgs );
-  const [ dense, denseSet ] = useState( defaultDense );
+  const [ dense, denseSet ] = useState( true );
   const [ light, themeSet ] = useState( defaultLight );
   const [ stormy, stormySet ] = useState(false);
   
@@ -244,8 +243,8 @@ const OverviewWrap = ({
         ghostSetUP={(e)=>changeState(e, 'ghost')}
         progUP={prog}
         progSetUP={(e)=>changeState(e, 'prog')}
-        denseUP={dense}
-        denseSetUP={(e)=>changeState(e, 'dense')}
+        // denseUP={dense}
+        // denseSetUP={(e)=>changeState(e, 'dense')}
         lightUP={light}
         themeSetUP={(e)=>changeState(e, 'lightTheme')}
         stormy={stormy}

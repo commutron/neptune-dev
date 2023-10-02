@@ -3,7 +3,8 @@ import ClockString from '/client/components/smallUi/ClockString';
 import { 
   SortSelect, 
   FocusSelect, FilterSelect, ProgSwitch,
-  LayoutSwitch, ThemeSwitch, StormySwitch
+  // LayoutSwitch, 
+  ThemeSwitch, StormySwitch
 } from '/client/components/smallUi/ToolBarTools';
 
 const OverviewTools = ({
@@ -14,7 +15,7 @@ const OverviewTools = ({
   tagBy, changeTagsUP,
   ghostUP, ghostSetUP, 
   progUP, progSetUP,
-  denseUP, denseSetUP,
+  // denseUP, denseSetUP,
   lightUP, themeSetUP,
   stormy, stormySet,
   doThing
@@ -91,10 +92,12 @@ const OverviewTools = ({
         changeFunc={stormySet} 
       />
       
+      {/*
       <LayoutSwitch
         denseState={denseUP}
         changeFunc={denseSetUP}
       />
+      */}
       
       <ThemeSwitch
         themeState={lightUP}

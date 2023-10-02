@@ -61,7 +61,7 @@ const BranchProgress = ({
             <NumStat
               num={dtTotl || ""}
               name='Total Items'
-              title=''
+              title='Total Items Quantity'
               color='blueT'
               size='big' />
           </div>}
@@ -91,7 +91,7 @@ const BranchProgress = ({
             if(!progType) {
               if(br.steps === 0) {
                 return(
-                  <div key={batchID + br.branch + index + 'x'}>
+                  <div key={batchID + br.branch + index + 'x'} title={br.branch}>
                    <i className='fade small label'>{br.branch}</i>
                   </div>
                 );
@@ -108,7 +108,7 @@ const BranchProgress = ({
                   <div 
                     key={batchID + niceName + index + 'g'} 
                     className={'fillRight' + fadeTick + redLne + ylwLne}
-                    title={`Steps: ${br.steps}${ylwTxt}${redtxt}`}>
+                    title={`${niceName}\nSteps: ${br.steps}${ylwTxt}${redtxt}`}>
                     <NumStat
                       num={isNaN(calNum) ? '' : `${calNum}%`}
                       name={niceName}
@@ -122,7 +122,7 @@ const BranchProgress = ({
                 <div 
                   key={batchID + niceName + index + 'b'} 
                   className={bgt !== null ? calNum > 100 ? 'warnRed' : 'fillUp' + fadeTick : br.time > 0 ? 'blueGlow' : ''}
-                  title={`${Math.round(br.time)} minutes verified\n${bgt || 0} minutes budgeted\n${isFinite(calNum) && calNum >= 0 ? calNum+'%' : ''}`}>
+                  title={`${niceName}\n${Math.round(br.time)} minutes verified\n${bgt || 0} minutes budgeted\n${isFinite(calNum) && calNum >= 0 ? calNum+'%' : ''}`}>
                   <NumStat
                     num={isNaN(br.time) || br.time === 0 ? '' : `${min2hr(br.time)} hrs`}
                     name={niceName}
@@ -140,7 +140,7 @@ const BranchProgress = ({
     <Fragment>
       {progCols.map( (branch, index)=>{
         return(
-          <div key={batchID + branch + index + 'z'}>
+          <div key={batchID + branch + index + 'z'} title={branch}>
             <i className='fade small label'>{branch}</i>
           </div>
       )})}
