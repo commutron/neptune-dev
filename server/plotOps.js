@@ -70,8 +70,9 @@ export function plotNonCons(batches, branches) {
   for( let batch of batches) {
     const srs = XSeriesDB.findOne({batch: batch.batch});
     const units = srs ? srs.items.length > 0 ? srs.items.reduce((t,i)=> t + i.units, 0) : 0 : 0;
-    const nncns = srs ? srs.nonCon : [];
-    
+    // -- nc rate calculation filter --
+    const nncns = srs ? srs.nonCon.filter( n => !n.trash && !(n.inspect && !n.fix) ) : [];
+      
     const ncQty = srs ? countMulti(nncns) : 0;
     const ncRte = asRate(ncQty, units);
     

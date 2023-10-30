@@ -77,7 +77,7 @@ const FilterItems = ({
       </label>
     </div>
       
-    <p className='centreText'>{total} items</p>
+    <p className='centreText margin5' style={{fontSize: "calc(0.7rem + 0.3vw)"}}>{total} items</p>
   </div>
 );
 

@@ -34,7 +34,7 @@ const FilterActive = ({ title, open, done, total, onClick, onTxtChange })=>	{
         </label>
       </div>
           
-      <p className='centreText'>Total: {total}</p>
+      <p className='centreText margin5' style={{fontSize: "calc(0.7rem + 0.3vw)"}}>Total: {total}</p>
       
     </div>
   );

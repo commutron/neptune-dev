@@ -4,11 +4,11 @@ import 'moment-business-time';
 
 import Config from '/server/hardConfig.js';
 
-import { syncLocale, noIg } from '/server/utility.js';
+import { syncLocale, countMulti, noIg } from '/server/utility.js';
 import { getShipAim, getShipDue, getEndWork } from '/server/shipOps';
 import { distTimeBudget } from './tideGlobalMethods.js';
 import { whatIsBatchX } from './searchOps.js';
-import { round1Decimal, diffTrend, percentOf } from './calcOps';
+import { asRate, round1Decimal, diffTrend, percentOf } from './calcOps';
 
 
 export function calcShipDay( batchId, nowDay, futureDay ) {
@@ -132,9 +132,12 @@ function weekDoneAnalysis(rangeStart, rangeEnd) {
     const allQuantity = gf.quantity;
     
     const srs = XSeriesDB.findOne({batch: gf.batch});
-    const itemQty = srs ? srs.items.length : 0;
-    const ncQty = srs ? srs.nonCon.filter( n => !n.trash ).length : 0;
-    const ncRate = ncQty ? ( ncQty / itemQty ).toFixed(1, 10) : 0;
+    const units = srs ? srs.items.length > 0 ? srs.items.reduce((t,i)=> t + i.units, 0) : 0 : 0;
+    // -- nc rate calculation filter --
+    const ncArr = srs ? srs.nonCon.filter( n => !n.trash && !(n.inspect && !n.fix) ) : [];
+    const ncQty = srs ? countMulti(ncArr) : 0;
+    
+    const ncRate = ncQty ? asRate(ncQty, units) : 0;
     const endAlter = gf.altered.filter( a => a.changeKey === 'salesEnd' ).length;
     
     const deliveryResult = deliveryState(gf._id, gf.salesEnd, gf.completedAt);

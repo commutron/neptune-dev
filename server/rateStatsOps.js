@@ -287,7 +287,6 @@ import { syncLocale, countMulti, noIg } from './utility';
 
 Meteor.methods({
   
-  
   cycleWeekRate(stat, cycles, bracket) {
     this.unblock();
     try {

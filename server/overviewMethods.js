@@ -153,7 +153,8 @@ function collectNonCon(batchID) {
       const items = !srs ? [] : srs.items;
       const itemQty = items.length > 0 ? items.reduce((t,i)=> t + i.units, 0) : 0;
       // nonCon relevant
-      const rNC = !srs ? [] : srs.nonCon.filter( n => !n.trash );
+      // -- nc rate calculation filter --
+      const rNC = !srs ? [] : srs.nonCon.filter( n => !n.trash && !(n.inspect && !n.fix) );
       // how many nonCons
       const nonConTotal = countMulti(rNC);
       // how many are unresolved  
@@ -249,7 +250,8 @@ Meteor.methods({
       const srs = XSeriesDB.findOne({batch: b.batch});
       const items = srs ? srs.items : [];
       
-      const nc = countMulti( srs ? srs.nonCon.filter( n => !n.trash ) : [] );
+      // -- nc rate calculation filter --
+      const nc = countMulti( srs ? srs.nonCon.filter( n => !n.trash && !(n.inspect && !n.fix) ) : [] );
       const units = items.length > 0 ? items.reduce((t,i)=> t + i.units, 0) : 0;
       const rate = asRate(nc, units);
       const pb = rate < 1 ? Math.round(rate) : Math.ceil(rate*0.1);

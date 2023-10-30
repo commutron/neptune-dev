@@ -533,6 +533,9 @@ main {
   text-align: left;
   white-space: nowrap;
 }
+.slideMenuButton > .small, .slideNestedMenuButton  > .small {
+  font-size: 1.25vmin;
+}
 .slideMenuButton {
   color: var(--silver);
 }

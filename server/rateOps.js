@@ -115,14 +115,14 @@ Meteor.methods({
   // nonCon Rate ////////////
   //////////////////////////
   nonConRateLoop(batches) {
-
+    // loop for Batch "recorded rate" chart
     const allNC = Array.from( batches, x => {
       const bDT = XSeriesDB.findOne({batch: x},{fields:{'nonCon':1}});
       if(bDT) { return bDT.nonCon }            
     }).filter(f=>f);
     
     function oneRate(theseNC) {
-      
+      // ploting the ncs as flagged (not how they're resolved)
       function recordedNC(noncons, qDay) {
         let relevant = noncons.filter(
                         x => moment(x.time)

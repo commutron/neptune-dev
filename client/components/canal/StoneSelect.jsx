@@ -2,13 +2,10 @@ import React, { useRef, useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 
 import StoneControl from './StoneControl';
-import ForkMenu from './ForkMenu';
-import { CommField } from './CommField';
 import TestFails from './TestFails';
 import NCTributary from './NCTributary';
 import Shortfalls from './Shortfalls';
 import CompleteRest from './CompleteRest';
-import { CommTrigger } from './CommField';
 
 const StoneSelect = ({ 
   bID, 
@@ -175,16 +172,6 @@ const StoneSelect = ({
             commTrigger={(e)=>commTrigger(e)}
             commTxtState={commTxtState}
           />
-	        
-  	      {canVerify && wFlowOps.length > 1 && !rapIs ?
-    	      <ForkMenu
-    	        seriesId={seriesId}
-    	        serial={item.serial}
-    	        wFlowOps={wFlowOps}
-    	        wFlowNow={wFlowNow}
-    	        altIs={altIs}
-    	      />
-  	       : null}
   	      
           <div className='undoStepWrap'>
   					{undoOption ? 
@@ -194,12 +181,6 @@ const StoneSelect = ({
   					  />
   					: null}
   				</div>
-  				
-  				{flowStep.type !== 'first' &&
-  				  <div className='stoneComm'>
-      				<CommTrigger
-      					commTrigger={()=>commTrigger(!commDoState)} />
-          	</div>}
   				
   				{rapIs && rarapid ?
   				  <div className='altTitle cap'>
@@ -211,9 +192,6 @@ const StoneSelect = ({
   				    <small>Alt Flow: {altitle}</small>
   				  </div>
   				}
-  				
-  				{commDoState &&
-  				  <CommField commSet={(e)=>commTxtSet(e)} />}
           
           <div className='riverErrors'>
             {fTest.length > 0 && 

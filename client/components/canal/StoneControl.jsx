@@ -2,7 +2,6 @@ import React, { useRef, useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 
 import StoneReg from './StoneReg.jsx';
-import StoneVerify from './StoneVerify.jsx';
 import StoneTest from './StoneTest.jsx';
 import FoldInNested from './FoldInNested';
 import StoneFinish from './StoneFinish.jsx';
@@ -113,18 +112,6 @@ const StoneControl = ({
 			commTxtState={commTxtState}
 		/>;
 	
-	const renderVerify = 
-		<StoneVerify 
-			key={seriesId+serial+sKey}
-			sKey={sKey}
-			step={step}
-			type={type} 
-			lockout={lockout}
-			topClass={topClass}
-			topTitle={topTitle}
-			handleVerify={handleVerify}
-		/>;
-	
 	const renderTest = 
 		<StoneTest
 			key={seriesId+serial+sKey}
@@ -186,12 +173,6 @@ const StoneControl = ({
 			workingState={workingState}
 			commTxtState={commTxtState}
 		/>;
-		
-	if(type === 'first') {
-		return(
-			renderVerify
-		);
-	}
 	
 	if(type === 'test') {
 		return(

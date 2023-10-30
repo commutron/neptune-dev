@@ -38,7 +38,8 @@ function loopSerieses(serieses) {
     let allShortfalls = [];
     
     for(let srs of serieses) {
-      allNonCons.push(...srs.nonCon.filter( x => !x.trash ));
+      // -- nc rate calculation filter --
+      allNonCons.push(...srs.nonCon.filter( x => !x.trash && !(n.inspect && !n.fix) ));
       allShortfalls.push(...srs.shortfall);
       allItems.push(...srs.items);
     }

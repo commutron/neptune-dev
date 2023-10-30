@@ -241,8 +241,10 @@ Meteor.methods({
   countNonConTypes(batch, nonConArray, nonConOptions) {
     function ncCounter(ncArray, ncOptions) {
       let ncCounts = [];
+      // -- nc rate calculation filter used for widget NC chart--
+      const ncRelArr = ncArray.filter( n => !n.trash && !(n.inspect && !n.fix) );
       for(let ncType of ncOptions) {
-        const typeCount = countMulti( ncArray.filter( n => n.type === ncType && !n.trash ) );
+        const typeCount = countMulti( ncRelArr.filter( n => n.type === ncType ) );
         ncCounts.unshift({x: ncType, y: typeCount, l: batch});
       }
       return ncCounts;
@@ -337,7 +339,8 @@ Meteor.methods({
       for(let srs of series) {
         const b = XBatchDB.findOne({ batch: srs.batch },{fields:{'completed':1}});
         if(b.completed) {
-          const total = countMulti( srs.nonCon.filter( n => !n.trash ) );
+          // -- nc rate calculation filter --
+          const total = countMulti( srs.nonCon.filter( n => !n.trash && !(n.inspect && !n.fix) ) );
           const units = srs.items.reduce((t,i)=> t + i.units, 0);
           rateArr.push( asRate(total, units) );
         }

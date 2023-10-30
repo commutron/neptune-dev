@@ -9,7 +9,6 @@ import TideWall from '/client/components/canal/TideWall';
 import ReleaseAction from '/client/components/bigUi/ReleasesModule';
 
 import River from '/client/components/canal/River';
-import RedoIsland from '/client/components/canal/RedoIsland';
 
 const XDoProCard = ({ 
   itemData, seriesData, batchData, rapidsData,
@@ -165,18 +164,6 @@ const XDoProCard = ({
             showVerifyState={showVerifyState}
             optionVerify={optionVerify}
             handleVerify={handleVerify} />;
-            
-  const insertRedoIsland =
-          <RedoIsland
-            batchId={batchData._id}
-            seriesId={seriesData && seriesData._id}
-            itemData={itemData}
-            flowFirsts={flowFirsts}
-            brancheS={brancheState}
-            app={app}
-            users={users}
-            optionVerify={optionVerify}
-            handleVerify={handleVerify} />;
   
   return(
     <Fragment>
@@ -199,8 +186,6 @@ const XDoProCard = ({
       !tideFloodGate ? insertTideWall : // @ Locked
         
         !flowAction || ( iComplete && !rapidData.rapIs ) ? <div>item</div> : // @ Rest
-          
-          showVerifyState ? insertRedoIsland : // @ First Form
             
             insertRiver // @ River
     }

@@ -60,8 +60,7 @@ export function allNCOptions() {
 }
 
 export function countMulti(ncArr) {
-  const inst = Array.from(ncArr, x => Number(x.multi) || 1);
-  const count = inst.reduce((x,y)=> x + y, 0);
+  const count = ncArr.reduce((x,y)=> x + Number(y.multi || 1), 0);
   return count;
 }
 export function countMultiRefs(shArr) {
