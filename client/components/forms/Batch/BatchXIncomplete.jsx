@@ -57,24 +57,26 @@ const BatchXIncompleteForm = ({ batchData, seriesData, selfclose })=> {
     const pinVal = this.orgPINgo.value;
     
     if(Roles.userIsInRole(Meteor.userId(), 'qa')) {
-      Meteor.call('FORCEfinishBatchX', batchData._id, 
-        doneScrap, remainScrap, unstartDelete, unstartScrap, comm, pinVal,
-      (error, reply)=> {
-        if(error)
-          console.log(error);
-        if(reply) {
-          toast.update(( batchData._id + 'FORCE' ), {
-            render: `${Pref.xBatch} Force Finished`,
-            type: toast.TYPE.SUCCESS,
-            autoClose: 3000
-          });
-          selfclose();
-        }else{
-          console.log('BLOCKED BY SERVER METHOD');
-          toast.error('Server Error');
-          workingSet(false);
+      Meteor.apply('FORCEfinishBatchX', 
+        [ batchData._id, doneScrap, remainScrap, unstartDelete, unstartScrap, comm, pinVal ], 
+        {wait: true},
+        (error, reply)=> {
+          if(error)
+            console.log(error);
+          if(reply) {
+            toast.update(( batchData._id + 'FORCE' ), {
+              render: `${Pref.xBatch} Force Finished`,
+              type: toast.TYPE.SUCCESS,
+              autoClose: 3000
+            });
+            selfclose();
+          }else{
+            console.log('BLOCKED BY SERVER METHOD');
+            toast.error('Server Error');
+            workingSet(false);
+          }
         }
-      });
+      );
     }
   }
   
