@@ -7,8 +7,13 @@ import { syncLocale } from '/server/utility.js';
 import { deliveryState, calcShipDay } from '/server/reportCompleted.js';
 import { getShipLoad } from '/server/shipOps';
 
+function shipLoadPromise(now) {
+  return new Promise( (resolve)=> {
+    resolve( getShipLoad(now) );
+  });
+}
 
-function shrinkWhole(bData, now, shipLoad, accessKey) {
+function shrinkWhole(bData, now, accessKey, shipLoad) {
   return new Promise( (resolve, reject)=> {
     const isWhat = Meteor.call('getBasicBatchInfo', bData.batch);
     
@@ -112,7 +117,7 @@ function checkMinify(bData, accessKey) {
   });
 }
 
-function checkMovement(bData, now, shipLoad, accessKey) {
+function checkMovement(bData, now, accessKey, shipLoad) {
   return new Promise( (resolve)=> {
     const oRapid = XRapidsDB.findOne({extendBatch: bData.batch, live: true});
     const rapIs = oRapid ? oRapid.rapid : false;
@@ -134,7 +139,7 @@ function checkMovement(bData, now, shipLoad, accessKey) {
     const fillZ = didFinish ? shpdlv[3] : null;
     const lateLate = didFinish ? fillZ[2] === 'late' : shpdlv[2];
     
-    const prtyRnk = Meteor.call('priorityFast', accessKey, bData, now, shipAim);
+    const prtyRnk = Meteor.call('priorityFast', accessKey, bData, now, shipAim, shipLoad);
     const perfFtr = Meteor.call('performTarget', bData._id);
     
     TraceDB.update({batchID: bData._id}, {
@@ -193,12 +198,14 @@ Meteor.methods({
       try {
         syncLocale(accessKey);
         const now = moment().tz(Config.clientTZ);
+        console.time('rebuild');
+        const shipLoad = await shipLoadPromise(now);
         
         const fetchX = XBatchDB.find({orgKey: accessKey}).fetch();
         await Promise.all(fetchX.map(async (x) => {
-            await shrinkWhole( x, now, accessKey );
+            await shrinkWhole( x, now, accessKey, shipLoad );
         }));
-        
+        console.timeEnd('rebuild');
       }catch (err) {
         throw new Meteor.Error(err);
       }
@@ -227,11 +234,10 @@ Meteor.methods({
       try {
         syncLocale(accessKey);
         const now = moment().tz(Config.clientTZ);
-        const shipLoad = getShipLoad(now);
         
         const batchX = XBatchDB.findOne({batch: batchNum});
                         
-        await shrinkWhole( batchX, now, shipLoad, accessKey );
+        await shrinkWhole( batchX, now, accessKey );
       }catch (err) {
         throw new Meteor.Error(err);
       }
@@ -277,11 +283,10 @@ Meteor.methods({
       try {
         syncLocale(accessKey);
         const now = moment().tz(Config.clientTZ);
-        const shipLoad = getShipLoad(now);
         
         const batchBX = XBatchDB.findOne({_id: bID});
                         
-        await shrinkWhole( batchBX, now, shipLoad, accessKey );
+        await shrinkWhole( batchBX, now, accessKey );
       }catch (err) {
         throw new Meteor.Error(err);
       }
@@ -309,11 +314,10 @@ Meteor.methods({
       try {
         syncLocale(accessKey);
         const now = moment().tz(Config.clientTZ);
-        const shipLoad = getShipLoad(now);
         
         const batchBX = XBatchDB.findOne({_id: bID});
         
-        await checkMovement( batchBX, now, shipLoad, accessKey );
+        await checkMovement( batchBX, now, accessKey );
       }catch (err) {
         throw new Meteor.Error(err);
       }
@@ -339,7 +343,8 @@ Meteor.methods({
       try {
         syncLocale(accessKey);
         const now = moment().tz(Config.clientTZ);
-        const shipLoad = getShipLoad(now);
+        console.time('update');
+        const shipLoad = await shipLoadPromise(now);
         
         const ystrday = ( d => new Date(d.setDate(d.getDate()-1)) )(new Date);
         const lstweek = ( d => new Date(d.setDate(d.getDate()-7)) )(new Date);
@@ -357,9 +362,10 @@ Meteor.methods({
               lastUpdated: { $gte: new Date(fresh) }
             },{fields:{'batchID':1},limit:1}).count();
           if(!t) {
-            await checkMovement( x, now, shipLoad, accessKey );
+            await checkMovement( x, now, accessKey, shipLoad );
           }
         }));
+        console.timeEnd('update');
       }catch (err) {
         throw new Meteor.Error(err);
       }

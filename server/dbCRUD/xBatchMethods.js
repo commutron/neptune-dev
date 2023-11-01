@@ -723,6 +723,10 @@ Meteor.methods({
       			  completed: false,
       			  completedAt: false,
       			  completedWho: false,
+      			 // finBffrRel: false,
+      			 // finShipAim: false,
+      			 // finShipDue: false,
+      			 // finEndWork: false,
             },
             $push : {
               altered: {
@@ -815,6 +819,39 @@ Meteor.methods({
     doneScrap, remainScrap, unstartDelete, unstartScrap, comm, pinInput
   ) {
     this.unblock();
+
+    async function resolveItems(srsI, srsId, doneScrap, remainScrap, unstartDelete) {
+      
+      const doneI = srsI.filter( i=> i.completed && 
+        i.history.findIndex( s => s.type === 'scrap' && s.good === true ) === -1 );
+      for(let di of doneI) {
+        if(doneScrap) {  
+          await Meteor.call('scrapItemX', srsId, di.serial, 'force finish', 'Force Finish All');
+        }
+      }
+      
+      const runI = srsI.filter( i=> !i.completed && i.history.length > 0 );
+      for(let ri of runI) {
+        if(remainScrap) {  
+          await Meteor.call('scrapItemX', srsId, ri.serial, 'force finish', 'Force Finish All');
+        }else{
+          await Meteor.call('finishIncompleteItemX', srsId, ri.serial, 'Force Finish All');
+        }
+      }
+    
+      const noI = srsI.filter( i=> !i.completed && i.history.length === 0 );
+      for(let ni of noI) {
+        if(unstartDelete) { 
+          await Meteor.call('authPullItemX', srsId, ni.serial, accessKey);
+        }else if(unstartScrap) {
+          await Meteor.call('scrapItemX', srsId, ni.serial, 'force finish', 'Force Finish All');
+        }else{
+          await Meteor.call('finishIncompleteItemX', srsId, ni.serial, 'Force Finish All');
+        }
+      }
+      
+    }
+        
     if(Roles.userIsInRole(Meteor.userId(), "qa") ) {
       const accessKey = Meteor.user().orgKey;
       
@@ -824,7 +861,7 @@ Meteor.methods({
       const doc = XBatchDB.findOne({_id: batchId},{fields:{'batch':1,'serialize':1}});
       
       if(pinInput === orgPIN) {
-  
+        console.time('forceFin');
         const didFlow = doc.serialize === true;
         const srs = didFlow && XSeriesDB.findOne({batch: doc.batch},{fields:{'items':1}});
         
@@ -832,33 +869,7 @@ Meteor.methods({
         
         const srsI = !srs ? [] : srs.items;
         
-        const doneI = srsI.filter( i=> i.completed && 
-          i.history.findIndex( s => s.type === 'scrap' && s.good === true ) === -1 );
-        for(let di of doneI) {
-          if(doneScrap) {  
-            Meteor.call('scrapItemX', srsId, di.serial, 'force finish', 'Force Finish All');
-          }
-        }
-        
-        const runI = srsI.filter( i=> !i.completed && i.history.length > 0 );
-        for(let ri of runI) {
-          if(remainScrap) {  
-            Meteor.call('scrapItemX', srsId, ri.serial, 'force finish', 'Force Finish All');
-          }else{
-            Meteor.call('finishIncompleteItemX', srsId, ri.serial, 'Force Finish All');
-          }
-        }
-        
-        const noI = srsI.filter( i=> !i.completed && i.history.length === 0 );
-        for(let ni of noI) {
-          if(unstartDelete) { 
-            Meteor.call('authPullItemX', srsId, ni.serial, accessKey);
-          }else if(unstartScrap) {
-            Meteor.call('scrapItemX', srsId, ni.serial, 'force finish', 'Force Finish All');
-          }else{
-            Meteor.call('finishIncompleteItemX', srsId, ni.serial, 'Force Finish All');
-          }
-        }
+        resolveItems(srsI, srsId, doneScrap, remainScrap, unstartDelete);
       
         XBatchDB.update({_id: batchId, orgKey: accessKey}, {
     			$set : { 
@@ -891,10 +902,14 @@ Meteor.methods({
       			  live: false
           }});
         }
+        
         Meteor.defer( ()=>{
           Meteor.call('updateOneMovement', batchId, accessKey);
           Meteor.call('saveEndState', batchId, accessKey);
         });
+        
+        console.timeEnd('forceFin');
+        
         return true;
       }else{ return false }
     }else{ return false }

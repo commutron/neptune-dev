@@ -106,14 +106,14 @@ function collectPriority(batchID, mockDay) {
   });
 }
 
-function getFastPriority(bData, now, shipAim) {
+function getFastPriority(bData, now, shipAim, shipLoaded) {
   return new Promise(resolve => {
     const doneEntry = bData.completedAt;
 
     const qtBready = !bData.quoteTimeBudget ? false : true;
     
     if(qtBready && bData.tide && !doneEntry) {
-      const shipLoad = getShipLoad(now);
+      const shipLoad = !isNaN(shipLoaded) ? shipLoaded : getShipLoad(now);
       const trc = TraceDB.findOne({batchID: bData._id});
       const tgt = trc ? trc.performTgt || 0 : 0;
       
@@ -205,11 +205,11 @@ Meteor.methods({
     }
     return bundlePriority();
   },
-  priorityFast(serverAccessKey, bData, now, shipAim) {
+  priorityFast(serverAccessKey, bData, now, shipAim, shipLoad) {
     async function bundlePriority() {
       syncLocale(serverAccessKey);
       try {
-        bundle = await getFastPriority(bData, now, shipAim);
+        bundle = await getFastPriority(bData, now, shipAim, shipLoad);
         return bundle;
       }catch (err) {
         throw new Meteor.Error(err);

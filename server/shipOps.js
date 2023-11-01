@@ -56,6 +56,7 @@ export function getEndWork(batchId, salesEnd, recalc) {
 }
 
 export function getShipLoad(nowMoment) {
+  console.log('run ship load');
   const shipLoad = TraceDB.find({
     completed: false,
     shipAim: {

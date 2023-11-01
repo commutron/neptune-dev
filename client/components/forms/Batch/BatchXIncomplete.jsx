@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 
 import ModelMedium from '/client/components/smallUi/ModelMedium';
 
-const BatchXIncomplete = ({ batchData, seriesData, app, lock, noText })=> {
+const BatchXIncomplete = ({ batchData, seriesData, lock, noText })=> {
   const access = Roles.userIsInRole(Meteor.userId(), ['qa', 'admin']);
   const aT = !access ? Pref.norole : '';
   const lT = lock ? lock : '';
@@ -20,14 +20,14 @@ const BatchXIncomplete = ({ batchData, seriesData, app, lock, noText })=> {
       <BatchXIncompleteForm
         batchData={batchData}
         seriesData={seriesData}
-        app={app} />
+      />
   	</ModelMedium>
   );
 };
 
 export default BatchXIncomplete;     
 	        
-const BatchXIncompleteForm = ({ batchData, seriesData, app, selfclose })=> {
+const BatchXIncompleteForm = ({ batchData, seriesData, selfclose })=> {
   
   const [ workingState, workingSet ] = useState(false);
   
