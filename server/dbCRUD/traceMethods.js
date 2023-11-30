@@ -14,7 +14,7 @@ function shipLoadPromise(now) {
 }
 
 function shrinkWhole(bData, now, accessKey, shipLoad) {
-  return new Promise( (resolve, reject)=> {
+  return new Promise( (resolve)=> {
     const isWhat = Meteor.call('getBasicBatchInfo', bData.batch);
     
     const oRapid = XRapidsDB.findOne({extendBatch: bData.batch, live: true});
@@ -198,14 +198,12 @@ Meteor.methods({
       try {
         syncLocale(accessKey);
         const now = moment().tz(Config.clientTZ);
-        console.time('rebuild');
         const shipLoad = await shipLoadPromise(now);
         
         const fetchX = XBatchDB.find({orgKey: accessKey}).fetch();
         await Promise.all(fetchX.map(async (x) => {
             await shrinkWhole( x, now, accessKey, shipLoad );
         }));
-        console.timeEnd('rebuild');
       }catch (err) {
         throw new Meteor.Error(err);
       }
@@ -343,7 +341,6 @@ Meteor.methods({
       try {
         syncLocale(accessKey);
         const now = moment().tz(Config.clientTZ);
-        console.time('update');
         const shipLoad = await shipLoadPromise(now);
         
         const ystrday = ( d => new Date(d.setDate(d.getDate()-1)) )(new Date);
@@ -365,7 +362,6 @@ Meteor.methods({
             await checkMovement( x, now, accessKey, shipLoad );
           }
         }));
-        console.timeEnd('update');
       }catch (err) {
         throw new Meteor.Error(err);
       }

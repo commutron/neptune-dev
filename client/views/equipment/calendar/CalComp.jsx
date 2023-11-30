@@ -49,7 +49,7 @@ const CalComp = ({ events, getEvents, defaultView, height })=> {
     },
     []
   );
-  
+
   return(
   	<Calendar
       localizer={localizer}
