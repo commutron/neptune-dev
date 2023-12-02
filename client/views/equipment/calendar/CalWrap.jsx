@@ -7,7 +7,7 @@ import CalComp from './CalComp';
 const CalWrap = ()=> {
   
   const mounted = useRef(true);
-  // const [ work, workSet ] = useState(false);
+  // const [ work, workSet ] = useState(false); 
   const [ float, floatSet ] = useState( false );
   
   const [ events, eventsSet ] = useState([]);

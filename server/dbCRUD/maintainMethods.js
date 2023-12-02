@@ -356,6 +356,7 @@ Meteor.methods({
     
     const orgKey = Meteor.user().orgKey;
     syncLocale(orgKey);
+    const now = moment().tz(Config.clientTZ);
     
     let futureEvents = [];
     
@@ -394,8 +395,8 @@ Meteor.methods({
               mId: mn._id,
               link: 'Eq-' + eq.alias +' ~ '+ mn.name,
           	  title: eq.alias + ' - ' + mn.name,
-          	  start: mn.open,
-          	  end: mn.expire,
+          	  start: mn.close,
+          	  end: mn.close,
           	  allDay: true,
               pass: true
           	});
@@ -414,7 +415,7 @@ Meteor.methods({
                   serveKey: sv.serveKey, 
                   doneAt: { $ne: false },
                   open: nx[0], expire: nx[1]
-              }, { fields: { 'name': 1, 'doneAt': 1 } });
+              }, { fields: { 'name': 1, 'doneAt': 1, 'expire': 1 } });
               
               const matchpass = !incDone || matchdone ? false :
                 MaintainDB.findOne({
@@ -423,7 +424,7 @@ Meteor.methods({
                   open: nx[0], expire: nx[1]
               }, { fields: { 'name': 1, 'open': 1, 'expire': 1 } });
               
-              const matchis = !incDone || matchdone || matchpass || nx[0] > new Date() ? false :
+              const matchis = !incDone || matchdone || matchpass || nx[0] > new Date(now.format()) ? false :
                 MaintainDB.findOne({
                   serveKey: sv.serveKey, 
                   open: nx[0], expire: nx[1] // this somehow fixed the greyed out ones?
@@ -435,7 +436,7 @@ Meteor.methods({
                   link: 'Eq-' + eq.alias +' ~ '+ matchdone.name,
               	  title: eq.alias + ' - ' + matchdone.name,
               	  start: matchdone.doneAt,
-              	  end: matchdone.doneAt,
+              	  end: matchdone.expire,
               	  allDay: true,
               	  done: true
               	});
@@ -457,7 +458,8 @@ Meteor.methods({
               	  start: nx[0],
               	  end: nx[1],
               	  allDay: true,
-              	  pass: req
+              	  pass: false,
+              	  willpass: req
               	});
               }else{
                 null;

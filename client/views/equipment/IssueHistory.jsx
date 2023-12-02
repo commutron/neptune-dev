@@ -8,7 +8,7 @@ import { chunkArray } from '/client/utility/Convert';
 import UserName from '/client/utility/Username.js';
 import IssueDetail from './IssueDetail';
 
-const IssueHistory = ({ eqId, issData, isDebug, isEqSup, users })=>{
+const IssueHistory = ({ eqId, issData, isDebug, isEqSup, liveUsers })=>{
   
   const issSort = useMemo( ()=> issData.reverse(), [issData]);
   
@@ -190,7 +190,7 @@ const IssueHistory = ({ eqId, issData, isDebug, isEqSup, users })=>{
       </form>
     </div>
     
-    {isEqSup && <BackdateIssue eqId={eqId} users={users} /> }
+    {isEqSup && <BackdateIssue eqId={eqId} liveUsers={liveUsers} /> }
     
     </Fragment>
   );
@@ -230,7 +230,7 @@ const IlterTools = ({ openSet, textSet, debSet })=> (
   </div>
 );
         
-const BackdateIssue = ({ eqId, users })=> {
+const BackdateIssue = ({ eqId, liveUsers })=> {
   
   const tzoffset = (new Date()).getTimezoneOffset() * 60000;
   
@@ -301,7 +301,7 @@ const BackdateIssue = ({ eqId, users })=> {
           <p>
             <label>Point-Person<br />
               <select id='backuser' defaultValue={Meteor.userId()} required>
-                {users.map( (u)=>(
+                {liveUsers.map( (u)=>(
                   <option key={u._id} value={u._id}>{u.username}</option>
                 ))}
               </select>

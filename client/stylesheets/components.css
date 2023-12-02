@@ -455,9 +455,9 @@ button[disabled].rbc-btn {
   box-shadow: none;
   margin: 1px;
   padding: 2px 5px;
-  background-color: var(--concrete);
+  background-color: var(--silver);
   border-radius: 5px;
-  color: #fff;
+  color: var(--blackT);
   /*cursor: pointer;*/
   width: 100%;
   text-align: left;

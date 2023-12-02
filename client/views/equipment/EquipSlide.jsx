@@ -31,6 +31,9 @@ const EquipSlide = ({
   
   const nowD = new Date();
   
+  const liveUsers = users.filter( x => Roles.userIsInRole(x._id, 'active') && 
+                                       !Roles.userIsInRole(x._id, 'readOnly') );
+                                        
   const shrtI = eq.instruct && eq.instruct.indexOf('http') === -1;
   
   const weekday = {
@@ -121,7 +124,7 @@ const EquipSlide = ({
           <EquipEmails
             id={eq._id}
             stewards={eq.stewards}
-            users={users}
+            liveUsers={liveUsers}
           />
           
           {maintainData.length === 0 && ( !eq.issues || eq.issues.length === 0 ) ?
@@ -279,7 +282,7 @@ const EquipSlide = ({
             issData={eq.issues || []} 
             isDebug={isDebug}
             isEqSup={isEqSup}
-            users={users}
+            liveUsers={liveUsers}
           />
         </div>
       

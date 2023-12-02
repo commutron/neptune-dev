@@ -6,6 +6,7 @@ import { Calendar, momentLocalizer } from 'react-big-calendar';
 const localizer = momentLocalizer(moment);
 
 const CalComp = ({ events, getEvents, defaultView, height })=> {
+  const now = moment();
   
   const dayPropGetter = useCallback(
     (date) => ({
@@ -16,22 +17,32 @@ const CalComp = ({ events, getEvents, defaultView, height })=> {
         style: { backgroundColor: 'rgb(150,150,150,0.1)' }
       }),
       ...(moment(date).isHoliday() && {
-        className: 'yellowGlow'
+        className: 'grayFade'
+      }),
+      ...(moment(date).isSame(now, 'day') && {
+        style: {backgroundColor: "hsl(210 29% 84%)" }
       }),
     }),
     []
   );
   
+  const clicker = (start, end)=> {
+    return now.isBetween(start, end, 'day') ? 'miniAction' : '';
+  };
+  
   const eventPropGetter = useCallback(
-    ({done, pass, mId}) => ({
+    ({done, pass, willpass, mId, start, end}) => ({
       ...(mId !== undefined && {
-        className: 'midnightblue miniAction'
+        className: 'midnightblue whiteT miniAction'
       }),
       ...(done && {
-        className: `green ${mId ? 'miniAction' : ''}`
+        className: `green ${clicker(start, end)}`
       }),
       ...(pass && {
-        className: `orange ${mId ? 'miniAction' : ''}`
+        className: `trueyellow ${clicker(start, end)}`
+      }),
+      ...(willpass && {
+        className: `yellowGlow`
       })
     }),
     []
@@ -40,7 +51,8 @@ const CalComp = ({ events, getEvents, defaultView, height })=> {
   const handleSelectEvent = useCallback(
     (event) => {
       if(event.mId) {
-        if(moment().isBetween(event.start, event.end) || moment().isSame(event.end, 'day')) {
+        // if(moment().isBetween(event.start, event.end) || moment().isSame(event.end, 'day')) {
+        if(moment().isBetween(event.start, event.end, 'day')) {
           Session.set('now', event.link);
           Session.set('nowSV', event.mId);
           FlowRouter.go('/production');

@@ -5,7 +5,7 @@ import Pref from '/client/global/pref.js';
 import { MultiSelect } from "react-multi-select-component";
 import ModelSmall from '/client/components/smallUi/ModelSmall';
 
-const EquipEmailsManager = ({ id, stewards, users })=> {
+const EquipEmailsManager = ({ id, stewards, liveUsers })=> {
 
   const access = Roles.userIsInRole(Meteor.userId(), ['peopleSuper','equipSuper','edit']);
   
@@ -20,7 +20,7 @@ const EquipEmailsManager = ({ id, stewards, users })=> {
       <EquipEmails
         id={id}
         stewards={stewards}
-        users={users}
+        liveUsers={liveUsers}
       />
     </ModelSmall>
   );
@@ -29,14 +29,12 @@ const EquipEmailsManager = ({ id, stewards, users })=> {
 export default EquipEmailsManager;
 
 
-const EquipEmails = ({ id, stewards, users, selfclose })=> {
+const EquipEmails = ({ id, stewards, liveUsers, selfclose })=> {
   
   const [ eList, eListSet ] = useState( [ { label: 'name', value: 'name' } ] );
   const [ emails, emailSet ] = useState( [] );
 
   useEffect( ()=>{
-    const liveUsers = users.filter( x => Roles.userIsInRole(x._id, 'active') && 
-                                        !Roles.userIsInRole(x._id, 'readOnly') );
     const listUsers = Array.from(liveUsers, x => { return { label: x.username, value: x._id } } );
     eListSet(listUsers);
     
