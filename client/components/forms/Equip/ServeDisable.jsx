@@ -12,7 +12,7 @@ const ServeDisable = ({ id, serveKey, name, disable, lockOut, opendates })=> {
     <ModelSmall
       button={disable ? 'Enable' : 'Disable'}
       title={disable ? 'Enable Service Pattern' : 'Disable Service Pattern'}
-      color={disable ? 'greenT' : 'orangeT'}
+      color={disable ? 'greenT' : 'yellowT'}
       icon={disable ? 'fa-calendar-check' : 'fa-calendar-xmark'}
       lock={!access || lockOut}
       wrapIcon={disable}>
@@ -71,7 +71,7 @@ const ServeDisableConfirm = ({ id, serveKey, name, disable, opendates, selfclose
         <button
           onClick={()=>toggleService()}
           title='Delete'
-          className='action orangeSolid vmargin'
+          className='action yellowSolid vmargin'
         >Yes, Disable</button>
       </p>
     </div>

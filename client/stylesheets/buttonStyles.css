@@ -112,9 +112,9 @@
 .redSolid, .redHover {
   --actionColor: var(--pomegranate);
 }
-/*.yellowSolid, .yellowHover {*/
-/*  --actionColor: var(--sunflower);*/
-/*}*/
+.yellowSolid, .yellowHover {
+  --actionColor: var(--orange);
+}
 .orangeSolid, .orangeHover {
   --actionColor: var(--carrot);
 }

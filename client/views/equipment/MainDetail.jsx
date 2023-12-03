@@ -28,6 +28,8 @@ const MainDetail = ({ dialogId, title, mData })=> (
                     <strong>Incomplete</strong> :
                     mData.status === 'notrequired' ?
                     <strong>Not Required</strong> :
+                    mData.status === 'willnotrequire' ?
+                    <em>Will Not Require</em> :
                     mData.doneAt && moment(mData.doneAt).format('dddd MMMM D h:mm A')}
           </p>
           <p>{'Notes:'} {mData.notes}</p>

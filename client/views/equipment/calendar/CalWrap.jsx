@@ -7,19 +7,19 @@ import CalComp from './CalComp';
 const CalWrap = ()=> {
   
   const mounted = useRef(true);
-  // const [ work, workSet ] = useState(false); 
+  const [ work, workSet ] = useState(false); 
   const [ float, floatSet ] = useState( false );
   
   const [ events, eventsSet ] = useState([]);
   
   function getEvents(dateStr) {
-  	// workSet(true);
+  	workSet(true);
   	
   	const date = new Date(dateStr);
 		
 		if( date.getMonth() === ( float && float.getMonth() ) ) {
 			null;
-		  // workSet(false);
+		  workSet(false);
 		}else{
 		  floatSet(date);
     	const startDate = moment(date).startOf('month').startOf('week').format();
@@ -32,7 +32,7 @@ const CalWrap = ()=> {
     		(err, re)=>{
     		err && console.log(err);
     		if(mounted.current) {
-    			// workSet(false);
+    			workSet(false);
     			if(re) {
     				eventsSet(re);
     			}
@@ -47,12 +47,7 @@ const CalWrap = ()=> {
   
   return(
 	  <div className='space3v vmarginhalf'>
-	  	{/*<div className='rowWrap vmarginquarter'>
-	  		<span>{work ?
-          <n-fa0><i className='fas fa-spinner fa-lg fa-spin'></i></n-fa0> :
-          <n-fa1><i className='fas fa-spinner fa-lg'></i></n-fa1>
-        }</span>
-	  	</div>*/}
+	  	{work ?	<div className='pulseload'></div> : null }
 	  	<CalComp
 	  	  events={events}
 	  	  getEvents={getEvents}

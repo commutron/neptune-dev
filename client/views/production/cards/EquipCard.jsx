@@ -33,7 +33,9 @@ const EquipCard = ({ equipData, maintainData })=> {
               key={ix}
               className='action whiteSolid margin5 leftText letterSpaced spacehalf'
               onClick={()=>gotoMaint(m.find, m.mId)}
-            >{m.flg === 'notrequired' ?
+            >{m.flg === 'willnotrequire' ?
+              <n-fa3><i className='fa-solid fa-clipboard fa-fw orangeT gapR'></i></n-fa3>
+            : m.flg === 'notrequired' ?
               <n-fa2><i className='fa-solid fa-ban fa-fw orangeT gapR'></i></n-fa2>
             : m.flg === 'complete' ?
               <n-fa1><i className='fa-solid fa-clipboard-check fa-fw greenT gapR'></i></n-fa1>

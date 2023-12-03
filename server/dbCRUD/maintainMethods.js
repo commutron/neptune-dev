@@ -188,7 +188,7 @@ Meteor.methods({
       const match = MaintainDB.findOne({equipId: eq._id, serveKey: sv.serveKey, expire: { $gt: new Date() }},
                                        {fields:{'_id':1}});
       
-      const req = !eq.online && ( sv.timeSpan === 'day' || sv.timeSpan === 'week' ) ? 'notrequired' : false;
+      const req = !eq.online && ( sv.timeSpan === 'day' || sv.timeSpan === 'week' ) ? 'willnotrequire' : false;
       
       if(!match) {
         MaintainDB.insert({
@@ -199,7 +199,7 @@ Meteor.methods({
           open: new Date( open ),
           close: new Date( close.format() ),
           expire: new Date( expire ),
-          status: req, // complete, notrequired, incomplete, missed
+          status: req, // complete, willnotrequire/notrequired, incomplete, missed
           doneAt: false,
           checklist: [],
           notes: ''
@@ -208,7 +208,7 @@ Meteor.methods({
         MaintainDB.update({_id: match._id, 
           $or: [ 
             { status: false },
-            { status: 'notrequired' }
+            { status: 'willnotrequire' }
           ], close: { $gt: new Date() }},{
           $set: {
             name: sv.name,
@@ -231,6 +231,15 @@ Meteor.methods({
         return new Promise(function(resolve, reject) {
           try {
             const now = moment().tz(Config.clientTZ);
+            
+            MaintainDB.update({
+              status: 'willnotrequire', 
+              expire: { $lt: new Date() }
+            },{
+              $set: {
+                status: 'notrequired'
+              }
+            });
             
             const maint = MaintainDB.find({status: false},
                             { fields: {
@@ -316,7 +325,7 @@ Meteor.methods({
                   open: new Date( open ),
                   close: new Date( close.format() ),
                   expire: new Date( expire ),
-                  status: req, // complete, notrequired, incomplete, missed
+                  status: req, // complete, willnotrequire/notrequired, incomplete, missed
                   doneAt: false,
                   checklist: [],
                   notes: ''
@@ -325,7 +334,7 @@ Meteor.methods({
                 MaintainDB.update({_id: match._id, 
                   $or: [ 
                     { status: false },
-                    { status: 'notrequired' }
+                    { status: 'willnotrequire' }
                   ], close: { $gt: new Date() }},{
                   $set: {
                     name: sv.name,
@@ -420,7 +429,10 @@ Meteor.methods({
               const matchpass = !incDone || matchdone ? false :
                 MaintainDB.findOne({
                   serveKey: sv.serveKey, 
-                  status: 'notrequired',
+                  $or: [ 
+                    { status: 'notrequired' },
+                    { status: 'willnotrequire' }
+                  ],
                   open: nx[0], expire: nx[1]
               }, { fields: { 'name': 1, 'open': 1, 'expire': 1 } });
               

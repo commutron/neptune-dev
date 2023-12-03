@@ -5,7 +5,7 @@ import ModelInline from '/client/layouts/Models/ModelInline';
 
 const ServiceDock = ({ maintData, serve })=> {
   
-  const noReq = maintData.status === 'notrequired';
+  const noReq = maintData.status === 'willnotrequire' || maintData.status === 'notrequired';
   
   const [ work, setWork ] = useState( false );
   const [ notes, setNotes ] = useState( maintData.notes );

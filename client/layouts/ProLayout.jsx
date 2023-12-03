@@ -256,7 +256,7 @@ export const ProWindow = ({ brancheS, plainBatchS, allEquip, canMulti, user, chi
         <div className='auxRight'></div>
         <TideFollow proRoute={true} canMulti={canMulti} />
       </div>
-      <div className='proContent darkTheme'>
+      <div className='proContent darkTheme scrollWrap forceScrollStyle'>
         <Fragment>
           {children}
         </Fragment>

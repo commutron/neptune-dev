@@ -255,6 +255,33 @@
   animation: spinAround 2s infinite linear;
 }
 
+@keyframes pulsehorz {
+  0% { background-position-x: 0vw; }
+  100% { background-position-x: 100vw; }
+}
+.pulseload {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 1vh;
+  height: 1dvh;
+  width: 100vw;
+  background-image: radial-gradient(
+    transparent 0%,
+    var(--blackfrost) 25%, 
+    transparent 50%,
+    var(--blackfrost) 75%,
+    transparent 100%
+  );
+  animation: pulsehorz 3s infinite  linear;
+}
+@media (orientation: portrait) {
+  .pulseload {
+    height: 1vmin;
+    height: 1dvmin;
+  }
+}
+
 .spinRe {
   animation-name: spinBack;
   animation-duration: 30s;

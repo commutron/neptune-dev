@@ -264,7 +264,7 @@ const EquipSlide = ({
                     nums={[cmplt, inplt, ntrqd, missd]}
                     name='Completed'
                     title={`${maint.length} Events\n${cmplt} Completed\n${inplt} Incomplete\n${ntrqd} Not Required\n${missd} Missed\n${nxtcr} Scheduled`}
-                    colour={['#2c3e50','#34495e80','#e67e22','#bdc3c7']}
+                    colour={['#2c3e50','#34495e80','rgb(243, 156, 18)','#bdc3c7']}
                     maxSize='chart10Contain'
                   />
                 </div>

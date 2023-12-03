@@ -27,7 +27,7 @@ const CalComp = ({ events, getEvents, defaultView, height })=> {
   );
   
   const clicker = (start, end)=> {
-    return now.isBetween(start, end, 'day') ? 'miniAction' : '';
+    return now.isBetween(start, end, 'day') || now.isSame(end, 'day') ? 'miniAction' : '';
   };
   
   const eventPropGetter = useCallback(
@@ -39,7 +39,7 @@ const CalComp = ({ events, getEvents, defaultView, height })=> {
         className: `green ${clicker(start, end)}`
       }),
       ...(pass && {
-        className: `trueyellow ${clicker(start, end)}`
+        className: `yellow ${clicker(start, end)}`
       }),
       ...(willpass && {
         className: `yellowGlow`
@@ -51,8 +51,7 @@ const CalComp = ({ events, getEvents, defaultView, height })=> {
   const handleSelectEvent = useCallback(
     (event) => {
       if(event.mId) {
-        // if(moment().isBetween(event.start, event.end) || moment().isSame(event.end, 'day')) {
-        if(moment().isBetween(event.start, event.end, 'day')) {
+        if(moment().isBetween(event.start, event.end, 'day') || moment().isSame(event.end, 'day')) {
           Session.set('now', event.link);
           Session.set('nowSV', event.mId);
           FlowRouter.go('/production');
@@ -73,6 +72,7 @@ const CalComp = ({ events, getEvents, defaultView, height })=> {
       style={{ height: height }}
       onNavigate={(e)=>getEvents(e)}
       popup={true}
+      showAllEvents={true}
       dayPropGetter={dayPropGetter}
       eventPropGetter={eventPropGetter}
       onSelectEvent={handleSelectEvent}
