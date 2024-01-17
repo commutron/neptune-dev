@@ -82,11 +82,14 @@ SyncedCron.add({
 SyncedCron.start();
   
 function goDo(goFunc) {
-  const apps = AppDB.find({},{fields:{'orgKey':1}}).fetch();
-  for(let app of apps) {
-    const accessKey = app.orgKey;
-    Meteor.call(goFunc, accessKey);
-  }
+  Meteor.defer( ()=>{
+    const apps = AppDB.find({},{fields:{'orgKey':1}}).fetch();
+    for(let app of apps) {
+      const accessKey = app.orgKey;
+      Meteor.call(goFunc, accessKey);
+      console.log('cron called: ' + goFunc);
+    }
+  });
 }
 
 async function runRanges() {

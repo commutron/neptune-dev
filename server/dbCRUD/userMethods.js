@@ -606,8 +606,10 @@ Meteor.methods({
     }
   },
   
-  removeOldDMLog() {
-    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+  removeOldDMLog(accessKey) {
+    const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
+    const isSelf = AppDB.find({orgKey: accessKey},{fields:{'_id':1}}).count();
+    if(isAdmin || isSelf) {
       const cutoff = ( d => new Date(d.setDate(d.getDate()-90)) )(new Date);
 
       CacheDB.update({dataName: 'internalDM_log'}, {

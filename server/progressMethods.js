@@ -18,6 +18,7 @@ function collectBranchCondition(privateKey, batchID) {
           batch: batchX.batch,
           batchID: batchX._id,
           onFloor: false,
+          doneItems: 0,
           stormy: [false, false, false],
           branchSets: []
         });
@@ -33,6 +34,7 @@ function collectBranchCondition(privateKey, batchID) {
         
         const waterfall = batchX.waterfall;
         const items = !srs ? [] : srs.items;
+        const doneItems = items.filter( x => x.completed ).length;
         
         const rSH = !srs ? [] : srs.shortfall.some( s => s.inEffect !== true && s.reSolve !== true );
         const iTF = items.some( x => x.history.find( y => y.type === 'test' && y.good === false ) );
@@ -111,6 +113,7 @@ function collectBranchCondition(privateKey, batchID) {
           batch: batchX.batch,
           batchID: batchX._id,
           onFloor: released,
+          doneItems: doneItems,
           stormy: stormy,
           branchSets: branchSets
         });

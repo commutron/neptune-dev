@@ -12,7 +12,7 @@ const ExploreLinkBlock = ({ type, keyword, altName, wrap, rad })=>{
                 : type === 'item' ? 
                   '/data/batch?request=' + keyword.split('+')[1] + '&specify=' + title
                 : type === 'equip' ?
-                  '/data/overview?request=maintain&specify=' + keyword
+                  '/equipment/' + keyword
                 : '';
   const noWrap = wrap ? '' : 'noWrap';
   return(                    

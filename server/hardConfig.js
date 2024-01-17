@@ -44,6 +44,7 @@ class Config {
     this.regexEmail = RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
     
     this.sendEmail = 'no-reply@commutron.ca';
+    this.replyEmail = 'orders@commutron.ca';
     
     this.orgTel = '13068542265';
     this.orgPhone = '306-854-2265';

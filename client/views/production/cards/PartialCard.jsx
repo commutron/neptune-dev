@@ -18,7 +18,7 @@ const PartialCard = ({ orb })=> {
   }, [orb]);
   
   return(
-    <div className='centre bottomLine borderGray vmarginhalf spacehalf min200 max600'>
+    <div className='centre bottomLine borderGray wmargin spacehalf min200 max600'>
       {!lookup ? <em>...</em> :
         lookup.length === 1 ? <em>~ Partial Match Auto Redirect ~</em> :
         lookup.length === 0 ? null :

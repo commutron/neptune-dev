@@ -304,7 +304,7 @@ Meteor.methods({
           
           for(const sv of eq.service) {
             if(!sv.disable) {
-              const req = !eq.online && ( sv.timeSpan === 'day' || sv.timeSpan === 'week' ) ? 'notrequired' : false;
+              const req = !eq.online && ( sv.timeSpan === 'day' || sv.timeSpan === 'week' ) ? 'willnotrequire' : false;
         
               const next = nextService(sv);
               

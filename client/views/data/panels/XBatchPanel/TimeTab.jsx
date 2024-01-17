@@ -22,7 +22,6 @@ const TimeTab = ({
   
   const addedTimes = Array.from(rapidsData, r => r.timeBudget);
   const addTime = addedTimes.length > 0 ? addedTimes.reduce((x,y)=> x + y) : 0;
-
   
   return(
     <div className='space3v'>
@@ -39,7 +38,7 @@ const TimeTab = ({
         brancheS={brancheS}
       />
       
-      {conversion !== 'raw' && rapidsData.length > 0 ?
+      {conversion !== 'raw records' && rapidsData.length > 0 ?
         <div className='autoFlex'>
           {rapidsData.map( (rapid, rindex)=>(
           <TimeExtendChunk

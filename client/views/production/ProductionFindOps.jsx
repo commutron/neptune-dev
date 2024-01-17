@@ -370,7 +370,7 @@ const ProductionFindOps = ({
 export default ProductionFindOps;
 
 const QuickCards = ({ orbslice, canMulti, user, allEquip, allMaint })=> (
-  <div className='centre'>
+  <div className='scrollWrap forceScrollStyle' style={{height: '100%', minHeight: '100%'}}>
     {orbslice && <PartialCard orb={orbslice} /> }
     <div className='balancer gapsR gapsC wide space'>
       <QuickRecent user={user} />

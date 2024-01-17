@@ -55,11 +55,14 @@ const DownstreamScrollChunk = ({
   const isDone = ck.completedAt ? true : false;
   
   const e2t = ck.est2tide;
+  const itmRmn = ck.quantity - (ck.doneItems || 0);
+  const itmCrct = itmRmn * (e2t / (ck.quantity || 1));
   const e2tStatus = !e2t ? 'Time Not Tracked' :
           e2t > 0 ? 
-            `${min2hr(e2t)} hr remain` :
+            `${min2hr(itmCrct)} hr remain` :
             'estimated time exceeded';
   
+  console.log( e2t + ' vs ' + itmCrct);
   const highG = focusBy ? tBatch.isWhat[0] === focusBy ? '' : 'hide' : '';
   const highT = tagBy ? tBatch.tags && tBatch.tags.includes(tagBy) ? '' : 'hide' : '';
 
