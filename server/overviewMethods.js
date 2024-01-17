@@ -47,7 +47,7 @@ function collectPriority(batchID, mockDay) {
     if(!b) {
       resolve(false);
     }else{
-      const trc = TraceDB.findOne({batchID: b._id});
+      const trc = TraceDB.findOne({batchID: b._id},{fields:{'performTgt':1}});
       const tgt = trc ? trc.performTgt || 0 : 0;
       
       const mEst = getEst(b.widgetId, b.quantity, tgt);
@@ -114,7 +114,7 @@ function getFastPriority(bData, now, shipAim, shipLoaded) {
     
     if(qtBready && bData.tide && !doneEntry) {
       const shipLoad = !isNaN(shipLoaded) ? shipLoaded : getShipLoad(now);
-      const trc = TraceDB.findOne({batchID: bData._id});
+      const trc = TraceDB.findOne({batchID: bData._id},{fields:{'performTgt':1}});
       const tgt = trc ? trc.performTgt || 0 : 0;
       
       const mEst = getEst(bData.widgetId, bData.quantity, tgt);
@@ -279,7 +279,8 @@ Meteor.methods({
                    Math.round( diff * 0.15 );
       
       const factor = isFinite(au) && isFinite(pb) ? au - pb : null;
-      return factor;
+      const safeFactor = Math.min(factor, 100);
+      return safeFactor;
     }
   },
   

@@ -61,8 +61,8 @@ const DownstreamScrollChunk = ({
           e2t > 0 ? 
             `${min2hr(itmCrct)} hr remain` :
             'estimated time exceeded';
-  
-  console.log( e2t + ' vs ' + itmCrct);
+  // itmCrct is an expimental corection to extreme estimations observed in production  
+
   const highG = focusBy ? tBatch.isWhat[0] === focusBy ? '' : 'hide' : '';
   const highT = tagBy ? tBatch.tags && tBatch.tags.includes(tagBy) ? '' : 'hide' : '';
 

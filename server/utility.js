@@ -80,8 +80,10 @@ export function getEst(widgetId, quantity, pTgt) {
   const mEst = perQ * quantity;
   
   let cEst = mEst;
+  const abs = Math.abs(pTgt);
+  const safe = abs && !isNaN(abs) && isFinite(abs) ? abs : 0;
   
-  for(let x = Math.abs(pTgt) || 0; x > 0; x--) { 
+  for(let x = safe; x > 0; x--) { 
     if(pTgt < 0) {
       cEst = cEst + ( cEst * 0.15 );
     }else{
