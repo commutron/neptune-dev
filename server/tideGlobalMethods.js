@@ -443,6 +443,7 @@ Meteor.methods({
       const stillEng = Meteor.users.find({engaged: { $ne: false }},
                                          { fields:{'engaged':1} }).fetch();
       
+      console.log(stillEng);
       if(stillEng.length > 0) {
         const mssg = `You did not stop your time tracker from the previous workday.\nPlease correct your Project Activity record.`;
         

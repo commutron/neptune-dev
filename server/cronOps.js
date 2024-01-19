@@ -45,7 +45,8 @@ SyncedCron.add({
 
 SyncedCron.add({
   name: 'Daily Tide Overrun',
-  schedule: (parser)=> parser.text('at 6:07 am every weekday'),
+  // schedule: (parser)=> parser.text('at 6:07 am every weekday'),
+  schedule: (parser)=> parser.text('at 7:30 pm every weekday'),
   job: ()=> goDo('fetchOverRun')
 });
 
