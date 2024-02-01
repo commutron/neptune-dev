@@ -73,6 +73,7 @@ export function getEndWork(batchId, salesEnd, recalc) {
 export function getShipLoad(nowMoment) {
   // console.log('run ship load');
   if(moment.isMoment(nowMoment)) {
+    console.time('ShipLoad_run_time');
     const nextStart = nowMoment.clone().nextShippingTime().startOf('day').format();
     const nextEnd = nowMoment.clone().nextShippingTime().endOf('day').format();
     const shipLoad = TraceDB.find({
@@ -82,6 +83,7 @@ export function getShipLoad(nowMoment) {
         $lte: new Date(nextEnd) 
       }
     },{fields:{'_id':1}}).count();
+    console.timeEnd('ShipLoad_run_time');
     return shipLoad;
   }else{
     return 0;

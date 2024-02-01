@@ -29,7 +29,7 @@ export const ExTaskBar = ({ subLink }) => (
       subON={!subLink}
       goLink='/data'
       icon='fas fa-rocket'
-      iconAdj='left-1 down-2'
+      iconAdj='left-1'
     />
     
     <TaskElement
@@ -51,7 +51,6 @@ export const ExTaskBar = ({ subLink }) => (
       subON={subLink === 'visualizationundefined'}
       goLink='/data/visualization'
       icon='fas fa-chart-area'
-      iconAdj='down-1'
     />
     
     <TaskElement
@@ -59,7 +58,6 @@ export const ExTaskBar = ({ subLink }) => (
       subON={subLink === 'overviewradioactive'}
       goLink='/data/overview?request=radioactive'
       icon='fas fa-burst'
-      iconAdj=''
     />
     
     <TaskElement
@@ -67,7 +65,6 @@ export const ExTaskBar = ({ subLink }) => (
       subON={subLink === 'overviewrapidex'}
       goLink='/data/overview?request=rapidex'
       icon='fa-solid fa-bolt'
-      iconAdj='down-1'
     />
     
     <TaskElement
@@ -75,7 +72,6 @@ export const ExTaskBar = ({ subLink }) => (
       subON={subLink === 'overviewtestfail'}
       goLink='/data/overview?request=testfail'
       icon='fas fa-microchip'
-      iconAdj=''
     />
     
     <TaskElement
@@ -83,7 +79,6 @@ export const ExTaskBar = ({ subLink }) => (
       subON={subLink === 'overviewscraps'}
       goLink='/data/overview?request=scraps'
       icon='fas fa-trash-alt'
-      iconAdj=''
     />
     
   </div>
@@ -106,7 +101,6 @@ export const UpTaskBar = ({ subLink, showParts, isAuth }) => (
         subON={subLink === 'parts'}
         goLink='/upstream/parts'
         icon='fas fa-shapes'
-        iconAdj=''
       />
     }
     
@@ -115,7 +109,6 @@ export const UpTaskBar = ({ subLink, showParts, isAuth }) => (
       subON={subLink === 'shortfalls'}
       goLink='/upstream/shortfalls'
       icon='fas fa-exclamation'
-      iconAdj='down-1'
     />
     
     <TaskElement
@@ -123,7 +116,6 @@ export const UpTaskBar = ({ subLink, showParts, isAuth }) => (
       subON={subLink === 'values'}
       goLink='/upstream/values'
       icon='fas fa-calculator'
-      iconAdj='down-1'
     />
     
     {isAuth || Roles.userIsInRole(Meteor.userId(), 'admin') ?
@@ -132,7 +124,6 @@ export const UpTaskBar = ({ subLink, showParts, isAuth }) => (
         subON={subLink === 'emailrec'}
         goLink='/upstream/emailrec'
         icon='fas fa-at'
-        iconAdj=''
       />
     : null}
       
@@ -175,7 +166,6 @@ export const DownTaskBar = ({ subLink }) => (
       subON={subLink === 'trends'}
       goLink='/downstream/trends'
       icon='fas fa-chart-line'
-      iconAdj='down-1'
     />
     
   </div>

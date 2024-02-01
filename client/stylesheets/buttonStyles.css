@@ -6,6 +6,7 @@
   line-height: 1;
 }
 .action, .roundAction, .openAction {
+	font-family: var(--styled-font);
 	text-transform: uppercase;
 	font-weight: 600;
 	overflow: hidden;

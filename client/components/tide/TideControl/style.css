@@ -25,6 +25,7 @@ n-big-tide-container > n-tide-task {
 }
 n-big-tide-container button {
   min-height: 14vmax;
+  font-family: var(--styled-font);
   font-size: 2.25vmax;
   font-weight: bold;
   line-height: 1.1;

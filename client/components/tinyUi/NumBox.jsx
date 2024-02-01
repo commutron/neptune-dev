@@ -4,7 +4,8 @@ import React from 'react';
     display: 'inline-block',
     textAlign: 'center',
     margin: '5px',
-    width: '105px'
+    width: '105px',
+    lineHeight: 1.3
   };
   const bSty = {
     fontSize: '2em',

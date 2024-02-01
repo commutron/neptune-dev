@@ -83,6 +83,7 @@ export function getEst(widgetId, quantity, pTgt) {
   const abs = Math.abs(pTgt);
   const safe = abs && !isNaN(abs) && isFinite(abs) ? abs : 0;
   
+  console.time('getEst_run_time');
   for(let x = safe; x > 0; x--) { 
     if(pTgt < 0) {
       cEst = cEst + ( cEst * 0.15 );
@@ -90,6 +91,7 @@ export function getEst(widgetId, quantity, pTgt) {
       cEst = cEst - ( cEst * 0.15 ); 
     }
   }
+  console.timeEnd('getEst_run_time');
   return cEst;
 }
 

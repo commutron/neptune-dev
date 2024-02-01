@@ -43,6 +43,7 @@
   justify-content: flex-start;
   align-items: center;
   overflow: hidden;
+  border-bottom: 1px groove var(--silverfader)
 }
 .overviewToolbar {
   grid-area: overviewNav;

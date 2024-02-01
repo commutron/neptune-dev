@@ -164,7 +164,7 @@ export const ProWrap = ({
             aria-label='Explore'
             className='taskLink auxTip'
             onClick={()=>FlowRouter.go(exploreLink)}>
-            <i className='fas fa-rocket' data-fa-transform='left-1 down-1'></i>
+            <i className='fas fa-rocket' data-fa-transform='left-1'></i>
           </button>
         </div>
         <TideFollow tOpen={timeOpen} canMulti={canMulti} />

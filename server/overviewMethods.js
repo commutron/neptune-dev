@@ -10,6 +10,7 @@ import { calcShipDay } from './reportCompleted.js';
 import { getShipLoad } from '/server/shipOps';
 
 function dryPriorityCalc(bQuTmBdg, mEst, bTide, shipAim, now, shipLoad) {
+  console.time('dryPriorityCalc_run_time');
   const shipAimMmnt = moment(shipAim);
   
   const mQuote = bQuTmBdg.length === 0 ? 0 : bQuTmBdg[0].timeAsMinutes;
@@ -34,6 +35,7 @@ function dryPriorityCalc(bQuTmBdg, mEst, bTide, shipAim, now, shipLoad) {
   const shipPull = dayGap <= Config.shipSoon ? shipLoad * 2 : shipLoad;
 
   const bffrRel = Math.round( ( estEnd2fillBuffer / 100 ) + dayGap - shipPull );
+  console.timeEnd('dryPriorityCalc_run_time');
   
   return { quote2tide, est2tide, estSoonest, bffrRel, estEnd2fillBuffer, overQuote };
 }
@@ -52,7 +54,7 @@ function collectPriority(batchID, mockDay) {
       
       const mEst = getEst(b.widgetId, b.quantity, tgt);
 
-      console.log(mEst);
+      console.log('mEst: ' + mEst);
       
       const oRapid = XRapidsDB.findOne({extendBatch: b.batch, live: true});
       const rapIs = oRapid ? oRapid.rapid : false;
@@ -67,18 +69,18 @@ function collectPriority(batchID, mockDay) {
       const shipAim = calcShip[1];
       const lateLate = calcShip[2];
       
-      console.log(calcShip);
+      console.log('calcShip: ' + calcShip);
       
       const qtBready = !b.quoteTimeBudget ? false : true;
       
       if(qtBready && b.tide && !doneEntry) {
         const shipLoad = getShipLoad(now);
         
-        console.log(shipLoad);
+        console.log('shipLoad: ' + shipLoad);
 
         const dryCalc = dryPriorityCalc(b.quoteTimeBudget, mEst, b.tide, shipAim, now, shipLoad);
 
-        console.log(dryCalc);
+        console.log('dryCalc: ' + dryCalc);
         
         resolve({
           batch: b.batch,

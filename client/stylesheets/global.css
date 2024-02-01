@@ -28,9 +28,6 @@ body {
 }
 
 @-moz-document url-prefix() {
-  /*body {*/
-  /*  font-family: 'NunitoLocalLight', 'VarelaLocal', sans-serif;*/
-  /*}*/
   select {
     height: auto;
   }
@@ -39,6 +36,8 @@ body {
 h1, h2, h3, h4 {
   margin: 0.5rem 0;
   font-family: var(--styled-font);
+}
+h1, h2, h3 {
   font-weight: 600;
 }
 
@@ -308,7 +307,6 @@ input[type='search']::-webkit-search-cancel-button {
   background-color: pink;
 }
 
-
 hr {
   opacity: 0.4; 
 }
@@ -421,6 +419,7 @@ th, td {
 th {
   padding: 0 10px;
   border-right: 1px solid lightgray;
+  font-family: var(--styled-font);
 }
 
 td {
