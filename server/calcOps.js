@@ -63,14 +63,15 @@ export function avgOfArray(arr, zeros) {
 }
 
 export function avg4est(mQuote, mEst) {
+  const mEstMAX = Math.min( mEst, 525600); // no more than minutes in a year
   if(!mQuote && !mEst) {
     return 0;
   }else if(!mQuote) {
-    return round2Decimal( mEst );
+    return round2Decimal( mEstMAX );
   }else if(!mEst) {
     return round2Decimal( mQuote );
   }else{
-    const lAvg = ( ( mEst * Config.estLean ) + mQuote ) / ( 1 + Config.estLean );
+    const lAvg = ( ( mEstMAX * Config.estLean ) + mQuote ) / ( 1 + Config.estLean );
     return round2Decimal( lAvg );
   }
 }

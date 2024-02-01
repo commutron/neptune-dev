@@ -12,7 +12,7 @@ import { asRate, round1Decimal, diffTrend, percentOf } from './calcOps';
 
 
 export function calcShipDay( batchId, nowDay, futureDay ) {
-  console.time('calcShipDay_run_time');
+  // console.time('calcShipDay_run_time');
   const shipAim = getShipAim(batchId, futureDay);
 
   const shipDue = getShipDue(batchId, futureDay);
@@ -21,7 +21,7 @@ export function calcShipDay( batchId, nowDay, futureDay ) {
   
   const lateLate = nowDay.clone().isAfter(endWork);
   const shipLate = nowDay.clone().isAfter(shipDue);
-  console.timeEnd('calcShipDay_run_time');
+  // console.timeEnd('calcShipDay_run_time');
   
   return [ endWork, shipAim, lateLate, shipLate ];
 }
