@@ -454,6 +454,7 @@ button.variableInput.biggest { height: 64px; }
 .buttonLayerCorrect { height: 1em; }
 
 .taskLink {
+  /*font-family: var(--styled-font);*/
   margin: 0.75dvh 0;
   width: 5.5dvh;
   min-height: 5.5dvh;

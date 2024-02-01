@@ -20,8 +20,8 @@ import React from 'react';
   };
  
 const NumBox = ({ num, name, title, color }) => (
-  <div title={title} style={sty}>
-    <i style={bSty} className={color + ' numFont'}>{num}</i>
+  <div title={title} style={sty} className='numFont'>
+    <i style={bSty} className={color}>{num}</i>
     <br />
     <i style={sSty}>{name}</i>
   </div>

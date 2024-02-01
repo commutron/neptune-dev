@@ -52,6 +52,8 @@ function collectPriority(batchID, mockDay) {
       
       const mEst = getEst(b.widgetId, b.quantity, tgt);
 
+      console.log(mEst);
+      
       const oRapid = XRapidsDB.findOne({extendBatch: b.batch, live: true});
       const rapIs = oRapid ? oRapid.rapid : false;
     
@@ -65,13 +67,19 @@ function collectPriority(batchID, mockDay) {
       const shipAim = calcShip[1];
       const lateLate = calcShip[2];
       
+      console.log(calcShip);
+      
       const qtBready = !b.quoteTimeBudget ? false : true;
       
       if(qtBready && b.tide && !doneEntry) {
         const shipLoad = getShipLoad(now);
+        
+        console.log(shipLoad);
 
         const dryCalc = dryPriorityCalc(b.quoteTimeBudget, mEst, b.tide, shipAim, now, shipLoad);
 
+        console.log(dryCalc);
+        
         resolve({
           batch: b.batch,
           batchID: b._id,

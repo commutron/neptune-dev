@@ -16,7 +16,6 @@ const DownstreamTools = ({
   tagBy, changeTagsUP,
   stormy, stormySet, 
   progUP, progSetUP,
-  // denseUP, denseSetUP,
   lightUP, themeSetUP,
   doThing
 })=> {
@@ -87,13 +86,6 @@ const DownstreamTools = ({
         stormState={stormy}
         changeFunc={stormySet} 
       />
-      
-      {/*
-      <LayoutSwitch
-        denseState={denseUP}
-        changeFunc={denseSetUP}
-      />
-      */}
       
       <ThemeSwitch
         themeState={lightUP}

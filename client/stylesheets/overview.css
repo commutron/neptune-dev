@@ -106,7 +106,7 @@
 .downstreamContent {
   grid-area: downContent;
   display: grid;
-  grid-template-columns: minmax(min-content, 30vw) auto;
+  grid-template-columns: minmax(min-content, 25vw) auto; 
   grid-template-areas:
     'downFixed downScroll';
 }
@@ -116,7 +116,7 @@
   display: grid;
   grid-template-areas: 
     'overFixedArea overScrollArea';
-  grid-template-columns: minmax(min-content, 30vw) auto;
+  grid-template-columns: minmax(min-content, 25vw) auto; 
 }
 
 .overGridWideFrame {
@@ -131,7 +131,7 @@
 .overGridFixed, .overGridScroll,
 .downOrdersFixed, .downOrdersScroll {
   display: grid;
-  grid-auto-rows: 9dvh;
+  grid-auto-rows: 5dvh;
 }
 
 .overGridFixed {
@@ -149,7 +149,7 @@
   color: var(--silver);
   padding: 1dvh 2vw;
   text-transform: capitalize;
-  font-size: 2.5dvh;
+  font-size: 1.75dvh;
   font-weight: 600;
 }
 
@@ -200,19 +200,19 @@
 }
 .overGridRowFixed > div:first-child .big,
 .downRowFixed > div:first-child .big {
-  font-size: inherit;
+  font-size: 1.5dvh;
 }
 .overGridRowFixed > div:nth-child(2),
 .downRowFixed > div:nth-child(2) {
   border-right: 1px outset rgba(255,255,255,0.4);
-  font-size: 2.25dvh;
+  font-size: 1.75dvh;
 }
 .overGridRowFixed > div:last-child,
 .downRowFixed > div:last-child {
   overflow: hidden;
   text-overflow: ellipsis;
   word-break: break-word;
-  font-size: 1.75dvh;
+  font-size: 1.25dvh;
   max-width: 35vmin;
   align-items: flex-start;
 }
@@ -243,7 +243,7 @@
 .downRowScroll {
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: 9.75dvh;
+  grid-auto-columns: 8.25dvh;
   place-items: stretch stretch;
 }
 .downHeadScroll {
@@ -265,14 +265,10 @@
   padding-bottom: 1dvh;
   padding-left: 1vmin;
   overflow: hidden;
-  font-size: 1.5dvh;
+  font-size: 1.2dvh;
   line-height: 1.3;
   text-overflow: ellipsis;
   text-align: center;
-}
-
-.overGridRowScroll > div,
-.downRowScroll > div {
   border-right: 1px outset rgba(255,255,255,0.3);
   border-bottom: 1px outset rgba(255,255,255,0.4);
 }
@@ -281,13 +277,27 @@
 .downRowScroll .bigger {
   font-size: unset;
 }
-.overGridRowScroll .big,
+.overGridRowScroll .big {
+  font-size: 1.5dvh;
+}
 .downRowScroll .big {
   font-size: 2dvh;
+}
+.downOrdersScroll .big { 
+  font-size: 1.5dvh; 
+}
+.overGridRowScroll > div.med,
+.downOrdersScroll .med { 
+  font-size: 1.3dvh; 
 }
 .overGridRowScroll .small,
 .downRowScroll .small {
   font-size: 1dvh;
+}
+
+.overGridRowScroll .label,
+.downRowScroll .label {
+  display: none;
 }
 
 .ovColhead { color: white; }
@@ -341,7 +351,8 @@
   grid-area: downWeek;
   writing-mode: tb-rl;
   transform: rotate(-180deg);
-  font-size: 2.75vmin;
+  font-family: var(--styled-font);
+  font-size: 2.5vmin;
   text-align: center;
   text-transform: capitalize;
   padding-bottom: 3dvh;
@@ -395,35 +406,10 @@
   overflow: hidden;
 }
 
-/* dense minifyed layout */
-.overGridFrame.minifyed {
-  grid-template-columns: minmax(min-content, 25vw) auto; 
-}
-.downstreamContent.minifyed {
-  grid-template-columns: minmax(min-content, 25vw) auto; 
-}
-.minifyed .label { display: none; }
-
-.minifyed .overGridRowFixedHeader > span {
-  font-size: 1.75dvh;
-}
-
-.minifyed .overGridFixed,
-.minifyed .overGridScroll,
-.minifyed .downOrdersFixed, 
-.minifyed .downOrdersScroll { 
-  grid-auto-rows: 5dvh; }
-.minifyed .overGridRowScroll,
-.minifyed .downRowScroll,
-.minifyed .downHeadScroll { 
-  grid-auto-columns: 8.25dvh;
-}
-
-
-.minifyed .overGridRowScroll.labels > div { 
+.overGridRowScroll.labels > div { 
   border-right: none;
 }
-.minifyed .overGridRowScroll.labels { 
+.overGridRowScroll.labels { 
   border: none;
 }
 .overGridRowScrollHeader, .overGridRowFixedHeader,
@@ -431,34 +417,12 @@
   border-top: 1px groove rgba(255,255,255,0.3);
 }
   
-.minifyed .overGridRowFixedHeader:first-child { 
+.overGridRowFixedHeader:first-child { 
   border-right: none; }
-.minifyed .overGridRowFixed > div:first-child > div,
-.minifyed .downRowFixed > div:first-child > div {
+.overGridRowFixed > div:first-child > div,
+.downRowFixed > div:first-child > div {
   display: inline-flex;
   align-items: center; }
-.minifyed .overGridRowFixed > div:first-child .big,
-.minifyed .downRowFixed > div:first-child .big { 
-  font-size: 1.5dvh; }
-.minifyed .overGridRowFixed > div:nth-child(2),
-.minifyed .downRowFixed > div:nth-child(2) { 
-  font-size: 1.75dvh; }
-.minifyed .overGridRowFixed > div:last-child,
-.minifyed .downRowFixed > div:last-child{ 
-  font-size: 1.25dvh; }
-
-.minifyed .overGridRowScroll > div,
-.minifyed .downRowScroll > div,
-.minifyed .statusBlock {
-  font-size: 1.2dvh;
-}
-.minifyed .overGridRowScroll > div.med,
-.minifyed .downOrdersScroll .med { 
-  font-size: 1.3dvh; }
-
-.minifyed .overGridRowScroll .big,
-.minifyed .downOrdersScroll .big { 
-  font-size: 1.5dvh; }
 
 .darkTheme .overviewToolbar,
 .darkTheme .downstreamToolbar {
@@ -546,7 +510,8 @@ n-sm-model .big { font-size: 1.5rem !important; }
 }
 .overButton > span > button > label > span,
 .overButton > a > label > span { 
-  font-size: smaller; }
+  /*font-size: smaller; */
+}
 .overButton n-fa1 { font-size: 2.25dvh; }
 
 @media (orientation: portrait) {

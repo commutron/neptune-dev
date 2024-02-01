@@ -8,7 +8,7 @@ import TrinaryStat from '/client/components/tinyUi/TrinaryStat';
 const BatchTopStatus = ({ 
   rowIndex, batchID, tBatch,
   app, isDebug,
-  statusCols, branchArea, dense
+  statusCols, branchArea
 })=> {
   
   const [ dueDateShip, dueDateShipSet ] = useState(null);
@@ -36,7 +36,7 @@ const BatchTopStatus = ({
       </div>
 
       <NumStat
-        num={ dense ? weekDaysRemain : Math.abs(weekDaysRemain) }
+        num={weekDaysRemain}
         name={
           weekDaysRemain < 0 ? 
             weekDaysRemain === -1 ?

@@ -11,7 +11,7 @@ import Grabber from '/client/utility/Grabber.js';
 
 const ShipWindows = ({ 
   calcFor, traceDT, dayTime,
-  brancheS, app, user, isDebug, focusBy, salesBy, tagBy, prog, dense, stormy,
+  brancheS, app, user, isDebug, focusBy, salesBy, tagBy, prog, stormy,
   updateTrigger
 })=> {
   
@@ -24,8 +24,13 @@ const ShipWindows = ({
   const [ traceDTSort, traceDTSSet ] = useState([]);
   
   const addUpTime = (wipArr)=> Array.from(wipArr, 
-        x => typeof x.est2tide === 'number' && !x.hold ? Math.max(x.est2tide, 0) : 0 )
-              .reduce( (arr, x)=> arr + x, 0);
+        x => {
+          if(typeof x.est2tide === 'number' && !x.hold) {
+            return ( x.quantity - (x.doneItems || 0) ) * ( Math.max(x.est2tide, 0) / (x.quantity || 1) );
+          }else{
+            return 0;
+          }
+        }).reduce( (arr, x)=> arr + x, 0);
   
   useEffect(() => {
     Grabber('.downstreamScroll');
@@ -114,9 +119,9 @@ const ShipWindows = ({
   const canDo = Roles.userIsInRole(Meteor.userId(), ['edit', 'sales']);
          
   return(
-    <div className={`downstreamContent forceScrollStyle ${dense}`}>
+    <div className='downstreamContent forceScrollStyle'>
        
-      <div className={`downstreamFixed forceScrollStyle ${dense}`}>
+      <div className='downstreamFixed forceScrollStyle'>
         {traceRapid &&
           <WindowFrame 
             key={'f'+'-1'}
@@ -130,7 +135,6 @@ const ShipWindows = ({
             isDebug={isDebug}
             focusBy={focusBy}
             tagBy={tagBy}
-            dense={dense}
             stormy={stormy}
           />
         }
@@ -149,13 +153,12 @@ const ShipWindows = ({
             holdshowSet={holdshowSet}
             focusBy={focusBy}
             tagBy={tagBy}
-            dense={dense}
             stormy={stormy}
           />
         ))}
       </div>
       
-      <div className={`downstreamScroll forceScrollStyle ${dense}`}>
+      <div className='downstreamScroll forceScrollStyle'>
         {traceRapid &&
           <WindowGlass
             key={'s'+'-1'}
@@ -170,7 +173,6 @@ const ShipWindows = ({
             focusBy={focusBy}
             tagBy={tagBy}
             prog={prog}
-            dense={dense}
             stormy={stormy}
             updateTrigger={updateTrigger}
           />
@@ -191,7 +193,6 @@ const ShipWindows = ({
             focusBy={focusBy}
             tagBy={tagBy}
             prog={prog}
-            dense={dense}
             stormy={stormy}
             updateTrigger={updateTrigger}
           />

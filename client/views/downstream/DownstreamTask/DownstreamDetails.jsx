@@ -13,7 +13,7 @@ const DownstreamDetails = ({
   indexKey, oB, traceDT,
   user, app,
   isDebug, canDo,
-  focusBy, tagBy, prog, dense, stormy, progCols, ncCols, updateTrigger
+  focusBy, tagBy, prog, stormy, progCols, ncCols, updateTrigger
 })=> (
   <Fragment>
     {!oB ? null :
@@ -32,7 +32,6 @@ const DownstreamDetails = ({
               focusBy={focusBy}
               tagBy={tagBy}
               prog={prog}
-              dense={dense}
               stormy={stormy}
               progCols={progCols}
               ncCols={ncCols}
@@ -47,7 +46,7 @@ export default DownstreamDetails;
 
 const DownstreamScrollChunk = ({
   ck, tBatch,
-  app, user, isDebug, focusBy, tagBy, canDo, prog, dense, stormy,
+  app, user, isDebug, focusBy, tagBy, canDo, prog, stormy,
   progCols, ncCols,
   updateTrigger
 })=> {
@@ -111,7 +110,7 @@ const DownstreamScrollChunk = ({
         updateTrigger={updateTrigger}
         isDebug={isDebug} />
       
-      <PerformanceSquare perf={ck.performTgt} />
+      <PerformanceSquare perf={ck.performTgt} mini={true} />
       
       <NonConCounts
         batchID={ck.batchID}
@@ -132,16 +131,13 @@ const DownstreamScrollChunk = ({
           app={app}
           lock={isDone && !isDebug ? Pref.isDone : false}
           canDo={canDo}
-          noText={dense}
+          noText={true}
           cleanIcon={true}
           isDebug={isDebug} />
       </div>
       
-      <ProJump batchNum={ck.batch} dense={dense} />
+      <ProJump batchNum={ck.batch} />
       
     </div>
   );
 };
-      
-      
-  

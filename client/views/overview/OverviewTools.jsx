@@ -15,7 +15,6 @@ const OverviewTools = ({
   tagBy, changeTagsUP,
   ghostUP, ghostSetUP, 
   progUP, progSetUP,
-  // denseUP, denseSetUP,
   lightUP, themeSetUP,
   stormy, stormySet,
   doThing
@@ -91,13 +90,6 @@ const OverviewTools = ({
         stormState={stormy}
         changeFunc={stormySet} 
       />
-      
-      {/*
-      <LayoutSwitch
-        denseState={denseUP}
-        changeFunc={denseSetUP}
-      />
-      */}
       
       <ThemeSwitch
         themeState={lightUP}

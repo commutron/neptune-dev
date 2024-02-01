@@ -6,7 +6,7 @@ const WindowGlass = ({
   mixedOrders, indexKey, traceDT,
   brancheS, app, user, isDebug, 
   holdShow, holdshowSet, canDo, 
-  focusBy, tagBy, prog, dense, stormy,
+  focusBy, tagBy, prog, stormy,
   updateTrigger
 })=> {
   
@@ -29,7 +29,7 @@ const WindowGlass = ({
           return(
             <div 
               key={entry+index} 
-              className={`cap blackT ${!dense ? 'invisible' : ''}`}
+              className='cap blackT'
               >{entry}
             </div>
       )})}
@@ -48,7 +48,6 @@ const WindowGlass = ({
           canDo={canDo}
           isNightly={false}
           prog={prog}
-          dense={dense}
           focusBy={focusBy}
           tagBy={tagBy}
           stormy={stormy}
@@ -76,7 +75,6 @@ const WindowGlass = ({
             canDo={canDo}
             isNightly={false}
             prog={prog}
-            dense={dense}
             focusBy={focusBy}
             tagBy={tagBy}
             stormy={stormy}

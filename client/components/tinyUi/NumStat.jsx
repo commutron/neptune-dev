@@ -17,10 +17,10 @@ import React from 'react';
   };
  
 const NumStat = ({ num, icon, name, title, color, size, moreClass }) => (
-  <div style={sty} title={title} className={'noCopy centre  ' + (moreClass || '')}>
+  <div style={sty} title={title} className={'numFont noCopy centre  ' + (moreClass || '')}>
     <span 
       style={bSty} 
-      className={color + ' numFont ' + size}
+      className={color + ' ' + size}
       >{num !== false ? num : <n-fa1><i className={icon}></i></n-fa1>}
     </span>
     <n-sm style={sSty} class='label'>{name}</n-sm>

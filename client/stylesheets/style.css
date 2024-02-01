@@ -2,7 +2,7 @@
   font-family: monospace;  
 }
 .numFont, n-num {
-  font-family: 'VarelaLocal';
+  font-family: var(--styled-font);
 }
 
 .logoSVG {
@@ -237,7 +237,10 @@
 .cap, n-c { text-transform: capitalize; }
 .capFL:first-letter { text-transform: capitalize; }
 
-.smCap { font-variant: small-caps; }
+.smCap { 
+  font-variant: small-caps;
+  font-family: var(--styled-font);
+}
 
 .up, n-u { text-transform: uppercase; }
 .low { text-transform: lowercase; }

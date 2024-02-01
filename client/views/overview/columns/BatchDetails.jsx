@@ -9,7 +9,7 @@ const BatchDetails = ({
   oB, hB, sV, traceDT,
   user, app, brancheS,
   isDebug, holdShow, holdshowSet,
-  prog, dense, filterBy, focusBy, tagBy, stormy, branchArea, updateTrigger
+  prog, filterBy, focusBy, tagBy, stormy, branchArea, updateTrigger
 })=> {
   
   useEffect(() => {
@@ -35,12 +35,7 @@ const BatchDetails = ({
   const isRO = useMemo( ()=> Roles.userIsInRole(Meteor.userId(), 'readOnly'), [user]);
   
   return(
-    <div 
-      className={
-        `overGridScroll forceScrollStyle 
-        ${dense ? 'dense' : ''}`
-      } tabIndex='1'
-    >
+    <div className='overGridScroll forceScrollStyle' tabIndex='1'>
       
       {sV &&
         sV.map( (entry, index)=>{
@@ -50,20 +45,16 @@ const BatchDetails = ({
               sv={entry}
               isRO={isRO}
               isDebug={isDebug}
-              dense={dense}
             />
       )})}
     
-      {!dense ? 
-        <div className='overGridRowScrollHeader'></div>
-      :
-        <div className='overGridRowScroll labels'>
-          {headersArr.map( (entry, index)=>{
-            return(
-              <div key={entry+index} className='cap ovColhead'>{entry}</div>
-        )})}
-        </div>
-      }
+      
+      <div className='overGridRowScroll labels'>
+        {headersArr.map( (entry, index)=>{
+          return(
+            <div key={entry+index} className='cap ovColhead'>{entry}</div>
+      )})}
+      </div>
       
       {!oB ? null :
         oB.map( (entry, index)=>{
@@ -82,7 +73,6 @@ const BatchDetails = ({
               progCols={progCols}
               ncCols={ncCols}
               prog={prog}
-              dense={dense}
               filterBy={filterBy}
               focusBy={focusBy}
               tagBy={tagBy}
@@ -92,11 +82,11 @@ const BatchDetails = ({
             />
       )})}
       
-      {hB.length === 0 ? null : // !dense ? 
+      {hB.length === 0 ? null : !holdShow ?
         <button className='overGridRowScrollHeader labels grayFade'
           onClick={()=>holdshowSet(!holdShow)}
         ></button>
-      /* :
+        :
         <button className='overGridRowScroll labels grayFade'
           onClick={()=>holdshowSet(!holdShow)}
         >
@@ -104,7 +94,7 @@ const BatchDetails = ({
             return(
               <div key={entry+index} className='cap ovColhead'>{entry}</div>
         )})}
-        </button> */
+        </button> 
       }
       
       {holdShow &&
@@ -124,7 +114,6 @@ const BatchDetails = ({
               progCols={progCols}
               ncCols={ncCols}
               prog={prog}
-              dense={dense}
               filterBy={filterBy}
               focusBy={focusBy}
               tagBy={tagBy}

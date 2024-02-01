@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ProJump = ({ batchNum, dense })=> {
+const ProJump = ({ batchNum })=> {
   
   function goPro(location) {
     Session.set('now', location);
@@ -19,7 +19,6 @@ const ProJump = ({ batchNum, dense })=> {
           <n-fa1>
             <i className='far fa-paper-plane darkgrayT'></i>
           </n-fa1>
-          {!dense && <span className='label darkgrayT'>Production</span>}
         </label>
       </a>
     </div>
@@ -28,7 +27,7 @@ const ProJump = ({ batchNum, dense })=> {
 
 export default ProJump;
 
-export const SrvJump = ({ find, mId, isRO, dense })=> {
+export const SrvJump = ({ find, mId, isRO })=> {
   
   function goPro() {
     Session.set('now', find);
@@ -46,7 +45,6 @@ export const SrvJump = ({ find, mId, isRO, dense })=> {
           <n-fa1>
             <i className='far fa-paper-plane wetasphaltT'></i>
           </n-fa1>
-          {!dense && <span className='label wetasphaltT'>Production</span>}
         </label>
       </a>
     </div>

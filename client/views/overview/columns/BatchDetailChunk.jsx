@@ -17,7 +17,7 @@ const BatchDetailChunk = ({
   app,
   isAuth, isRO, isDebug,
   statusCols, progCols, ncCols, 
-  prog, dense, filterBy, focusBy, tagBy, stormy, branchArea,
+  prog, filterBy, focusBy, tagBy, stormy, branchArea,
   updateTrigger
 })=> {
   
@@ -63,7 +63,7 @@ const BatchDetailChunk = ({
         isDebug={isDebug}
         statusCols={statusCols}
         branchArea={branchArea}
-        dense={dense} />
+      />
     
       {!branchArea ?
         <ReleasedCheck
@@ -73,7 +73,6 @@ const BatchDetailChunk = ({
           releasedToFloor={releasedToFloor}
           releases={oB.releases}
           app={app}
-          dense={dense}
           isAuth={isAuth}
           isRO={isRO}
           isDebug={isDebug} />
@@ -90,7 +89,7 @@ const BatchDetailChunk = ({
         updateTrigger={updateTrigger}
         isDebug={isDebug} />
     
-      <PerformanceSquare perf={tBatch.performTgt} />
+      <PerformanceSquare perf={tBatch.performTgt} mini={true} />
     
       <NonConCounts
         batchID={oB._id}
@@ -101,7 +100,7 @@ const BatchDetailChunk = ({
         updateTrigger={updateTrigger}
         isDebug={isDebug} />
     
-      <ProJump batchNum={oB.batch} dense={dense} />
+      <ProJump batchNum={oB.batch} />
         
     </div>
   );
@@ -109,7 +108,7 @@ const BatchDetailChunk = ({
 
 export default BatchDetailChunk;
 
-export const ServeDetailChunk = ({ sv, isRO, isDebug, dense })=> {
+export const ServeDetailChunk = ({ sv, isRO, isDebug })=> {
   
   const [ active, activeSet ] = useState(false);
   
@@ -158,7 +157,7 @@ export const ServeDetailChunk = ({ sv, isRO, isDebug, dense })=> {
         <i className='label infoSquareLabel'>{lattl}</i>
       </div>
       
-      <SrvJump find={sv.find} mId={sv.mId} dense={dense} isRO={isRO} />
+      <SrvJump find={sv.find} mId={sv.mId} isRO={isRO} />
       
     </div>
   );

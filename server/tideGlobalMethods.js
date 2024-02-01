@@ -440,7 +440,7 @@ Meteor.methods({
   
   fetchOverRun() {
     try {
-      const stillEng = Meteor.users.find({engaged: { $ne: false }},
+      const stillEng = Meteor.users.find({engaged: { $exists: true, $ne: false }},
                                          { fields:{'engaged':1} }).fetch();
       
       console.log(stillEng);

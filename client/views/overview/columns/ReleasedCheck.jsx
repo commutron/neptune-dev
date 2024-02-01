@@ -8,7 +8,7 @@ import { ReleaseWrapper } from '/client/components/bigUi/ReleasesModule';
 const ReleasedCheck = ({ 
   batchID, batchNum, isDone,
   releasedToFloor, releases,
-  app, dense, isAuth, isRO, isDebug
+  app, isAuth, isRO, isDebug
 })=> {
   
   if( Array.isArray(releases) ) {

@@ -60,8 +60,9 @@
 }
 .navButtonText,
 .navBarText {
+  font-family: var(--styled-font);
   padding: 0 1vh;
-  font-size: 3vh;
+  font-size: 2.75vh;
   text-align: center;
   line-height: 1;
   color: var(--neptuneColor);

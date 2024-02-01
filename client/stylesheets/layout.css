@@ -228,6 +228,7 @@ main {
   max-width: calc(100vw - 24dvh);
   height: 7dvh;
   background-color: rgb(25,25,25);
+  font-family: var(--styled-font);
   font-size: 4dvh;
   font-weight: 900;
   color: var(--silver);
@@ -522,6 +523,7 @@ main {
 }
 
 .slideMenuButton, .slideNestedMenuButton, .slideNestedLand {
+  font-family: var(--styled-font);
   display: block;
   width: 100%;
   min-height: 6vmin;

@@ -29,9 +29,6 @@ const OverviewWrap = ({
   const defaultProgs = sessionProgs !== undefined ? sessionProgs :
                         user.progType || false;
                         
-  // const sessionDense = Session.get(sessionSticky+'dense');
-  // const defaultDense = sessionDense !== undefined ? sessionDense : user.miniAction || false;
-                        
   const sessionLight = Session.get(sessionSticky+'lightTheme');
   const defaultLight =  sessionLight !== undefined ? sessionLight :
                         user.preferLight || false;
@@ -45,7 +42,6 @@ const OverviewWrap = ({
   
   const [ ghost, ghostSet ] = useState( defaultGhost );
   const [ prog, progSet ] = useState( defaultProgs );
-  const [ dense, denseSet ] = useState( true );
   const [ light, themeSet ] = useState( defaultLight );
   const [ stormy, stormySet ] = useState(false);
   
@@ -140,9 +136,6 @@ const OverviewWrap = ({
       case 'prog':
         progSet( val );
         break;
-      case 'dense':
-        denseSet( val );
-        break;
       case 'lightTheme':
         themeSet( val );
         break;
@@ -220,8 +213,6 @@ const OverviewWrap = ({
       holdSet( orderedBatches.filter( x => x.hold ) );
     });
   }
-      
-  const density = !dense ? '' : 'minifyed';
 
   return(
     <Fragment>
@@ -243,8 +234,6 @@ const OverviewWrap = ({
         ghostSetUP={(e)=>changeState(e, 'ghost')}
         progUP={prog}
         progSetUP={(e)=>changeState(e, 'prog')}
-        // denseUP={dense}
-        // denseSetUP={(e)=>changeState(e, 'dense')}
         lightUP={light}
         themeSetUP={(e)=>changeState(e, 'lightTheme')}
         stormy={stormy}
@@ -268,7 +257,7 @@ const OverviewWrap = ({
             </div>
           </div>
         : 
-          <div className={`overGridFrame ${density}`}>
+          <div className='overGridFrame'>
       
             <BatchHeaders
               key='fancylist0'
@@ -299,7 +288,6 @@ const OverviewWrap = ({
               holdShow={holdShow}
               holdshowSet={holdshowSet}
               prog={prog}
-              dense={dense}
               filterBy={filterBy}
               focusBy={focusBy}
               tagBy={tagBy}

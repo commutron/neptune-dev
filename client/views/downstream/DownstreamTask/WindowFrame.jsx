@@ -6,7 +6,7 @@ const WindowFrame = ({
   windowMoment, loaded, mixedOrders, 
   indexKey, traceDT,
   app, user, isDebug, holdShow, holdshowSet,
-  focusBy, tagBy, dense, stormy
+  focusBy, tagBy, stormy
 })=> {
   
   const dayOrders = indexKey === 0 ? mixedOrders.filter( o => !o.hold ) : mixedOrders;
@@ -44,7 +44,6 @@ const WindowFrame = ({
           isNightly={false}
           focusBy={focusBy}
           tagBy={tagBy}
-          dense={dense}
           stormy={stormy}
         />
         
@@ -54,13 +53,13 @@ const WindowFrame = ({
             className='overGridRowFixed grayFade beside'
             onClick={()=>holdshowSet(!holdShow)}
           >
-            <span className={`gap middle ${dense ? 'med' : 'vbig'}`}>
+            <span className='gap middle med'>
             {holdShow ?
               <n-fa0><i className="fa-solid fa-angles-down fa-lg gap"></i></n-fa0> :
               <n-fa1><i className="fa-solid fa-angles-right fa-lg gap"></i></n-fa1>
             }
             </span>
-            <span className={dense ? 'med' : 'vbig'}
+            <span className='med'
             >On Hold <sup>{hldOrders.length}</sup></span>
           </button>
         }
@@ -78,7 +77,6 @@ const WindowFrame = ({
             isNightly={false}
             focusBy={focusBy}
             tagBy={tagBy}
-            dense={dense}
             stormy={stormy}
           />
         }

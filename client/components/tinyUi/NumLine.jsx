@@ -33,8 +33,8 @@ const NumLine = ({
   num, name, title,
   color, big, inline, 
 }) => (
-  <div title={title} style={inline ? styInline : big ? styBig : sty}>
-    <i style={bSty} className={color + ' numFont'}>{num}</i>
+  <div title={title} style={inline ? styInline : big ? styBig : sty} className='numFont'>
+    <i style={bSty} className={color}>{num}</i>
     <i style={sSty}> {name}</i>
   </div>
 );
@@ -48,14 +48,14 @@ export const StatLine = ({
   preNum, preText, 
   postNum, postText
 }) => (
-  <div title={title} style={inline ? styInline : big ? styBig : sty}>
-    {preNum && <i style={mSty} className={color + ' numFont'}>{preNum}</i>}
+  <div title={title} style={inline ? styInline : big ? styBig : sty} className='numFont'>
+    {preNum && <i style={mSty} className={color}>{preNum}</i>}
     {preText && <i style={sSty}> {preText}</i>}
     
-    <div style={bSty} className={color + ' numFont'}>{num}</div>
+    <div style={bSty} className={color}>{num}</div>
     <i style={sSty}> {name}</i>
     
-    {postNum && <i style={mSty} className={color + ' numFont'}>{postNum}</i>}
+    {postNum && <i style={mSty} className={color}>{postNum}</i>}
     {postText && <i style={sSty}> {postText}</i>}
   </div>
 );

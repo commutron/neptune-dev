@@ -7,24 +7,11 @@
   font-family: inherit;
   outline-color: var(--neptuneColor);
   accent-color: var(--neptuneColor);
+  --styled-font: 'VarelaLocal', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 *::-moz-selection { background-color: var(--neptuneColor);}
 *::selection { background-color: var(--neptuneColor); }
 
-@font-face {
-  font-family: 'NunitoLocal';
-  src: url('/fonts/Nunito-Regular.ttf')  format('truetype'),
-       url('/fonts/nunito-regular.woff2') format('woff2'),
-       url('/fonts/nunito-regular.woff') format('woff');
-  font-weight: 400;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'NunitoLocalLight';
-  src: url('/fonts/Nunito-Light.ttf') format('truetype');
-  font-weight: 400;
-  font-style: normal;
-}
 @font-face {
   font-family: 'VarelaLocal';
   src: url('/fonts/varelaround-regular.woff2') format('woff2'),
@@ -34,16 +21,16 @@
 }
 
 body {
-  font-family: 'NunitoLocal', 'VarelaLocal', sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: greyscale;
   text-rendering: optimizeLegibility;
 }
 
 @-moz-document url-prefix() {
-  body {
-    font-family: 'NunitoLocalLight', 'VarelaLocal', sans-serif;
-  }
+  /*body {*/
+  /*  font-family: 'NunitoLocalLight', 'VarelaLocal', sans-serif;*/
+  /*}*/
   select {
     height: auto;
   }
@@ -51,6 +38,7 @@ body {
 
 h1, h2, h3, h4 {
   margin: 0.5rem 0;
+  font-family: var(--styled-font);
   font-weight: 600;
 }
 

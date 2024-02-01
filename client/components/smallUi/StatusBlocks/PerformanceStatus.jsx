@@ -3,7 +3,7 @@ import NumStat from '/client/components/tinyUi/NumStat';
 
 import './style';
 
-const PerformanceData = ({ batchID })=> {
+const PerformanceData = ({ batchID, mini })=> {
   
   const thingMounted = useRef(true);
   const [ pfData, setPerform ] = useState(null);
@@ -22,20 +22,21 @@ const PerformanceData = ({ batchID })=> {
   }, [batchID]);
   
   return(
-    <PerformanceSquare perf={pfData} /> 
+    <PerformanceSquare perf={pfData} mini={mini} /> 
   );
 };
 
 export default PerformanceData;
 
 
-export const PerformanceSquare = ({ perf })=> {
+export const PerformanceSquare = ({ perf, mini })=> {
   
   const pos = perf === null ? '±' : perf > 0 ? '+' : '';
   
   const golden = <b className='gapR numFont'>{pos}{perf}</b>;
   
-  const pfRank = 
+  const pfRank =
+    mini ? '' :
     perf === null ? <n-faX><i className='fas fa-meh'></i></n-faX> :
     perf <= -8 ? <n-fa4><i className='fas fa-angry'></i></n-fa4> :
     perf <= -4 ? <n-fa3><i className='fas fa-sad-tear'></i></n-fa3> :

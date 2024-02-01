@@ -81,7 +81,7 @@ export function getShipLoad(nowMoment) {
         $gte: new Date(nextStart),
         $lte: new Date(nextEnd) 
       }
-    },{fields:{'batchID':1}}).count();
+    },{fields:{'_id':1}}).count();
     return shipLoad;
   }else{
     return 0;
