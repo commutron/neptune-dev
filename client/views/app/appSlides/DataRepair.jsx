@@ -406,7 +406,7 @@ export const ForceRemoveTideBlock = ({ batch, isAdmin, isDebug })=> {
       <button
         id='doFORCEremoveTide'
         disabled={false}
-        className='smallAction redSolid'
+        className='action redSolid'
         onClick={(e)=>handle(e)}
       >Force Pop Last Tide Block</button>
     );

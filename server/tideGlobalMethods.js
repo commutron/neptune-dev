@@ -14,6 +14,8 @@ export function addTideDuration(td) {
 }
 
 function addTideArrayDuration(tideArray) {
+  /*
+  console.time('tideArrayAddition_run_time');
   let tideDurr = 0;
   for(const td of tideArray) {
     const mStart = moment(td.startTime);
@@ -21,6 +23,19 @@ function addTideArrayDuration(tideArray) {
     
     tideDurr += mStop.diff(mStart, 'seconds');
   }
+  console.timeEnd('tideArrayAddition_run_time');
+  */
+  
+  console.time('tideArrayAddition_run_time');
+  let tideDurr = 0;
+  for(let td of tideArray) {
+    const mStart = td.startTime;
+    const mStop = td.stopTime ? td.stopTime : new Date();
+    
+    tideDurr += ( ( mStop - mStart ) / 1000 );
+  }
+  console.timeEnd('tideArrayAddition_run_time');
+  
   return Math.round( moment.duration(tideDurr, 'seconds').asMinutes() );
 }
 
