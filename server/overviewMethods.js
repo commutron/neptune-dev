@@ -3,14 +3,14 @@ import 'moment-timezone';
 import 'moment-business-time';
 
 import Config from '/server/hardConfig.js';
-import { avg4est, asRate, percentOf, quadRegression } from './calcOps.js';
+import { round2Decimal, avg4est, asRate, percentOf, quadRegression } from './calcOps.js';
 import { syncLocale, countMulti, getEst } from './utility.js';
 import { batchTideTime } from './tideGlobalMethods.js';
 import { calcShipDay } from './reportCompleted.js';
 import { getShipLoad } from '/server/shipOps';
 
-function dryPriorityCalc(bQuTmBdg, mEst, bTide, shipAim, now, shipLoad) {
-  console.time('dryPriorityCalc_run_time');
+function dryPriorityCalc(bQuTmBdg, mEst, bTide, shipAim, now, shipLoad, timePer) {
+  // console.time('dryPriorityCalc_run_time');
   const shipAimMmnt = moment(shipAim);
   
   const mQuote = bQuTmBdg.length === 0 ? 0 : bQuTmBdg[0].timeAsMinutes || 0;
@@ -21,15 +21,13 @@ function dryPriorityCalc(bQuTmBdg, mEst, bTide, shipAim, now, shipLoad) {
   
   const quote2tide = mQuote - totalTideMinutes;
   const est2tide = estimatedMinutes - totalTideMinutes;
+  const est2item = round2Decimal( !timePer ? est2tide : (estimatedMinutes * ( 1 - (timePer / 100) )) );
   
   const overQuote = totalTideMinutes > mQuote;
   const e2tNice = Math.max(0, est2tide);
   
   const aimAhead = shipAimMmnt.clone().subtract(Config.shipAhead, 'hours');
-  
-  console.time('addWorking_run_time');
   const estSoonest = now.clone().addWorkingTime(e2tNice, 'minutes');
-  console.timeEnd('addWorking_run_time');
   
   const buffer = aimAhead.workingDiff(estSoonest, 'minutes');
   
@@ -39,9 +37,9 @@ function dryPriorityCalc(bQuTmBdg, mEst, bTide, shipAim, now, shipLoad) {
   const shipPull = dayGap <= Config.shipSoon ? shipLoad * 2 : shipLoad;
 
   const bffrRel = Math.round( ( estEnd2fillBuffer / 100 ) + dayGap - shipPull );
-  console.timeEnd('dryPriorityCalc_run_time');
+  // console.timeEnd('dryPriorityCalc_run_time');
   
-  return { quote2tide, est2tide, estSoonest, bffrRel, estEnd2fillBuffer, overQuote };
+  return { quote2tide, est2tide, est2item, estSoonest, bffrRel, estEnd2fillBuffer, overQuote };
 }
 
 function collectPriority(batchID, mockDay) {
@@ -53,11 +51,10 @@ function collectPriority(batchID, mockDay) {
     if(!b) {
       resolve(false);
     }else{
-      const trc = TraceDB.findOne({batchID: b._id},{fields:{'performTgt':1}});
+      const trc = TraceDB.findOne({batchID: b._id},{fields:{'performTgt':1,'donePnt': 1}});
       const tgt = trc ? trc.performTgt || 0 : 0;
       
       const mEst = getEst(b.widgetId, b.quantity, tgt);
-      console.log('mEst: ' + mEst);
       
       const oRapid = XRapidsDB.findOne({extendBatch: b.batch, live: true});
       const rapIs = oRapid ? oRapid.rapid : false;
@@ -77,13 +74,20 @@ function collectPriority(batchID, mockDay) {
       if(qtBready && b.tide && !doneEntry) {
         const shipLoad = getShipLoad(now);
 
-        const dryCalc = dryPriorityCalc(b.quoteTimeBudget, mEst, b.tide, shipAim, now, shipLoad);
+        const donePnt = trc ? trc.donePnt || 0 : 0;
+        const donePer = b.completed ? 100 : round2Decimal(donePnt * 100);
+        const timeReg = quadRegression(donePer);
+        const timePer = timeReg > Config.qregA ? timeReg : undefined;
+      
+        const dryCalc = dryPriorityCalc(b.quoteTimeBudget, mEst, b.tide, shipAim, now, shipLoad, timePer);
 
         resolve({
           batch: b.batch,
           batchID: b._id,
           salesOrder: b.salesOrder,
+          quote2tide: dryCalc.quote2tide,
           est2tide: dryCalc.est2tide,
+          est2item: dryCalc.est2item,
           estSoonest: dryCalc.estSoonest.format(),
           completed: doneEntry, 
           bffrRel: dryCalc.bffrRel,
@@ -99,7 +103,9 @@ function collectPriority(batchID, mockDay) {
           batch: b.batch,
           batchID: b._id,
           salesOrder: b.salesOrder,
+          quote2tide: 0,
           est2tide: false,
+          est2item: 0,
           completed: doneEntry,
           bffrRel: false,
           estEnd2fillBuffer: 0,
@@ -121,16 +127,22 @@ function getFastPriority(bData, now, shipAim, shipLoaded) {
     
     if(qtBready && bData.tide && !doneEntry) {
       const shipLoad = !isNaN(shipLoaded) ? shipLoaded : getShipLoad(now);
-      const trc = TraceDB.findOne({batchID: bData._id},{fields:{'performTgt':1}});
+      const trc = TraceDB.findOne({batchID: bData._id},{fields:{'performTgt':1,'donePnt': 1}});
       const tgt = trc ? trc.performTgt || 0 : 0;
       
       const mEst = getEst(bData.widgetId, bData.quantity, tgt);
       
-      const dryCalc = dryPriorityCalc(bData.quoteTimeBudget, mEst, bData.tide, shipAim, now, shipLoad);
+      const donePnt = trc ? trc.donePnt || 0 : 0;
+      const donePer = bData.completed ? 100 : round2Decimal(donePnt * 100);
+      const timeReg = quadRegression(donePer);
+      const timePer = timeReg > Config.qregA ? timeReg : undefined;
+      
+      const dryCalc = dryPriorityCalc(bData.quoteTimeBudget, mEst, bData.tide, shipAim, now, shipLoad, timePer);
       
       resolve({
         quote2tide: dryCalc.quote2tide,
         est2tide: dryCalc.est2tide,
+        est2item: dryCalc.est2item,
         estSoonest: dryCalc.estSoonest.format(),
         bffrRel: dryCalc.bffrRel,
         estEnd2fillBuffer: dryCalc.estEnd2fillBuffer,
@@ -140,6 +152,7 @@ function getFastPriority(bData, now, shipAim, shipLoaded) {
       resolve({
         quote2tide: 0,
         est2tide: false,
+        est2item: 0,
         estSoonest: false,
         bffrRel: false,
         estEnd2fillBuffer: 0,
@@ -273,7 +286,7 @@ Meteor.methods({
       
       const mEst = getEst(b.widgetId, b.quantity, 0);
       const budget = b.quoteTimeBudget || [];
-      const mQuote = budget.length === 0 ? 0 : Number(budget[0].timeAsMinutes);
+      const mQuote = budget.length === 0 ? 0 : Number(budget[0].timeAsMinutes) || 0;
       const estMinutes = mQuote === 0 ? mEst :
                          mQuote < mEst ? mQuote : avg4est(mQuote, mEst);
       

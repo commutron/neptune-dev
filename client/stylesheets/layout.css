@@ -1162,6 +1162,12 @@ n-sm-model-content {
   grid-template-columns: repeat( auto-fit, minmax(20ch, 1fr) );
   align-items: baseline;
 }
+.autoGrid.cardify > div {
+  margin: 0;
+}
+.autoGrid.cardify {
+  gap: 3vmin;
+}
 
 .minWide { width: min-content !important; }
 .maxWide { width: max-content !important; }

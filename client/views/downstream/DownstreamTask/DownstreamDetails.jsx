@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import Pref from '/client/global/pref.js';
-import { min2hr } from '/client/utility/Convert';
+import { min2hr, avgOfArray } from '/client/utility/Convert';
 
 import ProJump from '/client/components/smallUi/ProJump';
 import TideActivityData, { TideActivitySquare } from '/client/components/tide/TideActivity';
@@ -53,14 +53,16 @@ const DownstreamScrollChunk = ({
   
   const isDone = ck.completedAt ? true : false;
   
+  const q2t = ck.quote2tide || 0;
   const e2t = ck.est2tide;
-  const itmRmn = ck.quantity - (ck.doneItems || 0);
-  const itmCrct = itmRmn * (e2t / (ck.quantity || 1));
+  const e2i = ck.est2item || 0;
+  const avgRmn = avgOfArray([q2t, e2t, e2i], true);
   const e2tStatus = !e2t ? 'Time Not Tracked' :
           e2t > 0 ? 
-            `${min2hr(itmCrct)} hr remain` :
-            'estimated time exceeded';
-  // itmCrct is an expimental corection to extreme estimations observed in production  
+            `${min2hr(avgRmn)} hr remain` :
+            'time estimations exceeded';
+  // avgRmn is an expimental corection to extreme estimations observed in production  
+  // const onTime = !ck.estSoonest ? null : new Date(ck.shipAim) > new Date(ck.estSoonest);
 
   const highG = focusBy ? tBatch.isWhat[0] === focusBy ? '' : 'hide' : '';
   const highT = tagBy ? tBatch.tags && tBatch.tags.includes(tagBy) ? '' : 'hide' : '';
@@ -96,7 +98,7 @@ const DownstreamScrollChunk = ({
       {isDone ? 
         ck.oRapid ? <div title='status'>{Pref.xBatch} {Pref.rapidExd}</div> :
         <div title='status'>{Pref.xBatch} {Pref.isDone}</div> :
-        <div title={`Estimate\n${Math.round(e2t)} minutes`}>{e2tStatus}</div>}
+        <div title={`Remaining Quoted: ${min2hr(q2t)} hours\nRemaining Estimated(past): ${min2hr(e2t)} hours\nRemaining Estimated(curve): ${min2hr(e2i)} hours`}>{e2tStatus}</div>}
       
       <BranchProgress
         batchID={ck.batchID}

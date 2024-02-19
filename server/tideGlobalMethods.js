@@ -14,7 +14,7 @@ export function addTideDuration(td) {
 }
 
 function addTideArrayDuration(tideArray) {
-  
+  /* // Old slow with moment
   console.time('tideArrayAddition_run_time');
   let tideDurr = 0;
   for(const td of tideArray) {
@@ -24,19 +24,17 @@ function addTideArrayDuration(tideArray) {
     tideDurr += mStop.diff(mStart, 'seconds');
   }
   console.timeEnd('tideArrayAddition_run_time');
-
+  */
   
-  console.time('tideArrayAddFAST_run_time');
-  let ztideDurr = 0;
-  for(let td of ztideArray) {
-    const zmStart = td.startTime;
-    const zmStop = td.stopTime ? td.stopTime : new Date();
+  // console.time('tideArrayAddFAST_run_time');
+  let tideDurr = 0;
+  for(let td of tideArray) {
+    const mStart = td.startTime;
+    const mStop = td.stopTime ? td.stopTime : new Date();
     
-    ztideDurr += ( ( zmStop - zmStart ) / 1000 );
+    tideDurr += Math.floor( ( ( mStop - mStart ) / 1000 ) );
   }
-  console.timeEnd('tideArrayAddFAST_run_time');
-  
-  console.log('tidetotal: ' + tideDurr + ' // ' + ztideDurr);
+  // console.timeEnd('tideArrayAddFAST_run_time');
   
   return Math.round( moment.duration(tideDurr, 'seconds').asMinutes() );
 }
@@ -460,7 +458,7 @@ Meteor.methods({
       const stillEng = Meteor.users.find({engaged: { $exists: true, $ne: false }},
                                          { fields:{'engaged':1} }).fetch();
       
-      console.log(stillEng);
+      // console.log(stillEng);
       if(stillEng.length > 0) {
         const mssg = `You did not stop your time tracker from the previous workday.\nPlease correct your Project Activity record.`;
         

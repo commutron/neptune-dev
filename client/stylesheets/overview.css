@@ -357,6 +357,7 @@
   text-align: center;
   text-transform: capitalize;
   padding-bottom: 3dvh;
+  line-height: 4vmin;
 }
 .downGridFrameFixed:nth-child(odd) > .downWeek,
 .downGridFrameFixed:nth-child(odd) > .downHeadFixed,

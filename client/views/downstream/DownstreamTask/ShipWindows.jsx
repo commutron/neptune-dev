@@ -5,7 +5,7 @@ import WindowFrame from './WindowFrame';
 import WindowGlass from './WindowGlass';
 
 import { listShipDays } from '/client/utility/WorkTimeCalc';
-import { min2hr } from '/client/utility/Convert';
+import { min2hr, avgOfArray } from '/client/utility/Convert';
 
 import Grabber from '/client/utility/Grabber.js';
 
@@ -26,12 +26,12 @@ const ShipWindows = ({
   const addUpTime = (wipArr)=> Array.from(wipArr, 
         x => {
           if(typeof x.est2tide === 'number' && !x.hold) {
-            return ( x.quantity - (x.doneItems || 0) ) * ( Math.max(x.est2tide, 0) / (x.quantity || 1) );
+            return avgOfArray([Math.max(x.est2tide, 0), Math.max(x.est2item, 0)], true);
           }else{
             return 0;
           }
         }).reduce( (arr, x)=> arr + x, 0);
-  
+    
   useEffect(() => {
     Grabber('.downstreamScroll');
   }, []);
@@ -50,8 +50,8 @@ const ShipWindows = ({
     traceDTS = limitToSales.sort((p1, p2)=> {
       const p1bf = p1.bffrRel;
       const p2bf = p2.bffrRel;
-      if (isNaN(p1bf) || p1.hold) { return 1 }
-      if (isNaN(p2bf) || p2.hold) { return -1 }
+      if (isNaN(p1bf) || !!p1.hold) { return 1 }
+      if (isNaN(p2bf) || !!p2.hold) { return -1 }
       if (p1.lateLate) { return -1 }
       if (p2.lateLate) { return 1 }
       if (p1bf < p2bf) { return -1 }

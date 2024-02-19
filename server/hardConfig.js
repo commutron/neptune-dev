@@ -34,9 +34,10 @@ class Config {
                       // used in priority & performance
     // Relationship between % of completed and % of tide time 
     // is expressed as a Quadratic Regression Equation
-    this.qregA = 80.6898916;
-    this.qregB = 0.26632669;
-    this.qregC = -0.0007738926;
+    // https://www.omnicalculator.com/statistics/quadratic-regression
+    this.qregA = 77.64; // 80.6898916;
+    this.qregB = 0.2965; // 0.26632669;
+    this.qregC = -0.000814; // -0.0007738926;
     
     this.regexSN = RegExp(/^(\d{8,10})$|^(\d{6}\-\d{7})$/);
     this.regex810 = RegExp(/^(\d{8,10})$/);

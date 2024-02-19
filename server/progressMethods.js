@@ -1,4 +1,4 @@
-import moment from 'moment';
+// import moment from 'moment';
 import { 
   sortBranches, 
   flattenHistory,
@@ -18,7 +18,7 @@ function collectBranchCondition(privateKey, batchID) {
           batch: batchX.batch,
           batchID: batchX._id,
           onFloor: false,
-          doneItems: 0,
+          donePnt: 0,
           stormy: [false, false, false],
           branchSets: []
         });
@@ -34,7 +34,8 @@ function collectBranchCondition(privateKey, batchID) {
         
         const waterfall = batchX.waterfall;
         const items = !srs ? [] : srs.items;
-        const doneItems = items.filter( x => x.completed ).length;
+        const itemsDonePercent = items.filter( x => x.completed ).length / items.length;
+        const donePnt = isNaN(itemsDonePercent) ? 0 : itemsDonePercent;
         
         const rSH = !srs ? [] : srs.shortfall.some( s => s.inEffect !== true && s.reSolve !== true );
         const iTF = items.some( x => x.history.find( y => y.type === 'test' && y.good === false ) );
@@ -113,7 +114,7 @@ function collectBranchCondition(privateKey, batchID) {
           batch: batchX.batch,
           batchID: batchX._id,
           onFloor: released,
-          doneItems: doneItems,
+          donePnt: donePnt,
           stormy: stormy,
           branchSets: branchSets
         });
@@ -125,12 +126,21 @@ function collectBranchCondition(privateKey, batchID) {
 }
 
 const reduceTide = (tArr)=> {
-  return tArr.reduce((x,y)=> {
-    const start = moment(y.startTime);
-    const stop = !y.stopTime ? moment() : moment(y.stopTime);
-    const dur = moment.duration(stop.diff(start)).asMinutes();
-    return x + dur;
-  }, 0);
+  // return tArr.reduce((x,y)=> {
+  //   const start = moment(y.startTime);
+  //   const stop = !y.stopTime ? moment() : moment(y.stopTime);
+  //   const dur = moment.duration(stop.diff(start)).asMinutes();
+  //   return x + dur;
+  // }, 0);
+  
+  let durr = 0;
+  for(let td of tArr) {
+    const start = td.startTime;
+    const stop = td.stopTime ? td.stopTime : new Date();
+    
+    durr += Math.floor( ( ( stop - start ) / 60000 ) );
+  }
+  return durr;
 };
 
 function collectBranchTime(privateKey, batchID) {

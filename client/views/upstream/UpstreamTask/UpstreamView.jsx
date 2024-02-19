@@ -111,8 +111,8 @@ const UpstreamView = ({ batchX, traceDT, user, app, brancheS, isAuth, isDebug })
             const pB1bf = pB1 ? pB1.bffrRel : null;
             const pB2 = traceDT.find( x => x.batchID === b2._id);
             const pB2bf = pB2 ? pB2.bffrRel : null;
-            if (isNaN(pB1bf) || pB1.hold) { return 1 }
-            if (isNaN(pB2bf) || pB2.hold) { return -1 }
+            if (isNaN(pB1bf) || !!pB1.hold) { return 1 }
+            if (isNaN(pB2bf) || !!pB2.hold) { return -1 }
             if (pB1.lateLate) { return -1 }
             if (pB2.lateLate) { return 1 }
             if (pB1bf < pB2bf) { return -1 }

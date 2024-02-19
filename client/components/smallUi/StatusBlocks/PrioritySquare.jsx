@@ -3,7 +3,7 @@ import moment from 'moment';
 import 'moment-timezone';
 import Pref from '/client/global/pref.js';
 
-import { min2hr } from '/client/utility/Convert.js';
+import { min2hr, avgOfArray } from '/client/utility/Convert.js';
 import NumStat from '/client/components/tinyUi/NumStat.jsx';
 
 import './style';
@@ -157,6 +157,14 @@ export const PrioritySquare = ({
     
     const title = `${prTxt}\n${ovrTxt}\n\n${treTxt}\n${soonTxt}`;
     const debugTitle = `${prTxt}\n${ovrTxt}\n\n${treTxt}\nquote-to-tide: ${e2t}\n${soonTxt}\n\n${bffTxt}\n${pt.bffrRel}`;
+    
+    // const onTime = !ck.estSoonest ? null : new Date(ck.shipAim) > new Date(ck.estSoonest);
+    /*
+    const q2t = ck.quote2tide || 0;
+    const e2t = ck.est2tide;
+    const e2i = ck.est2item || 0;
+    const avgRmn = avgOfArray([q2t, e2t, e2i], true);
+    */
     
     if(showExtra && !showLess) {
       return(
