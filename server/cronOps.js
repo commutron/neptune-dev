@@ -79,6 +79,13 @@ SyncedCron.add({
   job: ()=> goDo('generateNCTimeMonthly')
 });
 
+SyncedCron.add({
+  name: 'Dev Monitor Status',
+  schedule: (parser)=> parser.text('at 5:55 am on Sat'),
+  job: ()=> goDo('handleDevMonitorEmail')
+});
+
+
 SyncedCron.start();
   
 function goDo(goFunc) {

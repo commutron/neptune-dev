@@ -34,7 +34,7 @@ function sendInternalEmail(to, subject, date, title, body, asid, foot, link, fin
       </tbody>
     </table>`;
     
-  const text = `Neptune Automated Message\n\n${title}\n\n${date}\n\n${body}\n\n${asid}\n\n${foot}\n\n\ndo not reply to this email\n\n${fine}`;
+  const text = `Neptune Automated Message\n\n${title}\n\n${date}\n\n${body}\n\n${asid}\n\n${foot}\n\n${link}\n\ndo not reply to this email\n\n${fine}`;
 
   Email.send({ to, from, subject, html, text });
 
@@ -159,7 +159,7 @@ Meteor.methods({
     }
   },
   
-  handleErrorEmail(errorTitle, errorTime, errorUser, agent, sessionID, errorMessage) {
+  handleErrorEmail(errorTitle, errorTime, errorUser, agent, sessionID, url, errorMessage) {
     this.unblock();
     const app = AppDB.findOne({},{fields:{'emailGlobal':1,'devEmail':1}});
     const emailGlobal = app && app.emailGlobal && app.devEmail;
@@ -172,11 +172,51 @@ Meteor.methods({
       const date = moment().tz(Config.clientTZ).format('h:mm a, dddd, MMM Do YYYY');
       const title = errorTitle;
       
-      const body = `${'<pre>'}${errorMessage}${'</pre>'}`;
+      const body = `${errorUser}, ${agent}, ${url}`;
       const foot = `${errorTime} (session ${sessionID})`;
-      const link = `${errorUser}, ${agent}`;
+      const link = `${'<pre>'}${errorMessage}${'</pre>'}`;
       
       sendInternalEmail(to, subject, date, title, body, "-", foot, link, "-");
+      
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  handleDevMonitorEmail() {
+    this.unblock();
+    const app = AppDB.findOne({},{fields:{'emailGlobal':1,'devEmail':1,'orgPIN':1,'workingHours':1}});
+    const emailGlobal = app && app.emailGlobal && app.devEmail;
+    
+    if(emailGlobal) {
+      
+      const to = app.devEmail;
+    
+      const subject = 'NEPTUNE STATUS REPORT';
+      const date = moment().tz(Config.clientTZ).format('h:mm a, dddd, MMM Do YYYY');
+      const title = `Neptune is running`;
+      
+      const pin = app.orgPIN;
+      const hrs = JSON.stringify(app.workingHours);
+      
+      const u = Meteor.users.find().count();
+      const g = GroupDB.find().count();
+      const w = WidgetDB.find().count();
+      const v = VariantDB.find().count();
+      const b = XBatchDB.find().count();
+      const i = XSeriesDB.find().count();
+      const r = XRapidsDB.find().count();
+      const t = TraceDB.find().count();
+      const e = EquipDB.find().count();
+      const m = MaintainDB.find().count();
+      
+      const body = `Users: ${u}\nGroups: ${g}\nWidgets: ${w}\nVariants: ${v}\nBatches: ${b}\nItems: ${i}\nRapids: ${r}\nTraces: ${t}\nEquips: ${e}\nMaints: ${m}`;
+      const asid = `OrgPIN: ${pin}`;
+      const foot = `WorkingHours: ${hrs}`;
+      const link = `config: tz:${Config.clientTZ} reply:${Config.replyEmail} tel:${Config.orgTel}`;
+      
+      sendInternalEmail(to, subject, date, title, body, asid, foot, link, ":P");
       
       return true;
     }else{

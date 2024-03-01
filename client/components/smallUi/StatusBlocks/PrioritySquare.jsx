@@ -62,6 +62,10 @@ export const PrioritySquare = ({
   altNumber, app, isDebug, showExtra, showLess
 })=> {
   
+  const pt = ptData;
+  const q2t = pt?.quote2tide || 0;
+  const doneQuote = q2t > 0 ? `Remaining Quoted: ${min2hr(q2t)} hours` : `Over Quoted: ${Math.abs(min2hr(q2t))} hours`;
+  
   if(isDone) {
     const doneColor = oRapid ? 'darkOrange' : 'green';
     const doneIcon = oRapid ? 'fa-solid fa-bolt' : 'fa-regular fa-star';
@@ -71,7 +75,7 @@ export const PrioritySquare = ({
         num={false}
         icon={doneIcon}
         name={showLess ? '' : doneName}
-        title={doneName}
+        title={`${doneName}\n${doneQuote}`}
         color='blackblackT'
         size='bold vbig' 
         moreClass={doneColor}
@@ -79,8 +83,6 @@ export const PrioritySquare = ({
     );
   }
     
-  const pt = ptData;
-  
   if( pt && pt.batchID === batchID ) {
     
     const e2t = pt.est2tide;
@@ -98,7 +100,7 @@ export const PrioritySquare = ({
           num={false}
           icon={doneIcon}
           name={showLess ? '' : doneName}
-          title={doneName}
+          title={`${doneName}\n${doneQuote}`}
           color='blackblackT'
           size='bold vbig'
           moreClass={doneColor}
@@ -111,7 +113,7 @@ export const PrioritySquare = ({
         <NumStat
           num='X'
           name=''
-          title='priority rank unavailable'
+          title={`Priority Rank Unavailable\n${doneQuote}`}
           color='fade'
           size='vbigger'
         />
@@ -152,19 +154,20 @@ export const PrioritySquare = ({
     
     const prTxt = `Priority Rank "${priorityRank}"`;
     const bffTxt = `buffer: ${bffrTime || 0} minutes`;
-    const treTxt = `Estimated Time Remaining: ${min2hr(Math.max(0,e2t))} hours`;
-    const soonTxt = `Soonest Complete: ${moment(pt.estSoonest).format("ddd, MMM Do, h:mm a")}`;
     
-    const title = `${prTxt}\n${ovrTxt}\n\n${treTxt}\n${soonTxt}`;
-    const debugTitle = `${prTxt}\n${ovrTxt}\n\n${treTxt}\nquote-to-tide: ${e2t}\n${soonTxt}\n\n${bffTxt}\n${pt.bffrRel}`;
+    const e2i = pt.est2item || 0;
+    const e2iTxt = `Remaining Estimated(curve): ${min2hr(e2i)} hours`;
+    const e2tTxt = `Remaining Estimated(past): ${min2hr(e2t)} hours`;
     
-    // const onTime = !ck.estSoonest ? null : new Date(ck.shipAim) > new Date(ck.estSoonest);
-    /*
-    const q2t = ck.quote2tide || 0;
-    const e2t = ck.est2tide;
-    const e2i = ck.est2item || 0;
     const avgRmn = avgOfArray([q2t, e2t, e2i], true);
-    */
+    const treTxt = `Estimated Time Remaining: ${min2hr(Math.max(0,avgRmn))} hours`;
+    
+    const onTime = !pt.estSoonest ? null : new Date(pt.shipAim) > new Date(pt.estSoonest);
+    const ontmTxt = onTime ? 'Predicted On Time' : onTime === false ? 'Predicted Late' : 'Prediction Unavailable';
+    const soonTxt = `Earliest Completion: ~${moment(pt.estSoonest).format("ddd, MMM Do, h:mm a")}`;
+    
+    const title = `${prTxt}\n${ovrTxt}\n${doneQuote}\n\n${treTxt}\n${ontmTxt}\n`;
+    const debugTitle = `${prTxt}\n${ovrTxt}\n${doneQuote}\nq2t: ${q2t}\n\n${treTxt}\ne2t: ${e2t}\ne2i: ${e2i}\n${ontmTxt}\n\n${soonTxt}\n\n${bffTxt}\nbffrRel: ${pt.bffrRel}`;
     
     if(showExtra && !showLess) {
       return(
@@ -180,8 +183,12 @@ export const PrioritySquare = ({
           />
           {showExtra && !showLess ? 
             <dl className='med clean noindent espace'>
-              <dd>{treTxt}</dd>
+              <dd>{ontmTxt}</dd>
               <dd>{soonTxt}</dd>
+              <dd>{doneQuote}</dd>
+              <dd>{treTxt}</dd>
+              <dd>{e2tTxt}</dd>
+              <dd>{e2iTxt}</dd>
             </dl> : null}
         </div>
       );

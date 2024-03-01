@@ -5,7 +5,7 @@ export function min2hr(minutes) {
   const trunc = ( Math.round(
                    (asHours + Number.EPSILON) * 100) 
                       / 100 ).toFixed(2, 10);
-  return trunc;
+  return parseFloat(trunc);
 }
 
 export function minsec(minutes) {
@@ -32,13 +32,13 @@ export function round2Decimal(thrtytw) {
 }
 
 export function avgOfArray(arr, zeros) {
-  const cArr = zeros ? arr.filter( f => ( f || f === 0 ) && !isNaN(f) ) :
-                       arr.filter( f => f && !isNaN(f) );
-  
+  const cArr = zeros ? arr.filter( f => ( f || f === 0 ) && isFinite(f) ) :
+                       arr.filter( f => f && isFinite(f) );
+                       
   if(cArr.length == 1) {
-    return cArr[0];
+    return round2Decimal( cArr[0] );
   }else if(cArr.length > 1) {
-    const reduced = cArr.reduce( (a,c)=>a+c) / cArr.length;
+    const reduced = round2Decimal( cArr.reduce( (a,c)=> a + c ) / cArr.length );
     return reduced;
   }else{
     return 0;

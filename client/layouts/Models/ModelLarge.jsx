@@ -21,10 +21,10 @@ const ModelLarge = ({
         className='transparent'
         onClick={()=>reveal()}
         disabled={lock}>
-        <label className='navIcon actionIconWrap'>
+        <n-model-button className='navIcon actionIconWrap'>
           <i className={`fas ' ${icon} ${iSize} fa-fw ${color}`}></i>
           {!noText && <span className={'actionIconText ' + color}>{button}</span>}
-        </label>
+        </n-model-button>
       </button>
     
     {show &&

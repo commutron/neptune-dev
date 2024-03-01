@@ -22,10 +22,10 @@ const ModelMedium = ({
         className='transparent'
         onClick={()=>reveal()}
         disabled={lock}>
-        <label className={`navIcon actionIconWrap ${iAlgn}`}>
+        <n-model-button className={`navIcon actionIconWrap ${iAlgn}`}>
           <i className={`fas ${icon} ${iSize} fa-fw ${color}`}></i>
           {!noText && <span className={'actionIconText ' + color}>{button}</span>}
-        </label>
+        </n-model-button>
       </button>
       
       {show &&

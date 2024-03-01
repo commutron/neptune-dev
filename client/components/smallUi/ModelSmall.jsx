@@ -29,10 +29,10 @@ const ModelSmall = ({
           title={title}
           onClick={()=>reveal()}
           disabled={lock}>
-          <label>
+          <n-model-button>
             <n-fa1><i className={`${icon} fa-fw ${color}`}></i></n-fa1>
             {!noText && <span className={textcolor || 'blackT'}>{button}</span>}
-          </label>
+          </n-model-button>
         </button>
       :
         <button
@@ -40,12 +40,12 @@ const ModelSmall = ({
           className='transparent'
           onClick={()=>reveal()}
           disabled={lock}>
-          <label className={`navIcon actionIconWrap ${inLine ? 'middle' : ''}`}>
+          <n-model-button className={`navIcon actionIconWrap ${inLine ? 'middle' : ''}`}>
             {wrapIcon ?
               <n-fa1><i className={`fas ${icon} ${iSize} fa-fw ${color}`}></i></n-fa1>
             : <n-fa0><i className={`fas ${icon} ${iSize} fa-fw ${color}`}></i></n-fa0>}
             {!noText && <span className={`actionIconText ${textcolor || color}`}>{button}</span>}
-          </label>
+          </n-model-button>
         </button>
       }
       

@@ -13,7 +13,7 @@ function dryPriorityCalc(bQuTmBdg, mEst, bTide, shipAim, now, shipLoad, timePer)
   // console.time('dryPriorityCalc_run_time');
   const shipAimMmnt = moment(shipAim);
   
-  const mQuote = bQuTmBdg.length === 0 ? 0 : bQuTmBdg[0].timeAsMinutes || 0;
+  const mQuote = Number( bQuTmBdg.length === 0 ? 0 : bQuTmBdg[0].timeAsMinutes || 0 );
   
   const estimatedMinutes = avg4est(mQuote, mEst);
   

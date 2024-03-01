@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect, Fragment } from 'react';
+import React, { useState, useLayoutEffect, useEffect, Fragment } from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
@@ -17,12 +17,43 @@ const BatchXComplete = ({ batchData, allFlow, allFall, nowater, quantity, canRun
   }
   
   const [ datetime, datetimeSet ] = useState( moment().format() );
+  const [ canBackDate, canBackDateSet ] = useState( false );
+  const [ datesearch, datesearchSet ] = useState( null );
   
   useLayoutEffect( ()=>{
     if(batchData.completed) {
       datetimeSet(moment(batchData.completedAt).format());
     }
+    if(batchData.completed && !batchData.lock && Roles.userIsInRole(Meteor.userId(), 'edit')) {
+      canBackDateSet(true);
+    }
   },[batchData]);
+  
+  useEffect( ()=>{
+    if(canBackDate) {
+      
+      let countDates = [];
+      if(canBackDate) {
+        for(let w of batchData.waterfall || []) {
+          if(w.counts.length > 0) {
+            countDates.push(w.counts[w.counts.length-1].time);
+          }
+        }
+      }
+      
+      let eventDates = [];
+      if(canBackDate) {
+        for(let e of batchData.events || []) {
+          if(e.title === 'End of Process' || e.title === 'Start of Process') {
+            eventDates.push(e.time);
+          }
+        }
+      }
+      
+      const latestDate = Math.max( ...[ batchData.createdAt, countDates, eventDates ].flat().filter(f=>f) );
+      datesearchSet( !latestDate ? null : moment(latestDate).startOf('minute').format() );
+    }
+  },[canBackDate]);
   
   function backdateFinish() {
     const batchID = batchData._id;
@@ -44,18 +75,6 @@ const BatchXComplete = ({ batchData, allFlow, allFall, nowater, quantity, canRun
   }
   
   const canFin = Roles.userIsInRole(Meteor.userId(), "BRKt3rm1n2t1ng8r2nch");
-  
-  const canBackDate = batchData.completed && 
-    !batchData.lock && Roles.userIsInRole(Meteor.userId(), 'edit');
-  
-  const datesearch = canBackDate ?
-    Math.max(...[
-      batchData.createdAt,
-      ...Array.from(batchData.waterfall || [], w => 
-          w.counts[w.counts.length-1].time ),
-      ...Array.from(batchData.events || [], e => {
-          if(e.title === 'End of Process' || e.title === 'Start of Process' ){ return e.time } })
-    ].filter(f=>f)) : null;
 
   return(
     <div className='endBox borderPurple'>
@@ -78,24 +97,23 @@ const BatchXComplete = ({ batchData, allFlow, allFall, nowater, quantity, canRun
       :
         <Fragment>
           <h3 className='centreText margin5'>Completed</h3>
-          <Flatpickr
-            id='backDateTime'
-            value={datetime}
-            className='minWide transparent margin5 blackblackT'
-            onChange={(e)=> datetimeSet( this.backDateTime.value )}
-            options={{
-              defaultDate: datetime,
-              minDate: !datesearch ? null : moment(datesearch).startOf('minute').format(),
-              maxDate: moment(batchData.completedAt).endOf('minute').format(),
-              minuteIncrement: 1,
-              enableTime: true,
-              time_24hr: false,
-              altInput: true,
-              altFormat: "Y-m-d G:i K",
-            }}
-            disabled={!canBackDate}
-            required
+          <CompleteTimePicker
+            datetime={datetime}
+            datesearch={datesearch}
+            completedAt={batchData.completedAt}
+            canBackDate={canBackDate}
+            datetimeSet={(e)=>datetimeSet(e)}
           />
+          {canBackDate && !moment(batchData.completedAt).isSame(datetime, 'minute') ?
+            <div className='vmarginhalf blueBorder'>
+              <p>
+                <button
+                  onClick={(e)=>backdateFinish(e)}
+                  className='action blueSolid'
+                >Save Backdate</button>
+              </p>
+            </div>
+          : null}
           {moment().diff(moment(batchData.completedAt), 'minutes') < 60 ?
             <div className='centre'>
               <p>
@@ -114,7 +132,7 @@ const BatchXComplete = ({ batchData, allFlow, allFall, nowater, quantity, canRun
               color='purple'
               border='borderPurple'
               icon='fa-solid fa-repeat'
-              lock={!canRun}
+              lock={!canRun || !canBackDate}
             >
               <div title="Must enter organization PIN to reopen">
                 <input
@@ -135,16 +153,6 @@ const BatchXComplete = ({ batchData, allFlow, allFall, nowater, quantity, canRun
             </ModelInline>
           : null
           }
-          {canBackDate && !moment(batchData.completedAt).isSame(datetime, 'minute') ?
-            <div className='vmarginhalf blueBorder'>
-              <p>
-                <button
-                  onClick={(e)=>backdateFinish(e)}
-                  className='smallAction blueHover'
-                >Save Backdate</button>
-              </p>
-            </div>
-          : null}
       
         </Fragment>
       }
@@ -153,3 +161,31 @@ const BatchXComplete = ({ batchData, allFlow, allFall, nowater, quantity, canRun
 };
   
 export default BatchXComplete;
+
+const CompleteTimePicker = ({ datetime, datesearch, completedAt, canBackDate, datetimeSet })=> {
+  
+  if(!canBackDate) {
+    return(
+      <p style={{fontSize:'var(--tx0)'}} className='bottomLine line15x margin5 blackblackT'>{moment(datetime).format('YYYY-MM-DD hh:mm A')}</p>
+    );
+  }
+  return(
+    <Flatpickr
+      id='backDateTime'
+      value={datetime}
+      className='minWide transparent margin5 blackblackT'
+      onChange={(e)=> datetimeSet( this.backDateTime.value )}
+      options={{
+        defaultDate: datetime,
+        minDate: datesearch,
+        maxDate: moment(completedAt).endOf('minute').format(),
+        minuteIncrement: 1,
+        enableTime: true,
+        time_24hr: false,
+        altInput: true,
+        altFormat: "Y-m-d G:i K",
+      }}
+      disabled={!canBackDate}
+      required
+    />
+)};

@@ -63,6 +63,14 @@ FlowRouter.notFound = {
     });
   }
 };
+// FlowRouter.route('*', {
+//   name: '404',
+//   action() {
+//     this.render(PublicLayout, {
+//       content: (<Login />),
+//     });
+//   }
+// });
 
 const exposedRoutes = FlowRouter.group({
   subscriptions: function(params, queryParams) {
@@ -147,8 +155,8 @@ privlegedRoutes.route('/', {
   name: 'home',
   action() {
     mount(CleanLayout, {
-       content: (<LandingWrap />),
-       title: Pref.neptuneIs
+      content: (<LandingWrap />),
+      title: Pref.neptuneIs
     });
   }
 });

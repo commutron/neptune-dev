@@ -27,7 +27,7 @@ const BatchXIncomplete = ({ batchData, seriesData, lock, noText })=> {
 
 export default BatchXIncomplete;     
 	        
-const BatchXIncompleteForm = ({ batchData, seriesData, selfclose })=> {
+const BatchXIncompleteForm = ({ batchData, seriesData })=> {
   
   const [ workingState, workingSet ] = useState(false);
   
@@ -47,10 +47,6 @@ const BatchXIncompleteForm = ({ batchData, seriesData, selfclose })=> {
     e.preventDefault();
     this.inFinGo.disabled = true;
     
-    toast.warn('Please Wait For Confirmation...', {
-      toastId: ( batchData._id + 'FORCE' ),
-      autoClose: false
-    });
     workingSet(true);
     
     const comm = this.fincomment.value.trim();
@@ -60,18 +56,9 @@ const BatchXIncompleteForm = ({ batchData, seriesData, selfclose })=> {
       Meteor.apply('FORCEfinishBatchX', 
         [ batchData._id, doneScrap, remainScrap, unstartDelete, unstartScrap, comm, pinVal ], 
         {wait: true},
-        (error, reply)=> {
-          if(error)
+        (error)=> {
+          if(error) {
             console.log(error);
-          if(reply) {
-            toast.update(( batchData._id + 'FORCE' ), {
-              render: `${Pref.xBatch} Force Finished`,
-              type: toast.TYPE.SUCCESS,
-              autoClose: 3000
-            });
-            selfclose();
-          }else{
-            console.log('BLOCKED BY SERVER METHOD');
             toast.error('Server Error');
             workingSet(false);
           }
@@ -82,10 +69,13 @@ const BatchXIncompleteForm = ({ batchData, seriesData, selfclose })=> {
   
   if(workingState) {
     return(
-      <div className='centreText'>
-        <p><n-num>{doneI}</n-num> Items Completed</p>
-        <p><n-num>{runI}</n-num> Items In Progress</p>
-        <p><n-num>{noI}</n-num> Items Unstarted</p>
+      <div className='centre vmarginhalf'>
+        <div>
+          <p><n-num>{doneI}</n-num> Items Completed</p>
+          <p><n-num>{runI}</n-num> Items In Progress</p>
+          <p><n-num>{noI}</n-num> Items Unstarted</p>
+        </div>
+        <h4 className='centreText'>{batchData.completed ? <strong>{Pref.XBatch} Complete</strong> : <em>Resolving {Pref.XBatch}</em>}</h4>
       </div>
     );
   }

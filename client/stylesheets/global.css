@@ -92,7 +92,8 @@ button,
 
 button,
 button span,
-button label,
+/*button label,*/
+button n-model-button,
 input[type='submit'],
 input[type='reset'],
 input[type='checkbox'] {
@@ -115,7 +116,8 @@ input[type='checkbox'] {
 button:disabled, 
 button:disabled:hover, 
 button:disabled span, 
-button:disabled label,
+/*button:disabled label,*/
+button:disabled n-model-button,
 .react-contextmenu-wrapper:disabled {
   opacity: 0.5;
   cursor: not-allowed;

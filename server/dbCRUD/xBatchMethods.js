@@ -849,28 +849,28 @@ Meteor.methods({
           await Meteor.call('finishIncompleteItemX', srsId, ni.serial, 'Force Finish All');
         }
       }
-      
+
     }
-        
-    if(Roles.userIsInRole(Meteor.userId(), "qa") ) {
-      const accessKey = Meteor.user().orgKey;
+    
+    const accessKey = Meteor.user().orgKey;
       
       const org = AppDB.findOne({ orgKey: accessKey },{fields:{'orgPIN':1}});
-      const orgPIN = org ? org.orgPIN : null;
-        
+      const orgPIN = org ? org.orgPIN : null;    
+    
+    if(pinInput === orgPIN && Roles.userIsInRole(Meteor.userId(), "qa") ) {
+      
       const doc = XBatchDB.findOne({_id: batchId},{fields:{'batch':1,'serialize':1}});
       
-      if(pinInput === orgPIN) {
-        console.time('forceFin');
-        const didFlow = doc.serialize === true;
-        const srs = didFlow && XSeriesDB.findOne({batch: doc.batch},{fields:{'items':1}});
-        
-        const srsId = !srs ? null : srs._id;
-        
-        const srsI = !srs ? [] : srs.items;
-        
-        resolveItems(srsI, srsId, doneScrap, remainScrap, unstartDelete);
+      const didFlow = doc.serialize === true;
+      const srs = didFlow && XSeriesDB.findOne({batch: doc.batch},{fields:{'items':1}});
       
+      const srsId = !srs ? null : srs._id;
+      
+      const srsI = !srs ? [] : srs.items;
+      
+      resolveItems(srsI, srsId, doneScrap, remainScrap, unstartDelete)
+      .then( ()=> {
+
         XBatchDB.update({_id: batchId, orgKey: accessKey}, {
     			$set : { 
     			  completed: true,
@@ -894,7 +894,7 @@ Meteor.methods({
               solve: false
             }
         }});
-        
+
         const openRapid = XRapidsDB.findOne({extendBatch: doc.batch, live: true});
         if(!openRapid) {
           XBatchDB.update({_id: batchId, orgKey: accessKey}, {
@@ -902,17 +902,14 @@ Meteor.methods({
       			  live: false
           }});
         }
-        
+      }).finally( ()=> {
         Meteor.defer( ()=>{
           Meteor.call('updateOneMovement', batchId, accessKey);
           Meteor.call('saveEndState', batchId, accessKey);
         });
-        
-        console.timeEnd('forceFin');
-        
-        return true;
-      }else{ return false }
-    }else{ return false }
+      });
+      
+    }
   },
     //////////////////// DESTRUCTIVE \\\\\\\\\\\\\\\\\\\\\
   // Items delete is in the Series Methods

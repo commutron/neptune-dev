@@ -682,6 +682,11 @@ main {
   transition: opacity 200ms;
   overflow: hidden;
 }
+n-model-button {
+  display: inline-block;
+  line-height: 1.75;
+  text-transform: capitalize;
+}
 
 n-lg-model, n-md-model, n-sm-model {
   background: rgb(236, 240, 241);
@@ -727,7 +732,7 @@ n-model-head {
   column-gap: 6px;
 }
 n-model-head > span {
-  max-width: 32ch;
+  max-width: 80%;
   overflow: hidden;
   text-overflow: ellipsis;
 }

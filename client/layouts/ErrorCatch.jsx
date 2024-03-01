@@ -25,7 +25,7 @@ export default class ErrorCatch extends Component	{
     if(Roles.userIsInRole(Meteor.userId(), 'debug')) {
       const size = window.innerWidth + 'px';
       const fngr = window.navigator.maxTouchPoints > 1 ? 'touch' : 'no-touch';
-      const view = `${size} ${fngr}`;
+      const view = `${size} - ${fngr} - ${window.location.href}`;
     	const sessionID = Meteor.connection._lastSessionId;
     	Meteor.call('logReactError', sessionID, view, error.toString(), info.componentStack);
     }
@@ -38,13 +38,14 @@ export default class ErrorCatch extends Component	{
     const fngr = window.navigator.maxTouchPoints > 1 ? 'touch' : 'no-touch';
     const view = `${size} ${fngr}`;
     const sessionID = Meteor.connection._lastSessionId;
+  	const url = window.location.href;
   	
     Meteor.call(
       'handleErrorEmail', 
       this.state.errorHeader, 
       this.state.errorTime,
       Meteor.user().username,
-      view, sessionID,
+      view, sessionID, url,
       this.state.errorInfo
     );
   }
@@ -69,7 +70,8 @@ export default class ErrorCatch extends Component	{
               {this.state.errorTime}<br />
               username "{Meteor.user().username}"<br />
               view "{window.innerWidth}px {window.navigator.maxTouchPoints > 1 ? 'touch' : 'no-touch'}"<br />
-              Meteor session ID "{Meteor.connection._lastSessionId}"<br /><br />
+              Meteor session ID "{Meteor.connection._lastSessionId}"<br />
+              URL "{window.location.href}"<br /><br />
               <pre>{this.state.errorInfo}</pre>
             </div>
           </details>

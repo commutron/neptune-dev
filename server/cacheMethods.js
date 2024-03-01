@@ -324,7 +324,7 @@ Meteor.methods({
 
     for(let w of widgets) {
       Meteor.call('nonConBatchTrend', w._id);
-      Meteor.call('countMultiBatchTideToQuote', w._id);
+      Meteor.call('countMultiBatchTideToQuote', w._id, accessKey);
       Meteor.call('oneWidgetTurnAround', w._id, accessKey);
     }
     return true;

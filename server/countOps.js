@@ -71,8 +71,9 @@ Meteor.methods({
     
   },
   
-  countMultiBatchTideToQuote(widgetId) {
+  countMultiBatchTideToQuote(widgetId, accessKey) {
     this.unblock();
+    const orgKey = accessKey || Meteor.user().orgKey;
     
     const widget = WidgetDB.findOne({ _id: widgetId },{fields:{'quoteStats':1}});
     const quoteStats = widget.quoteStats || null;
@@ -80,7 +81,7 @@ Meteor.methods({
     const stale = !statime ? true :
             moment.duration(moment().diff(moment(statime))).as('hours') > Config.freche;
     if(stale) {
-      syncLocale(Meteor.user().orgKey);
+      syncLocale(orgKey);
       
       let tidePerItem = [];
       
