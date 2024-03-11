@@ -1,7 +1,7 @@
 import React from 'react';
   
   const sty = {
-    textAlign: 'center'
+    textAlign: 'center',
   };
   const bSty = {
     verticalAlign: 'bottom',

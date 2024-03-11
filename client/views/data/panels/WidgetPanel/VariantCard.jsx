@@ -187,7 +187,7 @@ const InlineForm = ({ widgetData, variantData, rootURL })=> {
           className='interInput'
           defaultValue={variantData.variant}
           placeholder='1a'
-          pattern='[A-Za-z0-9 \._-]*'
+          pattern='[A-Za-z0-9 \._\-]*'
           required />
       </p>       
           

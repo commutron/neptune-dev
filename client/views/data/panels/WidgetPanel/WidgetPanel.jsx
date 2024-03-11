@@ -5,7 +5,7 @@ import Tabs from '/client/components/smallUi/Tabs/Tabs';
 
 import VariantCard from './VariantCard';
 
-import WidgetEditForm from '/client/components/forms/WidgetEditForm';
+import WidgetEditForm from '/client/components/forms/WidgetForm';
 import FlowFormHead from '/client/components/forms/FlowFormHead';
 import VariantForm from '/client/components/forms/VariantForm';
 import BatchXCreate from '/client/components/forms/Batch/BatchXCreate';
@@ -49,7 +49,7 @@ const WidgetPanel = ({
         <div className='centreRow vwrap vmarginhalf'>
         
           <WidgetEditForm
-            id={widgetData._id}
+            groupId={widgetData._id}
             now={widgetData}
             lockOut={groupData.hibernate} />
             

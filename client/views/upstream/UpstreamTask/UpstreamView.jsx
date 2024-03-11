@@ -15,9 +15,6 @@ const UpstreamView = ({ batchX, traceDT, user, app, brancheS, isAuth, isDebug })
   
   const [ loadTime, loadTimeSet ] = useState( moment() );
                         
-  // const sessionDense = Session.get(sessionSticky+'dense');
-  // const defaultDense = sessionDense !== undefined ? sessionDense : user.miniAction || false;
-                        
   const sessionLight = Session.get(sessionSticky+'lightTheme');
   const defaultLight =  sessionLight !== undefined ? sessionLight :
                         user.preferLight || false;
@@ -27,7 +24,6 @@ const UpstreamView = ({ batchX, traceDT, user, app, brancheS, isAuth, isDebug })
   const [ sortBy, sortBySet ] = useState( Session.get(sessionSticky+'sort') || 'priority' );
   const [ tagBy, tagBySet ] = useState( Session.get(sessionSticky+'tags') || false );
   
-  const [ dense, denseSet ] = useState( true );
   const [ light, themeSet ] = useState( defaultLight );
   
   const [ liveState, liveSet ] = useState( false );
@@ -79,10 +75,6 @@ const UpstreamView = ({ batchX, traceDT, user, app, brancheS, isAuth, isDebug })
     Session.set(sessionSticky+'tags', tag);
   }
   
-  // function changeDense(val) {
-  //   denseSet( val );
-  //   Session.set(sessionSticky+'dense', val);
-  // }
   function changeTheme(val) {
     themeSet( val );
     Session.set(sessionSticky+'lightTheme', val);
@@ -146,15 +138,12 @@ const UpstreamView = ({ batchX, traceDT, user, app, brancheS, isAuth, isDebug })
       holdSet( orderedBatches.filter( x => x.hold ) );
     });
   }
-      
-  const density = !dense ? '' : 'minifyed';
   
   return(
     <div key={0} className={`${light === true ? 
                   'upstreamView lightTheme' : 'upstreamView darkTheme'}`}>
     
       <UpstreamTools
-        app={app}
         traceDT={traceDT}
         loadTimeUP={loadTime}
         focusByUP={focusBy}
@@ -165,8 +154,6 @@ const UpstreamView = ({ batchX, traceDT, user, app, brancheS, isAuth, isDebug })
         changeTagsUP={(e)=>changeTag(e)} 
         sortByUP={sortBy}
         changeSortUP={(e)=>changeSort(e)}
-        // denseUP={dense}
-        // denseSetUP={(e)=>changeDense(e)}
         lightUP={light}
         themeSetUP={(e)=>changeTheme(e)}
         doThing={()=>updateTriggerSet(!updateTrigger)}
@@ -181,7 +168,7 @@ const UpstreamView = ({ batchX, traceDT, user, app, brancheS, isAuth, isDebug })
           </div>
         </div>
       :  
-        <div className={`overGridWideFrame ${density}`}>
+        <div className='overGridWideFrame'>
           
           <UpstreamHeaders
             key='fancylist0'
@@ -195,7 +182,6 @@ const UpstreamView = ({ batchX, traceDT, user, app, brancheS, isAuth, isDebug })
             holdshowSet={holdshowSet}
             focusBy={focusBy}
             tagBy={tagBy}
-            showMore={true}
           />
 
           <UpstreamDetails
@@ -210,7 +196,6 @@ const UpstreamView = ({ batchX, traceDT, user, app, brancheS, isAuth, isDebug })
             isDebug={isDebug}
             holdShow={holdShow}
             holdshowSet={holdshowSet}
-            dense={dense}
             focusBy={focusBy}
             tagBy={tagBy}
           />

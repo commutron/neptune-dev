@@ -6,7 +6,7 @@ import NumStat from '/client/components/tinyUi/NumStat';
 
 const NonConCounts = ({ 
   batchID, tBatch, releasedToFloor, force,
-  app, ncCols, updateTrigger, isDebug
+  ncCols, updateTrigger, isDebug
 })=> {
   
   const mounted = useRef(true);

@@ -8,7 +8,7 @@ import {
 import Theme from '/client/global/themeV.js';
 
 
-const TickScatter = ({ waterfall, rapidsData, app })=> {
+const TickScatter = ({ waterfall, rapidsData })=> {
   
   const [ tickXY, tickXYSet ] = useState([]);
   
@@ -60,7 +60,7 @@ const TickScatter = ({ waterfall, rapidsData, app })=> {
             tickLabels: { 
               fontSize: '7px' }
           } }
-          scale={{ x: "time" }}
+          scale={{x: "time", y: "linear"}}
         />
         <VictoryScatter
           data={tickXY}

@@ -7,7 +7,7 @@ import { min2hr, percentOf } from '/client/utility/Convert';
 const BranchProgress = ({ 
   batchID, showTotal,
   progCols, progType, tBatch,
-  app, filterBy, branchArea,
+  filterBy, branchArea,
   updateTrigger, isDebug
 })=> {
   

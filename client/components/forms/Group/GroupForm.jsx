@@ -104,7 +104,7 @@ const GroupForm = ({ id, name, alias, wiki, rootURL, title, selfclose })=> {
             defaultValue={orName}
             placeholder='ie. Trailer Safegaurd'
             className='dbbleWide'
-            pattern='[A-Za-z0-9 _-]*'
+            pattern='[A-Za-z0-9 _\-]*'
             maxLength={Pref.groupMax}
             autoFocus={true}
             required />
@@ -118,7 +118,7 @@ const GroupForm = ({ id, name, alias, wiki, rootURL, title, selfclose })=> {
             id='gAlias'
             defaultValue={orAlias}
             placeholder='ie. TSG'
-            pattern='[A-Za-z0-9 _-]*'
+            pattern='[A-Za-z0-9 _\-]*'
             maxLength={Pref.aliasMax}
             required />
           <label htmlFor='gAlias'>Abbreviation / Alias</label>

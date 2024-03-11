@@ -92,7 +92,7 @@ export const UpTaskBar = ({ subLink, showParts, isAuth }) => (
       subON={!subLink}
       goLink='/upstream'
       icon='fas fa-satellite-dish'
-      iconAdj='shrink-2'
+      iconAdj='shrink-2 up-1'
     />
     
     {showParts &&

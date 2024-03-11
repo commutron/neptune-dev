@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Pref from '/client/global/pref.js';
 import CreateTag from '/client/components/tinyUi/CreateTag';
 import WidgetsDepth from '../../lists/WidgetsDepth';
@@ -8,12 +8,12 @@ import GroupForm from '/client/components/forms/Group/GroupForm';
 import GroupHibernate from '/client/components/forms/Group/GroupHibernate';
 import GroupInternal from '/client/components/forms/Group/GroupInternal';
 import GroupEmails from '/client/components/forms/Group/GroupEmails';
-import WidgetNewForm from '/client/components/forms/WidgetNewForm';
+import WidgetNewForm from '/client/components/forms/WidgetForm';
 import Remove from '/client/components/forms/Remove';
 
 import GroupTops from '/client/components/charts/GroupTops';
 
-function groupActiveWidgets(gId, widgetsList, allXBatch) {
+function groupActiveWidgets(widgetsList, allXBatch) {
   
   let activeBatch = allXBatch.filter( b => b.completed === false);
 
@@ -29,7 +29,7 @@ function groupActiveWidgets(gId, widgetsList, allXBatch) {
 const GroupSlide = ({ groupData, widgetsList, batchDataX, app, inter, isERun })=>{
   
   const g = groupData;
-  const active = groupActiveWidgets(g._id, widgetsList, batchDataX);
+  const active = useMemo(()=>groupActiveWidgets(widgetsList, batchDataX), [widgetsList, batchDataX]);
   const shrtI = g.wiki && !g.wiki.includes('http');
   
   const mockTag = {
@@ -86,8 +86,9 @@ const GroupSlide = ({ groupData, widgetsList, batchDataX, app, inter, isERun })=
             primeTopRight={false}
             lockOut={g.hibernate} />
           <WidgetNewForm
+            fresh={true}
             groupId={g._id}
-            lock={g.hibernate}
+            lockOut={g.hibernate}
           />
             
           <GroupEmails

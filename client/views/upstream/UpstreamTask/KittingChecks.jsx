@@ -8,11 +8,9 @@ import { ReleaseWrapper } from '/client/components/bigUi/ReleasesModule';
 const KittingChecks = ({ 
   batchID, batchNum, tBatch,
   isDone, releasedToFloor, releases,
-  app, branchClear, 
-  kitCols, dense, isAuth, isDebug
+  branchClear, 
+  kitCols, isAuth, isRO
 })=> {
-  
-  const isRO = Roles.userIsInRole(Meteor.userId(), 'readOnly');
   
   if( Array.isArray(releases) ) {
     

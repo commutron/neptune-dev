@@ -11,42 +11,46 @@ import AlterFulfill from '/client/components/forms/Batch/AlterFulfill';
 
 const DownstreamDetails = ({
   indexKey, oB, traceDT,
-  user, app,
+  app,
   isDebug, canDo,
   focusBy, tagBy, prog, stormy, progCols, ncCols, updateTrigger
-})=> (
-  <Fragment>
-    {!oB ? null :
-      oB.map( (entry, index)=>{
-        const tBatch = traceDT.find( t => t.batchID === entry.batchID );
-        if(tBatch) {
-          return(
-            <DownstreamScrollChunk
-              key={indexKey+'c'+index}
-              ck={entry}
-              tBatch={tBatch}
-              app={app}
-              user={user}
-              isDebug={isDebug}
-              canDo={canDo}
-              focusBy={focusBy}
-              tagBy={tagBy}
-              prog={prog}
-              stormy={stormy}
-              progCols={progCols}
-              ncCols={ncCols}
-              updateTrigger={updateTrigger}
-            />
-      )}})}
-  </Fragment>
-);
+})=> {
+  const isRO = Roles.userIsInRole(Meteor.userId(), 'readOnly');
+  
+  return(
+    <Fragment>
+      {!oB ? null :
+        oB.map( (entry, index)=>{
+          const tBatch = traceDT.find( t => t.batchID === entry.batchID );
+          if(tBatch) {
+            return(
+              <DownstreamScrollChunk
+                key={indexKey+'c'+index}
+                ck={entry}
+                tBatch={tBatch}
+                app={app}
+                isRO={isRO}
+                isDebug={isDebug}
+                canDo={canDo}
+                focusBy={focusBy}
+                tagBy={tagBy}
+                prog={prog}
+                stormy={stormy}
+                progCols={progCols}
+                ncCols={ncCols}
+                updateTrigger={updateTrigger}
+              />
+        )}})}
+    </Fragment>
+  );
+};
 
 export default DownstreamDetails;
 
 
 const DownstreamScrollChunk = ({
   ck, tBatch,
-  app, user, isDebug, focusBy, tagBy, canDo, prog, stormy,
+  app, isRO, isDebug, focusBy, tagBy, canDo, prog, stormy,
   progCols, ncCols,
   updateTrigger
 })=> {
@@ -59,7 +63,7 @@ const DownstreamScrollChunk = ({
   const avgRmn = avgOfArray([q2t, e2t, e2i], true);
   const e2tStatus = !e2t ? 'Time Not Tracked' :
           avgRmn > 0 ? 
-            `${min2hr(avgRmn)} hr remain` :
+            `~${min2hr(avgRmn)} hr remain` :
             'time estimations exceeded';
   // avgRmn is an expimental corection to extreme estimations observed in production  
   // const onTime = !ck.estSoonest ? null : new Date(ck.shipAim) > new Date(ck.estSoonest);
@@ -98,13 +102,12 @@ const DownstreamScrollChunk = ({
       {isDone ? 
         ck.oRapid ? <div title='status'>{Pref.xBatch} {Pref.rapidExd}</div> :
         <div title='status'>{Pref.xBatch} {Pref.isDone}</div> :
-        <div title={`Remaining Quoted: ${min2hr(q2t)} hours\nRemaining Estimated(past): ${min2hr(e2t)} hours\nRemaining Estimated(curve): ${min2hr(e2i)} hours`}>{e2tStatus}</div>}
+        <div title={`Remaining Quoted: ${min2hr(q2t)} hours\nPast Performance Estimate: ${min2hr(e2t)} hours\nProduction Curve Estimate: ${min2hr(e2i)} hours`}>{e2tStatus}</div>}
       
       <BranchProgress
         batchID={ck.batchID}
         showTotal={true}
         progCols={progCols}
-        app={app}
         tBatch={tBatch}
         progType={prog}
         filterBy={false}
@@ -138,7 +141,7 @@ const DownstreamScrollChunk = ({
           isDebug={isDebug} />
       </div>
       
-      <ProJump batchNum={ck.batch} />
+      <ProJump batchNum={ck.batch} allRO={isRO} />
       
     </div>
   );

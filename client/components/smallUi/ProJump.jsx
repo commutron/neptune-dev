@@ -1,13 +1,13 @@
 import React from 'react';
 
-const ProJump = ({ batchNum })=> {
+const ProJump = ({ batchNum, allRO })=> {
   
   function goPro(location) {
     Session.set('now', location);
     FlowRouter.go('production');
   }
   
-  const isRO = Roles.userIsInRole(Meteor.userId(), 'readOnly');
+  const isRO = allRO || Roles.userIsInRole(Meteor.userId(), 'readOnly');
   
   return(
     <div className='overButton'>

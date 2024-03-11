@@ -927,6 +927,11 @@ n-sm-model-content {
 .nomargin, .nopmargin p, .nomarginB::before { margin: 0 !important; }
 
 .vwrap > span { margin-top: 0.5rem; }
+.fillup > div {
+  width: 100%;
+  height: 100%;
+  padding: 5px;
+}
 
 .topVpad { padding-top: 1dvh; }
 @media (orientation: portrait) {
@@ -1131,6 +1136,7 @@ n-sm-model-content {
 }
 .rowWrap { justify-content: flex-start; }
 .rowWrapR { justify-content: flex-end; }
+.rowStr { align-items: stretch; }
 
 .autoFlex {
   align-items: start;

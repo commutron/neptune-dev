@@ -5,11 +5,7 @@ import 'moment-business-time';
 import NumStat from '/client/components/tinyUi/NumStat';
 import TrinaryStat from '/client/components/tinyUi/TrinaryStat';
 
-const BatchTopStatus = ({ 
-  rowIndex, batchID, tBatch,
-  app, isDebug,
-  statusCols, branchArea
-})=> {
+const BatchTopStatus = ({ batchID, tBatch, branchArea })=> {
   
   const [ dueDateShip, dueDateShipSet ] = useState(null);
   const [ weekDaysRemain, weekDaysRemainSet ] = useState(0);

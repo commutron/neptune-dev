@@ -169,7 +169,7 @@ const BXCreateForm = ({ groupId, widgetId, allVariants })=> {
             type='text'
             id='soNum'
             className='numberSet indenText'
-            pattern='[A-Za-z0-9 \._-]*'
+            pattern='[A-Za-z0-9 \._\-]*'
             maxLength='32'
             minLength='1'
             placeholder='ab00ot70b'

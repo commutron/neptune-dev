@@ -50,6 +50,7 @@ class Config {
     this.orgTel = '13068542265';
     this.orgPhone = '306-854-2265';
     this.orgStreet = '302 Stanley Street, Elbow, Saskatchewan, S0H 1J0';
+    
   }
 }
 

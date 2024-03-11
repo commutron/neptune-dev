@@ -4,7 +4,7 @@ import LeapButton from '/client/components/tinyUi/LeapButton';
 import FilterItemsX from '/client/components/bigUi/FilterItemsX';
 import { SeriesDelete } from '/client/components/forms/ItemSerialsX/SeriesForm';
 
-const ItemsListX = ({ 
+const SeriesListWrap = ({ 
   seriesData, batchData, rapidsData, flowData, isDebug
 })=> {
   
@@ -30,6 +30,23 @@ const ItemsListX = ({
       </div>
     );
   }
+  
+  return(
+    <ItemsListX
+      seriesData={seriesData}
+      batchData={batchData}
+      rapidsData={rapidsData}
+      flowData={flowData} 
+      isDebug={isDebug}
+    />
+  );
+};
+
+export default SeriesListWrap;
+
+const ItemsListX = ({ 
+  seriesData, batchData, rapidsData, flowData, isDebug
+})=> {
   
   const sessionSticky = batchData.batch + 'batchXItemFilter' ;
   
@@ -380,5 +397,3 @@ const ItemsListX = ({
 		</Fragment>
   );
 };
-
-export default ItemsListX;

@@ -257,6 +257,21 @@ Meteor.methods({
       });
     }
     return keyArr;
+  },
+  
+  serverDatabaseSize() {
+    const u = Meteor.users.find().count();
+    const g = GroupDB.find().count();
+    const w = WidgetDB.find().count();
+    const v = VariantDB.find().count();
+    const b = XBatchDB.find().count();
+    const i = XSeriesDB.find().count();
+    const r = XRapidsDB.find().count();
+    const t = TraceDB.find().count();
+    const e = EquipDB.find().count();
+    const m = MaintainDB.find().count();
+    
+    return { u, g, w, v, b, i, r, t, e, m };
   }
 
 });

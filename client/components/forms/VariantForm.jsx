@@ -94,7 +94,7 @@ const VariantForm = ({ widgetData, users, app, rootWI, selfclose })=> {
                 type='text'
                 id='rev'
                 placeholder='1a'
-                pattern='[A-Za-z0-9 \._-]*'
+                pattern='[A-Za-z0-9 \._\-]*'
                 className='miniIn18'
                 required 
               /><br />{Pref.variant}

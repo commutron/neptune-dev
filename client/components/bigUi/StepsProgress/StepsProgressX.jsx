@@ -33,7 +33,7 @@ const StepsProgressX  = ({
   return(
     <div>
       {!truncate &&
-        <div className='centreRow'>
+        <div className='centreRow rowStr'>
           <label>
             <NumBox
               num={b.quantity}

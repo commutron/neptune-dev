@@ -1,6 +1,14 @@
 import moment from 'moment';
 import Config from '/server/hardConfig.js';
+// import SECRET from '/server/hardKeys.js';
 import { toCap } from './utility';
+
+//////////////////////////////
+
+import { createClient } from '@supabase/supabase-js';
+
+
+/////////////////////////////////////
 
 function sendInternalEmail(to, subject, date, title, body, asid, foot, link, fine) {
   const from = Config.sendEmail;
@@ -163,11 +171,10 @@ Meteor.methods({
     this.unblock();
     const app = AppDB.findOne({},{fields:{'emailGlobal':1,'devEmail':1}});
     const emailGlobal = app && app.emailGlobal && app.devEmail;
+    const to = app.devEmail;
     
-    if(emailGlobal) {
+    if(emailGlobal && to) {
       
-      const to = app.devEmail;
-    
       const subject = 'NEPTUNE ERROR REPORT';
       const date = moment().tz(Config.clientTZ).format('h:mm a, dddd, MMM Do YYYY');
       const title = errorTitle;
@@ -188,11 +195,10 @@ Meteor.methods({
     this.unblock();
     const app = AppDB.findOne({},{fields:{'emailGlobal':1,'devEmail':1,'orgPIN':1,'workingHours':1}});
     const emailGlobal = app && app.emailGlobal && app.devEmail;
+    const to = app.devEmail;
     
-    if(emailGlobal) {
+    if(emailGlobal && to) {
       
-      const to = app.devEmail;
-    
       const subject = 'NEPTUNE STATUS REPORT';
       const date = moment().tz(Config.clientTZ).format('h:mm a, dddd, MMM Do YYYY');
       const title = `Neptune is running`;
@@ -200,18 +206,9 @@ Meteor.methods({
       const pin = app.orgPIN;
       const hrs = JSON.stringify(app.workingHours);
       
-      const u = Meteor.users.find().count();
-      const g = GroupDB.find().count();
-      const w = WidgetDB.find().count();
-      const v = VariantDB.find().count();
-      const b = XBatchDB.find().count();
-      const i = XSeriesDB.find().count();
-      const r = XRapidsDB.find().count();
-      const t = TraceDB.find().count();
-      const e = EquipDB.find().count();
-      const m = MaintainDB.find().count();
+      const db = Meteor.call("serverDatabaseSize");
       
-      const body = `Users: ${u}\nGroups: ${g}\nWidgets: ${w}\nVariants: ${v}\nBatches: ${b}\nItems: ${i}\nRapids: ${r}\nTraces: ${t}\nEquips: ${e}\nMaints: ${m}`;
+      const body = `Users: ${db.u}\nGroups: ${db.g}\nWidgets: ${db.w}\nVariants: ${db.v}\nBatches: ${db.b}\nItems: ${db.i}\nRapids: ${db.r}\nTraces: ${db.t}\nEquips: ${db.e}\nMaints: ${db.m}`;
       const asid = `OrgPIN: ${pin}`;
       const foot = `WorkingHours: ${hrs}`;
       const link = `config: tz:${Config.clientTZ} reply:${Config.replyEmail} tel:${Config.orgTel}`;
@@ -344,6 +341,52 @@ Meteor.methods({
       EmailDB.remove({});
       return true;
     }
+  },
+  
+  
+  /* SUPABASE TEST */
+  
+  supabase_sendBasicUpdate() {
+    
+    console.log("supa try run");
+    
+    const supabaseUrl = 'https://pwvjsuvpowhhkpqxrfkw.supabase.co';
+    
+    const supabaseKey = process.env.SUPABASE_KEY;
+    // const supabaseKey = SECRET.PRIVATE_SUPABASE_KEY;
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    const data = Meteor.call("serverDatabaseSize");
+    
+
+    async function supaupdate(db) {
+      console.log('supa test called');
+      
+      const { data, error } = await supabase
+      .from('basic_db_status')
+      .insert([
+        { 
+          users: db.u, 
+          groups: db.g,
+          widgets: db.w,
+          variants: db.v,
+          batches: db.b,
+          items: db.i,
+          rapids: db.r,
+          traces: db.t,
+          equips: db.e,
+          maints: db.m,
+        },
+      ])
+      .select();
+      
+      console.log(error);
+    }
+    
+    if(supabaseKey) {
+      supaupdate(data);
+    }    
+    
   }
   
 });

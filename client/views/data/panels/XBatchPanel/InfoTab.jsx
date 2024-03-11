@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import moment from 'moment';
 import 'moment-business-time';
 import Pref from '/client/global/pref.js';
@@ -32,14 +32,14 @@ const InfoTab = ({
   
   const endDay = moment(b.salesEnd);
   
-  const shipDue =  b.completed && b.finShipDue ? moment(b.finShipDue) :
-                    endDay.isShipDay() ?
-                      endDay.clone().endOf('day').lastShippingTime() :
-                      endDay.clone().lastShippingTime();
+  const shipDue = useMemo(()=> b.completed && b.finShipDue ? moment(b.finShipDue) :
+                    endDay.isShipDay() ? endDay.clone().endOf('day').lastShippingTime() :
+                      endDay.clone().lastShippingTime()
+  ,[b, endDay]);
   
   const ontime = !b.completed ? null : shipDue.isSameOrAfter(b.completedAt);
   
-  const rOpen = rapidsData && rapidsData.some( r => r.live === true );
+  const rOpen = useMemo(()=> rapidsData && rapidsData.some( r => r.live === true ), [rapidsData]);
   
   const canRun = Roles.userIsInRole(Meteor.userId(), 'run');
   
@@ -50,28 +50,15 @@ const InfoTab = ({
       <div className='centreText'>
         <h3 className='leftText'>Status</h3>      
         
-        <div className='balance'>
-          {b.live &&
-            <div className='statusBlock'>
-              <PrioritySquareData
-                batchID={b._id}
-                app={app}
-                dbDay={b.salesEnd}
-                isDone={done}
-                isDebug={isDebug} />
-            </div>
-          }
-          {!b.lock &&
-            <div className='statusBlock'>
-              <TideActivityData
-                batchID={b._id}
-                app={app} />
-            </div>
-          }
-          <div className='statusBlock'>
-            <PerformanceData batchID={b._id} />
-          </div>
-        </div>
+        <StatusGroup
+          id={b._id}
+          live={b.live}
+          done={done}
+          salesEnd={b.salesEnd}
+          lock={b.lock}
+          app={app}
+          isDebug={isDebug}
+        />
         
         <div className='cap middle'>
           <p>Ship Due: <b>{shipDue.format("MMMM Do, YYYY")}</b></p>
@@ -196,6 +183,40 @@ const InfoTab = ({
 
 export default InfoTab;
 
+const StatusGroup = ({ id, live, done, salesEnd, lock, app, isDebug })=> {
+  
+  const blockwrap = {
+    minWidth: "50%",
+    display: "flex",
+    alignItems: "center"
+  };
+  
+  return(
+    <div className='balance'>
+      {live &&
+        <div style={blockwrap} className='fillup'>
+          <PrioritySquareData
+            batchID={id}
+            app={app}
+            dbDay={salesEnd}
+            isDone={done}
+            isDebug={isDebug} />
+        </div>
+      }
+      {!lock &&
+        <div style={blockwrap} className='fillup'>
+          <TideActivityData
+            batchID={id}
+            app={app} />
+        </div>
+      }
+      <div style={blockwrap} className='fillup'>
+        <PerformanceData batchID={id} />
+      </div>
+    </div>
+  );
+};
+
 const SalesSegment = ({ b, srange, flowCounts, end, shipDue })=> {
   
   const qtB = b.quoteTimeBudget && b.quoteTimeBudget.length > 0 ? 
@@ -216,35 +237,38 @@ const SalesSegment = ({ b, srange, flowCounts, end, shipDue })=> {
     <div className='readlines'>
       <h3>Sales Order</h3>
       
-      <p className='cap'>{Pref.salesOrder}: <n-num>{b.salesOrder || 'not available'}</n-num></p>
+      <DataLine l={Pref.salesOrder} n={b.salesOrder || 'not available'} />
       
-      <p>Total Batch Quantity: <n-num>{b.quantity}</n-num></p>
+      <DataLine l='Total Batch Quantity' n={b.quantity} />
       
-      <p>Serialized Items: <n-num>{flowCounts.liveItems}</n-num></p>
+      <DataLine l='Serialized Items' n={flowCounts.liveItems} />
       
       {flowCounts.liveUnits > 0 ?
-        <p>Serialized Units: <n-num>{flowCounts.liveUnits}</n-num></p>
+        <DataLine l='Serialized Units' n={flowCounts.liveUnits} />
       : null}
       
-      {srange && <p>Serial Range: <n-num>{srange}</n-num></p>}
+      {srange && <DataLine l='Serial Range' n={srange} />}
       
-      <p>Scrapped Items: <n-num className='redT'>{flowCounts.scrapCount || 0}</n-num></p>
+      <DataLine l='Scrapped Items' n={flowCounts.scrapCount || 0} r={flowCounts.scrapCount > 0} />
       
-      <p>Time Budget: <n-num>{qtHours} hours</n-num></p>
+      <DataLine l='Time Budget' n={qtHours + ' hours'} />
       
-      <p className='cap'>{Pref.start}: <n-num>{moment(b.salesStart).format("MMMM Do, YYYY")}</n-num></p>
+      <DataLine l={Pref.start} n={moment(b.salesStart).format("MMMM Do, YYYY")} />
       
-      <p className='cap'>{Pref.end}: <n-num>{moment(b.salesEnd).format("MMMM Do, YYYY")}</n-num></p>
+      <DataLine l={Pref.end} n={moment(b.salesEnd).format("MMMM Do, YYYY")} />
           
-      <p>{cmplt !== null ? 'Total Time:' : 'Elapsed:'} <n-num>{timeElapseClean} workdays</n-num></p>
+      <DataLine l={cmplt !== null ? 'Total Time:' : 'Elapsed:'} n={timeElapseClean + ' workdays'} />
       
-      {cmplt !== null && <p>Complete: <n-num>{cmplt}</n-num></p> }
+      {cmplt !== null && <DataLine l='Complete' n={cmplt} /> }
       
       {cmplt !== null ? null : 
-        <p>Ship Due in: 
-          <n-num className={remainClean < 0 ? 'yellowT' : ''}> {remainClean} workdays</n-num>
-        </p> }
+        <DataLine l='Ship Due in' n={remainClean + ' workdays'}  r={remain < 0} />
+      }
   
     </div>
   );
 };
+
+const DataLine = ({ l, n, r })=>( 
+  <p className='cap'>{l}: <n-num class={r ? 'redT' : ''}>{n}</n-num></p>
+);

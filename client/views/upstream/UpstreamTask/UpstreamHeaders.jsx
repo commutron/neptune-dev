@@ -5,7 +5,7 @@ import BatchHeaderChunk from '/client/views/overview/columns/BatchHeaderChunk';
 const UpstreamHeaders = ({ 
   oB, hB, traceDT,
   app, isDebug, holdShow, holdshowSet,
-  focusBy, tagBy, title, showMore 
+  focusBy, tagBy, title 
 })=> (
   <div className='overGridFixed'>
       

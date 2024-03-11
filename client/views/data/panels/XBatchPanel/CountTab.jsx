@@ -29,7 +29,6 @@ const CountTab = ({ batchData, fallData, rapidsData, app })=> {
           <TickScatter
             waterfall={batchData.waterfall}
             rapidsData={rapidsData}
-            app={app}
           />
         </span>
       }

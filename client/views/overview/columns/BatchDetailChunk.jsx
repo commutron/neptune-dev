@@ -81,7 +81,6 @@ const BatchDetailChunk = ({
       <BranchProgress
         batchID={oB._id}
         progCols={progCols}
-        app={app}
         tBatch={tBatch}
         progType={prog}
         filterBy={filterBy}
@@ -95,12 +94,11 @@ const BatchDetailChunk = ({
         batchID={oB._id}
         tBatch={tBatch}
         releasedToFloor={releasedToFloor}
-        app={app}
         ncCols={ncCols}
         updateTrigger={updateTrigger}
         isDebug={isDebug} />
     
-      <ProJump batchNum={oB.batch} />
+      <ProJump batchNum={oB.batch} allRO={isRO} />
         
     </div>
   );

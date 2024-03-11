@@ -12,9 +12,9 @@ import Grabber from '/client/utility/Grabber.js';
 const UpstreamDetails = ({
   oB, hB, traceDT,
   app, brancheS,
-  isAuth, isDebug,
+  isAuth,
   holdShow, holdshowSet,
-  dense, focusBy, tagBy
+  focusBy, tagBy
 })=> {
   
   useEffect(() => {
@@ -31,27 +31,22 @@ const UpstreamDetails = ({
   // due == 'fulfill', 'ship'
   const kitHead = ['sales order','active',...statusCols,...kitCols,'print','production'];
   
+  const isRO = Roles.userIsInRole(Meteor.userId(), 'readOnly');
+  
   return(
     <div 
-      className={
-        `overGridScroll forceScrollStyle 
-        ${dense ? 'dense' : ''}`
-      } 
+      className='overGridScroll forceScrollStyle'
       tabIndex='1'
     >
 
-      {!dense ? 
-        <div className='overGridRowScrollHeader'></div>
-      :
-        <div className='overGridRowScroll'>
-          {kitHead.map( (entry, index)=>{
-            return(
-              <div key={entry+index}>
-                <i className='cap ovColhead'>{entry}</i>
-              </div>
-        )})}
-        </div>
-      }
+      <div className='overGridRowScroll'>
+        {kitHead.map( (entry, index)=>{
+          return(
+            <div key={entry+index}>
+              <i className='cap ovColhead'>{entry}</i>
+            </div>
+      )})}
+      </div>
       
       {!oB ? null :
         oB.map( (entry, index)=>{
@@ -59,25 +54,31 @@ const UpstreamDetails = ({
           return(
             <UpstreamDetailChunk
               key={`${entry.batchID}live${index}`}
-              rowIndex={index}
               oB={entry}
               tBatch={tBatch}
               app={app}
               branchClear={branchClear}
               isAuth={isAuth}
-              isDebug={isDebug}
-              statusCols={statusCols}
+              isRO={isRO}
               kitCols={kitCols}
-              dense={dense}
               focusBy={focusBy}
               tagBy={tagBy}
             />
       )})}
       
-      {hB.length === 0 ? null :
+      {hB.length === 0 ? null : !holdShow || oB.length === 0 ?
         <button className='overGridRowScrollHeader labels grayFade'
           onClick={()=>holdshowSet(!holdShow)}
         ></button>
+        :
+        <button className='overGridRowScroll labels grayFade'
+          onClick={()=>holdshowSet(!holdShow)}
+        >
+          {kitHead.map( (entry, index)=>{
+            return(
+              <div key={entry+index} className='cap ovColhead'>{entry}</div>
+        )})}
+        </button> 
       }
       
       {holdShow &&
@@ -86,16 +87,13 @@ const UpstreamDetails = ({
           return(
             <UpstreamDetailChunk
               key={`${entry.batchID}hold${index}`}
-              rowIndex={index}
               oB={entry}
               tBatch={tBatch}
               app={app}
               branchClear={branchClear}
               isAuth={isAuth}
-              isDebug={isDebug}
-              statusCols={statusCols}
+              isRO={isRO}
               kitCols={kitCols}
-              dense={dense}
               focusBy={focusBy}
               tagBy={tagBy}
             />
@@ -109,12 +107,12 @@ export default UpstreamDetails;
 
 
 const UpstreamDetailChunk = ({ 
-  rowIndex, oB, tBatch,
+  oB, tBatch,
   app, 
   branchClear,
-  isAuth, isDebug,
-  statusCols, kitCols, 
-  dense, focusBy, tagBy
+  isAuth, isRO,
+  kitCols, 
+  focusBy, tagBy
 })=> {
   
   const isDone = oB.completed;
@@ -138,13 +136,9 @@ const UpstreamDetailChunk = ({
       />
       
       <BatchTopStatus
-        rowIndex={rowIndex}
         batchID={oB._id}
         tBatch={tBatch}
-        app={app}
-        isDebug={isDebug}
-        statusCols={statusCols}
-        dense={dense} />
+      />
       
       <KittingChecks
         batchID={oB._id}
@@ -153,21 +147,19 @@ const UpstreamDetailChunk = ({
         isDone={isDone}
         releasedToFloor={releasedToFloor}
         releases={oB.releases}
-        app={app}
         branchClear={branchClear}
         kitCols={kitCols}
-        dense={dense}
         isAuth={isAuth}
-        isDebug={isDebug} />
+        isRO={isRO} 
+      />
     
       <PrintJump
         batchNum={oB.batch}
         tBatch={tBatch}
         title='Print Label'
-        iText={!dense}
       />
       
-      <ProJump batchNum={oB.batch} dense={dense} />
+      <ProJump batchNum={oB.batch} allRO={isRO} />
         
     </div>
   );

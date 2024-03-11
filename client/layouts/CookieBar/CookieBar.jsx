@@ -8,34 +8,43 @@ const CookieBar = ({
   batch, item, 
 })=> (
   <div className='cookieRow'>
-    {alias && 
-      <button 
-        className='cookieCrumb up numFont' 
+    {alias &&
+      <CookieButton
+        label={alias}
         title={`${Pref.group}: ${alias}`}
-        onClick={()=>FlowRouter.go('/data/overview?request=groups&specify=' + alias)}
-      ><span className='cookie'>{alias}</span>
-      </button>}
+        uri={'/data/overview?request=groups&specify=' + alias}
+      />}
         
     {widget && 
-      <button 
-        className='cookieCrumb up numFont'
+      <CookieButton
+        label={widget}
+        sub={variant}
         title={`${Pref.widget}: ${widget}${variant && ' v.'+ variant}`}
-        onClick={()=>FlowRouter.go('/data/widget?request=' + widget)}>
-        <span className='crumb'></span>
-        <span className='cookie'>{widget} <i className='clean'>{variant && ' v.'+ variant}</i></span>
-      </button>}
+        uri={'/data/widget?request=' + widget}
+        crmb={true}
+      />}
       
     {batch && 
-      <button 
-        className='cookieCrumb numFont'
+      <CookieButton
+        label={batch}
         title={`${Pref.xBatch}: ${batch}`}
-        onClick={()=>FlowRouter.go('/data/batch?request=' + batch)}>
-        <span className='crumb'></span>
-        <span className='cookie'>{batch}</span>
-      </button>}
+        uri={'/data/batch?request=' + batch}
+        crmb={true}
+      />}
       
     {item && <span className='endCrumb'></span>}
   </div>
 );
 
 export default CookieBar;
+
+const CookieButton = ({ label, sub, title, uri, crmb })=> (
+  <button 
+    className='cookieCrumb numFont up'
+    title={title}
+    onClick={()=>FlowRouter.go(uri)}>
+    {crmb && <span className='crumb'></span>}
+    <span className='cookie'>{label}{sub && <i className='clean'>{' v.'+ sub}</i>}</span>
+  </button>
+  
+);

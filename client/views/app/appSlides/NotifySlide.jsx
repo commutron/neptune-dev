@@ -32,22 +32,18 @@ const NotifySlide = ({ app })=> {
     });
   }
   
-  function handleDevEmail(e) {
+  function handleDevEmail(e, value) {
     e.preventDefault();
-    const to = this.setDev.value;
-    Meteor.call('setDevEmail', to, (error, reply)=>{
+    Meteor.call('setDevEmail', value, (error, reply)=>{
       error && console.log(error);
       reply && toast.success('Saved');
     });
   }
   
-  function sendTestEmail(e) {
+  function sendTestEmail(e, value) {
     e.preventDefault();
-    
-    const to = this.toEmail.value;
-    
     Meteor.call(
-      'sendTestEmail', to, 'TEST - Hello from Neptune!',
+      'sendTestEmail', value, 'TEST - Hello from Neptune!',
       (err)=> {
         err && console.log(err);
         toast('Email Request Sent');
@@ -55,19 +51,29 @@ const NotifySlide = ({ app })=> {
     );
   }
   
+  function sendDevStatusEmail() {
+    Meteor.call('handleDevMonitorEmail', (err)=> {
+      err && console.log(err);
+      toast('Email Request Sent');
+    });
+  }
+  
+  function doSupa() {
+    Meteor.call('supabase_sendBasicUpdate', (err)=> {
+      err && console.log(err);
+      toast('Try Supabase Update');
+    });
+  }
+  
   return(
     <div className='space3v autoFlex'>
       
-      <div>
-        <h2 className='cap'>Notification Styles:</h2>
-        <i>available toast notification styles</i>
-        <p>
-          <button
-            className='smallAction blueHover'
-            onClick={()=>showToast()}
-          >Test Toast Notifications</button>
-        </p>
-      </div>
+      <NotifyAction 
+        title="Toast Styles"
+        sub="available toast notification styles"
+        doLabel="Test Toast Notifications"
+        func={showToast}
+      />
       
       <div>
         <h2 className='cap'>Send a Notification</h2>
@@ -90,7 +96,7 @@ const NotifySlide = ({ app })=> {
       </div>
       
       <div>
-        <h2 className='cap'>Neptune Email</h2>
+        <h2 className='cap'>NodeMailer Email</h2>
         <p><em>Requires enviroment variable "Mail_URL"</em></p>
         <p className='beside'>
           <input
@@ -106,45 +112,49 @@ const NotifySlide = ({ app })=> {
         
         <hr className='vmargin' />
         
-        <h3 className='cap'><i className="fa-solid fa-terminal gapR"></i>Dev Email for Error Reports</h3>
-        <form onSubmit={(e)=>handleDevEmail(e)}>
-          <p>
-            <label htmlFor='toEmail'>Developer email address<br />
-              <input
-                id='setDev'
-                type='email'
-                defaultValue={app.devEmail || ''}
-              />
-            </label>
-          </p>
-          <p>
-            <button
-              className='smallAction blueHover'
-              type='submit'
-            >Save Email</button>
-          </p>
-        </form>
+        <NotifyFormAction
+          uniq='gen_email_test'
+          title='Any Email Test'
+          icon="fa-solid fa-envelope"
+          func={sendTestEmail}
+          formlabel="Send To email address"
+          doLabel="Send Email"
+        />
+        
+      </div>
+      
+      
+      <div>
+        <h2 className='cap'>Dev Email</h2>
+        
+        <NotifyFormAction
+          uniq='dev_email_set'
+          title='Dev Email for Error Reports'
+          icon="fa-solid fa-terminal"
+          func={handleDevEmail}
+          formlabel="Developer email address"
+          defVal={app.devEmail}
+          doLabel="Save Email"
+        />
         
         <hr className='vmargin' />
         
-        <h3 className='cap'>Email Test</h3>
-        <form onSubmit={(e)=>sendTestEmail(e)}>
-          <p>
-            <label htmlFor='toEmail'>To email address<br />
-              <input
-                id='toEmail'
-                type='email'
-                required
-              />
-            </label>
-          </p>
-          <p>
-            <button
-              className='smallAction blueHover'
-              type='submit'
-            >Send Email</button>
-          </p>
-        </form>
+        <NotifyAction 
+          title=""
+          sub=""
+          doLabel="Send Dev Satus Email"
+          func={sendDevStatusEmail}
+        />
+        
+        <hr className='vmargin' />
+        
+        <NotifyAction 
+          title="Supabase"
+          sub="Proteus"
+          doLabel="Send Supabase Test"
+          func={doSupa}
+        />
+        
       </div>
   
     </div>
@@ -152,3 +162,40 @@ const NotifySlide = ({ app })=> {
 };
 
 export default NotifySlide;
+
+const NotifyAction = ({ title, sub, doLabel, func })=> (
+  <div>
+    <h3 className='cap'>{title}</h3>
+    <i>{sub}</i>
+    <p>
+      <button
+        className='smallAction blueHover'
+        onClick={()=>func()}
+      >{doLabel}</button>
+    </p>
+  </div>
+);
+
+const NotifyFormAction = ({ uniq, title, icon, formlabel, defVal, doLabel, func })=> (
+  <div>
+    <h3 className='cap'><i className={`${icon} gapR`}></i>{title}</h3>
+    <form onSubmit={(e)=>func(e, this[uniq+'field'].value)}>
+      <p>
+        <label htmlFor={uniq+'field'}>{formlabel}<br />
+          <input
+            id={uniq+'field'}
+            type='email'
+            defaultValue={defVal || ''}
+            required
+          />
+        </label>
+      </p>
+      <p>
+        <button
+          className='smallAction blueHover'
+          type='submit'
+        >{doLabel}</button>
+      </p>
+    </form>
+  </div>
+);

@@ -156,11 +156,11 @@ export const PrioritySquare = ({
     const bffTxt = `buffer: ${bffrTime || 0} minutes`;
     
     const e2i = pt.est2item || 0;
-    const e2iTxt = `Remaining Estimated(curve): ${min2hr(e2i)} hours`;
-    const e2tTxt = `Remaining Estimated(past): ${min2hr(e2t)} hours`;
+    const e2iTxt = `production curve estimate: ${min2hr(e2i)} hours`;
+    const e2tTxt = `past performance estimate: ${min2hr(e2t)} hours`;
     
     const avgRmn = avgOfArray([q2t, e2t, e2i], true);
-    const treTxt = `Estimated Time Remaining: ${min2hr(Math.max(0,avgRmn))} hours`;
+    const treTxt = `Remaining Predicted: ~${min2hr(Math.max(0,avgRmn))} hours`;
     
     const onTime = !pt.estSoonest ? null : new Date(pt.shipAim) > new Date(pt.estSoonest);
     const ontmTxt = onTime ? 'Predicted On Time' : onTime === false ? 'Predicted Late' : 'Prediction Unavailable';
@@ -187,8 +187,8 @@ export const PrioritySquare = ({
               <dd>{soonTxt}</dd>
               <dd>{doneQuote}</dd>
               <dd>{treTxt}</dd>
-              <dd>{e2tTxt}</dd>
-              <dd>{e2iTxt}</dd>
+              <dd className='topVpad'><small>{e2tTxt}</small></dd>
+              <dd><small>{e2iTxt}</small></dd>
             </dl> : null}
         </div>
       );
@@ -197,11 +197,10 @@ export const PrioritySquare = ({
     if(pt.hold) {
       return(
         <NumStat
-          num={<n-faH><i className='fa-solid fa-pause fa-fw'></i></n-faH>}
-          title={Pref.isHold}
+          num="||"
           color='holdblock'
-          size='vbigger'
-          title={isDebug ? debugTitle : title}
+          size='big bold letterSpaced'
+          title={isDebug ? debugTitle : Pref.isHold}
         />
       );
     }

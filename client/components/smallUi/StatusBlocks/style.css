@@ -1,20 +1,3 @@
-.statusBlock {
-  max-width: 11vh;
-  min-width: 50%;
-  min-height: 6vh;
-  display: flex;
-  align-items: center;
-  overflow: hidden;
-  text-overflow: clip;
-  text-overflow: fade;
-}
-.statusBlock > div {
-  width: 100%;
-  height: 100%;
-  justify-content: center;
-  padding: 5px;
-}
-    
 .pScale0 { background-color: var(--pomegranate); }
 .pScale1 { background-color: var(--pumpkin); }
 .pScale2 { background-color: var(--carrot); }
@@ -25,15 +8,6 @@
   border: 0.25rem #720300 solid !important;
 }
 
-.agScale1 { background-color: #AF0E36; }
-.agScale2 { background-color: #DD1F4E; }
-.agScale3 { background-color: #F4426E; }
-.agScale4 { background-color: #EDADC7; }
-
-.overGridRowScroll .statusBlock,
-.downRowScroll .statusBlock {
-  font-size: 1.2dvh;
-}
 .overGridRowScroll .perf,
 .downRowScroll  .perf {
   font-size: 2dvh;

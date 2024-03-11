@@ -18,7 +18,8 @@
 
 .cookieCrumb {
   background-color: transparent;
-  transition: background-color, color, max-width 300ms ease-in;
+  transition: all 200ms ease-in-out;
+  transition-property: background-color, color, max-width;
   color: var(--silver);
   margin: 0;
   font-size: 2.5vmin;
@@ -63,7 +64,8 @@
 	transform: rotate(45deg);
 	vertical-align: top;
 	width: 11vmin;
-  transition: all 150ms ease-in-out;
+  transition: all 200ms ease-in-out;
+  transition-property: background-color, color;
 }
 
 .cookieCrumb:where(:hover,:active) {
