@@ -5,10 +5,10 @@ import StoneWeir from './StoneWeir';
 const River = ({ 
   batchData, seriesData, itemData, widgetData, 
   altIs, altitle, rapid, rapIs,
-  app, userSpeed, users, brancheS,
+  app, userSpeed, brancheS,
   useFlow, flowCounts,
   shortfallS, scrapCheck,
-  optionVerify, handleVerify
+  handleVerify
 })=> {
   
   const thingMounted = useRef(true);
@@ -53,9 +53,7 @@ const River = ({
         flowCounts={flowCounts}
         app={app}
         userSpeed={userSpeed}
-        users={users}
         
-        optionVerify={optionVerify}
         handleVerify={handleVerify}
         
         undoOption={undoStepOption}

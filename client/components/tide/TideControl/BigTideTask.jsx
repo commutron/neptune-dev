@@ -26,6 +26,7 @@ const BigTideTask = ({
 
   return(
     <n-tide-task id={id+'tidetask'}>
+      {ctxLabel && <label htmlFor='tskSlct'>{ctxLabel}</label>}
       <select
         id='tskSlct'
         className={`cap ${!taskState ? 'darkgrayT em' : ''}`}
@@ -49,9 +50,9 @@ const BigTideTask = ({
           ))}
         </optgroup>
       </select>
-      {ctxLabel && <label htmlFor='tskSlct'>{ctxLabel}</label>}
       {subop?.subTasks?.length ?
         <Fragment>
+        <label htmlFor='sbtskSlct'>Sub-Task</label>
         <select
           id='sbtskSlct'
           className={`cap ${!subtState ? 'darkgrayT em' : ''}`}
@@ -64,7 +65,6 @@ const BigTideTask = ({
             <option key={ixs+'o3'} className='blackT nsty' value={v}>{v}</option>
           ))}
         </select>
-        <label htmlFor='sbtskSlct'>Sub-Task</label>
         </Fragment>
       : null}
     </n-tide-task>

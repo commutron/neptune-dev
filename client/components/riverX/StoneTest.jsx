@@ -9,8 +9,6 @@ const StoneTest = ({
 	lockout,
 	topClass, topTitle,
 	
-	allItems,
-	
 	enactEntry,
 	resolveEntry,
 	workingState,
@@ -58,21 +56,20 @@ const StoneTest = ({
     }
   }
   
+  let svar = {
+  	'--high-color': 'var(--turquoise)',
+  	'stoneback': 'var(--greenSea)'
+  };
+  	
   let sstyle = {
 	  'backgroundImage': 'url(test.svg)',
-	  'backgroundColor': 'var(--greenSea)',
-	  '--high-color': 'var(--turquoise)'
 	};
   
   return(
    	<Fragment>
-  		<div className={topClass + ' stoneFrame noCopy'} title={topTitle}>
+  		<div className={topClass + ' stoneFrame noCopy'} style={svar} title={topTitle}>
       	<StoneProgRing
-  				serial={barcode}
-  				allItems={allItems}
   				sKey={sKey}
-          step={step}
-          type={type}
           flowCounts={flowCounts}
           workingState={workingState}
           lockout={lockout}

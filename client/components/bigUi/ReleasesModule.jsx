@@ -5,7 +5,7 @@ import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/themes/airbnb.css';
 
-const ReleaseAction = ({ id, rType, actionText, contextText })=> {
+const ReleaseAction = ({ id, rType, actionText, contextText, qReady })=> {
   
   const [ datetime, datetimeSet ] = useState( moment().format() );
   
@@ -30,12 +30,14 @@ const ReleaseAction = ({ id, rType, actionText, contextText })=> {
   const title = access ? `${Pref.release} ${Pref.xBatch} to the ${Pref.floor}` : Pref.norole;
   
   return(
-    <div className='centre listSortInput' style={sty}>
+    <div className='centre listSortInput' style={sty} disabled={!qReady}>
+      {!qReady && <strong className='borderBlack bottomLine medBig centreText'>Quote Time Budget Required</strong>}
       <Flatpickr
         id='rDateTime'
         value={datetime}
         className='minWide'
         onChange={(e)=>handleDatetime(e)}
+        disabled={!access || !qReady}
         options={{
           defaultDate: datetime,
           maxDate: moment().format(),
@@ -52,14 +54,14 @@ const ReleaseAction = ({ id, rType, actionText, contextText })=> {
           title={title}
           className='action greenSolid cap'
           style={sty}
-          disabled={!access}
+          disabled={!access || !qReady}
         >{actionText} {contextText}</button>
       </p>
       <button
         onClick={(e)=>handleRelease(e, Pref.shortfall)}
         title={title}
         className='action orangeSolid cap'
-        disabled={!access}
+        disabled={!access || !qReady}
       >{actionText} with {Pref.shortfall}</button>
     </div>
   );
@@ -72,7 +74,7 @@ export const ReleaseWrapper = ({
   releasedBool, releaseObj, 
   actionKeyword, actionText, 
   holdText, unholdText, undoText, contextText,
-  lockout, isAuth, children
+  lockout, qReady, isAuth, children
 })=> {
   
   const clear = releasedBool === true;
@@ -115,8 +117,14 @@ export const ReleaseWrapper = ({
         className='cap noCopy'
         hideOnLeave={true}>
         <MenuItem disabled={true}>
-          <em>{Pref.xBatch} {batchNum}{lockout && ' is complete'}</em>
+          <em>{Pref.xBatch} {batchNum}</em>
         </MenuItem>
+        
+        {qReady === false &&
+          <MenuItem disabled={true}>
+            <strong className='yellowT'>Quote Time Budget Required</strong>
+          </MenuItem>
+        }
         
         {!clear &&
   	      <MenuItem

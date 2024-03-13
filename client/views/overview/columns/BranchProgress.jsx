@@ -124,7 +124,7 @@ const BranchProgress = ({
                   className={bgt !== null ? calNum > 100 ? 'warnRed' : 'fillUp' + fadeTick : br.time > 0 ? 'blueGlow' : ''}
                   title={`${niceName}\n${Math.round(br.time)} minutes verified\n${bgt || 0} minutes budgeted\n${isFinite(calNum) && calNum >= 0 ? calNum+'%' : ''}`}>
                   <NumStat
-                    num={isNaN(br.time) || br.time === 0 ? '' : `${min2hr(br.time)} hrs`}
+                    num={isNaN(br.time) || br.time === 0 ? '' : `${min2hr(br.time)} 𝗁𝗋𝗌`}
                     name={niceName}
                     color='blackT'
                     size='big' />

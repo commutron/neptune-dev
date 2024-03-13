@@ -24,11 +24,9 @@ const StoneSelect = ({
   scrapCheck,
   
   brancheS,
-  canVerify, users,
+  canVerify,
   flowCounts,
-  app,
   
-  optionVerify,
   handleVerify,
   
   undoOption,
@@ -136,7 +134,6 @@ const StoneSelect = ({
 	    Session.set('nowStepKey', flowStep.key);
       Session.set('nowWanchor', flowStep.how);
    
-      const compEntry = iDone.find( sc => sc.key === flowStep.key && sc.good === true);
       const fTest = flowStep.type === 'test' ? 
                     iDone.filter( x => x.type === 'test' && x.good === false) : [];
       
@@ -158,14 +155,10 @@ const StoneSelect = ({
             rapIs={rapIs}
             rarapid={rarapid}
             branchObj={branchObj}
-            allItems={allItems}
             canVerify={canVerify}
-            users={users}
-            app={app}
             flowCounts={flowCounts}
             blockStone={blockStone}
             doneStone={doneStone}
-            compEntry={compEntry}
             handleVerify={handleVerify}
             openUndoOption={openUndoOption}
             closeUndoOption={closeUndoOption}

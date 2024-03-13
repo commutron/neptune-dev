@@ -10,15 +10,12 @@ const StoneReg = ({
 	lockout, 
 	topClass, topTitle,
 	
-	allItems,// isAlt, hasAlt,
-	
 	enactEntry,
 	resolveEntry,
 	workingState,
 	commTxtState
 })=> { 
 	
-	//// Action for standard step
   function passS(pass) {
 	  enactEntry();
     let comm = commTxtState;
@@ -38,23 +35,33 @@ const StoneReg = ({
 		});
   }
   
+  let svar = {
+  	build: {
+		  '--high-color': 'var(--peterriver)',
+		  '--stoneborder': 'var(--belizeHole)',
+		  '--stoneback': 'transparent'
+		},
+		inspect: {
+		  '--high-color': 'var(--emerald)',
+		  '--stoneborder': 'var(--nephritis)',
+		  '--stoneback': 'var(--nephritis)'
+		},
+	  checkpoint: {
+  		'--high-color': 'var(--amethystfade)',
+  		'--stoneborder': 'var(--wisteria)',
+  		'--stoneback': 'transparent'
+		}
+  };
+  
   let sstyle = {
   	build: {
 		  'backgroundImage': 'url(build.svg)',
-		  'backgroundColor': 'transparent',
-		  'borderColor': 'var(--belizeHole)',
-		  '--high-color': 'var(--peterriver)'
 		},
 		inspect: {
-		  'backgroundImage': 'url(inspect.svg)',
-		  'backgroundColor': 'var(--nephritis)',
-		  '--high-color': 'var(--emerald)'
+		  'backgroundImage': 'url(inspect.svg)'
 		},
 	  checkpoint: {
-			'backgroundImage': 'url(first.svg)',
-  		'backgroundColor': 'transparent',
-  		'borderColor': 'var(--wisteria)',
-  		'--high-color': 'var(--amethystfade)'
+			'backgroundImage': 'url(first.svg)'
 		}
   };
     
@@ -62,15 +69,9 @@ const StoneReg = ({
 	let apend = type === 'inspect' ? <label>{type}</label> : null;
 	
   return(
-		<div className={topClass + ' stoneFrame noCopy'} title={topTitle}>
+		<div className={topClass + ' stoneFrame noCopy'} style={svar[type]} title={topTitle}>
     	<StoneProgRing
-				serial={barcode}
-				allItems={allItems}
-				// isAlt={isAlt}
-				// hasAlt={hasAlt}
 				sKey={sKey}
-        step={step}
-        type={type}
         flowCounts={flowCounts}
         workingState={workingState}
         lockout={lockout}

@@ -10,8 +10,6 @@ const StoneFinish = ({
 	lockout, 
 	topClass, topTitle,
 	
-	allItems,
-	
 	enactEntry,
 	resolveEntry,
 	workingState,
@@ -59,20 +57,19 @@ const StoneFinish = ({
 		}
 	}
 	
+	let svar = {
+		'--high-color': 'var(--amethyst)',
+		'--stoneback': 'var(--wisteria)'
+	};
+		
 	let sstyle = {
 	  'backgroundImage': 'url(fin.svg)',
-	  'backgroundColor': 'var(--wisteria)',
-	  '--high-color': 'var(--amethyst)'
 	};
     
   return(
-		<div className={topClass + ' stoneFrame noCopy'} title={topTitle}>
+		<div className={topClass + ' stoneFrame noCopy'} style={svar} title={topTitle}>
     	<StoneProgRing
-				serial={serial}
-				allItems={allItems}
 				sKey={sKey}
-        step={step}
-        type={type}
         flowCounts={flowCounts}
         workingState={workingState}
         lockout={lockout}

@@ -70,9 +70,12 @@ n-tide-task select {
   width: 100%;
 }
 n-tide-task label {
+  display: block;
+  width: 100%;
   padding: 0;
   max-width: 25vmax !important;
-  font-size: 1.3vmax;
+  font-size: min(1.3vmax, 1rem) !important;
+  line-height: 1.5;
   text-align: center;
   background-color: rgb(25,25,25);
 }

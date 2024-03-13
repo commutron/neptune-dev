@@ -22,9 +22,7 @@ const StoneWeir = ({
   flowCounts,
   app,
   userSpeed,
-  users,
   
-  optionVerify,
   handleVerify,
   
   undoOption,
@@ -75,11 +73,8 @@ const StoneWeir = ({
       
       brancheS={brancheS}
       canVerify={canVerify}
-      users={users}
       flowCounts={flowCounts}
-      app={app}
       
-      optionVerify={optionVerify}
       handleVerify={handleVerify}
       
       undoOption={undoOption}

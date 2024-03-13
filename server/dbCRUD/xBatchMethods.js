@@ -506,7 +506,7 @@ Meteor.methods({
         }});
       Meteor.defer( ()=>{ 
         Meteor.call('updateOneMinify', batchId, accessKey); 
-        Meteor.call('updateOneMovement', batchId, accessKey);
+        Meteor.call('updateOneNoise', batchId, accessKey);
       });
       return true;
     }else{

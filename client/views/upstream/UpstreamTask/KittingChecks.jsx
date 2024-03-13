@@ -11,17 +11,31 @@ const KittingChecks = ({
   branchClear, 
   kitCols, isAuth, isRO
 })=> {
-  
+     
   if( Array.isArray(releases) ) {
     
     const floorRelease = !releasedToFloor ? false :
       releases.find( x => x.type === 'floorRelease');
     
     const serialRelease = releases.find( x => x.type === 'pcbKitRelease');
-          
+    
+    const qReady = tBatch.isQuoted;
+    
     return(
       <Fragment>
         
+        <div>
+          <TrinaryStat
+            status={qReady}
+            name='Quote Time Budget'
+            title={qReady ? 'Entered' : 'No'}
+            size=''
+            onIcon='fa-solid fa-hourglass-start fa-2x greenT'
+            midIcon='fa-solid fa-hourglass-empty fa-2x darkgrayT' 
+            offIcon='fa-regular fa-hourglass-empty fa-2x darkgrayT' 
+          />
+        </div>
+            
         {branchClear.map( (br, ix)=>{
           const bstep = tBatch.branchCondition.find( bc => bc.brKey === br.brKey );
           if(!bstep.condition) {
@@ -100,6 +114,7 @@ const KittingChecks = ({
         }
         
         <ReleaseWrapper
+          key={batchID+'proFloorRelease'}
           id={batchID}
           batchNum={batchNum}
           releasedBool={releasedToFloor}
@@ -110,7 +125,8 @@ const KittingChecks = ({
           unholdText={`Released without ${Pref.shortfall}`}
           undoText='Cancel Release'
           contextText='to the floor'
-          lockout={isDone || isRO}
+          lockout={isDone || isRO || !qReady}
+          qReady={qReady}
           isAuth={isAuth}>
           <TrinaryStat
             status={releasedToFloor ? !floorRelease.caution ? true : false : null}

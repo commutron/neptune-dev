@@ -90,6 +90,7 @@ const InfoTab = ({
             rType='floorRelease'
             actionText={Pref.release}
             contextText={`to ${Pref.floor}`}
+            qReady={b.quoteTimeBudget?.[0].timeAsMinutes > 0}
           />
         </ModelInline>
         :null}

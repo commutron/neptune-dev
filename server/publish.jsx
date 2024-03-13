@@ -212,7 +212,8 @@ Meteor.publish('traceDataLive', function(){
           'estSoonest': 1,
           'bffrRel': 1,
           'estEnd2fillBuffer': 1,
-          'overQuote': 1
+          'overQuote': 1,
+          'isQuoted': 1
         }
       })
     ];
@@ -248,7 +249,6 @@ Meteor.publish('traceDataActive', function(){
           'oRapid': 1,
           'isActive': 1,
           'onFloor': 1,
-          // 'donePnt': 1,
           'stormy': 1,
           'branchCondition': 1,
           'totalItems': 1,
@@ -262,6 +262,7 @@ Meteor.publish('traceDataActive', function(){
           'bffrRel': 1,
           'estEnd2fillBuffer': 1,
           'overQuote': 1,
+          'isQuoted': 1,
           'performTgt': 1
         }
       })
@@ -305,7 +306,6 @@ Meteor.publish('traceDataOpen', function(){
           'oRapid': 1,
           'isActive': 1,
           'onFloor': 1,
-          // 'donePnt': 1,
           'stormy': 1,
           'branchCondition': 1,
           'totalItems': 1,

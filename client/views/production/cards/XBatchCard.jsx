@@ -15,7 +15,7 @@ const BatchCardX = ({
   batchData, bOpen, bClosed, rapidData,
   // user,
   app, brancheS, ancOptionS,
-  // floorReleased, 
+  floorReleased, 
   srange, flowCounts, fallCounts,
   tideKey, timeOpen, engagedPro,
   expand, flowwater, fallwater
@@ -64,7 +64,7 @@ const BatchCardX = ({
           </div>;
   
   if( ( expand && !bOpen ) || 
-      ( timeOpen && expand && !flowwater && !fallwater ) ) {
+      ( timeOpen && expand && !flowwater && !fallwater && floorReleased ) ) {
     return(
       <Fragment>   
         <div className='proPrimeSingle'>

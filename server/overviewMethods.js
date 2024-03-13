@@ -14,6 +14,7 @@ function dryPriorityCalc(bQuTmBdg, mEst, bTide, shipAim, now, shipLoad, timePer)
   const shipAimMmnt = moment(shipAim);
   
   const mQuote = Number( bQuTmBdg.length === 0 ? 0 : bQuTmBdg[0].timeAsMinutes || 0 );
+  const isQuoted = mQuote > 0;
   
   const estimatedMinutes = avg4est(mQuote, mEst);
   
@@ -39,7 +40,7 @@ function dryPriorityCalc(bQuTmBdg, mEst, bTide, shipAim, now, shipLoad, timePer)
   const bffrRel = Math.round( ( estEnd2fillBuffer / 100 ) + dayGap - shipPull );
   // console.timeEnd('dryPriorityCalc_run_time');
   
-  return { quote2tide, est2tide, est2item, estSoonest, bffrRel, estEnd2fillBuffer, overQuote };
+  return { quote2tide, est2tide, est2item, estSoonest, bffrRel, estEnd2fillBuffer, overQuote, isQuoted };
 }
 
 function collectPriority(batchID, mockDay) {
@@ -146,7 +147,8 @@ function getFastPriority(bData, now, shipAim, shipLoaded) {
         estSoonest: dryCalc.estSoonest.format(),
         bffrRel: dryCalc.bffrRel,
         estEnd2fillBuffer: dryCalc.estEnd2fillBuffer,
-        overQuote: dryCalc.overQuote
+        overQuote: dryCalc.overQuote,
+        isQuoted: dryCalc.isQuoted
       });
     }else{
       resolve({
@@ -156,7 +158,8 @@ function getFastPriority(bData, now, shipAim, shipLoaded) {
         estSoonest: false,
         bffrRel: false,
         estEnd2fillBuffer: 0,
-        overQuote: false
+        overQuote: false,
+        isQuoted: false
       });
     }
   });

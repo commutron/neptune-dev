@@ -122,9 +122,37 @@ button.stoneExtra {
   animation: spinAround 10s infinite linear;
 }
 
+.cssProgRing {
+  width: 13vmax;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  background: conic-gradient(
+    var(--high-color) var(--stonePercent, 0%),
+    rgb(40,40,40) 0%
+  );
+  display: grid;
+  place-items: center;
+}
+.cssProgRing::after {
+  content: '';
+  width: 12.25vmax;
+  border-radius: 50%;
+  background-color: var(--dark);
+  aspect-ratio: 1 / 1;
+}
+.cssProgCore {
+  position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%) rotate(0deg);
+	text-align: center;
+	line-height: 1;
+}
+
 .stone {
 	margin: 0;
-  border: 10px solid transparent;
+  border-width: 0.75vmax;
+  border-style: solid;
   width: 11.5vmax;
   height: 11.5vmax;
   font-size: calc(0.5rem + 0.75vmax);
@@ -138,14 +166,16 @@ button.stoneExtra {
   background-repeat: no-repeat;
   background-origin: content-box;
   background-size: 150%;
+  background-color: var(--stoneback, transparent);
+  border-color: var(--stoneborder, transparent);
   border-radius: 50%;
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
   justify-content: center;
-  transition: 0.25s;
+  /*transition: 0.25s;*/
   opacity: 1;
-  will-change: transform;
+  /*will-change: transform;*/
   cursor: pointer;
 }
 
@@ -224,6 +254,7 @@ button.stoneExtra {
 .crackedBot label,
 .extraFail label {
   line-height: 1.2;
+  cursor: pointer;
 }
 
 .stone:focus {
@@ -295,6 +326,7 @@ button.stoneExtra {
 .crackedTop {
   border-radius: 9rem 9rem 0 0;
   margin: -0.25em 0.25em 0 0.25em;
+  background-color: var(--greenSea);
 }
 .crackedBot {
   border-radius: 0 0 9rem 9rem;

@@ -12,14 +12,17 @@ const StoneVerify = ({
     handleVerify(sKey, true);
   }
   
+  let svar = {
+  	'--high-color': 'var(--peterriver)',
+  	'stoneback': 'var(--belizeHole)'
+  };
+  
   let sstyle = {
-	  'backgroundImage': 'url(first.svg)',
-	  'backgroundColor': 'var(--belizeHole)',
-	  '--high-color': 'var(--peterriver)'
+	  'backgroundImage': 'url(first.svg)'
 	};
 	
   return(
-		<div className={topClass + ' stoneFrame noCopy'} title={topTitle}>
+		<div className={topClass + ' stoneFrame noCopy'} style={svar} title={topTitle}>
     	<AnimateOnChange
     		customTag='span'
 		    baseClassName='stoneRing centre'

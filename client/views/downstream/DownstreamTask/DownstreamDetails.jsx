@@ -63,7 +63,7 @@ const DownstreamScrollChunk = ({
   const avgRmn = avgOfArray([q2t, e2t, e2i], true);
   const e2tStatus = !e2t ? 'Time Not Tracked' :
           avgRmn > 0 ? 
-            `~${min2hr(avgRmn)} hr remain` :
+            `${min2hr(avgRmn)} hr remain` :
             'time estimations exceeded';
   // avgRmn is an expimental corection to extreme estimations observed in production  
   // const onTime = !ck.estSoonest ? null : new Date(ck.shipAim) > new Date(ck.estSoonest);

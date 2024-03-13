@@ -129,10 +129,13 @@ const XDoProCard = ({
           />;
   
   const insertAxion =
-          <ReleaseAction 
-            id={batchData._id} 
-            rType='floorRelease'
-            actionText={Pref.release} />;
+          <div className='proPrimeSingle'>
+            <ReleaseAction 
+              id={batchData._id} 
+              rType='floorRelease'
+              actionText={Pref.release}
+              qReady={batchData.quoteTimeBudget?.[0].timeAsMinutes > 0} />
+          </div>;
 
   const insertWaterfall = 
           <WaterfallSelect 
@@ -166,7 +169,6 @@ const XDoProCard = ({
             widgetData={widgetData}
             app={app}
             userSpeed={user.unlockSpeed}
-            users={users}
             brancheS={brancheS}
             useFlow={useFlow}
             flowCounts={flowData.flowCounts}
@@ -176,7 +178,6 @@ const XDoProCard = ({
             rapIs={rapidData.rapIs}
             shortfallS={shortfallS}
             scrapCheck={scrapCheck}
-            optionVerify={optionVerify}
             handleVerify={handleVerify} />;
             
   const insertRedoIsland =

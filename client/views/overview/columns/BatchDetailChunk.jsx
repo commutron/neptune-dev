@@ -36,7 +36,7 @@ const BatchDetailChunk = ({
         stormy === 0 && tBatch.stormy[0] !== true ||
         stormy === 1 && tBatch.stormy[1] !== true ||
         stormy === 2 && tBatch.stormy[2] !== true ? 'clearall' : '';
-      
+     
   return(
     <div className={`overGridRowScroll ${highG} ${highT} ${storm} ${rTFghostC}`} title={rTFghostT}>
       <div className='med' title={Pref.salesOrder}>
@@ -69,13 +69,12 @@ const BatchDetailChunk = ({
         <ReleasedCheck
           batchID={oB._id}
           batchNum={oB.batch}
+          tBatch={tBatch}
           isDone={isDone}
           releasedToFloor={releasedToFloor}
           releases={oB.releases}
-          app={app}
           isAuth={isAuth}
-          isRO={isRO}
-          isDebug={isDebug} />
+          isRO={isRO} />
       : null}
       
       <BranchProgress

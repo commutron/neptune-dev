@@ -15,10 +15,9 @@ const StoneControl = ({
 	sKey, step, type, 
 	altIs, rapIs, rarapid,
 	branchObj,
-	allItems,
-	canVerify, users, app,
+	canVerify,
 	flowCounts,
-	blockStone, doneStone, compEntry,
+	blockStone, doneStone,
 	handleVerify,
 	openUndoOption, closeUndoOption,
 	timeOutCntrl, riverFlowStateSet,
@@ -106,7 +105,6 @@ const StoneControl = ({
 			lockout={lockout}
 			topClass={topClass}
 			topTitle={topTitle}
-			allItems={allItems}
 			enactEntry={()=>enactEntry()}
 			resolveEntry={()=>resolveEntry()}
 			workingState={workingState}
@@ -139,7 +137,6 @@ const StoneControl = ({
 			lockout={lockout}
 			topClass={topClass}
 			topTitle={topTitle}
-			allItems={allItems}
 			enactEntry={()=>enactEntry()}
 			resolveEntry={()=>resolveEntry()}
 			workingState={workingState}
@@ -180,7 +177,6 @@ const StoneControl = ({
 			lockout={lockout}
 			topClass={topClass}
 			topTitle={topTitle}
-			allItems={allItems}
 			enactEntry={()=>enactEntry()}
 			resolveEntry={()=>resolveEntry(true)}
 			workingState={workingState}

@@ -84,6 +84,7 @@ function shrinkWhole(bData, now, accessKey, shipLoad) {
         bffrRel: prtyRnk.bffrRel,
         estEnd2fillBuffer: prtyRnk.estEnd2fillBuffer,
         overQuote: prtyRnk.overQuote,
+        isQuoted: prtyRnk.isQuoted,
         performTgt: perfFtr
     }});
     resolve(true);
@@ -99,7 +100,7 @@ function checkMinify(bData, accessKey) {
     const rFlow = bData.river ? true :
                   bData.waterfall && bData.waterfall.length > 0 ? false : 
                   null;
-                  
+             
     TraceDB.update({batchID: bData._id}, {
       $set : { 
         orgKey: accessKey,
@@ -161,6 +162,7 @@ function checkMovement(bData, now, accessKey, shipLoad) {
         bffrRel: prtyRnk.bffrRel,
         estEnd2fillBuffer: prtyRnk.estEnd2fillBuffer,
         overQuote: prtyRnk.overQuote,
+        isQuoted: prtyRnk.isQuoted,
         performTgt: perfFtr
     }});
     resolve(true);
