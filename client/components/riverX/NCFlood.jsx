@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 
 import { NonConCheck, onFire } from '/client/utility/NonConOptions';
 
-const NCFlood = ({ seriesId, live, user, app, ncTypesCombo })=> {
+const NCFlood = ({ seriesId, live, user, ncTypesCombo })=> {
   
   const flatCheckList = Array.from(ncTypesCombo, x => 
                                   x.key ? x.live === true && x.typeText : x);

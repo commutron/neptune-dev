@@ -47,40 +47,83 @@ Meteor.methods({
 
 //// Non-Cons \\\\
   floodNCX(seriesId, ref, type) {
+    const orgKey = Meteor.user().orgKey;
     const srs = XSeriesDB.findOne(
-      {_id: seriesId, orgKey: Meteor.user().orgKey},
+      {_id: seriesId, orgKey: orgKey},
       {fields: {'items.serial':1,'items.completed':1,'nonCon':1}}
     );
     if(!Meteor.userId() || !srs) { null }else{
       const liveItems = srs.items.filter( x => x.completed === false );
-      const liveSerials = Array.from(liveItems, x => {
-                            const double = srs.nonCon.find( y => 
-                              y.ref === ref &&
-                              y.serial === x.serial &&
-                              y.type === type &&
-                              y.inspect === false
-                            );
-                            if( !double ) { return x.serial } } );
-      for( let sn of liveSerials ) {
-        XSeriesDB.update({_id: seriesId, orgKey: Meteor.user().orgKey}, {
-          $push : { nonCon: {
-            key: new Meteor.Collection.ObjectID().valueOf(), // id of the nonCon entry
-            serial: sn, // barcode id of item
-            ref: ref, // referance on the widget
-            type: type, // type of nonCon
-            where: 'wip', // where in the process
-            time: new Date(), // when nonCon was discovered
-            who: Meteor.userId(),
-            fix: false,
-            inspect: false,
-            reject: [],
-            snooze: false,
-            trash: false,
-            comm: ''
-        }}});
+      const aplcNCs = srs.nonCon.filter( n => n.ref === ref && n.type === type && n.inspect === false );
+      
+      for( let sn of liveItems ) {
+        const dbbl = aplcNCs.find( nc => nc.serial === sn.serial );
+        if(sn.serial && !dbbl) {
+          XSeriesDB.update({_id: seriesId, orgKey: orgKey}, {
+            $push : { nonCon: {
+              key: new Meteor.Collection.ObjectID().valueOf(), // id of the nonCon entry
+              serial: sn.serial, // barcode id of item
+              ref: ref, // referance on the widget
+              type: type, // type of nonCon
+              where: 'wip', // where in the process
+              time: new Date(), // when nonCon was discovered
+              who: Meteor.userId(),
+              fix: false,
+              inspect: false,
+              reject: [],
+              snooze: false,
+              trash: false,
+              comm: ''
+          }}});
+        }else{null}
       }
       return true;
     }
+  },
+  
+  // Temp Data Corection
+  floodMonitor() {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      const srses = XSeriesDB.find(
+        { 'nonCon.key': { $exists: true }, 'nonCon.serial': { $exists: false } },
+        {fields: {'batch':1}}
+      ).fetch();
+      return JSON.stringify(srses);
+    }
+  },
+  // Temp Data Corection
+  floodControl(seriesId) {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      const accessKey = Meteor.user().orgKey;
+      
+      const srs = XSeriesDB.findOne(
+        {_id: seriesId, orgKey: accessKey},
+        {fields: {'batch':1,'items.serial':1,'nonCon.key':1,'nonCon.serial':1}}
+      );
+      
+      if( srs.nonCon.some( x => x.serial === undefined ) ) {
+      
+        for( let nc of srs.nonCon ) {
+          if(!nc.serial) {
+            
+            XSeriesDB.update({_id: seriesId, orgKey: accessKey, 'nonCon.key': nc.key}, {
+              $pull : { nonCon: {key: nc.key}
+            }});
+          
+          }else{
+            null;
+          }
+        }
+        Meteor.defer( ()=>{
+          const b = XBatchDB.findOne({batch: srs.batch},{fields:{'_id':1}});
+          Meteor.call('updateOneMovement', b._id, accessKey);
+        });
+      }
+      
+    }else{
+      return false;
+    }
+    
   },
 
   addNCX(seriesId, bar, ref, multi, type, step, fix) {

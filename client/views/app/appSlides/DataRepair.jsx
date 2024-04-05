@@ -178,6 +178,15 @@ const DataRepair = ({ app, users })=> {
           action={()=>doCallThing('fixRemoveDamagedBatch')}
         />
         
+        <DoCard
+          title='Find NC Flood Errors'
+          sub='look in console for report'
+          icon='bugs'
+          color='redSolid'
+          button='Find Errors'
+          action={()=>doCallThing('floodMonitor', true)}
+        />
+        
       </div>
       <div className='autoFlex'>
       

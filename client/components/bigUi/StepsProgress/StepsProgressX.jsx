@@ -7,7 +7,6 @@ import ToggleBar from '/client/components/smallUi/Tabs/ToggleBar';
 import StepRateDisplay from './StepRateDisplay';
 import MiniStack from '/client/components/charts/MiniScales/MiniStack';
 import NumBox from '/client/components/tinyUi/NumBox.jsx';
-import { round2Decimal } from '/client/utility/Convert';
 
 const StepsProgressX  = ({ 
   b, widgetData, hasSeries, flowCounts, fallCounts, rapidsData,
@@ -169,8 +168,8 @@ const StepsProgressX  = ({
             key={'rapid'+ix}
             title={`${r.rapid} ${r.issueOrder}`}
             subtitle={r.type}
-            count={round2Decimal(r.quantity * (isNaN(r.rDone) ? 1 : r.rDone))}
-            countNew={round2Decimal(r.quantity * (isNaN(r.rNew) ? 1 : r.rNew))}
+            count={Math.round(r.quantity * (isNaN(r.rDone) ? 1 : r.rDone))}
+            countNew={Math.round(r.quantity * (isNaN(r.rNew) ? 1 : r.rNew))}
             total={r.quantity}
             tips={[
               r.rFin ? r.rFin[0] + ' Completed ' + Pref.items : null,
