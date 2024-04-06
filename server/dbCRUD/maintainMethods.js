@@ -250,7 +250,7 @@ Meteor.methods({
                             }}
                           ).fetch();
                           
-            const superUsers = Meteor.users.find({ roles: { $in: ["equipSuper"] } });
+            const superUsers = Meteor.users.find({ roles: { $in: ["equipSuper"] } },{fields:{'_id':1}});
             const supr = Array.from(superUsers, u => u._id);
 
             for(const mn of maint) {
@@ -282,7 +282,7 @@ Meteor.methods({
                   const equip = EquipDB.findOne({_id: mn.equipId},{fields:{'equip':1,'stewards':1}});
                   const titl = equip ? equip.equip : "";
                   const stew = equip ? equip.stewards : [];
-                  const sendto = [...new Set(supr, stew)];
+                  const sendto = [...new Set([supr,stew].flat())];
                   Meteor.call('handleIntMaintEmail', orgKey, sendto, titl, mn.name, "in_grace", mn.expire); 
                 });
               }else if( now.isSame(moment(mn.open), 'day') ) {
@@ -492,35 +492,6 @@ Meteor.methods({
   
   getMaintTime(mID) {
     return TimeDB.find({ 'link': mID }, { fields: { 'who':1,'startTime':1,'stopTime':1 } }).fetch();
-  },
-  
-  
-  
-  testMaintEmails() {
-    const orgKey = Meteor.user().orgKey;
-    
-    const superUsers = Meteor.users.find({ roles: { $in: ["equipSuper"] } },{fields:{'_id':1}});
-    const supr = Array.from(superUsers, u => u._id);
-    
-    const equip = EquipDB.findOne({'online':true},{fields:{'equip':1,'stewards':1}});
-    
-    const titl = equip ? equip.equip : "";
-    
-    const close = moment().add(3, 'days').format();
-    const expire = moment().add(5, 'days').format();
-    
-    const stew = equip ? equip.stewards : [];
-    
-    const sendtoBOTH = [...new Set(...supr, ...stew)];
-    console.log({sendtoBOTH});
-    
-    Meteor.call('handleIntMaintEmail', orgKey, supr, titl, "PM Name", "did_not");
-               
-    Meteor.call('handleIntMaintEmail', orgKey, sendtoBOTH, titl, "PM Name", "in_grace", expire);
-              
-    Meteor.call('handleIntMaintEmail', orgKey, stew, titl, "PM Name", "now_open", close); 
-                
-                
   }
   
 });

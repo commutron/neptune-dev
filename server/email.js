@@ -5,14 +5,14 @@ import { toCap } from './utility';
 
 //////////////////////////////
 
-import { createClient } from '@supabase/supabase-js';
-
+// import { createClient } from '@supabase/supabase-js';
 
 /////////////////////////////////////
 
 function sendInternalEmail(to, subject, date, title, body, asid, foot, link, fine) {
-  const from = Config.sendEmail;
-    
+  const from = '"Neptune" ' + Config.sendEmail;
+  const replyTo = Config.replyEmail;
+  
   const html = `
     <table style="min-width:140px;max-width:600px;width:80%;margin:0 auto;font-family:Verdana, sans-serif;line-height:1;table-layout:auto;border-collapse:separate;background-color:white">
       <tbody>
@@ -32,7 +32,6 @@ function sendInternalEmail(to, subject, date, title, body, asid, foot, link, fin
             <p style="color:black;margin:1rem 0"><small>${asid}</small></p>
             <p style="color:black;margin:1rem 0">${foot}</p>
             <p style="color:black;margin:1rem 0">${link}</p>
-            <p style="color:black;margin:1em 0"><em>Do not reply to this email.</em></p>
             <p style="color:black;margin:1rem 0"><small>${fine}</small></p>
           </td>
         </tr>
@@ -42,15 +41,16 @@ function sendInternalEmail(to, subject, date, title, body, asid, foot, link, fin
       </tbody>
     </table>`;
     
-  const text = `Neptune Automated Message\n\n${title}\n\n${date}\n\n${body}\n\n${asid}\n\n${foot}\n\n${link}\n\ndo not reply to this email\n\n${fine}`;
+  const text = `Neptune Automated Message\n\n${title}\n\n${date}\n\n${body}\n\n${asid}\n\n${foot}\n\n${link}\n\n${fine}`;
 
-  Email.send({ to, from, subject, html, text });
+  Email.send({ to, from, replyTo, subject, html, text });
 
 }
 
 function sendExternalEmail(to, cc, subject, date, body, foot, plainbody) {
   const from = Config.sendEmail;
-    
+  const replyTo = Config.replyEmail;
+  
   const html = `
     <table style="min-width:140px;max-width:600px;width:80%;margin:0 auto;font-family:Verdana, sans-serif;line-height:1;table-layout:auto;border-collapse:separate;background-color:white">
       <tbody>
@@ -85,7 +85,7 @@ function sendExternalEmail(to, cc, subject, date, body, foot, plainbody) {
     
   const text = `COMMUTRON Industries Ltd.\n\nAutomated message\n\n${date}(CST)\n\n${plainbody}\n\n\ndo not reply to this email\n\nCustomer Service: ${Config.orgPhone}\n${Config.orgStreet}`;
   
-  Email.send({ to, cc, from, subject, html, text });
+  Email.send({ to, cc, from, replyTo, subject, html, text });
 }
 
 function sortInternalRecipient(accessKey, emailUserIDs, subject, date, title, body, asid, foot, link, fine) {
@@ -346,9 +346,8 @@ Meteor.methods({
     }
   },
   
-  
   /* SUPABASE TEST */
-  
+  /*
   supabase_sendBasicUpdate() {
     
     console.log("supa try run");
@@ -361,7 +360,6 @@ Meteor.methods({
 
     const data = Meteor.call("serverDatabaseSize");
     
-
     async function supaupdate(db) {
       console.log('supa test called');
       
@@ -388,8 +386,7 @@ Meteor.methods({
     
     if(supabaseKey) {
       supaupdate(data);
-    }    
-    
+    }
   }
-  
+  */
 });

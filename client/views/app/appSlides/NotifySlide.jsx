@@ -58,19 +58,12 @@ const NotifySlide = ({ app })=> {
     });
   }
   
-  function doSupa() {
-    Meteor.call('supabase_sendBasicUpdate', (err)=> {
-      err && console.log(err);
-      toast('Try Supabase Update');
-    });
-  }
-  
-  function sendTestMaintEmail() {
-    Meteor.call('testMaintEmails', (err)=> {
-      err && console.log(err);
-      toast('Email Request Sent');
-    });
-  }
+  // function doSupa() {
+  //   Meteor.call('supabase_sendBasicUpdate', (err)=> {
+  //     err && console.log(err);
+  //     toast('Try Supabase Update');
+  //   });
+  // }
   
   return(
     <div className='space3v autoFlex'>
@@ -130,7 +123,6 @@ const NotifySlide = ({ app })=> {
         
       </div>
       
-      
       <div>
         <h2 className='cap'>Dev Email</h2>
         
@@ -153,24 +145,6 @@ const NotifySlide = ({ app })=> {
           func={sendDevStatusEmail}
         />
         
-        <hr className='vmargin' />
-        
-        <NotifyAction 
-          title="Supabase"
-          sub="Proteus"
-          doLabel="Send Supabase Test"
-          func={doSupa}
-        />
-        
-        <hr className='vmargin' />
-        
-        <NotifyAction 
-          title="Maintenance Email Tester"
-          sub=""
-          doLabel="Send Test Emails"
-          func={sendTestMaintEmail}
-        />
-        
       </div>
   
     </div>
@@ -179,6 +153,14 @@ const NotifySlide = ({ app })=> {
 
 export default NotifySlide;
 
+/*
+<NotifyAction 
+  title="Supabase"
+  sub="Proteus"
+  doLabel="Send Supabase Test"
+  func={doSupa}
+/>*/
+        
 const NotifyAction = ({ title, sub, doLabel, func })=> (
   <div>
     <h3 className='cap'>{title}</h3>
