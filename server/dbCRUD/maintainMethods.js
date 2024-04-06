@@ -511,7 +511,7 @@ Meteor.methods({
     
     const stew = equip ? equip.stewards : [];
     
-    const sendtoBOTH = [...new Set(supr, stew)];
+    const sendtoBOTH = [...new Set(...supr, ...stew)];
     console.log({sendtoBOTH});
     
     Meteor.call('handleIntMaintEmail', orgKey, supr, titl, "PM Name", "did_not");

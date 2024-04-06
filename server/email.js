@@ -271,20 +271,20 @@ Meteor.methods({
     const dead = deadline ? moment(deadline).tz(Config.clientTZ).format('dddd, MMM Do') : "";
     
     if(state === 'did_not') {
-      const body = `${pmname} scheduled maintenance was not completed.`;
+      const body = `${pmname} maintenance was not completed.`;
       const foot = 'The PM event has been closed';
       const fine = "You have received this email because you are assigned the 'equipSuper' role.";
     
       sortInternalRecipient(accessKey, emailUserIDs, subject, date, title, body, asid, foot, link, fine);
     }else if(state === 'in_grace') {
-      const body = `${pmname} scheduled maintenance has not been completed on time.`;
-      const foot = `A short grace period is in effect but maintenance must be completed by end of day, ${dead}.`;
+      const body = `${pmname} maintenance has not been completed on time.`;
+      const foot = `A short grace period is in effect but maintenance must be completed by ${dead} (end of workday).`;
       const fine = `You have received this email because you are assigned to the ${equip} or are assigned the 'equipSuper' role.`;
       
       sortInternalRecipient(accessKey, emailUserIDs, subject, date, title, body, asid, foot, link, fine);
     }else if(state === 'now_open') {
-      const body = `${pmname} scheduled maintenance is required.`;
-      const foot = `Maintenance should be completed by end of day, ${dead}.`;
+      const body = `${pmname} maintenance is required.`;
+      const foot = `Maintenance should be completed by ${dead} (end of workday).`;
       const fine = `You have received this email because you are assigned to the ${equip}.`;
       
       sortInternalRecipient(accessKey, emailUserIDs, subject, date, title, body, asid, foot, link, fine);
