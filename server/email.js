@@ -88,13 +88,19 @@ function sendExternalEmail(to, cc, subject, date, body, foot, plainbody) {
   Email.send({ to, cc, from, subject, html, text });
 }
 
-function sortInternalRecipient(emailUserIDs, subject, date, title, body, asid, foot, link, fine) {
+function sortInternalRecipient(accessKey, emailUserIDs, subject, date, title, body, asid, foot, link, fine) {
+  const doc = AppDB.findOne({orgKey: accessKey});
+  const emailGlobal = doc && doc.emailGlobal;
+  const emailpcbKit = doc && doc.emailpcbKit;
+  
+  const sendIDs = emailUserIDs === 'APP_emailpcbKit' ? emailpcbKit : emailUserIDs;
+    
   let emails = [];
   let ininbox = [];
   
-  for(let eu of emailUserIDs) {
+  for(let eu of sendIDs) {
     const user = Meteor.users.findOne({_id: eu});
-    if(user && user.emails && user.emails[0]) {
+    if(emailGlobal && user && user.emails && user.emails[0]) {
       emails.push(user.emails[0]);
     }else{
       ininbox.push(eu);
@@ -110,7 +116,7 @@ function sortInternalRecipient(emailUserIDs, subject, date, title, body, asid, f
     EmailDB.insert({
       sentTime: new Date(),
       subject: subject,
-      to: addresses.toString(),
+      to: addresses.join(', '),
       cc: undefined,
       text: title + ' - ' + body
     });
@@ -221,6 +227,70 @@ Meteor.methods({
     }
   },
   
+  handleIntVarEmail(accessKey, emailUsers, name, isG, isW, variant, wiki) {
+    this.unblock();
+    
+    const subject = `New Product Variant - ${variant} - automated Neptune email`;
+    const date = moment().tz(Config.clientTZ).format('h:mm a, dddd, MMM Do YYYY');
+    
+    const title = `Concerning ${toCap(isG, true)}.`;
+    const body = `${toCap(name, true)} has created variant ${variant} of ${toCap(isW, true)}.`;
+    const asid = '';
+    const foot = 'Expect Bill Of Material changes. Please prepare for potentially new stencils, jigs and machine programmes.';
+    const link = wiki ? `<a href="${wiki}">Work Instructions</a>` : 'New work instructions will be forthcoming.';
+    const fine = '';
+    
+    sortInternalRecipient(accessKey, emailUsers, subject, date, title, body, asid, foot, link, fine);
+  },
+  
+  handleIntPCBEmail(accessKey, isG, isW, wiki) {
+    this.unblock();
+    
+    const subject = `New PCBs Received - ${toCap(isW, true)} - automated Neptune email`;
+    const date = moment().tz(Config.clientTZ).format('h:mm a, dddd, MMM Do YYYY');
+    
+    const title = `Concerning ${toCap(isG, true)}.`;
+    const body = `Kitting has received PCBs for ${toCap(isW, true)}.`;
+    const asid = '(The Upstream clearance "Barcoding / PCB" is marked as "Ready", indicating that the base barcoded components are in stock. These are usually, but not always, printed circuit boards.)';
+    const foot = 'A work order of this product variant has never been completed. New stencils, jigs or machine programmes may be required.';
+    const link = `<a href="${wiki}">Work Instructions</a>`;
+    const fine = "To stop receiving emails concerning PCBs, contact receiving.";
+
+    sortInternalRecipient(accessKey, 'APP_emailpcbKit', subject, date, title, body, asid, foot, link, fine);
+  },
+  
+  handleIntMaintEmail(accessKey, emailUserIDs, equip, name, state, deadline) {
+    this.unblock();
+    const subject = "Scheduled Maintenance";
+    const title = toCap(equip, true) + '.';
+    const pmname = toCap(name);
+    const date = '';
+    const asid = '';
+    const link = '';
+    
+    const dead = deadline ? moment(deadline).tz(Config.clientTZ).format('dddd, MMM Do') : "";
+    
+    if(state === 'did_not') {
+      const body = `${pmname} scheduled maintenance was not completed.`;
+      const foot = 'The PM event has been closed';
+      const fine = "You have received this email because you are assigned the 'equipSuper' role.";
+    
+      sortInternalRecipient(accessKey, emailUserIDs, subject, date, title, body, asid, foot, link, fine);
+    }else if(state === 'in_grace') {
+      const body = `${pmname} scheduled maintenance has not been completed on time.`;
+      const foot = `A short grace period is in effect but maintenance must be completed by end of day, ${dead}.`;
+      const fine = `You have received this email because you are assigned to the ${equip} or are assigned the 'equipSuper' role.`;
+      
+      sortInternalRecipient(accessKey, emailUserIDs, subject, date, title, body, asid, foot, link, fine);
+    }else if(state === 'now_open') {
+      const body = `${pmname} scheduled maintenance is required.`;
+      const foot = `Maintenance should be completed by end of day, ${dead}.`;
+      const fine = `You have received this email because you are assigned to the ${equip}.`;
+      
+      sortInternalRecipient(accessKey, emailUserIDs, subject, date, title, body, asid, foot, link, fine);
+    }else{null}
+  },
+  
   handleExternalEmail(accessKey, emailPrime, emailSecond, isW, salesOrder) {
     this.unblock();
     const app = AppDB.findOne({orgKey: accessKey},{fields:{'emailGlobal':1}});
@@ -254,73 +324,6 @@ Meteor.methods({
       return true;
     }else{
       return false;
-    }
-  },
-  
-  handleInternalEmail(accessKey, emailUsers, name, isG, isW, variant, wiki) {
-    this.unblock();
-    const doc = AppDB.findOne({orgKey: accessKey});
-    const emailGlobal = doc && doc.emailGlobal;
-    
-    if(emailGlobal) {
-      const subject = `New Product Variant - ${variant} - automated Neptune email`;
-      
-      const date = moment().tz(Config.clientTZ).format('h:mm a, dddd, MMM Do YYYY');
-      
-      const title = `Concerning ${toCap(isG, true)}.`;
-      const body = `${toCap(name, true)} has created variant ${variant} of ${toCap(isW, true)}.`;
-      const asid = '';
-      const foot = 'Expect Bill Of Material changes. Please prepare for potentially new stencils, jigs and machine programmes.';
-      const link = wiki ? `<a href="${wiki}">Work Instructions</a>` : 'New work instructions will be forthcoming.';
-      const fine = '';
-      
-      sortInternalRecipient(emailUsers, subject, date, title, body, asid, foot, link, fine);
-    }
-  },
-  
-  handleInternalPCBEmail(accessKey, isG, isW, wiki) {
-    this.unblock();
-    const doc = AppDB.findOne({orgKey: accessKey});
-    const emailGlobal = doc && doc.emailGlobal;
-    const emailpcbKit = doc && doc.emailpcbKit;
-    
-    if(emailGlobal && emailpcbKit) {
-      const subject = `New PCBs Received - ${toCap(isW, true)} - automated Neptune email`;
-      
-      const date = moment().tz(Config.clientTZ).format('h:mm a, dddd, MMM Do YYYY');
-      
-      const title = `Concerning ${toCap(isG, true)}.`;
-      const body = `Kitting has received PCBs for ${toCap(isW, true)}.`;
-      const asid = '(The Upstream clearance "Barcoding / PCB" is marked as "Ready", indicating that the base barcoded components are in stock. These are usually, but not always, printed circuit boards.)';
-      const foot = 'A work order of this product variant has never been completed. New stencils, jigs or machine programmes may be required.';
-      const link = `<a href="${wiki}">Work Instructions</a>`;
-      const fine = dead ? "To stop receiving emails concerning PCBs, contact receiving." :
-
-      sortInternalRecipient(emailpcbKit, subject, date, title, body, asid, foot, link, fine);
-    }
-  },
-  
-  handleInternalMaintEmail(accessKey, emailUserIDs, equip, name, state, deadline) {
-    this.unblock();
-    const doc = AppDB.findOne({orgKey: accessKey});
-    const emailGlobal = doc && doc.emailGlobal;
-    
-    if(emailGlobal) {
-      const dead = !deadline ? false :
-                    moment(deadline).tz(Config.clientTZ).format('dddd, MMM Do');
-                
-      const subject = `Scheduled Maintenance is Not Completed`;
-      
-      const title = toCap(equip, true) + '.';
-      const date = '';
-      const body = `${toCap(name)} scheduled maintenance is incomplete and ${dead ? 'past its '+state :  'its '+state+' has ended'}.`;
-      const asid = '';
-      const foot = dead ? `A short grace period is in effect but maintenance must be completed by end of day, ${dead}.` : '';
-      const link = '';
-      const fine = dead ? "To stop receiving emails concerning this equipment, remove your name from the equipment's assignees." :
-                          "To stop receiving emails concerning missed maintenance, disable your 'equipSuper' authorization.";
-      
-      sortInternalRecipient(emailUserIDs, subject, date, title, body, asid, foot, link, fine);
     }
   },
   

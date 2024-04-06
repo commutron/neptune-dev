@@ -409,7 +409,7 @@ Meteor.methods({
             const isG = group.group + ' (' + group.alias.toUpperCase() + ')';
             const wiki = ver.instruct;
             
-            Meteor.call('handleInternalPCBEmail', accessKey, isG, isW, wiki);
+            Meteor.call('handleIntPCBEmail', accessKey, isG, isW, wiki);
           });
         }
       }

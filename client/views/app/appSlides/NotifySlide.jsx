@@ -65,6 +65,13 @@ const NotifySlide = ({ app })=> {
     });
   }
   
+  function sendTestMaintEmail() {
+    Meteor.call('testMaintEmails', (err)=> {
+      err && console.log(err);
+      toast('Email Request Sent');
+    });
+  }
+  
   return(
     <div className='space3v autoFlex'>
       
@@ -153,6 +160,15 @@ const NotifySlide = ({ app })=> {
           sub="Proteus"
           doLabel="Send Supabase Test"
           func={doSupa}
+        />
+        
+        <hr className='vmargin' />
+        
+        <NotifyAction 
+          title="Maintenance Email Tester"
+          sub=""
+          doLabel="Send Test Emails"
+          func={sendTestMaintEmail}
         />
         
       </div>

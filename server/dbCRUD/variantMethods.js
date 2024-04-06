@@ -35,7 +35,7 @@ Meteor.methods({
           const group = GroupDB.findOne({_id: groupId},{fields:{'group':1,'alias':1}});
           const isG = group.group + ' (' + group.alias.toUpperCase() + ')';
           
-          Meteor.call('handleInternalEmail', accessKey, emailUsers, name, isG, isW, variant, wiki);
+          Meteor.call('handleIntVarEmail', accessKey, emailUsers, name, isG, isW, variant, wiki);
         });
       }
       return true;
