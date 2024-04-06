@@ -11,7 +11,6 @@ import { toCap } from './utility';
 
 function sendInternalEmail(to, subject, date, title, body, asid, foot, link, fine) {
   const from = '"Neptune" ' + Config.sendEmail;
-  const replyTo = Config.replyEmail;
   
   const html = `
     <table style="min-width:140px;max-width:600px;width:80%;margin:0 auto;font-family:Verdana, sans-serif;line-height:1;table-layout:auto;border-collapse:separate;background-color:white">
@@ -43,12 +42,12 @@ function sendInternalEmail(to, subject, date, title, body, asid, foot, link, fin
     
   const text = `Neptune Automated Message\n\n${title}\n\n${date}\n\n${body}\n\n${asid}\n\n${foot}\n\n${link}\n\n${fine}`;
 
-  Email.send({ to, from, replyTo, subject, html, text });
+  Email.send({ to, from, subject, html, text });
 
 }
 
 function sendExternalEmail(to, cc, subject, date, body, foot, plainbody) {
-  const from = Config.sendEmail;
+  const from = '"' + Config.orgName  + '" ' + Config.sendEmail;
   const replyTo = Config.replyEmail;
   
   const html = `
@@ -69,21 +68,20 @@ function sendExternalEmail(to, cc, subject, date, body, foot, plainbody) {
             <p style="color:black;margin:1rem 0">${date} (CST)</p>
             <p style="color:black;margin:1rem 0">${body}</p>
             <p style="color:black;margin:1rem 0">${foot}</p>
-            <p style="color:black;margin:1em 0">Do not reply to this email address. If you have any questions, please contact a member of our customer service team directly.</p>
           </td>
         </tr>
         <tr>
-          <td colspan='2' style="text-align:center;padding:15px;color:white;background-color:#254690;"
-            >Customer Service: <a href="tel:+${Config.orgTel}" style="color:white">${Config.orgPhone}</a></td>        
+          <td colspan='2' style="text-align:center;padding:15px;color:white;line-height:1.3;background-color:#254690;"
+            >Customer Service: <a href="mailto:${Config.replyEmail}" style="color:white">${Config.replyEmail}</a>, <a href="tel:+${Config.orgTel}" style="color:white">${Config.orgPhone}</a></td>        
         </tr>
         <tr>
-          <td colspan='2' style="text-align:center;padding:15px;color:white;background-color:#000;"
+          <td colspan='2' style="text-align:center;padding:15px;color:white;line-height:1.3;background-color:#000;"
             >${Config.orgStreet}</td>
         </tr>
       </tbody>
     </table>`;
     
-  const text = `COMMUTRON Industries Ltd.\n\nAutomated message\n\n${date}(CST)\n\n${plainbody}\n\n\ndo not reply to this email\n\nCustomer Service: ${Config.orgPhone}\n${Config.orgStreet}`;
+  const text = `COMMUTRON Industries Ltd.\n\nAutomated message\n\n${date}(CST)\n\n${plainbody}\n\n\nCustomer Service: ${Config.replyEmail}\n${Config.orgPhone}\n${Config.orgStreet}`;
   
   Email.send({ to, cc, from, replyTo, subject, html, text });
 }
@@ -148,6 +146,7 @@ Meteor.methods({
     this.unblock();
     
     const from = Config.sendEmail;
+    const cc = undefined;
     
     const name = Meteor.user().username.replace('.', ' ').replace('_', ' ');
     
@@ -161,15 +160,11 @@ Meteor.methods({
       const link = '';
       const fine = '';
       
+      const plainbody = `Email Test. — ${date}. — Sent by ${name}. — no action required.`;
+      
       sendInternalEmail(to, subject, date, title, body, foot, link, fine);
       
-      EmailDB.insert({
-        sentTime: new Date(),
-        subject: title,
-        to: to,
-        cc: undefined,
-        text: body
-      });
+      sendExternalEmail( to, cc, subject, date, body, foot, plainbody );
     }
   },
   
