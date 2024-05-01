@@ -58,13 +58,6 @@ const NotifySlide = ({ app })=> {
     });
   }
   
-  // function doSupa() {
-  //   Meteor.call('supabase_sendBasicUpdate', (err)=> {
-  //     err && console.log(err);
-  //     toast('Try Supabase Update');
-  //   });
-  // }
-  
   return(
     <div className='space3v autoFlex'>
       
@@ -152,14 +145,6 @@ const NotifySlide = ({ app })=> {
 };
 
 export default NotifySlide;
-
-/*
-<NotifyAction 
-  title="Supabase"
-  sub="Proteus"
-  doLabel="Send Supabase Test"
-  func={doSupa}
-/>*/
         
 const NotifyAction = ({ title, sub, doLabel, func })=> (
   <div>

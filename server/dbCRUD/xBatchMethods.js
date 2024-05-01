@@ -84,6 +84,22 @@ Meteor.methods({
       Meteor.defer( ()=>{
         Meteor.call('buildNewTraceX', batchNum, accessKey);
       });
+      Meteor.defer( ()=>{
+        const group = GroupDB.findOne({_id: groupId},
+                        {fields:{'group':1,'alias':1,'emailOptIn':1, 'emailPrime':1, 'emailSecond':1
+                      }});
+                      
+        if(group.emailOptIn && group.emailPrime) {
+          const wig = WidgetDB.findOne({_id: widgetId},{fields:{'widget':1,'describe':1}});
+          const ver = VariantDB.findOne({versionKey: vKey},{fields:{'variant':1}});
+          const isW = wig.widget.toUpperCase() + ' ' + ver.variant + ' - ' + wig.describe;
+        
+          Meteor.call('handleExtOrderEmail', 
+            accessKey, group.emailPrime, group.emailSecond, 
+            isW, salesNum, eDate
+          );
+        }
+      });
       return true;
     }else{
       return false;
@@ -166,7 +182,27 @@ Meteor.methods({
         Meteor.defer( ()=>{
           Meteor.call('saveEndState', batchId, accessKey);
         });
-      }
+      }/*else{
+      // needs groupid, widgetid and vkey
+      // needs to be conditional based on change comparison and user selected checkbox to avoid spam
+      // best if it could log so it could tell the user if the latest date has been emailed or not
+        Meteor.defer( ()=>{
+          const group = GroupDB.findOne({_id: groupId},
+                          {fields:{'group':1,'alias':1,'emailOptIn':1, 'emailPrime':1, 'emailSecond':1
+                        }});
+                        
+          if(group.emailOptIn && group.emailPrime) {
+            const wig = WidgetDB.findOne({_id: widgetId},{fields:{'widget':1,'describe':1}});
+            const ver = VariantDB.findOne({versionKey: vKey},{fields:{'variant':1}});
+            const isW = wig.widget.toUpperCase() + ' ' + ver.variant + ' - ' + wig.describe;
+          
+            Meteor.call('handleExtUpdateEmail', 
+              accessKey, group.emailPrime, group.emailSecond, 
+              isW, salesNum, newDate
+            );
+          }
+        });
+      }*/
       return true;
     }else{
       return false;
@@ -377,7 +413,7 @@ Meteor.methods({
       
       if(rType === 'floorRelease') {
         Meteor.defer( ()=>{
-          const batch = XBatchDB.findOne({_id: batchId},{fields:{'groupId':1,'widgetId':1,'salesOrder':1}});
+          const batch = XBatchDB.findOne({_id: batchId},{fields:{'groupId':1,'widgetId':1,'salesOrder':1,'salesEnd':1}});
           const group = GroupDB.findOne({_id: batch.groupId},
                           {fields:{'group':1,'alias':1,'emailOptIn':1, 'emailPrime':1, 'emailSecond':1
                         }});
@@ -387,9 +423,9 @@ Meteor.methods({
             const ver = VariantDB.findOne({versionKey: batch.versionKey},{fields:{'variant':1}});
             const isW = wig.widget.toUpperCase() + ' ' + ver.variant + ' - ' + wig.describe;
           
-            Meteor.call('handleExternalEmail', 
+            Meteor.call('handleExtRelEmail', 
               accessKey, group.emailPrime, group.emailSecond, 
-              isW, batch.salesOrder
+              isW, batch.salesOrder, batch.salesEnd
             );
           }
         });

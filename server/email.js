@@ -1,13 +1,7 @@
 import moment from 'moment';
 import Config from '/server/hardConfig.js';
-// import SECRET from '/server/hardKeys.js';
 import { toCap } from './utility';
 
-//////////////////////////////
-
-// import { createClient } from '@supabase/supabase-js';
-
-/////////////////////////////////////
 
 function sendInternalEmail(to, subject, date, title, body, asid, foot, link, fine) {
   const from = '"Neptune" ' + Config.sendEmail;
@@ -46,7 +40,7 @@ function sendInternalEmail(to, subject, date, title, body, asid, foot, link, fin
 
 }
 
-function sendExternalEmail(to, cc, subject, date, body, foot, plainbody) {
+function sendExternalEmail(to, cc, subject, date, body, foot, fine, plainbody) {
   const from = '"' + Config.orgName  + '" ' + Config.sendEmail;
   const replyTo = Config.replyEmail;
   
@@ -68,6 +62,7 @@ function sendExternalEmail(to, cc, subject, date, body, foot, plainbody) {
             <p style="color:black;margin:1rem 0">${date} (CST)</p>
             <p style="color:black;margin:1rem 0">${body}</p>
             <p style="color:black;margin:1rem 0">${foot}</p>
+            <p style="color:black;margin:1rem 0"><small>${fine}</small></p>
           </td>
         </tr>
         <tr>
@@ -156,15 +151,16 @@ Meteor.methods({
       const date = moment().tz(Config.clientTZ).format('h:mm:ss a, dddd, MMM Do YYYY');
       const title = "Email Test.";
       const body = `Sent by ${name}.`;
+      const asid = '';
       const foot = "no action required.";
       const link = '';
       const fine = '';
       
       const plainbody = `Email Test. — ${date}. — Sent by ${name}. — no action required.`;
       
-      sendInternalEmail(to, subject, date, title, body, foot, link, fine);
+      sendInternalEmail(to, subject, date, title, body, asid, foot, link, fine);
       
-      sendExternalEmail( to, cc, subject, date, body, foot, plainbody );
+      sendExternalEmail( to, cc, subject, date, body, foot, fine, plainbody );
     }
   },
   
@@ -286,7 +282,7 @@ Meteor.methods({
     }else{null}
   },
   
-  handleExternalEmail(accessKey, emailPrime, emailSecond, isW, salesOrder) {
+  handleExtOrderEmail(accessKey, emailPrime, emailSecond, isW, salesOrder, salesEnd) {
     this.unblock();
     const app = AppDB.findOne({orgKey: accessKey},{fields:{'emailGlobal':1}});
     const emailGlobal = app && app.emailGlobal;
@@ -294,19 +290,94 @@ Meteor.methods({
     if(emailGlobal) {
       
       const to = emailPrime;
-        
       const cc = emailSecond || undefined;
       
-      const subject = `Production Notice For Order ${salesOrder}`;
+      const subject = `Production Notice — ${salesOrder}`;
       
       const date = moment().tz(Config.clientTZ).format('h:mm a, dddd, MMM Do YYYY');
+      const dueDate = moment(salesEnd).tz(Config.clientTZ).format('dddd, MMMM Do YYYY');
+      
+      const body = `A Work Order has been issued for your sales order ${'<b>'}${salesOrder}${'</b>'} of ${'<b>'}${toCap(isW, true)}${'</b>'}.`;
+      const foot = `Order due date is set for ${'<b>'}${dueDate}${'</b>'}.`;
+      const fine = 'A notice will be sent when this work order enters production.';
+      
+      const plainbody = `Work Order has been issued for your order — ${salesOrder} — of — ${toCap(isW, true)}.`;
+      
+      sendExternalEmail( to, cc, subject, date, body, foot, fine, plainbody );
+      
+      EmailDB.insert({
+        sentTime: new Date(),
+        subject: 'Production Release',
+        to: to ? to.toString() : undefined,
+        cc: cc ? cc.toString() : undefined,
+        text: plainbody
+      });
+      
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  handleExtUpdateEmail(accessKey, emailPrime, emailSecond, isW, salesOrder, salesEnd) {
+    this.unblock();
+    const app = AppDB.findOne({orgKey: accessKey},{fields:{'emailGlobal':1}});
+    const emailGlobal = app && app.emailGlobal;
+    
+    if(emailGlobal) {
+      
+      const to = emailPrime;
+      const cc = emailSecond || undefined;
+      
+      const subject = `Production Notice — ${salesOrder}`;
+      
+      const date = moment().tz(Config.clientTZ).format('h:mm a, dddd, MMM Do YYYY');
+      const dueDate = moment(salesEnd).tz(Config.clientTZ).format('dddd, MMMM Do YYYY');
+      
+      const body = `New ship due date for your sales order ${'<b>'}${salesOrder}${'</b>'} of ${'<b>'}${toCap(isW, true)}${'</b>'}.`;
+      const foot = `Order due date is set for ${'<b>'}${dueDate}${'</b>'}.`;
+      const fine = 'Once your order is completed, a packing slip will be provided.';
+      
+      const plainbody = `Ship Due Date has been changed for your order — ${salesOrder} — of — ${toCap(isW, true)}.`;
+      
+      sendExternalEmail( to, cc, subject, date, body, foot, fine, plainbody );
+      
+      EmailDB.insert({
+        sentTime: new Date(),
+        subject: 'Due Date Change',
+        to: to ? to.toString() : undefined,
+        cc: cc ? cc.toString() : undefined,
+        text: plainbody
+      });
+      
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  handleExtRelEmail(accessKey, emailPrime, emailSecond, isW, salesOrder, salesEnd) {
+    this.unblock();
+    const app = AppDB.findOne({orgKey: accessKey},{fields:{'emailGlobal':1}});
+    const emailGlobal = app && app.emailGlobal;
+    
+    if(emailGlobal) {
+      
+      const to = emailPrime;
+      const cc = emailSecond || undefined;
+      
+      const subject = `Production Notice — ${salesOrder}`;
+      
+      const date = moment().tz(Config.clientTZ).format('h:mm a, dddd, MMM Do YYYY');
+      const dueDate = moment(salesEnd).tz(Config.clientTZ).format('dddd, MMMM Do YYYY');
       
       const body = `Your order ${'<b>'}${salesOrder}${'</b>'} of ${'<b>'}${toCap(isW, true)}${'</b>'} has ${'<b>'}Entered Production${'</b>'},`;
-      const foot = 'Once your order is completed, a packing slip will be provided.';
+      const foot = `Order due date is set for ${'<b>'}${dueDate}${'</b>'}.`;
+      const fine = 'Once your order is completed, a packing slip will be provided.';
       
       const plainbody = `Your order — ${salesOrder} — of — ${toCap(isW, true)} — has Entered Production.`;
       
-      sendExternalEmail( to, cc, subject, date, body, foot, plainbody );
+      sendExternalEmail( to, cc, subject, date, body, foot, fine, plainbody );
       
       EmailDB.insert({
         sentTime: new Date(),
@@ -339,49 +410,6 @@ Meteor.methods({
       EmailDB.remove({});
       return true;
     }
-  },
-  
-  /* SUPABASE TEST */
-  /*
-  supabase_sendBasicUpdate() {
-    
-    console.log("supa try run");
-    
-    const supabaseUrl = 'https://pwvjsuvpowhhkpqxrfkw.supabase.co';
-    
-    const supabaseKey = process.env.SUPABASE_KEY;
-    // const supabaseKey = SECRET.PRIVATE_SUPABASE_KEY;
-    const supabase = createClient(supabaseUrl, supabaseKey);
-
-    const data = Meteor.call("serverDatabaseSize");
-    
-    async function supaupdate(db) {
-      console.log('supa test called');
-      
-      const { data, error } = await supabase
-      .from('basic_db_status')
-      .insert([
-        { 
-          users: db.u, 
-          groups: db.g,
-          widgets: db.w,
-          variants: db.v,
-          batches: db.b,
-          items: db.i,
-          rapids: db.r,
-          traces: db.t,
-          equips: db.e,
-          maints: db.m,
-        },
-      ])
-      .select();
-      
-      console.log(error);
-    }
-    
-    if(supabaseKey) {
-      supaupdate(data);
-    }
   }
-  */
+  
 });

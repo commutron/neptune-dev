@@ -81,7 +81,7 @@ SyncedCron.add({
 
 SyncedCron.add({
   name: 'Dev Monitor Status',
-  schedule: (parser)=> parser.text('at 5:55 am on Sat'),
+  schedule: (parser)=> parser.text('at 11:00 pm on Fri'),
   job: ()=> goDo('handleDevMonitorEmail')
 });
 
