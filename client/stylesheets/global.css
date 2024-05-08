@@ -336,10 +336,7 @@ summary {
   padding: 1vw;
   cursor: pointer;
 }
-summary:hover {
-  filter: brightness(1.1);
-}
-summary:where(:focus,:active) {
+summary:where(:focus-visible) {
   outline: 1px dashed;
   outline-offset: 1px;
 }

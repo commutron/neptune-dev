@@ -14,6 +14,7 @@
   justify-content: stretch;
   align-content: stretch;
   grid-gap: 0 0;
+  /*isolation: isolate;*/
 }
 
 .altTitle {
@@ -142,9 +143,9 @@ button.stoneExtra {
 }
 .cssProgCore {
   position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%) rotate(0deg);
+	/*top: 50%;*/
+	/*left: 50%;*/
+	/*transform: translate(-50%, -50%) rotate(0deg);*/
 	text-align: center;
 	line-height: 1;
 }
@@ -179,9 +180,9 @@ button.stoneExtra {
   cursor: pointer;
 }
 
-.stone:where(:focus,:hover),
-.crackedTop:where(:focus,:hover), 
-.crackedBot:where(:focus,:hover) { 
+.stone:where(:focus-visible,:hover),
+.crackedTop:where(:focus-visible,:hover), 
+.crackedBot:where(:focus-visible,:hover) { 
   background-color: var(--high-color) !important; 
 }
 
@@ -191,20 +192,23 @@ button.stoneExtra {
   content: "";
   position: fixed;
   z-index: -1;
-  width: 100%;
-  background-color: var(--high-color);
+  width: 11.5vmax;
+  background-color: var(--stoneback);
   opacity: 0;
   pointer-events: none;
 }
 .stone::after {
-  top: 0;
-  height: 100%;
+  align-self: center;
+  justify-self: center;
+  height: 11.5vmax;
   border-radius: 50%;
+  opacity: 1;
 }
 .crackedTop::after {
   top: -5%;
   left: 0;
   height: 55%;
+  height: 5.75vmax;
   border-radius: 9rem 9rem 0 0;
 }
 .crackedBot::after {
@@ -257,7 +261,7 @@ button.stoneExtra {
   cursor: pointer;
 }
 
-.stone:focus {
+.stone:focus-visible {
 	outline: 1px dotted;
 }
 .stone:disabled {
@@ -277,39 +281,38 @@ button.stoneExtra {
   text-align: center;
   text-shadow: 1px 1px black;
   position: absolute;
-  top: 50%;
-  padding: 1vh 1vw;
+  inset: 50% 50%;
+  transform: translate(-50%, -50%) rotate(0deg);
+  aspect-ratio: 1;
+  z-index: 3;
 }
 .doneStoneMask::before,
 .authBanMask::before {
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(0deg);
+  font-size: 10vmax;
   filter: opacity(0.2);
+  width: 100%;
 }
 
 .doneStoneMask::before {
   content: 	"\002714";
-  font-size: calc(3rem + 8vmax);
 }
 
 .authBanMask::before {
   content: 	"\1F6C7";
-  font-size: calc(6rem + 8vmax);
 }
 
 .blockStone::before {
   content: 'All noncons and shortages must be resolved';
   font-size: calc(0.5rem + 1vmin);
-  left: 0;
-  z-index: 3;
-  transform: translate(0, -50%) rotate(0deg);
   width: calc(100% - 2vmin);
-  margin: 0 1vmin;
-  padding: 3vmin 0;
+  padding: 1vmin;
+  max-height: 10vmax;
+  align-content: center;
   background-color: var(--black);
   border-radius: 10px;
   word-break: break-word;
   word-wrap: break-word;
+  text-wrap: pretty;
 }
 
 .crackedTop, .crackedBot {
@@ -579,11 +582,11 @@ n-trib-action-all {
   background-color: rgb(25,25,25);
 }
 .fakeFielset {
-  border-top: 5px dashed rgba(255,255,255,0.5);
+  border-top: 3px dashed rgba(255,255,255,0.5);
   border-right: none;
   border-bottom: none;
   border-left: none;
-  padding: 2.5vmax 1vmax;
+  padding: 2vmax 1vmax;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -591,7 +594,14 @@ n-trib-action-all {
 }
 .fakeFielset label {
   line-height: 1.2;
+  margin: 5px 0;
 }
+.fakeFielset input, .fakeFielset select {
+  display: block;
+}
+.dTopGap { border-top: 4dvh solid var(--dark); }
+.dBotGap { border-bottom: 4dvh solid var(--dark); }
+
 .stoneForm input[type='text'],
 .stoneForm select,
 .stoneForm details {
@@ -708,9 +718,6 @@ n-trib-action-all {
   margin-top: 1rem;
   padding-top: 1rem;
   width: 100%;
-}
-.reStep:last-child {
-  margin-bottom: 5vh;
 }
 .reStep span {
   display: flex;

@@ -1,6 +1,7 @@
 import React from 'react';
 
-import BatchHeaderChunk, { ServeHeaderChunk } from './BatchHeaderChunk';
+import BatchHeaderChunk from './BatchHeaderChunk';
+import ServeHeaderChunk from './ServeHeaderChunk';
 
 const BatchHeaders = ({ 
   oB, hB, sV, traceDT,
@@ -16,7 +17,6 @@ const BatchHeaders = ({
           <ServeHeaderChunk
             key={`${entry.mId}servefixed${index}`}
             sv={entry}
-            app={app}
             rowclss='overGridRowFixed midnightGlow'
             isDebug={isDebug}
           />

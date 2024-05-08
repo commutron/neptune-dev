@@ -6,11 +6,13 @@ import { ToastContainer } from 'react-toastify';
 const HomeIcon = () => {
 
 	const isDebug = Roles.userIsInRole(Meteor.userId(), 'debug');
+	const isReadOnly = Roles.userIsInRole(Meteor.userId(), 'readOnly');
+	const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
 	
   const warningLight = isDebug ? 'debugWarningLight' : '';
   
   return(
-    <div className={'homeIcon '}>
+    <div className='homeIcon'>
       <ContextMenuTrigger
 				id='absoluteHome01'>
 							
@@ -29,10 +31,18 @@ const HomeIcon = () => {
         {Meteor.userId() ? 
           <Fragment>
             <MenuItem onClick={()=>FlowRouter.go('/production')}
-              disabled={Roles.userIsInRole(Meteor.userId(), 'readOnly')}>
+              disabled={isReadOnly}>
               <i className='far fa-paper-plane fa-fw'></i>
               <i className='noCopy'> Production</i>
             </MenuItem>
+            
+            {/*
+            <MenuItem onClick={()=>FlowRouter.go('/process')}
+              disabled={isReadOnly}>
+              <i className='fa-solid fa-location-arrow fa-fw'></i>
+              <i className='noCopy'> Process</i>
+            </MenuItem>
+            */}
             
             <MenuItem onClick={()=>FlowRouter.go('/equipment')}>
               <i className='fa-solid fa-robot fa-fw'></i>
@@ -66,7 +76,7 @@ const HomeIcon = () => {
               <i className='noCopy cap'> {Pref.downstream}</i>
             </MenuItem>
             
-            {Roles.userIsInRole(Meteor.userId(), 'admin') ?
+            {isAdmin ?
               <Fragment>
                 <MenuItem divider />
                 <MenuItem onClick={()=>FlowRouter.go('/app')}>

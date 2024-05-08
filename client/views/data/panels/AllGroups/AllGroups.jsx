@@ -1,7 +1,7 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
 
-import SlidesNested from '/client/components/smallUi/SlidesNested';
+import SlidesNested from '/client/layouts/TaskBars/SlidesNested';
 import GroupLanding from './GroupLanding';
 import GroupSlide from './GroupSlide';
 

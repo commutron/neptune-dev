@@ -85,7 +85,7 @@ const TerminalFindOps = ({
 	return (
 	  <div>
       <div className='centre wide'>
-        <p className='biggest'>¯\_(ツ)_/¯</p>
+        <p className='biggest'>process in process</p>
       </div>
     </div>
   );

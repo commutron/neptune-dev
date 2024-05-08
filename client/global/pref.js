@@ -10,7 +10,7 @@ class Pref {
     
     this.InitialAppSetup = false;
     
-    this.neptuneVersion = '3.15.5';
+    this.neptuneVersion = '3.16.0';
     this.neptuneIs = 'Neptune Process Tracking';
 
     this.prefName = 'default';
@@ -176,7 +176,7 @@ class Pref {
     this.outIssue = 'outstanding issues';
     this.gComm = 'general comments';
     this.nest = 'nest';
-    this.stoneislocked = 'locked. \n unable to proceed';
+    this.stoneislocked = 'locked.\nunable to proceed';
     this.outOfFlow = 'out of flow';
     // bad tracking
     this.fix = 'Repair';

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const Slides = ({ menu, slide, disable, extraClass, children })=> {
+const Slides = ({ menu, lowmenu, slide, disable, extraClass, children })=> {
   
   const [ section, setSection ] = useState( slide || 0 );
   
@@ -27,6 +27,19 @@ const Slides = ({ menu, slide, disable, extraClass, children })=> {
               className={clss}
               disabled={dA[index]}
             >{entry}</button>
+        )})}
+        <span className='flexSpace'></span>
+        {(lowmenu || []).map( (lentry, lindex)=>{
+          let lclss =  section == menu.length + lindex ? 
+                      'slideMenuButton cap slideOn' : 
+                      'slideMenuButton cap slideOff';
+          return(
+            <button
+              key={menu.length + lindex}
+              onClick={()=>handleClick(menu.length + lindex)}
+              className={lclss}
+              disabled={dA[menu.length + lindex]}
+            >{lentry}</button>
         )})}
       </div>
       <div className={`slidesSlide forceScrollStyle ${extraClass || ''}`}>

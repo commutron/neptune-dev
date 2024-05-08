@@ -4,7 +4,7 @@ import Pref from '/client/global/pref.js';
 import HomeIcon from '/client/layouts/HomeIcon';
 import TideFollow from '/client/components/tide/TideFollow';
 
-import SlidesNested from '/client/components/smallUi/SlidesNested';
+import SlidesNested from '/client/layouts/TaskBars/SlidesNested';
 import Landing from '/client/views/equipment/Landing';
 import EquipSlide from '/client/views/equipment/EquipSlide';
 

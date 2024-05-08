@@ -3,6 +3,8 @@ import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 import AppSetSimple from '/client/components/forms/AppSetSimple';
 
+import KpiStat from '/client/components/smallUi/StatusBlocks/KpiStat';
+
 const ScalesTagsSlide = ({ app })=> {
   
   const dfEight = app.latestSerial.eightDigit || 0;
@@ -97,6 +99,8 @@ const ScalesTagsSlide = ({ app })=> {
       
       <TagSlide app={app} />
       
+      <StatSample />
+      
     </div>
   );
 };
@@ -140,10 +144,10 @@ const PriorityScale = ({ app })=> {
         <button type='submit' className='smallAction greenHover'>Save</button>
       </form>
       <div className='vmarginhalf inlineForm'>
-        <span className='progMockMeter pScale4'></span>
-        <span className='progMockMeter pScale3'></span>
-        <span className='progMockMeter pScale2'></span>
-        <span className='progMockMeter pScale1'></span>
+        <span className='progMockMeter blue'></span>
+        <span className='progMockMeter trueyellow'></span>
+        <span className='progMockMeter orange'></span>
+        <span className='progMockMeter darkOrange'></span>
       </div>
     </div>
   );
@@ -221,5 +225,164 @@ const TagSlide = ({ app })=> (
           return ( <li key={index}><i>{entry}</i></li> );
         })}
       </ul>
+  </div>
+);
+
+const StatSample = ()=> (
+  <div className='space3v'>
+    <h2>KPI Stat Samples</h2>
+    
+    <div className='w100'>
+
+      <KpiStat
+        icon='fa-solid fa-star'
+        name='Complete'
+        color='var(--nephritis)'
+      />
+      
+      <KpiStat
+        icon='fa-solid fa-bolt'
+        name='Extended'
+        color='var(--pumpkin)'
+      />
+      
+       <KpiStat
+        num="||"
+        name='On hold'
+        color='var(--wetasphalt)'
+      />
+      
+      <KpiStat
+        num='S!'
+        name='severe'
+        color={'var(--pomegranate)'}
+      />
+      
+      <KpiStat
+        num='U'
+        name='urgent'
+        color={'var(--pumpkin)'}
+      />
+      
+      
+      <KpiStat
+        num={'4'}
+        name='high'
+        color={'var(--carrot)'}
+      />
+      
+      
+      <KpiStat
+        num={'34'}
+        name='medium'
+        color={'var(--sunflower)'}
+      />
+      
+      <KpiStat
+        num={'56'}
+        name='low'
+        color={'var(--peterriver)'}
+      />
+      
+      
+      <KpiStat
+        num='X'
+        name='unset'
+        color='unset'
+      />
+      
+      
+      <KpiStat
+        num='🛠'
+        name='Service'
+        color='var(--midnightblue)'
+      />
+      
+      
+      <KpiStat
+        icon={'fas fa-minus'}
+        name={'no activity'}
+        color={'var(--emerald)'}
+      />
+      
+      <KpiStat
+        icon={'fas fa-shoe-prints'}
+        name={'previous'}
+        color={'var(--emerald)'}
+      />
+      
+      <KpiStat
+        icon={'fas fa-walking'}
+        name={'one person'}
+        color={'var(--emerald)'}
+      />
+      
+      <KpiStat
+        icon={'fas fa-running'}
+        name={'multiple people'}
+        color={'var(--emerald)'}
+      />
+      
+      
+      <KpiStat
+        num='±'
+        name={'Indiscernible'}
+        color={'var(--silver)'}
+      />
+      
+      <KpiStat
+        num='-8'
+        name={'Dreadful'}
+        color={'var(--amethyst)'}
+      />
+      
+      <KpiStat
+        num='-4'
+        name={'Terrible'}
+        color={'var(--amethyst)'}
+      />
+      
+      <KpiStat
+        num='-2'
+        name={'Awful'}
+        color={'var(--amethyst)'}
+      />
+      
+      <KpiStat
+        num='-1'
+        name={'Below Target'}
+        color={'var(--amethyst)'}
+      />
+      
+      <KpiStat
+        num='+0'
+        name={'On Target'}
+        color={'var(--amethyst)'}
+      />
+      
+      <KpiStat
+        num='+2'
+        name={'Above Target'}
+        color={'var(--amethyst)'}
+      />
+      
+      <KpiStat
+        num='+4'
+        name={'Exceptional'}
+        color={'var(--amethyst)'}
+      />
+      
+      <KpiStat
+        num='+8'
+        name={'Tremendous'}
+        color={'var(--amethyst)'}
+      />
+      
+      <KpiStat
+        num='+20'
+        name={'Unlikely'}
+        color={'var(--amethyst)'}
+      />
+    </div>
   </div>
 );

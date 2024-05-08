@@ -43,9 +43,10 @@
   flex-direction: row;
   align-items: center;
 }
-
-.navButtonWrap:focus-within,
-.navBarWrap:focus-within {
+.navButtonWrap button:focus-visible,
+.navButtonWrap a:focus-visible,
+.navBarWrap a:focus-visible,
+.navBarWrap button:focus-visible {
   outline-color: var(--neptuneColor);
   outline-style: double;
   outline-width: thick;

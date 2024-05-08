@@ -23,7 +23,7 @@ const MiniStack = ({
     letterSpacing: '1px'
   };
   
-  const per = (val)=> Math.ceil( ( val / t ) * 100 );
+  const per = (val)=> Math.max(0, Math.ceil( ( val / t ) * 100 ) );
   
   const by = per(dataArr[0]);
   const dn = by + per(dataArr[1]);
@@ -31,7 +31,7 @@ const MiniStack = ({
   
   let bar = {
     width: '100%',
-    height: '0.8rem',
+    height: '0.5rem',
     margin: '2px 0',
     backgroundImage: `linear-gradient(to right, rgb(200,200,200) 0% ${by}%, rgb(39,174,96) ${by}% ${dn}%, rgb(46,204,113) ${dn}% ${nw}%, white ${nw}% 100%`
   };

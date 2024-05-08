@@ -262,7 +262,7 @@ const NotifyMini = ({ unice, inbox, users })=> {
           </form>
           
           <p className='smaller darkgrayT line15x'
-          >Messages are temporarily logged for the purposes of management oversight and user safety.  Message logs can be accessed by administrators and management.  Logs are subject to Commutron policy and Canadian privacy laws.  Logs are automatically deleted after 90 days.</p>
+          >Messages are retained for 90 days and can be accessed by management. Message content is subject to Commutron policy and Canadian privacy laws.</p>
         </div>
         :
         <div>

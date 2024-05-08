@@ -111,7 +111,7 @@ const FirstForm = ({
   
   return(
     <Fragment>
-      <div className='fakeFielset centreText big cap'>{sStep}</div>
+      {!repeatOp && <div className='vmarginhalf centreText medBig cap'>{sStep} {Pref.trackFirst}</div>}
       
       {inspectCombo && inspectCombo.length > 1 ?
         <div className='fakeFielset balancer'>

@@ -68,6 +68,7 @@ n-tide-task select {
   height: 2.5vmax;
   max-width: 25vmax !important;
   width: 100%;
+  border-color: white;
 }
 n-tide-task label {
   display: block;

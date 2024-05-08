@@ -64,7 +64,8 @@ const XFormBar = ({
             check={showVerifyState === true}
             change={()=>handleVerify(null, true)}
             lock={!verAuth} 
-            icon='fa-solid fa-redo-alt'
+            // icon='fa-solid fa-redo-alt'
+            icon='fa-solid fa-check-double'
             color='butBlue'
           />}
           <FormToggle

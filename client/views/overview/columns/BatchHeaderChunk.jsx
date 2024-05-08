@@ -1,7 +1,6 @@
 import React from 'react';
-import Pref from '/client/global/pref.js';
 
-import { PrioritySquare } from '/client/components/smallUi/StatusBlocks/PrioritySquare';
+import { PriorityKPI } from '/client/components/smallUi/StatusBlocks/PriorityKPI';
 import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock';
 
 const BatchHeaderChunk = ({ 
@@ -30,15 +29,17 @@ const BatchHeaderChunk = ({
   
   return(
     <div className={`${rowclss} ${releasedToFloor} ${highG} ${highT} ${storm}`}>
-      <PrioritySquare
+      
+      <PriorityKPI
         batchID={id}
         ptData={tBatch}
+        app={app}
         isDone={isDone}
         oRapid={tBatch ? tBatch.oRapid : null}
-        app={app}
         isDebug={isDebug}
-        showLess={true}
+        core={true}
       />
+        
       <div>
         <ExploreLinkBlock 
           type='batch' 
@@ -55,31 +56,3 @@ const BatchHeaderChunk = ({
 };
 
 export default BatchHeaderChunk;
-
-
-export const ServeHeaderChunk = ({ 
-  sv, app, 
-  rowclss, nameLth,
-  isDebug
-})=> {
-  
-  isDebug && console.log(sv);
-  
-  return(
-    <div className={rowclss}>
-      <PrioritySquare
-        app={app}
-        showLess={true}
-        altNumber='🛠'
-      />
-      <div>
-        <ExploreLinkBlock type='equip' keyword={sv.equip} />
-      </div>
-      <div className='cap'>{
-        sv.title.length <= (nameLth || 75) ? 
-        sv.title : 
-        sv.title.substring(0, 65) + '...'
-      } {Pref.maintain}</div>
-    </div>
-  );
-};

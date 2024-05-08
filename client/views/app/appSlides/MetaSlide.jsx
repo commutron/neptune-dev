@@ -15,7 +15,7 @@ const MetaSlide = ()=> (
         <p>Source avaliable <a href='https://github.com/commutron/neptune-dev' target='_blank'>https://github.com/commutron/neptune-dev</a></p>
         <br />
         <h3>Authored by</h3>
-        <p>Matthew Andreas 2016-2021 <a href='https://github.com/mattandwhatnot' target='_blank'>https://github.com/mattandwhatnot</a></p>
+        <p>Matthew Andreas 2016-2024 <a href='https://github.com/mattandwhatnot' target='_blank'>https://github.com/mattandwhatnot</a></p>
         <br />
         <h3>with the generous support of</h3>
         <p>Robert Leonardo, Todd Ector, Hollis Scheller, Adam Wonnick

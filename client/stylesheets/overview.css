@@ -193,7 +193,7 @@
 
 .overGridRowFixed > div:first-child,
 .downRowFixed > div:first-child {
-  font-size: 2vmin !important;
+  font-size: 1.75dvh !important;
   justify-content: center;
   padding: 0;
   width: 4vmin;
@@ -421,10 +421,10 @@
   
 .overGridRowFixedHeader:first-child { 
   border-right: none; }
-.overGridRowFixed > div:first-child > div,
-.downRowFixed > div:first-child > div {
-  display: inline-flex;
-  align-items: center; }
+/*.overGridRowFixed > div:first-child > div,*/
+/*.downRowFixed > div:first-child > div {*/
+/*  display: inline-flex;*/
+/*  align-items: center; }*/
 
 .darkTheme .overviewToolbar,
 .darkTheme .downstreamToolbar {

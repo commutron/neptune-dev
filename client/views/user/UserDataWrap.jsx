@@ -6,7 +6,7 @@ import { branchesSort } from '/client/utility/Arrays.js';
 
 import { PlainFrame } from '/client/layouts/MainLayouts';
 import Spin from '/client/components/tinyUi/Spin';
-import Slides from '/client/components/smallUi/Slides';
+import Slides from '/client/layouts/TaskBars/Slides';
 import ActivityPanel from './ActivityPanel';
 import ServicePanel from './ServicePanel';
 import InboxPanel from './InboxPanel';

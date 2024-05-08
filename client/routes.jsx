@@ -186,8 +186,8 @@ privlegedRoutes.route('/production', {
   }
 });
 
-privlegedRoutes.route('/express', {
-  name: 'terminal',
+privlegedRoutes.route('/process', {
+  name: 'process',
   action() {
     mount(CleanLayout, {
       content: (<TerminalData />)

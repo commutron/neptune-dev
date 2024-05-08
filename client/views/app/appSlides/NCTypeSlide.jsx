@@ -2,7 +2,7 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import SlidesNested from '/client/components/smallUi/SlidesNested';
+import SlidesNested from '/client/layouts/TaskBars/SlidesNested';
 import AppSetSimple from '/client/components/forms/AppSetSimple';
 
 const NCTypeSlide = ({ app })=> {

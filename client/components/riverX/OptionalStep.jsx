@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Pref from '/client/global/pref.js';
 
-const RedoStep = ({ 
+const OptionalStep = ({ 
   batchId, seriesId, itemData,
   brancheS, app, close 
 })=> {
@@ -69,24 +69,16 @@ const RedoStep = ({
   
   return(
     <div className='dTopGap stoneForm'>
-      <div className='vmarginhalf centreText medBig cap'>Repeat {types}</div>
+      <div className='vmarginhalf centreText medBig cap'><em>Optional Step</em></div>
       
       <div className='fakeFielset'>
-        <label htmlFor='redoCommField' className='wideStone'>
-          <textarea 
-            id='redoCommField'
-            defaultValue={redoCommTxt}
-            onInput={(e)=>redoCommSet(e.target.value)}
-            required>
-          </textarea>Repetition Reason
-        </label>
           
-      {redoCommTxt.trim().length < 5 ? null :
+      {/*redoCommTxt.trim().length < 5 ? null :
         reSteps.map( (st, index)=> {
           const tstep = app.trackOption.find( x => x.key === st.key );
           const isAuth = checkAccess(tstep, st.type);
-          if(st.type === 'test') {
-            return(
+          
+          return(
               <div key={index} className='wideStone reStep medBig cap'
                 >{!tstep && `${Pref.rapidExd} `}{st.step} Test
                 <span>
@@ -117,35 +109,10 @@ const RedoStep = ({
         				</span>
       				</div>
   		      );
-          }else{
-            return(
-              <div key={index} className='wideStone reStep medBig cap'
-                >{!tstep && `${Pref.rapidExd} `}{st.step} {st.type}
-                <span>
-          				<button
-                	  className='reInspect'
-            				name={`${st.step}  ${st.type}`}
-            				id={st.key+'redook'}
-            				onClick={()=>passS(st.key, st.step, st.type, 'redone')}
-            				disabled={lock || !isAuth}>
-            				<label>OK</label>
-          				</button>
-          				<button
-                	  className='reFail'
-            				name={st.step + ' fail'}
-            				id={st.key+'redong'}
-            				onClick={()=>passS(st.key, st.step, st.type, false)}
-            				disabled={lock || !isAuth}>
-            				<label>NG</label>
-          				</button>
-        				</span>
-      				</div>
-            );
-          }
-      })}
+      )*/}
       </div>
     </div>
   );
 };
 
-export default RedoStep;
+export default OptionalStep;

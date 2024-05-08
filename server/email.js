@@ -205,7 +205,7 @@ Meteor.methods({
       
       const db = Meteor.call("serverDatabaseSize");
       
-      const body = `Users: ${db.u}\nGroups: ${db.g}\nWidgets: ${db.w}\nVariants: ${db.v}\nBatches: ${db.b}\nItems: ${db.i}\nRapids: ${db.r}\nTraces: ${db.t}\nEquips: ${db.e}\nMaints: ${db.m}`;
+      const body = `Users: ${db.u}, Groups: ${db.g}, Widgets: ${db.w}, Variants: ${db.v}, Batches: ${db.b}, Items: ${db.i}, Rapids: ${db.r}, Traces: ${db.t}, Equips: ${db.e}, Maints: ${db.m}`;
       const asid = `OrgPIN: ${pin}`;
       const foot = `WorkingHours: ${hrs}`;
       const link = `config: tz:${Config.clientTZ} reply:${Config.replyEmail} tel:${Config.orgTel}`;

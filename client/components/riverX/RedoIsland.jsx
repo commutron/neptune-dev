@@ -3,6 +3,7 @@ import Pref from '/client/global/pref.js';
 
 import FirstForm from '/client/components/riverX/FirstForm';
 import RedoStep from '/client/components/riverX/RedoStep';
+import OptionalStep from '/client/components/riverX/OptionalStep';
 
 const RedoIsland = ({
   batchId, seriesId, itemData, 
@@ -41,17 +42,19 @@ const RedoIsland = ({
   
   return(
     <div className='stoneForm noCopy blue'>
-    	<div className='wide'>
+    	<div className='wide dBotGap'>
       	<button
       		className='smallAction onblueHover medBig w100'
       		onClick={()=>handleVerify(null, false)}>
-      		<i className="fas fa-arrow-left fa-fw gap"></i>Cancel
+      		<i className="fa-solid fa-times fa-fw gap"></i>Cancel
       	</button>
     	</div>
+    	
+    	<div className='vmarginhalf centreText medBig cap'>Repeat {Pref.trackFirst}</div>
       	
     	{!optionVerify &&
         <div className='fakeFielset'>
-          <div>
+          <label htmlFor='repeatStep'>
             <select
               id='repeatStep'
               className='cap'
@@ -62,10 +65,9 @@ const RedoIsland = ({
               {flowFirsts.map( (dt)=> (
                   <option key={dt.key} value={dt.key}>{dt.step}</option>
               ))}
-            </select>
-            <label htmlFor='repeatStep'>Repeat {Pref.trackFirst}</label>
-          </div>
-          <div>
+            </select>Repeat {Pref.trackFirst}
+          </label>
+          <label htmlFor='change'>
             <datalist id='commonReasons'>
               {(app.repeatOption || []).map( (entry)=>{
                 if(entry.live === true) {
@@ -79,9 +81,8 @@ const RedoIsland = ({
       		    list='commonReasons'
       		    onChange={(e)=>repeatOpSet(e.target.value)}
       		    defaultValue={repeatOpState || ''}
-      		    required />
-            <label htmlFor='change'>Process Change</label>
-          </div>
+      		    required />Process Change
+      		</label>
         </div> }
       
       {optionVerify || (stepKeyState && repeatOpState) ?
@@ -106,6 +107,17 @@ const RedoIsland = ({
           brancheS={brancheS}
           app={app}
           close={()=>handleVerify(null, false)} />
+      }
+      
+      {optionVerify || (stepKeyState && repeatOpState) ? null :
+        <OptionalStep
+          batchId={batchId}
+          seriesId={seriesId}
+          itemData={itemData}
+          brancheS={brancheS}
+          app={app}
+          close={()=>handleVerify(null, false)}
+        />
       }
       
     </div>

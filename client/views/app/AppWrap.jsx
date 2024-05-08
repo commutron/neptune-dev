@@ -2,7 +2,7 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import { branchesSort } from '/client/utility/Arrays.js';
 
-import Slides from '/client/components/smallUi/Slides';
+import Slides from '/client/layouts/TaskBars/Slides';
 
 import BranchesSlide from './appSlides/BranchesSlide';
 import BehaviorSlide from './appSlides/BehaviorSlide';
@@ -37,9 +37,10 @@ const AppWrap = ({ isAdmin, isDebug, users, app })=> {
           <b><i className='fas fa-link fa-fw gapR'></i>Page Links</b>,
           <b><i className='fas fa-bell fa-fw gapR'></i>Notifications</b>,
           <b><i className='fas fa-robot fa-fw gapR'></i>CRON Jobs</b>,
-          <b><i className='fas fa-toolbox fa-fw gapR'></i>Data Repair</b>,
-          <b><i className='fas fa-copyright fa-fw gapR'></i>Meta</b>
-        ]}>
+          <b><i className='fas fa-toolbox fa-fw gapR'></i>Data Repair</b>
+        ]}
+        lowmenu={[<b><i className='fas fa-copyright fa-fw gapR'></i>Meta</b>]}
+      >
           
         <BehaviorSlide key={0} app={app} />
         <BranchesSlide key={1} app={app} isDebug={isDebug} />

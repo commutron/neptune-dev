@@ -1,13 +1,3 @@
-.pScale0 { background-color: var(--pomegranate); }
-.pScale1 { background-color: var(--pumpkin); }
-.pScale2 { background-color: var(--carrot); }
-.pScale3 { background-color: var(--sunflower); }
-.pScale4 { background-color: var(--peterriver); }
-
-.moreEphasis {
-  border: 0.25rem #720300 solid !important;
-}
-
 .overGridRowScroll .perf,
 .downRowScroll  .perf {
   font-size: 2dvh;

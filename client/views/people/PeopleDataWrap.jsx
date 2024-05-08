@@ -7,7 +7,7 @@ import { PlainFrame } from '/client/layouts/MainLayouts';
 import Pref from '/client/global/pref.js';
 import Spin from '../../components/tinyUi/Spin';
 
-import Slides from '../../components/smallUi/Slides';
+import Slides from '/client/layouts/TaskBars/Slides';
 
 import DashSlide from './DashSlide/DashSlide';
 import PerformanceSlide from './PerformanceSlide';
@@ -58,16 +58,18 @@ const PeopleDataWrap = ({
             <b><i className='fas fa-history fa-fw gapR'></i>Daily History</b>,
             <b><i className='fas fa-tachometer-alt fa-fw gapR'></i>Weekly Utilization</b>,
             <b><i className='far fa-calendar-alt fa-fw gapR'></i>Work Schedule</b>,
-            <b><i className='fas fa-user-lock fa-fw gapR'></i>Permissions</b>,
-            <b><i className='fas fa-users-cog fa-fw gapR'></i>Accounts Manager</b>,
             <b><i className='fas fa-hourglass-end fa-fw gapR'></i>Overtime Errors</b>,
             <b><i className='fas fa-envelopes-bulk fa-fw gapR'></i>Email Log</b>,
             <b><i className='fas fa-comments fa-fw gapR'></i>Message Log</b>,
-            <b><i className='fas fa-dice fa-fw gapR'></i>Revolving PIN</b>,
+            <b><i className='fas fa-user-lock fa-fw gapR'></i>Permissions</b>,
+            <b><i className='fas fa-users-cog fa-fw gapR'></i>Accounts Manager</b>
+          ]}
+          lowmenu={[
+            <b><i className='fas fa-dice fa-fw gapR'></i>Revolving PIN</b>
           ]}
           disable={[
-            false, false, false, false, false,
-            antiAuth, antiAuth, antiAuth, antiAuth, antiAuth
+            false, false, false, false, 
+            antiAuth, antiAuth, antiAuth, false, antiAuth, antiAuth
           ]}>
           
           <DashSlide
@@ -76,7 +78,8 @@ const PeopleDataWrap = ({
             loggedIn={loggedIn}
             traceDT={traceDT}
             brancheS={brancheS}
-            isDebug={isDebug} />
+            isDebug={isDebug} 
+          />
             
           <HistorySlide
             key={1}
@@ -86,7 +89,8 @@ const PeopleDataWrap = ({
             traceDT={traceDT}
             brancheS={brancheS}
             allUsers={true}
-            isDebug={isDebug} />
+            isDebug={isDebug} 
+          />
           
           <PerformanceSlide
             key={2}
@@ -95,7 +99,8 @@ const PeopleDataWrap = ({
             users={userS}
             traceDT={traceDT}
             brancheS={brancheS}
-            isDebug={isDebug} />
+            isDebug={isDebug} 
+          />
             
           <ScheduleSlide
             key={3}
@@ -103,9 +108,22 @@ const PeopleDataWrap = ({
             user={user}
             users={userS}
             isAdmin={isAdmin}
-            isPeopleSuper={isPeopleSuper} />
+            isPeopleSuper={isPeopleSuper} 
+          />
+
+          {isAdmin || isPeopleSuper ?
+            <TimeErrorCheck key={4} />
+          : null }
           
-          <div key={4}>
+          {isAdmin || isPeopleSuper ?
+            <EmailLogSlide key={5} />
+          : null }
+          
+          {isAdmin || isPeopleSuper ?
+            <DMLogSlide key={6} />
+          : null }
+          
+          <div key={7}>
             <PermissionHelp 
               auths={[...Pref.auths,...Pref.areas,'BRKt3rm1n2t1ng8r2nch']} 
               admin={false} 
@@ -114,31 +132,21 @@ const PeopleDataWrap = ({
           
           {isAdmin || isPeopleSuper ?
             <AccountsManagePanel 
-              key={5} 
+              key={8} 
               app={app}
               users={userS}
               traceDT={traceDT}
               brancheS={brancheS}
-              isDebug={isDebug} />
-          : null }
-          
-          {isAdmin || isPeopleSuper ?
-            <TimeErrorCheck key={6} />
-          : null }
-          
-          {isAdmin || isPeopleSuper ?
-            <EmailLogSlide key={7} />
-          : null }
-          
-          {isAdmin || isPeopleSuper ?
-            <DMLogSlide key={8} />
+              isDebug={isDebug}
+            />
           : null }
           
           {isAdmin || isPeopleSuper ?
             <RevolvingPINCheck 
               key={9}
               isAdmin={isAdmin}
-              isPeopleSuper={isPeopleSuper} />
+              isPeopleSuper={isPeopleSuper}
+            />
           : null }
           
         </Slides>

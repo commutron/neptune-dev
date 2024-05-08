@@ -14,7 +14,8 @@ const StoneVerify = ({
   
   let svar = {
   	'--high-color': 'var(--peterriver)',
-  	'stoneback': 'var(--belizeHole)'
+  	'--stoneback': 'var(--belizeHole)',
+  	'--stoneborder': 'var(--belizeHole)',
   };
   
   let sstyle = {

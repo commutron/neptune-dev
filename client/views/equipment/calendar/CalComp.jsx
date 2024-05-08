@@ -33,7 +33,7 @@ const CalComp = ({ events, getEvents, defaultView, height })=> {
   const eventPropGetter = useCallback(
     ({done, pass, willpass, mId, start, end}) => ({
       ...(mId !== undefined && {
-        className: 'midnightblue whiteT miniAction'
+        className: 'midnightblue miniAction'
       }),
       ...(done && {
         className: `green ${clicker(start, end)}`

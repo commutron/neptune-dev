@@ -14,10 +14,11 @@ import BlockList from '/client/components/bigUi/BlockList';
 
 import AlterFulfill from '/client/components/forms/Batch/AlterFulfill';
 
-import PrioritySquareData from '/client/components/smallUi/StatusBlocks/PrioritySquare';
 import PerformanceData from '/client/components/smallUi/StatusBlocks/PerformanceStatus';
 import TideActivityData from '/client/components/tide/TideActivity';
 import BatchXStatus from '/client/components/forms/Batch/BatchXStatus';
+
+import PriorityKPIData from '/client/components/smallUi/StatusBlocks/PriorityKPI';
 
 import StepsProgressX from '/client/components/bigUi/StepsProgress/StepsProgressX';
 
@@ -195,15 +196,15 @@ const StatusGroup = ({ id, live, done, salesEnd, lock, app, isDebug })=> {
   return(
     <div className='balance'>
       {live &&
-        <div style={blockwrap} className='fillup'>
-          <PrioritySquareData
-            batchID={id}
-            app={app}
-            dbDay={salesEnd}
-            isDone={done}
-            isDebug={isDebug} />
-        </div>
+        <PriorityKPIData
+          batchID={id}
+          app={app}
+          dbDay={salesEnd}
+          isDone={done}
+          isDebug={isDebug}
+        />
       }
+      
       {!lock &&
         <div style={blockwrap} className='fillup'>
           <TideActivityData

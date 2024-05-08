@@ -129,18 +129,6 @@ const XDoProCard = ({
             id={batchData._id} 
             rType='floorRelease'
             actionText={Pref.release} />;
-
-  const insertWaterfall = 
-          <WaterfallSelect 
-            batchData={batchData}
-            allFlow={flowData.flowCounts.allFlow}
-            fallProg={fallData.fallCounts.fallProg}
-            allFall={allFall}
-            nowater={!fallAction && !seriesData && !rapid}
-            rapid={rapid}
-            rapIs={rapidData.rapIs}
-            app={app} />;
-            
   
   
   const insertRiver = 
@@ -176,8 +164,6 @@ const XDoProCard = ({
           
           !fallData.floorRel ? insertAxion : // @ Release
           
-            fallAction ? insertWaterfall // @ Waterfall
-          : 
             !expand ? <div>batch</div> // Batch Tab Info
             : 
               null

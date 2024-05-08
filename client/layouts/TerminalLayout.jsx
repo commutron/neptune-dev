@@ -10,19 +10,31 @@ import TideControl from '/client/components/tide/TideControl/TideControl';
 import TideFollow from '/client/components/tide/TideFollow';
 import { NonConMerge } from '/client/utility/NonConOptions';
 
+// import EquipMenu from '/client/views/production/lists/EquipMenu';
+import TimeStop from '/client/components/tide/TimeStop';
+
+
+
 const TerminalWrap = ({ 
   itemSerial, itemData, batchData, seriesData, rapidsData,
   widgetData, radioactive, groupAlias, 
-  user, users, app,
-  action, tideLockOut, standAlone,
+  user, time, users, app, 
+  brancheS, plainBatchS, canMulti,
+  eqAlias, equipId, maintId,
+  action, tideLockOut, standAlone, defaultWide,
   children
 })=> {
   
+  const [ expand, expandSet ] = useState( defaultWide || false);
+  
   const [ isFirst, isFirstSet ] = useState(false);
+  const [ showVerifyState, showVerifySet ] = useState(false);
+  const [ optionVerify, optionVerifySet ] = useState(false);
   
   const [ rapIs, rapIsSet ] = useState(false);
   
   const [ ncTypesComboFlat, ncTypesComboSet ] = useState([]);
+  
   
   useEffect( ()=> {
     if(Meteor.user()) {
@@ -79,44 +91,69 @@ const TerminalWrap = ({
   }, [batchData, widgetData, app]);
   
   
-  const gAlias = groupAlias;
-  const bData = batchData;
-  const iS = itemSerial;
-  const append = bData && iS ? bData.batch : null;
+  function handleVerify(value, direct) {
+    showVerifySet( !showVerifyState ); 
+    optionVerifySet( value );
+    handleExpand(direct);
+  }
   
-  const et = !user || !user.engaged ? false : user.engaged.tKey;
-  const tide = !bData || !bData.tide ? [] : bData.tide;
-  const tideFloodGate = tide.find( 
-    x => x.tKey === et && x.who === Meteor.userId() 
-  );
-    
-  const exploreLink = iS && bData ?
-                      '/data/batch?request=' + bData.batch + '&specify=' + iS :
+  function handleExpand(direct) {
+    const openState = direct !== null ? direct : !expand;
+    expandSet( openState );
+    Session.set( 'riverExpand', openState );
+  }
+  
+  const bData = batchData;
+  const append = bData && itemSerial ? bData.batch : null;
+  
+  const eng = user?.engaged || false;
+  const etPro = eng?.task === 'PROX';
+  const etMlt = eng?.task === 'MLTI';
+  // 'MAINT', 'EQFX';
+  const etKey = eng?.tKey;
+  const timeOpen = etPro ? 
+                    (bData?.tide || []).find( x => x.tKey === etKey && x.who === Meteor.userId() ) 
+                   : etMlt ?
+                    (bData?.tide || []).find( x => ( x.tKey === etKey[0] || x.tKey === etKey[1] ) && x.who === Meteor.userId() ) 
+                   : time?._id === etKey &&
+                    (time?.link === maintId || time?.link === equipId) ? 
+                    time : null;
+
+  const exploreLink = itemSerial && bData ?
+                      '/data/batch?request=' + bData.batch + '&specify=' + itemSerial :
                       bData ?
                       '/data/batch?request=' + bData.batch :
-                      gAlias ?
-                      '/data/overview?request=groups&specify=' + gAlias :
+                      groupAlias ?
+                      '/data/overview?request=groups&specify=' + groupAlias :
+                      eqAlias ?
+                      '/equipment/' + eqAlias :
                       '/data/overview?request=groups';
-  
+
+  const viewContainer = standAlone ? 'pro_100' :
+                        !expand ? 'pro_20_80' : 
+                                    'pro_40_60';
+                        
   return(
-    <div className='pro_100 containerPro'>
+    <div className={viewContainer + ' containerPro do_not_use'}>
       <div className='tenHeader'>
         <div className='topBorder' />
         <HomeIcon />
-        {bData && 
+        {bData || etKey ? 
           <div className='proLeft'>
-            <TideControl 
-              batchID={bData._id} 
-              tideKey={et} 
-              tideFloodGate={tideFloodGate}
+            <TimeStop
+              tIdKey={etKey}
+              timeOpen={timeOpen}
+              etPro={etPro}
+              etMlt={etMlt}
               tideLockOut={tideLockOut}
-              stopOnly={true} />
-          </div>}
-        {iS && isFirst ?
+            />
+          </div>
+        : null}
+        {itemSerial && isFirst ?
           <div className='auxLeft firstBadge' data-steps={isFirst}>
             <span className='fa-stack'>
-              <i className="fas fa-certificate fa-stack-2x fa-fw blueT"></i>
-              <i className="fas fa-check-double fa-stack-1x fa-fw" ></i>
+              <i className="fas fa-certificate fa-stack-2x fa-fw blueT" data-fa-transform="right-1"></i>
+              <i className="fas fa-check-double fa-stack-1x fa-fw" data-fa-transform="right-12"></i>
             </span>
           </div>
         : null}
@@ -129,23 +166,44 @@ const TerminalWrap = ({
             aria-label='Explore'
             className='taskLink auxTip'
             onClick={()=>FlowRouter.go(exploreLink)}>
-            <i className='fas fa-rocket' data-fa-transform='left-1 down-1'></i>
+            <i className='fas fa-rocket' data-fa-transform='left-1'></i>
           </button>
         </div>
-        <TideFollow proRoute={bData && bData.batch} />
+        <TideFollow tOpen={timeOpen} canMulti={canMulti} />
       </div>
-    
+      
+      <Fragment>
+        
         <div className='proPrime forceScrollStyle darkTheme'>
           {React.cloneElement(children,
             { 
-              tideKey: et,
+              tideKey: etKey,
+              engagedPro: etPro,
+              engagedMlti: etMlt,
+              timeOpen: timeOpen,
+              
+              expand: expand, 
+              handleExpand: (d)=>handleExpand(d),
+              
               ncTypesCombo: ncTypesComboFlat,
               
-              tideFloodGate: tideFloodGate
+              showVerifyState: showVerifyState,
+              optionVerify: optionVerify,
+              handleVerify: (q, d)=>handleVerify(q, d)
             }
           )}
         </div>
-
+      
+        
+      </Fragment>
+      
+      {canMulti ?
+        <TideMulti
+          user={user}
+          brancheS={brancheS}
+          plainBatchS={plainBatchS}
+        />
+      : null}
     </div>
   );
 };

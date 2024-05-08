@@ -40,35 +40,23 @@
   background-color: rgb(30,30,30);
 }
 
-.darkTheme .jump:hover, 
-.darkTheme .jump:focus, 
-.darkTheme .jump:active {
+.darkTheme .jump:where(:hover,:focus-visible,:active) {
   border-bottom-color: #3498db;
 }
-.darkTheme .jumpBar {
-  border-left-color: white;
-}
-.darkTheme .jumpBar:hover,
-.darkTheme .jumpBar:focus,
-.darkTheme .jumpBar:active {
-  border-bottom-color: #3498db;
-}
-.darkTheme .leapText:hover,
-.darkTheme .leapText:focus,
-.darkTheme .leapText:active {
-  color: var(--peterriver);
-  border-bottom-color: var(--peterriver);
-}
+
+/*.darkTheme .leapText:where(:hover,:focus-visible,:active) {*/
+/*  color: var(--peterriver);*/
+/*  border-bottom-color: var(--peterriver);*/
+/*}*/
+
 .darkTheme .leapBar {
 	color: var(--white);
 	border-top-color: var(--silverfade);
   border-bottom-color: var(--silverfade);
 }
-.darkTheme .leapBar:hover, 
-.darkTheme .leapBar:focus,
-.darkTheme .leapBar:active {
-  background-color: var(--silverfade);
-}
+/*.darkTheme .leapBar:where(:hover,:focus-visible,:active) {*/
+/*  background-color: var(--silverfade);*/
+/*}*/
 
 .darkTheme .flatpickr-input ~ .form-control {
   color: white;

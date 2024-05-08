@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import Pref from '/client/global/pref.js';
 
-import SlidesNested from '/client/components/smallUi/SlidesNested';
+import SlidesNested from '/client/layouts/TaskBars/SlidesNested';
 
 import DeleteUser from '/client/components/forms/User/DeleteUser';
 
@@ -172,7 +172,7 @@ export const PermissionHelp = ({ auths, admin })=> {
             <li>Set {Pref.maintain}-service patterns</li>
             <li>Set {Pref.maintain}-service tasks</li>
             <li>Receive an email if {Pref.maintain}-service is missed</li>
-            <p className='small'>*Email is sent after the grace period ends</p> 
+            <p className='small'>*Email is sent when the grace period begins and ends</p> 
           </ul>
         </ul>
       : null}

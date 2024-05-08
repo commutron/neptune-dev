@@ -5,7 +5,7 @@ import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
 import ModelSmall from '/client/components/smallUi/ModelSmall';
-import PrioritySquareData from '/client/components/smallUi/StatusBlocks/PrioritySquare';
+import PriorityKPIData from '/client/components/smallUi/StatusBlocks/PriorityKPI';
 
 
 const AlterFulfill = ({ 
@@ -79,8 +79,7 @@ const AlterFulfillForm = ({ batchId, createdAt, end, app, selfclose })=> {
   return(
     <form className='centre vmargin' onSubmit={(e)=>save(e)}>
       <div className='centreRow max600'>
-        {app.alterFulfillReasons && 
-          app.alterFulfillReasons.map( (entry, index)=>{
+        {(app.alterFulfillReasons || []).map( (entry, index)=>{
             return(
               <label 
                 key={index}
@@ -121,12 +120,13 @@ const AlterFulfillForm = ({ batchId, createdAt, end, app, selfclose })=> {
         ><b>{loadState}</b> incomplete {Pref.xBatchs} are scheduled for this ship day</p>
       }
       
-      <div className='vmarginhalf'>
-        <PrioritySquareData
+      <div className='balance vmarginhalf'>
+        <PriorityKPIData
           batchID={batchId}
           app={app}
           mockDay={endDateState}
-          showExtra={true} />
+          stOpen={true}
+        />
       </div>
     </form>
   );

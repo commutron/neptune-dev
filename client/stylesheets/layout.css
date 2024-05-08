@@ -13,6 +13,18 @@ main {
   z-index: 8;
 }
 
+.do_not_use::after {
+  position: absolute;
+  inset: 0;
+	margin: auto;
+	height: 100%;
+	aspect-ratio: 1;
+  content: "PROTOTYPE DO NOT USE";
+  color: rgb(255,255,255,0.1);
+  font-size: 20dvh;
+  text-align: center;
+}
+
 .forceScroll { overflow-y: auto !important; }
 .wideScroll { overflow-x: auto !important; }
 .forceScrollStyle::-webkit-scrollbar {
@@ -52,9 +64,9 @@ main {
 
 .loading {
   position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(0deg);
+  inset: 0;
+	margin: auto;
+	/*aspect-ratio: 1;*/
   z-index: 10;
   display: flex;
   flex-direction: column;
@@ -253,6 +265,10 @@ main {
 .homeIconLink, .homeIconLogo {
   width: 8dvh;
   height: 8dvh;
+}
+.homeIconLink:focus-visible {
+  outline-color: white;
+  outline-offset: -0.2dvh;
 }
 .homeIconLogo { padding: 1dvh; }
 
@@ -508,6 +524,8 @@ main {
 
 .slidesMenu {
   grid-area: slidemenu;
+  display: flex;
+  flex-direction: column;
   background-color: rgb(35,35,35);
 }
 .slidesNestedMenu {
@@ -917,9 +935,7 @@ n-sm-model-content {
 .vmarginquarter { margin: 6px 0; }
 .vtop { margin-top: 2vh; }
 .vgap { margin-bottom: 2vh; }
-.dmargin {
-  border-top: 48px solid var(--dark);
-}
+
 .bmargin { margin-bottom: 24px; }
 .wmargin { 
   margin-right: auto;
