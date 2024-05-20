@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-
 const ModelInline = ({ title, color, border, icon, lock, children })=> {
   
   const [ sect, setSect ] = useState( false );

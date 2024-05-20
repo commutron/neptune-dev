@@ -47,12 +47,9 @@ const BatchDetailChunk = ({
       {!isDone ?
         <TideActivitySquare 
           batchID={oB._id} 
-          acData={tBatch}
-          isDebug={isDebug} />
+          acData={tBatch} />
       :
-        <TideActivityData
-          batchID={oB._id}
-          isDebug={isDebug} />
+        <TideActivityData batchID={oB._id} />
       }
       
       <BatchTopStatus

@@ -22,7 +22,7 @@ const XFormBar = ({
     if(user.shFocusReset) {
       document.getElementById('lookup').focus();
     }else{
-      document.getElementById('ncRefs').focus();
+      document.querySelector('#ncRefs')?.focus();
     }
   }
   

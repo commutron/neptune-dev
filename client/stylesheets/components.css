@@ -147,27 +147,44 @@ n-timeline-item:last-child n-timeline-marker:after {
   }
 }
 
-.kpiStat {
-  width: clamp(100px, 100%, 250px);
-  border: 1px solid var(--kpiColor, rgb(149,165,166));
+.dashNumBox {
+  min-width: 10vmin;
+  min-height: 10vmin;
+  font-size: 5vmin;
+  border: none;
+  padding: 1vmin 1.5vmin;
+  margin: 0 0.5vmin;
+  text-align: center;
+}
+.dashNumBox p {
+  font-size: 2vmin;
+  margin: 0;
+}
+.dashNumBox, .kpiStat {
   background-color: color-mix(in srgb, var(--kpiColor, rgb(149,165,166)) 50%, white);
+  box-shadow: 0 0px 4px -1px var(--kpiColor, rgb(149,165,166));
+}
+.kpiStat {
+  width: clamp(100px, 100%, 200px);
+  border: 1px solid var(--kpiColor, rgb(149,165,166));
   margin: 5px 0;
-  min-height: 4dvh;
   color: black;
 }
-
+.kpiStat, .keyData {
+  min-height: 4dvh;
+}
 .keyData {
   display: grid;
   grid-auto-columns: minmax(4vmin, min-content) 4fr;
   grid-auto-flow: column;
-  min-height: 4dvh;
   max-height: 5dvh;
   line-height: 1;
   padding: 0;
   list-style-type: none;
   user-select: none;
-  font-size: 2dvmin;
   text-align: center;
+  text-wrap: pretty;
+  cursor: default;
 }
 .keyData div {
   padding: 5px;
@@ -176,18 +193,19 @@ n-timeline-item:last-child n-timeline-marker:after {
   place-content: center;
   place-items: center;
 }
-
 .keyData div:first-child {
   background-color: var(--kpiColor, rgb(149,165,166));
+  font-size: clamp(14px, 2dvmin, 17px);
   font-weight: 600;
   width: 100%;
 }
-
 .keyData div:nth-child(2) {
   background-color: color-mix(in srgb, var(--kpiColor, rgb(149,165,166)) 75%, white);
-  text-transform: uppercase;
+  font-size: clamp(13px, 1.75dvmin, 16px);
 }
-
-.inDepth {
-  overflow: hidden;
+.kpiStat:has(> div) > .keyData {
+  cursor: pointer;
+}
+.kpiStat:has(> div)[open] {
+  width: clamp(100px, 100%, 350px);
 }

@@ -320,6 +320,17 @@ Meteor.methods({
     }});
   },
   
+  setOneXBatchEvent(accessKey, batchId, eventTitle, eventDetail, unique) {
+    XBatchDB.update({_id: batchId, orgKey: accessKey, 'events.unique': { $ne: unique } }, {
+      $push : { events : { 
+        title: eventTitle,
+        detail: eventDetail,
+        time: new Date(),
+        unique: unique
+      }
+    }});
+  },
+  
   pushCustomEvent(batchId, eventTitle, eventDetail) {
     if(Roles.userIsInRole(Meteor.userId(), ['edit','run'])) {
       const orgKey = Meteor.user().orgKey;

@@ -292,34 +292,45 @@ Meteor.methods({
     try {
       let loop = false;
       
-      if( !stat || typeof stat !== 'string' ) {
-        null;
-      }else if( stat === 'newUser' ) {
-        loop = countNewUser;
-      }else if( stat === 'newGroup' ) {
-        loop = countNewGroup;
-      }else if( stat === 'newWidget' ) {
-        loop = countNewWidget;
-      }else if( stat === 'newVariant' ) {
-        loop = countNewVariant;
-      }else if( stat === 'newBatch' ) {
-        loop = countNewBatch;
-      }else if( stat === 'doneBatch' ) {
-        loop = countDoneBatch;
-      }else if( stat === 'newItem' ) {
-        loop = countNewItem;
-      }else if( stat === 'doneItem' ) {
-        loop = countDoneItem;
-      }else if( stat === 'newNC' ) {
-        loop = countNewNC;
-      }else if( stat === 'newSH' ) {
-        loop = countNewSH;
-      }else if( stat === 'failItem' ) {
-        loop = countTestFail;
-      }else if( stat === 'scrapItem' ) {
-        loop = countScrap;
-      }else{
-        null;
+      switch (stat) {
+        case 'newUser':
+          loop = countNewUser;
+          break;
+        case 'newGroup':
+          loop = countNewGroup;
+          break;
+        case 'newWidget':
+          loop = countNewWidget;
+          break;
+        case 'newVariant':
+          loop = countNewVariant;
+          break;
+        case 'newBatch':
+          loop = countNewBatch;
+          break;
+        case 'doneBatch':
+          loop = countDoneBatch;
+          break;
+        case 'newItem':
+          loop = countNewItem;
+          break;
+        case 'doneItem':
+          loop = countDoneItem;
+          break;
+        case 'newNC':
+          loop = countNewNC;
+          break;
+        case 'newSH':
+          loop = countNewSH;
+          break;
+        case 'failItem':
+          loop = countTestFail;
+          break;
+        case 'scrapItem':
+          loop = countScrap;
+          break;
+        default:
+          null;
       }
       
       if( !loop || typeof cycles !== 'number' ) {

@@ -493,6 +493,40 @@ Meteor.methods({
     }
   },
   
+  addOpX(batchId, seriesId, bar, step, pass, com) {
+    if(!Roles.userIsInRole(Meteor.userId(), 'xray')) {
+      return false;
+    }else{
+      const orgKey = Meteor.user().orgKey;
+      const optKey = Config.optVerify || "adhocxray";
+      
+      XSeriesDB.update({_id: seriesId, orgKey: orgKey, 'items.serial': bar}, {
+        $push : { 'items.$.history': {
+          key: optKey,
+          step: step,
+          type: 'sample',
+          good: pass,
+          time: new Date(),
+          who: Meteor.userId(),
+          comm : com
+      }}});
+      
+      const username = Meteor.user().username;
+      const unqkey = 'optional_x-ray_' + optKey;
+      Meteor.defer( ()=>{
+        Meteor.call(
+          'setOneXBatchEvent', 
+          orgKey,
+          batchId, 
+          'Optional X-Ray', 
+          `Includes X-Ray inspection (first opted by ${username})`,
+          unqkey
+        );
+      });
+      return true;
+    }
+  },
+  
   checkNestX(serial) {
     const elsewhere = XSeriesDB.findOne({"items.subItems": { $in: [ serial ] } },{fields:{'_id':1}});
     const isSubed = !elsewhere ? false : true; 

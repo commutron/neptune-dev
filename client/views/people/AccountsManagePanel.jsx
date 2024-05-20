@@ -76,6 +76,7 @@ const AccountsManagePanel = ({ app, users, traceDT, brancheS, isDebug })=> {
                       id={entry._id}
                       name={entry.username}
                       org={entry.org}
+                      keys={Pref.keys}
                       auths={Pref.auths}
                       areas={Pref.areas}
                       brancheS={brancheS}

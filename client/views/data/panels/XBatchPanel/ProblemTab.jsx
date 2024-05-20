@@ -2,16 +2,24 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 
 import NonConRate from '/client/components/charts/NonCon/NonConRate';
-import { HasNonCon } from '/client/components/bigUi/NonConMiniTops';
-import { NonConPer } from '/client/components/bigUi/NonConMiniTops';
-import { LeftFxNonCon } from '/client/components/bigUi/NonConMiniTops';
-import { LeftInNonCon } from '/client/components/bigUi/NonConMiniTops';
-import NonConStatusPie from '/client/components/charts/NonCon/NonConStatusPie';
-import { HasShortfall } from '/client/components/bigUi/ShortfallMiniTops';
-import { RefCount } from '/client/components/bigUi/ShortfallMiniTops';
-import { PartsShort } from '/client/components/bigUi/ShortfallMiniTops';
-import { LeftToResolve } from '/client/components/bigUi/ShortfallMiniTops';
-import ShortfallStatusPie from '/client/components/charts/Blockers/ShortfallStatusPie';
+import { 
+  TotalNonCon,
+  HasNonCon, 
+  NonConPer, 
+  IsResNonCon, 
+  IsSkipNonCon, 
+  LeftFxNonCon, 
+  ReadyInNonCon, 
+  LeftInNonCon
+} from '/client/components/bigUi/NonConMiniTops';
+import { 
+  TotalShortfall,
+  HasShortfall,
+  RefCount,
+  PartsShort,
+  // LeftToResolve,
+  ShortDec, ShortPass, ShortWait, ShortRes
+} from '/client/components/bigUi/ShortfallMiniTops';
 import TabsLite from '/client/components/smallUi/Tabs/TabsLite';
 import NonConBubble from '/client/components/charts/NonCon/NonConBubble';
 import NonConBar from '/client/components/charts/NonCon/NonConBar';
@@ -37,33 +45,44 @@ const ProblemTab = ({
   
   return(
     <div className='space'>
-      <div className='balance'>
+      <div className='balance gapsC'>
         <div className='vmarginhalf centreSelf centreText'>
           <p className='small cap'>{Pref.nonCons}</p>
           {seriesData ?
-            <div className='gapsC rowWrap'>  
-              <NonConStatusPie nonCons={nonConArrayClean} />
+            <div className='gapsC balance'>
               <span>
-                <HasNonCon noncons={srsNonCon} items={srsItems} />
-                <NonConPer noncons={srsNonCon} items={srsItems} />
-                <LeftFxNonCon noncons={srsNonCon} />
-                <LeftInNonCon noncons={srsNonCon} />
+                <TotalNonCon noncons={nonConArrayClean} />
+                <HasNonCon noncons={nonConArrayClean} items={srsItems} />
+                <NonConPer noncons={nonConArrayClean} items={srsItems} />
+              </span>  
+              <span>  
+                <IsSkipNonCon noncons={nonConArrayClean} />
+                <LeftFxNonCon noncons={nonConArrayClean} />
+                <ReadyInNonCon noncons={nonConArrayClean} />
+                <LeftInNonCon noncons={nonConArrayClean} />
+                <IsResNonCon noncons={nonConArrayClean} />
               </span>
+              
             </div>
           : <h4>Not Tracking {Pref.nonCons}</h4>}
         </div>
         
-        
         <div className='vmarginhalf centreText'>
           <p className='small cap'>{Pref.shortfalls}</p>
           {seriesData ?
-            <div className='gapsC rowWrap'>  
-              <ShortfallStatusPie shortfalls={srsShorts} />
+            <div className='gapsC balance'>  
               <span>
+                <TotalShortfall shortfalls={srsShorts} />
                 <HasShortfall shortfalls={srsShorts} items={srsItems} />
                 <PartsShort shortfalls={srsShorts} />
                 <RefCount shortfalls={srsShorts} />
-                <LeftToResolve shortfalls={srsShorts} />
+                {/*<LeftToResolve shortfalls={srsShorts} />*/}
+              </span>
+              <span>
+                <ShortDec shortfalls={srsShorts} />
+                <ShortPass shortfalls={srsShorts} />
+                <ShortWait shortfalls={srsShorts} />
+                <ShortRes shortfalls={srsShorts} />
               </span>
             </div>
           : <h4>Not Tracking {Pref.shortfalls}</h4>}

@@ -111,7 +111,7 @@ const FirstForm = ({
   
   return(
     <Fragment>
-      {!repeatOp && <div className='vmarginhalf centreText medBig cap'>{sStep} {Pref.trackFirst}</div>}
+      {!repeatOp && <div className='space1v centreText medBig cap'>{sStep} {Pref.trackFirst}</div>}
       
       {inspectCombo && inspectCombo.length > 1 ?
         <div className='fakeFielset balancer'>
@@ -175,11 +175,12 @@ const FirstForm = ({
           <textarea
   			    type='text'
   			    id='issue'
+  			    rows={1}
   			    onChange={(e)=>flaw(e)}>
   			</textarea>{Pref.outIssue}</label>
 			</div>
 			
-			<div className='balancer overscroll'>
+			<div className='fakeFielset space2v'>
         <button
           type='button'
           id='goBad'
@@ -201,7 +202,6 @@ const FirstForm = ({
         <br /><i className='medBig whiteT'>OK</i></button>
       </div>
       
-
     </Fragment>
   );
 };

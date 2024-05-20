@@ -17,7 +17,7 @@ const AlterFulfill = ({
   const title = canDo && !lock ? `Alter ${batch || Pref.xBatch} ${Pref.end}` : `${aT}\n${lT}`;
   return(
     <ModelSmall
-      button={'Alter ' + Pref.end}
+      button='Alter'
       title={title}
       color='blueT'
       icon='far fa-calendar-alt'

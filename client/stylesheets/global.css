@@ -1,4 +1,3 @@
-
 /* global object CSS declarations go here */
 *, *::after, *::before {
   -webkit-box-sizing: border-box;
@@ -246,7 +245,7 @@ option {
 
 textarea {
   min-width: 15rem;
-  min-height: 3rem;
+  min-height: 2rem;
   border-color: inherit;
 }
 

@@ -6,7 +6,6 @@ import Pref from '/client/global/pref.js';
 import { min2hr, toCap } from '/client/utility/Convert.js';
 
 import TagsModule, { HoldFlag } from '/client/components/bigUi/TagsModule';
-import ModelInline from '/client/layouts/Models/ModelInline';
 
 import ReleaseAction from '/client/components/bigUi/ReleasesModule';
 import BlockForm from '/client/components/forms/BlockForm';
@@ -14,11 +13,12 @@ import BlockList from '/client/components/bigUi/BlockList';
 
 import AlterFulfill from '/client/components/forms/Batch/AlterFulfill';
 
-import PerformanceData from '/client/components/smallUi/StatusBlocks/PerformanceStatus';
-import TideActivityData from '/client/components/tide/TideActivity';
 import BatchXStatus from '/client/components/forms/Batch/BatchXStatus';
 
 import PriorityKPIData from '/client/components/smallUi/StatusBlocks/PriorityKPI';
+import ActivityKPIData from '/client/components/smallUi/StatusBlocks/ActivityKPI';
+import PerformKPIData from '/client/components/smallUi/StatusBlocks/PerformKPI';
+import KpiStat from '/client/components/smallUi/StatusBlocks/KpiStat';
 
 import StepsProgressX from '/client/components/bigUi/StepsProgress/StepsProgressX';
 
@@ -48,7 +48,7 @@ const InfoTab = ({
     <div className='cardify oneTwoThreeContainer'>
       <span className='oneThirdContent'>
       
-      <div className='centreText'>
+      <div className='centreText balance'>
         <h3 className='leftText'>Status</h3>      
         
         <StatusGroup
@@ -61,8 +61,7 @@ const InfoTab = ({
           isDebug={isDebug}
         />
         
-        <div className='cap middle'>
-          <p>Ship Due: <b>{shipDue.format("MMMM Do, YYYY")}</b></p>
+        <div className='cap middle kpiStat'>
           <AlterFulfill
             batchId={b._id}
             createdAt={b.createdAt}
@@ -70,30 +69,34 @@ const InfoTab = ({
             app={app}
             lock={(b.completed === true && !isDebug ) || b.lock ? Pref.isDone : false}
             canDo={Roles.userIsInRole(Meteor.userId(), ['edit', 'sales'])}
-            noText={true}
             lgIcon={true}
             isDebug={isDebug} />
+          <p>Ship Due:<br /><b>{shipDue.format("MMMM Do, YYYY")}</b></p>
         </div>
         
         {ontime === null ? null :
-          <div className='centreText'><em>Shipped {ontime ? 'On Time' : 'Late'}</em></div>}
-        
+          <KpiStat
+            icon='fa-solid fa-truck-fast'
+            name={`Shipped ${ontime ? 'On Time' : 'Late'}`}
+            color='var(--nephritis)'
+          />
+        }
         
         {!b.completed && !released ?
-        <ModelInline 
-          title={Pref.release} 
-          color='green' 
-          border='borderGreen'
-          icon='fa-solid fa-flag'
-        >
-          <ReleaseAction 
-            id={b._id} 
-            rType='floorRelease'
-            actionText={Pref.release}
-            contextText={`to ${Pref.floor}`}
-            qReady={b.quoteTimeBudget?.[0].timeAsMinutes > 0}
+          <KpiStat
+            icon='fa-solid fa-flag'
+            name={Pref.release}
+            color='var(--peterriver)'
+            more={
+              <ReleaseAction 
+                id={b._id} 
+                rType='floorRelease'
+                actionText={Pref.release}
+                contextText={`to ${Pref.floor}`}
+                qReady={b.quoteTimeBudget?.[0].timeAsMinutes > 0}
+              />
+            }
           />
-        </ModelInline>
         :null}
         
         <BatchXStatus 
@@ -205,16 +208,10 @@ const StatusGroup = ({ id, live, done, salesEnd, lock, app, isDebug })=> {
         />
       }
       
-      {!lock &&
-        <div style={blockwrap} className='fillup'>
-          <TideActivityData
-            batchID={id}
-            app={app} />
-        </div>
-      }
-      <div style={blockwrap} className='fillup'>
-        <PerformanceData batchID={id} />
-      </div>
+      {!lock && <ActivityKPIData batchID={id} app={app} /> }
+      
+      <PerformKPIData batchID={id} />
+      
     </div>
   );
 };

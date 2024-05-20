@@ -1,9 +1,8 @@
 import React, { useRef, useState, useEffect } from 'react';
-import NumStat from '/client/components/tinyUi/NumStat';
 
-import './style';
+import KpiStat from './KpiStat';
 
-const PerformanceData = ({ batchID, mini })=> {
+const PerformKPIData = ({ batchID })=> {
   
   const thingMounted = useRef(true);
   const [ pfData, setPerform ] = useState(null);
@@ -22,19 +21,19 @@ const PerformanceData = ({ batchID, mini })=> {
   }, [batchID]);
   
   return(
-    <PerformanceSquare perf={pfData} mini={mini} /> 
+    <PerformKPI perf={pfData} /> 
   );
 };
 
-export default PerformanceData;
+export default PerformKPIData;
 
 
-export const PerformanceSquare = ({ perf })=> {
+export const PerformKPI = ({ perf })=> {
   
-  const pos = perf === null ? '±' : perf > 0 ? '+' : '';
+  const pos = perf === null ? '±' : perf >= 0 ? '+' : '';
   
-  const golden = <b className='gapR numFont'>{`${pos}${perf === null ? '' : perf}`}</b>;
-
+  const golden = `${pos}${perf === null ? '' : perf}`;
+  
   const pfText = 
     perf === null ? 'Indiscernible' :
     perf <= -8 ? 'Dreadful' :
@@ -46,14 +45,16 @@ export const PerformanceSquare = ({ perf })=> {
     perf >= 2 ? 'Above Target' :
     // perf >= 0 ? 
     'On Target';
-    
+  
+  const exp = <p className='margin5'><small>Performance is a factor of progress, budgeted time and nonconformances.</small></p>;
+  
   return(
-    <NumStat
-      num={<span className='perf'>{golden}</span>}
-      name='Performance'
-      title={`Performance: ${pfText}`}
-      color='blackblackT'
-      size='bold bigger'
+    <KpiStat
+      title='Performance'
+      num={golden}
+      name={pfText}
+      color='var(--amethyst)'
+      more={exp}
     />
   );
 };

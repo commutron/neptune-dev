@@ -190,11 +190,11 @@ button.stoneExtra {
 .crackedTop::after,
 .crackedBot::after {
   content: "";
-  position: fixed;
+  position: absolute;
   z-index: -1;
   width: 11.5vmax;
-  background-color: var(--stoneback);
-  opacity: 0;
+  background-color: var(--stoneborder);
+  /*opacity: 0;*/
   pointer-events: none;
 }
 .stone::after {
@@ -204,41 +204,12 @@ button.stoneExtra {
   border-radius: 50%;
   opacity: 1;
 }
-.crackedTop::after {
-  top: -5%;
-  left: 0;
-  height: 55%;
-  height: 5.75vmax;
-  border-radius: 9rem 9rem 0 0;
-}
-.crackedBot::after {
-  bottom: -5%;
-  left: 0;
-  height: 55%;
-  border-radius: 0 0 9rem 9rem;
-}
-.stone:active::after {
+.stone:active::after,
+.crackedTop:active::after,
+.crackedBot:active::after {
   animation: pulselite 500ms;
   animation-iteration-count: infinite;
 }
-.crackedTop:active::after,
-.crackedBot:active::after {
-  animation: pulselitehalf 500ms;
-  animation-iteration-count: infinite;
-}
-.fail2step.crackedBot::after {
-  transition: box-shadow 100ms linear;
-  opacity: 1;
-  box-shadow: 0 0 0px 3px var(--dark),
-              0 0 0px 6px var(--high-color);
-}
-.extraFail:active {
-  transition: outline-width 100ms linear;
-  outline-width: 3px;
-  outline: solid var(--high-color);
-  outline-offset: 0px;
-}
-
 .stone:disabled:active,
 .stone:disabled:active::after,
 .crackedTop:disabled:active,
@@ -318,7 +289,7 @@ button.stoneExtra {
 .crackedTop, .crackedBot {
   width: 11.5vmax;
   height: 5.75vmax;
-  z-index: 2;
+  position: relative;
   background-position: top;
   background-size: 80%;
   background-repeat: no-repeat;
@@ -337,8 +308,31 @@ button.stoneExtra {
   background-image: url(test.svg);
   background-color: var(--pomegranate);
   --high-color: var(--alizarin);
+  --stoneborder: var(--pomegranate);
 }
-.crackedBot:where(:hover,:active) { z-index: 2; }
+.crackedTop::after {
+  top: -5%;
+  left: 0;
+  height: 6vmax;
+  border-radius: 9rem 9rem 0 0;
+}
+.crackedBot::after {
+  bottom: -5%;
+  left: 0;
+  height: 6vmax;
+  border-radius: 0 0 9rem 9rem;
+}
+.fail2step.crackedBot::after {
+  transition: box-shadow 100ms linear;
+  opacity: 1;
+  box-shadow: 0 0 2vmax 1vmax var(--stoneborder);
+}
+.extraFail:active {
+  transition: outline-width 100ms linear;
+  outline-width: 3px;
+  outline: solid var(--high-color);
+  outline-offset: 0px;
+}
 
 .nestBox {
   padding: 3vh 1vw;
@@ -586,7 +580,7 @@ n-trib-action-all {
   border-right: none;
   border-bottom: none;
   border-left: none;
-  padding: 2vmax 1vmax;
+  padding: 1vmax;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -598,6 +592,11 @@ n-trib-action-all {
 }
 .fakeFielset input, .fakeFielset select {
   display: block;
+}
+.fakeFielset.space2v { 
+  padding: 2vmax;
+  gap: 2vmax;
+  justify-content: space-evenly;
 }
 .dTopGap { border-top: 4dvh solid var(--dark); }
 .dBotGap { border-bottom: 4dvh solid var(--dark); }
@@ -611,7 +610,7 @@ n-trib-action-all {
 .wideStone {
   min-width: 11vmax;
   width: -moz-fit-content;
-  width: fit-content;
+  width: 80%;
   max-width: 30vmax;
   min-height: 1rem;
 
@@ -714,15 +713,25 @@ n-trib-action-all {
 }
 
 .reStep {
-  border-top: 2px solid white;
-  margin-top: 1rem;
-  padding-top: 1rem;
   width: 100%;
+}
+.reStep:not(:nth-child(-n+1)) {
+  margin-top: 0.5rem;
+}
+.reStep:not(:nth-child(-n+2)) {
+  padding-top: 0.5rem;
+  border-top: 2px dashed rgba(255,255,255,0.5);
 }
 .reStep span {
   display: flex;
   justify-content: space-evenly;
   flex-wrap: wrap;
+  column-gap: 2vmax;
+  padding-inline: 1vmax;
+}
+.reStep > span label {
+  line-height: 1;
+  cursor: pointer;
 }
 .reInspect {
   --high-color: var(--emerald);
@@ -737,27 +746,29 @@ n-trib-action-all {
   --high-color: var(--pomegranate);
 }
 .reInspect, .reTest, .reFail, .reBy {
-  border-radius: 25rem;
+  border-radius: 2rem;
   font-size: 1rem;
   font-weight: 600;
-  margin: 0.5rem 0;
-  padding: 0.5rem 0.75rem;
+  margin-block: 0.5rem;
+  padding: 0.25rem 0.5rem 0.5rem 0.5rem;
   letter-spacing: 1px;
   border: 3px solid;
   border-color: white;
   background-color: var(--high-color);
   color: white;
+  flex: 1;
 }
-.firstBad:where(:hover,:focus,:active),
-.firstGood:where(:hover,:focus,:active),
-.reInspect:where(:hover,:focus,:active),
-.reTest:where(:hover,:focus,:active),
-.reFail:where(:hover,:focus,:active),
-.reBy:where(:hover,:focus,:active) {
-  border-color: var(--high-color);
-  box-shadow: 
-    0 0 0 3px white,
-    0 0 0 6px var(--high-color);
+.optStep > .reTest,
+.optStep > .reFail {
+  border-radius: 0.25rem;
+}
+.firstBad:where(:hover,:focus-visible,:active),
+.firstGood:where(:hover,:focus-visible,:active),
+.reInspect:where(:hover,:focus-visible,:active),
+.reTest:where(:hover,:focus-visible,:active),
+.reFail:where(:hover,:focus-visible,:active),
+.reBy:where(:hover,:focus-visible,:active) {
+  box-shadow: 0 0 0 3px var(--high-color);
 }
 
 .scrapBanner {

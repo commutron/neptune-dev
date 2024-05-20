@@ -80,32 +80,33 @@ const ExploreLanding = ({ app, isDebug }) => {
             number={xlive || "0"}
             name={Pref.live}
             title={now}
-            borderColour='blue'
+            borderColour="var(--peterriver)"
           />
           
           <NumStatBox
             number={xlive ? xRapid : "0"}
             name={`${Pref.live} ${Pref.rapidEx}`}
             title={now}
-            borderColour='orange'
+            borderColour="var(--carrot)"
           />
           
           <NumStatBox
             number={xTotal ? xDone : "0"}
             name='Completed'
             title={start}
-            borderColour='green'
+            borderColour="var(--emerald)"
           />
            <NumStatBox
             number={xTotal || "0"}
             name='Total'
             title={start}
+            borderColour="var(--concrete)"
           />
           <NumStatBox
             number={xlocked || "0"}
             name='Locked'
             title={start}
-            borderColour='purple'
+            borderColour="var(--amethyst)"
           />
         </div>
         

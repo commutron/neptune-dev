@@ -59,7 +59,8 @@ const StoneFinish = ({
 	
 	let svar = {
 		'--high-color': 'var(--amethyst)',
-		'--stoneback': 'var(--wisteria)'
+		'--stoneback': 'var(--wisteria)',
+		'--stoneborder': 'var(--wisteria)'
 	};
 		
 	let sstyle = {

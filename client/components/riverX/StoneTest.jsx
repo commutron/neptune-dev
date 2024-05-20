@@ -58,7 +58,8 @@ const StoneTest = ({
   
   let svar = {
   	'--high-color': 'var(--turquoise)',
-  	'stoneback': 'var(--greenSea)'
+  	'--stoneback': 'var(--greenSea)',
+  	'--stoneborder': 'var(--greenSea)'
   };
   	
   let sstyle = {

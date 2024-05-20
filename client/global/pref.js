@@ -16,17 +16,20 @@ class Pref {
     this.prefName = 'default';
     
     // Roles
-    this.auths = [
+    this.keys = [
       'debug',
       'readOnly',
       'nightly',
       'peopleSuper',
-      'equipSuper',
+      'equipSuper'
+    ];
+    this.auths = [
       'qa',
       'remove',
       'create',
       'edit',
       'run',
+      'xray',
       'test',
       'verify',
       'inspect',
@@ -176,6 +179,7 @@ class Pref {
     this.outIssue = 'outstanding issues';
     this.gComm = 'general comments';
     this.nest = 'nest';
+    this.opInspect = 'x-ray inspect';
     this.stoneislocked = 'locked.\nunable to proceed';
     this.outOfFlow = 'out of flow';
     // bad tracking

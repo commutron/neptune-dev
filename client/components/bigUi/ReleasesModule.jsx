@@ -23,7 +23,7 @@ const ReleaseAction = ({ id, rType, actionText, contextText, qReady })=> {
   let sty = {
     padding: '10px',
     height: 'fit-content',
-    border: contextText ? '0' : '3px solid var(--emerald)'
+    border: contextText ? '0' : '3px solid var(--peterriver)'
   };
   
   const access = Roles.userIsInRole(Meteor.userId(), ['run', 'kitting']);
@@ -52,7 +52,7 @@ const ReleaseAction = ({ id, rType, actionText, contextText, qReady })=> {
         <button
           onClick={(e)=>handleRelease(e, false)}
           title={title}
-          className='action greenSolid cap'
+          className='action blueSolid cap'
           style={sty}
           disabled={!access || !qReady}
         >{actionText} {contextText}</button>

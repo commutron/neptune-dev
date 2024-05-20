@@ -132,7 +132,6 @@ const UpstreamDetailChunk = ({
       <TideActivitySquare 
         batchID={oB._id} 
         acData={tBatch}
-        app={app}
       />
       
       <BatchTopStatus

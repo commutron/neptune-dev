@@ -43,6 +43,7 @@ class Config {
     this.regex810 = RegExp(/^(\d{8,10})$/);
     this.regexNS = RegExp(/^(\d{6}\-\d{7})$/);
     this.regexEmail = RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+    this.optKey = '0p7i0nk3yXRAY';
     
     this.sendEmail = 'no-reply@commutron.ca';
     this.replyEmail = 'orders@commutron.ca';

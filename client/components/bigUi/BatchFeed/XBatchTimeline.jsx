@@ -65,7 +65,7 @@ const XBatchTimeline = ({
   const calFunc = (d)=> moment(d).calendar(null, {sameElse: calString});
   
   const canEdit = Roles.userIsInRole(Meteor.userId(), 'edit');
-                    
+
   return(
     <div className='scrollWrap'>
       <div className='infoFeed'>
@@ -76,7 +76,7 @@ const XBatchTimeline = ({
               id='inputRel'
               onChange={(e)=>releaseSet(!incRelease)}
               defaultChecked={incRelease} />
-            <label htmlFor='inputRel'>Green-Lights</label>
+            <label htmlFor='inputRel'>Clearances</label>
           </span>
           <span title={`${Pref.trackFirst} verifications`} className='middle'>
             <input
@@ -127,12 +127,9 @@ const XBatchTimeline = ({
               <HistoryBlock
                 key={dt.time.toISOString()+ix}
                 entry={dt}
-                batch={batchData.batch}
                 seriesId={seriesId}
                 serial={dt.serial}
-                done={doneBatch}
                 canEdit={canEdit}
-                showHeader={true}
                 cal={calFunc} /> 
             );
           }else if( typeof dt.changeKey === 'string' ) {

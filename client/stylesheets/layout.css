@@ -137,7 +137,7 @@ main {
 .stick {
   background-color: inherit;
 }
-
+.layerOne { z-index: 1; }
 .flexSpace { flex-grow: 2; }
 
 .autoSelf { margin: 0 auto; }

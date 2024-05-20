@@ -2,7 +2,7 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 
 import GroupForm from '/client/components/forms/Group/GroupForm';
-import NumBox from '/client/components/tinyUi/NumBox';
+import KpiStat from '/client/components/smallUi/StatusBlocks/KpiStat';
 import TrendLine from '/client/components/charts/Trends/TrendLine';
 import VariantNewList from '../../lists/VariantNewList';
 
@@ -30,27 +30,30 @@ const GroupLanding = ({ groupData, widgetData, variantData, app })=> {
   return(
     <div className='overscroll'>
       
-      <div className='wide centreRow'>
-        <span className='flexSpace' />
-        
-        <NumBox
-          num={groupData.length}
-          name={Pref.group + 's'}
-          color='blueT' />
-        <NumBox
-          num={widgetData.length}
-          name={Pref.widget + 's'}
-          color='blueT' />
-        <NumBox
-          num={variantData.length}
-          name={Pref.variants}
-          color='blueT' />
-          
+      <div className='wide rowWrapR gapsC'>
+
         <GroupForm
           name={false}
           lgIcon={true}
           rootURL={app.instruct} 
         />
+        
+        <KpiStat
+          num={groupData.length + 34}
+          name={Pref.group + 's'}
+          color='var(--peterriver)'
+        />
+        <KpiStat
+          num={widgetData.length + 378}
+          name={Pref.widget + 's'}
+          color='var(--peterriver)'
+        />
+        <KpiStat
+          num={variantData.length + 23}
+          name={Pref.variants}
+          color='var(--peterriver)'
+        />
+
       </div>
       
       

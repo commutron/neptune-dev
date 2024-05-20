@@ -65,6 +65,7 @@
 	/*aspect-ratio: 1;*/
 	text-align: center;
 	line-height: 1;
+	align-content: center;
 }
 .pieCore > i { display: block; }
 

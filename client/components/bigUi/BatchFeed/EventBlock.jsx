@@ -4,7 +4,7 @@ import '/client/components/bigUi/ItemFeedX/style.css';
 const EventBlock = ({ dt, cal })=> {
   const icon = dt.title === 'Start of Process' ? 'play-circle' :
                dt.title === 'End of Process' ? 'stop-circle' : 
-               'dot-circle';
+               'asterisk';
   return(
     <n-feed-info-block class='evEvent'>
       <n-feed-left-anchor>

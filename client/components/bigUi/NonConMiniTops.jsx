@@ -1,50 +1,38 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
+
+import KpiStat from '/client/components/smallUi/StatusBlocks/KpiStat';
 import NumStat from '/client/components/tinyUi/NumStat.jsx';
 import { countMulti } from '/client/utility/Arrays';
 
-// const NonConMiniTops = ({ noncons, items, user, app })=> (
-//   <div className='centre'>
-//     <HasNonCon noncons={noncons} items={items} />
-    
-//     <NonConPer noncons={noncons} items={items} />
-
-//     <MostNonCon noncons={noncons} app={app} />
-    
-//     <TodayNonCon noncons={noncons} />
-    
-//     <LeftFxNonCon noncons={noncons} />
-    
-//     <LeftInNonCon noncons={noncons} />
-    
-//     {/*<UserNonCon noncons={noncons} user={user} />*/}
-//   </div>
-// );
-// export default NonConMiniTops;
-
-
+export const TotalNonCon = ({ noncons })=> (
+  <KpiStat
+    num={countMulti(noncons)}
+    name='Total NonCons'
+    color='var(--pomegranate)'
+  />
+);
+                
+                
 export const HasNonCon = ({ noncons, items })=> {
-  const ncG = noncons.filter( n => !n.trash );
-  const hasNonCon = [... new Set( Array.from(ncG, x => x.serial) ) ].length;
+  const hasNonCon = [... new Set( Array.from(noncons, x => x.serial) ) ].length;
   return(
-    <NumStat
+    <KpiStat
       num={((hasNonCon / items.length) * 100 ).toFixed(0) + '%'}
       name={'of ' + Pref.item + 's have nonCons'}
-      color='redT'
-      size='bigger'
-      moreClass='max100 wmargin' />
+      color='var(--pomegranate)'
+    />
   );
 };
 
 export const NonConPer = ({ noncons, items })=> {
   const ncG = countMulti( noncons.filter( n => !n.trash ) );
   return(
-    <NumStat
+    <KpiStat
       num={(ncG / items.length).toFixed(1, 10)}
       name={'nonCons per ' + Pref.item}
-      title='mean average'
-      color='redT'
-      size='bigger' />
+      color='var(--pomegranate)'
+    />
   );
 };
 
@@ -69,9 +57,8 @@ export const MostNonCon = ({ noncons, app })=> {
 };
 
 export const TodayNonCon = ({ noncons })=> {
-  const ncG = noncons.filter( n => !n.trash );
   const now = new Date().toDateString();
-  const foundToday = ncG.filter( x => 
+  const foundToday = noncons.filter( x => 
     new Date(x.time).toDateString() === now );
   const todayCount = countMulti(foundToday);
   return(
@@ -84,36 +71,70 @@ export const TodayNonCon = ({ noncons })=> {
   );
 };
 
-export const LeftFxNonCon = ({ noncons })=> {
-  const ncG = noncons.filter( n => !n.trash );
-  const leftToFix = countMulti( ncG.filter( x => 
-          x.fix === false && x.inspect === false ) );
+export const IsSkipNonCon = ({ noncons })=> {
+  const isSkip = countMulti( noncons.filter( x => 
+          x.inspect === false && x.snooze === true ) );
   return(
-    <NumStat
-      num={leftToFix || 0}
-      name='Left To Repair'
+    <KpiStat
+      num={isSkip || 0}
+      name='Skipped/Snoozing'
       title='quantity remaining'
-      color='redT'
-      size='bigger' />
+      color='var(--sunflower)'
+    />
   );
 };
 
-export const LeftInNonCon = ({ noncons })=> {
-  const ncG = noncons.filter( n => !n.trash );
-  const leftToInspect = countMulti( ncG.filter( x => x.inspect === false ) );
+export const LeftFxNonCon = ({ noncons })=> {
+  const leftToFix = countMulti( noncons.filter( x => 
+          x.fix === false && x.inspect === false ) );
   return(
-    <NumStat
+    <KpiStat
+      num={leftToFix || 0}
+      name='Left To Repair'
+      title='quantity remaining'
+      color='var(--alizarin)'
+    />
+  );
+};
+
+export const ReadyInNonCon = ({ noncons })=> {
+  const rdyToIns = countMulti( noncons.filter( x => 
+          x.fix !== false && x.inspect === false ) );
+  return(
+    <KpiStat
+      num={rdyToIns || 0}
+      name='Ready To Inspect'
+      title='quantity remaining'
+      color='var(--carrot)'
+    />
+  );
+};
+export const LeftInNonCon = ({ noncons })=> {
+  const leftToInspect = countMulti( noncons.filter( x => x.inspect === false ) );
+  return(
+    <KpiStat
       num={leftToInspect || 0}
       name='Left To Inspect'
       title='quantity remaining'
-      color='orangeT'
-      size='bigger' />
+      color='var(--carrot)'
+    />
+  );
+};
+
+export const IsResNonCon = ({ noncons })=> {
+  const isRes = countMulti( noncons.filter( x => x.inspect !== false ) );
+  return(
+    <KpiStat
+      num={isRes || 0}
+      name='Resolved'
+      title='quantity'
+      color='var(--emerald)'
+    />
   );
 };
 
 export const UserNonCon = ({ noncons, user })=> {
-  const ncG = noncons.filter( n => !n.trash );
-  const count = countMulti( ncG.filter( x => x.who === user._id ) );
+  const count = countMulti( noncons.filter( x => x.who === user._id ) );
   return(
     <NumStat
       num={count}

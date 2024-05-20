@@ -1,6 +1,6 @@
 import React from 'react';
 
-const KpiStat = ({ title, icon, num, name, color, more, stOpen,core })=> {
+const KpiStat = ({ title, icon, num, name, color, more, stOpen, core })=> {
   if(core) {
     return(
       <div className='keyData numFont blackblackT' style={{"--kpiColor": color}} title={`${title || ''}\n${name}`}>
@@ -15,7 +15,7 @@ const KpiStat = ({ title, icon, num, name, color, more, stOpen,core })=> {
         <div>{icon ? <n-fa0><i className={icon}></i></n-fa0> : num}</div>
         <div>{name}</div>
       </summary>
-      {more ? <div className='inDepth clean noindent'>{more}</div> : null}
+      {more ? <div className='clean noindent'>{more}</div> : null}
     </details>
   );
 };

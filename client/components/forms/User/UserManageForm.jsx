@@ -7,7 +7,7 @@ import { AdminUp } from './AdminForm';
 
 const UserManageForm = ({ 
   userObj, id, name, org, 
-  auths, areas, brancheS
+  keys, auths, areas, brancheS
 })=> {
   
   const [ confirmState, confirmSet ] = useState(false);
@@ -70,13 +70,13 @@ const UserManageForm = ({
       
       <div className='balance'>
         <fieldset className='readlines min200'>
-          <legend>Account Permissions</legend>
+          <legend>Account Access</legend>
           <dl>
-            {auths.map( (entry, index)=>{
+            {keys.map( (entry, index)=>{
               if(entry === 'peopleSuper') {
                 return(
                   <SetCheckSuper
-                    key={index+'au'}
+                    key={index+'ky'}
                     user={id}
                     role={entry}
                     roleName={entry}
@@ -84,12 +84,27 @@ const UserManageForm = ({
               )}else{
                 return(
                   <SetCheck
-                    key={index+'au'}
+                    key={index+'ky'}
                     user={id}
                     role={entry}
                     roleName={entry}
                   />
               )}})}
+          </dl>
+        </fieldset>
+        
+        <fieldset className='readlines min200'>
+          <legend>Account Permissions</legend>
+          <dl>
+            {auths.map( (entry, index)=>{
+              return(
+                <SetCheck
+                  key={index+'au'}
+                  user={id}
+                  role={entry}
+                  roleName={entry}
+                />
+              )})}
           </dl>
         </fieldset>
         

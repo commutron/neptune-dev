@@ -151,7 +151,7 @@ export const PriorityKPI = ({
         <KpiStat
           title='Priority Rank'
           num="||"
-          name='On hold'
+          name='ON HOLD'
           color='var(--wetasphalt)'
           more={work}
           stOpen={stOpen}
@@ -164,27 +164,27 @@ export const PriorityKPI = ({
       {
         color: 'var(--peterriver)',
         num: bffrRel,
-        name: 'Low'
+        name: 'LOW'
       },
       {
         color: 'var(--sunflower)',
         num: bffrRel,
-        name: 'Medium'
+        name: 'MEDIUM'
       },
       {
         color: 'var(--carrot)',
         num: bffrRel,
-        name: 'High'
+        name: 'HIGH'
       },
       {
         color: 'var(--pumpkin)',
         num: 'U',
-        name: 'Urgent'
+        name: 'URGENT'
       },
       {
         color: 'var(--pomegranate)',
         num: 'S!',
-        name: 'Severe'
+        name: 'SEVERE'
       }
     ];
     
@@ -215,7 +215,7 @@ export const PriorityKPI = ({
     <KpiStat
       title='Priority Rank'
       num='?'
-      name='Unknown'
+      name='UNKNOWN'
       color='unset'
       core={core}
     />

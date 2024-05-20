@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import Pref from '/client/global/pref.js';
+import ButtonRedo from '/client/components/tinyUi/ButtonRedo';
 
 const RedoStep = ({ 
   batchId, seriesId, itemData,
-  brancheS, app, close 
+  brancheS, app, redoCommTxt, handleComm, close 
 })=> {
   
   const isInspect = Roles.userIsInRole(Meteor.userId(), 'inspect');
   const isTester = Roles.userIsInRole(Meteor.userId(), 'test');
   
-  const [ redoCommTxt, redoCommSet ] = useState("");
+  // const [ intend, intendSet ] = useState(false);
   const [ lock, lockSet ] = useState(false);
   
   const reSteps = itemData.history.filter( x => x.good === true &&
@@ -68,81 +69,83 @@ const RedoStep = ({
   const types = _.uniq(Array.from(reSteps, x => x.type)).join(' or ');
   
   return(
-    <div className='dTopGap stoneForm'>
-      <div className='vmarginhalf centreText medBig cap'>Repeat {types}</div>
+    <div className='dBotGap stoneForm'>
+      <div className='space1v centreText medBig cap'>Repeat {types}</div>
+      {/*
+      <button
+        className='blue action blueSolid whiteT space1v layerOne centreText medBig clean lnht cap'
+        onClick={()=>intendSet(!intend)}
+      >Repeat {types}</button>
       
-      <div className='fakeFielset'>
-        <label htmlFor='redoCommField' className='wideStone'>
-          <textarea 
-            id='redoCommField'
-            defaultValue={redoCommTxt}
-            onInput={(e)=>redoCommSet(e.target.value)}
-            required>
-          </textarea>Repetition Reason
-        </label>
-          
-      {redoCommTxt.trim().length < 5 ? null :
-        reSteps.map( (st, index)=> {
-          const tstep = app.trackOption.find( x => x.key === st.key );
-          const isAuth = checkAccess(tstep, st.type);
-          if(st.type === 'test') {
-            return(
-              <div key={index} className='wideStone reStep medBig cap'
-                >{!tstep && `${Pref.rapidExd} `}{st.step} Test
-                <span>
-                  <button
-                	  className='reTest'
-            				name={'Pass '+ st.step}
-            				id={st.key+'redopass'}
-            				onClick={()=>passT(st.key, st.step, st.type, 'redone', false)}
-            				disabled={lock || !isAuth}>
-            				<label>Pass</label>
-          				</button>
-          				<button
-                	  className='reFail'
-            				name={'Fail '+ st.step}
-            				id={st.key+'redofail'}
-            				onClick={()=>passT(st.key, st.step, st.type, false, false)}
-            				disabled={lock || !isAuth}>
-            				<label>Fail</label>
-          				</button>
-          				<button
-                	  className='reBy'
-            				name={'Bypass '+ st.step}
-            				id={st.key+'redobypass'}
-            				onClick={()=>passT(st.key, st.step, st.type, 'redone', true)}
-            				disabled={lock || !isAuth}>
-            				<label>Bypass</label>
-          				</button>
-        				</span>
-      				</div>
-  		      );
-          }else{
-            return(
-              <div key={index} className='wideStone reStep medBig cap'
-                >{!tstep && `${Pref.rapidExd} `}{st.step} {st.type}
-                <span>
-          				<button
-                	  className='reInspect'
-            				name={`${st.step}  ${st.type}`}
-            				id={st.key+'redook'}
-            				onClick={()=>passS(st.key, st.step, st.type, 'redone')}
-            				disabled={lock || !isAuth}>
-            				<label>OK</label>
-          				</button>
-          				<button
-                	  className='reFail'
-            				name={st.step + ' fail'}
-            				id={st.key+'redong'}
-            				onClick={()=>passS(st.key, st.step, st.type, false)}
-            				disabled={lock || !isAuth}>
-            				<label>NG</label>
-          				</button>
-        				</span>
-      				</div>
-            );
-          }
-      })}
+      {!intend ? null :
+      */}
+        <div className='fakeFielset'>
+          <label htmlFor='redoCommField' className='wideStone'>
+            <textarea 
+              id='redoCommField'
+              defaultValue={redoCommTxt}
+              onInput={(e)=>handleComm(e.target.value)}
+              rows={1}
+              required>
+            </textarea>Repetition Reason
+          </label>
+            
+        {redoCommTxt.trim().length < 5 ? null :
+          reSteps.map( (st, index)=> {
+            const tstep = app.trackOption.find( x => x.key === st.key );
+            const isAuth = checkAccess(tstep, st.type);
+            if(st.type === 'test') {
+              return(
+                <div key={index} className='wideStone reStep medBig cap'
+                  >{!tstep && `${Pref.rapidExd} `}{st.step} Test
+                  <span>
+            				<ButtonRedo
+                      act='bypass'
+                      ky={st.key}
+                      step={st.step}
+                      func={()=>passT(st.key, st.step, st.type, 'redone', true)}
+                      lockout={lock || !isAuth}
+                    />
+                    <ButtonRedo
+                      act='fail'
+                      ky={st.key}
+                      step={st.step}
+                      func={()=>passT(st.key, st.step, st.type, false, false)}
+                      lockout={lock || !isAuth}
+                    />
+                    <ButtonRedo
+                      act='pass'
+                      ky={st.key}
+                      step={st.step}
+                      func={()=>passT(st.key, st.step, st.type, 'redone', false)}
+                      lockout={lock || !isAuth}
+                    />
+          				</span>
+        				</div>
+    		      );
+            }else{
+              return(
+                <div key={index} className='wideStone reStep medBig cap'
+                  >{!tstep && `${Pref.rapidExd} `}{st.step} {st.type}
+                  <span>
+            				<ButtonRedo
+                      ky={st.key}
+                      step={st.step}
+                      func={()=>passS(st.key, st.step, st.type, false)}
+                      lockout={lock || !isAuth}
+                    />
+                    <ButtonRedo
+                      act='okay'
+                      ky={st.key}
+                      step={`${st.step}  ${st.type}`}
+                      func={()=>passS(st.key, st.step, st.type, 'redone')}
+                      lockout={lock || !isAuth}
+                    />
+          				</span>
+        				</div>
+              );
+            }
+        })}
       </div>
     </div>
   );

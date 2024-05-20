@@ -193,15 +193,13 @@
 
 .overGridRowFixed > div:first-child,
 .downRowFixed > div:first-child {
-  font-size: 1.75dvh !important;
-  justify-content: center;
   padding: 0;
   width: 4vmin;
   overflow: hidden;
 }
-.overGridRowFixed > div:first-child .big,
-.downRowFixed > div:first-child .big {
-  font-size: 1.5dvh;
+.overGridRowFixed > div:first-child div,
+.downRowFixed > div:first-child div {
+  font-size: 1.75dvh !important;
 }
 .overGridRowFixed > div:nth-child(2),
 .downRowFixed > div:nth-child(2) {

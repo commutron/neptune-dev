@@ -6,8 +6,8 @@ import UserNice from '/client/components/smallUi/UserNice.jsx';
 import StepBackX from '/client/components/bigUi/ItemFeedX/StepBackX';
 
 const HistoryBlock = ({
-  entry, batch, seriesId, serial, 
-  done, iopen, canEdit, showHeader, cal
+  entry, seriesId, serial, 
+  iopen, canEdit, cal
 })=>{
   
   let dt = entry;

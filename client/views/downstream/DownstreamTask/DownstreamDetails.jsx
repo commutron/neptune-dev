@@ -90,12 +90,9 @@ const DownstreamScrollChunk = ({
       {!isDone ?
         <TideActivitySquare 
           batchID={ck.batchID} 
-          acData={tBatch}
-          isDebug={isDebug} />
+          acData={tBatch} />
       :
-        <TideActivityData
-          batchID={ck.batchID}
-          isDebug={isDebug} />
+        <TideActivityData batchID={ck.batchID} />
       }    
       </div>
       
