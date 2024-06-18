@@ -10,13 +10,13 @@
   height: 100%;
   padding: 10px;
   border: 15px double var(--neptuneColor);
-  border-radius: 25px;
+  border-radius: 20px;
   background-color: white;
 }
 .userCardContent > img {
   position: relative;
   top: 5px;
-  height: 1.5cm; 
+  height: 1.7cm;
 }
 .userCardContent > n-username {
   display: flex;
@@ -26,7 +26,7 @@
   font-weight: 600;
   margin: 5px;
   height: 4cm;
-  line-height: 1.2;
+  line-height: 1.1;
   text-overflow: ellipsis;
   overflow: hidden;
 }

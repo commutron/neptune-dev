@@ -1,15 +1,7 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
 
-import UsernameChange from './UsernameChange';
-import EmailForm from './EmailForm';
-import PasswordChange from './PasswordChange';
-
-import { AdminDown } from './AdminForm.jsx';
-
-import IdCardCard from './IdCardCard/IdCardCard';
-
-const UserSettings = ({ app, user, isAdmin, brancheS })=> {
+const UserSettings = ({ brancheS })=> {
   
   const speedOps = [
     // {value: 250, lock: !isAdmin, name: 'Crazy Fast' },
@@ -27,27 +19,7 @@ const UserSettings = ({ app, user, isAdmin, brancheS })=> {
   
   return(
     <div>
-      <div className='comfort cardify'>
-        <div className='noPrint'>
-          <p><b>Username:</b> {user.username}</p>
-          <p><b>ID:</b> {Meteor.user()._id}</p>
-          <p><b>Organization:</b> <i className='blueT bold'>{Meteor.user().org}</i></p>
-          <p><b>Joined:</b> {user.createdAt.toLocaleString()}</p>
-        </div>
-        
-        <IdCardCard user={user} />
-      </div>
-        
       <div className='cardSelf settingColumn noPrint'>  
-        
-        <span className='comfort w100'>
-          <MenuSkip id='uipref' title='Interface Preferences' />
-          <MenuSkip id='usernamechng' title='Username' />
-          <MenuSkip id='emailchng' title='Email Address' />
-          <MenuSkip id='passwordchng' title='Password' />
-          {isAdmin && <MenuSkip id='adminpwr' title='Admin Status' />}
-        </span>
-      
         <div id='uipref'>
           <h3><i className='fas fa-sliders-h fa-fw gapR'></i>Interface Preferences</h3>
           <div>
@@ -142,28 +114,6 @@ const UserSettings = ({ app, user, isAdmin, brancheS })=> {
           </div>
         </div>
         
-        <div id='usernamechng' className='minHeight'>
-          <h3><i className='fas fa-user-edit fa-fw gapR'></i>Username</h3>
-          <UsernameChange />
-        </div>
-        
-        <div id='emailchng' className='minHeight'>
-          <h3><i className='fas fa-at fa-fw gapR'></i>Email Address</h3>
-          <EmailForm user={user} />
-        </div>
-        
-        <div id='passwordchng' className='minHeight'>
-          <h3><i className='fas fa-key fa-fw gapR'></i>Password</h3>
-          <PasswordChange />
-        </div>
-
-        {isAdmin ?
-          <div id='adminpwr' className='minHeight'>
-            <h3><i className='fas fa-meteor fa-fw'></i> Admin Status</h3>
-             <AdminDown />
-          </div>
-        : null}
-        
       </div>
       
     </div>
@@ -171,24 +121,6 @@ const UserSettings = ({ app, user, isAdmin, brancheS })=> {
 };
 
 export default UserSettings;
-
-const MenuSkip = ({ id, title })=> {
-  
-  function scrollTo(elId) {
-    const el = document.getElementById(elId);
-    el?.scrollIntoView({
-      block: 'start',
-      behavior: 'smooth'
-    });
-  }
-  
-  return(
-    <button 
-      className='smallAction margin5 blackT underdotline' 
-      onClick={()=>scrollTo(id)}
-    >{title}</button>
-  );     
-};
 
 const UserColorSetting = ({ userSetting, labelText, helpText })=> {
   function handle(val) {

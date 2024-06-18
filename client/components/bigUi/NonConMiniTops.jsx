@@ -77,7 +77,7 @@ export const IsSkipNonCon = ({ noncons })=> {
   return(
     <KpiStat
       num={isSkip || 0}
-      name='Skipped/Snoozing'
+      name='Skipped / Snoozing'
       title='quantity remaining'
       color='var(--sunflower)'
     />

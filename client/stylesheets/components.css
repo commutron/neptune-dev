@@ -165,7 +165,7 @@ n-timeline-item:last-child n-timeline-marker:after {
   box-shadow: 0 0px 4px -1px var(--kpiColor, rgb(149,165,166));
 }
 .kpiStat {
-  width: clamp(100px, 100%, 200px);
+  width: clamp(100px, 16vmax, 250px);
   border: 1px solid var(--kpiColor, rgb(149,165,166));
   margin: 5px 0;
   color: black;
@@ -175,7 +175,7 @@ n-timeline-item:last-child n-timeline-marker:after {
 }
 .keyData {
   display: grid;
-  grid-auto-columns: minmax(4vmin, min-content) 4fr;
+  grid-auto-columns: minmax(4vmax, max-content) 4fr;
   grid-auto-flow: column;
   max-height: 5dvh;
   line-height: 1;
@@ -184,6 +184,7 @@ n-timeline-item:last-child n-timeline-marker:after {
   user-select: none;
   text-align: center;
   text-wrap: pretty;
+  overflow: hidden;
   cursor: default;
 }
 .keyData div {

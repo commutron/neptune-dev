@@ -48,64 +48,67 @@ const InfoTab = ({
     <div className='cardify oneTwoThreeContainer'>
       <span className='oneThirdContent'>
       
-      <div className='centreText balance'>
+      <div className='centreText'>
         <h3 className='leftText'>Status</h3>      
         
-        <StatusGroup
-          id={b._id}
-          live={b.live}
-          done={done}
-          salesEnd={b.salesEnd}
-          lock={b.lock}
-          app={app}
-          isDebug={isDebug}
-        />
-        
-        <div className='cap middle kpiStat'>
-          <AlterFulfill
-            batchId={b._id}
-            createdAt={b.createdAt}
-            end={b.salesEnd}
+        <div className='balance'>
+          <StatusGroup
+            id={b._id}
+            live={b.live}
+            done={done}
+            salesEnd={b.salesEnd}
+            lock={b.lock}
             app={app}
-            lock={(b.completed === true && !isDebug ) || b.lock ? Pref.isDone : false}
-            canDo={Roles.userIsInRole(Meteor.userId(), ['edit', 'sales'])}
-            lgIcon={true}
-            isDebug={isDebug} />
-          <p>Ship Due:<br /><b>{shipDue.format("MMMM Do, YYYY")}</b></p>
+            isDebug={isDebug}
+          />
+          
+          <div className='middle espace cap kpiStat'>
+            <AlterFulfill
+              batchId={b._id}
+              createdAt={b.createdAt}
+              end={b.salesEnd}
+              app={app}
+              lock={(b.completed === true && !isDebug ) || b.lock ? Pref.isDone : false}
+              canDo={Roles.userIsInRole(Meteor.userId(), ['edit', 'sales'])}
+              lgIcon={true}
+              isDebug={isDebug} 
+            />
+            <p>Ship Due:<br /><b>{shipDue.format("MMMM Do, YYYY")}</b></p>
+          </div>
+        
+          {ontime === null ? null :
+            <KpiStat
+              icon='fa-solid fa-truck-fast'
+              name={`Shipped ${ontime ? 'On Time' : 'Late'}`}
+              color='var(--nephritis)'
+            />
+          }
+          
+          {!b.completed && !released ?
+            <KpiStat
+              icon='fa-solid fa-flag'
+              name={Pref.release}
+              color='var(--peterriver)'
+              more={
+                <ReleaseAction 
+                  id={b._id} 
+                  rType='floorRelease'
+                  actionText={Pref.release}
+                  contextText={`to ${Pref.floor}`}
+                  qReady={b.quoteTimeBudget?.[0].timeAsMinutes > 0}
+                />
+              }
+            />
+          :null}
+        
+          <BatchXStatus 
+            batchData={b} 
+            allFlow={allFlow}
+            allFall={allFall}
+            nowater={nowater}
+            rapid={rOpen}
+          />
         </div>
-        
-        {ontime === null ? null :
-          <KpiStat
-            icon='fa-solid fa-truck-fast'
-            name={`Shipped ${ontime ? 'On Time' : 'Late'}`}
-            color='var(--nephritis)'
-          />
-        }
-        
-        {!b.completed && !released ?
-          <KpiStat
-            icon='fa-solid fa-flag'
-            name={Pref.release}
-            color='var(--peterriver)'
-            more={
-              <ReleaseAction 
-                id={b._id} 
-                rType='floorRelease'
-                actionText={Pref.release}
-                contextText={`to ${Pref.floor}`}
-                qReady={b.quoteTimeBudget?.[0].timeAsMinutes > 0}
-              />
-            }
-          />
-        :null}
-        
-        <BatchXStatus 
-          batchData={b} 
-          allFlow={allFlow}
-          allFall={allFall}
-          nowater={nowater}
-          rapid={rOpen}
-        />
       </div>
       
       <div className='minHeight cap'>

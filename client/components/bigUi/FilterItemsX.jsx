@@ -33,11 +33,12 @@ const FilterItems = ({
         </label>
         <select
           id='fltItmkeyword'
+          className='cap'
           defaultValue={selectedKeyword}
           onChange={(e)=>onKeywordChange(e.target.value)}
           required>
           <option value={false} label='' />
-          <optgroup label='Categories'>
+          <optgroup label='Categories' className='cap'>
             <option value='complete'>Complete</option>
             <option value='in progress'>In Progress</option>
             <option value='first offs'>{Pref.trackFirst}s</option>

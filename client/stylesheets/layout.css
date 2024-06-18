@@ -1500,9 +1500,6 @@ n-col-table-head > span {
   border-bottom: 1px inset rgb(150,150,150);
   padding: 48px 24px;
 }
-.settingColumn > div:first-child {
-  padding: 24px 24px 48px 24px;
-}
 .settingColumn > div:last-child {
   border-bottom: none
 }

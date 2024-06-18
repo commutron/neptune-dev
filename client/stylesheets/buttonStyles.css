@@ -427,6 +427,7 @@ label.qdpplRound {
   font-weight: 600;
   border: 0.2em solid var(--wetasphalt);
   border-radius: 50px;
+  width: max-content;
   padding: 2px 0.25em 2px 0;
   line-height: 1;
 }

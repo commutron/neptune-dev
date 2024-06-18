@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import DATAMatrix from '/client/utility/datamatrix-svg/datamatrix.js';
+import liteEncode from '/client/utility/liteEncode';
 
 import './usercard.css';
 
@@ -11,7 +12,7 @@ const IdCardCard = ({ user })=> {
   
   function checkPassword(e) {
     e.preventDefault();
-    const passVal = this.passwordInput.value;
+    const passVal = this.genpasswordInput.value;
     
     Meteor.call('dbblCheckPassword', passVal, (err, re)=>{
       err && console.log(err);
@@ -29,14 +30,16 @@ const IdCardCard = ({ user })=> {
 
     const userstring = user.username + "<+>" + goodPass;
     
-    const encoder = new TextEncoder();
-    const ePass = encoder.encode(userstring).toString();
+    // const encoder = new TextEncoder();
+    // const ePass = encoder.encode(userstring).toString();
+    const ePass = liteEncode(userstring);
+    
     let svgNode = DATAMatrix({
                     msg :  ePass,
                     dim :   128,
                     pal : ["#000000", "#ffffff"]
                   });
-                  
+
     return {__html: svgNode.outerHTML};
   }
   
@@ -45,24 +48,23 @@ const IdCardCard = ({ user })=> {
 	
   return(
     <div className='minHeight'>
-      <h3 className='noPrint'>
-        <i className='fas fa-id-badge fa-fw'></i> Generate ID Badge
-      </h3>
       
       {!ready ?
-        <span>
-          <p>Confirm Your Password</p>
-          <form onSubmit={(e)=>checkPassword(e)}>
-            <input 
-              type='password' 
-              id='passwordInput'
-              className='miniIn18'
-              autoComplete="new-password"
-              required />
-            <button type='submit' className='smallAction blackHover'>SUBMIT</button>
-          </form>
-          {bad && <p>Incorrect Password</p>}
-        </span>
+        <div className='bigInfoBox no'>
+          <div><label htmlFor='genpasswordInput'>Confirm Your Password</label></div>
+          <div>
+            <form onSubmit={(e)=>checkPassword(e)}>
+              <input 
+                type='password' 
+                id='genpasswordInput'
+                className='miniIn18'
+                autoComplete="new-password"
+                required />
+              <button type='submit' className='smallAction blackHover'>Generate</button>
+            </form>
+            {bad && <p>Incorrect Password</p>}
+          </div>
+        </div>
       :
         <span>
           <button

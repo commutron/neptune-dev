@@ -12,8 +12,8 @@ import ServicePanel from './ServicePanel';
 import InboxPanel from './InboxPanel';
 import PrivacyPanel from './PrivacyPanel';
 
+import UserCred from '/client/components/forms/User/UserCred';
 import UserSettings from '/client/components/forms/User/UserSettings';
-
 
 const UserDataWrap = ({
   readybNames, slide,
@@ -44,6 +44,7 @@ const UserDataWrap = ({
           menu={[
             <b><i className='fas fa-clock fa-fw gapR'></i>Project Activity</b>,
             <b><i className='fas fa-gears fa-fw gapR'></i>Equipment</b>,
+            <b><i className='fas fa-id-card fa-fw gapR'></i>Credentials</b>,
             <b><i className='fas fa-sliders fa-fw gapR'></i>Preferences</b>,
             <b><i className='fas fa-key fa-fw gapR'></i>Access & Privacy</b>,
             <b><i className='fas fa-message fa-fw gapR'></i>Messages{iL}</b>
@@ -63,22 +64,27 @@ const UserDataWrap = ({
             key={2}
           />
           
-          <UserSettings
+          <UserCred
             key={3}
             app={app}
             user={user}
             isAdmin={isAdmin}
-            brancheS={brancheS} />
-          
-          <PrivacyPanel
+          />
+            
+          <UserSettings
             key={4}
+            brancheS={brancheS} 
+          />
+      
+          <PrivacyPanel
+            key={5}
             app={app}
             user={user}
             isAdmin={isAdmin}
           />
           
           <InboxPanel
-            key={5}
+            key={6}
             app={app}
             user={user}
             users={users} />

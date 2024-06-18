@@ -498,7 +498,8 @@ Meteor.methods({
       return false;
     }else{
       const orgKey = Meteor.user().orgKey;
-      const optKey = Config.optVerify || "adhocxray";
+      const optKey = "adhocxray";
+      // const optVer = Config.optVerify;
       
       XSeriesDB.update({_id: seriesId, orgKey: orgKey, 'items.serial': bar}, {
         $push : { 'items.$.history': {

@@ -57,7 +57,7 @@ const TagsModule = ({ action, id, vKey, tags, tagOps, truncate, rad, hold, canRu
     }
   }
   
-  function addHoldFlag(rad) {
+  function addHoldFlag() {
     Meteor.call('setHold', id, (err)=>{
       err && console.log(err);
     });
@@ -151,7 +151,7 @@ const TagsModule = ({ action, id, vKey, tags, tagOps, truncate, rad, hold, canRu
           </MenuItem>
           <MenuItem onClick={()=>addRadFlag(newRad)} disabled={!newRad} className='cap'>
             <n-faX>
-              <i className='fa-solid fa-bust fa-fw fa-lg gapR darkOrangeT'></i>
+              <i className='fa-solid fa-burst fa-fw fa-lg gapR darkOrangeT'></i>
             </n-faX>Add {Pref.radio.toUpperCase()}
           </MenuItem>
         </span>

@@ -360,7 +360,8 @@ const ItemsListX = ({
   
   const steps = [ 
     (flowData.riverFlow || []),
-    Array.from(rapidsData, r=> r.whitewater).flat()
+    {key: "adhocxray", step: "x-ray", type: "option"},
+    Array.from(rapidsData, r=> r.whitewater).flat(),
   ].flat();
 
   return(

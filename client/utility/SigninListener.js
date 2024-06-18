@@ -1,3 +1,5 @@
+import { liteDecode } from '/client/utility/liteEncode';
+
 function onBarcodePress(event) {
   !event.preventDefault ? null : event.preventDefault();
   Session.set('signinError', '');
@@ -29,13 +31,14 @@ function onBarcodePress(event) {
       
       if(slL > 9) {
         
-        const useE = signinListener.split(",");
-        let utf8decoder = new TextDecoder();
-        let u8arr = new Uint8Array(useE);
-        const decode = utf8decoder.decode(u8arr);
-    
+        // const useE = signinListener.split(",");
+        // let utf8decoder = new TextDecoder();
+        // let u8arr = new Uint8Array(useE);
+        // const decode = utf8decoder.decode(u8arr);
+        const decode = liteDecode(signinListener); console.log(decode);
+        
         if(!decode) {
-          console.error('utf8decoder was unable to decode the array provided');
+          console.error('utf8decoder/liteDecode was unable to decode the array provided');
           Session.set('signinError', 'Barcode cannot be decoded');
           turnOff();
         }else{
