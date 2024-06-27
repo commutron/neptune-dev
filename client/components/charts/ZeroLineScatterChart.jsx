@@ -37,7 +37,7 @@ const ZeroLineScatterChart = ({ xy, fade, fill, height, leftpad })=> {
           tickLabels: { 
             fontSize: '6px' }
         } }
-        scale={{ x: "time" }}
+        scale={{x: "time", y: "linear"}}
         orientation="bottom"
       />
       <VictoryAxis

@@ -1,9 +1,9 @@
-import React, {  Suspense, useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 
 import TideMultiBatchBar from '/client/components/charts/Tides/TideMultiBatchBar';
 import ShipScatter from '/client/components/charts/ShipScatter';
-import Spin from '/client/components/tinyUi/Spin';
+// import Spin from '/client/components/tinyUi/Spin';
 import { round1Decimal } from '/client/utility/Convert';
 
 const WTimeCycle = React.lazy(() => import('./WTimeCycle'));
@@ -29,8 +29,8 @@ const WTimeTab = ({
     });
   }, []);
   
+  // <Suspense fallback={<Spin />}>
   return(
-    <Suspense fallback={<Spin />}>
     <div className='space' key={widgetData._id+'times'}>
       
       <div className='cardSelf'> 
@@ -43,10 +43,10 @@ const WTimeTab = ({
           </tr>
         </thead><tbody>
           <tr className='centreText'>
-            <td>{ result['relAvg'] && `${round1Decimal(result['relAvg'])} days`}</td>
-            <td>{ result['stAvg'] && `${round1Decimal(result['stAvg'])} days`}</td>
-            <td>{ result['ffinAvg'] && `${round1Decimal(result['ffinAvg'])} days`}</td>
-            <td>{ result['compAvg'] && `${round1Decimal(result['compAvg'])} days`}</td>
+            <td>{ result['relAvg'] ? round1Decimal(result['relAvg']) : '-'} days</td>
+            <td>{ result['stAvg'] ? round1Decimal(result['stAvg']) : '-'} days</td>
+            <td>{ result['ffinAvg'] ? round1Decimal(result['ffinAvg']) : '-'} days</td>
+            <td>{ result['compAvg'] ? round1Decimal(result['compAvg']) : '-'} days</td>
           </tr>
         </tbody></table>
         
@@ -81,7 +81,6 @@ const WTimeTab = ({
       <WTimeCycle wID={widgetData._id} flows={widgetData.flows} app={app} />
 
     </div>
-    </Suspense>
   );
 };
 
