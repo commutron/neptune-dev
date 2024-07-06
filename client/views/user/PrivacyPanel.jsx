@@ -1,6 +1,6 @@
 import React from 'react';
 import { toast } from 'react-toastify';
-import { PermissionHelp } from '/client/views/people/AccountsManagePanel';
+import PermissionHelp from '/client/views/people/PermissionHelp';
 
 const PrivacyPanel = ({ app, user, isAdmin })=> {
   

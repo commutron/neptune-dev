@@ -147,7 +147,7 @@ function loopNCItems(items, from, to, nonCons) {
   });
 }
 
-function loopNonCons(nonCons, from, to, flatTypeListClean) {
+function loopNonCons(nonCons, from, to) {
   return new Promise(resolve => {
     const inTime = nonCons.filter( x => moment(x.time).isBetween(from, to) );
     const foundNC = countMulti(inTime);
@@ -185,9 +185,40 @@ function loopNonCons(nonCons, from, to, flatTypeListClean) {
       whereBreakdown.push( [where, whTotal ] );
     }
     
+    // const locals = Array.from(wheres, w => w.toLowerCase() ).sort();
+    const locals = [...wheres].sort();
+
+    console.log(wheres, locals);
+    
+    let crossref = [["",...locals,"Total"]];
+    
+    let endline = Array.from(locals, l => 0);
+    
+    for(let type of types) {
+      const ncOfType = inTime.filter( n => n.type === type );
+      
+      let whArr = [type];
+      let tyTtl = 0;
+      for(const [index, loc] of locals.entries()) {
+        let whCount = 0;
+        for(let ncW of ncOfType) {
+          if(ncW.where === loc) {
+            whCount += ( Number(ncW.multi) || 1 );
+          }
+        }
+        whArr.push( whCount );
+        tyTtl += whCount;
+        endline[index] += whCount;
+      }
+      whArr.push(tyTtl);
+      
+      crossref.push(whArr);
+    }
+    crossref.push(["total",endline,foundNC].flat());
+    
     const uniqueSerials = serials.size;
     
-    resolve({foundNC, uniqueSerials, typeBreakdown, whereBreakdown});
+    resolve({foundNC, uniqueSerials, typeBreakdown, whereBreakdown, crossref});
   });
 }
 

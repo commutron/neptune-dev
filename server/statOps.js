@@ -34,7 +34,6 @@ export const itemsWithPromise = (accessKey, rangeStart, rangeEnd, historyType)=>
   });
 };
 
-
 export const totalTideTimePromise = (accessKey, rangeStart, rangeEnd)=> {
   return new Promise(function(resolve) {
     let totalCount = 0;
@@ -62,6 +61,51 @@ export const totalTideTimePromise = (accessKey, rangeStart, rangeEnd)=> {
   });
 };
 
+function collectNonCon(batchID) {
+  return new Promise(resolve => {
+    let collection = false;
+    const bx = XBatchDB.findOne({_id: batchID});
+    if(bx) {
+      const srs = XSeriesDB.findOne({batch: bx.batch});
+      
+      const items = !srs ? [] : srs.items;
+      const itemQty = items.length > 0 ? items.reduce((t,i)=> t + i.units, 0) : 0;
+      // nonCon relevant
+      // -- nc rate calculation filter --
+      const rNC = !srs ? [] : srs.nonCon.filter( n => !n.trash && !(n.inspect && !n.fix) );
+      // how many nonCons
+      const nonConTotal = countMulti(rNC);
+      // how many are unresolved  
+      const nonConLeft = countMulti( rNC.filter( x => x.inspect === false ) );
+      // nc rate
+      const ncRate = asRate(nonConTotal, itemQty, true);
+      // how many items have nonCons
+      const hasNonCon = [... new Set( Array.from(rNC, x => x.serial) ) ].length;
+      // what percent of items have nonCons
+      const percentOfNCitems = itemQty === 0 ? 0 : hasNonCon >= itemQty ? 100 :
+        ((hasNonCon / itemQty) * 100 ).toFixed(0);
+      // how many items are scrapped
+      const itemIsScrap = items.filter( x => x.scrapped ).length;
+      // how many items with RMA
+      let itemHasRapid = items.filter( x => x.altPath.find( y => y.rapId !== false) ).length;
+ 
+      collection = {
+        batch: bx.batch,
+        batchID: bx._id,
+        nonConTotal: nonConTotal,
+        nonConRate: ncRate,
+        nonConLeft: nonConLeft,
+        percentOfNCitems: isNaN(percentOfNCitems) ? '0%' : percentOfNCitems + '%',
+        itemIsScrap: itemIsScrap,
+        itemHasRMA: itemHasRapid
+      };
+      
+      resolve(collection);
+    }else{
+      resolve(collection);
+    }
+  });
+}
 
 Meteor.methods({
   
@@ -186,6 +230,19 @@ Meteor.methods({
     }else{
       return topStats.stats;
     }
+  },
+  
+  nonconQuickStats(batchID) {
+    this.unblock();
+    async function bundleNonCon(batchID) {
+      try {
+        bundle = await collectNonCon(batchID);
+        return bundle;
+      }catch (err) {
+        throw new Meteor.Error(err);
+      }
+    }
+    return bundleNonCon(batchID);
   },
   
   nonConSelfCount(nonConCol) {

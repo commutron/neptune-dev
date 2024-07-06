@@ -3,11 +3,13 @@ import Pref from '/client/global/pref.js';
 import { asRate, percentOf } from '/client/utility/Convert';
 
 import ReportStatsTable from '/client/components/tables/ReportStatsTable'; 
+import ReportCrossTable from '/client/components/tables/ReportCrossTable';
 
 const ProblemReport = ({ start, end, dataset })=> {
   
   const [ working, workingSet ] = useState(false);
   const [ replyData, replySet ] = useState(false);
+  const [ crossData, crossSet ] = useState(false);
   
   useEffect( ()=>{
     replySet(false);
@@ -83,6 +85,10 @@ const ProblemReport = ({ start, end, dataset })=> {
         : [];
         workingSet(false);
         replySet([...arrange,...prob]);
+        
+        if(re?.nonConStats?.crossref) {
+          crossSet(re.nonConStats.crossref);
+        }
       }
     });
   }
@@ -90,7 +96,7 @@ const ProblemReport = ({ start, end, dataset })=> {
   const title = dataset === 'noncon' ? Pref.nonCons :
                 dataset === 'short' ? Pref.shortfalls :
                 'Completed Items';
-    
+
   return(
     <div className='overscroll'>
       
@@ -110,6 +116,17 @@ const ProblemReport = ({ start, end, dataset })=> {
           dateString={`${start} to ${end}`}
           rows={replyData}
           extraClass='max600' 
+        />
+      }
+      
+      <div className='printBr' />
+      
+      {crossData &&
+        <ReportCrossTable 
+          title={`Cross Reference (${title})`}
+          dateString={`${start} to ${end}`}
+          rows={crossData}
+          extraClass='max1200'
         />
       }
           

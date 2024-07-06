@@ -84,7 +84,6 @@ export function TimeInWeek( app, weekStart ) {
   }
 }
 
-
 export function TimeInDay( app, dayStart ) {
   localeUpdate(app);
   

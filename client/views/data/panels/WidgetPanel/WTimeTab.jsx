@@ -3,10 +3,8 @@ import Pref from '/client/global/pref.js';
 
 import TideMultiBatchBar from '/client/components/charts/Tides/TideMultiBatchBar';
 import ShipScatter from '/client/components/charts/ShipScatter';
-// import Spin from '/client/components/tinyUi/Spin';
+import WTimeCycle from './WTimeCycle';
 import { round1Decimal } from '/client/utility/Convert';
-
-const WTimeCycle = React.lazy(() => import('./WTimeCycle'));
 
 const WTimeTab = ({ 
   widgetData, batchIDs, 
@@ -29,7 +27,6 @@ const WTimeTab = ({
     });
   }, []);
   
-  // <Suspense fallback={<Spin />}>
   return(
     <div className='space' key={widgetData._id+'times'}>
       
