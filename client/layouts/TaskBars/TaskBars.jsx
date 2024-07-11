@@ -168,6 +168,15 @@ export const DownTaskBar = ({ subLink }) => (
       icon='fas fa-chart-line'
     />
     
+    <span className='flexSpace'></span>
+    
+    <TaskElement
+      title='βeta Planner'
+      subON={subLink === 'zplan'}
+      goLink='/downstream/zplan'
+      icon='fas fa-meteor' // fa-table-cells
+    />
+    
   </div>
 );
 

@@ -9,7 +9,7 @@ import UserNice from '/client/components/smallUi/UserNice.jsx';
 
 const NonConBlock = ({
   entry, seriesId, serial, units,
-  done, iopen, user, canQA, canVerify, canInspect,
+  done, iopen, irap, user, canQA, canVerify, canInspect,
   app, ncTypesCombo, flatCheckList, brancheS, cal
 })=> {
   
@@ -52,7 +52,7 @@ const NonConBlock = ({
   
   function handleTrash(e) {
     const ncKey = entry.key;
-    if(!Roles.userIsInRole(Meteor.userId(), 'verify')) {
+    if(!canVerify) {
       toast.warning("'First-off' permission is needed skip a nonconformance");
     }else{
       Meteor.call('trashNCX', seriesId, ncKey, (error)=> {
@@ -257,7 +257,7 @@ const NonConBlock = ({
                 {!trashed && !ins ?
                   <button
                     className='smallAction orangeHover blackT inlineButton vmarginhalf'
-                    disabled={!canVerify}
+                    disabled={irap ? !canQA : !canVerify}
                     onClick={(e)=>handleTrash(e)}
                   >Remove</button>
                 : trashed &&

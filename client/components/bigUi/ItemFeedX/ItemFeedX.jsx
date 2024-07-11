@@ -94,6 +94,7 @@ const ItemFeedX = ({
                 units={units}
                 done={done}
                 iopen={iopen}
+                irap={rapDo !== false}
                 user={user}
                 canQA={canQARmv}
                 canVerify={canVerify}

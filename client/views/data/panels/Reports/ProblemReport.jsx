@@ -13,6 +13,7 @@ const ProblemReport = ({ start, end, dataset })=> {
   
   useEffect( ()=>{
     replySet(false);
+    crossSet(false);
   },[start, end, dataset]);
   
   function getReport() {
@@ -68,14 +69,14 @@ const ProblemReport = ({ start, end, dataset })=> {
           [ 'Failed Serialized Items', re.itemStats.itemsFail, failOfComp+'%' ],
         ];
         
-        const prob = dataset === 'noncon' ? 
+        const prob = dataset === 'noncon' ?
           [
             [ `Discovered ${Pref.nonCons}`, re.nonConStats.foundNC ],
             [ `Live Items with ${Pref.nonCons}`, re.nonConStats.uniqueSerials, nciOfComp+'%' ],
-            [ `Live Items without ${Pref.nonCons}`, cleanItms, clnOfComp+'%' ],
-            [ `${Pref.nonCon} Types `, re.nonConStats.typeBreakdown ],
-            [ `${Pref.nonCon} Departments`, re.nonConStats.whereBreakdown ],
-          ] 
+            [ `Live Items without ${Pref.nonCons}`, cleanItms, clnOfComp+'%' ]
+            // [ `${Pref.nonCon} Types `, re.nonConStats.typeBreakdown ],
+            // [ `${Pref.nonCon} Departments`, re.nonConStats.whereBreakdown ],
+          ]
         : dataset === 'short' ? 
           [
             [ `Discovered ${Pref.shortfalls}`, re.shortfallStats.foundSH ],

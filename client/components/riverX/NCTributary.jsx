@@ -2,7 +2,7 @@ import React, { useState, Fragment } from 'react';
 import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 import Pref from '/client/global/pref.js';
 
-const NCTributary = ({ seriesId, nonCons, sType })=> {
+const NCTributary = ({ seriesId, nonCons, sType, rapIs, canVerify })=> {
 
   function handleAction(ncKey, ACT, extra) {
     Meteor.call('runNCAction', seriesId, ncKey, ACT, extra, (error)=> {
@@ -19,7 +19,7 @@ const NCTributary = ({ seriesId, nonCons, sType })=> {
   }
   
   const inspector = Roles.userIsInRole(Meteor.userId(), 'inspect');
-  const verifier = Roles.userIsInRole(Meteor.userId(), 'verify');
+  const verifier = rapIs ? Roles.userIsInRole(Meteor.userId(), 'qa') : canVerify;
   const rest = sType === 'finish' || sType === 'checkpoint';
   
   const chunkNC = Object.entries( _.groupBy(nonCons, x=> x.type) )
@@ -213,7 +213,7 @@ const NCStream = ({ entry, rest, doAction, inspector, verifier })=>{
             <MenuItem 
               onClick={()=>handleClick('INSPECT', null, true)} 
               disabled={!verifier}>
-              Inspected, no repair required
+              Re-Inspected, no repair required
             </MenuItem> }
             <MenuItem 
               onClick={()=>handleClick('REJECT', [entry.fix.time, entry.fix.who], false)} 

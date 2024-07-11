@@ -540,18 +540,20 @@ main {
   display: none;
 }
 
-.slideMenuButton, .slideNestedMenuButton, .slideNestedLand {
+.slideMenuButton, .slideNestedMenuButton, .slideNestedLand, .slideNestedClp {
   font-family: var(--styled-font);
   display: block;
   width: 100%;
-  min-height: 6vmin;
   padding: 0 2vmin 0 1vmin;
-  font-size: 1.75vmin;
-  background-color: transparent;
-  border-bottom: 1px solid black;
   cursor: pointer;
   text-align: left;
   white-space: nowrap;
+}
+.slideMenuButton, .slideNestedMenuButton, .slideNestedLand {
+  min-height: 6vmin;
+  font-size: 1.75vmin;
+  background-color: transparent;
+  border-bottom: 1px solid black;
 }
 .slideMenuButton > .small, .slideNestedMenuButton  > .small {
   font-size: 1.25vmin;
@@ -587,6 +589,11 @@ main {
   background-color: rgb(213,218,220);
   box-shadow: 0 3px 5px 0 rgb(0 0 0 / 25%)
 }
+.slideNestedClp {
+  min-height: 4vmin;
+  font-size: 1.5vmin;
+  background-color: var(--contrast);
+}
 
 .slideMenuButton:hover, 
 .slideMenuButton:active, 
@@ -596,7 +603,8 @@ main {
 .slideNestedMenuButton.slideOn,
 .slideNestedLand:hover, 
 .slideNestedLand:active,
-.slideNestedLand.slideOn {
+.slideNestedLand.slideOn,
+.slideNestedClp:where(:hover,:active,:focus-visible) {
   width: 100%;
   color: rgb(35,35,35);
   background-color: var(--silver);

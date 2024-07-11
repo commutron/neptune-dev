@@ -3,7 +3,7 @@ import moment from 'moment';
 import Config from '/server/hardConfig.js';
 import { batchTideTime } from './tideGlobalMethods.js';
 import { syncLocale, noIg, countWaterfall, countMulti } from './utility';
-import { avgOfArray } from './calcOps';
+import { avgOfArray, asRate } from './calcOps';
 import { getEndWork } from '/server/shipOps';
 
 

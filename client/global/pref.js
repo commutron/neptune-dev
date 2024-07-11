@@ -49,7 +49,7 @@ class Pref {
     this.groupMax = 128;
     this.aliasMax = 16;
     this.interMax = 1; // Also in server hardConfig
-    this.downDayMax = 24; // max ship days in downstream
+    this.downDayMax = 36; // max ship days in downstream
     this.pagingSize = 25;
     this.idleMinutes = 0; // minus idle time from timeInDay calculation
     this.breakMin = 15; // fixed break minutes

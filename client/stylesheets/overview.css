@@ -329,14 +329,14 @@
 .downGridFrameFixed, .downGridFrameScroll {
   display: grid;
   grid-template-rows: 3dvh auto;
-  min-height: 30dvh;
+  min-height: 25dvh;
 }
 .downGridFrameFixed:last-child,
 .downGridFrameScroll:last-child {
   margin-bottom: 1vmax;
 }
 .downGridFrameFixed {
-  grid-template-columns: 4vmin auto;
+  grid-template-columns: minmax(3dvh, 4vmin) auto;
   grid-template-areas: 
     'downWeek downHeaderF'
     'downWeek downOrdersF';
@@ -351,11 +351,12 @@
   writing-mode: tb-rl;
   transform: rotate(-180deg);
   font-family: var(--styled-font);
-  font-size: 2.5vmin;
+  font-size: max(1.75dvh, 2.25vmin);
   text-align: center;
+  vertical-align: middle;
   text-transform: capitalize;
   padding-bottom: 3dvh;
-  line-height: 4vmin;
+  line-height: max(3dvh, 4vmin);
 }
 .downGridFrameFixed:nth-child(odd) > .downWeek,
 .downGridFrameFixed:nth-child(odd) > .downHeadFixed,

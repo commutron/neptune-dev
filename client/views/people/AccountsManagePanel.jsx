@@ -25,12 +25,12 @@ const AccountsManagePanel = ({ app, users, traceDT, brancheS, isDebug })=> {
         });
   
   let usersMenu = usersSort.map( (entry)=>{
-    const clss = !Roles.userIsInRole(entry._id, 'active') ? 'strike darkgrayT' : '';
+    const strk = !Roles.userIsInRole(entry._id, 'active');
     const sbtl = Roles.userIsInRole(entry._id, 'admin') ? 'Org Admin' : 
                  Roles.userIsInRole(entry._id, 'peopleSuper') ? 'People Super' :
                  Roles.userIsInRole(entry._id, 'equipSuper') ? 'Equipment Super' :
                  Roles.userIsInRole(entry._id, 'readOnly') ? 'Read Only' : null;
-    return [ entry.username, clss, sbtl ];
+    return [ entry.username, strk, sbtl ];
   });
   
   const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
@@ -44,7 +44,8 @@ const AccountsManagePanel = ({ app, users, traceDT, brancheS, isDebug })=> {
       disableAll={!isAdmin && !isPeopleSuper}
       topPage={
         <AccountsTop users={usersSort} key={000} />
-      }>
+      }
+      collapse='Inactive'>
         
       {usersSort.map( (entry, index)=>{
         if(isAdmin || isPeopleSuper) {

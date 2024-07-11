@@ -216,7 +216,10 @@ const StoneSelect = ({
       			  seriesId={seriesId}
       			  serial={item.serial}
       			  nonCons={nc}
-      			  sType={flowStep.type} />
+      			  sType={flowStep.type}
+      			  rapIs={rapIs}
+      			  canVerify={canVerify}
+      			/>
       			  
             <Shortfalls
       			  seriesId={seriesId}

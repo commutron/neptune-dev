@@ -154,45 +154,43 @@ function loopNonCons(nonCons, from, to) {
     
     let serials = new Set();
     
-    let typeBreakdown = [];
+    // let typeBreakdown = [];
     let types = new Set();
     for(let nt of inTime) {
       types.add(nt.type);
       serials.add(nt.serial);
     }
-    for(let type of types) {
-      let tyTotal = 0;
-      for(let ncT of inTime) {
-        if(ncT.type === type) {
-          tyTotal += ( Number(ncT.multi) || 1 );
-        }
-      }
-      typeBreakdown.push( [ type, tyTotal ] );
-    }
+    // for(let type of types) {
+    //   let tyTotal = 0;
+    //   for(let ncT of inTime) {
+    //     if(ncT.type === type) {
+    //       tyTotal += ( Number(ncT.multi) || 1 );
+    //     }
+    //   }
+    //   typeBreakdown.push( [ type, tyTotal ] );
+    // }
     
     let whereBreakdown = [];
     let wheres = new Set();
     for(let nw of inTime) {
       wheres.add(nw.where);
     }
-    for(let where of wheres) {
-      let whTotal = 0;
-      for(let ncW of inTime) {
-        if(ncW.where === where) {
-          whTotal += 1;
-        }
-      }
-      whereBreakdown.push( [where, whTotal ] );
-    }
+    // for(let where of wheres) {
+    //   let whTotal = 0;
+    //   for(let ncW of inTime) {
+    //     if(ncW.where === where) {
+    //       whTotal += 1;
+    //     }
+    //   }
+    //   whereBreakdown.push( [where, whTotal ] );
+    // }
     
-    // const locals = Array.from(wheres, w => w.toLowerCase() ).sort();
     const locals = [...wheres].sort();
-
-    console.log(wheres, locals);
+    // console.log(wheres, locals);
     
     let crossref = [["",...locals,"Total"]];
     
-    let endline = Array.from(locals, l => 0);
+    let endline = Array.from(locals, ()=> 0);
     
     for(let type of types) {
       const ncOfType = inTime.filter( n => n.type === type );
@@ -218,7 +216,7 @@ function loopNonCons(nonCons, from, to) {
     
     const uniqueSerials = serials.size;
     
-    resolve({foundNC, uniqueSerials, typeBreakdown, whereBreakdown, crossref});
+    resolve({foundNC, uniqueSerials, crossref});
   });
 }
 

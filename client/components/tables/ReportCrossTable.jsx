@@ -41,7 +41,7 @@ const ReportCrossTable = ({ title, dateString, rows, extraClass })=> {
           <table className='reportTable wide cap'>
             <thead className='gray cap'>
               <tr>
-                {rows[0].map( (sub, index)=>{
+                {rows[0]?.map( (sub, index)=>{
                   if(sub === "") {
                     return <th key="000"></th>;
                   }else{

@@ -219,7 +219,7 @@ Meteor.methods({
   },
 
   inspectNCX(seriesId, ncKey) {
-    if(Meteor.userId()) {
+    if(Roles.userIsInRole(Meteor.userId(), 'inspect')) {
   		XSeriesDB.update({_id: seriesId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
   			$set : { 
   			  'nonCon.$.inspect': {

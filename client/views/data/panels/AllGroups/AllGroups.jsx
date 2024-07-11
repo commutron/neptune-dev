@@ -15,10 +15,10 @@ const AllGroups = ({
                   g1.alias < g2.alias ? -1 : g1.alias > g2.alias ? 1 : 0 );
                   
   const menuList = groupS.map( (entry)=> {
-                    const clss = entry.hibernate ? 'strike darkgrayT' : '';
-                    let it = entry.internal ? ' intrBlue' : '';
-                    let nl = entry.internal && 'Internal';
-                    return [entry.alias, clss+it, nl];
+                    const strk = entry.hibernate;
+                    let clss = entry.internal ? ' intrBlue' : '';
+                    let sub = entry.internal ? 'Internal' : '';
+                    return [entry.alias, strk, sub, clss];
                   });
   
   const defaultSlide = specify ? 
@@ -39,6 +39,7 @@ const AllGroups = ({
         />
       }
       defaultSlide={defaultSlide}
+      collapse={Pref.hibernatated}
       textStyle='up'>
     
       {groupS.map( (entry, index)=> {

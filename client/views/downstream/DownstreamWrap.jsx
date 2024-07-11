@@ -8,6 +8,7 @@ import MonthlyReport from './MonthlyReport';
 import WeeklyReport from './WeeklyReport';
 import DailyReport from './DailyReport';
 import TrendWrap from './DownTrends/TrendWrap';
+import ZPlanGrid from './ZPlanGrid';
 
 const DownstreamWrap = ({ 
   view, subLink, 
@@ -77,6 +78,24 @@ const DownstreamWrap = ({
         navBar='down'
       >
         <TrendWrap 
+          app={app}
+          isDebug={isDebug}
+        />
+      </StreamLayout>
+    );
+  }
+  
+  if(view === 'zplan') {
+    return(
+      <StreamLayout
+        user={user}
+        app={app}
+        title='Experimental Planner Experiment'
+        subLink={view}
+        navBar='down'
+      >
+        <ZPlanGrid
+          traceDT={traceDT}
           app={app}
           isDebug={isDebug}
         />

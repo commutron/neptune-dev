@@ -136,12 +136,6 @@ export const PriorityKPI = ({
     const ontmTxt = onTime ? 'Predicted On Time' : onTime === false ? 'Predicted Late' : 'Prediction Unavailable';
     const soonTxt = `Earliest Complete: ~${moment(pt.estSoonest).format("ddd, MMM Do, h:mm a")}`;
     
-    const startby = moment().addWorkingTime(bffrTime, 'minutes').format();
-    
-    const recondue = moment(startby).addWorkingTime(e2t, 'minutes').format();
-    
-    console.log({startby, recondue});
-    
     const work = <dl className='readlines'>
       <dt className='bold'>{pt.lateLate ? 'Is Late' : ontmTxt}</dt>
       <dd>{soonTxt}</dd>
