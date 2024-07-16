@@ -18,13 +18,14 @@ const ZPlanGrid = ({ traceDT, app, isDebug })=> {
     
     const cycles = 180 + goback;
     const bracket = 'day';
-    const nowLocal = moment().subtract(goback, 'days');
+    const nowLocal = moment();
+    const backDate = moment().clone().subtract(goback, 'days');
     
     let colArray = [];
     let headRow = [""];
     for(let w = 0; w < cycles; w++) {
       
-      const loop = nowLocal.clone().add(w, bracket);
+      const loop = backDate.clone().add(w, bracket);
      
       colArray.push(loop);
       headRow.push(loop.format('DD/MM'));
@@ -34,7 +35,7 @@ const ZPlanGrid = ({ traceDT, app, isDebug })=> {
     let rowArray = [headRow];
     for(let pt of traceDT) {
 
-      const batch = `${pt.batch} ${pt.onFloor ? "(R)" : ''}${pt.hold ? "(H)" : ''}`;
+      const batch = `${pt.batch} ${pt.onFloor ? "(R)" : ''}${pt.hold ? "{H}" : ''}${pt.isActive.hasNone ? "" : "[A]"}`;
       isDebug && console.log(pt);
 
       const e2t = pt.est2tide || 0;
