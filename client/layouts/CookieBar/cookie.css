@@ -7,12 +7,12 @@
 }
 
 .cookieRow {
-  grid-area: proLeft / proLeft / frontCenter / frontCenter;
+  grid-area: frontCenter;/*proLeft / proLeft / frontCenter / frontCenter;*/
   background-color: rgb(25,25,25);
   width: 100%;
-  max-width: calc(100vw - 20dvh);
+  max-width: calc(100vw - (var(--vert_adapt) * 3));
   height: 100%;
-  max-height: 8dvh;
+  max-height: var(--vert_frame);
   padding: 0;
 }
 
@@ -22,8 +22,8 @@
   transition-property: background-color, color, max-width;
   color: var(--silver);
   margin: 0;
-  font-size: 2.5vmin;
-  text-indent: 1vmin;
+  font-size: calc(var(--vert_border) * 2.5);
+  text-indent: var(--vert_border);
   cursor: pointer;
 }
 .cookie {
@@ -37,6 +37,7 @@
 }
 .cookieCrumb:hover > .cookie {
   max-width: calc( 100vw - ( 24vh + 10vmin ) );
+  max-width: calc( 100vw - ( var(--vert_adapt) * 3 ) + 10vmin ) );
 }
 .cookieCrumb:first-child {
   height: 100%;
@@ -81,14 +82,4 @@
 .cookieCrumb:active + .cookieCrumb > .crumb::before,
 .cookieCrumb:active + .endCrumb::before {
   background-color: var(--silver);
-}
-
-@media (orientation: portrait) {
-  .cookieRow { 
-    grid-area: frontCenter;
-    max-height: 8vmin
-  }
-  .cookieCrumb:hover > .cookie {
-    max-width: calc( 100vw - ( 24vmin + 10vmin ) );
-  }
 }

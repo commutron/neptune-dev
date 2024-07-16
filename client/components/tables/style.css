@@ -38,8 +38,15 @@
 .reportTable td {
   font-size: 0.9rem;
   text-align: center;
-  padding-right: 1ch;
-  padding-left: 1ch;
+  padding-inline: 1ch;
+}
+.reportTable.compact th,
+.reportTable.compact td {
+  font-size: 0.8rem;
+  padding: 0.5ch;
+  padding-inline: 0.5ch;
+  padding-block: 0.5ch;
+  height: 0;
 }
 
 .overviewTable th { text-align: left; }

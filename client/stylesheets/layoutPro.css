@@ -7,7 +7,7 @@
 
 .windowPro {
   display: grid;
-  grid-template-rows: 8dvh 92dvh;
+  grid-template-rows: var(--vert_frame) var(--vert_main);
   grid-template-columns: auto;
   grid-template-areas: 
     "tenHeader"
@@ -21,8 +21,8 @@
 .containerPro {
   display: grid;
   grid-template-rows: 
-    8dvh 
-    calc(92dvh - 65px)
+    var(--vert_frame) 
+    calc(var(--vert_main) - 65px)
     65px;
   grid-template-areas: 
     "tenHeader tenHeader"
@@ -133,7 +133,7 @@
 .firstBadge {
   width: 100%;
   height: 100%;
-  font-size: 2.5dvh;
+  font-size: calc(var(--vert_border) * 2.5);
   z-index: 2;
 }
 @media screen and (prefers-reduced-motion: no-preference) {
@@ -143,8 +143,8 @@
   content: "𝗙𝗶𝗿𝘀𝘁\a" attr(data-steps);
   position: fixed;
   z-index: 10;
-  top: 1dvh;
-  left: 21.6dvh;
+  top: var(--vert_border);
+  left: calc(var(--vert_adapt) * 3.2);
   min-width: 75px;
   margin: 0.5dvh 0;
   background-color: var(--peterriver);
@@ -155,7 +155,7 @@
 }
 
 #lookup {
-  font-size: 4.25dvh;
+  font-size: calc(var(--vert_border) * 4.25);
 	color: white;
 	background-color: transparent;
   -webkit-appearance: none;
@@ -164,12 +164,12 @@
 
 @media screen and (max-width: 885px){
   #lookup { 
-    font-size: 3.75dvh;
+    font-size: calc(var(--vert_border) * 3.75);
   }
 }
 @media screen and (max-width: 785px){
   #lookup {
-    font-size: 3.25dvh; 
+    font-size: calc(var(--vert_border) * 3.25); 
   }
 }
 #lookup::selection {
@@ -191,69 +191,4 @@
 #lookup:focus {
   outline-offset: -2px;
   outline-style: solid;
-}
-
-@media (orientation: portrait) {
-  .windowPro {
-    grid-template-rows: 
-      8dvh 
-      92dvh;
-  }
-  .containerPro {
-    display: grid;
-    grid-template-rows: 
-      8dvh 
-      calc(92dvh - 65px) 
-      65px;
-    grid-template-areas: 
-      "tenHeader tenHeader"
-      "proPrime proInstruct"
-      "proForm proForm";
-  }
-  .windowPro .tenHeader,
-  .containerPro .tenHeader {
-    grid-template-rows: 
-      1dvh 
-      7dvh;
-    grid-template-columns: 
-      8dvh 
-      7dvh 
-      0
-      1fr 
-      6dvh
-      6dvh;
-    grid-template-areas: 
-      'topBorder topBorder topBorder topBorder topBorder topBorder'
-      'homeIcon proLeft auxLeft frontCenter auxRight proRight';
-  }
-  .windowPro .homeIconLink, 
-  .windowPro .homeIconLogo,
-  .containerPro .homeIconLink, 
-  .containerPro .homeIconLogo {
-    width: 8dvh;
-    height: 8dvh;
-    padding: 1dvh;
-  }
-  .windowPro .frontCenterTitle,
-  .containerPro .frontCenterTitle {
-    max-width: calc(100vw - 16dvh);
-    height: 7dvh;
-    font-size: 4dvh;
-  }
-  .windowPro .taskLink,
-  .containerPro .taskLink {
-    margin: 1dvh 0;
-    width: 5dvh;
-    height: 5dvh;
-    font-size: 3dvh;
-  }
-  .windowPro  .followTask i,
-  .containerPro .followTask i {
-    width: 5dvh;
-    height: 5dvh;
-    font-size: 2dvh;
-  }
-  .firstBadge::after {
-    left: 21.1dvh;
-  }
 }

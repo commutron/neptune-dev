@@ -5,6 +5,16 @@ body {
   padding: 0;
   overflow: hidden;
   transform: translate3d(0, 0, 0);
+  --vert_border: max(3px, 1vmin);
+  --vert_frame: max(20px, 8vmin);
+  --vert_adapt: calc(var(--vert_frame) - var(--vert_border));
+  --vert_main: calc(100dvh - var(--vert_frame));
+}
+.windowPro, .containerPro {
+  --vert_frame: max(40px, 8vmin);
+  --vert_border: max(6px, 1vmin);
+  --vert_adapt: calc(var(--vert_frame) - var(--vert_border));
+  --vert_main: calc(100dvh - var(--vert_frame));
 }
 
 main {
@@ -164,9 +174,7 @@ main {
   /*min-width: 768px;*/
   min-height: 100%;
   max-height: 100%;
-  grid-template-rows: 
-    8dvh 
-    92dvh;
+  grid-template-rows: var(--vert_frame) var(--vert_main);
   grid-template-columns: 100%;
   grid-template-areas: 
     'tenHeader'
@@ -196,7 +204,7 @@ main {
   display: grid;
   width: 100vw;
   height: 100dvh;
-  grid-template-rows: 8dvh 1fr;
+  grid-template-rows: var(--vert_frame) 1fr;
   grid-template-columns: 100%;
   grid-template-areas: 
     'tenHeader'
@@ -207,14 +215,14 @@ main {
   grid-area: tenHeader;
   display: grid;
   max-width: 100vw;
-  grid-template-rows: 1dvh 7dvh;
+  grid-template-rows: var(--vert_border) var(--vert_adapt);
   grid-template-columns: 
-    8dvh
-    7dvh
+    var(--vert_frame)
+    var(--vert_adapt)
     0
     1fr 
-    7dvh
-    7dvh;
+    var(--vert_adapt)
+    var(--vert_adapt);
   grid-template-areas: 
     'topBorder topBorder topBorder topBorder topBorder topBorder'
     'homeIcon proLeft auxLeft frontCenter auxRight proRight';
@@ -229,7 +237,7 @@ main {
 .homeIcon {
   grid-area: homeIcon;
   background-color: var(--neptuneColor);
-  padding-bottom: 1dvh;
+  padding-bottom: var(--vert_border);
   background-image: url(neptune-logo-white.svg);
   background-repeat: no-repeat;
   background-position: 50% 30%;
@@ -237,11 +245,11 @@ main {
 }
 .frontCenterTitle {
   grid-area: frontCenter;
-  max-width: calc(100vw - 24dvh);
-  height: 7dvh;
+  max-width: calc(100vw - (var(--vert-adapt) * 3));
+  height: var(--vert_adapt);
   background-color: rgb(25,25,25);
   font-family: var(--styled-font);
-  font-size: 4dvh;
+  font-size: calc(var(--vert_border) * 4);/*4dvh;*/
   font-weight: 900;
   color: var(--silver);
 }
@@ -263,14 +271,14 @@ main {
   text-overflow: ellipsis;
 }
 .homeIconLink, .homeIconLogo {
-  width: 8dvh;
-  height: 8dvh;
+  width: var(--vert_frame);
+  height: var(--vert_frame);
 }
 .homeIconLink:focus-visible {
   outline-color: white;
   outline-offset: -0.2dvh;
 }
-.homeIconLogo { padding: 1dvh; }
+.homeIconLogo { padding: var(--vert_border); }
 
 .proLeft { grid-area: proLeft; }
 .auxLeft { 
@@ -282,7 +290,7 @@ main {
 
 .homeNavi, .homeNaviMini {
   display: grid;
-  grid-gap: 1dvh 1vw;
+  grid-gap: var(--vert_border);
   place-self: center center;
   place-items: stretch stretch;
 }
@@ -342,18 +350,19 @@ main {
   overflow-y: hidden;
 }
 .userMenuTop {
-  margin-top: 1dvh;
+  margin-top: var(--vert_border);
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
+  /*margin-top: var(--vert_border);*/
 }
 .userMenuTopTide {
   display: flex;
   flex-flow: column nowrap;
   justify-content: start;
   align-items: center;
-  width: 7dvh;
-  min-width: 7dvh;
+  width: var(--vert_adapt);
+  min-width: var(--vert_adapt);
 }
 .userMenuPing {
   margin-block: 5px;
@@ -489,10 +498,10 @@ main {
 
 .slidesLayout, .slidesNestedLayout {
   display: grid;
-  grid-template-rows: 92dvh;
+  grid-template-rows: var(--vert_main);
   grid-template-columns: minmax(min-content, 15vmin) 1fr;
   width: 100%;
-  height: calc(100% - 8dvh);
+  height: calc(100% - var(--vert_frame));
 }
 .slidesLayout {
   grid-template-areas: 
@@ -798,10 +807,10 @@ n-sm-model-content {
 .auxTipScale::before,
 .firstBadge::after,
 .leapBonus::after {
-  font-size: 1.5dvh;
+  font-size: calc(var(--vert_border) * 1.5);
   border-radius: 25px;
   width: auto;
-  padding: 1dvh;
+  padding: var(--vert_border);
   transition: opacity 150ms ease-in;
 }
 .tideOut::before, 
@@ -848,15 +857,12 @@ n-sm-model-content {
 @media (orientation: portrait) {
   .taskTip:after, 
   .auxTipScale:before {
-    padding: 1vmin;
     font-size: 1.5vmin;
   }
   .tideFollowTip::before {
-    padding: 1vmin;
     font-size: 1.5vmin;
   }
   .containerPro .tideFollowTip::before {
-    padding: 1dvh;
     font-size: 1.5dvh;
   }
 }
@@ -1544,72 +1550,13 @@ n-col-table-head > span {
 
 .minH60 { min-height: 60px; }
 
-
 @media (orientation: portrait) {
-  
-  .simpleContainer, .splashContainer {
-    grid-template-rows: 8vmin calc(100dvh - 8vmin);
-  }
-  .simpleContainer .tenHeader,
-  .splashContainer .tenHeader {
-    grid-template-rows: 1vmin 7vmin;
-    grid-template-columns: 8vmin 1fr 8vmin 8vmin;
-    grid-template-areas: 
-      'topBorder topBorder topBorder topBorder'
-      'homeIcon frontCenter auxRight proRight';
-  }
-  .homeIcon {
-    grid-area: topBorder / topBorder / homeIcon / homeIcon;
-    padding: 0;
-    background-position: 50% 50%;
-  }
-  .homeIconLink, 
-  .homeIconLogo {
-    width: 8vmin;
-    height: 8vmin;
-    padding: 1vmin;
-  }
-  .frontCenterTitle {
-    max-width: calc(100vw - 16vmin);
-    height: 7vmin;
-    font-size: 4vmin;
-  }
   .navButtonText {
     font-size: 3vmin;
     padding: 0 1vmin;
   }
   #userRightPanel {
     width: 50vmin;
-  }
-  .simpleContainer .userMenuTop, .splashContainer .userMenuTop {
-    margin-top: 1vmin;
-  }
-  .simpleContainer .userMenuTopTide, .splashContainer .userMenuTopTide {
-    width: 8vmin;
-    min-width: 8vmin;
-  }
-  .windowPro .userMenuTopTide, .containerPro .userMenuTopTide {
-    width: 6dvh;
-    min-width: 6dvh;
-  }
-  .slidesLayout, .slidesNestedLayout {
-    grid-template-rows: calc(100dvh - 8vmin);
-    height: calc(100% - 8vmin);
-  }
-  .taskLink {
-    margin: 1vmin 0;
-    min-width: 5.5vmin;
-    width: 5.5vmin;
-    min-height: 5.5vmin;
-    height: 5.5vmin;
-    font-size: 3.25vmin;
-  }
-  .followTask i {
-    min-width: 5.5vmin;
-    width: 5.5vmin;
-    min-height: 5.5vmin;
-    height: 5.5vmin;
-    font-size: 2.25vmin;
   }
 }
 

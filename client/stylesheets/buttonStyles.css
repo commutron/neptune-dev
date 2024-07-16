@@ -457,11 +457,11 @@ button.variableInput.biggest { height: 64px; }
 
 .taskLink {
   /*font-family: var(--styled-font);*/
-  margin: 0.75dvh 0;
-  width: 5.5dvh;
-  min-height: 5.5dvh;
+  margin: calc(var(--vert_border) * 0.75) 0;
+  width: calc(var(--vert_adapt) * 0.75);
+  min-height: calc(var(--vert_adapt) * 0.75);
   border-radius: 50%;
-  font-size: 3.5dvh;
+  font-size: calc(var(--vert_border) * 3);
   cursor: pointer;
 }
 
@@ -509,7 +509,7 @@ button.variableInput.biggest { height: 64px; }
 .auxTipScale::before {
   position: absolute;
   content: attr(aria-label);
-  margin: 0.25dvh 0;
+  margin: calc(var(--vert_border) * 0.25) 0;
   max-width: -webkit-fill-available;
   max-width: max-content;
   background-color: var(--task-front-color);
@@ -518,26 +518,11 @@ button.variableInput.biggest { height: 64px; }
   z-index: 11;
 }
 .taskTip::after {
-  left: 7.5dvh;
+  left: calc(var(--vert_adapt) * 1);
 }
 .auxTip::before, 
 .auxTipScale::before {
-  right: 14dvh;
-}
-
-@media (orientation: portrait) {
-  .taskTip::after {
-    left: 7.5vmin;
-    margin: 0;
-  }
-  .auxTip::before {
-    margin: 0.15dvh 0;
-    right: 12dvh;
-  }
-  .auxTipScale::before {
-    margin: 0.25vmin 0;
-    right: 15.5vmin;
-  }
+  right: calc(var(--vert_adapt) * 2);
 }
 
 .lightTheme.overMenuBar .taskTip::after {
@@ -588,9 +573,9 @@ button.variableInput.biggest { height: 64px; }
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 5.5dvh;
-  height: 5.5dvh;
-  font-size: 2.5dvh;
+  width: calc(var(--vert_adapt) * 0.75);
+  height: calc(var(--vert_adapt) * 0.75);
+  font-size: calc(var(--vert_border) * 2.25);
   font-weight: 600;
   color: var(--task-front-color);
   transition: all 150ms ease-in-out;
@@ -599,7 +584,7 @@ button.variableInput.biggest { height: 64px; }
   position: absolute;
 }
 .followTask i:last-child {
-  border-width: 0.3vh;
+  border-width: calc(var(--vert_border) * 0.3);
   border-style: inset;
   border-color: var(--task-front-color);
   border-radius: 50%;

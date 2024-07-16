@@ -38,7 +38,7 @@ const ReportCrossTable = ({ title, dateString, rows, extraClass })=> {
             disabled={rows.length === 1}
           ><i className='fas fa-download fa-fw'></i></button>
         </div>
-          <table className='reportTable wide cap'>
+          <table className='reportTable compact wide cap'>
             <thead className='gray cap'>
               <tr>
                 {rows[0]?.map( (sub, index)=>{

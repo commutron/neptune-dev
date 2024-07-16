@@ -102,11 +102,11 @@ n-tide-task label {
 .auxLeft > .tideIn, 
 .auxLeft > .tideOut, 
 .auxLeft > .tideLock {
-  width: 7dvh;
-  height: 7dvh;
+  width: var(--vert_adapt);
+  height: var(--vert_adapt);
 }
 .tideIcon {
-  font-size: 2.5dvh;
+  font-size: calc(var(--vert_border) * 2.5);
   border-radius: 50%;
 }
 .tideIcon svg {
@@ -197,7 +197,7 @@ n-tide-task label {
 .tideOutTip::before, 
 .tideFollowTip::before {
   position: absolute;
-  top: 2dvh;
+  top: calc(var(--vert_border) * 2);
   border-radius: 25px;
   text-transform: capitalize;
   width: auto;
@@ -213,21 +213,8 @@ n-tide-task label {
 }
 .tideFollowTip::before {
   content: attr(aria-label);
-  right: 7vh;
+  right: var(--vert_adapt);
   background-color: rgb(0,0,0);
   color: var(--silver);
   margin: 0.5dvh 0;
-}
-
-@media (orientation: portrait) {
-  .tideFollowTip::before {
-    top: 2vmin;
-    margin: 0.5vmin 0;
-    right: 7.5vmin;
-  }
-  .containerPro .tideFollowTip::before {
-    top: 2dvh;
-    margin: 0.5dvh 0;
-    right: 6dvh;
-  }
 }

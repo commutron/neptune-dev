@@ -1,15 +1,21 @@
 .containerEx {
   display: grid;
-  grid-template-rows: 
-    8dvh
-    92dvh;
-  grid-template-columns: 8dvh auto;
+  grid-template-rows: var(--vert_frame) var(--vert_main);
+  grid-template-columns: var(--vert_frame);
   grid-template-areas: 
     'tenHeader tenHeader'
     'taskBar contentArea';
   align-content: center;
   overflow-y: hidden !important;
   overflow-x: hidden !important;
+}
+
+.containerEx .tenHeader {
+  grid-template-rows: var(--vert_border) var(--vert_adapt);
+  grid-template-columns: var(--vert_frame) 1fr var(--vert_frame) var(--vert_frame);
+  grid-template-areas: 
+    'topBorder topBorder topBorder topBorder'
+    'homeIcon frontCenter auxRight proRight';
 }
 
 .taskBarEx {
@@ -42,21 +48,21 @@
   grid-template-columns: auto;
 }
 .baseContainer {
-  grid-template-rows: 92dvh 0px;
+  grid-template-rows: var(--vert_main) 0px;
   grid-template-areas: 
     'traverseContent'
     'traverseContent';
 }
 .midTraverseContainer {
   grid-template-columns: auto minmax(10vmin, 14vmax);
-  grid-template-rows: 92dvh;
+  grid-template-rows: var(--vert_main);
   grid-template-areas: 
     'traverseContent traverseList';
 }
 
 .traverseContainer {
   grid-template-columns: auto minmax(10vmin, 14vmax);
-  grid-template-rows: calc(92dvh - 48px) 48px;
+  grid-template-rows: calc(var(--vert_main) - 48px) 48px;
   grid-template-areas: 
     'traverseContent traverseList'
     'actionBarEx actionBarEx';
@@ -157,7 +163,7 @@
 
 .relativeWrap { position: relative; }
 .fixedResults {
-  max-height: calc(92dvh - 2vmax - 110px);
+  max-height: calc(var(--vert_main) - 2vmax - 110px);
   overflow-y: scroll;
   box-shadow: var(--navIndicatorIn);
 }
@@ -177,27 +183,4 @@
 .fixedResults:after {
   bottom: 0;
   background: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,0.15));
-}
-
-@media (orientation: portrait) {
-  .containerEx {
-    grid-template-rows: 8vmin calc(100dvh - 8vmin);
-    grid-template-columns: 8vmin auto;
-  }
-  .containerEx .tenHeader {
-    grid-template-rows: 1vmin 7vmin;
-    grid-template-columns: 8vmin 1fr 8vmin 8vmin;
-    grid-template-areas: 
-      'topBorder topBorder topBorder topBorder'
-      'homeIcon frontCenter auxRight proRight';
-  }
-  .baseContainer {
-    grid-template-rows: calc(100dvh - 8vmin) 0px;
-  }
-  .midTraverseContainer {
-    grid-template-rows: calc(100dvh - 8vmin);
-  }
-  .traverseContainer {
-    grid-template-rows: calc(100dvh - 8vmin - 48px) 48px;
-  }
 }

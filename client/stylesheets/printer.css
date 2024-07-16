@@ -40,6 +40,20 @@ n-print {
     display: block !important;
     visibility: visible !important;
   }
+  .plainPrint {
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    border-block: none !important;
+    border-inline: none !important;
+    border-bottom: none !important;
+    box-shadow: none !important;
+    background-color: unset !important;
+  }
+  .slidesSlide:has(.plainPrint) {
+    background-color: unset !important;
+    box-shadow: none !important;
+  }
   .errorReport {
     background-color: white;
     color: black;

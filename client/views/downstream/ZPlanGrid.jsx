@@ -14,7 +14,7 @@ const ZPlanGrid = ({ traceDT, app, isDebug })=> {
   
   function getData() {
     
-    const cycles = 90;
+    const cycles = 180;
     const bracket = 'day';
     const nowLocal = moment();
     
@@ -38,7 +38,7 @@ const ZPlanGrid = ({ traceDT, app, isDebug })=> {
       const e2t = pt.est2tide || 0;
       
       // const q2t = pt?.quote2tide || 0;
-      const bffrTime = pt.estEnd2fillBuffer;
+      const bffrTime = pt.estEnd2fillBuffer || 0;
       
       // const e2i = pt.est2item || 0;
       // const e2iTxt = `production curve est.: ${min2hr(e2i)} hours`;
