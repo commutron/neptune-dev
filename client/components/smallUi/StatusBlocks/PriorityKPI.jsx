@@ -56,10 +56,6 @@ export const PriorityKPI = ({
   batchID, ptData, isDone, oRapid, stOpen, app, isDebug, core
 })=> {
   
-  const pt = ptData;
-  const q2t = pt?.quote2tide || 0;
-  const doneQuote = q2t > 0 ? `Remaining Quoted: ${min2hr(q2t)} hours` : `Over Quoted: ${Math.abs(min2hr(q2t))} hours`;
-  
   const doneSty = [
     {
       color: 'var(--nephritis)',
@@ -86,8 +82,13 @@ export const PriorityKPI = ({
     );
   }
 
+  const pt = ptData;
+  
   if( pt && pt.batchID === batchID ) {
     
+    const q2t = pt.quote2tide || 0;
+    const doneQuote = q2t >= 0 ? `Remaining Quoted: ${min2hr(q2t)} hours` : `Over Quoted: ${Math.abs(min2hr(q2t))} hours`;
+  
     const e2t = pt.est2tide;
     const bffrTime = pt.estEnd2fillBuffer;
     const bffrRel = pt.bffrRel;
@@ -129,7 +130,7 @@ export const PriorityKPI = ({
     const e2iTxt = `production curve est.: ${min2hr(e2i)} hours`;
     const e2tTxt = `past performance est.: ${min2hr(e2t)} hours`;
     
-    const avgRmn = avgOfArray([q2t, e2t, e2i], true);
+    const avgRmn = avgOfArray([q2t, e2t, e2i]);
     const treTxt = `Best Estimate: ~${min2hr(Math.max(0,avgRmn))} hours`;
     
     const onTime = !pt.estSoonest ? null : new Date(pt.shipAim) > new Date(pt.estSoonest);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 
 const ToggleSearch = ({ 
@@ -6,6 +6,7 @@ const ToggleSearch = ({
 })=> {
 
   function batchAction() {
+    console.log(queryState);
     const valid = queryState && queryState.length > 2;
     if(valid) {
       Meteor.call('batchExtraLookup', queryState, (error, reply)=>{
@@ -64,6 +65,7 @@ const ToggleSearch = ({
   
   function handle(e) {
     const value = e.target.value;
+    console.log(value);
     const valid = value && value.length > (tggl === false ? 5 : 3);
     queryUP(value);
     if(!valid) {
@@ -79,19 +81,19 @@ const ToggleSearch = ({
 	      <button
 	        title={`${Pref.xBatchs}`}
           className={`${bttnClss} ${tggl ? 'toggleOn' : 'toggleOff'}`}
-          onClick={(e)=>doTog(true)}
+          onClick={()=>doTog(true)}
         ><i className="fas fa-cubes fa-fw"></i></button>
         
         <button
           title={`${Pref.item} ${Pref.itemSerial}s`}
           className={`${bttnClss} ${tggl === false ? 'toggleOn' : 'toggleOff'}`}
-          onClick={(e)=>doTog(false)}
+          onClick={()=>doTog(false)}
         ><i className="fas fa-qrcode fa-fw"></i></button>
         
         <button
           title={`${Pref.trackFirst} details`}
           className={`${bttnClss} ${tggl === null ? 'toggleOn' : 'toggleOff'}`}
-          onClick={(e)=>doTog(null)}
+          onClick={()=>doTog(null)}
         ><i className="fas fa-check-double fa-fw"></i></button>
       
         <input

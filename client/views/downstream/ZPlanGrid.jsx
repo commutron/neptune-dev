@@ -38,37 +38,32 @@ const ZPlanGrid = ({ traceDT, app, isDebug })=> {
       const batch = `${pt.batch} ${pt.onFloor ? "(R)" : ''}${pt.hold ? "{H}" : ''}${pt.isActive.hasNone ? "" : "[A]"}`;
       isDebug && console.log(pt);
 
-      const e2t = pt.est2tide || 0;
+      // const e2t = pt.est2tide || 0;
       
-      // const q2t = pt?.quote2tide || 0;
-      const bffrTime = pt.estEnd2fillBuffer || 0;
+      const q2t = pt.quote2tide || 0;
       
       // const e2i = pt.est2item || 0;
       // const e2iTxt = `production curve est.: ${min2hr(e2i)} hours`;
       // const e2tTxt = `past performance est.: ${min2hr(e2t)} hours`;
       
-      // const avgRmn = avgOfArray([q2t, e2t, e2i], true);
-      // const treTxt = `Best Estimate: ~${min2hr(Math.max(0,avgRmn))} hours`;
-      
       // const onTime = !pt.estSoonest ? null : new Date(pt.shipAim) > new Date(pt.estSoonest);
       // const ontmTxt = onTime ? 'Predicted On Time' : onTime === false ? 'Predicted Late' : 'Prediction Unavailable';
       // const soonTxt = `Earliest Complete: ~${moment(pt.estSoonest).format("ddd, MMM Do, h:mm a")}`;
-      
+
       // if start now
-      const doneby = moment(pt.estSoonest).format();
-      
-      const startby = nowLocal.clone().addWorkingTime(bffrTime, 'minutes').format();
-      const shipby = pt.shipAim;
+      const doneby = pt.estSoonest || nowLocal;
+      const shipby = moment(pt.shipAim);
       const dueby = pt.salesEnd;
-      const recondue = moment(startby).addWorkingTime(e2t, 'minutes').format(); // verification
       
-      isDebug && console.log({batch, startby, recondue, shipby, dueby});
+      const startby = shipby.clone().subtractWorkingTime(q2t, 'minutes').format();
+      
+      isDebug && console.log({batch, startby, shipby, dueby});
       
       let row_run = [batch];
       for(let d of colArray) {
         const isShip = d.isSame(shipby, 'day') ? 'S ' : '';
         const isFull = d.isSame(dueby, 'day') ? 'F ' : '';
-        const isEarly = d.isBetween(nowLocal, doneby, 'day', '[)' ) ? 'I ' : '';
+        const isEarly = d.isBetween(nowLocal, doneby, 'day', '[]' ) ? 'I ' : '';
         const isLater = d.isBetween(startby, shipby, 'day', '[)' ) ? 'Q ' : '';
         const isExtra = d.isBetween(shipby, dueby, 'day', '(]' ) ? 'B ' : '';
         
@@ -126,11 +121,12 @@ const ZPlanGrid = ({ traceDT, app, isDebug })=> {
       <p className='vmargin'>
         <dd>onFloor = R</dd>
         <dd>onHold = H</dd>
+        <dd>isActive = A</dd>
         <dd>isShip = shipby = S</dd>
         <dd>isFull = dueby = F</dd>
-        <dd>isEarly = now-doneby = I</dd>
-        <dd>isLater = startby-shipby = Q</dd>
-        <dd>isExtra = ship-fulfill = B</dd>
+        <dd>isEarly = now to doneby = I</dd>
+        <dd>isLater = startby to shipby = Q</dd>
+        <dd>isExtra = ship to fulfill = B</dd>
       </p>
            
     </div>
