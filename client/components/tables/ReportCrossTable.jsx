@@ -3,7 +3,7 @@ import './style.css';
 import { toast } from 'react-toastify';
 
 
-const ReportCrossTable = ({ title, dateString, rows, extraClass })=> {
+const ReportCrossTable = ({ title, dateString, rows, extraClass, colHl })=> {
   
   function exportTable() {
     const filename = title.split(" ").join("_");
@@ -46,7 +46,7 @@ const ReportCrossTable = ({ title, dateString, rows, extraClass })=> {
                     return <th key="000"></th>;
                   }else{
                     return(
-                      <th key={index+'header'}>{sub}</th>
+                      <th key={index+'header'} className={index === colHl ? 'contrast' : ''}>{sub}</th>
                 )}})}
               </tr>
             </thead>
@@ -65,7 +65,7 @@ const ReportCrossTable = ({ title, dateString, rows, extraClass })=> {
                           );
                         }else{
                           return(
-                            <td key={ix+rndm}>
+                            <td key={ix+rndm} className={ix === colHl ? 'contrast' : ''}>
                               {sub}
                             </td>
                           );

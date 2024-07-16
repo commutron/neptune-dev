@@ -12,11 +12,13 @@ const ZPlanGrid = ({ traceDT, app, isDebug })=> {
   
   const [arrayData, arrayDataSet] = useState(false);
   
+  const goback = 7;
+  
   function getData() {
     
-    const cycles = 180;
+    const cycles = 180 + goback;
     const bracket = 'day';
-    const nowLocal = moment();
+    const nowLocal = moment().subtract(goback, 'days');
     
     let colArray = [];
     let headRow = [""];
@@ -27,7 +29,7 @@ const ZPlanGrid = ({ traceDT, app, isDebug })=> {
       colArray.push(loop);
       headRow.push(loop.format('DD/MM'));
     }
-    console.log(colArray);
+    isDebug && console.log(colArray);
     
     let rowArray = [headRow];
     for(let pt of traceDT) {
@@ -59,14 +61,14 @@ const ZPlanGrid = ({ traceDT, app, isDebug })=> {
       const dueby = pt.salesEnd;
       const recondue = moment(startby).addWorkingTime(e2t, 'minutes').format(); // verification
       
-      console.log({batch, startby, recondue, shipby, dueby});
+      isDebug && console.log({batch, startby, recondue, shipby, dueby});
       
       let row_run = [batch];
       for(let d of colArray) {
         const isShip = d.isSame(shipby, 'day') ? 'S ' : '';
         const isFull = d.isSame(dueby, 'day') ? 'F ' : '';
-        const isEarly = d.isBetween(nowLocal, doneby, 'day', '[]' ) ? 'I ' : '';
-        const isLater = d.isBetween(startby, shipby, 'day', '[]' ) ? 'Q ' : '';
+        const isEarly = d.isBetween(nowLocal, doneby, 'day', '[)' ) ? 'I ' : '';
+        const isLater = d.isBetween(startby, shipby, 'day', '[)' ) ? 'Q ' : '';
         const isExtra = d.isBetween(shipby, dueby, 'day', '(]' ) ? 'B ' : '';
         
         row_run.push( isShip + isFull + isEarly + isLater + isExtra );
@@ -95,7 +97,7 @@ const ZPlanGrid = ({ traceDT, app, isDebug })=> {
   }
   
   useEffect( ()=>{
-    getData();
+    Meteor.setTimeout(()=>getData(),2000);
   }, []);
     
   return(
@@ -112,10 +114,11 @@ const ZPlanGrid = ({ traceDT, app, isDebug })=> {
           </div>
         :   
         <ReportCrossTable 
-          title='truckload of salt'
+          title='??'
           dateString=''
           rows={arrayData}
           extraClass=''
+          colHl={goback + 1}
         />
       }
       
