@@ -11,6 +11,8 @@ import ItemFeedX from '/client/components/bigUi/ItemFeedX/ItemFeedX';
 
 import ItemExport from '/client/views/paper/ItemExport';
 
+import { PopoverButton, PopoverMenu } from '/client/layouts/Models/Popover';
+
 const ItemPanelX = ({ 
   batchData, seriesData, rapidsData, itemData,
   widgetData, variantData, groupData, 
@@ -46,6 +48,37 @@ const ItemPanelX = ({
   return(
     <div className='section' key={i.serial}>
     
+      <div className='floattaskbar light'>
+        
+        <PopoverButton 
+          targetid='testpop'
+          attach='actions'
+          text='Actions'
+          icon='fa-solid fa-star gapR' />
+        
+        <PopoverMenu targetid='testpop' attach='actions'>
+          <div>item 1</div>
+    			<div>item 2</div>
+    			<div>item 3</div>
+    			<div>item 4</div>
+    			<div>item 5</div>
+    			<div>item 6</div>
+        </PopoverMenu>
+        
+        <PopoverButton 
+          targetid='itemviewpop'
+          attach='views'
+          text='View'
+          icon='fa-solid fa-sort gapR' />
+        
+        <PopoverMenu 
+          targetid='itemviewpop'
+          attach='views'
+          extraClass='rightedge'>
+          <div>Process Flow</div>
+			    <div>Cronological</div>
+        </PopoverMenu>
+      </div>
   
       <div className='balance'>
         <div className='numFont space2v' title={`${i.serial}\nclick to copy`}>

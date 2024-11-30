@@ -210,3 +210,87 @@ n-timeline-item:last-child n-timeline-marker:after {
 .kpiStat:has(> div)[open] {
   width: clamp(100px, 100%, 350px);
 }
+
+.floattaskbar {
+  margin: 1dvmin;
+  padding: 1dvmin;
+  border-radius: 2px;
+  box-shadow: var(--dropShadow000);
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
+}
+/*.popbutton {*/
+/*}*/
+.popbutton.actions { anchor-name: --pop-actions; }
+.popmenu.actions { position-anchor: --pop-actions; }
+.popbutton.views { anchor-name: --pop-views; }
+.popmenu.views { position-anchor: --pop-views; }
+
+.popmenu {
+  position: absolute;
+  position-try-fallbacks: --bottom, --right, --bottomright;
+  margin: 0;
+  padding: 0;
+  inset: auto;
+  top: anchor(bottom);
+  left: anchor(left);
+  margin-block-start: 5px;
+  
+  height: 0;
+  overflow: hidden;
+  border: 1px solid darkgray;
+  border-radius: 2px;
+  box-shadow: var(--dropShadow000);
+  opacity: 0;
+  interpolate-size: allow-keywords;
+  transition: display 150ms, opacity 300ms, height 150ms;
+  /*transition: display 1s, opacity 2s, height 1s;*/
+  transition-behavior: allow-discrete;
+}
+.popmenu:popover-open {
+  display: grid;
+  opacity: 1;
+  height: auto;
+  
+  @starting-style {
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+  }
+}
+.popmenu.rightedge {
+  inset: auto;
+  top: anchor(bottom);
+  right: anchor(right);
+  margin-block-start: 5px;
+}
+
+.floattaskbar.light,
+.floattaskbar.light .popmenu,
+.floattaskbar.light button {
+  background-color: var(--contrastlight);
+}
+
+@position-try --bottom {
+  inset: auto;
+  bottom: anchor(top);
+  left: anchor(left);
+  margin-block-end: 5px;
+}
+@position-try --right {
+  inset: auto;
+  top: anchor(bottom);
+  right: anchor(right);
+  margin-block-start: 5px;
+}
+@position-try --bottomright {
+  inset: auto;
+  bottom: anchor(top);
+  right: anchor(right);
+  margin-block-end: 5px;
+}
+
+.popmenu div {
+  margin: 5px 10px;
+}
