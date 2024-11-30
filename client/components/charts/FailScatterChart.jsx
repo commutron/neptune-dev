@@ -72,7 +72,7 @@ const FailScatterChart = ({
             tickLabels: { 
               fontSize: '6px' }
           } }
-          scale={{ x: "time" }}
+          scale={{x: "time", y: "linear"}}
         />
         <VictoryAxis 
           dependentAxis

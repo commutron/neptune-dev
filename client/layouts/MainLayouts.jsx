@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import React from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import ErrorCatch from '/client/layouts/ErrorCatch';
 import HomeIcon from '/client/layouts/HomeIcon';
 import TideFollow from '/client/components/tide/TideFollow';

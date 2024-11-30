@@ -4,7 +4,7 @@ import BatchHeaderChunk from './BatchHeaderChunk';
 import ServeHeaderChunk from './ServeHeaderChunk';
 
 const BatchHeaders = ({ 
-  oB, hB, sV, traceDT,
+  oB, hB, sV,
   app, isDebug, title,
   holdShow, holdshowSet,
   focusBy, tagBy, stormy
@@ -28,7 +28,7 @@ const BatchHeaders = ({
     
     {!oB ? null :
       oB.map( (entry, index)=>{
-        const tBatch = traceDT.find( t => t.batchID === entry._id );
+        // const tBatch = traceDT.find( t => t.batchID === entry._id );
         return(
           <BatchHeaderChunk
             key={`${entry._id}livefixed${index}`}
@@ -36,7 +36,7 @@ const BatchHeaders = ({
             batch={entry.batch}
             releases={entry.releases}
             isDone={entry.completed ? true : false}
-            tBatch={tBatch}
+            tBatch={entry.trace}
             app={app}
             rowclss='overGridRowFixed'
             focusBy={focusBy}
@@ -63,7 +63,7 @@ const BatchHeaders = ({
     
     {holdShow &&
       hB.map( (entry, index)=>{
-        const tBatch = traceDT.find( t => t.batchID === entry._id );
+        // const tBatch = traceDT.find( t => t.batchID === entry._id );
         return(
           <BatchHeaderChunk
             key={`${entry._id}holdfixed${index}`}
@@ -71,7 +71,7 @@ const BatchHeaders = ({
             batch={entry.batch}
             releases={entry.releases}
             isDone={entry.completed ? true : false}
-            tBatch={tBatch}
+            tBatch={entry.trace}
             app={app}
             rowclss='overGridRowFixed'
             focusBy={focusBy}

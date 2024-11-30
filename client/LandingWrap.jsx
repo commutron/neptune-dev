@@ -1,7 +1,7 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import Spin from '/client/components/tinyUi/Spin';
 
 import { PlainFrame } from '/client/layouts/MainLayouts';

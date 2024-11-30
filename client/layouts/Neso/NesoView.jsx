@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useState }from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
 import { toast, ToastContainer } from 'react-toastify';
 import moment from 'moment';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import { toCap } from '/client/utility/Convert';
 
 import { SpinWrap } from '/client/components/tinyUi/Spin';

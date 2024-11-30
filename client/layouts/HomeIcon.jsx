@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 import { ToastContainer } from 'react-toastify';
 

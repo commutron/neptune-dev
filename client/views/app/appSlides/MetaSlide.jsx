@@ -1,5 +1,5 @@
 import React from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 const MetaSlide = ()=> (
   <div className='space3v lightTheme scrollWrap thinScroll'>

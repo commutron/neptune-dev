@@ -46,6 +46,7 @@ const ItemPanelX = ({
   return(
     <div className='section' key={i.serial}>
     
+  
       <div className='balance'>
         <div className='numFont space2v' title={`${i.serial}\nclick to copy`}>
           <AnimateOnChange

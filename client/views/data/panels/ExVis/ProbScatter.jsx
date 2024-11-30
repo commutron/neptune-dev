@@ -49,7 +49,7 @@ const ProbScatter = ({ fetchFunc, fill, fillfade, title, brancheS, app })=> {
   }, []);
   
   const dataset = !tickXY ? [] : showZero ? tickXY : tickXY.filter(t=>t.y[brFtr] > 0);
-  
+
   return(
     <div className='chartNoHeightContain'>
       <div className='rowWrap noPrint'>
@@ -106,7 +106,7 @@ const ProbScatter = ({ fetchFunc, fill, fillfade, title, brancheS, app })=> {
             tickLabels: { 
               fontSize: '6px' }
           } }
-          scale={{ x: "time" }}
+          scale={{x: "time", y: "linear"}}
         />
         <VictoryAxis 
           dependentAxis

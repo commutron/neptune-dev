@@ -80,51 +80,6 @@ Meteor.methods({
       return true;
     }
   },
-  
-  // Temp Data Corection
-  floodMonitor() {
-    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
-      const srses = XSeriesDB.find(
-        { 'nonCon.key': { $exists: true }, 'nonCon.serial': { $exists: false } },
-        {fields: {'batch':1}}
-      ).fetch();
-      return JSON.stringify(srses);
-    }
-  },
-  // Temp Data Corection
-  floodControl(seriesId) {
-    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
-      const accessKey = Meteor.user().orgKey;
-      
-      const srs = XSeriesDB.findOne(
-        {_id: seriesId, orgKey: accessKey},
-        {fields: {'batch':1,'items.serial':1,'nonCon.key':1,'nonCon.serial':1}}
-      );
-      
-      if( srs.nonCon.some( x => x.serial === undefined ) ) {
-      
-        for( let nc of srs.nonCon ) {
-          if(!nc.serial) {
-            
-            XSeriesDB.update({_id: seriesId, orgKey: accessKey, 'nonCon.key': nc.key}, {
-              $pull : { nonCon: {key: nc.key}
-            }});
-          
-          }else{
-            null;
-          }
-        }
-        Meteor.defer( ()=>{
-          const b = XBatchDB.findOne({batch: srs.batch},{fields:{'_id':1}});
-          Meteor.call('updateOneMovement', b._id, accessKey);
-        });
-      }
-      
-    }else{
-      return false;
-    }
-    
-  },
 
   addNCX(seriesId, bar, ref, multi, type, step, fix) {
     const srs = XSeriesDB.findOne(

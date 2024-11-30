@@ -6,7 +6,7 @@ const ToggleSearch = ({
 })=> {
 
   function batchAction() {
-    console.log(queryState);
+    resultUP(undefined);
     const valid = queryState && queryState.length > 2;
     if(valid) {
       Meteor.call('batchExtraLookup', queryState, (error, reply)=>{
@@ -65,7 +65,6 @@ const ToggleSearch = ({
   
   function handle(e) {
     const value = e.target.value;
-    console.log(value);
     const valid = value && value.length > (tggl === false ? 5 : 3);
     queryUP(value);
     if(!valid) {

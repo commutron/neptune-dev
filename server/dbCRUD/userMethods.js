@@ -1,5 +1,6 @@
 import { Accounts } from 'meteor/accounts-base';
 import Config from '/server/hardConfig.js';
+import Pref from '/public/pref.js';
 
 Accounts.config({ 
   loginExpirationInDays: Config.loginExpire
@@ -595,6 +596,23 @@ Meteor.methods({
     }
   },
   
+  sendAllUserDM(message) {
+    if(Roles.userIsInRole(Meteor.userId(), ['admin','peopleSuper'])) {
+      const orgKey = Meteor.user().orgKey;
+      const user = Meteor.user();
+      const username = user ? user.username : 'Neptune';
+      const unice = username.replace(Pref.usrCut, " ").replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase())));
+
+      const activeusers = Meteor.users.find({_id: { $ne: Meteor.userId() }, orgKey: orgKey, roles: { $in: ["active"] }});
+      for(let au of activeusers) {
+        Meteor.call('sendUserDM', au._id, unice, message, false);
+      }
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
   fetchDMLog() {
     if(Roles.userIsInRole(Meteor.userId(), ['admin','peopleSuper'])) {
       const cache = CacheDB.findOne({dataName: 'internalDM_log'});
@@ -625,5 +643,4 @@ Meteor.methods({
     }
   }
   
-    
 });

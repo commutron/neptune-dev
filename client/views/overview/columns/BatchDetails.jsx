@@ -6,7 +6,7 @@ import BatchDetailChunk, { ServeDetailChunk } from './BatchDetailChunk';
 import Grabber from '/client/utility/Grabber.js';
       
 const BatchDetails = ({
-  oB, hB, sV, traceDT,
+  oB, hB, sV,
   user, app, brancheS,
   isDebug, holdShow, holdshowSet,
   prog, filterBy, focusBy, tagBy, stormy, branchArea, updateTrigger
@@ -58,13 +58,13 @@ const BatchDetails = ({
       
       {!oB ? null :
         oB.map( (entry, index)=>{
-          const tBatch = traceDT.find( t => t.batchID === entry._id );
+          // const tBatch = traceDT.find( t => t.batchID === entry._id );
           return(
             <BatchDetailChunk
               key={`${entry.batchID}live${index}`}
               rowIndex={index}
               oB={entry}
-              tBatch={tBatch}
+              tBatch={entry.trace}
               app={app}
               isAuth={isAuth}
               isRO={isRO}
@@ -80,7 +80,7 @@ const BatchDetails = ({
               branchArea={branchArea}
               updateTrigger={updateTrigger}
             />
-      )})}
+        )})}
       
       {hB.length === 0 ? null : !holdShow ?
         <button className='overGridRowScrollHeader labels grayFade'
@@ -99,13 +99,13 @@ const BatchDetails = ({
       
       {holdShow &&
         hB.map( (entry, index)=>{
-          const tBatch = traceDT.find( t => t.batchID === entry._id );
+          // const tBatch = traceDT.find( t => t.batchID === entry._id );
           return(
             <BatchDetailChunk
               key={`${entry.batchID}live${index}`}
               rowIndex={index}
               oB={entry}
-              tBatch={tBatch}
+              tBatch={entry.trace}
               app={app}
               isAuth={isAuth}
               isRO={isRO}

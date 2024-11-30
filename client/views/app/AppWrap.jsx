@@ -1,5 +1,5 @@
 import React from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import { branchesSort } from '/client/utility/Arrays.js';
 
 import Slides from '/client/layouts/TaskBars/Slides';

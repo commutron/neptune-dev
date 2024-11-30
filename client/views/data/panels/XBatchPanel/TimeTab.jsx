@@ -7,7 +7,7 @@ import PeopleScatter from '/client/components/charts/BatchBurn/PeopleScatter';
 import ItemsOnTime from '/client/components/charts/BatchBurn/ItemsOnTime';
 import TimeBudgetsChunk from './time/TimeBudgetsChunk';
 import TimeExtendChunk from './time/TimeExtendChunk';
-import TimeNextChunk from './time/TimeNextChunk';
+import TimeMarksChunk from './time/TimeMarksChunk';
 
 import TimeCycleChunk from './time/TimeCycleChunk';
 
@@ -94,20 +94,17 @@ const TimeTab = ({
         </TabsLite>
       </div>
       
+      <TimeMarksChunk
+        batchData={batchData}
+        seriesData={seriesData}
+        floorRelease={floorRelease}
+      />
+      
       <TimeCycleChunk
         batchData={batchData}
         seriesData={seriesData}
         isDebug={isDebug}
       />
-      
-      <TimeNextChunk
-        batchData={batchData}
-        seriesData={seriesData}
-        widgetData={widgetData}
-        floorRelease={floorRelease}
-        done={done}
-        app={app} />
-
       
     </div>
   );

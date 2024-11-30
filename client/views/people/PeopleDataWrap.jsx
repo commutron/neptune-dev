@@ -4,7 +4,7 @@ import { withTracker } from 'meteor/react-meteor-data';
 import { localeUpdate } from '/client/utility/WorkTimeCalc';
 import { branchesSort } from '/client/utility/Arrays.js';
 import { PlainFrame } from '/client/layouts/MainLayouts';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import Spin from '../../components/tinyUi/Spin';
 
 import Slides from '/client/layouts/TaskBars/Slides';
@@ -60,8 +60,8 @@ const PeopleDataWrap = ({
             <b><i className='fas fa-tachometer-alt fa-fw gapR'></i>Weekly Utilization</b>,
             <b><i className='far fa-calendar-alt fa-fw gapR'></i>Work Schedule</b>,
             <b><i className='fas fa-hourglass-end fa-fw gapR'></i>Overtime Errors</b>,
-            <b><i className='fas fa-envelopes-bulk fa-fw gapR'></i>Email Log</b>,
             <b><i className='fas fa-comments fa-fw gapR'></i>Message Log</b>,
+            <b><i className='fas fa-envelopes-bulk fa-fw gapR'></i>Email Log</b>,
             <b><i className='fas fa-user-lock fa-fw gapR'></i>Permissions</b>,
             <b><i className='fas fa-users-cog fa-fw gapR'></i>Accounts Manager</b>
           ]}
@@ -117,11 +117,11 @@ const PeopleDataWrap = ({
           : null }
           
           {isAdmin || isPeopleSuper ?
-            <EmailLogSlide key={5} />
+            <DMLogSlide key={5} />
           : null }
           
           {isAdmin || isPeopleSuper ?
-            <DMLogSlide key={6} />
+            <EmailLogSlide key={6} />
           : null }
           
           <div key={7}>

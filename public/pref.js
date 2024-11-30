@@ -1,7 +1,5 @@
 //// Preferences singleton class \\\\
 
-
-//////////////////// DEPRECIATE !!!!!!!!!   ////////////////////
 let instance = null;
 
 class Pref {
@@ -12,7 +10,7 @@ class Pref {
     
     this.InitialAppSetup = false;
     
-    this.neptuneVersion = '3.16.3';
+    this.neptuneVersion = '3.16.4';
     this.neptuneIs = 'Neptune Process Tracking';
 
     this.prefName = 'default';
@@ -20,10 +18,11 @@ class Pref {
     // Roles
     this.keys = [
       'debug',
-      'readOnly',
       'nightly',
+      'readOnly',
       'peopleSuper',
-      'equipSuper'
+      'equipSuper',
+      'active'
     ];
     this.auths = [
       'qa',
@@ -34,8 +33,7 @@ class Pref {
       'xray',
       'test',
       'verify',
-      'inspect',
-      'active'
+      'inspect'
     ];
     this.areas = [
       'sales',

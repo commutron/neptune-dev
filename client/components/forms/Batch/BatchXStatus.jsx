@@ -81,6 +81,14 @@ const BatchXStatus = ({ batchData, allFlow, allFall, nowater, rapid })=>	{
         </p>
       : null }
       
+      {batchData.lock ?
+        <KpiStat
+          icon='fa-solid fa-lock'
+          name={`${Pref.xBatch} is Locked`}
+          color='var(--wisteria)'
+          more={batchData.live && canRun ? lockControl : null}
+        />
+      : null}
       
       {!rapid && 
        ( nowater || (allFlow && allFall) || batchData.completed ) ?

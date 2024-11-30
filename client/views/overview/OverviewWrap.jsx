@@ -146,24 +146,25 @@ const OverviewWrap = ({
   
   function sortInitial() {
     return new Promise((resolve) => {
-      let liveBatches = bx.filter( bx => bx.releases !== undefined );
+      // let liveBatches = bx.filter( bx => bx.releases !== undefined );
+      const liveBatches = bx;
       
       let filteredBatches = filterBy === false ? 
         ghost === true ? liveBatches 
         :
-        liveBatches.filter( bx =>
-          bx.releases.findIndex( x => x.type === 'floorRelease') >= 0 )
+        liveBatches.filter( batch =>
+          batch.releases.findIndex( x => x.type === 'floorRelease') >= 0 )
         :
-        liveBatches.filter( bbx => {
-          const tBatch = traceDT.find( t => t.batchID === bbx._id );
-          const tBc = tBatch && tBatch.branchCondition;
+        liveBatches.filter( bbatch => {
+          // const tBatch = traceDT.find( t => t.batchID === bbatch._id );
+          const tBc = bbatch.trace?.branchCondition;
           const cP = tBc && tBc.find( x => x.branch === filterBy );
           const con = cP && cP.condition;
           
-          isDebug && console.log(`${bbx.batch}: ${con}`);
+          isDebug && console.log(`${bbatch.batch}: ${con}`);
           
           if( (con === 'onHold' && ghost === true) || (con === 'open') ) {
-            return bbx;
+            return bbatch;
           }
         });
         
@@ -173,9 +174,9 @@ const OverviewWrap = ({
       const orderedBatches = 
         sortBy === 'priority' ?
           limitToSales.sort((b1, b2)=> {
-            const pB1 = traceDT.find( x => x.batchID === b1._id);
+            const pB1 = b1.trace;//traceDT.find( x => x.batchID === b1._id);
             const pB1bf = pB1 ? pB1.bffrRel : null;
-            const pB2 = traceDT.find( x => x.batchID === b2._id);
+            const pB2 = b2.trace;//traceDT.find( x => x.batchID === b2._id);
             const pB2bf = pB2 ? pB2.bffrRel : null;
             if (isNaN(pB1bf) || !!pB1.hold) { return 1 }
             if (isNaN(pB2bf) || !!pB2.hold) { return -1 }
@@ -264,7 +265,6 @@ const OverviewWrap = ({
               oB={liveState}
               hB={holdState}
               sV={serveState}
-              traceDT={traceDT}
               app={app}
               isDebug={isDebug}
               title={!filterBy ? 'All Live' : filterBy}
@@ -280,7 +280,6 @@ const OverviewWrap = ({
               oB={liveState}
               hB={holdState}
               sV={serveState}
-              traceDT={traceDT}
               user={user}
               app={app}
               brancheS={brancheS}

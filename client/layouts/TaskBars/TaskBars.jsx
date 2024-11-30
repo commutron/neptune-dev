@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import React from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import { toCap } from '/client/utility/Convert';
 
 const TaskElement = ({ title, subON, goLink, icon, shrink, iconAdj, lock }) => (
@@ -44,6 +44,7 @@ export const ExTaskBar = ({ subLink }) => (
       subON={subLink === 'reportsundefined'}
       goLink='/data/reports'
       icon='fas fa-clipboard-list'
+      iconAdj='up-1'
     />
     
     <TaskElement
@@ -65,6 +66,7 @@ export const ExTaskBar = ({ subLink }) => (
       subON={subLink === 'overviewrapidex'}
       goLink='/data/overview?request=rapidex'
       icon='fa-solid fa-bolt'
+      iconAdj='up-1'
     />
     
     <TaskElement
@@ -72,6 +74,7 @@ export const ExTaskBar = ({ subLink }) => (
       subON={subLink === 'overviewtestfail'}
       goLink='/data/overview?request=testfail'
       icon='fas fa-microchip'
+      iconAdj='up-1'
     />
     
     <TaskElement
@@ -79,6 +82,7 @@ export const ExTaskBar = ({ subLink }) => (
       subON={subLink === 'overviewscraps'}
       goLink='/data/overview?request=scraps'
       icon='fas fa-trash-alt'
+      iconAdj='up-1'
     />
     
   </div>
@@ -92,7 +96,7 @@ export const UpTaskBar = ({ subLink, showParts, isAuth }) => (
       subON={!subLink}
       goLink='/upstream'
       icon='fas fa-satellite-dish'
-      iconAdj='shrink-2 up-1'
+      iconAdj='shrink-1 up-1'
     />
     
     {showParts &&
@@ -101,6 +105,7 @@ export const UpTaskBar = ({ subLink, showParts, isAuth }) => (
         subON={subLink === 'parts'}
         goLink='/upstream/parts'
         icon='fas fa-shapes'
+        iconAdj='up-1'
       />
     }
     
@@ -109,6 +114,7 @@ export const UpTaskBar = ({ subLink, showParts, isAuth }) => (
       subON={subLink === 'shortfalls'}
       goLink='/upstream/shortfalls'
       icon='fas fa-exclamation'
+      iconAdj='up-1'
     />
     
     <TaskElement
@@ -116,6 +122,7 @@ export const UpTaskBar = ({ subLink, showParts, isAuth }) => (
       subON={subLink === 'values'}
       goLink='/upstream/values'
       icon='fas fa-calculator'
+      iconAdj='up-1'
     />
     
     {isAuth || Roles.userIsInRole(Meteor.userId(), 'admin') ?
@@ -124,6 +131,7 @@ export const UpTaskBar = ({ subLink, showParts, isAuth }) => (
         subON={subLink === 'emailrec'}
         goLink='/upstream/emailrec'
         icon='fas fa-at'
+        iconAdj='up-1'
       />
     : null}
       
@@ -138,6 +146,7 @@ export const DownTaskBar = ({ subLink }) => (
       subON={!subLink}
       goLink='/downstream'
       icon='fas fa-satellite'
+      iconAdj='up-1'
     />
     
     <TaskElement
@@ -145,6 +154,7 @@ export const DownTaskBar = ({ subLink }) => (
       subON={subLink === 'reportday'}
       goLink='/downstream/reportday'
       icon='fas fa-calendar-day'
+      iconAdj='up-1'
     />
     
     <TaskElement
@@ -152,6 +162,7 @@ export const DownTaskBar = ({ subLink }) => (
       subON={subLink === 'reportweek'}
       goLink='/downstream/reportweek'
       icon='fas fa-calendar-week'
+      iconAdj='up-1'
     />
     
     <TaskElement
@@ -159,6 +170,7 @@ export const DownTaskBar = ({ subLink }) => (
       subON={subLink === 'reportmonths'}
       goLink='/downstream/reportmonths'
       icon='far fa-calendar-alt'
+      iconAdj='up-1'
     />
     
     <TaskElement

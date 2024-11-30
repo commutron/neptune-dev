@@ -2,7 +2,7 @@ import React, { useState, Fragment, useEffect } from 'react';
 import moment from 'moment';
 import { toast } from 'react-toastify';
 import InboxToastWatch from '/client/utility/InboxToastPop.js';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import { toCap } from '/client/utility/Convert';
 
 
@@ -112,7 +112,7 @@ const ModelUser = ({
         
         <UserMenuElement
           title='Messages'
-          doFunc={()=>FlowRouter.go('/user?slide=4')}
+          doFunc={()=>FlowRouter.go('/user?slide=5')}
           icon='fa-solid fa-message'
           tag={user.inbox?.length}
         />
@@ -161,8 +161,7 @@ const Divider = ()=> (
   <div style={{
     marginBottom: '4px',
     paddingTop: '4px',
-    borderBottom: '1px solid rgb(100,100,100)',
-    borderBottom: '1px solid rgba(100,100,100,0.5)'
+    borderBottom: '1px solid rgb(100,100,100,0.5)'
   }}></div>
 );
 

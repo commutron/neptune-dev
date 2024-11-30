@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import React from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 import AccountsUI from '/client/components/bigUi/AccountsUI/AccountsUI.jsx';
 import NavButton from '/client/layouts/NavButton/NavButton.jsx';

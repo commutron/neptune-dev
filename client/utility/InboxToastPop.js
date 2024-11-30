@@ -1,6 +1,6 @@
 import React from 'react';
 import { toast } from 'react-toastify';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 function sendReply(uID, unice, text) {
   Meteor.call('sendUserDM', uID, unice, text, true, (err)=>{

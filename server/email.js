@@ -1,5 +1,6 @@
 import moment from 'moment';
 import Config from '/server/hardConfig.js';
+import Pref from '/public/pref.js';
 import { toCap } from './utility';
 
 
@@ -178,7 +179,7 @@ Meteor.methods({
       const date = moment().tz(Config.clientTZ).format('h:mm a, dddd, MMM Do YYYY');
       const title = errorTitle;
       
-      const body = `${errorUser}, ${agent}, ${url}`;
+      const body = `v.${Pref.neptuneVersion}, ${errorUser}, ${agent}, ${url}`;
       const foot = `${errorTime} (session ${sessionID})`;
       const link = `${'<pre>'}${errorMessage}${'</pre>'}`;
       
@@ -200,7 +201,7 @@ Meteor.methods({
       
       const subject = 'NEPTUNE STATUS REPORT';
       const date = moment().tz(Config.clientTZ).format('h:mm a, dddd, MMM Do YYYY');
-      const title = `Neptune is running`;
+      const title = `Neptune is running version ${Pref.neptuneVersion}`;
       
       const pin = app.orgPIN;
       const hrs = JSON.stringify(app.workingHours);
@@ -362,7 +363,7 @@ Meteor.methods({
     }
   },
   
-  handleExtRelEmail(accessKey, emailPrime, emailSecond, isW, salesOrder, salesEnd) {
+  handleExtRelEmail(accessKey, emailPrime, emailSecond, isW, salesOrder, salesEnd, caution) {
     this.unblock();
     const app = AppDB.findOne({orgKey: accessKey},{fields:{'emailGlobal':1}});
     const emailGlobal = app && app.emailGlobal;
@@ -379,7 +380,7 @@ Meteor.methods({
       
       const body = `Your order ${'<b>'}${salesOrder}${'</b>'} of ${'<b>'}${toCap(isW, true)}${'</b>'} has ${'<b>'}Entered Production${'</b>'},`;
       const foot = `Order due date is set for ${'<b>'}${dueDate}${'</b>'}.`;
-      const flvr = '';
+      const flvr = caution ? '** This order is begining with an expected part shortage. Contact customer service for details. **' : '';
       
       const fine = 'Once your order is completed, a packing slip will be provided.';
       

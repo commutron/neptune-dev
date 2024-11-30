@@ -1,5 +1,5 @@
 import moment from 'moment';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 import { avgOfArray, minsec } from '/client/utility/Convert.js';
 

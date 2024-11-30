@@ -165,52 +165,6 @@ Meteor.methods({
     return timeArr;
   },
   
-  estBatchTurnAround(bID, wID) {
-    this.unblock();
-    const accessKey = Meteor.user().orgKey;
-    syncLocale(accessKey);
-    
-    const now = moment().tz(Config.clientTZ);
-    
-    const batch = XBatchDB.findOne({ _id: bID },{fields:{'salesStart':1}});
-    const salesMnt = moment(batch.salesStart).tz(Config.clientTZ);
-    
-    const widget = WidgetDB.findOne({ _id: wID },{fields:{'turnStats':1}});
-    const turnStats = widget.turnStats || null;
-    
-    if(turnStats) {
-      const trn = turnStats.stats;
-      
-      const rel = Math.round( trn.relAvg );
-      const relEst = salesMnt.clone().addWorkingTime(rel, 'days');
-      const relDif = relEst.workingDiff(now, 'days', true);
-      
-      const wrk = Math.round( trn.stAvg );
-      const wrkEst = salesMnt.clone().addWorkingTime(wrk, 'days');
-      const wrkDif = wrkEst.workingDiff(now, 'days', true);
-      
-      const ffinAvg = trn.ffinAvg;
-      const fin = ffinAvg ? Math.round( ffinAvg ) : 0;
-      const finEst = salesMnt.clone().addWorkingTime(fin, 'days');
-      const finDif = finEst.workingDiff(now, 'days', true);
-      
-      const cmp = Math.round( trn.compAvg );
-      const cmpEst = salesMnt.clone().addWorkingTime(cmp, 'days');
-      const cmpDif = cmpEst.workingDiff(now, 'days', true);
-      
-      return [ 
-        relEst.format(), relDif,
-        wrkEst.format(), wrkDif,
-        finEst.format(), finDif,
-        cmpEst.format(), cmpDif,
-        trn.qtyAvg
-      ];
-    }else{
-      return 'na';
-    }
-    
-  },
-  
   getAvgTimeShare() {
     this.unblock();
     

@@ -1,5 +1,5 @@
 import React from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 import { min2hr, toCap } from '/client/utility/Convert';
 import UserName from '/client/utility/Username';

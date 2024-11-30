@@ -1,6 +1,6 @@
 import moment from 'moment';
 import 'moment-business-time';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 import { round2Decimal } from '/client/utility/Convert.js';
 

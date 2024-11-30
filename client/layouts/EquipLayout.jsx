@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo }from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 import HomeIcon from '/client/layouts/HomeIcon';
 import TideFollow from '/client/components/tide/TideFollow';

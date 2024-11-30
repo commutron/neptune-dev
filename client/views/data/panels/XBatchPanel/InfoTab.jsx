@@ -193,11 +193,11 @@ export default InfoTab;
 
 const StatusGroup = ({ id, live, done, salesEnd, lock, app, isDebug })=> {
   
-  const blockwrap = {
-    minWidth: "50%",
-    display: "flex",
-    alignItems: "center"
-  };
+  // const blockwrap = {
+  //   minWidth: "50%",
+  //   display: "flex",
+  //   alignItems: "center"
+  // };
   
   return(
     <div className='balance'>

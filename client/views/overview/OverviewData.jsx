@@ -29,11 +29,21 @@ const View = ({
   }
   
   localeUpdate(app);
+  let mrgBX = [];
+  for(let core of batchX) {
+    const tBatch = traceDT.find( t => t.batchID === core._id );
+    if(!tBatch || core.releases === undefined) {
+      continue;
+    }else{
+      core.trace = tBatch;
+      mrgBX.push(core);
+    }
+  }
 
   return(
     <PlainFrame title='Overview' tag='WIP' container='overviewContainer'>
       <OverviewWrap 
-        bx={batchX}
+        bx={mrgBX}
         traceDT={traceDT}
         allEquip={allEquip}
         openMaint={openMaint}

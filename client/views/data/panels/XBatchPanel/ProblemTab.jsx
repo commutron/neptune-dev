@@ -140,43 +140,9 @@ const ProblemTab = ({
           <p className='cap'>no data to chart</p>
         </div>}
         
-        
-        {isDebug && srsNonCon.some(n => !n.serial) ? 
-          <SumpPump seriesData={seriesData} />
-          : null}
       </div>
     </div>
   );
 };
 
 export default ProblemTab;
-
-const SumpPump = ({ seriesData  })=> {
-  const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
-  
-  function handleRepair() {
-    if(isAdmin) {
-      Meteor.call('floodControl', seriesData._id, (error, reply)=>{
-        error && console.log(error);
-        toast( 'Running Flood Control' );
-        if(reply) {
-          console.log(seriesData.nonCon);
-        }
-      });
-    }else{
-      console.log('no admin');
-    }
-  }
-  
-  return(
-    <div>
-      <p>
-        <button
-          className='action redHover'
-          onClick={()=>handleRepair()}
-          disabled={!isAdmin}
-        >Remove Non Assigned NonCons</button>
-      </p>
-    </div>
-  );
-};

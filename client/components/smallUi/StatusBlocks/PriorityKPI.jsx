@@ -3,7 +3,7 @@ import moment from 'moment';
 import 'moment-business-time';
 import 'moment-timezone';
 
-import { min2hr, avgOfArray } from '/client/utility/Convert.js';
+import { min2hr, round1Decimal, avgOfArray } from '/client/utility/Convert.js';
 import KpiStat from './KpiStat';
 
 const PriorityKPIData = ({ 
@@ -86,7 +86,7 @@ export const PriorityKPI = ({
   
   if( pt && pt.batchID === batchID ) {
     
-    const q2t = pt.quote2tide || 0;
+    const q2t = pt.quote2tide;
     const doneQuote = q2t >= 0 ? `Remaining Quoted: ${min2hr(q2t)} hours` : `Over Quoted: ${Math.abs(min2hr(q2t))} hours`;
   
     const e2t = pt.est2tide;
@@ -126,7 +126,7 @@ export const PriorityKPI = ({
       );
     }
     
-    const e2i = pt.est2item || 0;
+    const e2i = pt.est2item;
     const e2iTxt = `production curve est.: ${min2hr(e2i)} hours`;
     const e2tTxt = `past performance est.: ${min2hr(e2t)} hours`;
     
@@ -145,7 +145,7 @@ export const PriorityKPI = ({
       <dd>{treTxt}</dd>
       <dd><small>{e2tTxt}</small></dd>
       <dd><small>{e2iTxt}</small></dd>
-      {isDebug && <dd>{`q2t: ${q2t}\n\ne2t: ${e2t}\ne2i: ${e2i}\n\n${soonTxt}\n\nbuffer: ${bffrTime || 0} minutes\nbffrRel: ${pt.bffrRel}`}</dd>}
+      {isDebug && <dd>{`q2t: ${round1Decimal(q2t)}\n\ne2t: ${round1Decimal(e2t)}\ne2i: ${round1Decimal(e2i)}\n\n${soonTxt}\n\nbuffer: ${bffrTime || 0} minutes\nbffrRel: ${pt.bffrRel}`}</dd>}
     </dl>;
     
     if(pt.hold) {

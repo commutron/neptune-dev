@@ -232,6 +232,7 @@ Meteor.methods({
           }
         }});
         Meteor.defer( ()=>{
+          // if(!status) { Meteor.call('updateOneNoise', batchId, accessKey); }
           Meteor.call('updateOneMovement', batchId, accessKey);
           if(status === true) {
             Meteor.call('disableLockX', batchId, accessKey);
@@ -436,13 +437,13 @@ Meteor.methods({
           
             Meteor.call('handleExtRelEmail', 
               accessKey, group.emailPrime, group.emailSecond, 
-              isW, batch.salesOrder, batch.salesEnd
+              isW, batch.salesOrder, batch.salesEnd, caution
             );
           }
         });
       }
       
-      if(rType.includes('pcbKitRelease')) {
+      if(rType.includes('pcbKitRelease') && !caution) {
         const batch = XBatchDB.findOne({_id: batchId},{fields:{'groupId':1,'widgetId':1,'versionKey':1,'salesOrder':1}});
         
         const vbtch = XBatchDB.find({_id: batchId, completed: true},{fields:{'_id':1}}).count();
@@ -900,9 +901,8 @@ Meteor.methods({
     }
     
     const accessKey = Meteor.user().orgKey;
-      
-      const org = AppDB.findOne({ orgKey: accessKey },{fields:{'orgPIN':1}});
-      const orgPIN = org ? org.orgPIN : null;    
+    const org = AppDB.findOne({ orgKey: accessKey },{fields:{'orgPIN':1}});
+    const orgPIN = org ? org.orgPIN : null;    
     
     if(pinInput === orgPIN && Roles.userIsInRole(Meteor.userId(), "qa") ) {
       
