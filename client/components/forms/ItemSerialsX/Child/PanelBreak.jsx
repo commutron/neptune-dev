@@ -2,43 +2,12 @@ import React, { useState, Fragment } from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import ModelLarge from '/client/layouts/Models/ModelLarge';
+import ModelNative from '/client/layouts/Models/ModelNative';
 
-const PanelBreakX = ({ seriesId, batchId, batchNum, item })=> {
-  
-  const auth = Roles.userIsInRole(Meteor.userId(), 'remove');
-  let done = item.completed;
-  
-  const aT = !auth ? Pref.norole : '';
-  const lock = done || item.units < 2;
-  const lT = lock ? 'unavailable' : '';
-  const title = auth && !lock ? 'Split Panel Into Its Units' : `${aT}\n${lT}`;
-  
-  return(
-    <ModelLarge
-      button='Split Panel'
-      title={title}
-      color='blueT'
-      icon='fa-cut'
-      lock={!auth || lock}
-    >
-      <PanelBreakForm
-        seriesId={seriesId}
-        batchId={batchId}
-        batchNum={batchNum}
-        item={item}
-      />
-    </ModelLarge>
-  );
-};
-
-export default PanelBreakX;
-
-const PanelBreakForm = ({ seriesId, batchId, batchNum, item })=> {
+const PanelBreak = ({ seriesId, batchId, batchNum, item, access })=> {
   
   const [ newSerials, newSerialsSet ] = useState([]);
   const [ confirmState, confirmSet ] = useState(false);
-
   
   function setSerials(e) {
     const srlInput = this.serials.value.trim().replace(",", " ");
@@ -69,6 +38,13 @@ const PanelBreakForm = ({ seriesId, batchId, batchNum, item })=> {
   }
 
   return(
+    <ModelNative
+      dialogId={item.serial+'_split_form'}
+      title='Split Panel Into Its Units'
+      icon='fa-solid fa-cut'
+      colorT='blueT'
+      dark={false}>
+      
     <Fragment>
       <p className='medBig space'>
         <b>Transform this item into new individual units</b><br />
@@ -126,5 +102,8 @@ const PanelBreakForm = ({ seriesId, batchId, batchNum, item })=> {
         </div>
       </form>
     </Fragment>
+    </ModelNative>
   );
 };
+
+export default PanelBreak;

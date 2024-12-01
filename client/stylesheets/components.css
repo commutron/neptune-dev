@@ -217,11 +217,12 @@ n-timeline-item:last-child n-timeline-marker:after {
   border-radius: 2px;
   box-shadow: var(--dropShadow000);
   display: flex;
-  justify-content: space-between;
-  align-content: center;
+  column-gap: 2dvmin;
 }
-/*.popbutton {*/
-/*}*/
+.popbutton {
+  font-size: var(--sm9);
+  text-transform: capitalize;
+}
 .popbutton.actions { anchor-name: --pop-actions; }
 .popmenu.actions { position-anchor: --pop-actions; }
 .popbutton.views { anchor-name: --pop-views; }
@@ -291,6 +292,16 @@ n-timeline-item:last-child n-timeline-marker:after {
   margin-block-end: 5px;
 }
 
-.popmenu div {
-  margin: 5px 10px;
+.popmenu div,
+.popmenu button {
+  /*margin: 5px 10px;*/
+  padding: 5px 10px;
+  font-size: var(--sm9);
+  text-align: left;
+  text-transform: capitalize;
+  border-block-end: 0.5px solid darkgray;
+}
+.popmenu div:last-child,
+.popmenu button:last-child {
+  border-block-end: none;
 }

@@ -2,35 +2,9 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import ModelMedium from '/client/components/smallUi/ModelMedium';
+import ModelNative from '/client/layouts/Models/ModelNative';
 
-const ItemIncompleteX = ({ seriesId, item, app, noText })=> {
-  
-  const done = item.completed;
-  const access = Roles.userIsInRole(Meteor.userId(), ['qa', 'run']);
-  const aT = !access ? Pref.norole : '';
-  const lT = done ? `${Pref.item} ${Pref.isDone}` : '';
-  const title = access && !done ? `Force Finish Incomplete ${Pref.item}` : `${aT}\n${lT}`;
-  
-	return(
-    <ModelMedium
-      button='Force Finish'
-      title={title}
-      color='darkOrangeT'
-      icon='fa-flag-checkered'
-      lock={!access || done}
-      noText={noText}>
-      <ItemIncompleteForm
-        seriesId={seriesId}
-        item={item}
-        app={app} />
-  	</ModelMedium>
-  );
-};
-
-export default ItemIncompleteX;     
-	        
-const ItemIncompleteForm = ({ seriesId, item, app, selfclose })=> {
+const ItemIncomplete = ({ seriesId, item, access })=> {
   
   function handleFinish(e) {
     e.preventDefault();
@@ -44,7 +18,7 @@ const ItemIncompleteForm = ({ seriesId, item, app, selfclose })=> {
           console.log(error);
         if(reply) {
           toast.success('Item Finished');
-          selfclose();
+          // selfclose();
         }else{
           console.log('BLOCKED BY SERVER METHOD');
           toast.error('Server Error');
@@ -55,6 +29,13 @@ const ItemIncompleteForm = ({ seriesId, item, app, selfclose })=> {
   }
   	
 	return(
+	  <ModelNative
+      dialogId={item.serial+'_incomplete_form'}
+      title={`Force Finish Incomplete ${Pref.item}`}
+      icon='fa-solid fa-flag-checkered'
+      colorT='darkOrangeT'
+      dark={false}>
+	    
   	<form className='centre' onSubmit={(e)=>handleFinish(e)}>
 	    <p>Skip the remaining flow and finish this item.
 	      <b> This will result in an incomplete record.</b></p>
@@ -75,5 +56,8 @@ const ItemIncompleteForm = ({ seriesId, item, app, selfclose })=> {
           >Finish {item.serial}</button>
       </p>
     </form>
+    </ModelNative>
   );
 };
+
+export default ItemIncomplete;

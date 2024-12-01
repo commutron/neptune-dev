@@ -4,25 +4,18 @@ import { Meteor } from 'meteor/meteor';
 import HomeIcon from '/client/layouts/HomeIcon';
 import TideFollow from '/client/components/tide/TideFollow';
 import { ExTaskBar } from './TaskBars/TaskBars';
-import ActionBar from '/client/components/bigUi/ToolBar/ActionBar';
 import CookieBar from './CookieBar/CookieBar';
 
 export const TraverseWrap = ({
   itemData,
-  rapidData,
-  seriesData,
   batchData,
   widgetData,
   variantData,
-  allVariants,
   groupData,
-  user,
-  app,
-  flowData,
   title,
   subLink,
   action,
-  base, mid,
+  base,
   beta,
   children
 })=>	{
@@ -79,10 +72,7 @@ export const TraverseWrap = ({
       </aside>
       
       <div className='contentAreaEx'>
-        <div 
-          className={
-            base || !children[1] ? 'baseContainer' :
-            mid ? 'midTraverseContainer' : 'traverseContainer'}>
+        <div className={base || !children[1] ? 'baseContainer' : 'traverseContainer'}>
           
           <div className='traverseContent forceScroll forceScrollStyle' >
             {children[0] || children}
@@ -94,25 +84,9 @@ export const TraverseWrap = ({
               id='exItemList'
             >
               {children[1]}
-            </aside>}
+            </aside>
+          }
           
-          {!base && !mid ?
-            <div className='actionBarEx centreRow'>
-              <ActionBar
-                batchData={batchData}
-                seriesData={seriesData}
-                rapidData={rapidData}
-                itemData={itemData}
-                groupData={groupData}
-                widgetData={widgetData}
-                variantData={variantData}
-                allVariants={allVariants}
-                app={app}
-                user={user}
-                action={action}
-                ncTypesCombo={flowData && flowData.ncTypesComboFlat} />
-            </div>
-          : null }
         </div>
       </div> 
     </div> 

@@ -15,7 +15,6 @@ const ModelNative = ({ dialogId, title, icon, colorT, dark, children })=> {
       <div className='stick split vspacehalf bottomLine medBig bold cap'>
         <span className='beside gapR'>
           <i className={`${icon} fa-fw fa-lg gapR ${colorT}`}></i>
-          <i className='breath'></i>
           {title}
         </span>
         <button

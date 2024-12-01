@@ -2,41 +2,9 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import ModelMedium from '/client/components/smallUi/ModelMedium';
+import ModelNative from '/client/layouts/Models/ModelNative';
 
-const ScrapItemX = ({ seriesId, item, ancillary, noText })=> {
-  
-  let done = item.completed;
-  let rapid = item.altPath.find( a => a.rapId !== false && a.completed === false );
-  let scrap = item.history.find(x => x.type === 'scrap' && x.good === true);
-	
-	const access = Roles.userIsInRole(Meteor.userId(), 'qa');
-  const aT = !access ? Pref.norole : '';
-  const lock = scrap || (done && !rapid);
-  const lT = lock ? 'unavailable' : '';
-  const title = access && !lock ? `${Pref.scrap} ${Pref.item}` : `${aT}\n${lT}`;
-  
-	return(
-    <ModelMedium
-      button={Pref.scrap}
-      title={title}
-      color='redT'
-      icon='fa-trash-alt'
-      lock={!access || lock }
-      noText={noText}
-    >
-      <ScrapForm
-        seriesId={seriesId}
-        item={item}
-        ancillary={ancillary}
-      />
-    </ModelMedium>
-  );
-};
-
-export default ScrapItemX;
-
-const ScrapForm = ({ seriesId, item, ancillary, selfclose })=> {    
+const ScrapItem = ({ seriesId, item, ancillary, access })=> {    
       
   function handleScrap(e) {
     e.preventDefault();
@@ -51,7 +19,7 @@ const ScrapForm = ({ seriesId, item, ancillary, selfclose })=> {
         console.log(error);
       if(reply) {
         toast.success('Item scrapped');
-        selfclose();
+        // selfclose();
       }else{
         console.log('BLOCKED BY SERVER METHOD');
         toast.error('Server Error');
@@ -60,6 +28,13 @@ const ScrapForm = ({ seriesId, item, ancillary, selfclose })=> {
   }
 	
 	return(
+	  <ModelNative
+      dialogId={item.serial+'_scrap_form'}
+      title={`${Pref.scrap} ${Pref.item}`}
+      icon='fa-solid fa-trash-alt'
+      colorT='redT'
+      dark={false}>
+	    
 	  <form className='centre' onSubmit={(e)=>handleScrap(e)}>
       <p><b>Are you sure you want to do this?</b></p>
       <p>
@@ -95,5 +70,8 @@ const ScrapForm = ({ seriesId, item, ancillary, selfclose })=> {
           >SCRAP {item.serial}</button>
       </p>
     </form>
+    </ModelNative>
   );
 };
+
+export default ScrapItem;

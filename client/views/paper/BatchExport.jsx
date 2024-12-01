@@ -18,7 +18,8 @@ function getRel(brancheS, type) {
 
 const BatchExport = ({ 
   group, widget, variant, brancheS,
-  batchData, seriesData, rapidsData 
+  batchData, seriesData, rapidsData,
+  extraClass
 })=> {
 
   const handleExport = ()=> {
@@ -334,9 +335,9 @@ const BatchExport = ({
   return(
     <button
       id='batchdataexport'
-      className='smallAction blackT endSelf vmarginhalf'
+      className={extraClass}
       onClick={()=>handleExport()}
-    >Export<i className="fas fa-file-export gapL"></i></button>
+    ><i className="fas fa-file-export gapR"></i>Export</button>
   );
 };
 

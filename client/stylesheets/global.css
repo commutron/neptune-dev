@@ -348,11 +348,11 @@ dialog {
   padding: 0 16px 16px 16px;
 }
 dialog::backdrop {
-  background-color: rgb(10,10,10,0.8);
-  backdrop-filter: blur(1px);
+  background-color: rgb(10,10,10,0.5);
+  backdrop-filter: blur(0.5px);
 }
 dialog > div:first-child .action {
-  border-radius: 4px;
+  border-radius: 2px;
 }
 
 img {

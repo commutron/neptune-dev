@@ -4,7 +4,7 @@ import Pref from '/public/pref.js';
 import { toCap } from '/client/utility/Convert';
 import printTextThing from '/client/utility/PrintGenerator';
 
-const ItemExport = ({ group, widget, variant, batch, sales, itemData, noncon, short })=> {
+const ItemExport = ({ group, widget, variant, batch, sales, itemData, noncon, short, extraClass })=> {
 
   const handleExport = ()=> {
     
@@ -278,9 +278,9 @@ const ItemExport = ({ group, widget, variant, batch, sales, itemData, noncon, sh
   return(
     <button
       id='itemdataexport'
-      className='smallAction blackT endSelf vmarginhalf'
+      className={extraClass}
       onClick={()=>handleExport()}
-    >Export<i className="fas fa-file-export gapL"></i></button>
+    ><i className="fas fa-file-export gapR"></i>Export</button>
   );
 };
 

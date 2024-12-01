@@ -2,33 +2,9 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import ModelSmall from '/client/components/smallUi/ModelSmall';
+import ModelNative from '/client/layouts/Models/ModelNative';
 
-const RapidSet = ({ seriesId, serial, rapidData })=> {
-  
-  const access = Roles.userIsInRole(Meteor.userId(), ['qa', 'run', 'inspect']);
-  const title = `${Pref.rapidEx} ${Pref.item} ${serial}`;
-  
-  return(
-    <ModelSmall
-      button={Pref.rapidEx}
-      title={title}
-      color='darkOrangeT'
-      icon='fa-sitemap'
-      lock={!access}
-    >
-      <RapidSetForm
-        seriesId={seriesId}
-        serial={serial}
-        rapidData={rapidData}
-      />
-    </ModelSmall>
-  );
-};
-
-export default RapidSet;
-
-const RapidSetForm = ({ seriesId, serial, rapidData, selfclose })=> {
+const RapidSet = ({ seriesId, serial, rapidData, access })=> {
   
   const handleRapid = (e)=> {
     this.dorapid.disabled = true;
@@ -39,7 +15,7 @@ const RapidSetForm = ({ seriesId, serial, rapidData, selfclose })=> {
         error && console.log(error);
         if(reply) {
           toast.success(Pref.rapidExd);
-          selfclose();
+          // selfclose();
         }else{
           toast.error('Server Error');
         }
@@ -49,7 +25,17 @@ const RapidSetForm = ({ seriesId, serial, rapidData, selfclose })=> {
     }
   };
   
+  if(!access) {
+    return null;
+  }
+  
   return(
+    <ModelNative
+      dialogId={serial+'_rapid_form'}
+      title={`${Pref.rapidEx} ${Pref.item} ${serial}`}
+      icon='fa-solid fa-sitemap'
+      colorT='darkOrangeT'
+      dark={false}>
     <div>
       <p className='centreText medBig bold vmargin'>Set {serial} on {Pref.rapidExn} {rapidData.rapid} - {rapidData.issueOrder}</p>
       
@@ -64,5 +50,8 @@ const RapidSetForm = ({ seriesId, serial, rapidData, selfclose })=> {
         >{Pref.rapidEx}</button>
       </p>
     </div>
+    </ModelNative>
   );
 };
+
+export default RapidSet;

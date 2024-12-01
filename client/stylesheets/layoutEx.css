@@ -36,15 +36,14 @@
 }
 
 .baseContainer,
-.traverseContainer,
-.midTraverseContainer {
+.traverseContainer {
   display: grid;
   align-content: center;
   overflow-y: hidden !important;
   overflow-x: hidden !important;
 }
 
-.baseContainer, .midTraverseContainer {
+.baseContainer {
   grid-template-columns: auto;
 }
 .baseContainer {
@@ -53,19 +52,12 @@
     'traverseContent'
     'traverseContent';
 }
-.midTraverseContainer {
+
+.traverseContainer {
   grid-template-columns: auto minmax(10vmin, 14vmax);
   grid-template-rows: var(--vert_main);
   grid-template-areas: 
     'traverseContent traverseList';
-}
-
-.traverseContainer {
-  grid-template-columns: auto minmax(10vmin, 14vmax);
-  grid-template-rows: calc(var(--vert_main) - 48px) 48px;
-  grid-template-areas: 
-    'traverseContent traverseList'
-    'actionBarEx actionBarEx';
 }
 
 .traverseContent {
@@ -78,22 +70,6 @@
   box-shadow: var(--dropShadowLeft00);
   overflow-y: scroll;
   overflow-x: hidden;
-}
-
-.actionBarEx {
-  grid-area: actionBarEx;
-  align-self: stretch;
-  background-color: rgb(25,25,25);
-  background-color: var(--contrast);
-  box-shadow: var(--dropShadow1);
-  display: flex;
-  align-items: center;
-  justify-content: space-evenly;
-  flex-wrap: nowrap;
-}
-.actionBarEx > div {
-  display: flex;
-  flex-shrink: 0;
 }
 
 .containerE {

@@ -10,8 +10,15 @@ import SubItemLink from '/client/components/smallUi/SubItemLink';
 import ItemFeedX from '/client/components/bigUi/ItemFeedX/ItemFeedX';
 
 import ItemExport from '/client/views/paper/ItemExport';
+import UnitSet from '/client/components/forms/ItemSerialsX/Child/UnitSet';
+import PanelBreak from '/client/components/forms/ItemSerialsX/Child/PanelBreak';
+import ItemIncomplete from '/client/components/forms/ItemSerialsX/Child/ItemIncomplete';
+import UndoFinish from '/client/components/forms/ItemSerialsX/Child/UndoFinish';
+import RapidSet from '/client/components/forms/ItemSerialsX/Child/RapidSet';
+import ScrapItem from '/client/components/forms/ItemSerialsX/Child/ScrapItem';
+import RemoveItem from '/client/components/forms/ItemSerialsX/Child/RemoveItem';
 
-import { PopoverButton, PopoverMenu } from '/client/layouts/Models/Popover';
+import { PopoverButton, PopoverMenu, PopoverAction } from '/client/layouts/Models/Popover';
 
 const ItemPanelX = ({ 
   batchData, seriesData, rapidsData, itemData,
@@ -23,6 +30,11 @@ const ItemPanelX = ({
   const srs = seriesData;
   const i = itemData;
   const b = batchData;
+  
+  const openAction = (dialogId)=> {
+    const dialog = document.getElementById(dialogId);
+    dialog?.showModal();
+  };
   
   const doCopy = ()=> {
     if(navigator.clipboard !== undefined) {
@@ -41,29 +53,80 @@ const ItemPanelX = ({
   
   const start = i.history.length > 0;
   const rapid = i.altPath.find( a => a.rapId !== false && a.completed === false );
-  
+  const liverapid = rapidsData && rapidsData.find(r=> r.live === true);
+  const itemrapid = liverapid && itemData && itemData.altPath.find(x=> x.rapId === liverapid._id);
+
   const scrap = !i.scrapped ? null :
                   i.history.find(x => x.type === 'scrap' && x.good === true);
+  
+  const done = i.completed;
+  
+  const accessE = Roles.userIsInRole(Meteor.userId(), 'edit');
+  const accessR = Roles.userIsInRole(Meteor.userId(), 'run');
+  const accessQ = Roles.userIsInRole(Meteor.userId(), 'qa');
+  const accessQR = accessQ || accessR;
+  const accessD = Roles.userIsInRole(Meteor.userId(), 'remove');
+  
+  const canCut = accessD && !done && i.units > 1;
+  const canEnd = accessQR && !done;
+  const canUdo = done && (!b.completed || liverapid) && Roles.userIsInRole(Meteor.userId(), 'BRKt3rm1n2t1ng8r2nch');
+  const canExt = liverapid && !itemrapid && Roles.userIsInRole(Meteor.userId(), ['qa', 'run', 'inspect']);
+  const canScp = accessQ && !scrap && !(done && !rapid);
+  const canRmv = accessD && !b.completed && !i.completed;
+  
   
   return(
     <div className='section' key={i.serial}>
     
+      <UnitSet
+  	    seriesId={srs._id}
+  	    item={itemData}
+  	    access={accessE || accessR}
+  	  />
+  	  <PanelBreak
+        batchId={b._id}
+        seriesId={srs._id}
+        batchNum={b.batch}
+  	    item={itemData}
+  	    access={canCut}
+  	  />
+  	  <ItemIncomplete
+        seriesId={srs._id}
+        item={itemData}
+        access={canEnd}
+      />
+      <UndoFinish
+  	    batchId={b._id}
+  	    seriesId={srs._id}
+  	    serial={i.serial}
+  	    completedAtI={i.completedAt}
+  	    rapidData={rapidsData}
+  	    rapids={i.altPath.filter(x=> x.rapId !== false)}
+  	    access={canUdo}
+  	  />
+  	  <RapidSet
+  	    seriesId={srs._id}
+  	    serial={i.serial}
+  	    rapidData={liverapid}
+  	    access={canExt}
+  	  />
+  	  <ScrapItem
+        seriesId={srs._id}
+        item={itemData}
+        ancillary={app.ancillaryOption}
+        access={canScp}
+      />
+  	  <RemoveItem
+        batchId={b._id}
+        batch={b.batch}
+        seriesId={srs._id}
+        serial={i.serial}
+        check={i.createdAt.toISOString()}
+        verify={i.history.length > 0}
+        access={canRmv}
+      />
+    	  
       <div className='floattaskbar light'>
-        
-        <PopoverButton 
-          targetid='testpop'
-          attach='actions'
-          text='Actions'
-          icon='fa-solid fa-star gapR' />
-        
-        <PopoverMenu targetid='testpop' attach='actions'>
-          <div>item 1</div>
-    			<div>item 2</div>
-    			<div>item 3</div>
-    			<div>item 4</div>
-    			<div>item 5</div>
-    			<div>item 6</div>
-        </PopoverMenu>
         
         <PopoverButton 
           targetid='itemviewpop'
@@ -73,11 +136,77 @@ const ItemPanelX = ({
         
         <PopoverMenu 
           targetid='itemviewpop'
-          attach='views'
-          extraClass='rightedge'>
+          attach='views'>
           <div>Process Flow</div>
 			    <div>Cronological</div>
         </PopoverMenu>
+        
+        <span className='flexSpace' />
+        
+        <ItemExport
+          group={groupData.group}
+          widget={widgetData.widget}
+          variant={variantData.variant}
+          batch={batchData.batch}
+          sales={batchData.salesOrder}
+          itemData={itemData}
+          noncon={nc}
+          short={sh}
+          extraClass='medSm'
+        />
+        
+        <PopoverButton 
+          targetid='testpop'
+          attach='actions'
+          text='Actions'
+          icon='fa-solid fa-star gapR'
+        />
+        <PopoverMenu targetid='testpop' extraClass='rightedge' attach='actions'>
+          <PopoverAction 
+            doFunc={()=>openAction(i.serial+'_unit_form')}
+            text={`Change ${Pref.unit}s`}
+            icon='fa-solid fa-th'
+            lock={!(accessE || accessR)}
+          />
+          <PopoverAction 
+            doFunc={()=>openAction(i.serial+'_split_form')}
+            text='Split Panel'
+            icon='fa-solid fa-cut'
+            lock={!canCut}
+          />
+    			<PopoverAction 
+            doFunc={()=>openAction(i.serial+'_incomplete_form')}
+            text='Force Finish'
+            icon='fa-solid fa-flag-checkered'
+            lock={!canEnd}
+          />
+    			<PopoverAction 
+            doFunc={()=>openAction(i.serial+'_undofin_form')}
+            text='Undo Finish'
+            icon='fa-solid fa-backward'
+            lock={!canUdo}
+          />
+    			<PopoverAction 
+            doFunc={()=>openAction(i.serial+'_rapid_form')}
+            text={Pref.rapidEx}
+            icon='fa-solid fa-sitemap'
+            lock={!canExt}
+          />
+          <PopoverAction 
+            doFunc={()=>openAction(i.serial+'_scrap_form')}
+            text='Scrap'
+            icon='fa-solid fa-trash-alt'
+            lock={!canScp}
+          />
+    			<PopoverAction 
+            doFunc={()=>openAction(i.serial+'_remove_form')}
+            text='Delete'
+            icon='fa-solid fa-minus-circle'
+            lock={!canRmv}
+          />
+        </PopoverMenu>
+        
+        
       </div>
   
       <div className='balance'>
@@ -155,26 +284,13 @@ const ItemPanelX = ({
         <br />
       </div>
       
-      <div className='rowWrap'>
-        <CreateTag
-          when={i.createdAt}
-          who={i.createdWho}
-          whenNew={i.createdAt}
-          whoNew={i.createdWho}
-          dbKey={i.serial} 
-        />
-        <span className='flexSpace' />
-        <ItemExport
-          group={groupData.group}
-          widget={widgetData.widget}
-          variant={variantData.variant}
-          batch={batchData.batch}
-          sales={batchData.salesOrder}
-          itemData={itemData}
-          noncon={nc}
-          short={sh}
-        />
-      </div>
+      <CreateTag
+        when={i.createdAt}
+        who={i.createdWho}
+        whenNew={i.createdAt}
+        whoNew={i.createdWho}
+        dbKey={i.serial} 
+      />
 		</div>
   );
 };

@@ -2,39 +2,9 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import ModelSmall from '/client/components/smallUi/ModelSmall';
+import ModelNative from '/client/layouts/Models/ModelNative';
 
-
-const RemoveItem = ({ batchId, batch, seriesId, serial, check, verify, lockOut })=> {
-  
-  const access = Roles.userIsInRole(Meteor.userId(), 'remove');
-  const aT = !access ? Pref.norole : '';
-  const lT = lockOut ? lockOut : '';
-  const title = access && !lockOut ? `Delete "${serial}"` : `${aT}\n${lT}`;
-  
-  return(
-    <ModelSmall
-      button='Delete'
-      title={title}
-      color='redT'
-      icon='fa-minus-circle'
-      lock={!access || lockOut}
-    >
-      <RemoveItemForm
-        batchId={batchId}
-        batch={batch}
-        seriesId={seriesId}
-        serial={serial}
-        check={check}
-        verify={verify}
-      />
-    </ModelSmall>
-  );  
-};
-
-export default RemoveItem;  
-      
-const RemoveItemForm = ({ batchId, batch, seriesId, serial, check, verify })=> {
+const RemoveItem = ({ batchId, batch, seriesId, serial, check, verify, access })=> {
   
   function handleRemove(e) {
     e.preventDefault();
@@ -61,6 +31,13 @@ const RemoveItemForm = ({ batchId, batch, seriesId, serial, check, verify })=> {
   let checkshort = check.split('T')[0];
 
   return(
+    <ModelNative
+      dialogId={serial+'_remove_form'}
+      title={`Delete "${serial}"`}
+      icon='fa-solid fa-minus-circle'
+      colorT='redT'
+      dark={false}>
+      
     <div className='actionBox centre centreText space2vsq'>
       <p><b>Are you sure you want to try to delete "{serial}"?</b></p>
       <p><b>This cannot be undone and could cause unexpected consequences.</b></p>
@@ -92,12 +69,15 @@ const RemoveItemForm = ({ batchId, batch, seriesId, serial, check, verify })=> {
           </p>
         }
         <button
-          className='smallAction redSolid'
+          className='action redSolid'
           type='submit'
           id='cutGo'
           disabled={false}>DELETE</button>
       </form>
       <br />
     </div>
+    </ModelNative>
   );
 };
+
+export default RemoveItem;
