@@ -2,32 +2,9 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import ModelSmall from '/client/components/smallUi/ModelSmall';
+import ModelNative from '/client/layouts/Models/ModelNative';
 
-const UnitSetAll = ({ block, bdone, sqty, vqty, seriesId, noText })=> {
-  const access = Roles.userIsInRole(Meteor.userId(), ['edit', 'qa']);
-  return(
-    <ModelSmall
-      button={Pref.unit + ' Set All'}
-      title={access ? `Set all ${Pref.unit}s` : Pref.norole}
-      color='blueT'
-      icon='fa-table'
-      lock={!access || block}
-      noText={noText}
-    >
-      <UnitSetAllForm
-        seriesId={seriesId}
-        bdone={bdone}
-        sqty={sqty}
-        vqty={vqty}
-      />
-    </ModelSmall>
-  );
-};
-
-export default UnitSetAll;
-      
-const UnitSetAllForm = ({ seriesId, bdone, sqty, vqty, selfclose })=> {
+const UnitSetAll = ({ bID, seriesId, bdone, sqty, vqty, access })=> {
   
   function handleUnits(e) {
     e.preventDefault();
@@ -59,6 +36,12 @@ const UnitSetAllForm = ({ seriesId, bdone, sqty, vqty, selfclose })=> {
   }
     
   return(
+    <ModelNative
+      dialogId={bID+'_units_form'}
+      title={`Assign ${Pref.counter}s`}
+      icon='fa-solid fa-table'
+      colorT='blueT'>
+      
     <div className='centre centreText max400 wide'>
       <p className='med'>This will change all {sqty} {Pref.item} {Pref.unit}s</p>
       {bdone &&
@@ -92,5 +75,8 @@ const UnitSetAllForm = ({ seriesId, bdone, sqty, vqty, selfclose })=> {
         </p>
       </form>
     </div>
+    </ModelNative>
   );
 };
+
+export default UnitSetAll;

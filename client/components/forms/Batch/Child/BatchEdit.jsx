@@ -4,40 +4,9 @@ import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 import { min2hr } from '/client/utility/Convert';
 
-import ModelMedium from '/client/components/smallUi/ModelMedium';
+import ModelNative from '/client/layouts/Models/ModelNative';
 
-const BatchXEdit = ({ batchData, seriesData, allVariants, lock })=> {
-  
-  const canRun = Roles.userIsInRole(Meteor.userId(), 'run');
-  const canEdit = Roles.userIsInRole(Meteor.userId(), 'edit');
-  const isDebug = Roles.userIsInRole(Meteor.userId(), 'debug');
-  
-  const aT = !(canEdit || canRun) ? Pref.norole : '';
-  const lT = lock ? lock : '';
-  const title = (canEdit || canRun) && !lock ? `Edit ${Pref.xBatch}` : `${aT}\n${lT}`;
-  
-  return(
-    <ModelMedium
-      button={'Edit ' + Pref.xBatch}
-      title={title}
-      color='blueT'
-      icon='fa-cubes'
-      lock={!(canEdit || canRun) || (lock && !isDebug)}
-    >
-    <BXEditForm 
-      batchData={batchData}
-      seriesData={seriesData}
-      allVariants={allVariants}
-      canEdit={canEdit}
-    />
-    </ModelMedium>
-  );
-};
-
-export default BatchXEdit;
-
-
-const BXEditForm = ({ batchData, seriesData, allVariants, canEdit, selfclose })=> {
+const BatchEdit = ({ batchData, seriesData, allVariants, canEdit, access })=> {
   
   const [ nxtNum, nxtSet ] = useState(false);
   
@@ -72,7 +41,8 @@ const BXEditForm = ({ batchData, seriesData, allVariants, canEdit, selfclose })=
         if(batchData.batch !== batchNum) {
           FlowRouter.go('/data/batch?request=' + batchNum);
         }else{
-          selfclose();
+          // selfclose();
+          null;
         }
       }else{
         toast.warning(`Duplicate or In Use.\n
@@ -85,6 +55,12 @@ const BXEditForm = ({ batchData, seriesData, allVariants, canEdit, selfclose })=
   const gtb = bDt.quoteTimeBudget[0] ? min2hr(bDt.quoteTimeBudget[0].timeAsMinutes) : 0;
 
   return(
+    <ModelNative
+      dialogId={batchData._id+'_batch_form'}
+      title={`Edit ${Pref.xBatch}`}
+      icon='fa-solid fa-cubes'
+      colorT='blueT'>
+      
     <form className='centre' onSubmit={(e)=>save(e)}>
       <div className='centreRow'>
         <label className='breath' htmlFor='vrsn'>{Pref.variant}<br />
@@ -154,7 +130,7 @@ const BXEditForm = ({ batchData, seriesData, allVariants, canEdit, selfclose })=
           required 
         /></label>
         
-        <label className='breath'>Serialize<br />
+        <label className='breath stdInW'>Serialize<br />
           <label htmlFor='srlz' className='beside'>
           <input
             type='checkbox'
@@ -178,7 +154,7 @@ const BXEditForm = ({ batchData, seriesData, allVariants, canEdit, selfclose })=
           required 
         /></label>
         
-        <label htmlFor='hourNum' className='breath'>{Pref.timeBudget} (in hours)<br />
+        <label htmlFor='hourNum' className='breath stdInW'>{Pref.timeBudget} (in hours)<br />
           <input
             type='number'
             id='hourNum'
@@ -197,5 +173,8 @@ const BXEditForm = ({ batchData, seriesData, allVariants, canEdit, selfclose })=
         >Save</button>
       </div>
     </form>
+    </ModelNative>
   );
 };
+
+export default BatchEdit;

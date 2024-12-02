@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import Pref from '/client/global/pref.js';
 import CreateTag from '/client/components/tinyUi/CreateTag';
 import Tabs from '/client/components/smallUi/Tabs/Tabs';
 
@@ -10,16 +11,15 @@ import CountTab from './CountTab';
 import ProblemTab from './ProblemTab';
 import RapidExtendTab from './RapidExtendTab';
 
-/// INTERGRATE
-import ActionLink from '/client/components/tinyUi/ActionLink';
-import BatchXEdit from '/client/components/forms/Batch/BatchXEdit';
-import BatchXIncomplete from '/client/components/forms/Batch/BatchXIncomplete';
-import RemoveXBatch from '/client/components/forms/Batch/RemoveXBatch';
-import SeriesForm from '/client/components/forms/ItemSerialsX/SeriesForm';
-import ItemSerialsWrapX from '/client/components/forms/ItemSerialsX/ItemSerialsWrapX';
-import UnitSetAll from '/client/components/forms/ItemSerialsX/UnitSetAll';
+import BatchEdit from '/client/components/forms/Batch/Child/BatchEdit';
+import SeriesForm, { SeriesDelete } from '/client/components/forms/ItemSerialsX/Parent/SeriesForm';
+import ItemSerialsWrap from '/client/components/forms/ItemSerialsX/ItemSerialsWrap';
+import UnitSetAll from '/client/components/forms/ItemSerialsX/Parent/UnitSetAll';
 import CounterAssign from '/client/components/bigUi/ArrayBuilder/CounterAssign';
-// \\\\\
+import BatchIncomplete from '/client/components/forms/Batch/Child/BatchIncomplete';
+import EventCustom from '/client/components/forms/Batch/EventCustom';
+
+import RemoveBatch from '/client/components/forms/Batch/Child/RemoveBatch';
 
 import { PopoverButton, PopoverMenu, PopoverAction } from '/client/layouts/Models/Popover';
 
@@ -46,96 +46,195 @@ const BatchPanelX = ({
     'Events',
     rapidsData.length > 0 ? 'Extended' : 'Extend'
   ];
-          
+  
+  const openAction = (dialogId)=> {
+    const dialog = document.getElementById(dialogId);
+    dialog?.showModal();
+  };
+  
+  const isOpen = !b.completed && b.live;
+  
+  const accessR = Roles.userIsInRole(Meteor.userId(), 'run');
+  const accessE = Roles.userIsInRole(Meteor.userId(), 'edit');
+  const accessQ = Roles.userIsInRole(Meteor.userId(), 'qa');
+  
+  const canEdt = (isOpen || isDebug) && (accessE || accessR); 
+  const canSrs = isOpen && (!seriesData || seriesData.items.length < 1) && accessR;
+  const canCnt = isOpen && accessR;
+  const canUnt = seriesData && variantData.runUnits > 1 && (accessE || accessQ);
+  const canItm = isOpen && seriesData && Roles.userIsInRole(Meteor.userId(), 'create');
+  const canImp = isOpen && accessQ;
+  const canEvt = accessE || accessR;
+  const canRmv = isOpen && Roles.userIsInRole(Meteor.userId(), 'remove');
+                 
   return(
     <div className='section' key={b.batch}>
       
-    <Fragment>
-          <BatchXEdit
+      <Fragment>
+        <BatchEdit
+          batchData={batchData}
+          seriesData={seriesData}
+          allVariants={allVariants}
+          canEdit={accessE}
+          access={canEdt}
+        />
+        
+        {!seriesData ?
+          <SeriesForm
             batchData={batchData}
-            seriesData={seriesData}
-            allVariants={allVariants}
-            lock={batchData.completed ? Pref.isDone :
-                 !batchData.live ? Pref.notlive : false}
+            access={canSrs}
           />
-          
-          {seriesData ?
-            <ItemSerialsWrapX
-              bID={batchData._id}
-              quantity={batchData.quantity}
-              seriesId={seriesData._id}
-              itemsQ={!seriesData ? 0 : seriesData.items.length}
-              unit={variantData.runUnits}
-              app={app}
-              lock={batchData.completed ? Pref.isDone :
-                   !batchData.live ? Pref.notlive :
-                   !seriesData ? `No ${Pref.series}` : false} 
-            />
-          :
-            <SeriesForm
-              batchData={batchData}
-              lock={!batchData.live || batchData.completed}
-            />
-          }
-          
-          {seriesData && variantData.runUnits > 1 ?
-            <UnitSetAll
-        	    seriesId={seriesData._id}
-        	    block={batchData.lock}
-        	    bdone={batchData.completed}
-        	    sqty={seriesData.items.length}
-        	    vqty={variantData.runUnits}
-        	  />
-          : null }
-          
-          <CounterAssign
-            id={batchData._id}
-            waterfall={batchData.waterfall}
-            app={app}
-            lock={batchData.completed ? Pref.isDone :
-                 !batchData.live ? Pref.notlive : false} />
-          
-          <span>
-            <ActionLink
-              address={'/print/generallabel/' + 
-                        batchData.batch + 
-                        '?group=' + groupData.alias +
-                        '&widget=' + widgetData.widget + 
-                        '&ver=' + variantData.variant + 
-                        ( variantData.radioactive ? '💥' : ''  ) +
-                        '&desc=' + widgetData.describe +
-                        '&sales=' + (batchData.salesOrder || '') +
-                        '&quant=' + batchData.quantity }
-              title='Print Label'
-              icon='fas fa-print'
-              color='blackT' />
-          </span>
-          
-          <BatchXIncomplete
-            batchData={batchData}
-            seriesData={seriesData}
-            app={app}
-            lock={batchData.completed ? Pref.isDone :
-                 !batchData.live ? Pref.notlive : false} />
-          
-          <RemoveXBatch
-            batchData={batchData}
-            seriesData={seriesData}
-            check={batchData.createdAt.toISOString()}
-            lock={batchData.completed ? Pref.isDone :
-                 !batchData.live ? Pref.notlive : false} />
-          
+        :
+          <SeriesDelete
+            batchId={batchData._id}
+            seriesId={seriesData._id}
+            srs={seriesData}
+          />
+        }
+        <ItemSerialsWrap
+          bID={batchData._id}
+          quantity={batchData.quantity}
+          seriesId={seriesData._id}
+          itemsQ={!seriesData ? 0 : seriesData.items.length}
+          unit={variantData.runUnits}
+          app={app}
+          isDebug={isDebug}
+          access={canItm}
+        />
+        <UnitSetAll
+    	    bID={b._id}
+    	    seriesId={seriesData._id}
+    	    block={batchData.lock}
+    	    sqty={seriesData?.items?.length}
+    	    vqty={variantData.runUnits}
+    	    access={canUnt}
+    	  />
+        <CounterAssign
+          bID={b._id}
+          waterfall={batchData.waterfall}
+          app={app}
+          access={canCnt}
+        />
+        <EventCustom 
+          batchId={b._id}
+        />
+        <BatchIncomplete
+          batchData={batchData}
+          seriesData={seriesData}
+          access={canImp}
+        />
+        <RemoveBatch
+          batchData={batchData}
+          seriesData={seriesData}
+          check={batchData.createdAt.toISOString()}
+          access={canRmv}
+        />
       </Fragment>
         
-      <div className='floattaskbar light'>
+      <div className='floattaskbar stick light'>
         
         <PopoverButton 
-          targetid='batchviewpop'
-          attach='vv'
-          text='Print Label'
-          icon='fa-solid fa-print gapR' />
+          targetid='editspop'
+          attach='edits'
+          text='Edits'
+          icon='fa-solid fa-file-pen gapR'
+        />
+        <PopoverMenu targetid='editspop' attach='edits'>
+          <PopoverAction 
+            doFunc={()=>openAction(b._id+'_batch_form')}
+            text={'Edit ' + Pref.xBatch}
+            icon='fa-solid fa-cubes'
+            lock={!canEdt}
+          />
+          {!seriesData ?
+          <PopoverAction 
+            doFunc={()=>openAction(b._id+'_series_form')}
+            text={`Add ${Pref.series}`}
+            icon='fa-solid fa-layer-group'
+            lock={!canSrs}
+          />
+          :
+          <PopoverAction 
+            doFunc={()=>openAction(b._id+'_seriesdelete_form')}
+            text={`Remove Empty ${Pref.series}`}
+            icon='fa-regular fa-trash-can'
+            lock={!canSrs}
+          />
+          }
+          <PopoverAction 
+            doFunc={()=>openAction(b._id+'_items_form')}
+            text={`Add ${Pref.itemSerial} numbers`}
+            icon={'fa-solid fa-' + Pref.serialIcon}
+            lock={!canItm}
+          />
+          <PopoverAction 
+            doFunc={()=>openAction(b._id+'_units_form')}
+            text={`Set ${Pref.unit}s`}
+            icon='fa-solid fa-table'
+            lock={!canUnt}
+          />
+          <PopoverAction
+            doFunc={()=>openAction(b._id+'_counter_form')}
+            text={`Assign ${Pref.counter}s`}
+            icon='fa-solid fa-stopwatch'
+            lock={!canCnt}
+          />
+    			
+    			{/*}
+    			<div>Time Budget</div>
+    			<div>Alter Ship Date</div>
+    			*/}
+    			
+    			<PopoverAction 
+            doFunc={()=>openAction(b._id+'_delete_form')}
+            text={`Delete ${Pref.xBatch}`}
+            icon='fa-solid fa-minus-circle'
+            lock={!canRmv}
+          />
+        </PopoverMenu>
+         
+        <PopoverButton 
+          targetid='poweractions'
+          attach='actions'
+          text='Actions'
+          icon='fa-solid fa-star gapR'
+        />
+        <PopoverMenu targetid='poweractions' attach='actions'>
+          <PopoverAction 
+            doFunc={()=>openAction(b._id+'_hold_action')}
+            text='Hold'
+            icon='fa-solid fa-pause'
+            lock={true}
+          />
+          <PopoverAction 
+            doFunc={()=>openAction(b._id+'_event_form')}
+            text='Add Custom Event'
+            icon='fa-solid fa-location-pin'
+            lock={!canEvt}
+          />
+          <PopoverAction 
+            doFunc={()=>openAction(b._id+'_incomplete_form')}
+            text='Force Finish'
+            icon='fa-solid fa-flag-checkered'
+            lock={!canImp}
+          />
+        </PopoverMenu>
         
         <span className='flexSpace' />
+        
+        <button
+          title='Print Label'
+          className='medSm'
+          onClick={()=>FlowRouter.go('/print/generallabel/' + 
+                      batchData.batch + 
+                      '?group=' + groupData.alias +
+                      '&widget=' + widgetData.widget + 
+                      '&ver=' + variantData.variant + 
+                      ( variantData.radioactive ? '💥' : ''  ) +
+                      '&desc=' + widgetData.describe +
+                      '&sales=' + (batchData.salesOrder || '') +
+                      '&quant=' + batchData.quantity)}
+        ><i className='fa-solid fa-print gapR'></i>Print Label</button>
         
         <BatchExport
           group={groupData.group}
@@ -147,30 +246,6 @@ const BatchPanelX = ({
           brancheS={brancheS}
           extraClass='medSm'
         />
-        
-        <PopoverButton 
-          targetid='testpop'
-          attach='actions'
-          text='Actions'
-          icon='fa-solid fa-star gapR'
-        />
-        <PopoverMenu targetid='testpop' extraClass='rightedge' attach='actions'>
-    			<div>Edit Work Order</div>
-    			<div>Add Items</div>
-    			<div>Unit Set All</div>
-    			<div>Counters</div>
-    			<div>Series</div>
-    			<div>Force Finish</div>
-    			<div>Delete</div>
-    			<div>Add Event</div>
-    			<div>Time Budget</div>
-    			<div>Alter Ship Date</div>
-    			<div>ON Hold</div>
-    			<div>Add Series</div>
-    			<div>remove series</div>
-        </PopoverMenu>
-        
-        
       </div>
       
       <Tabs

@@ -1324,6 +1324,7 @@ input.miniIn10, select.miniIn10 { width: 10ch; }
 input.miniIn12, select.miniIn12 { width: 12ch; }
 input.miniIn18, select.miniIn18 { width: 18ch; }
 input.miniIn24, select.miniIn24 { width: 24ch; }
+.stdInW { width: 15rem; }
 
 .rmsc {
   --rmsc-main: var(--neptuneColor) !important;

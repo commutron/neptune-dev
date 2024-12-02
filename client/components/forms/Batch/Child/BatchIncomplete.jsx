@@ -2,32 +2,9 @@ import React, { useState, Fragment } from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import ModelMedium from '/client/components/smallUi/ModelMedium';
-
-const BatchXIncomplete = ({ batchData, seriesData, lock, noText })=> {
-  const access = Roles.userIsInRole(Meteor.userId(), ['qa', 'admin']);
-  const aT = !access ? Pref.norole : '';
-  const lT = lock ? lock : '';
-  const title = access && !lock ? `Force Finish Incomplete ${Pref.xBatch}` : `${aT}\n${lT}`;
-  return(
-    <ModelMedium
-      button='Force Finish'
-      title={title}
-      color='darkOrangeT'
-      icon='fa-flag-checkered'
-      lock={!access || lock}
-      noText={noText}>
-      <BatchXIncompleteForm
-        batchData={batchData}
-        seriesData={seriesData}
-      />
-  	</ModelMedium>
-  );
-};
-
-export default BatchXIncomplete;     
+import ModelNative from '/client/layouts/Models/ModelNative';
 	        
-const BatchXIncompleteForm = ({ batchData, seriesData })=> {
+const BatchXIncomplete = ({ batchData, seriesData, access })=> {
   
   const [ workingState, workingSet ] = useState(false);
   
@@ -67,8 +44,18 @@ const BatchXIncompleteForm = ({ batchData, seriesData })=> {
     }
   }
   
-  if(workingState) {
-    return(
+  if(!access) {
+    return null;
+  }
+  
+	return(
+	  <ModelNative
+      dialogId={batchData._id+'_incomplete_form'}
+      title={`Force Finish Incomplete ${Pref.xBatch}`}
+      icon='fa-solid fa-flag-checkered'
+      colorT='darkOrangeT'>
+	    
+	  {workingState ?
       <div className='centre vmarginhalf'>
         <div>
           <p><n-num>{doneI}</n-num> Items Completed</p>
@@ -77,10 +64,8 @@ const BatchXIncompleteForm = ({ batchData, seriesData })=> {
         </div>
         <h4 className='centreText'>{batchData.completed ? <strong>{Pref.XBatch} Complete</strong> : <em>Resolving {Pref.XBatch}</em>}</h4>
       </div>
-    );
-  }
-  
-	return(
+      :
+	    
   	<form className='line2x overscroll' onSubmit={(e)=>handleForceFinish(e)}>
 	    <p>Cut off the remaining flow and finish {Pref.xBatch}.
 	      <b> This will result in an incomplete record.</b>
@@ -200,5 +185,9 @@ const BatchXIncompleteForm = ({ batchData, seriesData })=> {
           >Finish {Pref.xBatch}</button>
       </p>
     </form>
+    }
+    </ModelNative>
   );
 };
+
+export default BatchXIncomplete;

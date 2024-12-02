@@ -2,7 +2,6 @@ import React, { Fragment, useState, useEffect } from 'react';
 
 import LeapButton from '/client/components/tinyUi/LeapButton';
 import FilterItemsX from '/client/components/bigUi/FilterItemsX';
-import { SeriesDelete } from '/client/components/forms/ItemSerialsX/SeriesForm';
 
 const SeriesListWrap = ({ 
   seriesData, batchData, rapidsData, flowData, isDebug
@@ -23,10 +22,6 @@ const SeriesListWrap = ({
     return(
       <div className='centre'>
         <h4>Empty Series</h4>
-        <SeriesDelete
-          batchId={batchData._id}
-          seriesId={seriesData._id}
-        />
       </div>
     );
   }

@@ -4,35 +4,9 @@ import { toast } from 'react-toastify';
 
 import './style.css';
 
-import ModelMedium from '/client/components/smallUi/ModelMedium';
+import ModelNative from '/client/layouts/Models/ModelNative';
 
-
-const CounterAssign = ({ id, app, noText, waterfall, lock })=> {
-  const access = Roles.userIsInRole(Meteor.userId(), 'run');
-  const aT = !access ? Pref.norole : '';
-  const lT = lock ? lock : '';
-  const title = access && !lock ? `Assign ${Pref.counter}s` : `${aT}\n${lT}`;
-  return(
-    <ModelMedium
-      button={Pref.counter + 's'}
-      title={title}
-      color='blueT'
-      icon='fa-stopwatch'
-      lock={!access || lock}
-      noText={noText}
-      >
-      <CounterAssignForm
-        bID={id}
-        app={app}
-        waterfall={waterfall}
-      />
-    </ModelMedium>
-  );
-};
-
-export default CounterAssign;
-
-const CounterAssignForm = ({ bID, app, waterfall })=> {
+const CounterAssign = ({ bID, app, waterfall, access })=> {
 
   function handleAssign(e) {
     e.preventDefault();
@@ -75,6 +49,10 @@ const CounterAssignForm = ({ bID, app, waterfall })=> {
     });
   }
 
+  if(!access) {
+    return null;
+  }
+  
   const cOp = app.countOption || [];
   const cOpS = cOp.sort((c1, c2)=> 
                 c1.gate.toLowerCase() > c2.gate.toLowerCase() ? 1 : 
@@ -84,7 +62,13 @@ const CounterAssignForm = ({ bID, app, waterfall })=> {
           w1.position > w2.position ? 1 : w1.position < w2.position ? -1 : 0 );
     
   return(
-    <div>
+    <ModelNative
+      dialogId={bID+'_counter_form'}
+      title={`Assign ${Pref.counter}s`}
+      icon='fa-solid fa-stopwatch'
+      colorT='blueT'>
+      
+    <div className='overscroll'>
       <p className='centreText'>A process gate marks the end of one phase and the start of the next.</p>
       <p className='centreText'>A counter is a record of items, without serial numbers, passing through a gate.</p>
       <form className='centre' onSubmit={(e)=>handleAssign(e)}>
@@ -179,5 +163,8 @@ const CounterAssignForm = ({ bID, app, waterfall })=> {
           )})}
       </div>
     </div>
+    </ModelNative>
   );
 };
+
+export default CounterAssign;

@@ -2,8 +2,8 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import ModelLarge from '/client/layouts/Models/ModelLarge';
-import ModelSmall from '/client/components/smallUi/ModelSmall';
+import ModelNative from '/client/layouts/Models/ModelNative';
+
 import Tabs from '/client/components/smallUi/Tabs/Tabs';
 
 import YMDItemForm from './YMDItemForm';
@@ -11,7 +11,7 @@ import YrWkPnItemFormX from './YrWkPnItemFormX';
 import NSYrWkSqItemFormX from './NSYrWkSqItemFormX';
 
 const ItemSerialsWrapX = ({ 
-  bID, quantity, seriesId, itemsQ, unit, app, lock, lgIcon
+  bID, quantity, seriesId, itemsQ, unit, app, isDebug, access
 })=> {
   
   const quantityCheck = (tryLength, quantity, start, stop)=>
@@ -52,36 +52,20 @@ const ItemSerialsWrapX = ({
     }
   }
   
-  const access = Roles.userIsInRole(Meteor.userId(), 'create');
-  const isDebug = Roles.userIsInRole(Meteor.userId(), 'debug');
-  const aT = !access ? Pref.norole : '';
-  const lT = lock ? lock : '';
-  const title = access && !lock ? `Add ${Pref.item} ${Pref.itemSerial} numbers` : `${aT}\n${lT}`;
-
-  if(itemsQ >= quantity) {
-    return(
-      <ModelSmall
-        button={'Add ' + Pref.item + 's'}
-        title={title}
-        color='blueT'
-        icon={'fa-' + Pref.serialIcon}
-        lgIcon={lgIcon}
-        lock={!access || lock}
-      >
-        <NoBox />
-      </ModelSmall>
-    );
+  if(!access) {
+    return null;
   }
   
   return(
-    <ModelLarge
-      button={'Add ' + Pref.item + 's'}
-      title={title}
-      color='blueT'
-      icon={'fa-' + Pref.serialIcon}
-      lgIcon={lgIcon}
-      lock={!access || lock}
-    >
+    <ModelNative
+      dialogId={bID+'_items_form'}
+      title={`Add ${Pref.item} ${Pref.itemSerial} numbers`}
+      icon={`fa-solid fa-${Pref.serialIcon}`}
+      colorT='blueT'>
+      
+    {itemsQ >= quantity ?
+      <NoBox />
+      :
       <ItemSerialsTabs
         bID={bID}
         seriesId={seriesId}
@@ -93,7 +77,8 @@ const ItemSerialsWrapX = ({
         showToast={showToast}
         updateToast={updateToast}
       />
-    </ModelLarge>
+    }
+    </ModelNative>
   );
 };
 

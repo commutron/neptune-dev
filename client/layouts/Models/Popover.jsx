@@ -42,7 +42,7 @@ export const PopoverButton = ({ targetid, attach, text, icon })=> {
 export const PopoverMenu = ({ targetid, attach, extraClass, children })=> {
 	
 	return(
-		<div popover='auto' className={`popmenu ${attach} ${extraClass}`} id={targetid}>
+		<div popover='auto' className={`popmenu ${attach} ${extraClass || ''}`} id={targetid}>
 			{children}
 		</div>
 	);

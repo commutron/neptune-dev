@@ -2,7 +2,6 @@ import React from 'react';
 import { toast } from 'react-toastify';
 import Pref from '/client/global/pref.js';
 
-import ActionLink from '/client/components/tinyUi/ActionLink';
 import ActionConf from '/client/components/tinyUi/ActionConf';
 
 import NotesModule from '/client/components/bigUi/NotesModule';
@@ -53,14 +52,18 @@ const RapidExtendCard = ({
       
         <div className='centreRow vmarginhalf'>
             
-          <ActionLink
-            address={'/print/generallabel/' +
+          <button
+            title='Print Label'
+            className='transparent'
+            onClick={()=>FlowRouter.go('/print/generallabel/' +
                       rapid.rapid + urlString +
                       '&sales=' + 'Issue: 🗲' + rapid.issueOrder +
-                      '&quant=' + rapid.quantity }
-            title='Print Label'
-            icon='fas fa-print'
-            color='blackT gap' />
+                      '&quant=' + rapid.quantity)}>
+            <label className='navIcon actionIconWrap'>
+              <i className='fa-solid fa-print fa-lg blackT gap' aria-hidden='true'></i>
+              <span className='actionIconText blackT gap'>Print Label</span>
+            </label>
+          </button>
           
           <ActionConf
             key={rapid.rapid+'open'}

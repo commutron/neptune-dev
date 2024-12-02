@@ -2,35 +2,9 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import ModelMedium from '/client/components/smallUi/ModelMedium.jsx';
+import ModelNative from '/client/layouts/Models/ModelNative';
 
-const RemoveXBatchWrapper = ({ batchData, seriesData, check, lock })=> {
-  
-  const access = Roles.userIsInRole(Meteor.userId(), 'remove');
-  const aT = !access ? Pref.norole : '';
-  const lT = lock ? lock : '';
-  const title = access && !lock ? `Delete "${batchData.batch}" permanently` : `${aT}\n${lT}`;
-  
-  return(
-    <ModelMedium
-      button='Delete'
-      title={title}
-      color='redT'
-      icon='fa-minus-circle'
-      lock={!access || lock}
-    >
-      <RemoveXBatch
-        batchData={batchData}
-        seriesData={seriesData}
-        checkStr={check}
-      />
-    </ModelMedium>
-  );   
-};
-
-export default RemoveXBatchWrapper;  
-      
-const RemoveXBatch = ({ batchData, seriesData, checkStr })=> {
+const RemoveBatch = ({ batchData, seriesData, check, access })=> {
    
   function handleItemRemove(e) {
     this.cutItemGo.disabled = true;
@@ -131,12 +105,22 @@ const RemoveXBatch = ({ batchData, seriesData, checkStr })=> {
     });
   }
   
-  let checkshort = checkStr.split('T')[0];
+  if(!access) {
+    return null;
+  }
+  
+  let checkshort = check.split('T')[0];
   const itemsQ = !seriesData ? 0 : seriesData.items.length;
   const probsQ = !seriesData ? 0 : seriesData.nonCon.length +
                                   seriesData.shortfall.length;
   
   return(
+    <ModelNative
+      dialogId={batchData._id+'_delete_form'}
+      title={`Delete "${batchData.batch}" permanently`}
+      icon='fa-solid fa-minus-circle'
+      colorT='redT'>
+      
     <div className='vspace wide centreText'>
       <h2 className='redT up'>This cannot be undone</h2>
       
@@ -282,5 +266,8 @@ const RemoveXBatch = ({ batchData, seriesData, checkStr })=> {
       }
       <hr />
     </div>
+    </ModelNative>
   );
 };
+
+export default RemoveBatch;

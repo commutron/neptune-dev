@@ -132,13 +132,77 @@ const ItemPanelX = ({
           targetid='itemviewpop'
           attach='views'
           text='View'
-          icon='fa-solid fa-sort gapR' />
-        
+          icon='fa-solid fa-sort gapR' 
+        />
         <PopoverMenu 
           targetid='itemviewpop'
           attach='views'>
           <div>Process Flow</div>
 			    <div>Cronological</div>
+        </PopoverMenu>
+        
+        <PopoverButton 
+          targetid='editspop'
+          attach='edits'
+          text='Edits'
+          icon='fa-solid fa-file-pen gapR'
+        />
+        <PopoverMenu targetid='editspop' attach='edits'>
+          <PopoverAction 
+            doFunc={()=>openAction(i.serial+'_unit_form')}
+            text={`Change ${Pref.unit}s`}
+            icon='fa-solid fa-th'
+            lock={!(accessE || accessR)}
+          />
+          <PopoverAction 
+            doFunc={()=>openAction(i.serial+'_remove_form')}
+            text='Delete'
+            icon='fa-solid fa-minus-circle'
+            lock={!canRmv}
+          />
+        </PopoverMenu> 
+        
+        <PopoverButton 
+          targetid='poweractions'
+          attach='actions'
+          text='Actions'
+          icon='fa-solid fa-star gapR'
+        />
+        <PopoverMenu targetid='poweractions' attach='actions'>
+          <PopoverAction 
+            doFunc={()=>openAction(i.serial+'_split_form')}
+            text='Split Panel'
+            icon='fa-solid fa-cut'
+            lock={!canCut}
+          />
+    			{!done ?
+    			 <PopoverAction 
+            doFunc={()=>openAction(i.serial+'_incomplete_form')}
+            text='Force Finish'
+            icon='fa-solid fa-flag-checkered'
+            lock={!canEnd}
+          />
+          :
+    			<PopoverAction 
+            doFunc={()=>openAction(i.serial+'_undofin_form')}
+            text='Undo Finish'
+            icon='fa-solid fa-backward'
+            lock={!canUdo}
+          />
+          }
+    			<PopoverAction 
+            doFunc={()=>openAction(i.serial+'_rapid_form')}
+            text={Pref.rapidEx}
+            icon='fa-solid fa-sitemap'
+            lock={!canExt}
+          />
+          <PopoverAction 
+            doFunc={()=>openAction(i.serial+'_scrap_form')}
+            text='Scrap'
+            icon='fa-solid fa-trash-alt'
+            lock={!canScp}
+          />
+    			
         </PopoverMenu>
         
         <span className='flexSpace' />
@@ -154,59 +218,6 @@ const ItemPanelX = ({
           short={sh}
           extraClass='medSm'
         />
-        
-        <PopoverButton 
-          targetid='testpop'
-          attach='actions'
-          text='Actions'
-          icon='fa-solid fa-star gapR'
-        />
-        <PopoverMenu targetid='testpop' extraClass='rightedge' attach='actions'>
-          <PopoverAction 
-            doFunc={()=>openAction(i.serial+'_unit_form')}
-            text={`Change ${Pref.unit}s`}
-            icon='fa-solid fa-th'
-            lock={!(accessE || accessR)}
-          />
-          <PopoverAction 
-            doFunc={()=>openAction(i.serial+'_split_form')}
-            text='Split Panel'
-            icon='fa-solid fa-cut'
-            lock={!canCut}
-          />
-    			<PopoverAction 
-            doFunc={()=>openAction(i.serial+'_incomplete_form')}
-            text='Force Finish'
-            icon='fa-solid fa-flag-checkered'
-            lock={!canEnd}
-          />
-    			<PopoverAction 
-            doFunc={()=>openAction(i.serial+'_undofin_form')}
-            text='Undo Finish'
-            icon='fa-solid fa-backward'
-            lock={!canUdo}
-          />
-    			<PopoverAction 
-            doFunc={()=>openAction(i.serial+'_rapid_form')}
-            text={Pref.rapidEx}
-            icon='fa-solid fa-sitemap'
-            lock={!canExt}
-          />
-          <PopoverAction 
-            doFunc={()=>openAction(i.serial+'_scrap_form')}
-            text='Scrap'
-            icon='fa-solid fa-trash-alt'
-            lock={!canScp}
-          />
-    			<PopoverAction 
-            doFunc={()=>openAction(i.serial+'_remove_form')}
-            text='Delete'
-            icon='fa-solid fa-minus-circle'
-            lock={!canRmv}
-          />
-        </PopoverMenu>
-        
-        
       </div>
   
       <div className='balance'>

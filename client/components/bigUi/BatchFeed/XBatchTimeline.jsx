@@ -11,8 +11,6 @@ import ReleaseBlock from './ReleaseBlock';
 import CompleteBlock from './CompleteBlock';
 import HistoryBlock from '/client/components/bigUi/ItemFeedX/HistoryBlock';
 
-import EventCustom from '/client/components/forms/Batch/EventCustom';
-
 const XBatchTimeline = ({ 
   batchData, seriesId,
   releaseList, verifyList, eventList, alterList, quoteList, 
@@ -111,8 +109,6 @@ const XBatchTimeline = ({
               defaultChecked={incEvent} />
             <label htmlFor='inputEvt'>Events</label>
           </span>
-          <EventCustom batchId={batchData._id} />
-          
         </div>
           
         <CreateBlock

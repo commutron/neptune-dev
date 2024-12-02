@@ -1,35 +1,9 @@
 import React from 'react';
 import { toast } from 'react-toastify';
 
-import ModelSmall from '/client/components/smallUi/ModelSmall';
-
+import ModelNative from '/client/layouts/Models/ModelNative';
 
 const EventCustom = ({ batchId })=> {
-  
-  const access = Roles.userIsInRole(Meteor.userId(), ['edit','run']);
-
-  return(
-    <ModelSmall
-      button='Add Event'
-      title='Add Custom Event'
-      color='nT'
-      icon='fa-plus-square'
-      lock={!access}
-      lgIcon={true}
-      inLine={true}
-      textcolor='blackblackT med'
-      overrideStyle={{display: 'flex', alignItems: 'center'}}
-    >
-      <EventForm 
-        batchId={batchId}
-      />
-    </ModelSmall>
-  );
-};
-
-export default EventCustom;
-  
-const EventForm = ({ batchId, selfclose })=> {
   
   function save(e) {
     e.preventDefault();
@@ -40,12 +14,17 @@ const EventForm = ({ batchId, selfclose })=> {
     Meteor.call('pushCustomEvent', batchId, title, detail, (error, re)=>{
       error && console.log(error);
       re && toast.success('Event Saved');
-      selfclose();
+      // selfclose();
     });
   }
   
   return(
-    <div>
+    <ModelNative
+      dialogId={batchId+'_event_form'}
+      title='Add Custom Event'
+      icon='fa-solid fa-location-pin'
+      colorT='nT'>
+
       <form id='ceventSave' className='space centre' onSubmit={(e)=>save(e)}
       >
         <p>
@@ -80,6 +59,8 @@ const EventForm = ({ batchId, selfclose })=> {
         >Save</button>
         
       </form>
-    </div>
+    </ModelNative>
   );
 };
+
+export default EventCustom;
