@@ -2,38 +2,10 @@ import React, { useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import ModelLarge from '/client/layouts/Models/ModelLarge';
+import ModelNative from '/client/layouts/Models/ModelNative';
 import { MultiSelect } from "react-multi-select-component";
 
-const VariantModel = ({ widgetData, users, app, rootWI, lockOut })=> {
-  
-  let name = `new ${Pref.variant}`;
-  const access = Roles.userIsInRole(Meteor.userId(), ['create', 'edit']);
-  const aT = !access ? Pref.norole : '';
-  const lT = lockOut ? `${Pref.group} is hibernated` : '';
-  const title = access && !lockOut ? name : `${aT}\n${lT}`;
-  
-  return(
-    <ModelLarge
-      button={name}
-      title={title}
-      color='blueT'
-      icon='fa-cube fa-rotate-90'
-      lock={!access || lockOut}
-    >
-      <VariantForm
-        widgetData={widgetData}
-        users={users}
-        app={app}
-        rootWI={rootWI}
-      />
-    </ModelLarge>
-  );
-};
-  
-export default VariantModel;
-
-const VariantForm = ({ widgetData, users, app, rootWI, selfclose })=> {
+const VariantForm = ({ widgetData, users, app, rootWI, access })=> {
   
   const [ eList, eListSet ] = useState( [] );
   const [ emailState, emailSet ] = useState( [] );
@@ -70,7 +42,7 @@ const VariantForm = ({ widgetData, users, app, rootWI, selfclose })=> {
       error && console.log(error);
       if(reply) {
         toast.success('Saved');
-        selfclose();
+        // selfclose();
       }else{
         toast.error('Server Error');
         this.go.disabled = false;
@@ -81,6 +53,12 @@ const VariantForm = ({ widgetData, users, app, rootWI, selfclose })=> {
   const urlWI = !rootWI ? false : rootWI.slice(0,4) === 'http' ? rootWI : app.instruct + rootWI;
 
   return(
+    <ModelNative
+      dialogId={widgetData._id+'_newvar_form'}
+      title={`new ${Pref.variant}`}
+      icon='fa-solid fa-cube fa-rotate-90'
+      colorT='blueT'>
+      
     <div className='split overscroll'>
 
       <div className='half space'>
@@ -168,5 +146,8 @@ const VariantForm = ({ widgetData, users, app, rootWI, selfclose })=> {
       </div>
       
     </div>
+    </ModelNative>
   );
 };
+
+export default VariantForm;

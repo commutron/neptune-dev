@@ -21,7 +21,7 @@ import EventCustom from '/client/components/forms/Batch/EventCustom';
 
 import RemoveBatch from '/client/components/forms/Batch/Child/RemoveBatch';
 
-import { PopoverButton, PopoverMenu, PopoverAction } from '/client/layouts/Models/Popover';
+import { PopoverButton, PopoverMenu, PopoverAction, MatchButton } from '/client/layouts/Models/Popover';
 
 import BatchExport from '/client/views/paper/BatchExport';
 
@@ -222,19 +222,20 @@ const BatchPanelX = ({
         
         <span className='flexSpace' />
         
-        <button
+        <MatchButton 
           title='Print Label'
-          className='medSm'
-          onClick={()=>FlowRouter.go('/print/generallabel/' + 
-                      batchData.batch + 
-                      '?group=' + groupData.alias +
-                      '&widget=' + widgetData.widget + 
-                      '&ver=' + variantData.variant + 
-                      ( variantData.radioactive ? '💥' : ''  ) +
-                      '&desc=' + widgetData.describe +
-                      '&sales=' + (batchData.salesOrder || '') +
-                      '&quant=' + batchData.quantity)}
-        ><i className='fa-solid fa-print gapR'></i>Print Label</button>
+          text='Print Label' 
+          icon='fa-solid fa-print'
+          doFunc={()=>FlowRouter.go('/print/generallabel/' + 
+                    batchData.batch + 
+                    '?group=' + groupData.alias +
+                    '&widget=' + widgetData.widget + 
+                    '&ver=' + variantData.variant + 
+                    ( variantData.radioactive ? '💥' : ''  ) +
+                    '&desc=' + widgetData.describe +
+                    '&sales=' + (batchData.salesOrder || '') +
+                    '&quant=' + batchData.quantity)}
+        />
         
         <BatchExport
           group={groupData.group}
@@ -244,7 +245,7 @@ const BatchPanelX = ({
           seriesData={seriesData}
           rapidsData={rapidsData}
           brancheS={brancheS}
-          extraClass='medSm'
+          extraClass='popbutton'
         />
       </div>
       

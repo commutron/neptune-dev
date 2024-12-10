@@ -1,14 +1,16 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, Fragment } from 'react';
 import Pref from '/client/global/pref.js';
 import CreateTag from '/client/components/tinyUi/CreateTag';
 import WidgetsDepth from '../../lists/WidgetsDepth';
 import TagsModule from '/client/components/bigUi/TagsModule';
+import { PopoverButton, PopoverMenu, PopoverAction, MatchButton } from '/client/layouts/Models/Popover';
+import { OpenModelNative } from '/client/layouts/Models/ModelNative';
 
 import GroupForm from '/client/components/forms/Group/GroupForm';
 import GroupHibernate from '/client/components/forms/Group/GroupHibernate';
 import GroupInternal from '/client/components/forms/Group/GroupInternal';
 import GroupEmails from '/client/components/forms/Group/GroupEmails';
-import WidgetNewForm from '/client/components/forms/WidgetForm';
+import WidgetNew from '/client/components/forms/WidgetForm';
 import Remove from '/client/components/forms/Remove';
 
 import GroupTops from '/client/components/charts/GroupTops';
@@ -26,11 +28,21 @@ function groupActiveWidgets(widgetsList, allXBatch) {
 }
 
 
-const GroupSlide = ({ groupData, widgetsList, batchDataX, app, inter, isERun })=>{
+const GroupSlide = ({ 
+  groupData, widgetsList, batchDataX, app, 
+  inter, isERun, canCrt, canRmv 
+})=>{
   
   const g = groupData;
   const active = useMemo(()=>groupActiveWidgets(widgetsList, batchDataX), [widgetsList, batchDataX]);
   const shrtI = g.wiki && !g.wiki.includes('http');
+  
+  const openDirect = (dialogId)=> {
+    const dialog = document.getElementById(dialogId);
+    dialog?.showModal();
+  };
+  
+  const doNew = canCrt && !groupData.hibernate;
   
   const mockTag = {
     padding: '3px 7px 3px 5px',
@@ -84,11 +96,16 @@ const GroupSlide = ({ groupData, widgetsList, batchDataX, app, inter, isERun })=
             rootURL={app.instruct}
             noText={false}
             primeTopRight={false}
-            lockOut={g.hibernate} />
-          <WidgetNewForm
-            fresh={true}
+            lockOut={g.hibernate} 
+          />
+          <WidgetNew
             groupId={g._id}
-            lockOut={g.hibernate}
+          />
+          <MatchButton 
+            text={`New ${Pref.widget}`}
+            icon='fa-solid fa-cube'
+            doFunc={()=>openDirect(g._id+'_widget_new_form')}
+            lock={!doNew}
           />
             
           <GroupEmails
@@ -111,14 +128,23 @@ const GroupSlide = ({ groupData, widgetsList, batchDataX, app, inter, isERun })=
             primeTopRight={false} />
           
           {!widgetsList || widgetsList.length === 0 ?
-            <Remove
-              action='group'
-              title={g.group}
-              check={g.createdAt.toISOString()}
-              entry={g._id}
-              noText={false}
-              lockOut={g.hibernate !== true ? 'still active' : false}
-            />
+            <Fragment>
+              <Remove
+                action='group'
+                title={g.group}
+                check={g.createdAt.toISOString()}
+                entry={g._id}
+                access={g.hibernate === true && canRmv}
+              />
+              <OpenModelNative  
+                dialogId={'group_multi_delete_form'}
+                title='Delete'
+                icon='fa-solid fa-minus-circle'
+                colorT='blackT'
+                colorB='redSolid'
+                lock={!canRmv}
+              />
+            </Fragment>
           : null}
         </div>
         

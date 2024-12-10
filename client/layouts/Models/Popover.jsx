@@ -54,3 +54,12 @@ export const PopoverAction = ({ text, icon, doFunc, lock })=> (
     disabled={lock}
   >{icon ? <i className={`${icon} gapR`}></i> : null}{text}</button>
 );
+
+export const MatchButton = ({ title, text, icon, doFunc, lock })=> (
+	<button
+    title={title}
+    className='popbutton'
+    onClick={()=>doFunc()}
+    disabled={lock}
+  >{icon ? <i className={`${icon} gapR`}></i> : null}{text}</button>
+);

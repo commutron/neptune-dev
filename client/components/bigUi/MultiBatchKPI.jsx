@@ -1,12 +1,11 @@
-import React, { useRef, useState, useEffect, Fragment } from 'react';
-import { CalcSpin } from '/client/components/tinyUi/Spin.jsx';
+import React, { useRef, useState, useEffect } from 'react';
 
 import { round2Decimal } from '/client/utility/Convert';
 import NumLine from '/client/components/tinyUi/NumLine.jsx';
 
 import Pref from '/client/global/pref.js';
 
-const MultiBatchKPI = ({ widgetId, app })=> {
+const MultiBatchKPI = ({ widgetId })=> {
   
   const mounted = useRef(true);
   
@@ -24,15 +23,12 @@ const MultiBatchKPI = ({ widgetId, app })=> {
   }, []);
   
   return(
-    <div className='autoGrid' 
-      title={`Mean Average of completed ${Pref.xBatchs}`}>
-      <h3>Averages</h3>
+    <div className='w100'>
+      <h4 className='comfort'><span className='cap'>{`Mean Average of completed ${Pref.xBatchs}`}</span><span className='smaller middle fadeMore'
+        >Based on completed orders only. Updates once a day.
+      </span></h4>
       
       <KPIBlocks batchDT={batchDT} />
-      
-      <span className='small fadeMore'
-        >Based on completed orders only.<br />Updates once a day.
-      </span>
     </div>
   );
 };
@@ -57,7 +53,7 @@ const KPIBlocks = ({ batchDT })=> {
     const dlvColr = delvAvg < 0 ? 'redT' : 'greenT';
     
     return(
-      <Fragment>
+      <div className='balancer'>
         <NumLine
           num={round2Decimal(bdtObj.tidePerItemAvg)}
           name='minutes per item'
@@ -77,9 +73,15 @@ const KPIBlocks = ({ batchDT })=> {
           num={Math.round(Math.abs(delvAvg))}
           name={dlvText}
           color={dlvColr} />
-      </Fragment>
+      </div>
     );
   }
   
-  return( <CalcSpin /> );
+  return( 
+    <div className='centre' style={{minHeight:'55.33px'}}>
+      <p className='centreText'>
+        <em>Loading...</em>
+      </p>
+    </div> 
+  );
 };

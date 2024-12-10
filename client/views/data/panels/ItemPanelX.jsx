@@ -216,7 +216,7 @@ const ItemPanelX = ({
           itemData={itemData}
           noncon={nc}
           short={sh}
-          extraClass='medSm'
+          extraClass='popbutton'
         />
       </div>
   

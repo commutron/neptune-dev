@@ -721,7 +721,7 @@ input[type='radio'].interInput {
   border: 1px dotted lightgray
 }
 
-.showValid:invalid {
+.showValid:user-invalid {
   box-shadow: 0 0 10px var(--sunflowerfade);
 }
 

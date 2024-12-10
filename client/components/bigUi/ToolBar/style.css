@@ -36,7 +36,7 @@ select.orangeIn > option {
 input.redIn:focus {
   border-bottom-color: var(--alizarin);
 }
-input.redIn:invalid {
+input.redIn:user-invalid {
   text-decoration: overline wavy var(--pomegranate);
 }
 select.redIn:focus, 
@@ -50,7 +50,7 @@ textarea.redIn:focus {
 input.orangeIn:focus {
   border-bottom-color: var(--orange);
 }
-input.orangeIn:invalid {
+input.orangeIn:user-invalid {
   text-decoration: overline wavy var(--pomegranate);
 }
 .orangeIn:focus + label {

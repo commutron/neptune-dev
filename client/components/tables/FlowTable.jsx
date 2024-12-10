@@ -1,13 +1,14 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import FlowFormHead, { FlowRemove } from '../forms/FlowFormHead.jsx';
-import FlowFormRoute from '../forms/FlowFormRoute.jsx';
+import { MatchButton } from '/client/layouts/Models/Popover';
+import { FlowRemove } from '../forms/FlowFormHead';
 
-const FlowTable = ({ id, flows, app })=> {
+const FlowTable = ({ id, flows, app, openActions })=> {
   
   const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
+  const canEdt = Roles.userIsInRole(Meteor.userId(), 'edit');
   
   function handleRebuild() {
     if(isAdmin) {
@@ -31,43 +32,19 @@ const FlowTable = ({ id, flows, app })=> {
           <details key={entry.flowKey} className='blueBorder' open={index === 0 ? true : false}>
             <summary>{entry.title}</summary>
             <div className=''>
-              <table className='wide'>
-                <tbody className='clean'>
-                  <tr>
-                    <td>type: {entry.type}</td>
-                    <td><dl>
-                    <dt>{Pref.nonCon} Lists:</dt>
-                      {entry.type === 'plus' ?
-                        <NClists chosen={entry.ncLists} app={app} />
-                      :
-                        <em>Legacy</em>
-                      }
-                    </dl></td>
-                    <td className='centreText'>
-                      <FlowFormHead
-                        id={id}
-                        edit={true}
-                        preFill={entry}
-                        existFlows={flows}
-                        app={app}
-                        small={true} />
-                    </td>
-                    <td className='centreText'>
-                      <FlowFormRoute
-                        id={id}
-                        edit={true}
-                        preFill={entry}
-                        existFlows={flows}
-                        app={app}
-                        small={true} />
-                    </td>
-                    <td className='centreText'>
-                      <FlowRemove id={id} fKey={entry.flowKey} />
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-              <br />
+              <FlowToolbar 
+                id={id} 
+                entry={entry} 
+                canEdt={canEdt}
+                openActions={openActions}
+              />
+              
+              <NClists 
+                plus={entry.type === 'plus'}
+                chosen={entry.ncLists} 
+                app={app} 
+              />
+                      
               <table style={sty} className='w100 vmargin wmargin'>
                 <thead className='cap'>
                   <tr className='line3x'>
@@ -92,9 +69,9 @@ const FlowTable = ({ id, flows, app })=> {
         )})}
         
         {isAdmin &&
-          <div className='space3v'>
+          <div className='space1v'>
             <button
-              className='action clearGreen up'
+              className='action up'
               disabled={!isAdmin}
               onClick={(e)=>handleRebuild()}
             >Rebuild {Pref.flow}s for current app settings</button>
@@ -103,7 +80,37 @@ const FlowTable = ({ id, flows, app })=> {
   );
 };
 
-const NClists = ({ chosen, app })=> {
+const FlowToolbar = ({ id, entry, canEdt, openActions })=> (
+  <div className='floattaskbar light'>
+           
+      <div>type: {entry.type}</div>
+      
+      <span className='flexSpace' />
+      
+      <MatchButton 
+        text='Edit Flow'
+        icon='fa-solid fa-project-diagram'
+        doFunc={()=>openActions('topflow', entry.flowKey)}
+        lock={!canEdt}
+      />
+      
+      <MatchButton 
+        text='Change Process'
+        icon='fa-solid fa-stream'
+        doFunc={()=>openActions('proflow', entry.flowKey)}
+        lock={!canEdt}
+      />
+      
+      <FlowRemove 
+        id={id} 
+        fKey={entry.flowKey} 
+        access={canEdt} 
+      />
+        
+  </div>
+);
+
+const NClists = ({ plus, chosen, app })=> {
   
   const filtered = app.nonConTypeLists.filter( x => chosen.includes(x.key) );
   
@@ -111,13 +118,19 @@ const NClists = ({ chosen, app })=> {
     n1.listPrefix < n2.listPrefix ? -1 : n1.listPrefix > n2.listPrefix ? 1 : 0 );
                     
   return(
-    <Fragment>
-    {sorted.map( (obj, ix)=>(
-      <i key={ix} className='gap'>
-        <b className='up'>{obj.listPrefix}.</b> {obj.listName}
-      </i>
-      ))}
-    </Fragment>
+    <div className='indent2min'>
+      <p>{Pref.nonCon} Lists:
+      {plus ?
+        sorted.map( (obj, ix)=>(
+          <i key={ix} className='gap'>
+            <b className='up'>{obj.listPrefix}.</b> {obj.listName}
+          </i>
+        ))
+      :
+        <em>Legacy</em>
+      }
+      </p>
+    </div>
   );
 };
 

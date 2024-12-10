@@ -2,39 +2,9 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import ModelSmall from '../smallUi/ModelSmall';
+import ModelNative from '/client/layouts/Models/ModelNative';
 
-
-const WidgetWrapper = ({ fresh, groupId, now, lockOut })=> {
-  const role = fresh ? 'create' : 'edit';
-  const access = Roles.userIsInRole(Meteor.userId(), role);
-  
-  const aT = !access ? Pref.norole : '';
-  const lT = lockOut ? `${Pref.group} is hibernated` : '';
-  const lead = fresh ? 'New' : 'Edit';
-  
-  const label = `${lead} ${Pref.widget}`;
-  const title = access && !lockOut ? `${lead} ${Pref.widget}` : `${aT}\n${lT}`;
-  
-  return(
-    <ModelSmall
-      button={label}
-      title={title}
-      color='blueT'
-      icon='fa-cube'
-      lock={!access || lockOut}>
-      {fresh ?
-        <WidgetNewForm groupId={groupId} />
-      :
-        <WidgetEditForm id={groupId} now={now} />
-      }    
-    </ModelSmall>
-  );
-};
-
-export default WidgetWrapper;
-
-const WidgetNewForm = ({ groupId })=> {
+const WidgetNew = ({ groupId })=> {
 
   function save(e) {
     e.preventDefault();
@@ -54,37 +24,47 @@ const WidgetNewForm = ({ groupId })=> {
   }
 
   return(
-    <form className='fitWide' onSubmit={(e)=>save(e)}>
-      <p>
-        <input
-          type='text'
-          id='nwNm'
-          placeholder='ID ie. A4-R-0221'
-          pattern='[A-Za-z0-9 _\-]*'
-          autoFocus={true}
-          required />
-        <label htmlFor='nwNm'>{Pref.widget} ID</label>
-      </p>
-      <p>
-        <input
-          type='text'
-          id='prodiption'
-          placeholder='Description ie. CRC Display'
-          className='wide min300'
-          required />
-        <label htmlFor='prodiption'>{Pref.widget} Description</label>
-      </p>
-      <br />
-      <button
-        type='submit'
-        className='action nSolid'
-        id='go'
-        disabled={false}>SAVE</button>
-    </form>
+    <ModelNative
+      dialogId={groupId+'_widget_new_form'}
+      title={`New ${Pref.widget}`}
+      icon='fa-solid fa-cube'
+      colorT='blueT'>
+      
+      <form className='fitWide' onSubmit={(e)=>save(e)}>
+        <p>
+          <input
+            type='text'
+            id='nwNm'
+            placeholder='ID ie. A4-R-0221'
+            pattern='[A-Za-z0-9 _\-]*'
+            autoFocus={true}
+            required />
+          <label htmlFor='nwNm'>{Pref.widget} ID</label>
+        </p>
+        <p>
+          <input
+            type='text'
+            id='prodiption'
+            placeholder='Description ie. CRC Display'
+            className='wide min300'
+            required />
+          <label htmlFor='prodiption'>{Pref.widget} Description</label>
+        </p>
+        <span className='centre'>
+          <button
+            type='submit'
+            className='action nSolid'
+            id='go'
+            disabled={false}>SAVE</button>
+        </span>
+      </form>
+    </ModelNative>
   );
 };
 
-const WidgetEditForm = ({ id, now })=> {
+export default WidgetNew;
+
+export const WidgetEdit = ({ id, now })=> {
 
   function save(e) {
     e.preventDefault();
@@ -103,6 +83,12 @@ const WidgetEditForm = ({ id, now })=> {
   }
 
   return(
+    <ModelNative
+      dialogId={id+'_widget_edit_form'}
+      title={`Edit ${Pref.widget}`}
+      icon='fa-solid fa-cube'
+      colorT='blueT'>
+      
     <form className='fitWide' onSubmit={(e)=>save(e)}>
       <p>
         <input
@@ -132,5 +118,6 @@ const WidgetEditForm = ({ id, now })=> {
         >SAVE</button>
       </span>
     </form>
+    </ModelNative>
   );
 };

@@ -219,7 +219,7 @@ textarea:optional {
   border-style: dashed;
 }
 
-input:invalid, select:invalid, textarea:invalid {
+input:user-invalid, select:user-invalid, textarea:user-invalid {
   -moz-box-shadow: none;
   -webkit-box-shadow: none;
   box-shadow: none;
@@ -323,6 +323,7 @@ details {
   padding: 0;
   text-transform: capitalize;
   box-shadow: none;
+  overflow-x: clip;
   cursor: default;
 }
 details[open] summary {

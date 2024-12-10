@@ -25,7 +25,9 @@ const AllGroups = ({
     groupS.findIndex( x => x.alias === specify ) : false;
     
   const isERun = Roles.userIsInRole(Meteor.userId(), ['edit','run']);
-                                  
+  const canCrt = Roles.userIsInRole(Meteor.userId(), 'create');
+  const canRmv = Roles.userIsInRole(Meteor.userId(), 'remove');
+  
   return(
     <SlidesNested
       menuTitle={Pref.Group + 's'}
@@ -53,6 +55,8 @@ const AllGroups = ({
             app={app}
             inter={!inter || inter.length < Pref.interMax || inter.find( x=> x._id === entry._id )}
             isERun={isERun}
+            canCrt={canCrt}
+            canRmv={canRmv}
           />
         )})} 
     </SlidesNested>

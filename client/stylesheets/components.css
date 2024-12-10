@@ -217,7 +217,9 @@ n-timeline-item:last-child n-timeline-marker:after {
   border-radius: 2px;
   box-shadow: var(--dropShadow000);
   display: flex;
+  align-items: center;
   column-gap: 2dvmin;
+  overflow-x: clip;
 }
 .popbutton {
   font-size: var(--sm9);
@@ -263,8 +265,10 @@ n-timeline-item:last-child n-timeline-marker:after {
 }
 
 .floattaskbar.light,
+.floattaskbar.light .popbutton,
 .floattaskbar.light .popmenu,
-.floattaskbar.light button {
+.floattaskbar.light .popmenu > div,
+.floattaskbar.light .popmenu > button {
   background-color: var(--contrastlight);
 }
 

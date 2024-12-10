@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
@@ -7,15 +7,6 @@ import { min2hr } from '/client/utility/Convert';
 import ModelNative from '/client/layouts/Models/ModelNative';
 
 const BatchEdit = ({ batchData, seriesData, allVariants, canEdit, access })=> {
-  
-  const [ nxtNum, nxtSet ] = useState(false);
-  
-  useEffect( ()=>{
-    Meteor.call('getNextBatch', (err, re)=>{
-      err && console.log(err);
-      re && nxtSet(re);
-     }); 
-  }, []);
    
   function save(e) {
     e.preventDefault();
@@ -99,7 +90,6 @@ const BatchEdit = ({ batchData, seriesData, allVariants, canEdit, access })=> {
         
         <datalist id='nextbatch'>
           <option value={bDt.batch}>{bDt.batch}</option>
-          {nxtNum ? <option value={nxtNum}>{nxtNum}</option> : null}
         </datalist>
         
         <label htmlFor='soNum' className='breath'>{Pref.salesOrder} number<br />
@@ -170,6 +160,7 @@ const BatchEdit = ({ batchData, seriesData, allVariants, canEdit, access })=> {
         <button
           type='submit'
           className='action nSolid'
+          disabled={!access}
         >Save</button>
       </div>
     </form>

@@ -988,6 +988,7 @@ n-sm-model-content {
 .indentR { padding-right: 16px; }
 .indent2v { padding-left: 2vw; }
 .indent5v { padding-left: 5vw; }
+.indent2min { padding-inline: 2dvmin; }
 
 .breath { margin: 0 5px; }
 

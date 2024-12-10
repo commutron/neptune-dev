@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
@@ -12,12 +12,13 @@ import Remove from '/client/components/forms/Remove';
 
 import AssemblyList from './AssemblyList';
 
+import { OpenModelNative } from '/client/layouts/Models/ModelNative';
 import { cleanURL } from '/client/utility/Convert';
 
 const VariantCard = ({ 
   variantData, widgetData, 
   groupData, batchRelated, 
-  app, user, canRun
+  app, user, canRun, canRmv
 })=> {
   
   const v = variantData;
@@ -51,16 +52,26 @@ const VariantCard = ({
             />
           : null}
           
-          {batchRelated.length === 0 ?
-            <Remove
-              action='variant'
-              title={variantData.variant}
-              check={variantData.createdAt.toISOString()}
-              entry={variantData}
-              lockOut={variantData.live === true ? 'still open' : false} 
-            />
+          {batchRelated.length === 0 && variantData.live === false ?
+            <Fragment>
+              <Remove
+                action='variant'
+                title={variantData.variant}
+                check={variantData.createdAt.toISOString()}
+                entry={variantData}
+                access={!variantData.live && canRmv} 
+              />
+              <OpenModelNative  
+                dialogId={'variant_multi_delete_form'}
+                title='Delete'
+                icon='fa-solid fa-minus-circle'
+                colorT='blackT'
+                colorB='redSolid'
+                lock={!canRmv}
+              />
+            </Fragment>
           : null}
-            
+         
         </div>
           
       </div>

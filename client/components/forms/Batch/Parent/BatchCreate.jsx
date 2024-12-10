@@ -1,38 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useLayoutEffect } from 'react';
 import moment from 'moment';
 import 'moment-business-time';
 import 'moment-timezone';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import ModelMedium from '/client/components/smallUi/ModelMedium';
+import ModelNative from '/client/layouts/Models/ModelNative';
 import { onFire } from '/client/utility/NonConOptions';
 
-const BatchXCreate = ({ groupId, widgetId, allVariants, lock })=> {
-  const access = Roles.userIsInRole(Meteor.userId(), 'create');
-  const aT = !access ? Pref.norole : '';
-  const lT = lock ? lock : '';
-  const title = access && !lock ? 'Create new ' + Pref.xBatch : `${aT}\n${lT}`;
-  return(
-    <ModelMedium
-      button={'New ' + Pref.xBatch}
-      title={title}
-      color='blueT'
-      icon='fa-cubes'
-      lock={!access || lock}
-    >
-      <BXCreateForm
-        groupId={groupId}
-        widgetId={widgetId}
-        allVariants={allVariants}
-      />
-    </ModelMedium>
-  );
-};
-
-export default BatchXCreate;
-
-const BXCreateForm = ({ groupId, widgetId, allVariants })=> {
+const BatchCreate = ({ groupId, widgetId, allVariants, prerun, clearOnClose })=> {
   
   const liveVs = allVariants.filter( v => v.live );
   
@@ -40,34 +16,50 @@ const BXCreateForm = ({ groupId, widgetId, allVariants })=> {
   const [ pstState, pstSet ] = useState(false);
   const [ radState, radSet ] = useState(false);
   
-  useEffect( ()=>{
-    Meteor.call('getPastBatch', widgetId, tempver, (err, re)=>{
-      err && console.log(err);
-      re && pstSet(re);
-     });
+  useLayoutEffect( ()=>{
+    if(prerun) {
+      Meteor.call('getPastBatch', widgetId, tempver, (err, re)=>{
+        err && console.log(err);
+        re && pstSet(re);
+       });
      
-     radSet( liveVs.find( v => v.versionKey === tempver ).radioactive );
-   }, [tempver]);
+      radSet( liveVs.find( v => v.versionKey === tempver ).radioactive );
+    }
+   }, [prerun, tempver]);
    
   const [ nxtNum, nxtSet ] = useState(false);
   
-  useEffect( ()=>{
-    Meteor.call('getNextBatch', (err, re)=>{
-      err && console.log(err);
-      re && nxtSet(re);
-     }); 
-   }, []);
+  useLayoutEffect( ()=>{
+    if(prerun) {
+      Meteor.call('getNextBatch', (err, re)=>{
+        err && console.log(err);
+        re && nxtSet(re);
+       }); 
+    }
+   }, [prerun]);
   
   const [ temptime, temptimeSet ] = useState(0);
   const [ endDateState, endDateSet ] = useState( moment().format('YYYY-MM-DD') );
+  const [ shipAim, shipAimSet ] = useState(0);
   const [ loadState, loadSet ] = useState( null );
   
-  useEffect( ()=> {
-    Meteor.call('mockDayShipLoad', endDateState, (err, re)=>{
-      err && console.log(err);
-      loadSet(re);
-    });
-  }, [endDateState]);
+  useLayoutEffect( ()=> {
+    if(prerun) {
+      Meteor.call('mockDayShipLoad', endDateState, (err, re)=>{
+        err && console.log(err);
+        loadSet(re);
+      });
+    }
+  }, [prerun, endDateState]);
+  
+  useLayoutEffect( ()=> {
+    if(prerun) {
+      const daymoment = moment(endDateState);
+      const shpmoment = daymoment.isShipDay() ? daymoment.format('ddd, MMM Do') :
+                        daymoment.lastShippingTime().format('ddd, MMM Do');
+      shipAimSet(shpmoment);
+    }
+  }, [prerun, endDateState]);
    
   function save(e) {
     e.preventDefault();
@@ -103,13 +95,15 @@ const BXCreateForm = ({ groupId, widgetId, allVariants })=> {
         }
     });
   }
-  
-  
-  const daymoment = moment(endDateState);
-  const shipAim = daymoment.isShipDay() ? daymoment.format('ddd, MMM Do') :
-                  daymoment.lastShippingTime().format('ddd, MMM Do');
    
   return(
+    <ModelNative
+      dialogId={widgetId+'_batch_new_form'}
+      title={`New ${Pref.xBatch}`}
+      icon='fa-solid fa-cubes'
+      colorT='blueT'
+      closeFunc={()=>clearOnClose()}>
+      
     <form className='centre max500' onSubmit={(e)=>save(e)}>
       <span className='overscroll'>
         <div className='centreRow'>
@@ -194,7 +188,7 @@ const BXCreateForm = ({ groupId, widgetId, allVariants })=> {
             required 
           /></label>
           
-          <label className='breath'>Serialize<br />
+          <label className='breath stdInW'>Serialize<br />
             <label htmlFor='srlz' className='beside'>
             <input
               type='checkbox'
@@ -221,7 +215,7 @@ const BXCreateForm = ({ groupId, widgetId, allVariants })=> {
             required 
           /></label>
 
-          <label htmlFor='hourNum' className='breath'>{Pref.timeBudget} (in hours)<br />
+          <label htmlFor='hourNum' className='breath stdInW'>{Pref.timeBudget} (in hours)<br />
           <input
             type='number'
             id='hourNum'
@@ -275,5 +269,8 @@ const BXCreateForm = ({ groupId, widgetId, allVariants })=> {
         >Create</button>
       </div>
     </form>
+    </ModelNative>
   );
 };
+
+export default BatchCreate;

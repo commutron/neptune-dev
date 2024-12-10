@@ -1,8 +1,9 @@
 import React from 'react';
 
-const ModelNative = ({ dialogId, title, icon, colorT, dark, children })=> {
+const ModelNative = ({ dialogId, title, icon, colorT, dark, closeFunc, children })=> {
   
   const close = ()=> {
+    closeFunc ? closeFunc() : null;
     const dialog = document.getElementById(dialogId);
     dialog?.close();
   };
