@@ -246,6 +246,7 @@ option {
 textarea {
   min-width: 15rem;
   min-height: 2rem;
+  field-sizing: content;
   border-color: inherit;
 }
 

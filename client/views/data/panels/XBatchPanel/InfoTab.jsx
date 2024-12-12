@@ -5,7 +5,7 @@ import Pref from '/client/global/pref.js';
 
 import { min2hr, toCap } from '/client/utility/Convert.js';
 
-import TagsModule, { HoldFlag } from '/client/components/bigUi/TagsModule';
+import TagsModule from '/client/components/bigUi/TagsModule';
 
 import ReleaseAction from '/client/components/bigUi/ReleasesModule';
 import BlockForm from '/client/components/forms/BlockForm';
@@ -116,7 +116,6 @@ const InfoTab = ({
           action={Pref.xBatch}
           id={b._id}
           tags={b.tags}
-          hold={b.hold}
           tagOps={app.tagOption}
           canRun={canRun}
         />
@@ -129,13 +128,6 @@ const InfoTab = ({
             <n-faX><i className='fas fa-burst fa-fw fa-lg darkOrangeT'></i></n-faX>
             <i>{radioactive}</i>
           </div>
-        }
-        
-        {b.hold &&
-          <HoldFlag
-            id={b._id}
-            canRun={canRun}
-          />
         }
       </div>
         

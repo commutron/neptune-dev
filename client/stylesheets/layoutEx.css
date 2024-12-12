@@ -12,7 +12,7 @@
 
 .containerEx .tenHeader {
   grid-template-rows: var(--vert_border) var(--vert_adapt);
-  grid-template-columns: var(--vert_frame) 1fr var(--vert_frame) var(--vert_frame);
+  grid-template-columns: var(--vert_frame) 1fr var(--vert_adapt) var(--vert_adapt);
   grid-template-areas: 
     'topBorder topBorder topBorder topBorder'
     'homeIcon frontCenter auxRight proRight';

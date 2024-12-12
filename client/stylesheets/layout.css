@@ -5,14 +5,14 @@ body {
   padding: 0;
   overflow: hidden;
   transform: translate3d(0, 0, 0);
-  --vert_border: max(3px, 1vmin);
-  --vert_frame: max(20px, 8vmin);
+  --vert_border: max(6px, 1vmin);
+  --vert_frame: max(40px, 7vmin);
   --vert_adapt: calc(var(--vert_frame) - var(--vert_border));
   --vert_main: calc(100dvh - var(--vert_frame));
 }
 .windowPro, .containerPro {
-  --vert_frame: max(40px, 8vmin);
   --vert_border: max(6px, 1vmin);
+  --vert_frame: max(40px, 8vmin);
   --vert_adapt: calc(var(--vert_frame) - var(--vert_border));
   --vert_main: calc(100dvh - var(--vert_frame));
 }
@@ -249,7 +249,7 @@ main {
   height: var(--vert_adapt);
   background-color: rgb(25,25,25);
   font-family: var(--styled-font);
-  font-size: calc(var(--vert_border) * 4);/*4dvh;*/
+  font-size: calc(var(--vert_adapt) * 0.7);
   font-weight: 900;
   color: var(--silver);
 }
@@ -1602,4 +1602,33 @@ n-col-table-head > span {
   border-width: 1px 1px 2px 1px;
   border-style: solid;
   border-color: white;
+}
+
+
+.tabsVert {
+  display: grid;
+  grid-template-columns: minmax(min-content, max-content) auto;
+}
+.tabsVertMenu {
+  display: grid;
+  grid-auto-rows: max-content;
+  grid-auto-rows: auto;
+}
+.tabsVertMenu > button {
+  text-align: left;
+  
+}
+.tabsVertMenu .tabOn,
+.tabsVertMenu .tabOff:hover {
+  border-right: none;
+  background-color: var(--contrastlight);
+  box-shadow: var(--dropShadowLeft00);
+}
+.tabsVertMenu .tabOff {
+  background-color: hsl(204 8.2% 76.08%);
+  background-color: var(--clouds);
+}
+
+.tabsVertContent {
+  background-color: var(--contrastlight);
 }

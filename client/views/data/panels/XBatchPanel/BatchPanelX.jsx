@@ -52,6 +52,18 @@ const BatchPanelX = ({
     dialog?.showModal();
   };
   
+  function toggleHold() {
+    if(!b.hold) {
+      Meteor.call('setHold', b._id, (err)=>{
+        err && console.log(err);
+      });
+    }else{
+      Meteor.call('unsetHold', b._id, (err)=>{
+        err && console.log(err);
+      });
+    }
+  }
+  
   const isOpen = !b.completed && b.live;
   
   const accessR = Roles.userIsInRole(Meteor.userId(), 'run');
@@ -201,10 +213,10 @@ const BatchPanelX = ({
         />
         <PopoverMenu targetid='poweractions' attach='actions'>
           <PopoverAction 
-            doFunc={()=>openAction(b._id+'_hold_action')}
-            text='Hold'
+            doFunc={()=>toggleHold()}
+            text={b.hold ? 'Remove Hold' : 'Apply Hold'}
             icon='fa-solid fa-pause'
-            lock={true}
+            lock={!accessR}
           />
           <PopoverAction 
             doFunc={()=>openAction(b._id+'_event_form')}

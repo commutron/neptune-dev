@@ -83,7 +83,7 @@ const NotesContent = ({ sourceId, noteObj, editMethod, lines, cal })=> {
           </span>
         </form>
       :
-        <pre className='vmarginquarter spacehalf line15x'
+        <pre className='nomargin line15x'
         >{noteObj?.content || ''}</pre>
       }
       {!editState &&

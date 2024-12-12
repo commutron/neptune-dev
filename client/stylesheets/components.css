@@ -221,6 +221,9 @@ n-timeline-item:last-child n-timeline-marker:after {
   column-gap: 2dvmin;
   overflow-x: clip;
 }
+.floattaskbar.shallow {
+  box-shadow: var(--dropShadow0000);
+}
 .popbutton {
   font-size: var(--sm9);
   text-transform: capitalize;

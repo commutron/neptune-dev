@@ -43,6 +43,7 @@
 }
 
 .pop { box-shadow: var(--dropShadow1); }
+.popSm { box-shadow: var(--dropShadow000); }
 .chip { 
   margin: 4px;
   padding: 2px 4px;

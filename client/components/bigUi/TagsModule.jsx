@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 import Pref from '/client/global/pref.js';
 
-
-const TagsModule = ({ action, id, vKey, tags, tagOps, truncate, rad, hold, canRun })=>	{
+const TagsModule = ({ action, id, vKey, tags, tagOps, truncate, rad, canRun })=>	{
 
   const [ newOption, newOptionSet ] = useState(false);
   const [ newRad, newRadSet ] = useState(false);
@@ -55,12 +54,6 @@ const TagsModule = ({ action, id, vKey, tags, tagOps, truncate, rad, hold, canRu
     default:
       console.log('this component is not wired properly');
     }
-  }
-  
-  function addHoldFlag() {
-    Meteor.call('setHold', id, (err)=>{
-      err && console.log(err);
-    });
   }
   
   function addRadFlag(rad) {
@@ -127,17 +120,6 @@ const TagsModule = ({ action, id, vKey, tags, tagOps, truncate, rad, hold, canRu
           Add Custom
         </MenuItem>
         
-        {action === Pref.xBatch && !hold ?
-        <span>
-          <MenuItem divider />
-          <MenuItem onClick={()=>addHoldFlag()} className='cap'>
-            <n-faX>
-              <i className='fas fa-pause fa-fw gapR darkgrayT'></i>
-            </n-faX>Add {Pref.hold}
-          </MenuItem>
-        </span>
-        : null}
-        
         {action === 'variant' && !rad ?
         <span>
           <MenuItem divider />
@@ -198,69 +180,5 @@ const IndieTag = ({ tagText, removeTag, lock }) => {
         <MenuItem onClick={()=>removeTag()}>Remove {Pref.tag}</MenuItem>
       </ContextMenu>
     </div>
-  );
-};
-
-export const HoldFlag = ({ id, canRun })=> {
-
-  function removeHoldFlag() {
-    Meteor.call('unsetHold', id, (err)=>{
-      err && console.log(err);
-    });
-  }
-  
-  return(
-    <div 
-      className='medBig max250 vmarginhalf holdpill' 
-      title={`${Pref.xBatch} is ${Pref.isHold}`}
-    >
-      <ContextMenuTrigger
-        id={id+'hldcut'}
-        holdToDisplay={1}
-        attributes={{
-          style: { cursor: 'pointer' }
-        }}
-        renderTag='div'
-      >
-        <n-faX><i className='far fa-pause-circle fa-lg fa-fw wetasphaltT'></i></n-faX>
-        <i>{Pref.isHold}</i>
-      </ContextMenuTrigger>
-        
-      <ContextMenu id={id+'hldcut'} className='noCopy cap'>
-        <MenuItem onClick={()=>removeHoldFlag()} disabled={!canRun}
-        >Remove {Pref.hold}</MenuItem>
-      </ContextMenu>
-    </div>
-  );
-};
-
-export const RadFlag = ({ vKey, rad, canRun })=> {
-
-  function removeRadFlag() {
-    Meteor.call('cutVRad', vKey, (err)=>{
-      err && console.log(err);
-    });
-  }
-  
-  return(
-    <span>
-      <ContextMenuTrigger
-        id={vKey+'radcut'}
-        holdToDisplay={1}
-        attributes={{ 
-          className: 'centre max100',
-          style: { cursor: 'pointer' }
-        }}
-        renderTag='div'
-      >
-        <n-faX><i className='fa-solid fa-burst fa-fw fa-2x darkOrangeT'></i></n-faX>
-        <i>{rad}</i>
-      </ContextMenuTrigger>
-        
-      <ContextMenu id={vKey+'radcut'} className='noCopy cap'>
-        <MenuItem onClick={()=>removeRadFlag()} disabled={!canRun}
-        >Remove {Pref.radio.toUpperCase()}</MenuItem>
-      </ContextMenu>
-    </span>
   );
 };

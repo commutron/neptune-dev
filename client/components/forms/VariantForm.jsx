@@ -43,9 +43,13 @@ const VariantForm = ({ widgetData, users, app, rootWI, access })=> {
       if(reply) {
         toast.success('Saved');
         // selfclose();
+        this.rev.value = '';
+        this.wikdress.value = '';
+        this.unit.value = '';
+        this.gonewvar.disabled = false;
       }else{
         toast.error('Server Error');
-        this.go.disabled = false;
+        this.gonewvar.disabled = false;
       }
     });
   }

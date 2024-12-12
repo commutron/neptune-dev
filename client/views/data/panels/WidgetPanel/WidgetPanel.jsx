@@ -4,18 +4,8 @@ import CreateTag from '/client/components/tinyUi/CreateTag';
 import Tabs from '/client/components/smallUi/Tabs/Tabs';
 import { PopoverButton, PopoverMenu, PopoverAction, MatchButton } from '/client/layouts/Models/Popover';
 
-import VariantCard from './VariantCard';
-
-import { WidgetEdit } from '/client/components/forms/WidgetForm';
-import FlowFormHead from '/client/components/forms/FlowFormHead';
-import FlowFormRoute from '/client/components/forms/FlowFormRoute';
-import VariantForm from '/client/components/forms/VariantForm';
-import BatchCreate from '/client/components/forms/Batch/Parent/BatchCreate';
-
-import Remove from '/client/components/forms/Remove';
-
-import MultiBatchKPI from '/client/components/bigUi/MultiBatchKPI';
-
+import VariantCards from './VariantCards';
+import WModels from './WModels';
 import FlowTable from '/client/components/tables/FlowTable';
 import WTimeTab from './WTimeTab';
 import WProbTab from './WProbTab';
@@ -50,10 +40,7 @@ const WidgetPanel = ({
     const dialog = document.getElementById(dialogId);
     dialog?.showModal();
   };
-  
-  const varS = variantData.sort((v1, v2)=> 
-              v1.variant > v2.variant ? -1 : v1.variant < v2.variant ? 1 : 0 );
-                               
+                           
   const bS = b.sort((b1, b2)=> b1.batch < b2.batch ? -1 : b1.batch > b2.batch ? 1 : 0 );
   const batchIDs = Array.from( bS, x => x._id );
   const batches = Array.from( bS, x => x.batch );
@@ -69,47 +56,21 @@ const WidgetPanel = ({
 
   return(
     <div className='space' key={w.widget}>
-      <WidgetEdit
-        id={widgetData._id}
-        now={widgetData}
-      />
-      <VariantForm
+      
+      <WModels
         widgetData={widgetData}
+        groupData={groupData}
+        variantData={variantData}
         users={users}
         app={app}
-        rootWI={groupData.wiki}
-        access={doVar} 
-      />
-      <FlowFormHead
-        id={w._id}
-        preFill={selectedFlow}
-        existFlows={w.flows}
-        app={app}
-        access={canEdt}
+        selectedFlow={selectedFlow}
+        bload={bload}
         clearOnClose={()=>selectedFlowSet(false)}
-      />
-      <FlowFormRoute
-        id={w._id}
-        preFill={selectedFlow}
-        existFlows={w.flows}
-        app={app}
-        access={canEdt}
-        clearOnClose={()=>selectedFlowSet(false)}
-      />
-      <BatchCreate
-        groupId={groupData._id}
-        widgetId={widgetData._id}
-        allVariants={variantData}
-        access={doBch}
-        prerun={bload}
-        clearOnClose={()=>bloadSet(false)}
-      />
-      <Remove
-        action='widget'
-        title={widgetData.widget}
-        check={widgetData.createdAt && widgetData.createdAt.toISOString()}
-        entry={widgetData._id}
-        access={doRmv}
+        unloadOnClose={()=>bloadSet(false)}
+        doVar={doVar} 
+        canEdt={canEdt}
+        doBch={doBch}
+        doRmv={doRmv}
       />
       
       <div className='floattaskbar stick light'>
@@ -168,29 +129,21 @@ const WidgetPanel = ({
         hold={true}
         sessionTab='widgetExPanelTabs'>
         
-        <div className='cardify autoFlex'>
-            
-          <MultiBatchKPI
-            widgetId={widgetData._id}
-            app={a} />
-            
-          {variantData.length < 1 ? <p>no {Pref.variants} created</p> : null}
-          
-          {varS.map( (ventry, index)=> {
-            return(  
-              <VariantCard
-                key={ventry._id+index}
-                variantData={ventry}
-                widgetData={widgetData} 
-                groupData={groupData}
-                batchRelated={batchRelated.filter(b=> b.versionKey === ventry.versionKey)} 
-                app={app}
-                user={user}
-                canRun={canRun}
-                canRmv={canRmv}
-              />
-          )})}
-  
+        <div className='space'>
+          {variantData.length < 1 ? <p>no {Pref.variants} created</p> : 
+            <VariantCards
+              variantData={variantData}
+              widgetData={widgetData} 
+              groupData={groupData}
+              batchRelated={batchRelated}
+              app={app}
+              user={user}
+              canEdt={canEdt}
+              canRun={canRun}
+              canRmv={canRmv}
+              modelFunc={openDirect}
+            />
+          }
         </div>
         
         <FlowTable 

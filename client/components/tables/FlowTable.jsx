@@ -81,7 +81,7 @@ const FlowTable = ({ id, flows, app, openActions })=> {
 };
 
 const FlowToolbar = ({ id, entry, canEdt, openActions })=> (
-  <div className='floattaskbar light'>
+  <div className='floattaskbar shallow light'>
            
       <div>type: {entry.type}</div>
       

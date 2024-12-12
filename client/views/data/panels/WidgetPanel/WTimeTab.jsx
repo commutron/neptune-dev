@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 
+import MultiBatchKPI from './MultiBatchKPI';
 import TideMultiBatchBar from '/client/components/charts/Tides/TideMultiBatchBar';
 import ShipScatter from '/client/components/charts/ShipScatter';
 import WTimeCycle from './WTimeCycle';
@@ -29,8 +30,12 @@ const WTimeTab = ({
   
   return(
     <div className='space' key={widgetData._id+'times'}>
+      <MultiBatchKPI
+        widgetId={widgetData._id}
+        app={app} 
+      />
       
-      <div className='cardSelf'> 
+      <div className='cardSelf vmargin'> 
         <table className='wide'><thead>
           <tr className='cap'>
             <th>Sales Start → {Pref.kitting} Release</th>
@@ -66,14 +71,14 @@ const WTimeTab = ({
       <TideMultiBatchBar 
         batchIDs={batchIDs}
         app={app}
-        extraClass='cardSelf dropCeiling' />
+        extraClass='cardSelf vmargin' />
       
       <ShipScatter 
         fetchFunc='getBatchOnTime'
         idLimit={widgetData._id}
         height={100}
         leftpad={50}
-        extraClass='cardSelf dropCeiling' />
+        extraClass='cardSelf vmargin' />
         
       <WTimeCycle wID={widgetData._id} flows={widgetData.flows} app={app} />
 

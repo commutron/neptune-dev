@@ -7,7 +7,7 @@ import Tabs from '/client/components/smallUi/Tabs/Tabs';
 import { TideBump } from '/client/components/riverX/TideWall';
 
 import StepsProgressX from '/client/components/bigUi/StepsProgress/StepsProgressX';
-import TagsModule, { HoldFlag } from '/client/components/bigUi/TagsModule';
+import TagsModule from '/client/components/bigUi/TagsModule';
 import BlockForm from '/client/components/forms/BlockForm';
 import BlockList from '/client/components/bigUi/BlockList';
 
@@ -159,10 +159,12 @@ const MiniInfo = ({ batchData, srange, flowCounts, rapidMerge, bClosed, app, can
       truncate={true}
       canRun={canRun} />
     {batchData.hold &&
-      <HoldFlag
-        id={batchData._id}
-        canRun={canRun}
-      />
+      <div 
+        className='medBig max250 vmarginhalf holdpill' 
+        title={`${Pref.xBatch} is ${Pref.isHold}`}>
+        <n-faX><i className='far fa-pause-circle fa-lg fa-fw wetasphaltT'></i></n-faX>
+        <i>{Pref.isHold}</i>
+      </div>
     }
     <BlockForm
       id={batchData._id}

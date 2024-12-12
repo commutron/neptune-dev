@@ -56,7 +56,7 @@
   --pomegranatefrost: rgba(192, 57, 43, 0.8);
   --pomegranatetrans: rgba(192, 57, 43, 0.5);
   
-  --silver: rgb(189, 195, 199);
+  --silver: rgb(189, 195, 199); /* hsl(204deg 8.2% 76.08%); */
   --silverfade: rgba(189, 195, 199, 0.5);
   --silverfader: rgba(189, 195, 199, 0.2);
   
@@ -95,8 +95,8 @@
   --scottsCurve: cubic-bezier(0.165, 0.84, 0.44, 1);
   
   /* shaddow */
+  --dropShadow0000: 0 2px 3px rgba(0,0,0,0.12);
   --dropShadow000: 0 2px 4px rgba(0,0,0,0.16);
-                  
   --dropShadow00: 0 3px 6px rgba(0,0,0,0.16),
                   0 3px 6px rgba(0,0,0,0.23);
                 
@@ -109,7 +109,7 @@
   --dropShadow2: 0 14px 28px rgba(0,0,0,0.25), 
                  0 10px 10px rgba(0,0,0,0.22);
 
-  --dropShadowLeft00: -5px 0 10px 0px rgba(0,0,0,0.11);
+  --dropShadowLeft00: -5px 0 6px 0px rgba(0,0,0,0.11);
   /*--dropShadowLeft0: -10px 0 15px 0px rgba(0,0,0,0.22);*/
   --dropShadowLeft1: -15px 0 20px 0px rgba(0,0,0,0.22);
 }
