@@ -3,7 +3,7 @@ import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import ModelMedium from '../smallUi/ModelMedium';
+import ModelMedium from '/client/layouts/Models/ModelMedium';
 import { toCap } from '/client/utility/Convert';
 
 const QuoteTimeBudget = ({ bID, qtB, qtbB, lockOut, brancheS })=> {

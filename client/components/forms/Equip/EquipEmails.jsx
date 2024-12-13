@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 import Pref from '/client/global/pref.js';
 
 import { MultiSelect } from "react-multi-select-component";
-import ModelSmall from '/client/components/smallUi/ModelSmall';
+import ModelSmall from '/client/layouts/Models/ModelSmall';
 
 const EquipEmailsManager = ({ id, stewards, liveUsers })=> {
 

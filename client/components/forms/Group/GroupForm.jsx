@@ -2,106 +2,65 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import ModelMedium from '/client/components/smallUi/ModelMedium';
+import ModelNative from '/client/layouts/Models/ModelNative';
 import { cleanURL } from '/client/utility/Convert';
 
-const GroupFormWrapper = ({ 
-  id, name, alias, wiki, rootURL,
-  noText, primeTopRight, lgIcon,
-  lockOut
-})=> {
-  const bttn = name ? `edit ${Pref.group}` : `new ${Pref.group}`;
-  const otitle = name ? 'edit ' + Pref.group : 'create new ' + Pref.group;
+const GroupForm = ({ gObj, clearOnClose, rootURL })=> {
   
-  const access = name ? Roles.userIsInRole(Meteor.userId(), 'edit') :
-                        Roles.userIsInRole(Meteor.userId(), 'create');
-  const aT = !access ? Pref.norole : '';
-  const lT = lockOut ? `${Pref.group} is hibernated` : '';
-  const title = access && !lockOut ? otitle : `${aT}\n${lT}`;
-  
-  return(
-    <ModelMedium
-      button={bttn}
-      title={title}
-      color='blueT'
-      icon='fa-industry'
-      lock={!access || lockOut}
-      noText={noText}
-      primeTopRight={primeTopRight}
-      lgIcon={lgIcon}>
-      <GroupForm 
-        id={id}
-        name={name}
-        alias={alias}
-        wiki={wiki}
-        title={title}
-        rootURL={rootURL}
-      />
-    </ModelMedium>
-  );
-};
-
-export default GroupFormWrapper;
-
-const GroupForm = ({ id, name, alias, wiki, rootURL, title, selfclose })=> {
+  const groupId = gObj?._id || null;
+  const name = gObj?.group || '';
+  const alias = gObj?.alias || '';
+  const wiki = gObj?.wiki || '';
 
   function createCustomer(e) {
     e.preventDefault();
-    const groupId = id;
     const groupName = this.gName.value.trim();
     const groupAlias = this.gAlias.value.trim().toLowerCase();
     
     const gURL = this.gWiki.value.trim();
     const groupWiki = cleanURL(gURL, rootURL);
     
-    function create(groupName, groupAlias, groupWiki) {
+    if(!groupId) {
       Meteor.call('addGroup', groupName, groupAlias, groupWiki, (error, reply)=>{
         if(error)
           console.log(error);
         if(reply) {
           toast.success('Saved');
-          selfclose();
+          // selfclose();
         }else{
           toast.error('Server Error');
         }
       });
-    }
-      
-    function edit(groupId, groupName, groupAlias, groupWiki) {
+    }else{
       Meteor.call('editGroup', groupId, groupName, groupAlias, groupWiki, (error, reply)=>{
         if(error)
           console.log(error);
         if(reply) {
           toast.success('Saved');
           FlowRouter.go('/data/overview?request=groups&specify=' + groupAlias);
-          selfclose();
+          // selfclose();
         }else{
           toast.error('Server Error');
         }
       });
     }
-    
-    /////////Selection/////////
-    if(name === false) {
-      create(groupName, groupAlias, groupWiki);
-    }else{
-      edit(groupId, groupName, groupAlias, groupWiki);
-    }
-    
   }
-    
-  const orName = name ? name : '';
-  const orAlias = alias ? alias : '';
-  const orWiki = wiki ? wiki : '';
 
   return(
+    <ModelNative
+      dialogId={'multifuncion_group_form'}
+      title={`${groupId ? 'Edit' : 'Create'} ${Pref.group}`}
+      icon='fa-solid fa-industry'
+      colorT='blueT'
+      clearOnClose={clearOnClose}>
+      
     <form id='newGroup' className='fitWide' onSubmit={(e)=>createCustomer(e)}>
       <p>
         <span>
           <input
             type='text'
             id='gName'
-            defaultValue={orName}
+            defaultValue={name}
             placeholder='ie. Trailer Safegaurd'
             className='dbbleWide'
             pattern='[A-Za-z0-9 _\-]*'
@@ -116,7 +75,7 @@ const GroupForm = ({ id, name, alias, wiki, rootURL, title, selfclose })=> {
           <input
             type='text'
             id='gAlias'
-            defaultValue={orAlias}
+            defaultValue={alias}
             placeholder='ie. TSG'
             pattern='[A-Za-z0-9 _\-]*'
             maxLength={Pref.aliasMax}
@@ -128,7 +87,7 @@ const GroupForm = ({ id, name, alias, wiki, rootURL, title, selfclose })=> {
         <input
           type='text'
           id='gWiki'
-          defaultValue={orWiki}
+          defaultValue={wiki}
           placeholder='http://192.168.1.68/pisces'
           className='dbbleWide' />
         <label htmlFor='gWiki' className='cap'>{Pref.group} {Pref.instruct} index</label>
@@ -142,5 +101,8 @@ const GroupForm = ({ id, name, alias, wiki, rootURL, title, selfclose })=> {
         </button>
       </span>
     </form>
+    </ModelNative>
   );
 };
+
+export default GroupForm;

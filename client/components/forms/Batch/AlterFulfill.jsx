@@ -4,7 +4,7 @@ import 'moment-business-time';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import ModelSmall from '/client/components/smallUi/ModelSmall';
+import ModelSmall from '/client/layouts/Models/ModelSmall';
 import PriorityKPIData from '/client/components/smallUi/StatusBlocks/PriorityKPI';
 
 

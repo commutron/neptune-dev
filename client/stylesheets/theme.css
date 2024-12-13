@@ -85,8 +85,10 @@
   --contrast: rgba(150,150,150,0.1);
   --contrastlight: hsl(192 15% 91%);
 
-  --navIndicatorA: rgba(127, 140, 141, 0.2);
-  --navIndicatorB: rgba(127, 140, 141, 0.5);
+  /*--navIndicatorA: rgba(127, 140, 141, 0.2);*/
+  /*--navIndicatorB: rgba(127, 140, 141, 0.5);*/
+  --navIndicatorA: hsl(184.29deg 5.79% 62.55% / 0.2);
+  --navIndicatorB: hsl(184.29deg 5.79% 62.55% / 0.5);
   
   --navIndicatorIn: inset 0 0 3px rgba(0,0,0,0.2);
   --navIndicatorOut: 0 0 3px rgba(0,0,0,0.1);

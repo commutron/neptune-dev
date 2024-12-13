@@ -2,7 +2,7 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import ModelSmall from '/client/components/smallUi/ModelSmall';
+import ModelSmall from '/client/layouts/Models/ModelSmall';
 
 const BlockAdd = ({ id, edit, noText, smIcon, lgIcon, doneLock, canRun })=> {
   

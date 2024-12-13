@@ -171,7 +171,7 @@ n-timeline-item:last-child n-timeline-marker:after {
   color: black;
 }
 .kpiStat, .keyData {
-  min-height: 4dvh;
+  min-height: calc(var(--vert_border)*4);
 }
 .keyData {
   display: grid;
@@ -212,6 +212,7 @@ n-timeline-item:last-child n-timeline-marker:after {
 }
 
 .floattaskbar {
+  max-height: calc(var(--vert_adapt)*2);
   margin: 1dvmin;
   padding: 1dvmin;
   border-radius: 2px;
@@ -219,10 +220,17 @@ n-timeline-item:last-child n-timeline-marker:after {
   display: flex;
   align-items: center;
   column-gap: 2dvmin;
-  overflow-x: clip;
+  overflow: clip hidden;
 }
 .floattaskbar.shallow {
   box-shadow: var(--dropShadow0000);
+}
+.floattaskbar > span,
+.floattaskbar > button {
+  word-wrap: normal;
+  word-break: keep-all;
+  overflow-wrap: normal;
+  text-wrap-mode: wrap;
 }
 .popbutton {
   font-size: var(--sm9);

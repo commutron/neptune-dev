@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState } from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
@@ -8,11 +8,12 @@ import CreateTag from '/client/components/tinyUi/CreateTag';
 import TagsModule from '/client/components/bigUi/TagsModule';
 import NotesModule from '/client/components/bigUi/NotesModule';
 
+import CompForm from '/client/components/forms/CompForm';
 import Remove from '/client/components/forms/Remove';
 
 import AssemblyList from './AssemblyList';
 
-import { PopoverButton, PopoverMenu, PopoverAction, MatchButton } from '/client/layouts/Models/Popover';
+import { PopoverButton, PopoverMenu, PopoverAction } from '/client/layouts/Models/Popover';
 
 import { cleanURL } from '/client/utility/Convert';
 
@@ -47,6 +48,27 @@ const VariantCards = ({
     }
   }
   
+  function downloadComp(vID, vName) {
+    Meteor.call('componentExport', widgetData._id, vID, (error, reply)=>{
+      error && console.log(error);
+      if(reply) {
+        const name = widgetData.widget + "_" + vName;
+        const outputLines = reply.join('\n');
+        const outputComma = reply.toString();
+        toast(
+          <a href={`data:text/plain;charset=UTF-8,${outputLines}`}
+          download={name + ".txt"}>Download seperated by new lines</a>
+          , {autoClose: false, closeOnClick: false}
+        );
+        toast(
+          <a href={`data:text/plain;charset=UTF-8,${outputComma}`}
+          download={name + ".csv"}>Download seperated by commas</a>
+          , {autoClose: false, closeOnClick: false}
+        );
+      }
+    });
+  }
+  
   const varS = variantData.sort((v1, v2)=> v1.createdAt > v2.createdAt ? -1 : v1.createdAt < v2.createdAt ? 1 : 0 );
   const varNames = varS.map((v)=>v.variant);
 
@@ -68,6 +90,7 @@ const VariantCards = ({
             canRmv={canRmv}
             handleVive={handleVive}
             toggleRad={toggleRad}
+            downloadComp={downloadComp}
           />
       )})}
     </TabsVert>
@@ -80,7 +103,7 @@ const VentryCard = ({
   ventry, widgetData, 
   groupData, batchRelated, 
   app, user, modelFunc, canEdt, canRun, canRmv,
-  handleVive, toggleRad
+  handleVive, toggleRad, downloadComp
 })=> {
   
   const [ editState, editSet ] = useState(false);
@@ -91,6 +114,7 @@ const VentryCard = ({
   const calFunc = (d)=> moment(d).calendar(null, {sameElse: calString});
 
   const doRad = v.radioactive && canRun;  
+  const doCmp = app.partsGlobal && ventry.live && canEdt;
   const doRmv = batchRelated.length === 0 && ventry.live === false && canRmv;
   
   return(
@@ -104,14 +128,35 @@ const VentryCard = ({
           access={!ventry.live && canRmv} 
         />
       : null}
+      {doCmp && <CompForm vID={ventry._id} /> }
           
       <div className='floattaskbar shallow light'>
-        <MatchButton 
-          text="Edit"
-          icon='fa-solid fa-file-pen'
-          doFunc={()=>editSet(!editState)}
-          lock={!ventry.live || !canEdt}
+        <PopoverButton 
+          targetid='editssubpop'
+          attach='views'
+          text='Edits'
+          icon='fa-solid fa-file-pen gapR'
         />
+        <PopoverMenu targetid='editssubpop' attach='views'>
+          <PopoverAction 
+            doFunc={()=>editSet(!editState)}
+            text={`Edit ${Pref.variant}`}
+            icon='fa-solid fa-cube fa-rotate-90'
+            lock={!ventry.live || !canEdt}
+          />
+          <PopoverAction 
+            doFunc={()=>modelFunc(ventry._id+'_comp_form')}
+            text={`Add ${Pref.comp}s`}
+            icon='fa-solid fa-shapes'
+            lock={!doCmp}
+          />
+          <PopoverAction 
+            doFunc={()=>modelFunc('variant_multi_delete_form')}
+            text='Delete'
+            icon='fa-solid fa-minus-circle'
+            lock={!doRmv}
+          />
+        </PopoverMenu>
         <PopoverButton 
           targetid='actionspop'
           attach='actions'
@@ -132,10 +177,9 @@ const VentryCard = ({
             lock={!doRad}
           />
           <PopoverAction 
-            doFunc={()=>modelFunc('variant_multi_delete_form')}
-            text='Delete'
-            icon='fa-solid fa-minus-circle'
-            lock={!doRmv}
+            doFunc={()=>downloadComp(v._id, v.variant)}
+            text={`Download ${Pref.comp}s`}
+            icon='fa-solid fa-download'
           />
         </PopoverMenu>
 
@@ -191,12 +235,11 @@ const VentryCard = ({
             lines={10}
           />
           
-          {app.partsGlobal &&
-            <AssemblyList
-              variantData={ventry}
-              widgetData={widgetData}
-              groupData={groupData}
-            />
+          {app.partsGlobal && 
+            <AssemblyList 
+              variantData={ventry} 
+              canRmv={canRmv}
+            /> 
           }
         
           <CreateTag

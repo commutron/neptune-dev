@@ -1,54 +1,40 @@
 import React , { useState } from 'react';
 import { toast } from 'react-toastify';
 
-import ModelSmall from '/client/components/smallUi/ModelSmall';
+import ModelNative from '/client/layouts/Models/ModelNative';
 
-const GroupEmailsManager = ({ groupData })=> {
-
-  const access = Roles.userIsInRole(Meteor.userId(), 'edit');
-  
-  return(
-    <ModelSmall
-      button='Set Emails'
-      title='Email Configuration' 
-      color='grayT'
-      icon='fa-at'
-      lock={!access}
-      primeTopRight={true}>
-      <GroupEmails
-        groupData={groupData}
+const GroupEmails = ({ groupData, clearOnClose })=> (
+  <ModelNative
+    dialogId={'multifuncion_gemail_form'}
+    title='Email Configuration'
+    icon='fa-solid fa-at'
+    colorT='grayT'
+    clearOnClose={clearOnClose}>
+    <div className='centre vmarginhalf space'>
+    
+      <EmailSendToggle
+        gId={groupData._id}
+        emailset={groupData.emailOptIn}
       />
-    </ModelSmall>
-  );
-};
-
-export default GroupEmailsManager;
-
-const GroupEmails = ({ groupData })=> (
-  <div className='centre vmarginhalf space'>
+      
+      <EmailPrimeForm 
+        gId={groupData._id}
+        emailset={groupData.emailPrime}
+      />
+      
+      <EmailSecondForm 
+        gId={groupData._id}
+        emailset={groupData.emailSecond}
+        lockOut={!groupData.emailPrime} 
+      />
   
-    <EmailSendToggle
-      gId={groupData._id}
-      emailset={groupData.emailOptIn}
-      lockOut={groupData.hibernate} 
-    />
-    
-    <EmailPrimeForm 
-      gId={groupData._id}
-      emailset={groupData.emailPrime}
-      lockOut={groupData.hibernate} 
-    />
-    
-    <EmailSecondForm 
-      gId={groupData._id}
-      emailset={groupData.emailSecond}
-      lockOut={!groupData.emailPrime} 
-    />
-
-  </div>
+    </div>
+  </ModelNative>
 );
 
-const EmailPrimeForm = ({ gId, emailset, lockOut })=> {
+export default GroupEmails;
+
+const EmailPrimeForm = ({ gId, emailset })=> {
   
 	const [ emailOneChoice, emailOneChoiceSet ] = useState( emailset );
   
@@ -156,7 +142,7 @@ const EmailSecondForm = ({ gId, emailset, lockOut })=> {
   );
 };
 
-const EmailSendToggle = ({ gId, emailset, lockOut })=> {
+const EmailSendToggle = ({ gId, emailset })=> {
   
   function doGroupEmail(val) {
     Meteor.call('groupEmailOptIn', gId, val, (error, reply)=>{

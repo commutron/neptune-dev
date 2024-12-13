@@ -1,44 +1,35 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
-import DumbFilter from '/client/components/tinyUi/DumbFilter';
 import LeapLine from '/client/components/tinyUi/LeapLine';
 import NumStat from '/client/components/tinyUi/NumStat';
 
-const WidgetsDepth = ({ groupAlias, widgetData, active })=> {
-  
-  const [ textString, textStringSet ] = useState( '' );
-  
-  function setTextFilter(rule) {
-    textStringSet( rule.toLowerCase() );
-  }
+const WidgetsDepth = ({ filterString, widgetData, active })=> {
   
   const w = widgetData.sort((w1, w2)=>
               w1.widget < w2.widget ? -1  : w1.widget > w2.widget ? 1 : 0 );
   
   let showList = w.filter( 
-    tx => tx.widget.toLowerCase().includes(textString) === true ||
-          tx.describe.toLowerCase().includes(textString) === true);
+    tx => tx.widget.toLowerCase().includes(filterString) === true ||
+          tx.describe.toLowerCase().includes(filterString) === true);
 
   return(
-    <Fragment>
-      <DumbFilter
-        size='medBig'
-        onTxtChange={(e)=>setTextFilter(e)}
-        labelText='Filter searches ID and description, not case-sensitve.' />
-      
-      <div className='wide vspacehalf max1000'>
-        {w.length < 1 ? <p className='centreText'>no {Pref.widget}s created</p> : null}
-          { showList.map( (entry, index)=> {
-          let ac = active.includes(entry._id) ? 'activeMark' : '';
-            return(
-              <WidgetIndexCard 
-                key={entry._id} 
-                data={entry} 
-                barStyle={ac} />
-          )})}
-      </div>
-      
-    </Fragment>
+    <div className='wide vspacehalf max1000'>
+      {w.length < 1 ? 
+        <p className='centreText'>no {Pref.widget}s created</p>
+      :
+        showList.length < 1 ? 
+          <p className='centreText'>no match found</p>
+      :
+        showList.map( (entry)=> {
+        let ac = active.includes(entry._id) ? 'activeMark' : '';
+          return(
+            <WidgetIndexCard 
+              key={entry._id} 
+              data={entry} 
+              barStyle={ac}
+            />
+        )})}
+    </div>
   ); 
 };
 

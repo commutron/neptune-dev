@@ -1,7 +1,7 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
 
-import GroupForm from '/client/components/forms/Group/GroupForm';
+import { MatchButton } from '/client/layouts/Models/Popover';
 import KpiStat from '/client/components/smallUi/StatusBlocks/KpiStat';
 import TrendLine from '/client/components/charts/Trends/TrendLine';
 import VariantNewList from '../../lists/VariantNewList';
@@ -16,7 +16,7 @@ function countNewCollection(collected, rangeStart, rangeEnd) {
   return collectFind.length;
 }
 
-const GroupLanding = ({ groupData, widgetData, variantData, app })=> {
+const GroupLanding = ({ groupData, widgetData, variantData, openActions, canEdt })=> {
   
   const og = groupData.find( x => x.internal );
   const ogID = og ? og._id : 'none';
@@ -32,11 +32,14 @@ const GroupLanding = ({ groupData, widgetData, variantData, app })=> {
       
       <div className='wide rowWrapR gapsC'>
 
-        <GroupForm
-          name={false}
-          lgIcon={true}
-          rootURL={app.instruct} 
+        <MatchButton 
+          text={`new ${Pref.group}`}
+          icon='fa-solid fa-industry'
+          doFunc={()=>openActions('groupform', false)}
+          lock={!canEdt}
         />
+        
+        <span className='flexSpace' />
         
         <KpiStat
           num={groupData.length + 34}
@@ -55,7 +58,6 @@ const GroupLanding = ({ groupData, widgetData, variantData, app })=> {
         />
 
       </div>
-      
       
       <div className='centreRow'>
         

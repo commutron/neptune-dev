@@ -17,7 +17,7 @@ import ItemSerialsWrap from '/client/components/forms/ItemSerialsX/ItemSerialsWr
 import UnitSetAll from '/client/components/forms/ItemSerialsX/Parent/UnitSetAll';
 import CounterAssign from '/client/components/bigUi/ArrayBuilder/CounterAssign';
 import BatchIncomplete from '/client/components/forms/Batch/Child/BatchIncomplete';
-import EventCustom from '/client/components/forms/Batch/EventCustom';
+import EventCustom from '/client/components/forms/Batch/Child/EventCustom';
 
 import RemoveBatch from '/client/components/forms/Batch/Child/RemoveBatch';
 

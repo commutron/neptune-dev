@@ -3,7 +3,7 @@ import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import NumStatRing from '/client/components/charts/Dash/NumStatRing';
 
-const GroupTops = ({ groupId, alias, app })=> {
+const GroupTops = ({ groupId, alias })=> {
   
   const thingMounted = useRef(true);
   
@@ -41,7 +41,7 @@ const GroupTops = ({ groupId, alias, app })=> {
     <n-fa3><i className='fas fa-minus'></i></n-fa3>;
         
   return(
-    <div className='balancer vmarginhalf' title={title}>
+    <div className='centreRow vmarginhalf' title={title}>
       
       <NumStatRing
         total={total !== false ? `${total}%` :

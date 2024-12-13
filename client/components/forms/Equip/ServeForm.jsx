@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment } from 'react';
 import moment from 'moment';
 import { toast } from 'react-toastify';
 
-import ModelMedium from '/client/components/smallUi/ModelMedium';
+import ModelMedium from '/client/layouts/Models/ModelMedium';
 
 const ServeFormWrapper = ({ 
   id, service,

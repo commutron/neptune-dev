@@ -1,36 +1,13 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
 
-import ModelMedium from '../smallUi/ModelMedium';
+import ModelNative from '/client/layouts/Models/ModelNative';
 
-const CompModel = ({ vID, lockOut })=> {
-  const access = Roles.userIsInRole(Meteor.userId(), ['create', 'edit']);
-  const aT = !access ? Pref.norole : '';
-  const lT = lockOut ? `${Pref.variant} is archived` : '';
-  const title = access && !lockOut ? `Add ${Pref.comp}s` : `${aT}\n${lT}`;
-  
-  return(
-    <ModelMedium
-      button={'Add ' + Pref.comp + 's'}
-      title={title}
-      color='blueT'
-      icon='fa-shapes'
-      lock={!access || lockOut}
-    >
-      <CompForm
-        vID={vID}
-      />
-    </ModelMedium>
-  );
-};
-
-export default CompModel;
-
-const CompForm = ({ vID, selfclose })=> {
+const CompForm = ({ vID })=> {
   
   function addParts(e) {
     e.preventDefault();
-    this.go.disabled = true;
+    this.add_comp_go.disabled = true;
     
     const allNums = this.parts.value.trim().toLowerCase();
     
@@ -42,11 +19,18 @@ const CompForm = ({ vID, selfclose })=> {
     
     Meteor.call('pushCompV', vID, indieNums, (error)=>{
       error && console.log(error);
-      selfclose();
+      this.parts.value = '';
+      this.add_comp_go.disabled = false;
     });
   }
   
-  return (
+  return(
+    <ModelNative
+      dialogId={vID+'_comp_form'}
+      title={'Add ' + Pref.comp + 's'}
+      icon='fa-solid fa-shapes'
+      colorT='nT'>
+      
     <form id='new' className='centre' onSubmit={(e)=>addParts(e)}>
       <p>Add multiple {Pref.comp}s seperated by pipe, space or new line</p>
       <p>
@@ -60,11 +44,14 @@ const CompForm = ({ vID, selfclose })=> {
       </p>
       <p>
         <button
-          id='go'
+          id='add_comp_go'
           disabled={false}
           className='action nSolid'
           type='submit'>Add</button>
       </p>
     </form>
+    </ModelNative>
   );
 };
+
+export default CompForm;

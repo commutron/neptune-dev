@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Pref from '/client/global/pref.js';
 
-import ModelMedium from '/client/components/smallUi/ModelMedium';
+import ModelMedium from '/client/layouts/Models/ModelMedium';
 
 import DateRangeSelect from '/client/components/smallUi/DateRangeSelect';
 import ReportStatsTable from '/client/components/tables/ReportStatsTable'; 

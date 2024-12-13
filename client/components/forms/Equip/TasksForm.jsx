@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 
-import ModelMedium from '/client/components/smallUi/ModelMedium';
+import ModelMedium from '/client/layouts/Models/ModelMedium';
 
 const TasksFormWrapper = ({ id, serveKey, name, tasks, lockOut })=> {
   

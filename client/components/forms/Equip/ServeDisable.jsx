@@ -2,7 +2,7 @@ import React from 'react';
 import moment from 'moment';
 import { toast } from 'react-toastify';
 
-import ModelSmall from '/client/components/smallUi/ModelSmall';
+import ModelSmall from '/client/layouts/Models/ModelSmall';
 
 const ServeDisable = ({ id, serveKey, name, disable, lockOut, opendates })=> {
   

@@ -1,19 +1,13 @@
-import React, { useMemo, Fragment } from 'react';
+import React, { useMemo, useState } from 'react';
 import Pref from '/client/global/pref.js';
 import CreateTag from '/client/components/tinyUi/CreateTag';
 import WidgetsDepth from '../../lists/WidgetsDepth';
 import TagsModule from '/client/components/bigUi/TagsModule';
-import { PopoverButton, PopoverMenu, PopoverAction, MatchButton } from '/client/layouts/Models/Popover';
-import { OpenModelNative } from '/client/layouts/Models/ModelNative';
+import { PopoverButton, PopoverMenu, PopoverAction } from '/client/layouts/Models/Popover';
 
-import GroupForm from '/client/components/forms/Group/GroupForm';
-import GroupHibernate from '/client/components/forms/Group/GroupHibernate';
-import GroupInternal from '/client/components/forms/Group/GroupInternal';
-import GroupEmails from '/client/components/forms/Group/GroupEmails';
-import WidgetNew from '/client/components/forms/WidgetForm';
 import Remove from '/client/components/forms/Remove';
-
 import GroupTops from '/client/components/charts/GroupTops';
+import DumbFilter from '/client/components/tinyUi/DumbFilter';
 
 function groupActiveWidgets(widgetsList, allXBatch) {
   
@@ -27,22 +21,20 @@ function groupActiveWidgets(widgetsList, allXBatch) {
   return activeList;
 }
 
-
 const GroupSlide = ({ 
   groupData, widgetsList, batchDataX, app, 
-  inter, isERun, canCrt, canRmv 
+  inter, openActions, handleInterize, handleHibernate,
+  canRun, canEdt, canCrt, canRmv 
 })=>{
+  
+  const [ filterString, filterStringSet ] = useState( '' );
   
   const g = groupData;
   const active = useMemo(()=>groupActiveWidgets(widgetsList, batchDataX), [widgetsList, batchDataX]);
   const shrtI = g.wiki && !g.wiki.includes('http');
   
-  const openDirect = (dialogId)=> {
-    const dialog = document.getElementById(dialogId);
-    dialog?.showModal();
-  };
-  
-  const doNew = canCrt && !groupData.hibernate;
+  const doNew = canCrt && !g.hibernate;
+  const doRmv = (!widgetsList || widgetsList.length === 0) && g.hibernate && canRmv;
   
   const mockTag = {
     padding: '3px 7px 3px 5px',
@@ -53,20 +45,96 @@ const GroupSlide = ({
   };
   
   return(
-    <div className='section centre overscroll' key={g.alias}>
-      
-      <div className='wide centreText'>
-        <h1 className='cap bigger'>{g.group}</h1>
+    <div className='section overscroll' key={g.alias}>
+      {doRmv &&
+        <Remove
+          action='group'
+          title={g.group}
+          check={g.createdAt.toISOString()}
+          entry={g._id}
+          access={doRmv}
+        />
+      }
+          
+      <h1 className='cap bigger centreText bottomLine'>{g.group}</h1>
+
+      <div className='floattaskbar light'>
+        <PopoverButton 
+          targetid='editspop'
+          attach='edits'
+          text='Edits'
+          icon='fa-solid fa-file-pen gapR'
+        />
+        <PopoverMenu targetid='editspop' attach='edits'>
+          <PopoverAction 
+            doFunc={()=>openActions('groupform', g)}
+            text={`edit ${Pref.group}`}
+            icon='fa-solid fa-industry'
+            lock={g.hibernate || !canEdt}
+          />
+          <PopoverAction 
+            doFunc={()=>openActions('widgetform', g)}
+            text={`New ${Pref.widget}`}
+            icon='fa-solid fa-cube'
+            lock={!doNew}
+          />
+          <PopoverAction 
+            doFunc={()=>openActions('groupemail', g)}
+            text={`Setup Emails`}
+            icon='fa-solid fa-at'
+            lock={!canEdt}
+          />
+          <PopoverAction 
+            doFunc={()=>document.getElementById('group_multi_delete_form')?.showModal()}
+            text={`Delete ${Pref.group}`}
+            icon='fa-solid fa-minus-circle'
+            lock={!doRmv}
+          />
+        </PopoverMenu>
         
-        <hr className='vmargin' />
+        <PopoverButton 
+          targetid='actionspop'
+          attach='actions'
+          text='Actions'
+          icon='fa-solid fa-star gapR'
+        />
+        <PopoverMenu targetid='actionspop' attach='actions'>
+          {inter &&
+          <PopoverAction 
+            doFunc={()=>handleInterize(g._id)}
+            text={`${g.internal ? 'Unset' : 'Set'} Internal`}
+            icon='fa-solid fa-home'
+            lock={!(canRun || canEdt)}
+          />}
+          <PopoverAction 
+            doFunc={()=>handleHibernate(g._id)}
+            text={`${g.hibernate ? 'Un' : ''}${Pref.hibernatate} ${Pref.group}`}
+            icon='fa-solid fa-archive'
+            lock={!canEdt}
+          />
+        </PopoverMenu>
+        
+        <span className='flexSpace' />
+        
+        <div>
+          <DumbFilter
+            id='groupwidgettextfilter'
+            inputClass='miniIn24 smTxt'
+            styleOv={{minHeight:'0',height:'calc(var(--sm9)* 1.75)'}}
+            onTxtChange={(e)=>filterStringSet(e)}
+          />
+        </div>
       </div>
-      
+        
       <div className='wide comfort'>
       
         {g.internal &&
           <div className='centreText comfort middle w100 vmargin intrBlueSq cap'>
             <i className='fas fa-home fa-fw fa-2x nT gapL'></i>
-            <h3>Internal {Pref.group}</h3>
+            <span>
+              <h3>Internal {Pref.group}</h3>
+              <p>For in-house use, one-off projects, prototypes, or training.</p>
+            </span>
             <i className='fas fa-globe-americas fa-fw fa-2x nT gapR'></i>
           </div>}
           
@@ -83,69 +151,8 @@ const GroupSlide = ({
             id={g._id}
             tags={g.tags}
             tagOps={app.tagOption}
-            canRun={isERun} 
+            canRun={canRun || canEdt} 
           />
-        </div>
-          
-        <div className='centreRow'>
-          <GroupForm
-            id={g._id}
-            name={g.group}
-            alias={g.alias}
-            wiki={g.wiki}
-            rootURL={app.instruct}
-            noText={false}
-            primeTopRight={false}
-            lockOut={g.hibernate} 
-          />
-          <WidgetNew
-            groupId={g._id}
-          />
-          <MatchButton 
-            text={`New ${Pref.widget}`}
-            icon='fa-solid fa-cube'
-            doFunc={()=>openDirect(g._id+'_widget_new_form')}
-            lock={!doNew}
-          />
-            
-          <GroupEmails
-            groupData={g}
-          />
-          
-          {inter &&
-            <GroupInternal
-              id={g._id}
-              iState={g.internal}
-              noText={false}
-              primeTopRight={false}
-              access={isERun}
-            />
-          }
-          <GroupHibernate
-            id={g._id}
-            hState={g.hibernate}
-            noText={false}
-            primeTopRight={false} />
-          
-          {!widgetsList || widgetsList.length === 0 ?
-            <Fragment>
-              <Remove
-                action='group'
-                title={g.group}
-                check={g.createdAt.toISOString()}
-                entry={g._id}
-                access={g.hibernate === true && canRmv}
-              />
-              <OpenModelNative  
-                dialogId={'group_multi_delete_form'}
-                title='Delete'
-                icon='fa-solid fa-minus-circle'
-                colorT='blackT'
-                colorB='redSolid'
-                lock={!canRmv}
-              />
-            </Fragment>
-          : null}
         </div>
         
       </div>
@@ -163,9 +170,10 @@ const GroupSlide = ({
         }<a className='clean wordBr' href={shrtI ? app.instruct + g.wiki : g.wiki} target='_blank'>{g.wiki}</a>
       </p>
       
-      <GroupTops groupId={g._id} alias={g.alias} app={app} />
+      <GroupTops groupId={g._id} alias={g.alias} />
         
       <WidgetsDepth
+        filterString={filterString}
         groupAlias={g.alias}
         widgetData={widgetsList}
         active={active} />

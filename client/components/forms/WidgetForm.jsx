@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 
 import ModelNative from '/client/layouts/Models/ModelNative';
 
-const WidgetNew = ({ groupId })=> {
+const WidgetNew = ({ groupId, clearOnClose })=> {
 
   function save(e) {
     e.preventDefault();
@@ -25,12 +25,13 @@ const WidgetNew = ({ groupId })=> {
 
   return(
     <ModelNative
-      dialogId={groupId+'_widget_new_form'}
+      dialogId={'multi_widget_new_form'}
       title={`New ${Pref.widget}`}
       icon='fa-solid fa-cube'
-      colorT='blueT'>
+      colorT='blueT'
+      clearOnClose={clearOnClose}>
       
-      <form className='fitWide' onSubmit={(e)=>save(e)}>
+      <form className='fitWide' onSubmit={(e)=>save(e)} disabled={!groupId}>
         <p>
           <input
             type='text'

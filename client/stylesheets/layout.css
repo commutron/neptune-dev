@@ -51,7 +51,7 @@ main {
 }
 .forceScrollStyle {
   scrollbar-width: thin;
-  scrollbar-color: var(--navIndicatorA) var(--navIndicatorB);
+  scrollbar-color: var(--navIndicatorB) var(--navIndicatorA);
 }
 
 .thinScroll::-webkit-scrollbar {
@@ -1607,7 +1607,7 @@ n-col-table-head > span {
 
 .tabsVert {
   display: grid;
-  grid-template-columns: minmax(min-content, max-content) auto;
+  grid-template-columns: minmax(max-content, min-content) auto;
 }
 .tabsVertMenu {
   display: grid;
@@ -1616,7 +1616,10 @@ n-col-table-head > span {
 }
 .tabsVertMenu > button {
   text-align: left;
-  
+  max-width: calc(var(--vert_adapt) * 2);
+  word-break: break-word;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 .tabsVertMenu .tabOn,
 .tabsVertMenu .tabOff:hover {

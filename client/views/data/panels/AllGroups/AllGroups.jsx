@@ -1,13 +1,54 @@
-import React from 'react';
+import React, { useState, Fragment } from 'react';
 import Pref from '/client/global/pref.js';
+import { toast } from 'react-toastify';
 
 import SlidesNested from '/client/layouts/TaskBars/SlidesNested';
 import GroupLanding from './GroupLanding';
 import GroupSlide from './GroupSlide';
+import GroupForm from '/client/components/forms/Group/GroupForm';
+import GroupEmails from '/client/components/forms/Group/GroupEmails';
+import WidgetNew from '/client/components/forms/WidgetForm';
 
 const AllGroups = ({ 
   groupData, widgetData, variantData, batchDataX, app, specify 
 }) => {
+  
+  const [ selectedGroup, selectedGroupSet ] = useState(false);
+  
+  const openActions = (model, select)=> {
+    selectedGroupSet(select);
+    if(model === 'groupform') {
+      const dialog = document.getElementById('multifuncion_group_form');
+      dialog?.showModal();
+    }else if(model === 'groupemail') {
+      const dialog = document.getElementById('multifuncion_gemail_form');
+      dialog?.showModal();
+    }else if(model === 'widgetform') {
+      const dialog = document.getElementById('multi_widget_new_form');
+      dialog?.showModal();
+    }
+  };
+  
+  function handleInterize(gID) {
+    Meteor.call('internalizeGroup', gID, (error, reply)=>{
+      error && console.log(error);
+      if(reply) {
+        toast.success('Saved');
+      }else{
+        toast.warning('Not internalized');
+      }
+    });
+  }
+  function handleHibernate(gID) {
+    Meteor.call('hibernateGroup', gID, (error, reply)=>{
+      error && console.log(error);
+      if(reply) {
+        toast.success('Saved');
+      }else{
+        toast.warning(`Not ${Pref.hibernatated}. Live ${Pref.variants} found`);
+      }
+    });
+  }
   
   const inter = groupData.filter( g => g.internal );
   
@@ -23,12 +64,28 @@ const AllGroups = ({
   
   const defaultSlide = specify ? 
     groupS.findIndex( x => x.alias === specify ) : false;
-    
-  const isERun = Roles.userIsInRole(Meteor.userId(), ['edit','run']);
+  
+  const canRun = Roles.userIsInRole(Meteor.userId(), 'run');
+  const canEdt = Roles.userIsInRole(Meteor.userId(), 'edit');
   const canCrt = Roles.userIsInRole(Meteor.userId(), 'create');
   const canRmv = Roles.userIsInRole(Meteor.userId(), 'remove');
   
   return(
+    <Fragment>
+     <GroupForm
+        gObj={selectedGroup}
+        clearOnClose={()=>selectedGroupSet(false)}
+        rootURL={app.instruct}
+      />
+      <GroupEmails
+        groupData={selectedGroup}
+        clearOnClose={()=>selectedGroupSet(false)}
+      />
+      <WidgetNew 
+        groupId={selectedGroup?._id || null}
+        clearOnClose={()=>selectedGroupSet(false)}
+      />
+     
     <SlidesNested
       menuTitle={Pref.Group + 's'}
       menu={menuList}
@@ -37,7 +94,8 @@ const AllGroups = ({
           groupData={groupData}
           widgetData={widgetData}
           variantData={variantData}
-          app={app}
+          openActions={openActions}
+          canEdt={canEdt}
         />
       }
       defaultSlide={defaultSlide}
@@ -54,12 +112,17 @@ const AllGroups = ({
             batchDataX={batchDataX}
             app={app}
             inter={!inter || inter.length < Pref.interMax || inter.find( x=> x._id === entry._id )}
-            isERun={isERun}
+            openActions={openActions}
+            handleInterize={handleInterize}
+            handleHibernate={handleHibernate}
+            canRun={canRun}
+            canEdt={canEdt}
             canCrt={canCrt}
             canRmv={canRmv}
           />
-        )})} 
+        )})}
     </SlidesNested>
+    </Fragment>
   );
 };
 

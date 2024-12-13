@@ -2,7 +2,7 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import ModelMedium from '/client/components/smallUi/ModelMedium';
+import ModelMedium from '/client/layouts/Models/ModelMedium';
 import { cleanURL } from '/client/utility/Convert';
 
 const EquipFormWrapper = ({ 
