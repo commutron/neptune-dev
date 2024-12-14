@@ -9,7 +9,7 @@ const GroupEmails = ({ groupData, clearOnClose })=> (
     title='Email Configuration'
     icon='fa-solid fa-at'
     colorT='grayT'
-    clearOnClose={clearOnClose}>
+    closeFunc={clearOnClose}>
     <div className='centre vmarginhalf space'>
     
       <EmailSendToggle

@@ -24,6 +24,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: greyscale;
   text-rendering: optimizeLegibility;
+  interpolate-size: allow-keywords;
 }
 
 @-moz-document url-prefix() {

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './style.css';
 
-const TabsVert = ({ tabs, names, disable, extraClass, children })=> {
+const TabsVert = ({ tabs, names, disable, extraClass, contentClass, children })=> {
   
   const [ sect, setSect ] = useState( 0 );
 
@@ -26,7 +26,7 @@ const TabsVert = ({ tabs, names, disable, extraClass, children })=> {
             >{entry} {names && names[index]}</button>
         )})}
       </div>
-      <div className='tabsVertContent'>
+      <div className={`tabsVertContent ${contentClass || ''}`}>
 
         {children[show]}
       

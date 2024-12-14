@@ -52,7 +52,7 @@ const GroupForm = ({ gObj, clearOnClose, rootURL })=> {
       title={`${groupId ? 'Edit' : 'Create'} ${Pref.group}`}
       icon='fa-solid fa-industry'
       colorT='blueT'
-      clearOnClose={clearOnClose}>
+      closeFunc={clearOnClose}>
       
     <form id='newGroup' className='fitWide' onSubmit={(e)=>createCustomer(e)}>
       <p>

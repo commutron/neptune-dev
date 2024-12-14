@@ -15,6 +15,7 @@ import EquipEmails from '/client/components/forms/Equip/EquipEmails';
 import EquipRemove from '/client/components/forms/Equip/EquipRemove';
 import ServeForm from '/client/components/forms/Equip/ServeForm';
 
+import Nameplate from './Nameplate';
 import ServiceSlides from './ServiceSlides';
 import IssueHistory from './IssueHistory';
 
@@ -168,12 +169,21 @@ const EquipSlide = ({
       <hr className='vmargin' />
       
       <Tabs
-        tabs={[Pref.premaintain, Pref.eqissue]}
+        tabs={['Nameplate', Pref.premaintain, Pref.eqissue]}
         wide={true}
         stick={false}
         hold={true}
         sessionTab='equipExPanelTabs'>
       
+        <div className='cardify autoFlex overscroll'>
+          <Nameplate 
+            eqId={eq._id}
+            equipData={equipData}
+            isDebug={isDebug}
+            isEqSup={isEqSup}
+          />
+        </div>
+        
         <ServiceSlides 
           equipData={equipData}
           maintainData={maintainData}

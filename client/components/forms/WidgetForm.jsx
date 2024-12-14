@@ -29,7 +29,7 @@ const WidgetNew = ({ groupId, clearOnClose })=> {
       title={`New ${Pref.widget}`}
       icon='fa-solid fa-cube'
       colorT='blueT'
-      clearOnClose={clearOnClose}>
+      closeFunc={clearOnClose}>
       
       <form className='fitWide' onSubmit={(e)=>save(e)} disabled={!groupId}>
         <p>

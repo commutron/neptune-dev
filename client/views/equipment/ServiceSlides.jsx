@@ -23,7 +23,10 @@ const ServiceSlides = ({
   const svNames = eq.service.map((sv)=>sv.name);
   
   return(
-    <TabsVert tabs={svNames} extraClass='popSm vmargin overscroll'>
+    <TabsVert 
+      tabs={svNames} 
+      extraClass='popSm vmargin overscroll'
+      contentClass='spacehalf'>
       {eq.service.map( (sv)=>{
           const maint = maintainData.filter( m => m.serveKey === sv.serveKey )
                                     .sort((x1, x2)=> x1.close < x2.close ? 1 : 

@@ -236,6 +236,7 @@ main {
 }
 .homeIcon {
   grid-area: homeIcon;
+  anchor-name: --pop-home;
   background-color: var(--neptuneColor);
   padding-bottom: var(--vert_border);
   background-image: url(neptune-logo-white.svg);
@@ -279,6 +280,33 @@ main {
   outline-offset: -0.2dvh;
 }
 .homeIconLogo { padding: var(--vert_border); }
+
+.popmenu.homeMenu { 
+  position-anchor: --pop-home; 
+  background-color: var(--dark);
+  color: var(--whiteT);
+  margin: calc(var(--vert_border) * -1) calc(var(--vert_frame) / 2);
+  border: 1px solid var(--neptuneColor);
+  border-radius: 5px;
+  
+}
+.popmenu.homeMenu > div,
+.popmenu.homeMenu > button {
+  background-color: var(--blackT);
+  color: var(--whiteT);
+  border-color: var(--neptuneColor);
+}
+.popmenu.homeMenu > button {
+  padding: 10px 12px;
+  font-size: var(--tx0);
+}
+@supports not (anchor-name: --pop-home) {
+  .popmenu.homeMenu {
+    transform: translateX(50%)
+               translateY(calc(50% + var(--tx0)));
+    margin: calc(var(--vert_border) * -1) calc(var(--vert_frame) / 2);
+  }
+}
 
 .proLeft { grid-area: proLeft; }
 .auxLeft { 

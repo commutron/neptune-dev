@@ -246,7 +246,6 @@ n-timeline-item:last-child n-timeline-marker:after {
 .popmenu {
   position: absolute;
   position-try-fallbacks: --bottom, --right, --bottomright;
-  /*interpolate-size: allow-keywords;*/
   margin: 0;
   padding: 0;
   inset: auto;
@@ -260,6 +259,14 @@ n-timeline-item:last-child n-timeline-marker:after {
   box-shadow: var(--dropShadow000);
   transition: display 200ms, opacity 200ms;
   transition-behavior: allow-discrete;
+}
+@supports not (anchor-name: --pop-actions) {
+  .popmenu {
+    position: absolute;
+    inset: unset;
+    transform: translateY(calc(50% + var(--tx0)));
+    margin: 0;
+  }
 }
 .popmenu:popover-open {
   display: grid;
