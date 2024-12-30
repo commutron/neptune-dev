@@ -1325,6 +1325,7 @@ n-sm-i {
 .vbigger { font-size: 3dvh; }
 
 .dbbleWide { min-width: 30vw; }
+.tppleWide { min-width: 45vw; }
 .inlineForm > input[type='text'].dbbleWide { width: 30vw; }
 
 input.variableInput.medBig {
@@ -1354,28 +1355,6 @@ input.miniIn12, select.miniIn12 { width: 12ch; }
 input.miniIn18, select.miniIn18 { width: 18ch; }
 input.miniIn24, select.miniIn24 { width: 24ch; }
 .stdInW { width: 15rem; }
-
-.rmsc {
-  --rmsc-main: var(--neptuneColor) !important;
-  --rmsc-hover: var(--neptuneColor) !important;
-  --rmsc-selected: var(--contrast) !important;
-  --rmsc-h: 32px !important;
-  --rmsc-border: black !important;
-  --rmsc-bg: white !important;
-  --rmsc-radius: 0px !important;
-}
-.rmsc,
-.rmsc.multi-select {
-  min-width: 15rem;
-  max-width: 400px;
-  margin: 0;
-  text-align: initial;
-  font-size: 1rem;
-}
-
-.rmsc .panel-content {
-  min-width: fit-content;
-}
 
 .numberSet {
   min-height: var(--txx0);

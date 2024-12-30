@@ -59,22 +59,6 @@ const IssueHistory = ({ eqId, issData, isDebug, isEqSup, liveUsers })=>{
 
   isDebug && console.log(issData);
   
-  function newIssue(e) {
-    e.preventDefault();
-    const title = this.newtitle.value.trim();
-    const log = this.newlog.value.trim();
-    
-    Meteor.call('addEqIssue', eqId, title, log, (err, re)=>{
-      err && console.log(err);
-      if(re) {
-        this.newtitle.value = '';
-        this.newlog.value = '';
-      }else{
-        toast.warning('Not Allowed');
-      }
-    });
-  }
-  
   function changeOpen(iKey, open) {
     Meteor.call('editEqIssueState', eqId, iKey, open, (err, re)=>{
       err && console.log(err);
@@ -168,29 +152,7 @@ const IssueHistory = ({ eqId, issData, isDebug, isEqSup, liveUsers })=>{
       
     </div>
     
-    <div>
-      <form id='neweqissue' onSubmit={(e)=>newIssue(e)}>
-        <h4>Quick Add New Issue</h4>
-        
-        <p>
-          <label>Issue<br />
-            <input type='text' id='newtitle' required />
-          </label>
-          <span className='blk small max250 vmarginquarter'>Only the you will be able to edit the title.</span>
-        </p>
-        <p>
-          <label>Action / Troubleshooting<br />
-            <textarea id='newlog' rows='4' style={{maxWidth: '240px'}} required></textarea>
-          </label>
-          <span className='blk small max250'>Issue logs are permanent and non-editable</span>
-        </p>
-        <div className='centreText'>
-          <button type='submit' className='action midnightSolid'>Post</button>
-        </div>
-      </form>
-    </div>
-    
-    {isEqSup && <BackdateIssue eqId={eqId} liveUsers={liveUsers} /> }
+    <BackdateIssue eqId={eqId} liveUsers={liveUsers} />
     
     </Fragment>
   );
@@ -294,11 +256,6 @@ const BackdateIssue = ({ eqId, liveUsers })=> {
             </label>
           </p>
           <p>
-            <label className='beside'>Work In Progress
-            <input type='checkbox' id='backwip' className='gapL' defaultChecked={true} />
-            </label>
-          </p>
-          <p>
             <label>Point-Person<br />
               <select id='backuser' defaultValue={Meteor.userId()} required>
                 {liveUsers.map( (u)=>(
@@ -307,12 +264,16 @@ const BackdateIssue = ({ eqId, liveUsers })=> {
               </select>
             </label>
           </p>
-          
-          <p className='centreText'>
-            <button type='submit' className='action midnightSolid'>Post</button>
+          <p>
+            <label className='beside'>
+            <input type='checkbox' id='backwip' className='gapR' defaultChecked={true} />
+            Work In Progress</label>
           </p>
+          </div>
         </div>
-        </div>
+        <p className='centreText'>
+          <button type='submit' className='action midnightSolid'>Post</button>
+        </p>
       </form>
     </div>
   );

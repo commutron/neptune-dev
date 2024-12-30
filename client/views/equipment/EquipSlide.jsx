@@ -1,7 +1,7 @@
 import React from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
-import moment from 'moment';
-import 'moment-business-time';
+// import moment from 'moment';
+// import 'moment-business-time';
 import Pref from '/client/global/pref.js';
 
 import Spin from '/client/components/tinyUi/Spin';
@@ -102,6 +102,10 @@ const EquipSlide = ({
             id={eq._id}
             name={eq.equip}
             alias={eq.alias}
+            model={eq.model}
+            mfserial={eq.mfserial}
+            mfyear={eq.mfyear}
+            mfwrnty={eq.mfwrnty}
             brKey={eq.branchKey}
             wiki={eq.instruct}
             lib={eq.library}
@@ -158,16 +162,6 @@ const EquipSlide = ({
         >{eq.library}</a>
       </p>
       
-      <dl className='vmarginhalf'>
-        <dt className='cap'>{Pref.steward}s:</dt>
-        {(eq.stewards || []).map( (uID, index)=> ( 
-          <dd key={index} className='cap'
-          >{users.find( u => u._id === uID )?.username?.replace('.', ' ')?.replace('_', ' ')}</dd>
-        ))}
-      </dl>
-      
-      <hr className='vmargin' />
-      
       <Tabs
         tabs={['Nameplate', Pref.premaintain, Pref.eqissue]}
         wide={true}
@@ -177,8 +171,8 @@ const EquipSlide = ({
       
         <div className='cardify autoFlex overscroll'>
           <Nameplate 
-            eqId={eq._id}
             equipData={equipData}
+            users={users}
             isDebug={isDebug}
             isEqSup={isEqSup}
           />

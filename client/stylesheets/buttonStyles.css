@@ -161,9 +161,9 @@
   border-bottom-style: hidden;
   text-decoration: none;
 }
-.actionIconWrap:hover .actionIconText {
-  text-decoration: underline;
-}
+/*.actionIconWrap:hover .actionIconText {*/
+/*  text-decoration: underline;*/
+/*}*/
 
 .miniAction {
   min-width: 1rem;

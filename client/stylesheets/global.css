@@ -92,7 +92,7 @@ button,
 
 button,
 button span,
-/*button label,*/
+button label,
 button n-model-button,
 input[type='submit'],
 input[type='reset'],
@@ -116,7 +116,7 @@ input[type='checkbox'] {
 button:disabled, 
 button:disabled:hover, 
 button:disabled span, 
-/*button:disabled label,*/
+button:disabled label,
 button:disabled n-model-button,
 .react-contextmenu-wrapper:disabled {
   opacity: 0.5;
@@ -282,8 +282,8 @@ select:-webkit-autofill:focus {
 
 input + label, textarea + label, select + label {
   display: block;
-  font-size: 1rem;
-  line-height: 1.5;
+  font-size: var(--tx0);;
+  line-height: 1.4;
   max-width: 15rem;
   word-wrap: normal;
   word-break: keep-all;

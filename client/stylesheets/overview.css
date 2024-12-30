@@ -518,10 +518,10 @@ n-sm-model .big { font-size: 1.5rem !important; }
   line-height: 1.3;
   cursor: pointer;
 }
-.overButton > span > button > label > span,
-.overButton > a > label > span { 
+/*.overButton > span > button > label > span,*/
+/*.overButton > a > label > span { */
   /*font-size: smaller; */
-}
+/*}*/
 .overButton n-fa1 { font-size: 2.25dvh; }
 
 .overGridScroll, .downstreamScroll {

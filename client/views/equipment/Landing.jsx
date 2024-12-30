@@ -12,37 +12,42 @@ const Landing = ({ equipData, maintainData, issues, app, brancheS })=> {
   return(
     <div>
       
-      <div className='wide centreRow'>
-        <NumBox
-          num={equipData.filter( e => e.online && !e.hibernate ).length}
-          name='Online'
-          color='greenT' 
-        />
-        <NumBox
-          num={equipData.filter( e => !e.online && !e.hibernate ).length}
-          name='Offline'
-          color='midnightBlueT' 
-        />
-        <NumBox
-          num={equipData.filter( e => e.hibernate ).length}
-          name={Pref.eqhib}
-          color='darkgrayT' 
-        />
-        <NumBox
-          num={issues || 0}
-          name={`WIP ${Pref.eqissue}`}
-          color='orangeT' 
-        />
+      <div className='wide rowWrap'>
+        <span className='rowWrap gapsC'>
+          <NumBox
+            num={equipData.filter( e => e.online && !e.hibernate ).length}
+            name='Online'
+            color='greenT' 
+          />
+          <NumBox
+            num={equipData.filter( e => !e.online && !e.hibernate ).length}
+            name='Offline'
+            color='midnightBlueT' 
+          />
+          <NumBox
+            num={equipData.filter( e => e.hibernate ).length}
+            name={Pref.eqhib}
+            color='darkgrayT' 
+          />
+          <NumBox
+            num={issues || 0}
+            name={`WIP ${Pref.eqissue}`}
+            color='orangeT' 
+          />
+        </span>
+        
         <span className='flexSpace' />
         
-        <EqTimeReport />
-        
-        <EquipForm
-          id={false}
-          lgIcon={true}
-          rootURL={app.instruct}
-          brancheS={brancheS} 
-        />
+        <span className='rowWrap gapsC'>
+          <EqTimeReport />
+          
+          <EquipForm
+            id={false}
+            lgIcon={true}
+            rootURL={app.instruct}
+            brancheS={brancheS} 
+          />
+        </span>
       </div>
       
       <CalWrap />

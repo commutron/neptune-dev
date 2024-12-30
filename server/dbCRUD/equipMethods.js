@@ -1,16 +1,25 @@
+import moment from 'moment';
+import 'moment-timezone';
+import Config from '/server/hardConfig.js';
+
 Meteor.methods({
 
-  createEquipment(eqname, alias, brKey, instruct, library) {
+  createEquipment(eqname, alias, eqmodel, eqserial, eqmfyear, eqmfwrnty, brKey, instruct, library) {
     
     let duplicate = EquipDB.findOne({equip: eqname},{fields:{'_id':1}});
     const dupe = EquipDB.findOne({alias: alias},{fields:{'_id':1}});
     
     const auth = Roles.userIsInRole(Meteor.userId(), ['equipSuper','create']);
+    const opWrYr = eqmfwrnty ? new Date(moment(eqmfwrnty).tz(Config.clientTZ).format()) : null;
     
     if(!duplicate && !dupe && auth) {
       EquipDB.insert({
         equip: eqname,
         alias: alias,
+        model: eqmodel,
+        mfserial: eqserial,
+        mfyear: eqmfyear,
+        mfwrnty: opWrYr,
         branchKey: brKey,
         orgKey: Meteor.user().orgKey,
         createdAt: new Date(),
@@ -22,7 +31,8 @@ Meteor.methods({
         library: library,
         stewards: [],
         service: [],
-        issues: []
+        issues: [],
+        contacts: []
       });
       return true;
     }else{
@@ -30,7 +40,7 @@ Meteor.methods({
     }
   },
 
-  editEquipment(eqId, newEqname, newAlias, brKey, instruct, library) {
+  editEquipment(eqId, newEqname, newAlias, eqmodel, eqserial, eqmfyear, eqmfwrnty, brKey, instruct, library) {
     const doc = EquipDB.findOne({_id: eqId},{fields:{'equip':1,'alias':1}});
     
     let duplicate = EquipDB.findOne({equip: newEqname},{fields:{'_id':1}});
@@ -43,17 +53,91 @@ Meteor.methods({
     
     if(!duplicate && !dupe && auth) {
       let setBr = !brKey || brKey === 'false' ? false : brKey;
-      
+      const opWrYr = eqmfwrnty ? new Date(moment(eqmfwrnty).tz(Config.clientTZ).format()) : null;
+    
       EquipDB.update({_id: eqId, orgKey: Meteor.user().orgKey}, {
         $set : {
           equip: newEqname,
           alias: newAlias,
+          model: eqmodel,
+          mfserial: eqserial,
+          mfyear: eqmfyear,
+          mfwrnty: opWrYr,
           branchKey: setBr,
           updatedAt: new Date(),
   			  updatedWho: Meteor.userId(),
   			  instruct: instruct,
   			  library: library
         }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  addEqContact(eqId, prime, source, company, dprt, name, phone, email, cost, notes) {
+    const auth = Roles.userIsInRole(Meteor.userId(), ['equipSuper','edit']);
+    
+    if(auth) {
+      EquipDB.update({_id: eqId, orgKey: Meteor.user().orgKey}, {
+        $set : {
+          updatedAt: new Date(),
+  			  updatedWho: Meteor.userId(),
+  			},
+        $push : { contacts: {
+          key: new Meteor.Collection.ObjectID().valueOf(),
+          prime: prime,
+          source: source,
+          company: company,
+          department: dprt,
+          name: name,
+          phone: phone,
+          email: email,
+          cost: cost,
+          notes: notes
+      }}});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  setEqContact(eqId, cKey, prime, source, company, dprt, name, phone, email, notes) {
+    const auth = Roles.userIsInRole(Meteor.userId(), ['equipSuper','edit']);
+
+    if(auth) {
+      EquipDB.update({_id: eqId, orgKey: Meteor.user().orgKey, 'contacts.key': cKey}, {
+        $set : {
+          updatedAt: new Date(),
+  			  updatedWho: Meteor.userId(),
+  			},
+        $push : { contacts: {
+          prime: prime,
+          source: source,
+          company: company,
+          department: dprt,
+          name: name,
+          phone: phone,
+          email: email,
+          cost: cost,
+          notes: notes
+      }}});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  cutEqContact(eqId, cKey) {
+    const auth = Roles.userIsInRole(Meteor.userId(), ['equipSuper','edit']);
+    if(auth) {
+      EquipDB.update({_id: eqId, orgKey: Meteor.user().orgKey, 'contacts.key': cKey}, {
+        $set : {
+          updatedAt: new Date(),
+  			  updatedWho: Meteor.userId(),
+  			},
+        $pull : { contacts: {key: cKey}
+      }});
       return true;
     }else{
       return false;
@@ -228,34 +312,6 @@ Meteor.methods({
           'service.$.updatedAt': new Date(),
           'service.$.tasks': tasksArr
         }});
-      return true;
-    }else{
-      return false;
-    }
-  },
-  
-  addEqIssue(eqId, title, logtext) {
-    if( Roles.userIsInRole(Meteor.userId(), 'active') ) {
-      const accessKey = Meteor.user().orgKey;
-      const newKey = new Meteor.Collection.ObjectID().valueOf();
-      
-      EquipDB.update({_id: eqId, orgKey: accessKey}, {
-        $push : {
-          issues: { 
-            issueKey: newKey,
-            createdAt: new Date(),
-            createdWho: Meteor.userId(),
-            updatedAt: new Date(),
-            title: title,
-            open: true, // true-wip / false-resolved
-            problog: [{
-              time: new Date(),
-              who: Meteor.userId(),
-              text: logtext,
-            }]
-          }
-        }});
-      
       return true;
     }else{
       return false;

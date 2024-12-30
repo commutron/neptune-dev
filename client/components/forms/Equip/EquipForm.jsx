@@ -1,12 +1,14 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
+import moment from 'moment';
+import 'moment-timezone';
 
 import ModelMedium from '/client/layouts/Models/ModelMedium';
 import { cleanURL } from '/client/utility/Convert';
 
 const EquipFormWrapper = ({ 
-  id, name, alias, brKey, wiki, lib, rootURL, brancheS,
+  id, name, alias, model, mfserial, mfyear, mfwrnty, brKey, wiki, lib, rootURL, brancheS,
   noText, primeTopRight, lgIcon,
   lockOut
 })=> {
@@ -33,6 +35,10 @@ const EquipFormWrapper = ({
         id={id}
         name={name}
         alias={alias}
+        model={model}
+        mfserial={mfserial}
+        mfyear={mfyear}
+        mfwrnty={mfwrnty}
         brKey={brKey}
         wiki={wiki}
         lib={lib}
@@ -46,7 +52,8 @@ const EquipFormWrapper = ({
 export default EquipFormWrapper;
 
 const EquipForm = ({ 
-  id, name, alias, brKey, wiki, lib, rootURL, brancheS, selfclose
+  id, name, alias, model, mfserial, mfyear, mfwrnty,
+  brKey, wiki, lib, rootURL, brancheS, selfclose
 })=> {
 
   function saveEquipment(e) {
@@ -54,6 +61,11 @@ const EquipForm = ({
     const equipId = id;
     const eqname = this.eName.value.trim();
     const eqalias = this.eAlias.value.trim().toLowerCase();
+    
+    const eqmodel = this.eModel.value.trim();
+    const eqserial = this.eMfSerial.value.trim();
+    const eqmfyear = this.eMfYear.value.trim();
+    const eqmfwrnty = this.eMfWrnty.value.trim();
     
     const eqBrKey = this.eBrKey.value;
     
@@ -64,7 +76,8 @@ const EquipForm = ({
     const eqlib = cleanURL(lURL, rootURL);
     
     if(equipId) {
-       Meteor.call('editEquipment', equipId, eqname, eqalias, eqBrKey, eqwiki, eqlib,
+       Meteor.call('editEquipment', 
+       equipId, eqname, eqalias, eqmodel, eqserial, eqmfyear, eqmfwrnty, eqBrKey, eqwiki, eqlib,
       (error, reply)=>{
         if(error)
           console.log(error);
@@ -77,7 +90,8 @@ const EquipForm = ({
         }
       });
     }else{
-      Meteor.call('createEquipment', eqname, eqalias, eqBrKey, eqwiki, eqlib,
+      Meteor.call('createEquipment', 
+      eqname, eqalias, eqmodel, eqserial, eqmfyear, eqmfwrnty, eqBrKey, eqwiki, eqlib,
       (error, reply)=>{
         error && console.log(error);
         if(reply) {
@@ -93,68 +107,103 @@ const EquipForm = ({
     
   const orName = name ? name : '';
   const orAlias = alias ? alias : '';
+  
+  const orModel = model || '';
+  const orMfSerial = mfserial || '';
+  const orMfYear = mfyear || '';
+  const orMfWrnty = mfwrnty ? moment(mfwrnty).tz('UTC').format('YYYY-MM-DD') : '';
+  
   const orBrKey = brKey ? brKey : false;
   const orWiki = wiki ? wiki : '';
   const orLib = lib ? lib : '';
 
   return(
     <form id='newEquip' className='fitWide' onSubmit={(e)=>saveEquipment(e)}>
-      <p>
-        <label htmlFor='eName'>Full Name<br />
-          <input
-            type='text'
-            id='eName'
-            defaultValue={orName}
-            placeholder='ie. Heller 1707 Reflow Oven'
-            className='dbbleWide'
-            pattern='[A-Za-z0-9 _-]*'
-            maxLength={Pref.groupMax}
-            autoFocus={true}
-            required />
-        </label>
-      </p>
-      <p>
-        <label htmlFor='eAlias'>Alias / Common<br />
-          <input
-            type='text'
-            id='eAlias'
-            defaultValue={orAlias}
-            placeholder='ie. Reflow'
-            pattern='[A-Za-z0-9 _-]*'
-            maxLength={Pref.aliasMax}
-            required />
-        </label>
-      </p>
-      <p>
-        <label htmlFor='eBrKey'>{Pref.branch}<br />
-          <select id='eBrKey' defaultValue={orBrKey} required>
-            <option value={false}>Facility</option>
-            {brancheS.map( (br, index)=>(
-              <option key={index} value={br.brKey} className='cap'>{br.branch}</option>
-            ))}
-          </select>
-        </label>
-      </p>
-      <p>
-        <label htmlFor='eWiki' className='dbbleWide cap'>{Pref.premaintain} {Pref.instruct}<br />
-        <input
-          type='text'
+      <div className='balance gapsC'>
+        <EqInput 
+          id='eName'
+          label='Full Name' 
+          dfVal={orName}
+          place='ie. Heller 1707 Reflow Oven'
+          pattern='[A-Za-z0-9 _\-]*'
+          max={Pref.groupMax}
+          req={true}
+          af={true}
+          cls='tppleWide'
+        />
+      </div>
+      <div className='balance gapsC'>
+        <EqInput 
+          id='eAlias'
+          label='Alias / Common' 
+          dfVal={orAlias}
+          place='ie. Reflow'
+          pattern='[A-Za-z0-9 _\-]*'
+          max={Pref.aliasMax}
+          req={true}
+        />
+        <p>
+          <label htmlFor='eBrKey'>{Pref.branch}<br />
+            <select id='eBrKey' defaultValue={orBrKey} required>
+              <option value={false}>Facility</option>
+              {brancheS.map( (br, index)=>(
+                <option key={index} value={br.brKey} className='cap'>{br.branch}</option>
+              ))}
+            </select>
+          </label>
+        </p>
+      </div>
+      <div className='balance gapsC'>
+        <EqInput 
+          id='eModel'
+          label='Model'
+          dfVal={orModel}
+          place='ie. 1707 MKIII'
+        />
+        <EqInput 
+          id='eMfSerial'
+          label='Serial Number'
+          place='ie. C9FN-K52J-7976-F352'
+          dfVal={orMfSerial}
+        />
+      </div>
+      <div className='balance gapsC'>
+        <EqInput 
+          id='eMfYear'
+          label='Manufacture Year' 
+          dfVal={orMfYear}
+          place='ie. 2014'
+          pattern='[0-9]*'
+          max={4}
+        />
+        <p>
+          <label htmlFor='eMfWrnty'>Warranty Expiration<br />
+            <input
+              type='date'
+              id='eMfWrnty'
+              defaultValue={orMfWrnty}
+            />
+          </label>
+        </p>
+      </div>
+      <div className='balance gapsC'>
+        <EqInput 
           id='eWiki'
-          defaultValue={orWiki}
-          placeholder='http://192.168.1.68/pisces'
-          className='dbbleWide' />
-        </label>
-      </p>
-      <p>
-        <label htmlFor='reWiki' className='dbbleWide cap'>{Pref.equip} Repair Documents<br />
-        <input
-          type='text'
+          label={`${Pref.premaintain} ${Pref.instruct}`}
+          dfVal={orWiki}
+          place='http://192.168.1.68/pisces'
+          cls='tppleWide'
+        />
+      </div>
+      <div className='balance gapsC'>
+        <EqInput 
           id='reWiki'
-          defaultValue={orLib}
-          placeholder='http://192.168.1.68/pisces'
-          className='dbbleWide' />
-        </label>
-      </p>
+          label={`${Pref.equip} Repair Documents`}
+          dfVal={orLib}
+          place='http://192.168.1.68/pisces'
+          cls='tppleWide'
+        />
+      </div>
       <p className='centre'>
         <button
           type='submit'
@@ -166,3 +215,21 @@ const EquipForm = ({
     </form>
   );
 };
+
+const EqInput = ({ id, label, dfVal, place, pattern, max, req, af, cls })=> (
+  <p>
+    <label htmlFor={id} className={`${cls} cap`}>{label}<br />
+      <input
+        type='text'
+        id={id}
+        defaultValue={dfVal}
+        placeholder={place || ''}
+        className={cls || ''}
+        pattern={pattern || null}
+        maxLength={max}
+        required={req || false} 
+        autoFocus={af || false} 
+      />
+    </label>
+  </p>
+);

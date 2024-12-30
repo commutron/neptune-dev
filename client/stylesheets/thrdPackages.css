@@ -720,3 +720,28 @@ button[disabled].rbc-btn {
   white-space: unset;
   min-height: 5vh;
 }
+
+@scope (.rmsc) {
+  :scope {
+    --rmsc-main: var(--neptuneColor) !important;
+    --rmsc-hover: var(--neptuneColor) !important;
+    --rmsc-selected: var(--contrast) !important;
+    --rmsc-h: 32px !important;
+    --rmsc-p: 0.25rem;
+    --rmsc-border: black !important;
+    --rmsc-bg: white !important;
+    /*--rmsc-gray: #aaa;*/
+    --rmsc-radius: 0px !important;
+  }
+  :scope,
+  .multi-select {
+    min-width: 15rem;
+    max-width: 400px;
+    margin: 0;
+    text-align: initial;
+    font-size: 1rem;
+  }
+  .panel-content {
+    min-width: fit-content;
+  }
+}
