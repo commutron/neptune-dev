@@ -21,6 +21,12 @@ const TimeErrorCheck = ()=> {
     });
   };
   
+  const handleTESTFetch = ()=>{
+    Meteor.call('fetchOverRun', Meteor.user().orgKey, (err)=>{
+      err && console.log(err);
+    });
+  };
+  
   function exportTable() {
     const dateString = new Date().toLocaleDateString();
     toast(
@@ -77,6 +83,14 @@ const TimeErrorCheck = ()=> {
           ))}
         </tbody>
       </table>
+      
+      <p>
+        <button
+          className='action yellowSolid'
+          onClick={()=>handleTESTFetch()}
+        >TEST AUTOFIX
+        </button>
+      </p>
     </div>
   );
 };

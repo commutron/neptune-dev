@@ -453,33 +453,43 @@ Meteor.methods({
     return report;
   },
   
-  fetchOverRun() {
+  fetchOverRun(accessKey) {
     try {
       const stillEng = Meteor.users.find({engaged: { $exists: true, $ne: false }},
                                          { fields:{'engaged':1} }).fetch();
+      const orgKey = accessKey || Meteor.user().orgKey;
       
-      // console.log(stillEng);
       if(stillEng.length > 0) {
         const mssg = `You did not stop your time tracker from the previous workday.\nPlease correct your Project Activity record.`;
         
         for( let u of stillEng ) {
           const ttle = `${u.engaged.tName} Project Time Overrun`;
         
-          const b = XBatchDB.findOne({ 'tide.tKey': u.engaged.tKey },{fields:{'tide':1}});
-          if(b) {
-            const td = b.tide.find( x => x.tKey === u.engaged.tKey );
-            const overDay = ( new Date() - td.startTime ) > 
-                            ( (Config.maxShift / 2) * 60 * 60000 );
-            if(overDay) {
-              Meteor.call('sendUserDM', u._id, ttle, mssg);
-            }
-          }else{
-            const t = TimeDB.findOne({ _id: u.engaged.tKey },{fields:{'startTime':1}});
-            if(t) {
-              const overDay = ( new Date() - t.startTime ) > 
+          const user_tKey = u.engaged.tKey;
+          if(user_tKey) {
+            const b = XBatchDB.findOne({ 'tide.tKey': user_tKey },{fields:{'tide':1}});
+            if(b) {
+              const td = b.tide.find( x => x.tKey === user_tKey );
+              const overDay = ( new Date() - td.startTime ) > 
                               ( (Config.maxShift / 2) * 60 * 60000 );
+              const overStill = ( new Date() - td.startTime ) > 
+                                ( 48 * 60 * 60000 );
               if(overDay) {
                 Meteor.call('sendUserDM', u._id, ttle, mssg);
+              }
+              if(true) {
+                Meteor.defer( ()=>{
+                  Meteor.call('autofixTideToShift', orgKey, user_tKey, u._id );
+                });
+              }
+            }else{
+              const t = TimeDB.findOne({ _id: user_tKey },{fields:{'startTime':1}});
+              if(t) {
+                const overDay = ( new Date() - t.startTime ) > 
+                                ( (Config.maxShift / 2) * 60 * 60000 );
+                if(overDay) {
+                  Meteor.call('sendUserDM', u._id, ttle, mssg);
+                }
               }
             }
           }
@@ -495,12 +505,13 @@ Meteor.methods({
       const now = new Date();
       let badDurr = [];
       
-      const tooManyMin = tooVal ? Number(tooVal) : 500;
+      const tooManyMin = tooVal ? Number(tooVal) : (Config.maxShift / 2) * 60;
       const tooManyMsec = tooManyMin * 60000;
       
       const screenT = (tideArr, bID)=> {
         for( let t of tideArr ) {
           if( t.stopTime === false ) {
+            // Fix if time recording was stopped on User.engaged but not in XBatchDB.tide
             if( !Meteor.users.findOne({_id: t.who, 'engaged.tKey': t.tKey}) &&
                 !Meteor.users.findOne({_id: t.who, 'engaged.tKey': { $in: [t.tKey] } })
             ) {
@@ -511,6 +522,7 @@ Meteor.methods({
               }});
             }
           }
+          // Log times that exceed reasonable task length
           if( ( ( t.stopTime || now ) - t.startTime ) > tooManyMsec ) {
             badDurr.push([
               t.startTime, t.who
@@ -533,6 +545,7 @@ Meteor.methods({
       TimeDB.find({ stopTime: false },{ fields: {'who':1,'startTime':1,'stopTime':1} 
       }).forEach( tm => {
         if( tm.stopTime === false ) {
+          // Fix if time recording was stopped on User.engaged but not in TimeDB.tide
           if( !Meteor.users.findOne({_id: tm.who, 'engaged.tKey': tm._id}) ) {
             const stopshort = moment(tm.startTime).add(3, 'seconds').toISOString();
             TimeDB.update({ _id: tm._id }, {
@@ -540,6 +553,7 @@ Meteor.methods({
                 stopTime : new Date(stopshort)
             }});
           }
+          // Log times that exceed reasonable task length
           if( ( ( tm.stopTime || now ) - tm.startTime ) > tooManyMsec ) {
             badDurr.push([
               tm.startTime, tm.who
@@ -553,6 +567,62 @@ Meteor.methods({
     }catch(err) {
       throw new Meteor.Error(err);
     }
+  },
+  
+  autofixTideToShift(accessKey, user_tKey, userId) {
+    
+    
+    const doc = AppDB.findOne({orgKey: accessKey});
+    const user = Meteor.users.findOne({_id: userId});
+    
+    console.log({ user_tKey });
+    
+    if( user_tKey && doc && user ) {
+      
+      const weekD = doc.workingHours;
+      
+      const batch = XBatchDB.findOne({ 'tide.tKey': user_tKey },{ fields: {'tide':1} });
+      const tideE = batch?.tide.find( t => t.tKey === user_tKey ) || null;
+              
+      if( weekD && batch && tideE ) {
+        const startTime = tideE.startTime;
+        
+        const weekDay = moment(startTime).day();
+        const shiftDay = weekD[weekDay];
+        const shiftEnd = shiftDay?.[shiftDay.length - 1]?.split(":") || false;
+        
+        console.log({startTime});
+        console.log({shiftEnd});
+        
+        if(shiftEnd) {
+        
+          const trueStart = moment(startTime).format();
+          
+          console.log({trueStart});
+          
+          const safeStop = moment(startTime).set({'hour': shiftEnd[0], 'minute': shiftEnd[1]});
+        
+          const trueStop = safeStop.format();
+          
+        console.log({safeStop});
+        console.log({trueStop});
+        
+        }
+        
+        
+          // XBatchDB.update({ _id: bID, 'tide.tKey': t.tKey }, {
+          //   $set : { 
+          //     'tide.$.stopTime' : new Date(stopshort)
+          // }});
+              
+      }
+    }
+    
+    
+    
+    
+    
+    
   },
   
   errorFixDeleteTideTimeBlock(batch) {
