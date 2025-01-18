@@ -12,6 +12,7 @@ import NCTypeSlide from './appSlides/NCTypeSlide';
 import ScalesTagsSlide from './appSlides/ScalesTagsSlide';
 import AddressSlide from './appSlides/AddressSlide';
 import DataRepair from './appSlides/DataRepair';
+import TimeErrorCheck from './appSlides/TimeErrorCheck';
 import NotifySlide from './appSlides/NotifySlide';
 import CRONSlide from './appSlides/CRONSlide';
 import MetaSlide from './appSlides/MetaSlide';
@@ -37,6 +38,7 @@ const AppWrap = ({ isAdmin, isDebug, users, app })=> {
           <b><i className='fas fa-link fa-fw gapR'></i>Page Links</b>,
           <b><i className='fas fa-bell fa-fw gapR'></i>Notifications</b>,
           <b><i className='fas fa-robot fa-fw gapR'></i>CRON Jobs</b>,
+          <b><i className='fas fa-hourglass-end fa-fw gapR'></i>Overtime Errors</b>,
           <b><i className='fas fa-toolbox fa-fw gapR'></i>Data Repair</b>
         ]}
         lowmenu={[<b><i className='fas fa-copyright fa-fw gapR'></i>Meta</b>]}
@@ -56,10 +58,11 @@ const AppWrap = ({ isAdmin, isDebug, users, app })=> {
         <NCTypeSlide key={4} app={app} />
         <ScalesTagsSlide key={5} app={app} />
         <AddressSlide key={6} app={app} />
-        <NotifySlide key={8} app={app} />
-        <CRONSlide key={9} />
-        <DataRepair key={7} app={app} users={users} />
-        <MetaSlide key={10} />
+        <NotifySlide key={7} app={app} />
+        <CRONSlide key={8} />
+        <TimeErrorCheck key={9} />
+        <DataRepair key={10} app={app} users={users} />
+        <MetaSlide key={11} />
         
       </Slides>
 			

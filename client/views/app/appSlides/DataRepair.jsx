@@ -42,7 +42,7 @@ const DataRepair = ({ app, users })=> {
   
   return(
     <div className='space3v'>
-      <div className='autoGrid cardify'>
+      <div className='autoGrid cardify twoDfill'>
       
         <DoCard
           title='Force Randomize Org PIN'
@@ -63,10 +63,10 @@ const DataRepair = ({ app, users })=> {
         />
       
         <div>
-          <h3><i className="fas fa-lock fa-lg gap"></i>
-            Run Batch+ Locker
-          </h3>
-          <small>Runs every Saturday at 12:15am (CST)</small><br />
+          <span>
+            <h3><i className="fas fa-lock fa-lg gap"></i>Run Batch+ Locker</h3>
+            <p className='small'>Runs every Saturday at 12:15am (CST)</p>
+          </span>
           <button
             onClick={()=>forceLockCheck()}
             className='action purpleSolid'
@@ -196,11 +196,10 @@ export default DataRepair;
 
 const DoCard = ({ title, sub, icon, color, button, action })=> (
   <div>
-    <h3><i className={`fa-solid fa-${icon} fa-lg gap`}></i>
-      {title}
-    </h3>
-    {sub && <small className='line2x'>{sub}</small>}
-    <br />
+    <span>
+      <h3><i className={`fa-solid fa-${icon} fa-lg gap`}></i>{title}</h3>
+      {sub && <p className='small'>{sub}</p>}
+    </span>
     <button
       onClick={()=>action()}
       className={`action ${color}`}

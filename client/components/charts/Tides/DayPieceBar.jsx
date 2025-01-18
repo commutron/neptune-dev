@@ -1,10 +1,8 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { TimeInDay } from '/client/utility/WorkTimeCalc.js';
 import { UserTime } from '/client/utility/WorkTimeCalc.js';
 import { round2Decimal } from '/client/utility/Convert.js';
-// import Pref from '/client/global/pref.js';
-
 
 const DayPieceBar = ({ tideTimes, dateTime, regDayStart, regDayEnd, app, user })=> {
   
@@ -31,12 +29,15 @@ const DayPieceBar = ({ tideTimes, dateTime, regDayStart, regDayEnd, app, user })
       const dayEnd = moment(lastTime).isAfter(regDayEnd) ?
                       lastTime : regDayEnd.format();
       
+      const tick = ((( new Date(dayEnd) - new Date(dayStart) ) / 1000) / 60 )  / 48;
+      const tock = Math.max( 10, Math.round( tick ) );
+      
       const chunkStart = moment(dayStart);
       let chunks = [];
-      for(let c = chunkStart; c.isBefore(dayEnd); c.add(10, 'minutes') ) {
+      for(let c = chunkStart; c.isBefore(dayEnd); c.add(tock, 'minutes') ) {
         const hourFound = tideTimes.filter( x => {
           let mStop = x.stopTime || moment();
-          let next = c.clone().add(10, 'minutes');
+          let next = c.clone().add(tock, 'minutes');
           if( moment(x.startTime).isBetween(c, next, null, '[)' ) ||
           c.isBetween(x.startTime, mStop, null, '[]' ) ) {
             return x;

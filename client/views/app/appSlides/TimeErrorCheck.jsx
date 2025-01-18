@@ -10,20 +10,14 @@ const TimeErrorCheck = ()=> {
   const [ working, workingSet ] = useState(false);
   const [ result, resultSet ] = useState(false);
   
-  const handleFetch = ()=>{
+  const handleFetch = (run_on_db)=>{
     workingSet(true);
-    Meteor.call('fetchErrorTimes', Pref.tooManyMin, (err, reply)=>{
+    Meteor.call('fetchErrorTimes', Pref.tooManyMin, run_on_db, (err, reply)=>{
       err && console.log(err);
       if(reply) {
         resultSet(reply);
         workingSet(false);
       }
-    });
-  };
-  
-  const handleTESTFetch = ()=>{
-    Meteor.call('fetchOverRun', Meteor.user().orgKey, (err)=>{
-      err && console.log(err);
     });
   };
   
@@ -44,15 +38,24 @@ const TimeErrorCheck = ()=> {
       <p>Will automatically correct abandoned stop time blocks.</p>
       <p><b>Resource intensive function. Run during idle times.</b></p>
       <br />
-      <div className='rowWrap'>
+      <div className='rowWrap gapsC'>
         <button
-          className='smallAction blackHover'
-          onClick={()=>handleFetch()}
+          className='action blueSolid'
+          onClick={()=>handleFetch('db_xbatch')}
           disabled={working}
         >{working ?
           <n-fa0><i className='gap fas fa-spinner fa-lg fa-spin'></i></n-fa0> :
           <n-fa1><i className='gap fas fa-spinner fa-lg'></i></n-fa1>
-          } Run Check
+          } Run Check On XBatch
+        </button>
+        <button
+          className='action wetSolid'
+          onClick={()=>handleFetch('db_time')}
+          disabled={working}
+        >{working ?
+          <n-fa0><i className='gap fas fa-spinner fa-lg fa-spin'></i></n-fa0> :
+          <n-fa1><i className='gap fas fa-spinner fa-lg'></i></n-fa1>
+          } Run Check On TimeDB
         </button>
       </div>
       
@@ -70,6 +73,7 @@ const TimeErrorCheck = ()=> {
             <th>Week Day</th>
             <th>Month Day</th>
             <th>Year</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -79,18 +83,11 @@ const TimeErrorCheck = ()=> {
               <td>{moment(entry[0]).format('w - ddd')}</td>
               <td>{moment(entry[0]).format('MMM D')}</td>
               <td>{moment(entry[0]).format('YYYY')}</td>
+              <td>{entry[2] && 'AUTOFIX'}</td>
             </tr>
           ))}
         </tbody>
       </table>
-      
-      <p>
-        <button
-          className='action yellowSolid'
-          onClick={()=>handleTESTFetch()}
-        >TEST AUTOFIX
-        </button>
-      </p>
     </div>
   );
 };

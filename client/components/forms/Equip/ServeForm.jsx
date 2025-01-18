@@ -218,14 +218,14 @@ const ServeForm = ({
             className='gap miniIn6'
             defaultValue={period}
             min={1}
-            max={timeSpan === 'day' ? recur : timeSpan === 'week' ? 7 : 31}
+            max={Math.max(0,timeSpan === 'day' ? recur : timeSpan === 'week' ? 7 - grace : 31 - grace)}
             inputMode='numeric'
             onChange={(e)=>setPeriod(Number(e.target.value))}
             required
           /></label>
         </span>
         <span className='block max400 vmarginquarter'>
-          <n-sm>Eg. If service is due Friday and has two days to complete then service is from the start of Thursday to the end of Friday.</n-sm>
+          <n-sm>Service window opens this many days before due date.</n-sm>
         </span>
       </p>
       
@@ -238,9 +238,9 @@ const ServeForm = ({
             className='gap miniIn6'
             defaultValue={grace}
             min={0}
-            max={timeSpan === 'day' ? recur - period :
+            max={Math.max(0, timeSpan === 'day' ? recur - period :
                  timeSpan === 'week' ? ( recur * 5  ) - period :
-                 timeSpan === 'month' ? ( recur * 20  ) - period : 60}
+                 timeSpan === 'month' ? ( recur * 20  ) - period : 60)}
             inputMode='numeric'
             onChange={(e)=>setGrace(Number(e.target.value))}
             required /></label>
@@ -249,6 +249,9 @@ const ServeForm = ({
           <n-sm>After the grace period an incomplete service is considered missed.</n-sm>
         </span>
       </p>
+      
+      <p className='medSm centreText'
+      >Service window will be open for <n-num>{period + grace}</n-num> workdays. Overlaping Service windows may cause errors.</p>
       
       {serveKey && servicing ?
         <p className='medSm centreText'

@@ -119,12 +119,12 @@ const TideBlockRow = ({
                 changeValue={(e)=>setTempStart(e)}
                 defaultMmnt={mStart}
                 minLimit={mStart.isSame(absoluteMin, 'minute') ?
-                    moment(absoluteMin).format() :
-                    moment(absoluteMin).startOf('minute').format()}
+                  moment(absoluteMin).format() :
+                  moment(absoluteMin).startOf('minute').format()}
                 maxLimit={tempStop[0] ? 
                     moment(tempStop[0]).format() :
                     mStop.clone().format()}
-                calendarBool={true}
+                calendarBool={mStop.isAfter(mStart, 'day') === false}
                 staticAlt={staticAlt}
               />}
         </td>

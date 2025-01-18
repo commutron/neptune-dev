@@ -25,15 +25,15 @@ const VariantForm = ({ widgetData, users, app, rootWI, access })=> {
     const wId = widgetData._id;
     const gId = widgetData.groupId;
     
-    const variant = this.rev.value.trim();
+    const variant = this.revNew.value.trim();
     
-    const url = this.wikdress.value.trim();
+    const url = this.wikdressNew.value.trim();
     const http = url.slice(0,4) === 'http' ? url : 
                  url.slice(0,1) === '/' ? url :
                  '/' + url;
     const wiki = http.slice(-1) === '/' ? http.slice(0,-1) : http;
     
-    const unit = this.unit.value.trim();
+    const unit = this.unitNew.value.trim();
     
     const emailUsers = app.emailGlobal ? Array.from(emailState, u => u.value) : [];
     
@@ -43,9 +43,9 @@ const VariantForm = ({ widgetData, users, app, rootWI, access })=> {
       if(reply) {
         toast.success('Saved');
         // selfclose();
-        this.rev.value = '';
-        this.wikdress.value = '';
-        this.unit.value = '';
+        this.revNew.value = '';
+        this.wikdressNew.value = '';
+        this.unitNew.value = '';
         this.gonewvar.disabled = false;
       }else{
         toast.error('Server Error');
@@ -74,7 +74,7 @@ const VariantForm = ({ widgetData, users, app, rootWI, access })=> {
             <label htmlFor='rev'>
               <input
                 type='text'
-                id='rev'
+                id='revNew'
                 placeholder='1a'
                 pattern='[A-Za-z0-9 \._\-]*'
                 className='miniIn18'
@@ -85,7 +85,7 @@ const VariantForm = ({ widgetData, users, app, rootWI, access })=> {
             <label htmlFor='unit'>
               <input
                 type='number'
-                id='unit'
+                id='unitNew'
                 pattern='[0000-9999]*'
                 maxLength='4'
                 minLength='1'
@@ -102,7 +102,7 @@ const VariantForm = ({ widgetData, users, app, rootWI, access })=> {
           <p>
             <input
               type='text'
-              id='wikdress'
+              id='wikdressNew'
               placeholder='Full Address'
               className='wide' />
             <label htmlFor='wikdress'>Work Instructions</label>

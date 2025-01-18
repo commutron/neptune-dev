@@ -75,7 +75,8 @@ Accounts.onLogout( ()=>{
       $pull : { 
         dataArray: userId
       }
-    });
+    },{ multi: true }
+    );
   });
 });
 

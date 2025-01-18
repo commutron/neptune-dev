@@ -37,33 +37,33 @@ main {
 
 .forceScroll { overflow-y: auto !important; }
 .wideScroll { overflow-x: auto !important; }
-.forceScrollStyle::-webkit-scrollbar {
-  width: 1vmax;
-  height: 1vmax;
-}
-.forceScrollStyle::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 3px rgba(0,0,0,0.2); 
-  background-color: var(--navIndicatorA);
-}
-.forceScrollStyle::-webkit-scrollbar-thumb {
-  box-shadow: inset 0 0 3px rgba(0,0,0,0.2);
-  background-color: var(--navIndicatorB);
-}
+/*.forceScrollStyle::-webkit-scrollbar {*/
+/*  width: 1vmax;*/
+/*  height: 1vmax;*/
+/*}*/
+/*.forceScrollStyle::-webkit-scrollbar-track {*/
+/*  box-shadow: inset 0 0 3px rgba(0,0,0,0.2); */
+/*  background-color: var(--navIndicatorA);*/
+/*}*/
+/*.forceScrollStyle::-webkit-scrollbar-thumb {*/
+/*  box-shadow: inset 0 0 3px rgba(0,0,0,0.2);*/
+/*  background-color: var(--navIndicatorB);*/
+/*}*/
 .forceScrollStyle {
   scrollbar-width: thin;
   scrollbar-color: var(--navIndicatorB) var(--navIndicatorA);
 }
 
-.thinScroll::-webkit-scrollbar {
-  width: 3px;
-  height: 3px;
-}
-.thinScroll::-webkit-scrollbar-track {
-  background-color: var(--navIndicatorA);
-}
-.thinScroll::-webkit-scrollbar-thumb {
-  background-color: var(--navIndicatorB);
-}
+/*.thinScroll::-webkit-scrollbar {*/
+/*  width: 3px;*/
+/*  height: 3px;*/
+/*}*/
+/*.thinScroll::-webkit-scrollbar-track {*/
+/*  background-color: var(--navIndicatorA);*/
+/*}*/
+/*.thinScroll::-webkit-scrollbar-thumb {*/
+/*  background-color: var(--navIndicatorB);*/
+/*}*/
 .thinScroll {
   scrollbar-width: thin;
   scrollbar-color: var(--navIndicatorA) var(--navIndicatorB);
@@ -1237,6 +1237,14 @@ n-sm-model-content {
 }
 .autoGrid.cardify {
   gap: 3vmin;
+}
+.autoGrid.twoDfill {
+  align-items: stretch; 
+}
+.autoGrid.twoDfill > div {
+  display: flex;
+  flex-flow: column;
+  justify-content: space-between;
 }
 
 .minWide { width: min-content !important; }

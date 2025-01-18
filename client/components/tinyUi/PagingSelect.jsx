@@ -5,7 +5,7 @@ const PagingSelect = ({ multiArray, isSet, doChange })=> (
   <div className='noPrint centreRow vmargin'>
     <button
       onClick={()=>doChange(isSet-1)}
-      className='smallAction gap blackHover borderWhite transparent'
+      className='smallAction gap blackHover transparent'
       disabled={isSet < 1}
     >❮</button>
     {multiArray.map( (pg, ix)=>{
@@ -28,7 +28,7 @@ const PagingSelect = ({ multiArray, isSet, doChange })=> (
             onClick={()=>doChange(ix)}
             className={
               `smallAction gap blackHover transparent
-              ${isSet == ix ? '' : 'borderWhite'}`
+              ${isSet == ix ? 'borderBlack' : ''}`
             }
           >{ix+1}</button>
         );
@@ -36,7 +36,7 @@ const PagingSelect = ({ multiArray, isSet, doChange })=> (
     })}
     <button
       onClick={()=>doChange(isSet+1)}
-      className='smallAction gap blackHover borderWhite transparent'
+      className='smallAction gap blackHover transparent'
       disabled={isSet === multiArray.length-1 || multiArray.length === 0}
     >❯</button>
   </div>

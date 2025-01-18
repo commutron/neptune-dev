@@ -52,6 +52,7 @@
 
 .transparent {
   background-color: transparent;
+  border-color: transparent;
 }
 
 .nT { color: var(--neptuneColor); }

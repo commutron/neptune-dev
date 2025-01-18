@@ -17,7 +17,6 @@ import AccountsManagePanel from './AccountsManagePanel';
 import PermissionHelp from './PermissionHelp';
 import EmailLogSlide from './EmailLogSlide';
 import DMLogSlide from './DMLogSlide';
-import TimeErrorCheck from './TimeErrorCheck';
 import RevolvingPINCheck from './RevolvingPINCheck';
 
 
@@ -59,7 +58,6 @@ const PeopleDataWrap = ({
             <b><i className='fas fa-history fa-fw gapR'></i>Daily History</b>,
             <b><i className='fas fa-tachometer-alt fa-fw gapR'></i>Weekly Utilization</b>,
             <b><i className='far fa-calendar-alt fa-fw gapR'></i>Work Schedule</b>,
-            <b><i className='fas fa-hourglass-end fa-fw gapR'></i>Overtime Errors</b>,
             <b><i className='fas fa-comments fa-fw gapR'></i>Message Log</b>,
             <b><i className='fas fa-envelopes-bulk fa-fw gapR'></i>Email Log</b>,
             <b><i className='fas fa-user-lock fa-fw gapR'></i>Permissions</b>,
@@ -70,7 +68,7 @@ const PeopleDataWrap = ({
           ]}
           disable={[
             false, false, false, false, 
-            antiAuth, antiAuth, antiAuth, false, antiAuth, antiAuth
+            antiAuth, antiAuth, false, antiAuth, antiAuth
           ]}>
           
           <DashSlide
@@ -111,20 +109,16 @@ const PeopleDataWrap = ({
             isAdmin={isAdmin}
             isPeopleSuper={isPeopleSuper} 
           />
-
+          
           {isAdmin || isPeopleSuper ?
-            <TimeErrorCheck key={4} />
+            <DMLogSlide key={4} />
           : null }
           
           {isAdmin || isPeopleSuper ?
-            <DMLogSlide key={5} />
+            <EmailLogSlide key={5} />
           : null }
           
-          {isAdmin || isPeopleSuper ?
-            <EmailLogSlide key={6} />
-          : null }
-          
-          <div key={7}>
+          <div key={6}>
             <PermissionHelp 
               auths={[...Pref.keys,...Pref.auths,...Pref.areas,'BRKt3rm1n2t1ng8r2nch']} 
               admin={false} 
@@ -133,7 +127,7 @@ const PeopleDataWrap = ({
           
           {isAdmin || isPeopleSuper ?
             <AccountsManagePanel 
-              key={8} 
+              key={7} 
               app={app}
               users={userS}
               traceDT={traceDT}
@@ -144,7 +138,7 @@ const PeopleDataWrap = ({
           
           {isAdmin || isPeopleSuper ?
             <RevolvingPINCheck 
-              key={9}
+              key={8}
               isAdmin={isAdmin}
               isPeopleSuper={isPeopleSuper}
             />

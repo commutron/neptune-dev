@@ -5,6 +5,11 @@
   -webkit-overflow-scrolling: touch;
 }
 
+.windowPro .followTask i, 
+.containerPro .followTask i {
+  font-size: calc(var(--vert_border) * 2.25);
+}
+
 .windowPro {
   display: grid;
   grid-template-rows: var(--vert_frame) var(--vert_main);

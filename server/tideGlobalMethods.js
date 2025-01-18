@@ -454,6 +454,7 @@ Meteor.methods({
   },
   
   fetchOverRun(accessKey) {
+    // Daily CRON
     try {
       const stillEng = Meteor.users.find({engaged: { $exists: true, $ne: false }},
                                          { fields:{'engaged':1} }).fetch();
@@ -468,8 +469,12 @@ Meteor.methods({
           const user_tKey = u.engaged.tKey;
           if(user_tKey) {
             const b = XBatchDB.findOne({ 'tide.tKey': user_tKey },{fields:{'tide':1}});
-            if(b) {
-              const td = b.tide.find( x => x.tKey === user_tKey );
+            
+            const td = b ? b.tide.find( x => x.tKey === user_tKey ) :
+                           TimeDB.findOne({ _id: user_tKey },{fields:{'startTime':1}});
+            const db = b ? 'xb_TIDE_db' : 'mg_TIME_db';
+            
+            if(td) {
               const overDay = ( new Date() - td.startTime ) > 
                               ( (Config.maxShift / 2) * 60 * 60000 );
               const overStill = ( new Date() - td.startTime ) > 
@@ -477,19 +482,10 @@ Meteor.methods({
               if(overDay) {
                 Meteor.call('sendUserDM', u._id, ttle, mssg);
               }
-              if(true) {
+              if(overStill) {
                 Meteor.defer( ()=>{
-                  Meteor.call('autofixTideToShift', orgKey, user_tKey, u._id );
+                  Meteor.call('autofixStopToShift', db, orgKey, user_tKey, u._id, td );
                 });
-              }
-            }else{
-              const t = TimeDB.findOne({ _id: user_tKey },{fields:{'startTime':1}});
-              if(t) {
-                const overDay = ( new Date() - t.startTime ) > 
-                                ( (Config.maxShift / 2) * 60 * 60000 );
-                if(overDay) {
-                  Meteor.call('sendUserDM', u._id, ttle, mssg);
-                }
               }
             }
           }
@@ -500,67 +496,86 @@ Meteor.methods({
     }
   },
   
-  fetchErrorTimes(tooVal) {
+  fetchErrorTimes(tooVal, db_select) {
+    // Manual PeopleSuper Call
     try {
+      const orgKey = Meteor.user().orgKey;
       const now = new Date();
       let badDurr = [];
       
       const tooManyMin = tooVal ? Number(tooVal) : (Config.maxShift / 2) * 60;
       const tooManyMsec = tooManyMin * 60000;
       
-      const screenT = (tideArr, bID)=> {
-        for( let t of tideArr ) {
-          if( t.stopTime === false ) {
-            // Fix if time recording was stopped on User.engaged but not in XBatchDB.tide
-            if( !Meteor.users.findOne({_id: t.who, 'engaged.tKey': t.tKey}) &&
-                !Meteor.users.findOne({_id: t.who, 'engaged.tKey': { $in: [t.tKey] } })
-            ) {
-              const stopshort = moment(t.startTime).add(3, 'seconds').toISOString();
-              XBatchDB.update({ _id: bID, 'tide.tKey': t.tKey }, {
-                $set : { 
-                  'tide.$.stopTime' : new Date(stopshort)
-              }});
+      if(db_select === 'db_xbatch') {
+      
+        XBatchDB.find({
+          orgKey: orgKey,
+          $or: [ { lock: false },
+                 { lock: { $exists: false } }
+               ],
+          // 'tide.stopTime': false
+        },{ fields: {'tide':1} 
+        }).forEach( bx => {
+          if(bx.tide) { 
+            for( let t of bx.tide ) {
+              if( t.stopTime === false ) {
+                // Fix if time recording was stopped on User.engaged but not in XBatchDB.tide
+                if( !Meteor.users.findOne({_id: t.who, 'engaged.tKey': t.tKey}) &&
+                    !Meteor.users.findOne({_id: t.who, 'engaged.tKey': { $in: [t.tKey] } })
+                ) {
+                  const stopshort = moment(t.startTime).add(3, 'seconds').toISOString();
+                  XBatchDB.update({ _id: bx._id, 'tide.tKey': t.tKey }, {
+                    $set : { 
+                      'tide.$.stopTime' : new Date(stopshort)
+                  }});
+                }
+              }
+              // Log times that exceed reasonable task length
+              if( ( ( t.stopTime || now ) - t.startTime ) > tooManyMsec ) {
+                //  Correct way over time
+                if( ( ( t.stopTime || now ) - t.startTime ) > (Config.maxShift * 2 * 3600000)) {
+                  badDurr.push([ t.startTime, t.who, true ]);
+                  Meteor.defer( ()=>{
+                    Meteor.call('autofixStopToShift', 'xb_TIDE_db', orgKey, t.tKey, t.who, t );
+                  });
+                }else{
+                  badDurr.push([ t.startTime, t.who ]);
+                }
+              }
             }
           }
-          // Log times that exceed reasonable task length
-          if( ( ( t.stopTime || now ) - t.startTime ) > tooManyMsec ) {
-            badDurr.push([
-              t.startTime, t.who
-            ]);
+        });
+        
+      }else if(db_select === 'db_time') {
+        // TimeDB.find({ stopTime: false },{ fields: {'who':1,'startTime':1,'stopTime':1} 
+        TimeDB.find({},{ fields: {'who':1,'startTime':1,'stopTime':1} 
+        }).forEach( tm => {
+          if( tm.stopTime === false ) {
+            // Fix if time recording was stopped on User.engaged but not in TimeDB.tide
+            if( !Meteor.users.findOne({_id: tm.who, 'engaged.tKey': tm._id}) ) {
+              const stopshort = moment(tm.startTime).add(3, 'seconds').toISOString();
+              TimeDB.update({ _id: tm._id }, {
+                $set : { 
+                  stopTime : new Date(stopshort)
+              }});
+            }
+            // Log times that exceed reasonable task length
+            if( ( ( tm.stopTime || now ) - tm.startTime ) > tooManyMsec ) {
+              //  Correct way over time
+              if( ( ( tm.stopTime || now ) - tm.startTime ) > (Config.maxShift * 2 * 3600000)) {
+                badDurr.push([ tm.startTime, tm.who, true ]);
+                Meteor.defer( ()=>{
+                  Meteor.call('autofixStopToShift', 'mg_TIME_db', orgKey, tm._id, tm.who, t );
+                });
+              }else{
+                badDurr.push([ tm.startTime, tm.who ]);
+              }
+            }
           }
-        }
-      };
-      
-      XBatchDB.find({
-        orgKey: Meteor.user().orgKey,
-        $or: [ { lock: false },
-               { lock: { $exists: false } }
-             ],
-        'tide.stopTime': false
-      },{ fields: {'tide':1} 
-      }).forEach( bx => {
-        if(bx.tide) { screenT(bx.tide, bx._id) }
-      });
-      
-      TimeDB.find({ stopTime: false },{ fields: {'who':1,'startTime':1,'stopTime':1} 
-      }).forEach( tm => {
-        if( tm.stopTime === false ) {
-          // Fix if time recording was stopped on User.engaged but not in TimeDB.tide
-          if( !Meteor.users.findOne({_id: tm.who, 'engaged.tKey': tm._id}) ) {
-            const stopshort = moment(tm.startTime).add(3, 'seconds').toISOString();
-            TimeDB.update({ _id: tm._id }, {
-              $set : { 
-                stopTime : new Date(stopshort)
-            }});
-          }
-          // Log times that exceed reasonable task length
-          if( ( ( tm.stopTime || now ) - tm.startTime ) > tooManyMsec ) {
-            badDurr.push([
-              tm.startTime, tm.who
-            ]);
-          }
-        }
-      });
+        });
+      }else{
+        null;
+      }
       
       const badDurrS = badDurr.sort( (d1, d2)=> d1[1] < d2[1] ? 1 : d1[1] > d2[1] ? -1 : 0 );
       return JSON.stringify(badDurrS);
@@ -569,60 +584,69 @@ Meteor.methods({
     }
   },
   
-  autofixTideToShift(accessKey, user_tKey, userId) {
-    
+  autofixStopToShift(data, accessKey, user_tKey, userId, tObj) {
+    // Only fixes single engaged
     
     const doc = AppDB.findOne({orgKey: accessKey});
     const user = Meteor.users.findOne({_id: userId});
     
-    console.log({ user_tKey });
+    function setStopTime_UNSAFE(isoStop) {
+      
+      if(data === 'xb_TIDE_db') {
+        console.log('stop the Tide');
+        XBatchDB.update({ 'tide.tKey': user_tKey }, {
+          $set : { 
+            'tide.$.stopTime' : new Date(isoStop)
+        }});
+        Meteor.users.update(userId, {
+          $set: {
+            engaged: false
+          }
+        });
+      }else if(data === 'mg_TIME_db') {
+        console.log('stop a Time');
+        TimeDB.update({ _id: user_tKey }, {
+          $set : { 
+            stopTime : new Date(isoStop)
+        }});
+        Meteor.users.update(userId, {
+          $set: {
+            engaged: false
+          }
+        });
+      }else{
+        console.log('lacks instruction');
+      }
+    }
     
-    if( user_tKey && doc && user ) {
+    if( user_tKey && doc && user && tObj ) {
       
       const weekD = doc.workingHours;
-      
-      const batch = XBatchDB.findOne({ 'tide.tKey': user_tKey },{ fields: {'tide':1} });
-      const tideE = batch?.tide.find( t => t.tKey === user_tKey ) || null;
               
-      if( weekD && batch && tideE ) {
-        const startTime = tideE.startTime;
+      if( weekD ) {
+        const startTime = tObj.startTime;
+        const localStart = moment(startTime).tz(Config.clientTZ);
         
         const weekDay = moment(startTime).day();
         const shiftDay = weekD[weekDay];
         const shiftEnd = shiftDay?.[shiftDay.length - 1]?.split(":") || false;
         
-        console.log({startTime});
-        console.log({shiftEnd});
-        
         if(shiftEnd) {
-        
-          const trueStart = moment(startTime).format();
+          const shiftStop = localStart.clone().set({'hour': shiftEnd[0], 'minute': shiftEnd[1], 'second': shiftEnd[2]});
+          const regStop = shiftStop.toISOString();
           
-          console.log({trueStart});
-          
-          const safeStop = moment(startTime).set({'hour': shiftEnd[0], 'minute': shiftEnd[1]});
-        
-          const trueStop = safeStop.format();
-          
-        console.log({safeStop});
-        console.log({trueStop});
-        
+          if( new Date( regStop ) > new Date( localStart.toISOString() ) ) {
+            setStopTime_UNSAFE(regStop);
+          }else{
+            const otStop = localStart.clone().add(1, 'hours').toISOString();
+            setStopTime_UNSAFE(otStop);
+          }
+        }else{
+          const wkndStop = localStart.clone().add(1, 'hours').toISOString();
+          setStopTime_UNSAFE(wkndStop);
         }
-        
-        
-          // XBatchDB.update({ _id: bID, 'tide.tKey': t.tKey }, {
-          //   $set : { 
-          //     'tide.$.stopTime' : new Date(stopshort)
-          // }});
-              
       }
     }
-    
-    
-    
-    
-    
-    
   },
   
   errorFixDeleteTideTimeBlock(batch) {

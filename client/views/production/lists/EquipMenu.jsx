@@ -34,13 +34,13 @@ const EquipMenuCore = ({ user, brancheS, allEquip })=> {
   };
   
   return(
-    <div className='min600 max750 vmargin'>
+    <div className='min600 max600 vmargin'>
       {[{brKey: false, branch: 'Facility'},...brancheS].map( (br)=> {
         const brEq = allEquip.filter( e => e.branchKey === br.brKey );
         if(brEq.length > 0) {
           return(
-            <div key={br.brKey} className='vmarginhalf spacehalf'>
-              <p className='wide vmarginhalf bottomLine cap'>{br.branch}</p>
+            <details name='branch_selector' key={br.brKey} className='vmarginhalf spacehalf'>
+              <summary className='wide vmarginhalf bottomLine cap'>{br.branch}</summary>
               {brEq.map( (eq)=>(
                 <button 
                   key={eq._id}
@@ -50,7 +50,7 @@ const EquipMenuCore = ({ user, brancheS, allEquip })=> {
                 <n-fa1><i className='fa-solid fa-circle-notch midnightblueT fa-fw gapR fa-spin'></i></n-fa1>
                 : null}{eq.alias}</button>
               ))}
-            </div>
+            </details>
           );
         }else{null}
       })}

@@ -38,7 +38,7 @@ function onPress(event) {
 
 function onMessage(event) {
   if(event.data.keyCode !== undefined) {
-    // console.log(event);
+    console.log(event);
     onPress(event.data);
   }
 }
@@ -55,6 +55,9 @@ export function ScanListenerUtility(user) {
   wikiwin && wikiwin.contentWindow.document.addEventListener('focus',function(){
     // console.log("contentWindow listener");
   });
+  
+  const doc = wikiwin ? wikiwin.contentWindow.document.querySelector(".notverified") : null;
+  doc && console.log("Iframe Document Element Found");
 
   if(!autoScan) {
     // console.log('auto window scanning OFF');
