@@ -5,6 +5,7 @@ const KpiStat = ({ title, icon, num, name, color, more, stOpen, core })=> {
     return(
       <div className='keyData numFont blackblackT' style={{"--kpiColor": color}} title={`${title || ''}\n${name}`}>
         <div>{icon ? <n-fa0><i className={icon}></i></n-fa0> : num}</div>
+        <div>{name}</div>
       </div>
     );
   }

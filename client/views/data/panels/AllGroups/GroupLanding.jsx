@@ -42,17 +42,17 @@ const GroupLanding = ({ groupData, widgetData, variantData, openActions, canEdt 
         <span className='flexSpace' />
         
         <KpiStat
-          num={groupData.length + 34}
+          num={groupData.length}
           name={Pref.group + 's'}
           color='var(--peterriver)'
         />
         <KpiStat
-          num={widgetData.length + 378}
+          num={widgetData.length}
           name={Pref.widget + 's'}
           color='var(--peterriver)'
         />
         <KpiStat
-          num={variantData.length + 23}
+          num={variantData.length}
           name={Pref.variants}
           color='var(--peterriver)'
         />

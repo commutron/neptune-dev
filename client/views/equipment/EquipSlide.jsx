@@ -21,7 +21,7 @@ import IssueHistory from './IssueHistory';
 
 const EquipSlide = ({ 
   equipData, maintainData, 
-  app, users, isDebug, isEqSup, brancheS
+  app, users, isDebug, isEqSup, isEdit, brancheS
 })=> {
   
   const eq = equipData;
@@ -169,12 +169,12 @@ const EquipSlide = ({
         hold={true}
         sessionTab='equipExPanelTabs'>
       
-        <div className='cardify autoFlex overscroll'>
+        <div className='autoFlex overscroll'>
           <Nameplate 
             equipData={equipData}
             users={users}
-            isDebug={isDebug}
             isEqSup={isEqSup}
+            isEdit={isEdit}
           />
         </div>
         
@@ -245,6 +245,7 @@ const EquipHotData = ({
 export default withTracker( ({ equipLite, app, users, isDebug, brancheS }) => {
   const hotSub = Meteor.subscribe('hotEquip', equipLite._id);
   const isEqSup = Roles.userIsInRole(Meteor.userId(), ['admin','equipSuper']);
+  const isEdit = Roles.userIsInRole(Meteor.userId(), 'edit');
   
   return {
     hotReady: hotSub.ready(),
@@ -252,6 +253,7 @@ export default withTracker( ({ equipLite, app, users, isDebug, brancheS }) => {
     users: users,
     isDebug: isDebug,
     isEqSup: isEqSup,
+    isEdit: isEdit,
     brancheS: brancheS,
     equipData: EquipDB.findOne({_id: equipLite._id}, { sort: { alias: -1 } } ),
     maintainData: MaintainDB.find({equipId: equipLite._id}, { sort: { name: -1 } } ).fetch(),

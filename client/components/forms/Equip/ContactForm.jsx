@@ -6,8 +6,20 @@ import ModelNative from '/client/layouts/Models/ModelNative';
 
 const ContactForm = ({ ctctKey, equipData, clearOnClose })=> {
   
-  const addNewContact = (e)=> {
-    e.preventDefault();
+  const ct = !ctctKey ? null : equipData.contacts?.find( (c)=> c.key === ctctKey) || false;
+  const df_prime = ct?.prime || '';
+  const df_source = ct?.source || '';
+  const df_compy = ct?.company || '';
+  const df_dpmt =  ct?.department || '';
+  const df_name = ct?.name || '';
+    
+  const df_phone = ct?.phone || '';
+  const df_email = ct?.email || '';
+  const df_cost = ct?.cost || '';
+  const df_notes = ct?.notes || '';
+
+  const handleContact = (e)=> {
+    // e.preventDefault();
     this.eqcontactGo.disabled = true;
     
     const eqid = equipData._id;
@@ -23,40 +35,62 @@ const ContactForm = ({ ctctKey, equipData, clearOnClose })=> {
     const cost = e.target.newcost.value;
     const nots = e.target.newnotes.value;
     
-    Meteor.call('addEqContact', eqid, prim, sorc, comp, dpmt, name, phon, emal, cost, nots,
+    Meteor.call("setEqContact", eqid, ctctKey, prim, sorc, comp, dpmt, name, phon, emal, cost, nots,
     (error, reply)=>{
       error && console.log(error);
       if(reply) {
         this.eqcontactGo.disabled = false;
+        
+        e.target.newprime.checked= df_prime;
+        e.target.newsource.value= df_source;
+        e.target.newcomp.value = df_compy;
+        e.target.newdprt.value= df_dpmt;
+        e.target.newname.value = df_name;
+        e.target.newphone.value = df_phone;
+        e.target.newemail.value = df_email;
+        e.target.newcost.value = df_cost;
+        e.target.newnotes.value = df_notes;
       }else{
         toast.error('Server Error');
         this.eqcontactGo.disabled = false;
       }
     });
-    
   };
   
-  const ct = !ctctKey ? null : equipData.contacts?.find( (c)=> c.key === ctctKey) || false;
-
+  const removeAction = ()=> {
+    Meteor.call("cutEqContact", equipData._id, ctctKey,
+    (error, reply)=>{
+      error && console.log(error);
+      if(reply) {
+        clearOnClose();
+      }else{
+        toast.error('Server Error');
+        this.eqcontactGo.disabled = false;
+      }   
+    });
+  };
+  
   return(
     <ModelNative
       dialogId={'multi_eqip_contact_form'}
-      title='New Contact'
+      title={`${ctctKey ? 'Edit' : 'New'} Contact`}
       icon='fa-solid fa-address-book'
       colorT='blackT'
       closeFunc={clearOnClose}>
       
-      <form className='space' onSubmit={(e)=>addNewContact(e)}>
+      <form className='space' onSubmit={(e)=>handleContact(e)}>
         
         <p className='rowWrap gapsC'>
         <ContactInput 
           inid='newsource'
           label='Support Type'
+          dfval={df_source}
           req={true}
         />
         <ContactInput 
           inid='newname'
           label='Contact Person'
+          dfval={df_name}
         />
         </p>
         
@@ -64,10 +98,12 @@ const ContactForm = ({ ctctKey, equipData, clearOnClose })=> {
         <ContactInput 
           inid='newcomp'
           label='Company'
+          dfval={df_compy}
         />
         <ContactInput 
           inid='newdprt'
           label='Department'
+          dfval={df_dpmt}
         />
         </p>
         
@@ -76,11 +112,13 @@ const ContactForm = ({ ctctKey, equipData, clearOnClose })=> {
           inid='newphone'
           label='Phone'
           type='tel'
+          dfval={df_phone}
         />
         <ContactInput 
           inid='newemail'
           label='Email'
           type='email'
+          dfval={df_email}
         />
         </p>
         
@@ -88,12 +126,14 @@ const ContactForm = ({ ctctKey, equipData, clearOnClose })=> {
           <ContactInput 
             inid='newcost'
             label='Pricing'
+            dfval={df_cost}
           />
           <ContactInput 
             inid='newprime'
             type='checkbox' 
             cls='minlineRadio'
             label='Priority'
+            dfval={df_prime}
           />
         </p>
         <p className='centre'>
@@ -102,18 +142,30 @@ const ContactForm = ({ ctctKey, equipData, clearOnClose })=> {
             <textarea 
               id='newnotes' 
               className='max250'
-              defaultValue=''
+              defaultValue={df_notes}
             ></textarea></label>
           </span>
         </p>
        
-        <p className='centre'>
+        <p className='centreRow'>
           <button
             id='eqcontactGo'
-            type='submit' 
+            type='submit'
+            formMethod="dialog"
             className='action nSolid'
           >SAVE</button>
         </p>
+        
+        {ctctKey ?
+          <p className='centreRow dropCeiling topLine'>
+            <button
+              onClick={()=>removeAction()}
+              type='button'
+              formMethod="dialog"
+              className='action redSolid'
+            >REMOVE Contact</button>
+          </p>
+        : null}
         
       </form>
     </ModelNative>
@@ -130,6 +182,7 @@ const ContactInput = ({ inid, type, cls, label, dfval, req })=> (
       className={cls || 'miniIn24'}
       type={type || 'text'}
       defaultValue={dfval || ''}
+      defaultChecked={type === 'checkbox' ? dfval : null}
       required={req || false}
     /></label>
   </span>

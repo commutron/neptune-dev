@@ -1020,14 +1020,9 @@ n-sm-model-content {
 
 .breath { margin: 0 5px; }
 
-.readlines p {
-  margin: 10px 0 15px 0;
-}
-.readlines dd,
-.readlines dt {
-  margin: 5px 0 5px 0;
-  align-items: flex-start;
-}
+.readlines p { margin: 10px 0 15px 0; }
+.readlines dt { margin: 5px 0 5px 0; }
+.readlines dd { margin: 5px 0 5px 25px; }
 .readPs p {
   margin: 5px 0;
   font-size: inherit;
@@ -1045,7 +1040,6 @@ n-sm-model-content {
 .topLine {
   padding-top: 0.5rem;
   border-top: 1px solid lightgray;
-  margin-top: 0.5rem;
 }
 .bottomLine {
   padding-bottom: 0.5rem;

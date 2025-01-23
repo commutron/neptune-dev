@@ -11,7 +11,7 @@ import ServeRemove from '/client/components/forms/Equip/ServeRemove';
 import TasksForm from '/client/components/forms/Equip/TasksForm';
 
 import MainHistory from './MainHistory';
-import NumStatRing from '/client/components/charts/Dash/NumStatRing.jsx';
+import KpiStat from '/client/components/smallUi/StatusBlocks/KpiStat';
 
 const ServiceSlides = ({ 
   equipData, maintainData, nowD, weekday, monthday, month,
@@ -38,6 +38,8 @@ const ServiceSlides = ({
           const ntrqd = maint.filter( m => m.status === 'notrequired' ).length;
           const missd = maint.filter( m => m.status === 'missed' ).length;
           const nxtcr = maint.filter( m => !m.status ).length;
+          
+          const req = maint.length - ntrqd;
           
           return(
           <div key={sv.serveKey} className='w100'>
@@ -98,7 +100,7 @@ const ServiceSlides = ({
                     <p>Workdays Late Grace: <n-num>{sv.grace}</n-num></p>
                   </span>
                   
-                  <dl className='overscroll max500'>
+                  <dl className='overscroll max400'>
                     <dt className='vmarginquarter'>Checklist:</dt>
                     {sv.tasks.map( (entry, index)=>( 
                       <dd key={index} className='line15x cap'>☑ {entry}</dd>
@@ -106,14 +108,18 @@ const ServiceSlides = ({
                   </dl>
                 </div>
                 
-                <div className='centre overscroll'>
-                  <NumStatRing
-                    total={`${cmplt} /${maint.length}`}
-                    nums={[cmplt, inplt, ntrqd, missd]}
-                    name='Completed'
-                    title={`${maint.length} Events\n${cmplt} Completed\n${inplt} Incomplete\n${ntrqd} Not Required\n${missd} Missed\n${nxtcr} Scheduled`}
-                    colour={['#2c3e50','#34495e80','rgb(243, 156, 18)','#bdc3c7']}
-                    maxSize='chart10Contain'
+                <div className='max250'>
+                  <KpiStat
+                    core
+                    num={`${cmplt}/${req}`}
+                    name='Completed When Required'
+                    color='var(--concrete)'
+                  />
+                  <KpiStat
+                    core
+                    num={inplt}
+                    name='Incomplete'
+                    color='var(--sunflower)'
                   />
                 </div>
               </div>

@@ -15,7 +15,7 @@ const MainHistory = ({ maintData, sving, isDebug })=>{
   isDebug && console.log(maintData);
   
   return(
-    <div className='vmarginhalf scrollWrap forceScrollStyle cap'>
+    <div className='vmargin scrollWrap forceScrollStyle cap'>
    
       <table className='w100'>
         <thead>

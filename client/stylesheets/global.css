@@ -77,7 +77,7 @@ a:where(:link,:visited) {
   text-decoration: none;
 }
 a:active {
-  border: 1px dotted black;
+  outline: 1px dotted black;
 }
 a:where(:hover,:focus-visible) {
   text-decoration: underline !important;

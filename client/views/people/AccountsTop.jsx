@@ -1,7 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import { toast } from 'react-toastify';
-import NumStatRing from '/client/components/charts/Dash/NumStatRing';
+import KpiStat from '/client/components/smallUi/StatusBlocks/KpiStat';
 import NumLine from '/client/components/tinyUi/NumLine';
 
 const AccountsTop = ({ users })=> {
@@ -34,46 +34,46 @@ const AccountsTop = ({ users })=> {
   }
   
   return(
-    <div>
-      <div className='autoGrid'>
-          
-        <div className='medBig wordBr' style={{alignSelf:'start'}}>
-          <NumLine
-            num={pSupNamesNice}
-            name={`${pMulti ? 'is the' : 'are'} People Super${pMulti ? '' : 's'}`}
-            color='blueT'
-            big={true} />
-            
-          <NumLine
+    <div className='autoGrid'>
+      <div className='overscroll'>
+        <div className='medBig wordBr max400' style={{alignSelf:'start'}}>
+          <KpiStat
+            core
+            num={active}
+            name='Active Users'
+            color='var(--peterriver)'
+          />
+          <KpiStat
+            core
+            num={all - active}
+            name='Inactive Users'
+            color='var(--sunflower)'
+          />  
+          <KpiStat
+            core
             num={nightly}
             name='can access Nightly features'
-            color='tealT'
-            big={true} />
-            
-          <NumLine
+            color='var(--turquoise)'
+          />
+          <KpiStat
+            core
             num={debug}
             name={`${debug === 1 ? 'has' : 'have'} Debug reporting`}
-            color='redT'
-            big={true} />
-          
-          <NumLine
+            color='var(--alizarin)'
+          />
+          <KpiStat
+            core
             num={readOnly}
             name='are limited to Read Only'
-            color='grayT'
-            big={true} />
-        </div>
-        
-        <div className='centre'>
-          <NumStatRing
-            total={active}
-            nums={[ active, ( all - active ) ]}
-            name='Active Users'
-            title={`${active} active users,\n${( all - active )} inactive users`}
-            colour='blueBi'
-            maxSize='chart15Contain'
-            noGap={all - active === 0}
+            color='var(--silver)'
           />
         </div>
+        
+        <NumLine
+          num={pSupNamesNice}
+          name={`${pMulti ? 'is the' : 'are'} People Super${pMulti ? '' : 's'}`}
+          color='blueT'
+          big={true} />
       </div>
       
       {newusers > 0 &&

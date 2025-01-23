@@ -1,4 +1,5 @@
 import React from 'react';
+import { toast } from 'react-toastify';
 import Pref from '/client/global/pref.js';
 import CreateTag from '/client/components/tinyUi/CreateTag';
 
@@ -38,12 +39,8 @@ const ItemPanelX = ({
   
   const doCopy = ()=> {
     if(navigator.clipboard !== undefined) {
-      var elmFa = document.getElementById("fa-"+i.serial);
-      elmFa.classList.remove("invisible");
-  
+      toast(`"${i.serial}" copied`, {autoClose: 1000});
       navigator.clipboard.writeText(i.serial);
-      
-      Meteor.setTimeout(()=> elmFa.classList.add("invisible"), 2000);
     }
   };
   
@@ -226,11 +223,11 @@ const ItemPanelX = ({
             customTag='div'
             animationClassName="quick-bounce-change"
             animate={i.serial}
-            ><button
+            ><a
               id={"copy"+i.serial}
-              className='cap biggest'
+              className='textAction cap biggest blackT'
               onClick={()=>doCopy()}
-            >{i.serial}<span id={"fa-"+i.serial} className='gapL invisible'><i className="fa-regular fa-copy fa-xs"></i></span></button>
+            >{i.serial}<i className="fa-regular fa-copy fa-xs gapL onlyHover"></i></a>
           </AnimateOnChange>
         </div>
         <div className='titleSection space2v'>

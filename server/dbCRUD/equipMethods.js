@@ -75,53 +75,44 @@ Meteor.methods({
     }
   },
   
-  addEqContact(eqId, prime, source, company, dprt, name, phone, email, cost, notes) {
+  setEqContact(eqId, cKey, prime, source, company, dprt, name, phone, email, cost, notes) {
     const auth = Roles.userIsInRole(Meteor.userId(), ['equipSuper','edit']);
     
     if(auth) {
-      EquipDB.update({_id: eqId, orgKey: Meteor.user().orgKey}, {
-        $set : {
-          updatedAt: new Date(),
-  			  updatedWho: Meteor.userId(),
-  			},
-        $push : { contacts: {
-          key: new Meteor.Collection.ObjectID().valueOf(),
-          prime: prime,
-          source: source,
-          company: company,
-          department: dprt,
-          name: name,
-          phone: phone,
-          email: email,
-          cost: cost,
-          notes: notes
-      }}});
-      return true;
-    }else{
-      return false;
-    }
-  },
-  
-  setEqContact(eqId, cKey, prime, source, company, dprt, name, phone, email, notes) {
-    const auth = Roles.userIsInRole(Meteor.userId(), ['equipSuper','edit']);
-
-    if(auth) {
-      EquipDB.update({_id: eqId, orgKey: Meteor.user().orgKey, 'contacts.key': cKey}, {
-        $set : {
-          updatedAt: new Date(),
-  			  updatedWho: Meteor.userId(),
-  			},
-        $push : { contacts: {
-          prime: prime,
-          source: source,
-          company: company,
-          department: dprt,
-          name: name,
-          phone: phone,
-          email: email,
-          cost: cost,
-          notes: notes
-      }}});
+      if(cKey) {
+        EquipDB.update({_id: eqId, orgKey: Meteor.user().orgKey, 'contacts.key': cKey}, {
+          $set : {
+            updatedAt: new Date(),
+    			  updatedWho: Meteor.userId(),
+      			'contacts.$.prime': prime,
+            'contacts.$.source': source,
+            'contacts.$.company': company,
+            'contacts.$.department': dprt,
+            'contacts.$.name': name,
+            'contacts.$.phone': phone,
+            'contacts.$.email': email,
+            'contacts.$.cost': cost,
+            'contacts.$.notes': notes
+        }});
+      }else{
+        EquipDB.update({_id: eqId, orgKey: Meteor.user().orgKey}, {
+          $set : {
+            updatedAt: new Date(),
+    			  updatedWho: Meteor.userId(),
+    			},
+          $push : { contacts: {
+            key: new Meteor.Collection.ObjectID().valueOf(),
+            prime: prime,
+            source: source,
+            company: company,
+            department: dprt,
+            name: name,
+            phone: phone,
+            email: email,
+            cost: cost,
+            notes: notes
+        }}});
+      }
       return true;
     }else{
       return false;

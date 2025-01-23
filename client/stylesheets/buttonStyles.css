@@ -197,6 +197,15 @@
   min-height: 2rem;
 }
 
+.onlyHover {
+  position: absolute;
+  display: none;
+}
+a:has(.onlyHover) { position: relative; }
+a:has(.onlyHover):where(:hover, :active, :focus-visible) .onlyHover {
+  display: inline;
+}
+
 .textAction {
   margin: 0px;
   border: none;
