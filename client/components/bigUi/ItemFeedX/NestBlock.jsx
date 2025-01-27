@@ -15,8 +15,8 @@ const NestBlock = ({
   const redoAllow = canEdit && iopen && dt.good === true;
                  
   const indictor = dt.good ?
-          <i><i className="fas fa-check-circle fa-lg fa-fw" title='Good'></i></i> :
-          <b><i className="fas fa-times-circle fa-lg fa-fw" title='No Good'></i></b>;
+          <i><i className="fa-solid fa-check-circle fa-lg fa-fw" title='Good'></i></i> :
+          <b><i className="fa-solid fa-times-circle fa-lg fa-fw" title='No Good'></i></b>;
    
   const infoSub = dt.type === 'nest' ? typeof dt.info === 'object' ? 
                     dt.info.subSerial : dt.comm : null;
@@ -34,7 +34,6 @@ const NestBlock = ({
         <n-feed-info-title>
           <span>{dt.step}</span>
           <span>{dt.type}</span>
-          <span></span>
           <span><UserNice id={dt.who} /></span>
           <span>{cal(dt.time)}</span>
         </n-feed-info-title>

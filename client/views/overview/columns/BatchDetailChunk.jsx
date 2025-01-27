@@ -6,7 +6,7 @@ import Pref from '/client/global/pref.js';
 import BatchTopStatus from './BatchTopStatus';
 import ReleasedCheck from './ReleasedCheck';
 import TideActivityData, { TideActivitySquare } from '/client/components/tide/TideActivity';
-import { PerformanceSquare } from '/client/components/smallUi/StatusBlocks/PerformanceStatus';
+import { PerformanceSquare } from '/client/components/smallUi/StatusBlocks/PerformKPI';
 import BranchProgress from './BranchProgress';
 import NonConCounts from './NonConCounts';
 import ProJump, { SrvJump } from '/client/components/smallUi/ProJump';

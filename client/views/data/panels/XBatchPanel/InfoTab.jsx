@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, Fragment } from 'react';
 import moment from 'moment';
 import 'moment-business-time';
 import Pref from '/client/global/pref.js';
@@ -51,7 +51,7 @@ const InfoTab = ({
       <div className='centreText'>
         <h3 className='leftText'>Status</h3>      
         
-        <div className='balance'>
+        <div className='balance w100'>
           <StatusGroup
             id={b._id}
             live={b.live}
@@ -192,7 +192,7 @@ const StatusGroup = ({ id, live, done, salesEnd, lock, app, isDebug })=> {
   // };
   
   return(
-    <div className='balance'>
+    <Fragment>
       {live &&
         <PriorityKPIData
           batchID={id}
@@ -207,7 +207,7 @@ const StatusGroup = ({ id, live, done, salesEnd, lock, app, isDebug })=> {
       
       <PerformKPIData batchID={id} />
       
-    </div>
+    </Fragment>
   );
 };
 

@@ -9,7 +9,7 @@ const PanelBreak = ({ seriesId, batchId, batchNum, item, access })=> {
   const [ newSerials, newSerialsSet ] = useState([]);
   const [ confirmState, confirmSet ] = useState(false);
   
-  function setSerials(e) {
+  function setSerials() {
     const srlInput = this.serials.value.trim().replace(",", " ");
     let cutInput = srlInput.split(/\s* \s*/gi);
     newSerialsSet( cutInput );
@@ -46,14 +46,16 @@ const PanelBreak = ({ seriesId, batchId, batchNum, item, access })=> {
       dark={false}>
       
     <Fragment>
-      <p className='medBig space'>
-        <b>Transform this item into new individual units</b><br />
-        <i>New Items are created with a copy of this item's history</i><br />
-        <i>NonConformances & Shortfalls WILL BE LOST</i><br />
-        <i>The highest serial number is NOT saved in the app settings</i><br />
-        <i>The original IS deleted</i><br />
+      <p className='medBig spacehalf'>
+        <b>Transform this item into new individual units</b>
       </p>
-      <br />
+      <ul>
+        <li>New Items are created with a copy of this item's history</li>
+        <li>NonConformances & Shortfalls WILL BE LOST</li>
+        <li>The highest serial number is NOT saved in the app settings</li>
+        <li>The original IS deleted</li>
+      </ul>
+      
       <form
         className='centre'
         onSubmit={(e)=>splitApart(e)}>
@@ -91,6 +93,7 @@ const PanelBreak = ({ seriesId, batchId, batchNum, item, access })=> {
             <p><b>Are you sure? </b><button
                 className='smallAction redHover inlineButton'
                 type='submit'
+                formMethod="dialog"
               >YES</button>
               <button
                 className='smallAction blackHover inlineButton'

@@ -34,7 +34,7 @@ const RapidBlock = ({
   return(
     <n-feed-info-block class='rapid'>
       <n-feed-left-anchor>
-        <i className='fas fa-bolt fa-lg fa-fw' 
+        <i className='fa-solid fa-bolt fa-lg fa-fw' 
           title='Extend'
         ></i>
       </n-feed-left-anchor>
@@ -42,7 +42,6 @@ const RapidBlock = ({
         <n-feed-info-title class='cap'>
           <span>{rarapid}</span>
           <span>{raissue}</span>
-          <span></span>
           <span>{cal(rapIs.assignedAt)}</span>
         </n-feed-info-title>
         {rapIs.completed && 
@@ -59,7 +58,7 @@ const RapidBlock = ({
           }}
           holdToDisplay={1}
           renderTag='button'>
-          <i className='fas fa-ellipsis-v fa-lg fa-fw'></i>
+          <i className='fa-solid fa-ellipsis-v fa-lg fa-fw'></i>
         </ContextMenuTrigger>
         
         <ContextMenu id={rarapid+'rapid'} className='noCopy'>

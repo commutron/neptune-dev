@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import Pref from '/client/global/pref.js';
 import CreateTag from '/client/components/tinyUi/CreateTag';
 
 import AnimateOnChange from 'react-animate-on-change';
   
-import ScrapBox from '/client/components/bigUi/ItemFeedX/ScrapBox';
+import ScrapBlock from '/client/components/bigUi/ItemFeedX/ScrapBlock';
 import SubItemLink from '/client/components/smallUi/SubItemLink';
 
 import ItemFeedX from '/client/components/bigUi/ItemFeedX/ItemFeedX';
@@ -25,16 +25,17 @@ const ItemPanelX = ({
   batchData, seriesData, rapidsData, itemData,
   widgetData, variantData, groupData, 
   app, brancheS, user,
-  listTitle, flowData
+  flowData
 })=> {
+  
+  const [ cronofeed, cronofeedSet ] = useState(false);
   
   const srs = seriesData;
   const i = itemData;
   const b = batchData;
   
   const openAction = (dialogId)=> {
-    const dialog = document.getElementById(dialogId);
-    dialog?.showModal();
+    document.getElementById(dialogId)?.showModal();
   };
   
   const doCopy = ()=> {
@@ -53,11 +54,11 @@ const ItemPanelX = ({
   const liverapid = rapidsData && rapidsData.find(r=> r.live === true);
   const itemrapid = liverapid && itemData && itemData.altPath.find(x=> x.rapId === liverapid._id);
 
-  const scrap = !i.scrapped ? null :
-                  i.history.find(x => x.type === 'scrap' && x.good === true);
+  const scrap = !i.scrapped ? null : i.history.find(x => x.type === 'scrap' && x.good === true);
   
   const done = i.completed;
   
+  const accessI = Roles.userIsInRole(Meteor.userId(), 'inspect');
   const accessE = Roles.userIsInRole(Meteor.userId(), 'edit');
   const accessR = Roles.userIsInRole(Meteor.userId(), 'run');
   const accessQ = Roles.userIsInRole(Meteor.userId(), 'qa');
@@ -66,11 +67,10 @@ const ItemPanelX = ({
   
   const canCut = accessD && !done && i.units > 1;
   const canEnd = accessQR && !done;
-  const canUdo = done && (!b.completed || liverapid) && Roles.userIsInRole(Meteor.userId(), 'BRKt3rm1n2t1ng8r2nch');
-  const canExt = liverapid && !itemrapid && Roles.userIsInRole(Meteor.userId(), ['qa', 'run', 'inspect']);
+  const canUdo = done && (!b.completed || liverapid) && !i.scrapped && Roles.userIsInRole(Meteor.userId(), 'BRKt3rm1n2t1ng8r2nch');
+  const canExt = liverapid && !itemrapid && (accessQ || accessR || accessI);
   const canScp = accessQ && !scrap && !(done && !rapid);
   const canRmv = accessD && !b.completed && !i.completed;
-  
   
   return(
     <div className='section' key={i.serial}>
@@ -90,7 +90,7 @@ const ItemPanelX = ({
   	  <ItemIncomplete
         seriesId={srs._id}
         item={itemData}
-        access={canEnd}
+        access={canEnd && accessQR}
       />
       <UndoFinish
   	    batchId={b._id}
@@ -123,7 +123,7 @@ const ItemPanelX = ({
         access={canRmv}
       />
     	  
-      <div className='floattaskbar light'>
+      <div className='floattaskbar stick light'>
         
         <PopoverButton 
           targetid='itemviewpop'
@@ -134,8 +134,16 @@ const ItemPanelX = ({
         <PopoverMenu 
           targetid='itemviewpop'
           attach='views'>
-          <div>Process Flow</div>
-			    <div>Cronological</div>
+          <PopoverAction 
+            doFunc={()=>cronofeedSet(false)}
+            text='Process Flow'
+            icon='fa-solid fa-diagram-project'
+          />
+          <PopoverAction 
+            doFunc={()=>cronofeedSet(true)}
+            text='Cronological'
+            icon='fa-solid fa-timeline fa-rotate-270'
+          />
         </PopoverMenu>
         
         <PopoverButton 
@@ -218,7 +226,7 @@ const ItemPanelX = ({
       </div>
   
       <div className='balance'>
-        <div className='numFont space2v' title={`${i.serial}\nclick to copy`}>
+        <div className='numFont space2v' title='click to copy'>
           <AnimateOnChange
             customTag='div'
             animationClassName="quick-bounce-change"
@@ -231,15 +239,18 @@ const ItemPanelX = ({
           </AnimateOnChange>
         </div>
         <div className='titleSection space2v'>
-          <span>Units: {i.units}</span>
+          <span>Units: <n-num>{i.units}</n-num></span>
           <span>
             { !start ?
-              <i className='fas fa-battery-empty' title='unstarted'></i>
+              <i className='fa-regular fa-circle' title='unstarted'></i>
+              :
+              i.scrapped ? 
+              <i className='fa-solid fa-circle-minus redT' title='scrapped'></i>
               :
               i.completed ? 
-              <i className='fas fa-battery-full greenT' title='complete'></i>
+              <i className='fa-solid fa-circle greenT' title='complete'></i>
               : 
-              <i className='fas fa-battery-half blueT' title='in progress'></i>
+              <i className='fa-solid fa-circle-half-stroke blueT' title='in progress'></i>
             }
           </span>
         </div>
@@ -262,15 +273,18 @@ const ItemPanelX = ({
             })}
           </p>}
         {scrap && 
-          <ScrapBox 
+          <ScrapBlock 
             seriesId={srs._id} 
             serial={i.serial} 
             entry={scrap}
-            eX={!b.completed && b.live} />}
+            eX={!b.completed && b.live} 
+            isQA={accessQ}
+          />
+        }
         
         <ItemFeedX
           widgetData={widgetData}
-          batchId={b._id}
+          batchFlow={flowData && flowData.riverFlow}
           batch={b.batch}
           seriesId={srs._id}
           serial={i.serial}
@@ -287,9 +301,13 @@ const ItemPanelX = ({
           rapId={rapid ? rapid.rapId : false}
           rapidsData={rapidsData}
           user={user}
-          app={app} />
-            
-        <br />
+          canInspect={accessI}
+          canQAFin={accessQ || accessR}
+          canQARmv={accessQ || accessD}
+          canEdit={accessE || accessR}
+          app={app}
+          cronofeed={cronofeed}  
+        />
       </div>
       
       <CreateTag

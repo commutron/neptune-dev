@@ -70,6 +70,8 @@ const UnitSetAll = ({ bID, seriesId, bdone, sqty, vqty, access })=> {
         <p>
           <button
             id='setallgo'
+            type='submit'
+            formMethod="dialog"
             className='action nSolid'
           >Set All</button>
         </p>

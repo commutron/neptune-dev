@@ -4,7 +4,7 @@ import { min2hr, avgOfArray } from '/client/utility/Convert';
 
 import ProJump from '/client/components/smallUi/ProJump';
 import TideActivityData, { TideActivitySquare } from '/client/components/tide/TideActivity';
-import { PerformanceSquare } from '/client/components/smallUi/StatusBlocks/PerformanceStatus';
+import { PerformanceSquare } from '/client/components/smallUi/StatusBlocks/PerformKPI';
 import BranchProgress from '../../overview/columns/BranchProgress';
 import NonConCounts from '../../overview/columns/NonConCounts';
 import AlterFulfill from '/client/components/forms/Batch/AlterFulfill';

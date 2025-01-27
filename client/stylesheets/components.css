@@ -178,6 +178,7 @@ n-timeline-item:last-child n-timeline-marker:after {
   grid-auto-columns: minmax(4vmax, max-content) 4fr;
   grid-auto-flow: column;
   max-height: 5dvh;
+  width: clamp(100px, 100%, 250px);
   line-height: 1;
   padding: 0;
   list-style-type: none;
@@ -188,7 +189,7 @@ n-timeline-item:last-child n-timeline-marker:after {
   cursor: default;
 }
 .keyData div {
-  padding: 5px;
+  padding: 5px 10px;
   height: 100%;
   display: flex;
   place-content: center;
@@ -210,6 +211,10 @@ n-timeline-item:last-child n-timeline-marker:after {
 .kpiStat:has(> div)[open] {
   width: clamp(100px, 100%, 350px);
 }
+/*.w100 .keyData,*/
+/*.w100 .keyStat { */
+/*  width: 100%;*/
+/*}*/
 
 .floattaskbar {
   max-height: calc(var(--vert_adapt)*2);

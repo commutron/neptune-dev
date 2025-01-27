@@ -4,10 +4,9 @@ import { toast } from 'react-toastify';
 
 import ModelNative from '/client/layouts/Models/ModelNative';
 
-const ScrapItem = ({ seriesId, item, ancillary, access })=> {    
+const ScrapItem = ({ seriesId, item, ancillary })=> {    
       
-  function handleScrap(e) {
-    e.preventDefault();
+  function handleScrap() {
     this.scpGO.disabled = true;
   
     const bar = item.serial;
@@ -19,7 +18,6 @@ const ScrapItem = ({ seriesId, item, ancillary, access })=> {
         console.log(error);
       if(reply) {
         toast.success('Item scrapped');
-        // selfclose();
       }else{
         console.log('BLOCKED BY SERVER METHOD');
         toast.error('Server Error');
@@ -64,6 +62,7 @@ const ScrapItem = ({ seriesId, item, ancillary, access })=> {
       <p>
         <button 
           type="submit"
+          formMethod="dialog"
           className='action redSolid'
           id='scpGO'
           disabled={false}

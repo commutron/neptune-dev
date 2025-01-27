@@ -38,31 +38,26 @@ const AccountsTop = ({ users })=> {
       <div className='overscroll'>
         <div className='medBig wordBr max400' style={{alignSelf:'start'}}>
           <KpiStat
-            core
             num={active}
             name='Active Users'
             color='var(--peterriver)'
           />
           <KpiStat
-            core
             num={all - active}
             name='Inactive Users'
             color='var(--sunflower)'
           />  
           <KpiStat
-            core
             num={nightly}
             name='can access Nightly features'
             color='var(--turquoise)'
           />
           <KpiStat
-            core
             num={debug}
             name={`${debug === 1 ? 'has' : 'have'} Debug reporting`}
             color='var(--alizarin)'
           />
           <KpiStat
-            core
             num={readOnly}
             name='are limited to Read Only'
             color='var(--silver)'

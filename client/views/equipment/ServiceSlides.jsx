@@ -110,13 +110,11 @@ const ServiceSlides = ({
                 
                 <div className='max250'>
                   <KpiStat
-                    core
                     num={`${cmplt}/${req}`}
                     name='Completed When Required'
                     color='var(--concrete)'
                   />
                   <KpiStat
-                    core
                     num={inplt}
                     name='Incomplete'
                     color='var(--sunflower)'

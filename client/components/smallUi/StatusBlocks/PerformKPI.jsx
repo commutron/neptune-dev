@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 
 import KpiStat from './KpiStat';
+import NumStat from '/client/components/tinyUi/NumStat';
 
 const PerformKPIData = ({ batchID })=> {
   
@@ -27,6 +28,17 @@ const PerformKPIData = ({ batchID })=> {
 
 export default PerformKPIData;
 
+const textScale = (num)=> {
+  return num === null ? 'Indiscernible' :
+    num <= -8 ? 'Dreadful' :
+    num <= -4 ? 'Terrible' :
+    num <= -2 ? 'Awful' :
+    num <= -1 ? 'Below Target' :
+    num >= 8 ? 'Tremendous' :
+    num >= 4 ? 'Exceptional' :
+    num >= 2 ? 'Above Target' :
+    'On Target';
+};
 
 export const PerformKPI = ({ perf })=> {
   
@@ -34,17 +46,7 @@ export const PerformKPI = ({ perf })=> {
   
   const golden = `${pos}${perf === null ? '' : perf}`;
   
-  const pfText = 
-    perf === null ? 'Indiscernible' :
-    perf <= -8 ? 'Dreadful' :
-    perf <= -4 ? 'Terrible' :
-    perf <= -2 ? 'Awful' :
-    perf <= -1 ? 'Below Target' :
-    perf >= 8 ? 'Tremendous' :
-    perf >= 4 ? 'Exceptional' :
-    perf >= 2 ? 'Above Target' :
-    // perf >= 0 ? 
-    'On Target';
+  const pfText = textScale(perf);
   
   const exp = <p className='margin5'><small>Performance is a factor of progress, budgeted time and nonconformances.</small></p>;
   
@@ -55,6 +57,25 @@ export const PerformKPI = ({ perf })=> {
       name={pfText}
       color='var(--amethyst)'
       more={exp}
+    />
+  );
+};
+
+export const PerformanceSquare = ({ perf })=> {
+  
+  const pos = perf === null ? '±' : perf >= 0 ? '+' : '';
+  
+  const golden = <b className='gapR numFont'>{`${pos}${perf === null ? '' : perf}`}</b>;
+
+  const pfText = textScale(perf);
+
+  return(
+    <NumStat
+      num={<span className='perf'>{golden}</span>}
+      name='Performance'
+      title={`Performance: ${pfText}`}
+      color='blackblackT'
+      size='bold bigger'
     />
   );
 };

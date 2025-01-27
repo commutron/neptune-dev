@@ -771,14 +771,6 @@ n-trib-action-all {
   box-shadow: 0 0 0 3px var(--high-color);
 }
 
-.scrapBanner {
-	animation-name: blurIn;
-  animation-duration: 300ms;
-  animation-timing-function: linear;
-  animation-iteration-count: 1;
-  --blurInColor: var(--amethystfade);
-}
-
 .ncTypeList datalist {
   text-transform: capitalize;
 }

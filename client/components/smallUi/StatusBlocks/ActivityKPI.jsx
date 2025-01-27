@@ -82,8 +82,8 @@ export const ActivityKPI = ({ batchID, acData, isDebug })=> {
     
     const work = <dl className='readlines'>
       <dt className='bold'>{nTxt}</dt>
-      <dd className='topVpad'>{hTxt}</dd>
-      <dd>{dTxt}</dd>
+      <dt className='topVpad'>{hTxt}</dt>
+      <dt>{dTxt}</dt>
     </dl>;
 
     return(
@@ -103,6 +103,7 @@ export const ActivityKPI = ({ batchID, acData, isDebug })=> {
       num='?'
       name='Unknown'
       color='unset'
+      more={<p></p>}
     />
   );
 };

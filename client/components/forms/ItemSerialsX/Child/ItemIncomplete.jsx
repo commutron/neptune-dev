@@ -6,19 +6,17 @@ import ModelNative from '/client/layouts/Models/ModelNative';
 
 const ItemIncomplete = ({ seriesId, item, access })=> {
   
-  function handleFinish(e) {
-    e.preventDefault();
+  function handleFinish() {
     this.inFinGo.disabled = true;
     const bar = item.serial;
     const comm = this.fincomment.value.trim();
     
-    if(Roles.userIsInRole(Meteor.userId(), ['qa', 'run'])) {
+    if(access) {
       Meteor.call('finishIncompleteItemX', seriesId, bar, comm, (error, reply)=> {
         if(error)
           console.log(error);
         if(reply) {
           toast.success('Item Finished');
-          // selfclose();
         }else{
           console.log('BLOCKED BY SERVER METHOD');
           toast.error('Server Error');
@@ -37,8 +35,8 @@ const ItemIncomplete = ({ seriesId, item, access })=> {
       dark={false}>
 	    
   	<form className='centre' onSubmit={(e)=>handleFinish(e)}>
-	    <p>Skip the remaining flow and finish this item.
-	      <b> This will result in an incomplete record.</b></p>
+	    <p>Skip the remaining flow and finish this item.</p>
+	     <p><b>This will result in an incomplete record.</b></p>
       <p>
         <textarea
           id='fincomment'
@@ -50,6 +48,7 @@ const ItemIncomplete = ({ seriesId, item, access })=> {
       <p>
         <button 
           type="submit"
+          formMethod="dialog"
           id='inFinGo'
           className='action orangeSolid'
           disabled={false}

@@ -6,7 +6,7 @@ import ModelNative from '/client/layouts/Models/ModelNative';
       
 const UnitSet = ({ seriesId, item, access })=> {
   
-  function unitSet(e) {
+  function unitSet() {
     const bar = item.serial;
     const unit = this.unit.value.trim();
     
@@ -35,7 +35,7 @@ const UnitSet = ({ seriesId, item, access })=> {
     
       <div className='centre centreText min200 max400 wide'>
         {done &&
-          <p className='bold medBig'
+          <p className='bold'
             >This serial number is finished, are you sure you want to adjust how many units were included under this serial?
           </p>}
         <p>

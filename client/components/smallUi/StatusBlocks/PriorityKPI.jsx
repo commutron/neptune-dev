@@ -139,13 +139,13 @@ export const PriorityKPI = ({
     
     const work = <dl className='readlines'>
       <dt className='bold'>{pt.lateLate ? 'Is Late' : ontmTxt}</dt>
-      <dd>{soonTxt}</dd>
-      <dd>{doneQuote}</dd>
+      <dt>{soonTxt}</dt>
+      <dt>{doneQuote}</dt>
       <dt className='topVpad bold'>Remaining Time</dt>
-      <dd>{treTxt}</dd>
-      <dd><small>{e2tTxt}</small></dd>
-      <dd><small>{e2iTxt}</small></dd>
-      {isDebug && <dd>{`q2t: ${round1Decimal(q2t)}\n\ne2t: ${round1Decimal(e2t)}\ne2i: ${round1Decimal(e2i)}\n\n${soonTxt}\n\nbuffer: ${bffrTime || 0} minutes\nbffrRel: ${pt.bffrRel}`}</dd>}
+      <dt>{treTxt}</dt>
+      <dt><small>{e2tTxt}</small></dt>
+      <dt><small>{e2iTxt}</small></dt>
+      {isDebug && <dt>{`q2t: ${round1Decimal(q2t)}\n\ne2t: ${round1Decimal(e2t)}\ne2i: ${round1Decimal(e2i)}\n\n${soonTxt}\n\nbuffer: ${bffrTime || 0} minutes\nbffrRel: ${pt.bffrRel}`}</dt>}
     </dl>;
     
     if(pt.hold) {

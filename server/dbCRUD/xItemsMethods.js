@@ -920,6 +920,9 @@ Meteor.methods({
     if(replace.type === 'scrap') {
       XSeriesDB.update({_id: seriesId, orgKey: accessKey, 'items.serial': serial}, {
         $set : {
+          'items.$.completed': false,
+  			  'items.$.completedAt': false,
+  			  'items.$.completedWho': false,
           'items.$.scrapped': false
       }});
     }

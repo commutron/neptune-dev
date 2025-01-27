@@ -69,8 +69,8 @@ const ShortBlock = ({ seriesId, serial, units, entry, done, iopen, canQA, cal })
                       'unknown';
     
   const open = inE === true || reS === true ?
-          <n-fa1><i className="fas fa-check-circle fa-lg fa-fw" title='Good'></i></n-fa1> :
-          <n-fa2><i className="far fa-circle fa-lg fa-fw" title='Awaiting Repair'></i></n-fa2>;
+          <n-fa1><i className="fa-solid fa-check-circle fa-lg fa-fw" title='Good'></i></n-fa1> :
+          <n-fa2><i className="fa-regular fa-circle fa-lg fa-fw" title='Awaiting Repair'></i></n-fa2>;
                 
   const editAllow = Roles.userIsInRole(Meteor.userId(), 'verify') && iopen;
   const editIndicate = editState ? 'editStandout' : '';     
@@ -160,7 +160,6 @@ const ShortBlock = ({ seriesId, serial, units, entry, done, iopen, canQA, cal })
             >{dt.refs.toString()}{dt.multi > 1 && <sup> x{dt.multi}</sup>}
           </span>
           <span className='cap'>{dt.where}</span>
-          <span></span>
           <span><UserNice id={dt.cWho} /></span>
           <span>{cal(dt.cTime)}</span>
 
@@ -180,7 +179,7 @@ const ShortBlock = ({ seriesId, serial, units, entry, done, iopen, canQA, cal })
         onClick={(e)=>editSet(!editState)}
         disabled={!editAllow}>
         {editState === true ? 'cancel' : 
-          <n-fa1><i className='fas fa-edit fa-lg fa-fw'></i></n-fa1>}
+          <n-fa1><i className='fa-solid fa-edit fa-lg fa-fw'></i></n-fa1>}
       </button>
       </n-feed-right-anchor>
     </n-feed-info-block>

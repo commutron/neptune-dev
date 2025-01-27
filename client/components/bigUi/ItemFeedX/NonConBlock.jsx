@@ -88,10 +88,10 @@ const NonConBlock = ({
   const trashed = !dt.trash ? false : typeof dt.trash === 'object';
   const tSty = trashed ? 'trashStyle' : '';
   const open = trashed ?
-               <n-fa1><i className="far fa-trash-alt fa-lg fa-fw" title='Trashed'></i></n-fa1> :
+               <n-fa1><i className="fa-regular fa-trash-alt fa-lg fa-fw" title='Trashed'></i></n-fa1> :
                dt.inspect === false ?
-                <n-fa2><i className="fas fa-wrench fa-lg fa-fw" title='Awaiting Repair'></i></n-fa2> :
-                <n-fa3><i className="fas fa-check-circle fa-lg fa-fw" title='Good'></i></n-fa3>;
+                <n-fa2><i className="fa-solid fa-wrench fa-lg fa-fw" title='Awaiting Repair'></i></n-fa2> :
+                <n-fa3><i className="fa-solid fa-check-circle fa-lg fa-fw" title='Good'></i></n-fa3>;
   
   let fixed = !fx ? '' : <dd>Repaired: <UserNice id={dt.fix.who} /> {cal(dt.fix.time)}</dd>;
   let inspected = !ins ? '' : <dd>Inspected: <UserNice id={dt.inspect.who} /> {cal(dt.inspect.time)}</dd>;
@@ -279,7 +279,6 @@ const NonConBlock = ({
               <span className='up'>{dt.ref}{dt.multi > 1 && <sup> x{dt.multi}</sup>}</span>
               <span className=''>{dt.type}</span>
               <span className=''>{dt.where}</span>
-              <span></span>
               <span><UserNice id={dt.who} /></span>
               <span>{cal(dt.time)}</span>
             </n-feed-info-title>  
@@ -314,7 +313,7 @@ const NonConBlock = ({
           disabled={!editAllow}
           readOnly={true}>
           {editState === true ? 'cancel' : 
-          <n-fa1><i className='fas fa-edit fa-lg fa-fw'></i></n-fa1>}
+          <n-fa1><i className='fa-solid fa-edit fa-lg fa-fw'></i></n-fa1>}
         </button>
       </n-feed-right-anchor>
     </n-feed-info-block>

@@ -31,7 +31,7 @@ const UndoFinish = ({
       error && console.log(error);
       if(reply) {
         toast.success('Saved');
-        selfclose();
+        document.getElementById(serial+'_undofin_form').close();
       }else{
         toast.error('Server Error');
       }
@@ -43,7 +43,7 @@ const UndoFinish = ({
       error && console.log(error);
       if(reply) {
         toast.success('Saved');
-        selfclose();
+        document.getElementById(serial+'_undofin_form').close();
       }else{
         toast.error('Server Error');
       }

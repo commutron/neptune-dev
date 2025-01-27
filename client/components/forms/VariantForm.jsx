@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import ModelNative from '/client/layouts/Models/ModelNative';
 import { MultiSelect } from "react-multi-select-component";
 
-const VariantForm = ({ widgetData, users, app, rootWI, access })=> {
+const VariantForm = ({ widgetData, users, app, rootWI })=> {
   
   const [ eList, eListSet ] = useState( [] );
   const [ emailState, emailSet ] = useState( [] );
@@ -18,8 +18,7 @@ const VariantForm = ({ widgetData, users, app, rootWI, access })=> {
     eListSet(listUsers);
   }, []);
   
-  function save(e) {
-    e.preventDefault();
+  function save() {
     this.gonewvar.disabled = true;
     
     const wId = widgetData._id;
@@ -42,7 +41,6 @@ const VariantForm = ({ widgetData, users, app, rootWI, access })=> {
       error && console.log(error);
       if(reply) {
         toast.success('Saved');
-        // selfclose();
         this.revNew.value = '';
         this.wikdressNew.value = '';
         this.unitNew.value = '';
@@ -133,6 +131,7 @@ const VariantForm = ({ widgetData, users, app, rootWI, access })=> {
           <p>
             <button
               type='submit'
+              formMethod="dialog"
               className='action nSolid'
               id='gonewvar'
               disabled={false}
@@ -146,7 +145,8 @@ const VariantForm = ({ widgetData, users, app, rootWI, access })=> {
           id='instructMini'
           src={urlWI || app.instruct}
           height='600'
-          width='100%' />
+          width='100%' 
+        />
       </div>
       
     </div>
