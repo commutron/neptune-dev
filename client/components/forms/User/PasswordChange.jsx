@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 
-const PasswordChange = (props)=> {
+const PasswordChange = ()=> {
 	
 	const [ nowPassword, nowPasswordSet ] = useState( false );
 	const [ choicePassword, choicePasswordSet ] = useState( false );

@@ -18,104 +18,98 @@ const UserSettings = ({ brancheS })=> {
   const overOps = [...overTopOp,...overBrOps];
   
   return(
-    <div>
-      <div className='cardSelf settingColumn noPrint'>  
-        <div id='uipref'>
-          <h3><i className='fas fa-sliders-h fa-fw gapR'></i>Interface Preferences</h3>
-          <div>
-            
-            <UserColorSetting
-              userSetting={Meteor.user().customColor}
-              labelText='Custom Colour Theme'
-              helpText="Set a custom colour for '--neptuneColor'. Also matches outline, accents and text selction"
-            />
-            
-            <UserToggleSetting
-              userSetting={Meteor.user().progType}
-              labelText='Prefer Progress By Time'
-              yesText='Overview and Streams default to the task time view.'
-              noText='Overview and Streams default to the progress view.'
-              callMethod='setUserProgPrefer' />
-            
-            {/*
-            <UserToggleSetting
-              userSetting={Meteor.user().miniAction}
-              labelText='Prefer Dense View'
-              yesText='Overview and Streams default to the minifyed view.'
-              noText='Overview and Streams default to the comfort view.'
-              callMethod='setUserMiniPrefer' />
-            */}
-            
-            <UserToggleSetting
-              userSetting={Meteor.user().preferLight}
-              labelText='Prefer Light Theme'
-              yesText='Overview and Streams default to the light theme.'
-              noText='Overview and Streams default to the dark theme.'
-              callMethod='setUserLightPrefer' />
-            
-            <UserToggleSetting
-              userSetting={Meteor.user().autoScan}
-              labelText='Barcode scan outside of search field'
-              yesText='Accepts barcode input no matter the cursor focus.'
-              noText='Barcode input is only accepted when the cursor focus is in the searchbox.'
-              callMethod='setAutoScan' />
-              
-            <UserToggleSetting
-              userSetting={Meteor.user().scrollInstruct}
-              labelText={`Autoscroll To Instruction Section`}
-              yesText={`Automatically scrolls the work instruction section that matches the process flow.\n
-                        Only occurs on configured work instructions.`}
-              noText='Only loads to the top of the work instructions.'
-              callMethod='setUserAutoscrollI' />
-            
-            <UserToggleSetting
-              userSetting={Meteor.user().showNCcodes}
-              labelText={`Show ${Pref.nonCon} Codes`}
-              yesText={`Alphanumeric codes are displayed with each ${Pref.nonCon} type.`}
-              noText={`Alphanumeric codes are not dispayed with ${Pref.nonCon} types.`}
-              callMethod='setUserNCcodes' />
-            
-            <UserToggleSetting
-              userSetting={Meteor.user().typeNCselection}
-              labelText={`Filterable ${Pref.nonCon} Type List`}
-              yesText={`Typing into the ${Pref.nonCon} defect type input will filter the selection options.`}
-              noText={`The ${Pref.nonCon} defect type input is a fixed dropdown list.`}
-              callMethod='setUserNCselection' />
-              
-            <UserToggleSetting
-              userSetting={Meteor.user().ncFocusReset}
-              labelText={`Reset focus after ${Pref.nonCon} add`}
-              yesText={`After you enter a ${Pref.nonCon}, your cursor focus goes back to the main searchbox.`}
-              noText={`After entering a ${Pref.nonCon}, your cursor focus stays with the ${Pref.nonCon} "reference" input.`}
-              callMethod='setUserNCFocus' />
-            
-            <UserToggleSetting
-              userSetting={Meteor.user().shFocusReset}
-              labelText={`Reset focus after ${Pref.shortfall} add`}
-              yesText={`After you enter a ${Pref.shortfall}, your cursor focus returns to the main searchbox.`}
-              noText={`After you enter a ${Pref.shortfall}, your cursor focus stays with the ${Pref.nonCon} "reference" input.`}
-              callMethod='setUserSHFocus' />
-            
-            <UserSelectSetting
-              userSetting={Meteor.user().unlockSpeed || 2000}
-              optionObjArr={speedOps}
-              labelText='Step Unlock Speed'
-              yesText={`Process flow steps will unlock after an additional ${Meteor.user().unlockSpeed || '2000'} milliseconds.\n
-                        Other factors including database and network speed impact the absolute unlock delay.`}
-              callMethod='setSpeed' />
-            
-            <UserSelectSetting
-              userSetting={Meteor.user().defaultOverview || false}
-              optionObjArr={overOps}
-              labelText='Default Overview Area'
-              yesText={`The Overview section will default to the ${Meteor.user().defaultOverview || 'All'} ${Pref.branch}`}
-              callMethod='setDefaultOverview' />
-    
-          </div>
-        </div>
+    <div className='cardSelf settingColumn noPrint'>  
+      <div id='uipref'>
+        <h3><i className='fas fa-sliders-h fa-fw gapR'></i>Interface Preferences</h3>
+          
+        <UserColorSetting
+          userSetting={Meteor.user().customColor}
+          labelText='Custom Colour Theme'
+          helpText="Set a custom colour for '--neptuneColor'. Also matches outline, accents and text selction"
+        />
         
+        <UserToggleSetting
+          userSetting={Meteor.user().progType}
+          labelText='Prefer Progress By Time'
+          yesText='Overview and Streams default to the task time view.'
+          noText='Overview and Streams default to the progress view.'
+          callMethod='setUserProgPrefer' />
+        
+        {/*
+        <UserToggleSetting
+          userSetting={Meteor.user().miniAction}
+          labelText='Prefer Dense View'
+          yesText='Overview and Streams default to the minifyed view.'
+          noText='Overview and Streams default to the comfort view.'
+          callMethod='setUserMiniPrefer' />
+        */}
+        
+        <UserToggleSetting
+          userSetting={Meteor.user().preferLight}
+          labelText='Prefer Light Theme'
+          yesText='Overview and Streams default to the light theme.'
+          noText='Overview and Streams default to the dark theme.'
+          callMethod='setUserLightPrefer' />
+        
+        <UserToggleSetting
+          userSetting={Meteor.user().autoScan}
+          labelText='Barcode scan outside of search field'
+          yesText='Accepts barcode input no matter the cursor focus.'
+          noText='Barcode input is only accepted when the cursor focus is in the searchbox.'
+          callMethod='setAutoScan' />
+          
+        <UserToggleSetting
+          userSetting={Meteor.user().scrollInstruct}
+          labelText={`Autoscroll To Instruction Section`}
+          yesText={`Automatically scrolls the work instruction section that matches the process flow.\n
+                    Only occurs on configured work instructions.`}
+          noText='Only loads to the top of the work instructions.'
+          callMethod='setUserAutoscrollI' />
+        
+        <UserToggleSetting
+          userSetting={Meteor.user().showNCcodes}
+          labelText={`Show ${Pref.nonCon} Codes`}
+          yesText={`Alphanumeric codes are displayed with each ${Pref.nonCon} type.`}
+          noText={`Alphanumeric codes are not dispayed with ${Pref.nonCon} types.`}
+          callMethod='setUserNCcodes' />
+        
+        <UserToggleSetting
+          userSetting={Meteor.user().typeNCselection}
+          labelText={`Filterable ${Pref.nonCon} Type List`}
+          yesText={`Typing into the ${Pref.nonCon} defect type input will filter the selection options.`}
+          noText={`The ${Pref.nonCon} defect type input is a fixed dropdown list.`}
+          callMethod='setUserNCselection' />
+          
+        <UserToggleSetting
+          userSetting={Meteor.user().ncFocusReset}
+          labelText={`Reset focus after ${Pref.nonCon} add`}
+          yesText={`After you enter a ${Pref.nonCon}, your cursor focus goes back to the main searchbox.`}
+          noText={`After entering a ${Pref.nonCon}, your cursor focus stays with the ${Pref.nonCon} "reference" input.`}
+          callMethod='setUserNCFocus' />
+        
+        <UserToggleSetting
+          userSetting={Meteor.user().shFocusReset}
+          labelText={`Reset focus after ${Pref.shortfall} add`}
+          yesText={`After you enter a ${Pref.shortfall}, your cursor focus returns to the main searchbox.`}
+          noText={`After you enter a ${Pref.shortfall}, your cursor focus stays with the ${Pref.nonCon} "reference" input.`}
+          callMethod='setUserSHFocus' />
+        
+        <UserSelectSetting
+          userSetting={Meteor.user().unlockSpeed || 2000}
+          optionObjArr={speedOps}
+          labelText='Step Unlock Speed'
+          yesText={`Process flow steps will unlock after an additional ${Meteor.user().unlockSpeed || '2000'} milliseconds.\n
+                    Other factors including database and network speed impact the absolute unlock delay.`}
+          callMethod='setSpeed' />
+        
+        <UserSelectSetting
+          userSetting={Meteor.user().defaultOverview || false}
+          optionObjArr={overOps}
+          labelText='Default Overview Area'
+          yesText={`The Overview section will default to the ${Meteor.user().defaultOverview || 'All'} ${Pref.branch}`}
+          callMethod='setDefaultOverview' />
+  
       </div>
-      
     </div>
   );
 };

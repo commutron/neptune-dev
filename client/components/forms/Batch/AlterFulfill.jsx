@@ -79,22 +79,21 @@ const AlterFulfillForm = ({ batchId, createdAt, end, app, selfclose })=> {
   return(
     <form className='centre vmargin' onSubmit={(e)=>save(e)}>
       <div className='centreRow max600'>
-        {(app.alterFulfillReasons || []).map( (entry, index)=>{
-            return(
-              <label 
-                key={index}
-                htmlFor={entry+index} 
-                className='beside breath medSm'>
-                <input
-                  type='radio'
-                  id={entry+index}
-                  name='rsn'
-                  className='inlineRadio cap'
-                  defaultChecked={reasonState === entry}
-                  onChange={()=>reasonSet(entry)}
-                  required={app.alterFulfillReasons ? true : false}
-              />{entry}</label>
-        )})}
+        {(app.alterFulfillReasons || []).map( (entry, index)=>(
+          <label 
+            key={index}
+            htmlFor={entry+index} 
+            className='beside breath medSm'>
+            <input
+              type='radio'
+              id={entry+index}
+              name='rsn'
+              className='inlineRadio cap'
+              defaultChecked={reasonState === entry}
+              onChange={()=>reasonSet(entry)}
+              required={app.alterFulfillReasons ? true : false}
+          />{entry}</label>
+        ))}
       </div>
       <p>
         <label htmlFor='eDate' className='breath'>{Pref.salesOrder} {Pref.end}</label><br />

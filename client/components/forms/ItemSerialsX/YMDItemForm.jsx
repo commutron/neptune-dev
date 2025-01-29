@@ -2,7 +2,6 @@ import React, { useRef, useState, useEffect } from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
 
-
 const YMDItemForm = ({ 
   bID, seriesId, unit, quantity, 
   app, isDebug, quantityCheck, showToast, updateToast
@@ -84,7 +83,7 @@ const YMDItemForm = ({
     });
 	}
 	
-	function handleAdd(e) {
+	function handleAdd() {
     if(previewData.length > 0) {
       lockSet(true);
       
@@ -110,31 +109,27 @@ const YMDItemForm = ({
                             previewData.slice(-3) : [];
     
   return(
-    <div className='balance gapsC'>
-        <form 
-          className='fill'
-          onSubmit={(e)=>handleCheck(e)} 
-          autoComplete='off'>
-          <p className='centreRow'>
-            <label htmlFor='nineDigit' className='beside'>
-              <input
-                type='radio'
-                id='nineDigit'
-                name='digit'
-                defaultChecked={digitState === 9}
-                onChange={()=>digitSet(9)}
-                required
-              />9 digits</label>
-            <label htmlFor='tenDigit' className='beside'>
-              <input
-                type='radio'
-                id='tenDigit'
-                name='digit'
-                defaultChecked={digitState === 10}
-                onChange={()=>digitSet(10)}
-                required
-              />10 digits</label>
-          </p>
+    <div className='balance gapsC min750'>
+      <form 
+        className='fill'
+        onSubmit={(e)=>handleCheck(e)} 
+        autoComplete='off'>
+        <p className='centreRow'>
+          <Radio
+            id='nineDigit'
+            name='digit'
+            label='9 digits'
+            dfVal={digitState === 9}
+            chFunc={()=>digitSet(9)}
+          />
+          <Radio
+            id='tenDigit'
+            name='digit'
+            label='10 digits'
+            dfVal={digitState === 10}
+            chFunc={()=>digitSet(10)}
+          />
+        </p>
           
           <p>
             <input
@@ -155,45 +150,21 @@ const YMDItemForm = ({
           </p>
           
           <p className='leftRow'>
-            
-            <label htmlFor='yrDigits'>
-              <input
-                id='yrDigits'
-                className='miniIn6'
-                pattern='[\d\d]*'
-                maxLength='2'
-                minLength='2'
-                defaultValue={thisYear}
-                placeholder={thisYear}
-                inputMode='numeric'
-                required 
-              /><br />Year</label>
-          
-            <label htmlFor='wkDigits'>
-              <input
-                id='moDigits'
-                className='miniIn6'
-                pattern='[\d\d]*'
-                maxLength='2'
-                minLength='2'
-                defaultValue={thisMonth}
-                placeholder={thisMonth}
-                inputMode='numeric'
-                required
-              /><br />Month</label>
-         
-            <label htmlFor='dyDigits'>
-              <input
-                id='dyDigits'
-                className='miniIn6'
-                pattern='[\d\d]*'
-                maxLength='2'
-                minLength='2'
-                defaultValue={thisDay}
-                placeholder={thisDay}
-                inputMode='numeric'
-                required
-              /><br />Day</label>
+            <TwoDigits
+              id='yrDigits'
+              label='Year'
+              dfVal={thisYear}
+            />
+            <TwoDigits
+              id='moDigits'
+              label='Month'
+              dfVal={thisMonth}
+            />
+            <TwoDigits
+              id='dyDigits'
+              label='Day'
+              dfVal={thisDay}
+            />
           </p>
           
           <p>
@@ -271,3 +242,30 @@ const YMDItemForm = ({
 };
   
 export default YMDItemForm;
+
+const TwoDigits = ({ id, label, dfVal })=>(
+  <label htmlFor={id}>
+    <input
+      id={id}
+      className='miniIn6'
+      pattern='[\d\d]*'
+      maxLength='2'
+      minLength='2'
+      defaultValue={dfVal}
+      placeholder={dfVal}
+      inputMode='numeric'
+      required 
+    /><br />{label}</label>
+);
+
+const Radio = ({ id, name, label, dfVal, chFunc })=> (
+  <label htmlFor={id} className='beside'>
+    <input
+      type='radio'
+      id={id}
+      name={name}
+      defaultChecked={dfVal}
+      onChange={chFunc}
+      required
+    />{label}</label>
+);

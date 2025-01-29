@@ -12,6 +12,7 @@ const FlowFormHead = ({ id, preFill, existFlows, app, access, clearOnClose })=> 
   const [ warn, warnSet ] = useState(false);
   const [ base, baseSet ] = useState(false);
   
+  const [ flowInput, flowInputSet ] = useState('');
   const [ ncOptions, ncOptionsSet ] = useState([]);
   const [ ncLists, ncListSet ] = useState([]);
   
@@ -21,7 +22,8 @@ const FlowFormHead = ({ id, preFill, existFlows, app, access, clearOnClose })=> 
     }else{
       const fill = existFlows.find( f => f.flowKey === preFill ) || null;
       baseSet(fill);
-      
+      flowInputSet(fill?.title || '');
+    
       const ncCombo = Array.from(app.nonConTypeLists, x => { 
                         return { 
                           label: x.listPrefix +". "+ x.listName, 
@@ -49,12 +51,11 @@ const FlowFormHead = ({ id, preFill, existFlows, app, access, clearOnClose })=> 
     }
   }, [id, preFill, app]);
   
-  function save(e) {
-    e.preventDefault();
-    this.go.disabled = true;
+  function save() {
+    this.goFloH.disabled = true;
     const widgetId = id;
     
-    const flowTitle = this.flwttl.value.trim().toLowerCase();
+    const flowTitle = flowInput.trim().toLowerCase();
     const ncPlainList = Array.from(ncLists, u => u.value);
 
     const editId = base ? base.flowKey : false;
@@ -64,48 +65,44 @@ const FlowFormHead = ({ id, preFill, existFlows, app, access, clearOnClose })=> 
       (error)=>{
         error && console.log(error);
         toast.success('Saved');
+        this.goFloH.disabled = false;
       });
     }else{
       Meteor.call('pushBasicPlusFlow', widgetId, flowTitle, ncPlainList, 
       (error)=>{
         error && console.log(error);
         toast.success('Saved');
+        this.goFloH.disabled = false;
       });
     }
   }
-    
-  const e = base;
-  const eN = e ? e.title : '';
-  const name = e ? 'Edit Flow' : 'New Flow';
 
   return(
     <ModelNative
       dialogId={`${id}_flowhead_form`}
-      title={name}
+      title={preFill ? 'Edit Flow' : 'New Flow'}
       icon='fa-solid fa-project-diagram'
       colorT='blueT'
       closeFunc={()=>clearOnClose()}>
     
-    {base === false ?
-      <div><em>Building Flow...</em></div>
-    :  
       <div className='overscroll2x space'>
         <form
           id='flowSave'
           className='centre'
           onSubmit={(e)=>save(e)}
         >
-        {warn ?
+        
           <div className='centre'>
-            <p><b>{eN}</b> is or has been used by a {Pref.xBatch}</p>
+            <p>{warn ? <span><b>{flowInput}</b> is or has been used by a {Pref.xBatch}</span> : null}</p>
           </div>
-        : null}
+        
           <em className='small'>duplicate {Pref.flow} names are ill advised but not blocked</em>
           <p>
             <input
               type='text'
               id='flwttl'
-              defaultValue={eN}
+              value={flowInput}
+              onChange={(e)=>flowInputSet(e.target.value)}
               placeholder='descriptive title'
               required />
             <label htmlFor='flwttl'>{Pref.flow} title</label>
@@ -129,13 +126,13 @@ const FlowFormHead = ({ id, preFill, existFlows, app, access, clearOnClose })=> 
         <div className='space centre'>
           <button
             type='submit'
-            id='go'
+            formMethod='dialog'
+            id='goFloH'
             form='flowSave'
             className='action nSolid'>SAVE</button>
           <br />
         </div>
       </div>
-    }
     </ModelNative>
   );
 };

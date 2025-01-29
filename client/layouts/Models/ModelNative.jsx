@@ -4,8 +4,7 @@ const ModelNative = ({ dialogId, title, icon, colorT, dark, closeFunc, children 
   
   const close = ()=> {
     closeFunc ? closeFunc() : null;
-    const dialog = document.getElementById(dialogId);
-    dialog?.close();
+    document.getElementById(dialogId)?.close();
   };
 
   return(
@@ -13,7 +12,7 @@ const ModelNative = ({ dialogId, title, icon, colorT, dark, closeFunc, children 
       id={dialogId}
       className={`forceScrollStyle ${dark ? 'darkTheme' : ''}`}
     >
-      <div className='stick split vspacehalf bottomLine medBig bold cap'>
+      <div className='stick split bottomLine medBig bold cap'>
         <span className='beside gapR'>
           <i className={`${icon} fa-fw fa-lg gapR ${colorT}`}></i>
           {title}
@@ -22,7 +21,7 @@ const ModelNative = ({ dialogId, title, icon, colorT, dark, closeFunc, children 
           className='action redSolid centreRow'
           onClick={()=>close()}
           title='cancel'
-        ><i className='fas fa-xmark fa-lg'></i></button>
+        ><i className='fa-solid fa-xmark fa-lg'></i></button>
       </div>
       {children}
     </dialog>
@@ -34,8 +33,7 @@ export default ModelNative;
 export const OpenModelNative = ({ dialogId, title, icon, iconObj, colorB, colorT, lock })=> {
   
   const open = ()=> {
-    const dialog = document.getElementById(dialogId);
-    dialog?.showModal();
+    document.getElementById(dialogId)?.showModal();
   };
   
   return(

@@ -60,7 +60,7 @@ const ItemSerialsWrapX = ({
     <ModelNative
       dialogId={bID+'_items_form'}
       title={`Add ${Pref.item} ${Pref.itemSerial} numbers`}
-      icon={`fa-solid fa-${Pref.serialIcon}`}
+      icon='fa-solid fa-barcode'
       colorT='blueT'>
       
     {itemsQ >= quantity ?

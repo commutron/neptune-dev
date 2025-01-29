@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 
 const RiverSelect = ({ bID, wFlows, river, riverTitle, lock, access })=> {
 
-  function handleChange(e) {
+  function handleChange() {
     let flow = this.riverchoice.value;
     flow === 'false' ? flow = false : null;
    
@@ -22,10 +22,10 @@ const RiverSelect = ({ bID, wFlows, river, riverTitle, lock, access })=> {
   const title = access && !lock ? `Set ${Pref.flow}` : `${aT}\n${lT}`;
   
   const adaptSize = riverTitle.length < 5 ? '8ch' :
-                    riverTitle.length * 0.7 + 8 + 'ch';
+                    riverTitle.length * 0.6 + 8 + 'ch';
   
   return(
-    <i><i className='fas fa-project-diagram fa-fw blueT'></i> {Pref.flow}:
+    <i><i className='fa-solid fa-project-diagram fa-fw gapR blueT'></i>{Pref.flow}:
       <select 
         id='riverchoice'
         title={title}
@@ -36,11 +36,9 @@ const RiverSelect = ({ bID, wFlows, river, riverTitle, lock, access })=> {
         disabled={!access || lock}
         required>
       <option></option>
-      {wFlows.map( (entry, index)=>{
-        return(
+      {wFlows.map( (entry, index)=>(
          <option key={index} value={entry.flowKey}>{entry.title}</option>
-         );
-      })}
+      ))}
       </select>
     </i>
   );

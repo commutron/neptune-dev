@@ -6,7 +6,7 @@ import ModelNative from '/client/layouts/Models/ModelNative';
 
 const RapidSet = ({ seriesId, serial, rapidData, access })=> {
   
-  const handleRapid = (e)=> {
+  const handleRapid = ()=> {
     this.dorapid.disabled = true;
     const rapId = rapidData._id;
     
@@ -15,7 +15,6 @@ const RapidSet = ({ seriesId, serial, rapidData, access })=> {
         error && console.log(error);
         if(reply) {
           toast.success(Pref.rapidExd);
-          // selfclose();
         }else{
           toast.error('Server Error');
         }
@@ -32,23 +31,24 @@ const RapidSet = ({ seriesId, serial, rapidData, access })=> {
   return(
     <ModelNative
       dialogId={serial+'_rapid_form'}
-      title={`${Pref.rapidEx} ${Pref.item} ${serial}`}
+      title={`${Pref.rapidEx} ${Pref.item}`}
       icon='fa-solid fa-sitemap'
       colorT='darkOrangeT'
       dark={false}>
-    <div>
-      <p className='centreText medBig bold vmargin'>Set {serial} on {Pref.rapidExn} {rapidData.rapid} - {rapidData.issueOrder}</p>
+    <div className='min200'>
+      <p className='centreText medBig'>{Pref.rapidEx} {serial}</p>
+      <p className='centreText medBig'>on {rapidData.rapid} - {rapidData.issueOrder}</p>
       
-      <p className='centreText'><em>This action requires "qa", "run" or "inspect" permission.</em></p>
-      
-      <p className='centre vmargin'>
-        <button
-          id='dorapid'
-          className='action darkOrangeSolid'
-          onClick={(e)=>handleRapid(e)}
-          disabled={false}
-        >{Pref.rapidEx}</button>
-      </p>
+      <form onSubmit={(e)=>handleRapid(e)}>
+        <p className='centre vmargin'>
+          <button
+            id='dorapid'
+            type='submit'
+            formMethod='dialog'
+            className='action darkOrangeSolid'
+          >{Pref.rapidEx}</button>
+        </p>
+      </form>
     </div>
     </ModelNative>
   );

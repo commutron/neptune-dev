@@ -12,8 +12,7 @@ const GroupForm = ({ gObj, clearOnClose, rootURL })=> {
   const alias = gObj?.alias || '';
   const wiki = gObj?.wiki || '';
 
-  function createCustomer(e) {
-    e.preventDefault();
+  function createCustomer() {
     const groupName = this.gName.value.trim();
     const groupAlias = this.gAlias.value.trim().toLowerCase();
     
@@ -26,7 +25,6 @@ const GroupForm = ({ gObj, clearOnClose, rootURL })=> {
           console.log(error);
         if(reply) {
           toast.success('Saved');
-          // selfclose();
         }else{
           toast.error('Server Error');
         }
@@ -38,7 +36,6 @@ const GroupForm = ({ gObj, clearOnClose, rootURL })=> {
         if(reply) {
           toast.success('Saved');
           FlowRouter.go('/data/overview?request=groups&specify=' + groupAlias);
-          // selfclose();
         }else{
           toast.error('Server Error');
         }
@@ -95,6 +92,7 @@ const GroupForm = ({ gObj, clearOnClose, rootURL })=> {
       <span className='centre'>
         <button
           type='submit'
+          formMethod='dialog'
           id='grpSave'
           className='action nSolid'
           >Save

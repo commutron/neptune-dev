@@ -48,8 +48,7 @@ const BatchPanelX = ({
   ];
   
   const openAction = (dialogId)=> {
-    const dialog = document.getElementById(dialogId);
-    dialog?.showModal();
+    document.getElementById(dialogId)?.showModal();
   };
   
   function toggleHold() {
@@ -162,27 +161,27 @@ const BatchPanelX = ({
           <PopoverAction 
             doFunc={()=>openAction(b._id+'_series_form')}
             text={`Add ${Pref.series}`}
-            icon='fa-solid fa-layer-group'
+            icon='fa-solid fa-cubes-stacked'
             lock={!canSrs}
           />
           :
           <PopoverAction 
             doFunc={()=>openAction(b._id+'_seriesdelete_form')}
             text={`Remove Empty ${Pref.series}`}
-            icon='fa-regular fa-trash-can'
+            icon='fa-solid fa-cubes-stacked'
             lock={!canSrs}
           />
           }
           <PopoverAction 
             doFunc={()=>openAction(b._id+'_items_form')}
             text={`Add ${Pref.itemSerial} numbers`}
-            icon={'fa-solid fa-' + Pref.serialIcon}
+            icon={'fa-solid fa-barcode'}
             lock={!canItm}
           />
           <PopoverAction 
             doFunc={()=>openAction(b._id+'_units_form')}
             text={`Set ${Pref.unit}s`}
-            icon='fa-solid fa-table'
+            icon='fa-solid fa-table-cells'
             lock={!canUnt}
           />
           <PopoverAction

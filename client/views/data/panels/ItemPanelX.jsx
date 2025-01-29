@@ -156,7 +156,7 @@ const ItemPanelX = ({
           <PopoverAction 
             doFunc={()=>openAction(i.serial+'_unit_form')}
             text={`Change ${Pref.unit}s`}
-            icon='fa-solid fa-th'
+            icon='fa-solid fa-table-cells'
             lock={!(accessE || accessR)}
           />
           <PopoverAction 

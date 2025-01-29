@@ -15,7 +15,7 @@ const Tabs = ({ tabs, names, wide, stick, hold, sessionTab, disable, children })
 
   let show = sect;
   const sticky = stick ? 'stickInPlace' : '';
-  const styl = wide ? { width: 100 / tabs.length + '%'} : null;
+  const styl = wide ? { width: '100%'} : null;
   const dA = Array.isArray(disable) ? disable : [];
   
   return(

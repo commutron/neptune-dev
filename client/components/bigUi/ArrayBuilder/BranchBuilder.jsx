@@ -53,7 +53,7 @@ const BranchEditRow = ({ branch, isDebug })=> {
   const [ uLockState, uLockSet ] = useState(br.reqUserLock);
   const [ consumeState, consumeSet ] = useState(br.reqConsumable);
   
-  function handleCancel(e) {
+  function handleCancel() {
     posSet(br.position);
     comSet(br.common);
     openSet(br.open);
@@ -127,80 +127,58 @@ const BranchEditRow = ({ branch, isDebug })=> {
           required
         />
       </div>
+      <BrCheck
+        id={id+'chkOpen'}
+        title='Open'
+        chk={openState}
+        chFunc={(e)=>openSet(e.target.checked)}
+      />
+      <BrCheck
+        id={id+'chkClear'}
+        title='Require Kit Clearance'
+        chk={clearState}
+        chFunc={(e)=>clearSet(e.target.checked)}
+      />
+      <BrCheck
+        id={id+'chkProbDam'}
+        title='Require Problem Dam'
+        chk={damState}
+        chFunc={(e)=>damSet(e.target.checked)}
+      />
+      <BrCheck
+        id={id+'chkUsrLck'}
+        title='Require User Locking'
+        chk={uLockState}
+        chFunc={(e)=>uLockSet(e.target.checked)}
+      />
+      <BrCheck
+        id={id+'chkConsume'}
+        title='Require Consumable Tracing'
+        chk={consumeState}
+        chFunc={(e)=>consumeSet(e.target.checked)}
+      />
+      
       <div>
-        <input
-          type='checkbox'
-          title='Open'
-          id={id+'chkOpen'}
-          className='tableAction'
-          checked={openState}
-          onChange={(e)=>openSet(e.target.checked)}
-        />
-      </div>
-      <div>
-        <input
-          type='checkbox'
-          title='Require Kit Clearance'
-          id={id+'chkClear'}
-          className='tableAction'
-          checked={clearState}
-          onChange={(e)=>clearSet(e.target.checked)}
-        />
-      </div>
-      <div>
-        <input
-          type='checkbox'
-          title='Require Problem Dam'
-          id={id+'chkProbDam'}
-          className='tableAction'
-          checked={damState}
-          onChange={(e)=>damSet(e.target.checked)}
-        />
-      </div>
-      <div>
-        <input
-          type='checkbox'
-          title='Require User Locking'
-          id={id+'chkUsrLck'}
-          className='tableAction'
-          checked={uLockState}
-          onChange={(e)=>uLockSet(e.target.checked)}
-        />
-      </div>
-       <div>
-        <input
-          type='checkbox'
-          title='Require Consumable Tracing'
-          id={id+'chkConsume'}
-          className='tableAction'
-          checked={consumeState}
-          onChange={(e)=>consumeSet(e.target.checked)}
-        />
-      </div>
-      <div>
-        <button
-          type='button'
-          title='Delete (requires debug)'
+        <DoButton 
           id={id+'rmv'}
-          className='smallAction redHover'
-          onClick={(e)=>handleDeleteBranch(e)}
+          title='Delete (requires debug)'
+          color='redHover'
+          icon='fa-trash'
+          clFunc={(e)=>handleDeleteBranch(e)}
           disabled={!isDebug}
-        ><i className='fas fa-trash'></i></button>
-        <button
-          type='button'
-          title='Cancel/Reset'
+        />
+        <DoButton 
           id={id+'cncl'}
-          className='smallAction blueHover'
-          onClick={(e)=>handleCancel(e)}
-        ><i className='fas fa-ban'></i></button>
-        <button
-          type='button'
-          title='Save'
+          title='Cancel/Reset'
+          clFunc={(e)=>handleCancel(e)}
+        />
+        <DoButton 
           id={id+'sv'}
-          className='smallAction greenHover'
-          onClick={()=>handleSaveBranch()}
-          disabled={false}
-        ><i className='fas fa-check'></i></button>
+          title='Save'
+          color='greenHover'
+          icon='fa-check'
+          clFunc={()=>handleSaveBranch()}
+        />
       </div>
     </div>
   );
@@ -213,17 +191,15 @@ export const BranchListEditor = ({ app })=> {
           b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 );
 
   return(
-    <div className=''>
-      <div className='stepList'>
-        <BranchListHead />
-        {branchesSort.map( (br, index)=> {  
-          return (                 
-            <BranchListRow 
-              key={index+br.brKey} 
-              branch={br}
-            />                      
-        )})}
-      </div>
+    <div className='stepList'>
+      <BranchListHead />
+      {branchesSort.map( (br, index)=> {  
+        return (                 
+          <BranchListRow 
+            key={index+br.brKey} 
+            branch={br}
+          />                      
+      )})}
     </div>
   );
 };
@@ -268,7 +244,7 @@ const BranchListRow = ({ branch })=> {
     }
   }
   
-  function handleCancelLists(e) {
+  function handleCancelLists() {
     subtaskSet(br.subTasks);
     this[id+'tpSbTsk'].value = (br.subTasks || []).join(", ");
     buildSet(br.buildMethods);
@@ -293,53 +269,75 @@ const BranchListRow = ({ branch })=> {
     <div>
       <div>{br.position}</div>
       <div>{br.branch}</div>
+      <BrTxtAr
+        id={id+'tpSbTsk'}
+        title='Sub-Tasks'
+        dfVal={(br.subTasks || []).join(", ")}
+        chFunc={(e)=>handleMulti(e.target.value, 'task')}
+      />
+      <BrTxtAr
+        id={id+'tpBldMth'}
+        title='Build Methods'
+        dfVal={br.buildMethods.join(", ")}
+        chFunc={(e)=>handleMulti(e.target.value, 'build')}
+      />
+      <BrTxtAr
+        id={id+'tpIspMth'}
+        title='Inpection Methods'
+        dfVal={br.inspectMethods.join(", ")}
+        chFunc={(e)=>handleMulti(e.target.value, 'inspect')}
+      />
       <div>
-        <textarea
-          title='Sub-Tasks'
-          id={id+'tpSbTsk'}
-          className='tableTextarea'
-          defaultValue={(br.subTasks || []).join(", ")}
-          onChange={(e)=>handleMulti(e.target.value, 'task')}
-          required
-        ></textarea>
-      </div>
-      <div>
-        <textarea
-          title='Build Methods'
-          id={id+'tpBldMth'}
-          className='tableTextarea'
-          defaultValue={br.buildMethods.join(", ")}
-          onChange={(e)=>handleMulti(e.target.value, 'build')}
-          required
-        ></textarea>
-      </div>
-      <div>
-        <textarea
-          title='Inpection Methods'
-          id={id+'tpIspMth'}
-          className='tableTextarea'
-          defaultValue={br.inspectMethods.join(", ")}
-          onChange={(e)=>handleMulti(e.target.value, 'inspect')}
-          required
-        ></textarea>
-      </div>
-      <div>
-        <button
-          type='button'
+        <DoButton 
+          id={id+'cncllst'} 
           title='Cancel/Reset'
-          id={id+'cncllst'}
-          className='smallAction blueHover'
-          onClick={(e)=>handleCancelLists(e)}
-        ><i className='fas fa-ban'></i></button>
-        <button
-          type='button'
+          clFunc={(e)=>handleCancelLists(e)} 
+        />
+        <DoButton 
+          id={id+'svlst'} 
           title='Save'
-          id={id+'svlst'}
-          className='smallAction greenHover'
-          onClick={()=>handleSaveLists()}
-          disabled={false}
-        ><i className='fas fa-check'></i></button>
+          color='greenHover'
+          icon='fa-check'
+          clFunc={()=>handleSaveLists()}
+        />
       </div>
     </div>
   );
 };
+
+const DoButton = ({ id, title, icon, color, clFunc, disabled })=> (
+  <button
+    type='button'
+    title={title}
+    id={id}
+    className={`smallAction ${color || 'blueHover'}`}
+    onClick={clFunc}
+    disabled={disabled}
+  ><i className={`fa-solid ${icon || 'fa-ban'}`}></i></button>
+);
+
+const BrCheck = ({ id, title, chk, chFunc })=>(
+  <div>
+    <input
+      type='checkbox'
+      title={title}
+      id={id}
+      className='tableAction'
+      checked={chk}
+      onChange={chFunc}
+    />
+  </div>
+);
+
+const BrTxtAr = ({ id, title, dfVal, chFunc })=> (
+  <div>
+    <textarea
+      title={title}
+      id={id}
+      className='tableTextarea'
+      defaultValue={dfVal}
+      onChange={chFunc}
+      required
+    ></textarea>
+  </div>
+);

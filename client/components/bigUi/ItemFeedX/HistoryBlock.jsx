@@ -39,7 +39,7 @@ const HistoryBlock = ({
   const colour = dt.type === 'finish' ? dt.good ? 'finish' : 'alterEvent' :
                  dt.type === 'scrap' ? dt.good ? 'scrap' : 'alterEvent' :
                  dt.type === 'undo' ? 'alterEvent' : 'history';
-   
+  
   return(
     <n-feed-info-block class={colour}>
       <n-feed-left-anchor>{indictor}</n-feed-left-anchor>

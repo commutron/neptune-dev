@@ -12,7 +12,6 @@ import ModelNative from '/client/layouts/Models/ModelNative';
 const Remove = ({ action, entry, title, check, access })=> {
   
   function handleRemove(e) {
-    e.preventDefault();
     this.cutGo.disabled = true;
     const confirm = this.confirmInput.value.trim();
     switch(action) {
@@ -93,6 +92,7 @@ const Remove = ({ action, entry, title, check, access })=> {
           <button
             className='action redSolid'
             type='submit'
+            formMethod='dialog'
             id='cutGo'
             disabled={false}>DELETE</button>
         </form>

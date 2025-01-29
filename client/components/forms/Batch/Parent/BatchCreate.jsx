@@ -61,9 +61,7 @@ const BatchCreate = ({ groupId, widgetId, allVariants, prerun, clearOnClose })=>
     }
   }, [prerun, endDateState]);
    
-  function save(e) {
-    e.preventDefault();
-    
+  function save() {
     const vKey = this.vrsn.value;
     const batchNum = this.oNum.value.trim().toLowerCase();
     const salesNum = this.soNum.value.trim().toLowerCase();
@@ -265,6 +263,7 @@ const BatchCreate = ({ groupId, widgetId, allVariants, prerun, clearOnClose })=>
       <div className='vmargin'>
         <button
           type='submit'
+          formMethod='dialog'
           className='action nSolid'
         >Create</button>
       </div>

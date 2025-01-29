@@ -61,7 +61,6 @@ const EquipEmails = ({ id, stewards, liveUsers, selfclose })=> {
       null;
     }
   }
-    
   
   return(
     <div className='centre vmarginhalf space'>

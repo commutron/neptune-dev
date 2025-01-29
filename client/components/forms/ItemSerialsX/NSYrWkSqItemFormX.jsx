@@ -101,23 +101,17 @@ const NSYrWkSqItemFormX = ({
                             previewData.slice(-3) : [];
     
   return(
-    <div className='balance gapsC'>
+    <div className='balance gapsC min750'>
       <form 
         className='fill'
         onSubmit={(e)=>handleCheck(e)} 
         autoComplete='off'>
-        <p>
-          <input
-            id='manDigits'
-            className='miniIn18'
-            pattern='[\d\d]*'
-            maxLength='2'
-            minLength='2'
-            defaultValue='03'
-            inputMode='numeric'
-            disabled />
-          <label htmlFor='manDigits'>Manufacture Number</label>
-        </p>
+        <TwoDigits
+          id='manDigits'
+          dfVal='03'
+          label='Manufacture Number'
+          disabled
+        />
         <p>
           <input
             id='lotDigits'
@@ -131,32 +125,16 @@ const NSYrWkSqItemFormX = ({
           <label htmlFor='lotDigits'>Lot Number</label>
         </p>
         {/* DASH CHARACTER */}
-        <p>
-          <input
-            id='yrDigits'
-            className='miniIn18'
-            pattern='[\d\d]*'
-            maxLength='2'
-            minLength='2'
-            defaultValue={thisYear}
-            placeholder={thisYear}
-            inputMode='numeric'
-            required />
-          <label htmlFor='yrDigits'>Year Number</label>
-        </p>
-        <p>
-          <input
-            id='wkDigits'
-            className='miniIn18'
-            pattern='[\d\d]*'
-            maxLength='2'
-            minLength='2'
-            defaultValue={thisWeek}
-            placeholder={thisWeek}
-            inputMode='numeric'
-            required />
-          <label htmlFor='wkDigits'>Week Number</label>
-        </p>
+        <TwoDigits
+          id='yrDigits'
+          dfVal={thisYear}
+          label='Year Number'
+        />
+        <TwoDigits
+          id='wkDigits'
+          dfVal={thisWeek}
+          label='Week Number'
+        />
         
         <p>
           <input
@@ -232,3 +210,22 @@ const NSYrWkSqItemFormX = ({
 };
   
 export default NSYrWkSqItemFormX;
+
+const TwoDigits = ({ id, dfVal, label, disabled })=> (
+  <p>
+    <input
+      id={id}
+      className='miniIn18'
+      pattern='[\d\d]*'
+      maxLength='2'
+      minLength='2'
+      defaultValue={dfVal}
+      placeholder={dfVal}
+      inputMode='numeric'
+      required 
+      disabled={disabled}
+    />
+    <label htmlFor={id}>{label}</label>
+  </p>
+);
+

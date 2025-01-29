@@ -64,7 +64,7 @@ const TimeEditForm = ({ setFunc, idpre, defaultObj, closeFunc })=> {
     }else{
       const saveArray = Array.from(checkVals, z => z[0] );
       
-      Meteor.call(setFunc, saveArray, (err, re)=>{
+      Meteor.call(setFunc, saveArray, (err)=>{
         if(err) {
           console.log(err);
           toast.error(err.reason || 'server rejected');
@@ -95,11 +95,12 @@ const TimeEditForm = ({ setFunc, idpre, defaultObj, closeFunc })=> {
       <p>
         <button 
           type='submit'
-          className='action clearBlack'
+          className='action blackSolid'
         >Save</button>
         <button
+          type='reset'
           onClick={(e)=>closeFunc()}
-          className='miniAction med gapL'
+          className='smallAction med gapL'
         >Cancel</button>
       </p>
     </form>

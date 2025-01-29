@@ -28,17 +28,14 @@ const WidgetPanel = ({
   const openActions = (model, select)=> {
     selectedFlowSet(select);
     if(model === 'topflow') {
-      const dialog = document.getElementById(w._id+'_flowhead_form');
-      dialog?.showModal();
+      document.getElementById(w._id+'_flowhead_form')?.showModal();
     }else if(model === 'proflow') {
-      const dialog = document.getElementById(w._id+'_flowroute_form');
-      dialog?.showModal();
+      document.getElementById(w._id+'_flowroute_form')?.showModal();
     }
   };
   
   const openDirect = (dialogId)=> {
-    const dialog = document.getElementById(dialogId);
-    dialog?.showModal();
+    document.getElementById(dialogId)?.showModal();
   };
                            
   const bS = b.sort((b1, b2)=> b1.batch < b2.batch ? -1 : b1.batch > b2.batch ? 1 : 0 );

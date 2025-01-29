@@ -23,8 +23,7 @@ const FlowFormRoute = ({
     }
   }
   
-  function save(e) {
-    e.preventDefault();
+  function save() {
     this.goFlow.disabled = true;
     const widgetId = id;
     const flowObj = flow;
@@ -109,6 +108,7 @@ const FlowFormRoute = ({
         <div className='space centre'>
           <button
             type='submit'
+            formMethod='dialog'
             id='goFlow'
             className='medBig'
             disabled={!flow || !access}

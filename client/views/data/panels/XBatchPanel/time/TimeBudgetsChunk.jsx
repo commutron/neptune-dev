@@ -197,7 +197,7 @@ const TimeBudgetsChunk = ({
                         const sbs = !brt && qtbB.filter( x => x[0].includes(br.x) );
                         const sbt = !brt ? sbs.reduce((a,b)=> a + b[1], 0) : brt[1];
                         return( 
-                          <dl key={ix} className='nomargin breaklines'>
+                          <dl key={ix} className='breaklines'>
                             <dt
                               title={`${Math.round(br.y)} minutes`}
                               className='rightRow doJustWeen'
@@ -215,7 +215,7 @@ const TimeBudgetsChunk = ({
                                 <dd 
                                   key={ix+'sub'+ixz}
                                   title={`${Math.round(zt.b)} minutes`}
-                                  className='rightRow doJustWeen indent'
+                                  className='rightRow doJustWeen'
                                 ><i className='cap'>{zt.a}{zt.w && 
                                    <i className='fa-solid fa-layer-group fa-xs tealT gapL' title={mlt}></i>}
                                  </i>

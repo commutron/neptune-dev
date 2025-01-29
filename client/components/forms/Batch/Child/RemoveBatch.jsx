@@ -87,6 +87,7 @@ const RemoveBatch = ({ batchData, seriesData, check, access })=> {
   function handleAllRemove(e) {
     e.preventDefault();
     this.cutAllGo.disabled = true;
+    const widgetId = batchData.widgetId;
     const pinVal = this.orgPINall.value;
     
     const confirm = this.confirmInput.value.trim();
@@ -96,7 +97,7 @@ const RemoveBatch = ({ batchData, seriesData, check, access })=> {
       if(reply === 'inUse') {
         toast.warning('Cannot do this, records are in use');
       }else if(reply) {
-        FlowRouter.go('/data');
+        FlowRouter.go('/data/widget?request='+widgetId);
         toast.success('Entry in XBatchDB removed');
       }else{
         toast.error('Rejected by Server, No Authorization');
@@ -104,7 +105,7 @@ const RemoveBatch = ({ batchData, seriesData, check, access })=> {
       }
     });
   }
-  
+
   if(!access) {
     return null;
   }

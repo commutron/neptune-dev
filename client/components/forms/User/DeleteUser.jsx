@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 
-const DeleteUser = ({ userID, isDebug })=> {
+const DeleteUser = ({ userID })=> {
   
   const [ confirmState, confirmSet ] = useState(false);
   
-  function deleteForever(e) {
+  function deleteForever() {
     const pin = this.orgPINrmv.value;
     const self = Meteor.userId() === userID;
 

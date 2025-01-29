@@ -8,8 +8,7 @@ import ModelNative from '/client/layouts/Models/ModelNative';
 
 const BatchEdit = ({ batchData, seriesData, allVariants, canEdit, access })=> {
    
-  function save(e) {
-    e.preventDefault();
+  function save() {
     const batchId = batchData._id;
     
     const vKey = this.vrsn.value;
@@ -32,7 +31,6 @@ const BatchEdit = ({ batchData, seriesData, allVariants, canEdit, access })=> {
         if(batchData.batch !== batchNum) {
           FlowRouter.go('/data/batch?request=' + batchNum);
         }else{
-          // selfclose();
           null;
         }
       }else{
@@ -47,7 +45,7 @@ const BatchEdit = ({ batchData, seriesData, allVariants, canEdit, access })=> {
 
   return(
     <ModelNative
-      dialogId={batchData._id+'_batch_form'}
+      dialogId={bDt._id+'_batch_form'}
       title={`Edit ${Pref.xBatch}`}
       icon='fa-solid fa-cubes'
       colorT='blueT'>
@@ -159,6 +157,7 @@ const BatchEdit = ({ batchData, seriesData, allVariants, canEdit, access })=> {
       <div className='centreRow vmargin'>
         <button
           type='submit'
+          formMethod='dialog'
           className='action nSolid'
           disabled={!access}
         >Save</button>

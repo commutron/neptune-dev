@@ -1,5 +1,5 @@
 import React from 'react';
-import Pref from '/client/global/pref.js';
+// import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
 import ModelNative from '/client/layouts/Models/ModelNative';
@@ -19,7 +19,6 @@ const ContactForm = ({ ctctKey, equipData, clearOnClose })=> {
   const df_notes = ct?.notes || '';
 
   const handleContact = (e)=> {
-    // e.preventDefault();
     this.eqcontactGo.disabled = true;
     
     const eqid = equipData._id;
@@ -187,14 +186,3 @@ const ContactInput = ({ inid, type, cls, label, dfval, req })=> (
     /></label>
   </span>
 );
-
-// const phoneinput = ()=> (
-//   <label>Phone
-//     <span className='flexRow'>
-//     <input id='intCode' />
-//     <input id='areaCode' />
-//     <input id='locCode' />
-//     </span>
-//   </label>
-  
-// );

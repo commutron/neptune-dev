@@ -90,7 +90,8 @@ const QuoteTimeBudgetForm = ({ bID, qtB, qtbB, auth, lockOut, brancheS, selfclos
       Meteor.call('pushBatchXTimeBudget', bID, totalState, (err, re)=>{
         err && console.log(err);
         if(re) {
-          toast.success('Saved');// selfclose();
+          toast.success('Saved');
+          // selfclose();
         }else{
           toast.error('Server Error');
         }
@@ -101,7 +102,6 @@ const QuoteTimeBudgetForm = ({ bID, qtB, qtbB, auth, lockOut, brancheS, selfclos
   
   const setBreakdown = (e)=> {
     e.preventDefault();
-    
     const brkArray = Object.entries(breakState).filter( x => x[1] > 0);
     
     if(auth) {
@@ -124,10 +124,7 @@ const QuoteTimeBudgetForm = ({ bID, qtB, qtbB, auth, lockOut, brancheS, selfclos
       {auth && !lockOut ? null : <p>{aT} {lT}</p>}
       <h3>{toCap(Pref.timeBudget, true)} Total</h3>
       <p><em>Set in hours, to 2 decimal places</em></p>
-      <form
-        id='totalqtb'
-        onSubmit={(e)=>setTimeInHours(e)}
-      >
+      <form id='totalqtb' onSubmit={(e)=>setTimeInHours(e)}>
         <p className='inlineForm'>
           <label>Hours<br />
           <input
@@ -156,6 +153,7 @@ const QuoteTimeBudgetForm = ({ bID, qtB, qtbB, auth, lockOut, brancheS, selfclos
         <p>
           <button
             type='submit'
+            // formMethod='dialog'
             id='goQTB'
             className='action nSolid numberSet minIn7 vmargin'
             disabled={!auth || lockOut}
@@ -201,7 +199,7 @@ const QuoteTimeBudgetForm = ({ bID, qtB, qtbB, auth, lockOut, brancheS, selfclos
         {inputOps.map( (op, index)=>(
           <div 
             key={index}
-            className='rightRow doJustWeen breaklines'
+            className='w100 split doJustWeen breaklines'
           >
           <label>{op[0].split('|')[0]} {op[0].split('|')[1] === '!X' ? null : op[0].split('|')[1]}</label>
           <span className='middle'>
@@ -237,6 +235,7 @@ const QuoteTimeBudgetForm = ({ bID, qtB, qtbB, auth, lockOut, brancheS, selfclos
         <p className='vmargin'>
           <button
             type='submit'
+            // formMethod='dialog'
             id='goQTBB'
             className='action nSolid numberSet minIn7'
             disabled={!auth || lockOut}

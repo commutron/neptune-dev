@@ -59,7 +59,7 @@ const XBatchTimeline = ({
     return 0;
   });
   
-  const calString = "ddd, MMM D /YY, h:mm A";
+  const calString = "MMM D YYYY, h:mm A (ddd)";
   const calFunc = (d)=> moment(d).calendar(null, {sameElse: calString});
   
   const canEdit = Roles.userIsInRole(Meteor.userId(), 'edit');
@@ -67,48 +67,42 @@ const XBatchTimeline = ({
   return(
     <div className='scrollWrap'>
       <div className='infoFeed'>
-        <div className='comfort uiCheck vbreak'>
-          <span title='releases and clearances' className='middle'>
-            <input
-              type='checkbox'
-              id='inputRel'
-              onChange={(e)=>releaseSet(!incRelease)}
-              defaultChecked={incRelease} />
-            <label htmlFor='inputRel'>Clearances</label>
-          </span>
-          <span title={`${Pref.trackFirst} verifications`} className='middle'>
-            <input
-              type='checkbox'
-              id='inputVer'
-              onChange={(e)=>verifySet(!incVerify)}
-              defaultChecked={incVerify} />
-            <label htmlFor='inputVer'>{Pref.trackFirst}s</label>
-          </span>
-          <span title='top-level alterations' className='middle'>
-            <input
-              type='checkbox'
-              id='inputAlt'
-              onChange={(e)=>alterSet(!incAlter)}
-              defaultChecked={incAlter} />
-            <label htmlFor='inputAlt'>Alters</label>
-          </span>
-          <span title={`quote ${Pref.timeBudget} changes`} className='middle'>
-            <input
-              type='checkbox'
-              id='inputQut'
-              onChange={(e)=>quoteSet(!incQuote)}
-              defaultChecked={incQuote} />
-            <label htmlFor='inputQut'>Quotes</label>
-          </span>
-          
-          <span title='general and benchmark events' className='middle'>
-            <input
-              type='checkbox'
-              id='inputEvt'
-              onChange={(e)=>eventSet(!incEvent)}
-              defaultChecked={incEvent} />
-            <label htmlFor='inputEvt'>Events</label>
-          </span>
+        <div className='balance uiCheck vbreak'>
+          <CheckBox
+            id='inputRel'
+            label='Clearances'
+            title='releases and clearances'
+            dfVal={incRelease}
+            chFunc={(e)=>releaseSet(!incRelease)}
+          />
+          <CheckBox
+            id='inputVer'
+            label={`${Pref.trackFirst}s`}
+            title={`${Pref.trackFirst} verifications`}
+            dfVal={incVerify}
+            chFunc={(e)=>verifySet(!incVerify)}
+          />
+          <CheckBox
+            id='inputAlt'
+            label='Alters'
+            title='top-level alterations'
+            dfVal={incAlter}
+            chFunc={(e)=>alterSet(!incAlter)}
+          />
+          <CheckBox
+            id='inputQut'
+            label='Quotes'
+            title={`quote ${Pref.timeBudget} changes`}
+            dfVal={incQuote}
+            chFunc={(e)=>quoteSet(!incQuote)}
+          />
+          <CheckBox
+            id='inputEvt'
+            label='Events'
+            title='general and benchmark events'
+            dfVal={incEvent}
+            chFunc={(e)=>eventSet(!incEvent)}
+          />
         </div>
           
         <CreateBlock
@@ -179,3 +173,14 @@ const XBatchTimeline = ({
 };
 
 export default XBatchTimeline;
+
+const CheckBox = ({ id, label, title, dfVal, chFunc })=> (
+  <span title={title} className='middle'>
+    <input
+      type='checkbox'
+      id={id}
+      onChange={chFunc}
+      defaultChecked={dfVal} />
+    <label htmlFor={id}>{label}</label>
+  </span>
+);

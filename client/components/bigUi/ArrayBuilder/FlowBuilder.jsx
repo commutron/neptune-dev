@@ -124,7 +124,7 @@ const FlowBuilder = ({ app, options, defaultEnd, baseline, onClick })=> {
   const branchOps = branchOptions(branchSelect, options);
   
   return(
-    <div>
+    <div className='min750'>
       <div className='space1v rightText'>
         <p className='nomargin'>
           <label htmlFor='phasefltr' className='cap'>{Pref.branch}<br />
@@ -191,30 +191,28 @@ const FlowBuilder = ({ app, options, defaultEnd, baseline, onClick })=> {
               <div>{niceBr}</div>
               <div>{entry.how}</div>
               <div>
-                <button
-                  type='button'
-                  name='Move Up'
+                <OrderButton 
                   id='up'
-                  className='smallAction blackHover'
-                  onClick={()=>moveUp(entry, index)}
+                  name='Move Up'
+                  icon='fa-arrow-up' 
+                  clFunc={()=>moveUp(entry, index)}
                   disabled={lockout || index === 0}
-                ><i className='fas fa-arrow-up'></i></button>
-                <button
-                  type='button'
-                  name='Move Down'
+                />
+                <OrderButton 
                   id='dn'
-                  className='smallAction blackHover'
-                  onClick={()=>moveDown(entry, index)}
+                  name='Move Down'
+                  icon='fa-arrow-down' 
+                  clFunc={()=>moveDown(entry, index)}
                   disabled={lockout || index === steps.length - 1}
-                ><i className='fas fa-arrow-down'></i></button>
-                <button
-                  type='button'
-                  name='Remove'
+                />
+                <OrderButton 
                   id='ex'
-                  className='smallAction redHover'
-                  onClick={()=>removeOne(entry)}
+                  name='Remove'
+                  color='redHover'
+                  icon='fa-times' 
+                  clFunc={()=>removeOne(entry)}
                   disabled={lockout && entry.key !== 'f1n15h1t3m5t3p'}
-                ><i className='fas fa-times'></i></button>
+                />
               </div>
             </div>
           )})}
@@ -250,3 +248,14 @@ const FlowBuilder = ({ app, options, defaultEnd, baseline, onClick })=> {
 };
 
 export default FlowBuilder;
+
+const OrderButton = ({ id, name, color, icon, clFunc, disabled })=> (
+  <button
+    type='button'
+    name={name}
+    id={id}
+    className={`smallAction ${color || 'blackHover'}`}
+    onClick={clFunc}
+    disabled={disabled}
+  ><i className={`fa-solid ${icon}`}></i></button>
+);

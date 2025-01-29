@@ -35,7 +35,6 @@ const ReleaseBlock = ({ id, done, dt, icon, brancheS, cal })=>{
         <n-feed-info-title class='cap'>  
           <span>{actionString} by <UserNice id={dt.who} /></span>
           {dt.caution ? <span>Caution: {dt.caution}</span> : null}
-          <span></span>
           <span>{cal(dt.time)}</span>
         </n-feed-info-title>
       </n-feed-info-center>
@@ -46,7 +45,7 @@ const ReleaseBlock = ({ id, done, dt, icon, brancheS, cal })=>{
           onClick={()=>handleCancel()} 
           disabled={done || !canRel}
           readOnly={true}>
-          <i className='fas fa-ban fa-lg fa-fw'></i>
+          <i className='fa-solid fa-ban fa-lg fa-fw'></i>
         </button>
       </n-feed-right-anchor>
     </n-feed-info-block>

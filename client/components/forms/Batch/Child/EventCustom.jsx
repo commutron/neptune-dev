@@ -6,7 +6,6 @@ import ModelNative from '/client/layouts/Models/ModelNative';
 const EventCustom = ({ batchId })=> {
   
   function save(e) {
-    e.preventDefault();
     this.gocevent.disabled = true;
     const title = this.titleVal.value;
     const detail = this.detailVal.value;
@@ -14,7 +13,6 @@ const EventCustom = ({ batchId })=> {
     Meteor.call('pushCustomEvent', batchId, title, detail, (error, re)=>{
       error && console.log(error);
       re && toast.success('Event Saved');
-      // selfclose();
     });
   }
   
@@ -52,6 +50,7 @@ const EventCustom = ({ batchId })=> {
       
         <button
           type='submit'
+          formMethod='dialog'
           id='gocevent'
           className='medBig'
           form='ceventSave'

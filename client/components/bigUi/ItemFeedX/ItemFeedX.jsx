@@ -216,13 +216,26 @@ const ItemFeedX = ({
     );
   }
   
-  const assembly = [...history, ...altPath, ...noncons, ...shortfalls];
+  let assembly = [];
+
+  for(let h of history) {
+    assembly.push(h);
+  }
+  for(let a of altPath) {
+    assembly.push(a);
+  }
+  for(let n of noncons) {
+    assembly.push(n);
+  }
+  for(let s of shortfalls) {
+    assembly.push(s);
+  }
   
   const ordered = assembly.sort((t1, t2)=> {
           const mt1 = moment( t1.time || t1.cTime || t1.assignedAt );
           const nt2 = t2.time || t2.cTime || t2.assignedAt;
           return( mt1.isAfter(nt2) ? 1 : mt1.isBefore(nt2) ? -1 : 0 )});
-  
+          
   const flatCheckList = Array.from(ncTypesCombo, x => 
                                   x.key ? x.live === true && x.typeText : x);
   

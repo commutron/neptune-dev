@@ -21,7 +21,6 @@ const BatchXIncomplete = ({ batchData, seriesData, access })=> {
   const noI = srsI.filter( i=> !i.completed && i.history.length === 0 ).length;
   
   function handleForceFinish(e) {
-    e.preventDefault();
     this.inFinGo.disabled = true;
     
     workingSet(true);
@@ -179,6 +178,7 @@ const BatchXIncomplete = ({ batchData, seriesData, access })=> {
           required />
         <button 
           type="submit"
+          formMethod='dialog'
           id='inFinGo'
           className='action orangeSolid blackT'
           disabled={false}

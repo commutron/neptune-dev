@@ -4,10 +4,9 @@ import { toast } from 'react-toastify';
 
 import ModelNative from '/client/layouts/Models/ModelNative';
 
-const RemoveItem = ({ batchId, batch, seriesId, serial, check, verify, access })=> {
+const RemoveItem = ({ batchId, batch, seriesId, serial, check, verify })=> {
   
-  function handleRemove(e) {
-    e.preventDefault();
+  function handleRemove() {
     this.cutGo.disabled = true;
     const confirm = this.confirmInput.value.trim();
     
@@ -71,6 +70,7 @@ const RemoveItem = ({ batchId, batch, seriesId, serial, check, verify, access })
         <button
           className='action redSolid'
           type='submit'
+          formMethod='dialog'
           id='cutGo'
           disabled={false}>DELETE</button>
       </form>

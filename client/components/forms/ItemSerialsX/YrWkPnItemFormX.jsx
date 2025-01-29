@@ -93,13 +93,13 @@ const YrWkPnItemFormX = ({
     }
     
     isDebug && console.log({ 
-        year_week, itemPerVal, panelQuVal,
-        startLoopNum, stopLoopNum, itemLoop, tryData
-      });
+      year_week, itemPerVal, panelQuVal,
+      startLoopNum, stopLoopNum, itemLoop, tryData
+    });
 	}
 	
 	
-	function handleAdd(e) {
+	function handleAdd() {
     if(previewData.length > 0) {
       lockSet(true);
       showToast();
@@ -121,57 +121,37 @@ const YrWkPnItemFormX = ({
                             previewData.slice(-3) : [];
     
   return(
-    <div className='balance gapsC'>
+    <div className='balance gapsC min750'>
         <form 
           className='fill'
           onSubmit={(e)=>handleCheck(e)} 
           autoComplete='off'>
-          <p>
-            <input
-              id='yrDigits'
-              className='miniIn18'
-              pattern='[\d\d]*'
-              maxLength='2'
-              minLength='2'
-              defaultValue={thisYear}
-              placeholder={thisYear}
-              inputMode='numeric'
-              required />
-            <label htmlFor='yrDigits'>Year Number</label>
-          </p>
-          <p>
-            <input
-              id='wkDigits'
-              className='miniIn18'
-              pattern='[\d\d]*'
-              maxLength='2'
-              minLength='2'
-              defaultValue={thisWeek}
-              placeholder={thisWeek}
-              inputMode='numeric'
-              required />
-            <label htmlFor='wkDigits'>Week Number</label>
-          </p>
+          <TwoDigits
+            id='yrDigits'
+            dfVal={thisYear}
+            label='Year Number'
+          />
+          <TwoDigits
+            id='wkDigits'
+            dfVal={thisWeek}
+            label='Week Number'
+          />
           
           <p className='centreRow'>
-            <label htmlFor='yesPnl' className='beside'>
-            <input
-              type='radio'
+            <Radio
               id='yesPnl'
               name='ynPanlSelect'
-              defaultChecked={isPnl === true}
-              onChange={()=>isPnlSet(true)}
-              required
-            />Panels</label>
-            <label htmlFor='noPnl' className='beside'>
-            <input
-              type='radio'
+              label='Panels'
+              dfVal={isPnl === true}
+              chFunc={()=>isPnlSet(true)}
+            />
+            <Radio
               id='noPnl'
               name='ynPanlSelect'
-              defaultChecked={isPnl === false}
-              onChange={()=>isPnlSet(false)}
-              required
-            />Singles</label>
+              label='Singles'
+              dfVal={isPnl === false}
+              chFunc={()=>isPnlSet(false)}
+            />
           </p>
           
           <p>
@@ -266,3 +246,31 @@ const YrWkPnItemFormX = ({
 };
   
 export default YrWkPnItemFormX;
+
+const TwoDigits = ({ id, dfVal, label })=> (
+  <p>
+    <input
+      id={id}
+      className='miniIn18'
+      pattern='[\d\d]*'
+      maxLength='2'
+      minLength='2'
+      defaultValue={dfVal}
+      placeholder={dfVal}
+      inputMode='numeric'
+      required />
+    <label htmlFor={id}>{label}</label>
+  </p>
+);
+
+const Radio = ({ id, name, label, dfVal, chFunc })=> (
+  <label htmlFor={id} className='beside'>
+  <input
+    type='radio'
+    id={id}
+    name={name}
+    defaultChecked={dfVal}
+    onChange={chFunc}
+    required
+  />{label}</label>
+);

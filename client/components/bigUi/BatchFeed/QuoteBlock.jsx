@@ -10,13 +10,12 @@ const QuoteBlock = ({ dt, cal })=>{
   return(
     <n-feed-info-block class='quoteEvent'>
       <n-feed-left-anchor>
-        <i className="fas fa-hourglass-start fa-lg fa-fw"></i>
+        <i className="fa-solid fa-hourglass-start fa-lg fa-fw"></i>
       </n-feed-left-anchor>
       <n-feed-info-center>
         <n-feed-info-title class='cap'>  
           <span>Quote Time set to {hoursDur} hours</span>
           <span>({dt.timeAsMinutes} minutes)</span>
-          <span></span>
           <span>{cal(dt.updatedAt)}</span>
         </n-feed-info-title>
       </n-feed-info-center>

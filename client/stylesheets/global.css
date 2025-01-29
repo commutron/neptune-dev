@@ -348,7 +348,8 @@ dialog {
   border-radius: 4px;
   box-shadow: var(--dropShadow2);
   background-color: var(--clouds);
-  padding: 0 16px 16px 16px;
+  padding-inline: calc(var(--vert_border)*2);
+  padding-block: calc(var(--vert_border)*2) calc(var(--vert_border)*4);
 }
 dialog::backdrop {
   background-color: rgb(10,10,10,0.5);
@@ -356,6 +357,10 @@ dialog::backdrop {
 }
 dialog > div:first-child .action {
   border-radius: 2px;
+  width: 32.5px;
+}
+dialog > form {
+  margin-inline: calc(var(--vert_border)*4);
 }
 
 img {

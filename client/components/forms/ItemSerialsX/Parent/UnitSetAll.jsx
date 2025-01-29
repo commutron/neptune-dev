@@ -4,10 +4,9 @@ import { toast } from 'react-toastify';
 
 import ModelNative from '/client/layouts/Models/ModelNative';
 
-const UnitSetAll = ({ bID, seriesId, bdone, sqty, vqty, access })=> {
+const UnitSetAll = ({ bID, seriesId, bdone, sqty, vqty })=> {
   
-  function handleUnits(e) {
-    e.preventDefault();
+  function handleUnits() {
     this.setallgo.disabled = true;
     
     toast.warn('Please Wait For Confirmation...', {
@@ -39,7 +38,7 @@ const UnitSetAll = ({ bID, seriesId, bdone, sqty, vqty, access })=> {
     <ModelNative
       dialogId={bID+'_units_form'}
       title={`Assign ${Pref.counter}s`}
-      icon='fa-solid fa-table'
+      icon='fa-solid fa-table-cells'
       colorT='blueT'>
       
     <div className='centre centreText max400 wide'>

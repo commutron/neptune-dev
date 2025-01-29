@@ -1157,7 +1157,6 @@ n-sm-model-content {
 }
 
 .evenRow, .rightRow {
-  width: 100%;
   margin: 0;
   display: flex;
   flex-flow: row nowrap;
@@ -1539,6 +1538,7 @@ n-col-table-head > span {
 .max300 { max-width: 300px; }
 .max250 { max-width: 250px; }
 .max100 { max-width: 100px; }
+.min750 { min-width: 750px; }
 .min600 { min-width: 600px; }
 .min400 { min-width: 400px; }
 .min350 { min-width: 350px; }

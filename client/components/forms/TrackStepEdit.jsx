@@ -1,7 +1,7 @@
 import React from 'react';
 import { toast } from 'react-toastify';
 
-const TrackStepEdit = ({app, branchesSort, data})=> {
+const TrackStepEdit = ({branchesSort, data})=> {
   
   const opKey = data.key;
   

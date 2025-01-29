@@ -29,7 +29,7 @@ const UnitSet = ({ seriesId, item, access })=> {
     <ModelNative
       dialogId={item.serial+'_unit_form'}
       title={access ? `Set ${Pref.unit}` : Pref.norole}
-      icon='fa-solid fa-th'
+      icon='fa-solid fa-table-cells'
       colorT='blueT'
       dark={false}>
     

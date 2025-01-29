@@ -59,15 +59,6 @@ const BlockAddForm = ({ id, edit, doneLock, selfclose })=> {
 
   return(
     <div>
-      {edit &&
-        <p>
-          <RemoveBlock
-            id={id} 
-            blKey={edit.key}
-            doneLock={doneLock}
-            inLine={true} />
-        </p>
-      }
       <form className='centre' onSubmit={(e)=>addBlock(e)}>
         <p>
           <textarea
@@ -87,6 +78,15 @@ const BlockAddForm = ({ id, edit, doneLock, selfclose })=> {
           className='action nSolid'>Save</button>
         </p>
       </form>
+      {edit &&
+        <p className='dropCeiling centre topLine'>
+          <RemoveBlock
+            id={id} 
+            blKey={edit.key}
+            doneLock={doneLock}
+            inLine={true} />
+        </p>
+      }
     </div>
   );
 };
@@ -117,7 +117,7 @@ const SolveBlockForm = ({ id, blKey, selfclose })=> {
     
     const text = this.slvTxt.value.trim();
     
-    Meteor.call('solveBlockX', id, blKey, text, (error, reply)=> {
+    Meteor.call('solveBlockX', id, blKey, text, (error)=> {
       error && toast.error('Server Error');
       selfclose(); 
 		});
@@ -144,7 +144,7 @@ const SolveBlockForm = ({ id, blKey, selfclose })=> {
   );
 };
 
-const RemoveBlock = ({ id, blKey, doneLock, noText })=> {
+const RemoveBlock = ({ id, blKey, doneLock })=> {
   
   function remove() {
     Meteor.call('removeBlockX', id, blKey, (error, reply)=> {
@@ -157,10 +157,10 @@ const RemoveBlock = ({ id, blKey, doneLock, noText })=> {
     <button
       type='button'
       title={!doneLock ? 'Remove this ' + Pref.block : Pref.isDone}
-      className='action middle'
+      className='action redSolid'
       onClick={(e)=>remove(e)}
       disabled={doneLock}>
-      <i className='fas fa-trash fa-lg redT'></i> Delete
+      <i className='fa-solid fa-trash gapR'></i>Delete
     </button>
   );
 };

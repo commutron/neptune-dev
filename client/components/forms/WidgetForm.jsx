@@ -6,8 +6,7 @@ import ModelNative from '/client/layouts/Models/ModelNative';
 
 const WidgetNew = ({ groupId, clearOnClose })=> {
 
-  function save(e) {
-    e.preventDefault();
+  function save() {
     this.go.disabled = true;
     const newName = this.nwNm.value.trim().toLowerCase();
     const desc = this.prodiption.value.trim();
@@ -54,6 +53,7 @@ const WidgetNew = ({ groupId, clearOnClose })=> {
         <span className='centre'>
           <button
             type='submit'
+            formMethod='dialog'
             className='action nSolid'
             id='go'
             disabled={false}>SAVE</button>
@@ -67,8 +67,7 @@ export default WidgetNew;
 
 export const WidgetEdit = ({ id, now })=> {
 
-  function save(e) {
-    e.preventDefault();
+  function save() {
     const newName = this.nwNm.value.trim().toLowerCase();
     const desc = this.prodiption.value.trim();
 
@@ -114,7 +113,8 @@ export const WidgetEdit = ({ id, now })=> {
       </p>
       <span className='centre'>
         <button
-          type='submit' 
+          type='submit'
+          formMethod='dialog'
           className='action nSolid'
         >SAVE</button>
       </span>

@@ -5,8 +5,7 @@ import ModelNative from '/client/layouts/Models/ModelNative';
 
 const CompForm = ({ vID })=> {
   
-  function addParts(e) {
-    e.preventDefault();
+  function addParts() {
     this.add_comp_go.disabled = true;
     
     const allNums = this.parts.value.trim().toLowerCase();
@@ -47,7 +46,9 @@ const CompForm = ({ vID })=> {
           id='add_comp_go'
           disabled={false}
           className='action nSolid'
-          type='submit'>Add</button>
+          type='submit'
+          formMethod='dialog'
+        >Add</button>
       </p>
     </form>
     </ModelNative>
