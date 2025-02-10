@@ -11,6 +11,14 @@ export function syncLocale(accessKey) {
     });
   }
 }
+export function appValue(accessKey, onekey) {
+  const app = AppDB.findOne({orgKey:accessKey},{fields:{[onekey]:1}});
+  if( app ) { 
+    return app[onekey];
+  }else{
+    return false;
+  }
+}
 
 export function sortBranches(branches) {
   const brancheS = branches.sort((b1, b2)=>

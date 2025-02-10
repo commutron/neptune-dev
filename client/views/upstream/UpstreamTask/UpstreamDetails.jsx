@@ -108,7 +108,6 @@ export default UpstreamDetails;
 
 const UpstreamDetailChunk = ({ 
   oB, tBatch,
-  app, 
   branchClear,
   isAuth, isRO,
   kitCols, 

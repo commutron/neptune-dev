@@ -3,7 +3,7 @@ import 'moment-timezone';
 import 'moment-business-time';
 
 import Config from '/server/hardConfig.js';
-import { syncLocale } from '/server/utility.js';
+import { syncLocale, appValue } from '/server/utility.js';
 import { deliveryState, calcShipDay } from '/server/reportCompleted.js';
 import { getShipLoad } from '/server/shipOps';
 
@@ -11,6 +11,33 @@ function shipLoadPromise(now) {
   return new Promise( (resolve)=> {
     resolve( getShipLoad(now) );
   });
+}
+
+function docsData(bData, rootI) {
+  const v = VariantDB.findOne({widgetId: bData.widgetId, versionKey: bData.versionKey},{fields:{'instruct':1}});
+  const d = v?.instruct || '';
+  const r = rootI || '';
+  
+  const url = d.slice(0,4) === 'http' ? d : r + d;
+  const address = url + ".json";
+  console.log(address);
+  
+  try {
+    HTTP.call('GET', address, {}, (error, result) => {
+    if (!error) {
+      console.log(result);
+    }else{
+      console.error(error);
+    }});
+
+    return true;
+  } catch (e) {
+    // Got a network error, timeout, or HTTP error in the 400 or 500 range.
+    console.error(e);
+    return false;
+  }
+  
+  
 }
 
 function shrinkWhole(bData, now, accessKey, shipLoad) {
@@ -168,8 +195,11 @@ function checkMovement(bData, now, accessKey, shipLoad) {
     resolve(true);
   });
 }
-function checkNoise(bData, accessKey) {
+function checkNoise(bData, rootI, accessKey) {
   return new Promise( (resolve)=> {
+    
+    docsData(bData, rootI);
+    
     
     const actvLvl = Meteor.call('tideActivityLevel', bData._id);
     const brchCnd = Meteor.call('branchCondition', bData._id, accessKey);
@@ -332,8 +362,9 @@ Meteor.methods({
     (async ()=> {
       try {
         const batchBX = XBatchDB.findOne({_id: bID});
+        const rootI = appValue(accessKey, 'instruct');
         
-        await checkNoise( batchBX, accessKey );
+        await checkNoise( batchBX, rootI, accessKey );
       }catch (err) {
         throw new Meteor.Error(err);
       }
@@ -380,8 +411,10 @@ Meteor.methods({
       try {
         const ystrday = ( d => new Date(d.setDate(d.getDate()-1)) )(new Date);
         const lstweek = ( d => new Date(d.setDate(d.getDate()-7)) )(new Date);
-        const hot = moment().subtract(10, 'minutes').toISOString();
+        const hot = moment().subtract(1, 'minutes').toISOString();
       
+        const rootI = appValue(accessKey, 'instruct');
+        
         const fetchX = XBatchDB.find({orgKey: accessKey, lock: {$ne: true},
                         $or: [ { live: true }, 
                                { completedAt: { $gte: lstweek } },
@@ -394,7 +427,7 @@ Meteor.methods({
               lastRefreshed: { $gte: new Date(hot) }
             },{fields:{'batchID':1},limit:1}).count();
           if(!t) {
-            await checkNoise( x, accessKey );
+            await checkNoise( x, rootI, accessKey );
           }
         }));
       }catch (err) {
