@@ -16,8 +16,7 @@ const BatchDetails = ({
     Grabber('.overGridScroll');
   }, []);
   
-  const statusCols = branchArea ? ['due', 'remaining workdays', 'items quantity'] :
-                      ['due', 'remaining workdays', 'items quantity', 'flow set'];
+  const statusCols = ['due', 'remaining workdays', 'items quantity','flow set','docs'];
   
   const allBrnch = useMemo( ()=> Array.from(brancheS, x => x.common), [brancheS]);
   const progCols = branchArea ?

@@ -179,16 +179,19 @@ Meteor.publish('peopleData', function(){
 });
 
 // Upstream
-Meteor.publish('traceDataLive', function(){
+Meteor.publish('traceDataLive', function(view){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
+  const loadscope = view === 'docs' ? 
+    {orgKey: orgKey, live: true } :
+    {orgKey: orgKey, live: true, onFloor: false };
   if(!this.userId){
     return this.ready();
   }else{
     return [
-      TraceDB.find({
-        orgKey: orgKey, live: true, onFloor: false }, {
+      TraceDB.find(loadscope, {
         fields: {
+          // 'lastRefreshed': 1,
           'batch': 1,
           'batchID': 1,
           'tags': 1,
@@ -213,7 +216,8 @@ Meteor.publish('traceDataLive', function(){
           'bffrRel': 1,
           'estEnd2fillBuffer': 1,
           'overQuote': 1,
-          'isQuoted': 1
+          'isQuoted': 1,
+          'docStatus': 1
         }
       })
     ];
@@ -263,7 +267,8 @@ Meteor.publish('traceDataActive', function(){
           'estEnd2fillBuffer': 1,
           'overQuote': 1,
           'isQuoted': 1,
-          'performTgt': 1
+          'performTgt': 1,
+          'docStatus': 1
         }
       })
     ];
@@ -319,7 +324,8 @@ Meteor.publish('traceDataOpen', function(){
           'bffrRel': 1,
           'estEnd2fillBuffer': 1,
           'overQuote': 1,
-          'performTgt': 1
+          'performTgt': 1,
+          'docStatus': 1
         }
       }),
       CacheDB.find({orgKey: orgKey,

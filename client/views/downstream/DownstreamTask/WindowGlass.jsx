@@ -13,7 +13,7 @@ const WindowGlass = ({
   const statCols = ['sales order','active','estimate'];
   const progCols = ['total items',...Array.from(brancheS, x => x.common)];
   const ncCols = ['NC total', 'NC remain', 'NC rate', 'NC items', Pref.scrap, Pref.rapidEx];
-  const headersArr = [...statCols,...progCols,'Perfomance',...ncCols,'',''];
+  const headersArr = [...statCols,...progCols,'Perfomance',...ncCols,'Date','Docs',''];
 
   const dayOrders = indexKey === 0 ? mixedOrders.filter( o => !o.hold ) : mixedOrders;
   const hldOrders = indexKey === 0 ? mixedOrders.filter( o => o.hold ) : [];

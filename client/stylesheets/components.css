@@ -261,7 +261,7 @@ n-timeline-item:last-child n-timeline-marker:after {
   overflow: hidden;
   border: 1px solid darkgray;
   border-radius: 2px;
-  box-shadow: var(--dropShadow000);
+  box-shadow: var(--dropShadow00);
   transition: display 200ms, opacity 200ms;
   transition-behavior: allow-discrete;
 }

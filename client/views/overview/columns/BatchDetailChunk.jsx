@@ -59,7 +59,6 @@ const BatchDetailChunk = ({
         app={app}
         isDebug={isDebug}
         statusCols={statusCols}
-        branchArea={branchArea}
       />
     
       {!branchArea ?

@@ -25,8 +25,8 @@
     'topBorder topBorder topBorder topBorder'
     'homeIcon frontCenter auxRight proRight';
 }
-.overviewContainer .vbigger {
-  font-size: calc(var(--vert_border) * 3);
+.overviewContainer .taskLink {
+  font-size: calc(var(--vert_border) * 2.5);
 }
 
 .upstreamView,

@@ -22,7 +22,6 @@ const WModels = ({
         widgetData={widgetData}
         users={users}
         app={app}
-        rootWI={groupData.wiki}
         access={doVar} 
       />
       <FlowFormHead

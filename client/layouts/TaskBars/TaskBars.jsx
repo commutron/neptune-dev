@@ -118,6 +118,14 @@ export const UpTaskBar = ({ subLink, showParts, isAuth }) => (
     />
     
     <TaskElement
+      title='Instruction Docs'
+      subON={subLink === 'docs'}
+      goLink='/upstream/docs'
+      icon='fa-solid fa-file-invoice'
+      iconAdj='up-1'
+    />
+    
+    <TaskElement
       title='Conversion Calculators'
       subON={subLink === 'values'}
       goLink='/upstream/values'
@@ -192,7 +200,7 @@ export const DownTaskBar = ({ subLink }) => (
   </div>
 );
 
-const FilterElement = ({ title, subTitle, goLink, branchON, changeBranch, icon, size, shrink, lock }) => (
+const FilterElement = ({ title, subTitle, goLink, branchON, changeBranch, icon, iconAdj, size, shrink, lock }) => (
   <button
     aria-label={title}
     style={shrink ? {minHeight:'unset',padding:'3px 0'} : {}}
@@ -204,7 +212,7 @@ const FilterElement = ({ title, subTitle, goLink, branchON, changeBranch, icon, 
     `}
     onClick={()=>{FlowRouter.go( '/overview' );changeBranch( goLink )}}
     disabled={lock}
-  >{icon ? <i className={icon}></i> : 
+  >{icon ? <i className={icon} data-fa-transform={iconAdj}></i> : 
            <i className={size}>{toCap(subTitle)}</i>}
   </button>
 );
@@ -234,8 +242,8 @@ export const OverMenuBar = ({ brancheS, branchON, changeBranch, light }) => {
         goLink={false}
         branchON={branchON === false}
         changeBranch={changeBranch}
-        icon='fa-solid fa-code-branch'
-        size=''
+        icon='fa-solid fa-globe'
+        iconAdj='down-1'
         shrink={brancheS.length >= 14}
       />
       
@@ -248,8 +256,6 @@ export const OverMenuBar = ({ brancheS, branchON, changeBranch, light }) => {
             goLink={br.branch}
             branchON={branchON === br.branch}
             changeBranch={changeBranch}
-            icon={false}
-            size='vbigger'
             shrink={brancheS.length >= 12}
           />
       )})}

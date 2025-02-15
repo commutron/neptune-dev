@@ -5,6 +5,7 @@ import { min2hr, avgOfArray } from '/client/utility/Convert';
 import ProJump from '/client/components/smallUi/ProJump';
 import TideActivityData, { TideActivitySquare } from '/client/components/tide/TideActivity';
 import { PerformanceSquare } from '/client/components/smallUi/StatusBlocks/PerformKPI';
+import TrinaryStat from '/client/components/tinyUi/TrinaryStat';
 import BranchProgress from '../../overview/columns/BranchProgress';
 import NonConCounts from '../../overview/columns/NonConCounts';
 import AlterFulfill from '/client/components/forms/Batch/AlterFulfill';
@@ -77,7 +78,11 @@ const DownstreamScrollChunk = ({
         stormy === 0 && tBatch.stormy[0] !== true ||
         stormy === 1 && tBatch.stormy[1] !== true ||
         stormy === 2 && tBatch.stormy[2] !== true ? 'clearall' : '';
-
+  
+  const dS = tBatch.docStatus || null;
+  const dV = !dS ? null : dS.topLevelV;
+  const dL = dS?.url || undefined;
+  
   return(
     <div className={`downRowScroll ${highG} ${highT} ${storm}`}>
       
@@ -136,6 +141,21 @@ const DownstreamScrollChunk = ({
           noText={true}
           cleanIcon={true}
           isDebug={isDebug} />
+      </div>
+      
+      <div className='overButton'>
+        <a href={dL} target='_blank'>
+        <TrinaryStat
+          status={dV}
+          name={dV ? 'Verified' :
+                dV === false ? 'Unverified' :
+                'Not Found'}
+          title='Instruction Doc Satus'
+          onIcon='fa-solid fa-file-circle-check fa-2x greenT' 
+          midIcon='fa-solid fa-file-shield fa-2x orangeT'
+          offIcon='fa-solid fa-minus fa-2x grayT fade' 
+        />
+        </a>
       </div>
       
       <ProJump batchNum={ck.batch} allRO={isRO} />

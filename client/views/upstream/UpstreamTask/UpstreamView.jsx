@@ -39,7 +39,7 @@ const UpstreamView = ({ batchX, traceDT, user, app, brancheS, isAuth, isDebug })
   useEffect( ()=>{
     Meteor.setTimeout( ()=> {
       Meteor.call('updateLiveNoise');
-    },3000);
+    },2000);
   }, [updateTrigger]);
   
   useEffect( ()=>{
@@ -140,8 +140,7 @@ const UpstreamView = ({ batchX, traceDT, user, app, brancheS, isAuth, isDebug })
   }
   
   return(
-    <div key={0} className={`${light === true ? 
-                  'upstreamView lightTheme' : 'upstreamView darkTheme'}`}>
+    <div key={0} className={`upstreamView ${light ? 'lightTheme' : 'darkTheme'}`}>
     
       <UpstreamTools
         traceDT={traceDT}

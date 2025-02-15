@@ -23,7 +23,7 @@ const UpstreamDetails = ({
   
   const branchClear = brancheS.filter( b => b.reqClearance === true );
   
-  const statusCols = ['due','remaining workdays','items quantity','flow set'];
+  const statusCols = ['due','remaining workdays','items quantity','flow set','docs'];
   
   const branchClearCols = Array.from(branchClear, x => x.common );
   const kitCols = ['Quote Set', ...branchClearCols, Pref.baseSerialPart+'s', 'released'];

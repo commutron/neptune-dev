@@ -14,30 +14,38 @@ function shipLoadPromise(now) {
 }
 
 function docsData(bData, rootI) {
-  const v = VariantDB.findOne({widgetId: bData.widgetId, versionKey: bData.versionKey},{fields:{'instruct':1}});
-  const d = v?.instruct || '';
-  const r = rootI || '';
-  
-  const url = d.slice(0,4) === 'http' ? d : r + d;
-  const address = url + ".json";
-  console.log(address);
-  
   try {
-    HTTP.call('GET', address, {}, (error, result) => {
-    if (!error) {
-      console.log(result);
-    }else{
-      console.error(error);
-    }});
-
-    return true;
-  } catch (e) {
-    // Got a network error, timeout, or HTTP error in the 400 or 500 range.
-    console.error(e);
-    return false;
+    const v = VariantDB.findOne({widgetId: bData.widgetId, versionKey: bData.versionKey},{fields:{'instruct':1}});
+    const d = v?.instruct || '';
+    const r = rootI || '';
+    
+    const url = d.slice(0,4) === 'http' ? d : r + d;
+    const api = url + ".json";
+  
+    return fetch(api, {})
+      .catch( ()=>{
+        return null;
+      })
+      .then((response)=> {
+        return response.json();
+      })
+      .then((docObj)=> {
+        if(docObj) {
+          const docStatus = {
+            url: url,
+            title: docObj.title,
+            last_modified: docObj.last_modified,
+            modulesV: docObj.modules.every( m => m.verify === true ),
+            topLevelV : docObj.verified
+          };
+          return docStatus;
+        }else{
+          return false;
+        }
+    });
+  }catch (err) {
+    throw new Meteor.Error(err);
   }
-  
-  
 }
 
 function shrinkWhole(bData, now, accessKey, shipLoad) {
@@ -198,30 +206,37 @@ function checkMovement(bData, now, accessKey, shipLoad) {
 function checkNoise(bData, rootI, accessKey) {
   return new Promise( (resolve)=> {
     
-    docsData(bData, rootI);
-    
-    
-    const actvLvl = Meteor.call('tideActivityLevel', bData._id);
-    const brchCnd = Meteor.call('branchCondition', bData._id, accessKey);
-    const brchPrg = Meteor.call('branchProgress', bData._id, accessKey);
-    const btchDur = Meteor.call('branchTaskTime', bData._id, accessKey);
-    const btchNCs = Meteor.call('nonconQuickStats', bData._id);
-    
-    TraceDB.update({batchID: bData._id}, {
-      $set : { 
-        lastRefreshed: new Date(),
-        live: bData.live,
-        isActive: actvLvl.isActive,
-        onFloor: brchCnd.onFloor,
-        donePnt: Number(brchCnd.donePnt),
-        stormy: brchCnd.stormy,
-        branchCondition: brchCnd.branchSets,
-        totalItems: Number(brchPrg.totalItems),
-        branchProg: brchPrg.branchProg,
-        branchTime: btchDur.branchTime,
-        btchNCs: btchNCs
-    }});
-    resolve(true);
+    (async ()=> {
+      const docStatus = await docsData(bData, rootI)
+        .catch((err)=>{
+          console.error(err);
+          return false;
+        });
+      
+      const actvLvl = Meteor.call('tideActivityLevel', bData._id);
+      const brchCnd = Meteor.call('branchCondition', bData._id, accessKey);
+      const brchPrg = Meteor.call('branchProgress', bData._id, accessKey);
+      const btchDur = Meteor.call('branchTaskTime', bData._id, accessKey);
+      const btchNCs = Meteor.call('nonconQuickStats', bData._id);
+      
+      TraceDB.update({batchID: bData._id}, {
+        $set : { 
+          lastRefreshed: new Date(),
+          live: bData.live,
+          isActive: actvLvl.isActive,
+          onFloor: brchCnd.onFloor,
+          donePnt: Number(brchCnd.donePnt),
+          stormy: brchCnd.stormy,
+          branchCondition: brchCnd.branchSets,
+          totalItems: Number(brchPrg.totalItems),
+          branchProg: brchPrg.branchProg,
+          branchTime: btchDur.branchTime,
+          btchNCs: btchNCs,
+          docStatus: docStatus
+      }});
+      
+      resolve(true);
+    })();
   });
 }
 
@@ -371,7 +386,6 @@ Meteor.methods({
     })();
   },
   
-  
   updateLiveMovement(privateKey) {
     (async ()=> {
       const accessKey = privateKey || Meteor.user().orgKey;
@@ -406,13 +420,13 @@ Meteor.methods({
   },
   
   updateLiveNoise(privateKey) {
+    this.unblock();
     (async ()=> {
       const accessKey = privateKey || Meteor.user().orgKey;
       try {
         const ystrday = ( d => new Date(d.setDate(d.getDate()-1)) )(new Date);
         const lstweek = ( d => new Date(d.setDate(d.getDate()-7)) )(new Date);
-        const hot = moment().subtract(1, 'minutes').toISOString();
-      
+        const hot = moment().subtract(10, 'minutes').toISOString();
         const rootI = appValue(accessKey, 'instruct');
         
         const fetchX = XBatchDB.find({orgKey: accessKey, lock: {$ne: true},

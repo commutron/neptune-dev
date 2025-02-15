@@ -8,6 +8,7 @@ import CompSearchData from '/client/views/upstream/CompSearch/CompSearchData';
 import CompValuesSlide from '/client/views/upstream/CompValues/CompValuesSlide';
 import EmailRec from '/client/views/upstream/EmailRec';
 import ReportShort from '/client/views/upstream/ReportShort';
+import DocsReadySlide from '/client/views/upstream/DocsReadySlide';
 
 const UpstreamWrap = ({ 
   view,
@@ -69,6 +70,23 @@ const UpstreamWrap = ({
           user={user}
           org={user.org}
           app={app} />
+      </StreamLayout>
+    );
+  }
+  
+  if(view === 'docs') {
+    return (
+      <StreamLayout
+        user={user}
+        app={app}
+        title='Instruction Docs'
+        subLink={view}
+        action={false}
+      >
+        <DocsReadySlide
+          traceDT={traceDT}
+          app={app} 
+        />
       </StreamLayout>
     );
   }

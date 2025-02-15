@@ -13,6 +13,43 @@ const AddressSlide = ({ app })=> {
     });
   }
   
+  function handleTestCall(e) {
+    e.preventDefault();
+    
+    const address = e.target.testURLforHTTP.value;
+    
+    console.log(address);
+    
+    Meteor.apply('testHTTPCALL', [ address ], {wait: true},
+      (error, reply)=> {
+        error && console.log(error);
+        if(reply) {
+          console.log("RUN FROM SERVER");
+          toast.success(reply);
+          console.log(reply);
+        }
+      }
+    );
+    
+    try {
+      return new Promise(() => {
+        fetch(address, {})
+        .then(function(response) {
+          console.log("RUN FROM CLIENT 1");
+          return response.json();
+        })
+        .then(function(articles) {
+          console.log("RUN FROM CLIENT 2");
+          console.log(articles);
+        });
+      });
+    } catch (e) {
+      console.log("RUN FROM CLIENT E");
+      console.error(e);
+    }
+  }
+  
+  
   return(
     <div className='space3v autoFlex'>
       <div>
@@ -56,6 +93,27 @@ const AddressSlide = ({ app })=> {
           />
           <label htmlFor='appPartsDo'>Enable Parts Search Module</label>
         </p>
+      </div>
+      <div>
+        <h2 className='cap'><i className='fas fa-bugs gapR'></i>Test HTTP Call</h2>
+        <form onSubmit={(e)=>handleTestCall(e)}>
+        <p>
+          <input
+            type='url'
+            id='testURLforHTTP'
+            className=''
+            required
+          />
+          <label htmlFor='testURLforHTTP'>API Adress</label>
+        </p>
+        <p>
+          <button
+            id='dotestURLforHTTP'
+            type='submit'
+            className='action nSolid'
+          >Call</button>
+        </p>
+        </form>
       </div>
     </div>
   );

@@ -5,7 +5,7 @@ import 'moment-business-time';
 import NumStat from '/client/components/tinyUi/NumStat';
 import TrinaryStat from '/client/components/tinyUi/TrinaryStat';
 
-const BatchTopStatus = ({ batchID, tBatch, branchArea })=> {
+const BatchTopStatus = ({ batchID, tBatch })=> {
   
   const [ dueDateShip, dueDateShipSet ] = useState(null);
   const [ weekDaysRemain, weekDaysRemainSet ] = useState(0);
@@ -24,6 +24,9 @@ const BatchTopStatus = ({ batchID, tBatch, branchArea })=> {
     }
   }, [batchID, tBatch]);
   
+  const dS = tBatch.docStatus || null;
+  const dV = !dS ? null : dS.topLevelV;
+  const dL = dS?.url || undefined;
 
   return(
     <Fragment>
@@ -52,7 +55,6 @@ const BatchTopStatus = ({ batchID, tBatch, branchArea })=> {
         color='blueT'
         size='big' />
       
-      {!branchArea &&
       <div>
         <TrinaryStat
           status={tBatch.riverChosen}
@@ -61,10 +63,25 @@ const BatchTopStatus = ({ batchID, tBatch, branchArea })=> {
                 'No Flow'}
           title='Process Flow Assignment'
           size=''
-          onIcon='fas fa-check-circle fa-2x greenT' 
-          midIcon='far fa-check-circle fa-2x greenT'
-          offIcon='far fa-question-circle fa-2x blackT' />
-      </div>}
+          onIcon='fa-solid fa-diagram-project fa-2x greenT' 
+          midIcon='fa-solid fa-stopwatch fa-2x greenT'
+          offIcon='fa-solid fa-minus fa-2x grayT fade' />
+      </div>
+      
+      <div className='overButton'>
+        <a href={dL} target='_blank'>
+        <TrinaryStat
+          status={dV}
+          name={dV ? 'Verified' :
+                dV === false ? 'Unverified' :
+                'Not Found'}
+          title='Instruction Doc Satus'
+          onIcon='fa-solid fa-file-circle-check fa-2x greenT' 
+          midIcon='fa-solid fa-file-shield fa-2x orangeT'
+          offIcon='fa-solid fa-minus fa-2x grayT fade' 
+        />
+        </a>
+      </div>
       
     </Fragment>
   );

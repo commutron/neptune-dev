@@ -35,7 +35,7 @@ const DownstreamView = ({ traceDT, dayTime, user, app, isDebug })=> {
   useEffect( ()=>{
     Meteor.setTimeout( ()=> {
       Meteor.call('updateLiveNoise');
-    },3000);
+    },2000);
   }, [updateTrigger]);
   
   useEffect( ()=>{

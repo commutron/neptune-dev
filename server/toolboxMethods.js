@@ -6,7 +6,7 @@ import Config from '/server/hardConfig.js';
 import { avg4est } from './calcOps.js';
 import { syncLocale, getEst } from './utility.js';
 import { getShipLoad } from '/server/shipOps';
-
+    
 Meteor.methods({
   
   // Testing Functions //
@@ -221,6 +221,25 @@ Meteor.methods({
           return false;
         }
       }
+    }
+  },
+  
+  testHTTPCALL(address) {
+    this.unblock();
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      try {
+        return fetch(address, {})
+          .then(function(response) {
+            return response.json();
+          })
+          .then(function(articles) {
+            return articles;
+          });
+      } catch (e) {
+        console.error(e);
+      }
+    }else{
+      return false;
     }
   }
   

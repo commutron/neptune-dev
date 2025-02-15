@@ -53,7 +53,7 @@ export default withTracker( ({ view } ) => {
   let isDebug = user ? Roles.userIsInRole(Meteor.userId(), 'debug') : false;
   let org = user ? user.org : false;
   const sub = login ? Meteor.subscribe('shaddowData') : false;
-  const subT = login ? Meteor.subscribe('traceDataLive') : false;
+  const subT = login ? Meteor.subscribe('traceDataLive', view) : false;
   
   if(!login || !active) {
     return {

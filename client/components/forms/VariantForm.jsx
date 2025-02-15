@@ -5,10 +5,12 @@ import { toast } from 'react-toastify';
 import ModelNative from '/client/layouts/Models/ModelNative';
 import { MultiSelect } from "react-multi-select-component";
 
-const VariantForm = ({ widgetData, users, app, rootWI })=> {
+const VariantForm = ({ widgetData, users, app })=> {
   
   const [ eList, eListSet ] = useState( [] );
   const [ emailState, emailSet ] = useState( [] );
+  const [ instState, instSet ] = useState(false);
+  const [ docState, docSet ] = useState(false);
   
   useEffect( ()=>{
     const liveUsers = users.filter( x => Roles.userIsInRole(x._id, 'active') && 
@@ -17,6 +19,33 @@ const VariantForm = ({ widgetData, users, app, rootWI })=> {
     const listUsers = Array.from(liveUsers, x => { return { label: x.username, value: x._id } } );
     eListSet(listUsers);
   }, []);
+  
+  useEffect( ()=> {
+    if(instState) { 
+      const root = app.instruct || '';
+      const http = instState.slice(0,4) === 'http' ? instState + ".json" : 
+                   instState.slice(0,1) === '/' ? root + instState + ".json" :
+                   root + '/' + instState + ".json";
+      if(http) {
+        try {
+          fetch(http, {})
+          .catch( ()=> {
+            docSet(false);
+          })
+          .then( (response)=> {
+            if(response?.ok) { return response.json(); }
+          })
+          .then( (articles)=> {
+            if(articles) { docSet(articles) }
+          });
+        } catch(e) {
+          null;
+        }
+      }
+    }else{
+      docSet(false);
+    }
+  }, [instState]);
   
   function save() {
     this.gonewvar.disabled = true;
@@ -51,8 +80,6 @@ const VariantForm = ({ widgetData, users, app, rootWI })=> {
       }
     });
   }
-  
-  const urlWI = !rootWI ? false : rootWI.slice(0,4) === 'http' ? rootWI : app.instruct + rootWI;
 
   return(
     <ModelNative
@@ -101,6 +128,7 @@ const VariantForm = ({ widgetData, users, app, rootWI })=> {
             <input
               type='text'
               id='wikdressNew'
+              onChange={(e)=>instSet(e.target.value)}
               placeholder='Full Address'
               className='wide' />
             <label htmlFor='wikdress'>Work Instructions</label>
@@ -140,13 +168,16 @@ const VariantForm = ({ widgetData, users, app, rootWI })=> {
         </form>
       </div>
 
-      <div className='half'>
-        <iframe
-          id='instructMini'
-          src={urlWI || app.instruct}
-          height='600'
-          width='100%' 
-        />
+      <div className='half spacehalf min300 max300'>
+        {docState &&
+          <div>
+            <p>Dcoument Found:</p>
+            <dl>
+              <dt>{docState.title}</dt>
+              {docState.modules.map( (m, ix)=>(<dd key={ix}>{m.module}</dd>) )}
+            </dl>
+          </div>
+        }
       </div>
       
     </div>

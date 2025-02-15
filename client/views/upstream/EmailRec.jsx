@@ -48,7 +48,7 @@ const EmailRec = ({ app, users })=> {
   
   return(
     <div className='space5x5'>
-      <p className='med cap'><h2>Email to Notify on New {Pref.widget} {Pref.baseSerialPart} Clearance.</h2></p>
+      <h2 className='med cap'>Email to Notify on New {Pref.widget} {Pref.baseSerialPart} Clearance.</h2>
       <p className='indent'
         >If {Pref.xBatch} is the first of a {Pref.widget} {Pref.variant} then an emails will be sent to these users upon Upstream clearance.</p> 
       <p className='indent'
