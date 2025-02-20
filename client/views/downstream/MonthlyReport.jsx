@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import { CalcSpin } from '/client/components/tinyUi/Spin';
@@ -10,7 +10,7 @@ import { FilterSelect } from '/client/components/smallUi/ToolBarTools';
 import MonthsTable from '/client/components/tables/MonthsTable'; 
 
 
-const MonthlyReport = ({ app })=> {
+const MonthlyReport = ({ app, isDebug })=> {
   
   const [ yrsState, yrsSet ] = useState([]);
   
@@ -26,6 +26,11 @@ const MonthlyReport = ({ app })=> {
   
   const [ yrDoneTotal, setYrDoneTotal ] = useState(0);
   
+  const [ dataItemState, dataItemSet ] = useState(false);
+  const [ yrPerItmOnT, setYrPerItmOnT ] = useState(0);
+  const [ yrItmDue, setYrItmDue ] = useState(0);
+  const [ yrItmOnT, setYrItmOnT ] = useState(0);
+  
   function getData(fresh) {
     fresh && dataSet(false);
     if(yearState) {
@@ -34,6 +39,12 @@ const MonthlyReport = ({ app })=> {
       Meteor.call('reportMonthsFromCache', yearNum, (err, rtn)=>{
   	    err && console.log(err);
   	    dataSet(rtn);
+  	    isDebug && console.log(rtn);
+  	  });
+  	  Meteor.call('reportItemsDueMonthsCache', yearNum, (err, rtn)=>{
+  	    err && console.log(err);
+  	    dataItemSet(rtn);
+  	    isDebug && console.log(rtn);
   	  });
     }
   }
@@ -54,6 +65,7 @@ const MonthlyReport = ({ app })=> {
   
   useEffect( ()=>{
     if(dataState) {
+      // b time table
       const allPerOnTime = Array.from(dataState, x => x.totalIsDone ? x.percentOnTime : undefined);
       const avgPerOnTime = round2Decimal( avgOfArray(allPerOnTime, true) );
       setYrOnTime(avgPerOnTime);
@@ -61,6 +73,7 @@ const MonthlyReport = ({ app })=> {
       const allOnTime = Array.from(dataState, x => x.totalOnTime).reduce((x,y)=>x+y);
       setYrTimeTotal(allOnTime);
       
+      // quote table
       const allPerOnBdgt = Array.from(dataState, x => x.totalIsDone ? x.percentOnBdgt : undefined);
       const avgPerOnBdgt = round2Decimal( avgOfArray(allPerOnBdgt, true) );
       setYrOnBdgt(avgPerOnBdgt);
@@ -68,11 +81,24 @@ const MonthlyReport = ({ app })=> {
       const allOnBdgt = Array.from(dataState, x => x.totalOnBdgt).reduce((x,y)=>x+y);
       setYrBdgtTotal(allOnBdgt);
       
+      // both batch tables
       const allIsDone = Array.from(dataState, x => x.totalIsDone).reduce((x,y)=>x+y);
       setYrDoneTotal(allIsDone);
     }
   }, [dataState]);
-
+  
+  useEffect( ()=>{
+    if(dataItemState) {
+      // i time table
+      const allPerItm = Array.from(dataItemState, x => x.percentOnTime ? x.percentOnTime : undefined);
+      setYrPerItmOnT( round2Decimal( avgOfArray(allPerItm, true) ) );
+      
+      setYrItmDue( Array.from(dataItemState, x => x.totalWasDue).reduce((x,y)=>x+y) );
+      
+      setYrItmOnT( Array.from(dataItemState, x => x.totalOnTime).reduce((x,y)=>x+y) );
+    }
+  }, [dataItemState]);
+console.log(dataItemState);
   return(
     <div className='w100 minWfit space2v'>
         
@@ -88,6 +114,41 @@ const MonthlyReport = ({ app })=> {
         <PrintThis />
       </div>
       
+      {dataItemState === false ?
+          <div>
+            <p className='centreText'>Looking for those numbers...</p>
+            <CalcSpin />
+          </div>
+        : 
+        dataItemState === null ? 
+          <div>
+            <p className='centreText'>No Data Yet</p>
+          </div>
+        : 
+        <Fragment>
+        
+          <MonthsTable 
+            title='Items On Time'
+            goodtitle='On Time'
+            donetitle='Due'
+            date={yearState}
+            data={dataItemState} 
+            yeartotal={yrPerItmOnT}
+            yrStatTotal={yrItmOnT}
+            yrDoneTotal={yrItmDue}
+            stat='onTime'
+            goal='wasDue'
+            statTotal='totalOnTime'
+            statGoal='totalWasDue'
+            statPer='percentOnTime' 
+            app={app}
+          />
+          
+          <div className='printBr' />
+          
+        </Fragment>
+      }
+      
       {dataState === false ?
           <div>
             <p className='centreText'>Looking for those numbers...</p>
@@ -99,18 +160,21 @@ const MonthlyReport = ({ app })=> {
             <p className='centreText'>No Data Yet</p>
           </div>
         : 
-        <div>
-        
+        <Fragment>
+          
           <MonthsTable 
-            title='On Time'
+            title={`${Pref.XBatchs} On Time`}
+            goodtitle='On Time'
             donetitle='Shipped'
             date={yearState}
             data={dataState} 
-            total={yrOnTime}
+            yeartotal={yrOnTime}
             yrStatTotal={yrTimeTotal}
             yrDoneTotal={yrDoneTotal}
             stat='onTime'
+            goal='isDone'
             statTotal='totalOnTime'
+            statGoal='totalIsDone'
             statPer='percentOnTime' 
             app={app}
             miss={true}
@@ -119,20 +183,23 @@ const MonthlyReport = ({ app })=> {
           <div className='printBr' />
           
           <MonthsTable 
-            title='On Budget'
+            title={`${Pref.XBatchs} On Budget`}
+            goodtitle='On Budget'
             donetitle='Filled'
             date={yearState}
             data={dataState} 
-            total={yrOnBdgt}
+            yeartotal={yrOnBdgt}
             yrStatTotal={yrBdgtTotal}
             yrDoneTotal={yrDoneTotal}
             stat='onBdgt'
+            goal='isDone'
             statTotal='totalOnBdgt'
+            statGoal='totalIsDone'
             statPer='percentOnBdgt' 
             app={app}
           />
         
-        </div>
+        </Fragment>
       }
 
     </div>

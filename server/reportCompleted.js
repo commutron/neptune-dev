@@ -31,14 +31,15 @@ function coreDlvDays(batchId, bEnd, bFinish) {
 
   const endWork = getEndWork(batchId, bEnd);
   
-  const didFinish = moment(bFinish).tz(Config.clientTZ);
+  const didFinish = bFinish ? moment(bFinish).tz(Config.clientTZ) : null;
+  const cleanFin = didFinish ? didFinish.format() : null;
   
-  const lateLate = didFinish.isAfter(endWork);
-  const lateDay = didFinish.isSame(endWork, 'day');
+  const lateLate = didFinish ? didFinish.isAfter(endWork) : null;
+  const lateDay = didFinish ? didFinish.isSame(endWork, 'day') : null;
   
-  const shipLate = didFinish.isAfter(shipDue);
+  const shipLate = didFinish ? didFinish.isAfter(shipDue) : null;
   
-  return [ endWork, shipDue, didFinish.format(), lateLate, lateDay, shipLate ];
+  return [ endWork, shipDue, cleanFin, lateLate, lateDay, shipLate ];
 }
 
 export function deliveryState(batchId, bEnd, bFinish) {
@@ -99,13 +100,37 @@ export function deliveryBinary(batchId, bEnd, bFinish) {
   
   const shipLate = dlvDy[5];
   
-  const hrGp = Math.abs( moment(shipDue).workingDiff(didFinish, 'hours') );
+  const hrGp = didFinish ? Math.abs( moment(shipDue).workingDiff(didFinish, 'hours') ) : 0;
   
   const shipZ = !shipLate || hrGp == 0 ?
-                  hrGp <= Config.dropShipBffr ? 'on time' : 'early' : 
-                  hrGp <= Config.dropShipBffr ? 'late' : 'late';
+                  hrGp <= Config.dropShipBffr ? 'on time' : 'early' : 'late';
   
   return [ fillZ, shipZ ];
+}
+
+export function deliveryRatio(srsBatch, shipDue, bFinish) {
+  const didFinish = bFinish ? moment(bFinish).tz(Config.clientTZ) : null;
+  const allOnTime = didFinish ? didFinish.isBefore(shipDue) : false;
+  
+  let totalItem = 0;
+  let ontimeItm = 0;
+  
+  if(srsBatch) {
+    const srs = XSeriesDB.findOne({batch: srsBatch},{fields:{'items.completedAt':1}});
+    if(srs) {
+      totalItem += srs.items.length;
+      if(allOnTime) {
+        ontimeItm += srs.items.length;
+      }else{
+        for(let i of srs.items) {
+          if(i.completedAt) {
+            new Date(i.completedAt) < new Date(shipDue) ? ontimeItm++ : null;
+          }
+        }
+      }
+    }
+  }
+  return [ totalItem, ontimeItm ];
 }
 
   
@@ -168,7 +193,10 @@ function weekDoneAnalysis(rangeStart, rangeEnd) {
   return batchMetrics;
 }
 
-  
+const filterCacheYear = (cache, year)=> cache.dataSet.filter( c => moment(c.month).year() === year );
+
+const findCacheMonth = (cache, month)=> cache.find( c => moment(c.month).month() === month );
+
 Meteor.methods({
   
   reportOnCompleted(yearNum, weekNum) {
@@ -193,13 +221,13 @@ Meteor.methods({
     if(!allCache) {
       return null;
     }else{
-      const yearCache = allCache.dataSet.filter( c => moment(c.month).year() === yearNum );
+      const yearCache = filterCacheYear(allCache, yearNum);
       
       let yearSet = [];
       
       for( let m = 0; m < 12; m++) {
       
-        const monthCache = yearCache.find( c => moment(c.month).month() === m );
+        const monthCache = findCacheMonth(yearCache, m);
         
         let monthSet = [];
         
@@ -220,7 +248,7 @@ Meteor.methods({
               onTime : week.y[0],
               missed : week.y[0] > week.y[2],
               onBdgt : week.y[4],
-              isDone : week.y[0] + week.y[1]
+              isDone : week.y[0] + week.y[1],
             });
             
           }
@@ -242,6 +270,54 @@ Meteor.methods({
       
       }
 
+      return yearSet;
+    }
+  },
+  
+  reportItemsDueMonthsCache(yearNum) {
+    const allCache = CacheDB.findOne({
+                      orgKey: Meteor.user().orgKey, 
+                      dataName: 'doneItemsLiteMonthsWeeks'
+                    });
+    if(!allCache) {
+      return null;
+    }else{
+      const yearCache = filterCacheYear(allCache, yearNum);
+      
+      let yearSet = [];
+      
+      for( let m = 0; m < 12; m++) {
+      
+        const monthCache = findCacheMonth(yearCache, m);
+        
+        let monthSet = [];
+        
+        let totalWasDue = 0;
+        let totalOnTime = 0;
+        
+        if(monthCache) {
+          for( let week of monthCache.weeks ) {
+            
+            totalWasDue += week.y[0];
+            totalOnTime += week.y[1];
+            
+            monthSet.push({
+              wasDue : week.y[0],
+              onTime : week.y[1]
+            });
+          }
+        }
+  
+        const percentOnTime = percentOf(totalWasDue, totalOnTime);
+        
+        yearSet.push({
+          monthNum : m,
+          monthSet,
+          totalWasDue,
+          totalOnTime,
+          percentOnTime
+        });
+      }
       return yearSet;
     }
   },

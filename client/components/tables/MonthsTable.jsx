@@ -2,9 +2,9 @@ import React, { Fragment } from 'react';
 import './style.css';
 
 const MonthsTable = ({ 
-  title, donetitle, date, data, total, 
+  title, goodtitle, donetitle, date, data, yeartotal, 
   yrStatTotal, yrDoneTotal,
-  stat, statTotal, statPer,
+  stat, goal, statTotal, statGoal, statPer,
   app, extraClass, miss 
 })=> {
 
@@ -39,36 +39,36 @@ const MonthsTable = ({
                 <th></th>
                 {data.map( (a, adex)=>(
                   <Fragment key={adex}>
-                    <th>{title}</th><th>{donetitle}</th>
+                    <th>{goodtitle}</th><th>{donetitle}</th>
                   </Fragment>
                 ))}
                 <td colSpan='2'></td>
               </tr>
               
-              <WeekRows data={data} w={0} stat={stat} miss={miss} />
+              <WeekRows data={data} w={0} stat={stat} goal={goal} miss={miss} />
               
-              <WeekRows data={data} w={1} stat={stat} miss={miss} />
+              <WeekRows data={data} w={1} stat={stat} goal={goal} miss={miss} />
               
-              <WeekRows data={data} w={2} stat={stat} miss={miss} />
+              <WeekRows data={data} w={2} stat={stat} goal={goal} miss={miss} />
               
-              <WeekRows data={data} w={3} stat={stat} miss={miss} />
+              <WeekRows data={data} w={3} stat={stat} goal={goal} miss={miss} />
               
-              <WeekRows data={data} w={4} stat={stat} miss={miss} />
+              <WeekRows data={data} w={4} stat={stat} goal={goal} miss={miss} />
               
-              <WeekRows data={data} w={5} stat={stat} miss={miss} />
+              <WeekRows data={data} w={5} stat={stat} goal={goal} miss={miss} />
               
               <tr>
                 <th>Totals</th>
                 {data.map( (tt, ttdex)=>(
                   <Fragment key={ttdex}>
-                    <td><b>{tt[statTotal]}</b></td><td><b>{tt.totalIsDone}</b></td>
+                    <td><b>{tt[statTotal]}</b></td><td><b>{tt[statGoal]}</b></td>
                   </Fragment>
                 ))}
                 <td><b>{yrStatTotal}</b></td>
                 <td><b>{yrDoneTotal}</b></td>
               </tr>
               
-              <TotalsRow data={data} statPer={statPer} total={total} app={app} />
+              <TotalsRow data={data} statPer={statPer} yeartotal={yeartotal} app={app} />
              
             </tbody>
                
@@ -89,7 +89,7 @@ const MonthsTable = ({
 export default MonthsTable;
 
 
-const WeekRows = ({ data, w, stat, miss })=> (
+const WeekRows = ({ data, w, stat, goal, miss })=> (
   <tr>
     <th className='leftThead'>Week {w+1}</th>
     {data.map( (e)=> {
@@ -99,7 +99,7 @@ const WeekRows = ({ data, w, stat, miss })=> (
             <td className={miss && e.monthSet[w].missed ? 'redT' : ''}
               >{e.monthSet[w][stat]}
             </td>
-            <td>{e.monthSet[w].isDone}</td>
+            <td>{e.monthSet[w][goal]}</td>
           </Fragment>
         );
       }else{
@@ -114,11 +114,11 @@ const WeekRows = ({ data, w, stat, miss })=> (
   </tr>
 );
 
-const TotalsRow = ({ data, statPer, total, app })=> {
+const TotalsRow = ({ data, statPer, yeartotal, app })=> {
   
   const sTy = !app.onScale ? '' :
-              total >= app.onScale.high ? 'greenGlow' :
-              total <= app.onScale.low ? 'redGlow' :
+              yeartotal >= app.onScale.high ? 'greenGlow' :
+              yeartotal <= app.onScale.low ? 'redGlow' :
               'yellowGlow';
   return(
     <tr className='botThead'>
@@ -136,7 +136,7 @@ const TotalsRow = ({ data, statPer, total, app })=> {
             className={`bold ${sty}`}
           >{tt[statPer] || '0.00'}%</td>
       )})}
-      <td colSpan='2' className={`bold ${sTy}`}>{total}%</td>
+      <td colSpan='2' className={`bold ${sTy}`}>{yeartotal}%</td>
     </tr>
   );
 };

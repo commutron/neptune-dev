@@ -2,9 +2,10 @@ import { SyncedCron } from 'meteor/littledata:synced-cron';
 import moment from 'moment';
 import 'moment-timezone';
 
-import { deliveryBinary } from '/server/reportCompleted.js';
+import { deliveryBinary, deliveryRatio } from '/server/reportCompleted.js';
 import { checkTimeBudget } from '/server/tideGlobalMethods';
 import { syncLocale, noIg } from '/server/utility';
+
 import Config from '/server/hardConfig.js';
 
 
@@ -104,6 +105,7 @@ async function runRanges() {
     const apps = AppDB.find({},{fields:{'orgKey':1}}).fetch();
     for(let app of apps) {
       await countDoneBatchTarget(app.orgKey);
+      await countDoneItemsTarget(app.orgKey);
     }
     return true;
   }catch (error) {
@@ -174,6 +176,20 @@ const addRanges = (bStats, ranges, period)=> {
   return xy;
 };
 
+const monthFilter = (bchs, month, due)=> bchs.filter( b => moment(b[due]).isSame(month, 'month') );
+const weekFilter = (month, week, due)=> month.filter( b => moment(b[due]).week() === week );
+
+const weeksGenerator = (range, nowYear, nowWeek)=> {
+  const thisYr = moment(range).year() === nowYear;
+  const rend = moment(range).endOf('month');
+
+  let weekdays = new Set();
+  for(let d = new Date(range); d <= new Date(rend.format()); d.setDate(d.getDate() + 1)) {
+    weekdays.add( moment(d).week() );
+  }
+  return !thisYr ? [...weekdays] : [...weekdays].filter( f => f <= nowWeek );
+};
+
 const runMonthWeeks = (bStats, ranges)=> {
   let mXY = [];
   
@@ -182,16 +198,8 @@ const runMonthWeeks = (bStats, ranges)=> {
   const nWk = now.week();
   
   for(let r of ranges) {
-    const thisYr = moment(r).year() === nYr;
-    const rend = moment(r).endOf('month');
-    
-    const month = bStats.filter( b => moment(b.finish).isSame(r, 'month') );
-    
-    let weekdays = new Set();
-    for(let d = new Date(r); d <= new Date(rend.format()); d.setDate(d.getDate() + 1)) {
-      weekdays.add( moment(d).week() );
-    }
-    const weeks = !thisYr ? [...weekdays] : [...weekdays].filter( f => f <= nWk );
+    const month = monthFilter(bStats, r, 'finish');
+    const weeks = weeksGenerator(r, nYr, nWk);
     
     let wXY = [];
     
@@ -202,10 +210,10 @@ const runMonthWeeks = (bStats, ranges)=> {
       let shipLate = 0;
       let doneUnderQ = 0;
       let doneOverQ = 0;
-
-      const wset = month.filter( b => moment(b.finish).week() === w );
+      
+      const weekset = weekFilter(month, w, 'finish');
     
-      wset.map( (w)=> {
+      weekset.map( (w)=> {
         w.fillOn ? doneOnTime++ : doneLate++;
         w.shipOn ? shipOnTime++ : shipLate++;
         w.qbgtOn ? doneUnderQ++ : doneOverQ++;
@@ -243,6 +251,7 @@ async function countDoneBatchTarget(accessKey) {
       groupId: { $ne: xid },
       completed: true
     },{fields:{
+      'batch': 1,
       'salesEnd': 1,
       'completedAt': 1,
       'tide': 1,
@@ -303,11 +312,104 @@ async function countDoneBatchTarget(accessKey) {
   });
 }
 
+const runMonthWeeksItems = (bStats, ranges)=> {
+  let mXY = [];
+  
+  const now = moment();
+  const nYr = now.year();
+  const nWk = now.week();
+  
+  for(let r of ranges) {
+    const month = monthFilter(bStats, r, 'shipDue');
+    const weeks = weeksGenerator(r, nYr, nWk);
+    
+    let wXY = [];
+    
+    for(let w of weeks) {
+      let totalItems = 0;
+      let onTimeItems = 0;
+      
+      const weekset = weekFilter(month, w, 'shipDue');
+    
+      weekset.map( (w)=> {
+        totalItems += w.totalItm;
+        onTimeItems += w.ontimeItm;
+      });
+  
+      wXY.push({
+        x: w,
+        y: [
+          totalItems,
+          onTimeItems
+        ]
+      });
+    }
+    
+    mXY.push({
+      month: r,
+      weeks: wXY
+    });
+  }
+    
+  return mXY;
+};
+
+async function countDoneItemsTarget(accessKey) {
+  return new Promise(function(resolve) {
+    syncLocale(accessKey);
+    const xid = noIg();
+    
+    const batches = XBatchDB.find({
+      orgKey: accessKey, 
+      groupId: { $ne: xid }
+    },{fields:{
+      'batch': 1,
+      'salesEnd': 1,
+      'completedAt': 1,
+      'finShipDue': 1
+    }}).fetch();
+    
+    let bStats = [];
+    
+    for(let gfx of batches) {
+      const calcDue = (sEnd)=> {
+        const endDay = moment.tz(sEnd, Config.clientTZ);
+        return endDay.isShipDay() ?
+                endDay.clone().endOf('day').lastShippingTime().format() :
+                endDay.clone().lastShippingTime().format();
+      };
+      const shipDue = gfx.finShipDue || calcDue(gfx.salesEnd);
+      
+      const dst = deliveryRatio(gfx.batch, shipDue, gfx.completedAt);
+      
+      bStats.push({
+        shipDue: shipDue,
+        totalItm: dst[0],
+        ontimeItm: dst[1]
+      });
+    }
+
+    const stdRanges = getRanges();
+    let monthweekXY = runMonthWeeksItems(bStats, stdRanges[1]);
+    
+    CacheDB.upsert({orgKey: accessKey, dataName: 'doneItemsLiteMonthsWeeks'}, {
+      $set : {
+        orgKey: accessKey,
+        lastUpdated: new Date(),
+        dataName: 'doneItemsLiteMonthsWeeks',
+        dataSet: monthweekXY
+    }});
+  
+    resolve(true);
+  });
+}
 
 Meteor.methods({
   
   forceRunTrendLoops() {
+    this.unblock();
     runRanges();
+    return true;
   }
   
 })

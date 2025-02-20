@@ -286,13 +286,16 @@ n-timeline-item:last-child n-timeline-marker:after {
   right: anchor(right);
   margin-block-start: 0.8dvmin;
 }
-
-.floattaskbar.light,
-.floattaskbar.light .popbutton,
-.floattaskbar.light .popmenu,
-.floattaskbar.light .popmenu > div,
-.floattaskbar.light .popmenu > button {
+.popbutton,
+.popmenu,
+.popmenu > div,
+.popmenu > button {
   background-color: var(--contrastlight);
+}
+.popbutton:hover,
+.popmenu div:hover,
+.popmenu button:hover {
+  background-color: var(--contrast);
 }
 
 @position-try --bottom {

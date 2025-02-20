@@ -63,6 +63,19 @@ const BatchPanelX = ({
     }
   }
   
+  const debugTrace = (kyd)=> {
+      const method = kyd === 'rebuid' ? 'rebuildOneTrace' :
+                     kyd === 'move' ? 'updateOneMovement' :
+                     kyd === 'noise' ? 'updateOneNoise' : null;
+    if(isDebug && method) {
+      Meteor.apply(method, [batchData._id], {wait: true},
+      (error)=> {
+        error && console.log(error);
+      });
+      document.getElementById('poweractions')?.hidePopover();
+    }
+  };
+  
   const isOpen = !b.completed && b.live;
   
   const accessR = Roles.userIsInRole(Meteor.userId(), 'run');
@@ -229,6 +242,28 @@ const BatchPanelX = ({
             icon='fa-solid fa-flag-checkered'
             lock={!canImp}
           />
+          {isDebug ?
+          <Fragment>
+            <MatchButton 
+              title='Manual Update TraceDB - Rebuild Functions'
+              text='Rebuild Trace'
+              icon='fa-solid fa-trowel-bricks'
+              doFunc={()=>debugTrace('rebuild')}
+            />
+            <MatchButton 
+              title='Manual Update TraceDB - Movement Functions'
+              text='Update Move Trace' 
+              icon='fa-solid fa-arrows-spin'
+              doFunc={()=>debugTrace('move')}
+            />
+            <MatchButton 
+              title='Manual Update TraceDB - Noise Functions'
+              text='Update Noise Trace' 
+              icon='fa-solid fa-volume-high'
+              doFunc={()=>debugTrace('noise')}
+            />
+          </Fragment>
+        : null}
         </PopoverMenu>
         
         <span className='flexSpace' />
@@ -258,6 +293,7 @@ const BatchPanelX = ({
           brancheS={brancheS}
           extraClass='popbutton'
         />
+        
       </div>
       
       <Tabs

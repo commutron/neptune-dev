@@ -11,7 +11,7 @@ const DataRepair = ({ app, users })=> {
   }
   
   function doCallThing(mtrMethod, rtnLog) {
-    Meteor.call(mtrMethod, (error, re)=>{
+    Meteor.apply(mtrMethod, [], {wait: true}, (error, re)=>{
       error && console.log(error);
       re && toast.success((mtrMethod+' success'), {autoClose: false});
       if(rtnLog) {
@@ -43,7 +43,7 @@ const DataRepair = ({ app, users })=> {
   return(
     <div className='space3v'>
       <div className='autoGrid cardify twoDfill'>
-      
+        
         <DoCard
           title='Force Randomize Org PIN'
           sub='Runs every day at 12:00am (CST)'
@@ -92,7 +92,7 @@ const DataRepair = ({ app, users })=> {
         />
       
         <DoCard
-          title='Run Done Target Loops Update'
+          title='Run Done Target (Month/Week) Loops CacheDB Update'
           sub='Runs Daily at 12:10am (CST)'
           icon='digital-tachograph'
           color='purpleSolid'
