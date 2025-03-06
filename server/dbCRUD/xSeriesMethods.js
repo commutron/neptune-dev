@@ -46,7 +46,7 @@ Meteor.methods({
   },
 
 //// Non-Cons \\\\
-  floodNCX(seriesId, ref, type) {
+  floodNCX(seriesId, ref, type, station) {
     const orgKey = Meteor.user().orgKey;
     const srs = XSeriesDB.findOne(
       {_id: seriesId, orgKey: orgKey},
@@ -68,6 +68,7 @@ Meteor.methods({
               where: 'wip', // where in the process
               time: new Date(), // when nonCon was discovered
               who: Meteor.userId(),
+              loc: station || undefined,
               fix: false,
               inspect: false,
               reject: [],
@@ -81,7 +82,7 @@ Meteor.methods({
     }
   },
 
-  addNCX(seriesId, bar, ref, multi, type, step, fix) {
+  addNCX(seriesId, bar, ref, multi, type, step, station, fix) {
     const srs = XSeriesDB.findOne(
       {_id: seriesId, orgKey: Meteor.user().orgKey},
       {fields: {'nonCon':1}}
@@ -106,6 +107,7 @@ Meteor.methods({
           where: step, // where in the process
           time: new Date(),
           who: Meteor.userId(),
+          loc: station || undefined,
           fix: repaired,
           inspect: false,
           reject: [],
@@ -116,13 +118,13 @@ Meteor.methods({
     }
   },
   
-  runNCAction(seriesId, ncKey, ACT, extra) {
+  runNCAction(seriesId, ncKey, ACT, extra, loc) {
     switch (ACT) {
       case 'FIX':
-        Meteor.call('fixNCX', seriesId, ncKey);
+        Meteor.call('fixNCX', seriesId, ncKey, loc);
         break;
       case 'INSPECT':
-        Meteor.call('inspectNCX', seriesId, ncKey);
+        Meteor.call('inspectNCX', seriesId, ncKey, loc);
         break;
       case 'SNOOZE':
         Meteor.call('snoozeNCX', seriesId, ncKey);
@@ -131,7 +133,7 @@ Meteor.methods({
         Meteor.call('wakeNCX', seriesId, ncKey);
         break;
       case 'REJECT':
-        Meteor.call('rejectNCX', seriesId, ncKey, extra);
+        Meteor.call('rejectNCX', seriesId, ncKey, extra, loc);
         break;
       case 'COMM':
         Meteor.call('commentNCX', seriesId, ncKey, extra);
@@ -141,17 +143,17 @@ Meteor.methods({
     }
   },
   
-  loopNCActions(seriesId, ncKeys, ACT) {
+  loopNCActions(seriesId, ncKeys, ACT, loc) {
     if(Array.isArray(ncKeys)) {
       switch (ACT) {
         case 'FIXALL':
           for(let nCey of ncKeys) {
-            Meteor.call('fixNCX', seriesId, nCey);
+            Meteor.call('fixNCX', seriesId, nCey, loc);
           }
           break;
         case 'INSPECTALL':
           for(let nCey of ncKeys) {
-            Meteor.call('inspectNCX', seriesId, nCey);
+            Meteor.call('inspectNCX', seriesId, nCey, loc);
           }
           break;
         default:
@@ -160,33 +162,35 @@ Meteor.methods({
     }
   },
 
-  fixNCX(seriesId, ncKey) {
+  fixNCX(seriesId, ncKey, loc) {
     if(Meteor.userId()) {
   		XSeriesDB.update({_id: seriesId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
   			$set : { 
   			  'nonCon.$.fix': {
   			    time: new Date(),
-  			    who: Meteor.userId()
+  			    who: Meteor.userId(),
+  			    loc: loc || undefined
   			  }
   			}
   		});
     }else{null}
   },
 
-  inspectNCX(seriesId, ncKey) {
+  inspectNCX(seriesId, ncKey, loc) {
     if(Roles.userIsInRole(Meteor.userId(), 'inspect')) {
   		XSeriesDB.update({_id: seriesId, orgKey: Meteor.user().orgKey, 'nonCon.key': ncKey}, {
   			$set : { 
   			  'nonCon.$.inspect': {
   			    time: new Date(),
-  			    who: Meteor.userId()
+  			    who: Meteor.userId(),
+  			    loc: loc || undefined
   			  }
   			}
   		});
     }else{null}
   },
   
-  rejectNCX(seriesId, ncKey, extra) {
+  rejectNCX(seriesId, ncKey, extra, loc) {
     if(Meteor.userId() && Array.isArray(extra)) {
       const timeRepair = extra[0];
       const whoRepair = extra[1];
@@ -196,7 +200,8 @@ Meteor.methods({
             attemptTime: new Date(timeRepair),
             attemptWho: whoRepair,
             rejectTime: new Date(),
-            rejectWho: Meteor.userId()
+            rejectWho: Meteor.userId(),
+            loc: loc || undefined
           }
         },
         $set : {
@@ -464,7 +469,6 @@ Meteor.methods({
     }
   },
   
-
   deleteSeriesProblems(batchId, seriesId, pinInput) {
     const accessKey = Meteor.user().orgKey;
     const auth = Roles.userIsInRole(Meteor.userId(), 'remove');

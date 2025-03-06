@@ -10,7 +10,7 @@ class Pref {
     
     this.InitialAppSetup = false;
     
-    this.neptuneVersion = '3.16.9';
+    this.neptuneVersion = '3.17.2';
     this.neptuneIs = 'Neptune Process Tracking';
 
     this.prefName = 'default';
@@ -40,6 +40,11 @@ class Pref {
       'kitting',
       'multitask_time'
     ];
+    this.stations = [
+      'SPI',
+      'AOI',
+      'PACK'
+    ];
     
     // Config
     this.userTimePublic = true;
@@ -58,7 +63,7 @@ class Pref {
     this.statisticalStartHour = 6; // 6am
     this.statisticalEndHour = 20; // 8pm
     this.avgSpan = 1000; // Also in server hardConfig
-    this.yrsSpan = 3; // Also in server hardConfig
+    this.yrsSpan = 5; // Also in server hardConfig
     this.stepUndoWindow = 1000*30; // remember to match ".spinRe"
     this.completeGrace = 24; // allow complete undo for lower permission for how many hours
     this.timeAfterGrace = 48; // hours, keep the tideControl unlocked, Also in server hardConfig

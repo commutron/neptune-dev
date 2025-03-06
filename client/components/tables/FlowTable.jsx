@@ -30,7 +30,7 @@ const FlowTable = ({ id, flows, app, openActions })=> {
       {flows.map( (entry, index)=>{ 
         return(
           <details key={entry.flowKey} className='blueBorder' open={index === 0 ? true : false}>
-            <summary>{entry.title}</summary>
+            <summary><strong>{entry.title}</strong></summary>
             <div className=''>
               <FlowToolbar 
                 id={id} 
@@ -82,11 +82,6 @@ const FlowTable = ({ id, flows, app, openActions })=> {
 
 const FlowToolbar = ({ id, entry, canEdt, openActions })=> (
   <div className='floattaskbar shallow light'>
-           
-      <div>type: {entry.type}</div>
-      
-      <span className='flexSpace' />
-      
       <MatchButton 
         text='Edit Flow'
         icon='fa-solid fa-project-diagram'
@@ -106,7 +101,10 @@ const FlowToolbar = ({ id, entry, canEdt, openActions })=> (
         fKey={entry.flowKey} 
         access={canEdt} 
       />
-        
+      
+      <span className='flexSpace' /> 
+      
+      <div>type: {entry.type}</div>
   </div>
 );
 

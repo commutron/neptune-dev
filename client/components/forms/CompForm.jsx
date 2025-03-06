@@ -1,14 +1,12 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
 
-import ModelNative from '/client/layouts/Models/ModelNative';
-
 const CompForm = ({ vID })=> {
   
   function addParts() {
-    this.add_comp_go.disabled = true;
+    this[vID+'add_comp_go'].disabled = true;
     
-    const allNums = this.parts.value.trim().toLowerCase();
+    const allNums = this[vID+'newparts'].value.trim().toLowerCase();
     
     const alterOne = allNums.replace(/\s* \s*/gi, "|");// spaces
     const alterTwo = alterOne.replace(/[\n\r]/g, "|");// new line
@@ -16,34 +14,29 @@ const CompForm = ({ vID })=> {
     
     let indieNums = [... new Set(split) ];
     
-    Meteor.call('pushCompV', vID, indieNums, (error)=>{
-      error && console.log(error);
-      this.parts.value = '';
-      this.add_comp_go.disabled = false;
-    });
+    if(indieNums.length > 0) {
+      Meteor.call('pushCompV', vID, indieNums, (error)=>{
+        error && console.log(error);
+        this[vID+'newparts'].value = '';
+        this[vID+'add_comp_go'].disabled = false;
+      });
+    }
   }
   
   return(
-    <ModelNative
-      dialogId={vID+'_comp_form'}
-      title={'Add ' + Pref.comp + 's'}
-      icon='fa-solid fa-shapes'
-      colorT='nT'>
-      
     <form id='new' className='centre' onSubmit={(e)=>addParts(e)}>
-      <p>Add multiple {Pref.comp}s seperated by pipe, space or new line</p>
-      <p>
+      <p className='nomargin'>
         <textarea
-          id='parts'
-          cols='40'
+          id={vID+'newparts'}
           rows='15'
           autoFocus={true}
+          style={{resize:'vertical'}}
           required></textarea>
-        <label htmlFor='parts'>{Pref.comp} Numbers</label>
+        <label htmlFor={vID+'newparts'}>{Pref.comp} Numbers (seperated by pipe, space or new line)</label>
       </p>
-      <p>
+      <p className='nomargin'>
         <button
-          id='add_comp_go'
+          id={vID+'add_comp_go'}
           disabled={false}
           className='action nSolid'
           type='submit'
@@ -51,7 +44,6 @@ const CompForm = ({ vID })=> {
         >Add</button>
       </p>
     </form>
-    </ModelNative>
   );
 };
 

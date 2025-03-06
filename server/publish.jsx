@@ -329,8 +329,8 @@ Meteor.publish('traceDataOpen', function(){
         }
       }),
       CacheDB.find({orgKey: orgKey,
-        // $or: [ { dataName: 'avgDayTime' },
-              // { dataName: 'avgDayItemFin' } ]
+        $or: [ { dataName: 'avgDayTime' },
+               { dataName: 'avgDayItemFin' } ]
       },{
         fields: {
           'orgKey': 0,

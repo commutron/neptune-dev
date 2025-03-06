@@ -3,25 +3,30 @@ import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import TabsVert from '/client/components/smallUi/Tabs/TabsVert';
 import CreateTag from '/client/components/tinyUi/CreateTag';
 import TagsModule from '/client/components/bigUi/TagsModule';
 import NotesModule from '/client/components/bigUi/NotesModule';
 
-import CompForm from '/client/components/forms/CompForm';
 import Remove from '/client/components/forms/Remove';
 
 import AssemblyList from './AssemblyList';
 
-import { PopoverButton, PopoverMenu, PopoverAction } from '/client/layouts/Models/Popover';
+import { MatchButton } from '/client/layouts/Models/Popover';
 
 import { cleanURL } from '/client/utility/Convert';
 
 const VariantCards = ({ 
   variantData, widgetData, 
-  groupData, batchRelated, 
-  app, user, canEdt, canRun, canRmv, modelFunc
+  batchRelated, 
+  app, canEdt, canRun, canRmv
 })=> {
+  
+  const [ selectedVar, selectedVarSet ] = useState(false);
+  
+  const openVarActions = (dialogId, ventry)=> {
+    selectedVarSet(ventry);
+    document.getElementById(dialogId)?.showModal();
+  };
   
   function handleVive(vId, vKey, vState) {
     Meteor.call('changeVive', vId, vKey, vState, (error, reply)=>{
@@ -48,62 +53,47 @@ const VariantCards = ({
     }
   }
   
-  function downloadComp(vID, vName) {
-    Meteor.call('componentExport', widgetData._id, vID, (error, reply)=>{
-      error && console.log(error);
-      if(reply) {
-        const name = widgetData.widget + "_" + vName;
-        const outputLines = reply.join('\n');
-        const outputComma = reply.toString();
-        toast(
-          <a href={`data:text/plain;charset=UTF-8,${outputLines}`}
-          download={name + ".txt"}>Download seperated by new lines</a>
-          , {autoClose: false, closeOnClick: false}
-        );
-        toast(
-          <a href={`data:text/plain;charset=UTF-8,${outputComma}`}
-          download={name + ".csv"}>Download seperated by commas</a>
-          , {autoClose: false, closeOnClick: false}
-        );
-      }
-    });
-  }
-  
   const varS = variantData.sort((v1, v2)=> v1.createdAt > v2.createdAt ? -1 : v1.createdAt < v2.createdAt ? 1 : 0 );
-  const varNames = varS.map((v)=>v.variant);
-
+  
   return(
-    <TabsVert tabs={varNames} extraClass='popSm'>
+    <div className='rowWrap cardify'>
+      {canRmv ?
+        <Remove
+          action='variant'
+          title={selectedVar?.variant}
+          check={selectedVar?.createdAt?.toISOString()}
+          entry={selectedVar}
+          access={canRmv} 
+          clearOnClose={()=>selectedVarSet(false)}
+        />
+      : null}
+      
       {varS.map( (ventry, index)=> {
         return(  
           <VentryCard
             key={ventry._id+index}
             ventry={ventry}
             widgetData={widgetData} 
-            groupData={groupData}
-            batchRelated={batchRelated.filter(b=> b.versionKey === ventry.versionKey)} 
+            batchRelated={batchRelated}
             app={app}
-            user={user}
-            modelFunc={modelFunc}
+            openVarActions={openVarActions}
             canEdt={canEdt}
             canRun={canRun}
             canRmv={canRmv}
             handleVive={handleVive}
             toggleRad={toggleRad}
-            downloadComp={downloadComp}
           />
       )})}
-    </TabsVert>
+    </div>
   );
 };
       
 export default VariantCards;  
         
 const VentryCard = ({ 
-  ventry, widgetData, 
-  groupData, batchRelated, 
-  app, user, modelFunc, canEdt, canRun, canRmv,
-  handleVive, toggleRad, downloadComp
+  ventry, widgetData, batchRelated,
+  app, openVarActions, canEdt, canRun, canRmv,
+  handleVive, toggleRad
 })=> {
   
   const [ editState, editSet ] = useState(false);
@@ -115,93 +105,59 @@ const VentryCard = ({
 
   const doRad = v.radioactive && canRun;  
   const doCmp = app.partsGlobal && ventry.live && canEdt;
-  const doRmv = batchRelated.length === 0 && ventry.live === false && canRmv;
+  const vbatchRel = batchRelated.filter(b=> b.versionKey === v.versionKey);
+  const doRmv = vbatchRel.length === 0 && v.live === false && canRmv;
   
   return(
-    <div className='min300 space'>
-      {doRmv ?
-        <Remove
-          action='variant'
-          title={ventry.variant}
-          check={ventry.createdAt.toISOString()}
-          entry={ventry}
-          access={!ventry.live && canRmv} 
-        />
-      : null}
-      {doCmp && <CompForm vID={ventry._id} /> }
-          
-      <div className='floattaskbar shallow light'>
-        <PopoverButton 
-          targetid='editssubpop'
-          attach='views'
-          text='Edits'
-          icon='fa-solid fa-file-pen gapR'
-        />
-        <PopoverMenu targetid='editssubpop' attach='views'>
-          <PopoverAction 
-            doFunc={()=>editSet(!editState)}
-            text={`Edit ${Pref.variant}`}
-            icon='fa-solid fa-cube fa-rotate-90'
-            lock={!ventry.live || !canEdt}
-          />
-          <PopoverAction 
-            doFunc={()=>modelFunc(ventry._id+'_comp_form')}
-            text={`Add ${Pref.comp}s`}
-            icon='fa-solid fa-shapes'
-            lock={!doCmp}
-          />
-          <PopoverAction 
-            doFunc={()=>modelFunc('variant_multi_delete_form')}
-            text='Delete'
-            icon='fa-solid fa-minus-circle'
-            lock={!doRmv}
-          />
-        </PopoverMenu>
-        <PopoverButton 
-          targetid='actionspop'
-          attach='actions'
-          text='Actions'
-          icon='fa-solid fa-star gapR'
-        />
-        <PopoverMenu targetid='actionspop' attach='actions'>
-          <PopoverAction 
-            doFunc={()=>handleVive(v._id, v.versionKey, v.live)}
-            text={v.live ? `Archive ${Pref.variant}` : `Re-activate ${Pref.variant}`}
-            icon='fa-solid fa-folder'
-            lock={!canEdt}
-          />
-          <PopoverAction 
-            doFunc={()=>toggleRad(v.versionKey)}
-            text={`Remove ${Pref.radio.toUpperCase()}`}
-            icon='fa-solid fa-burst'
-            lock={!doRad}
-          />
-          <PopoverAction 
-            doFunc={()=>downloadComp(v._id, v.variant)}
-            text={`Download ${Pref.comp}s`}
-            icon='fa-solid fa-download'
-          />
-        </PopoverMenu>
-
-        <span className='flexSpace' />
+    <div className='startSelf space' style={{width: 'clamp(250px, 25vw, 350px)'}}>
+      <div className='split gapsC'>
+        <h2 className='cap wordBr'><strong>{v.variant}</strong></h2>
         
-        <span>
+        <div className='centreText rowWrapR gapsC'>
           {v.radioactive ? 
             <n-faX><i className='fa-solid fa-burst fa-fw darkOrangeT'></i>{Pref.radio.toUpperCase()}: {v.radioactive}</n-faX>
             : null
           }
-        </span>
         
-        <span>
           {v.live ? 
             <n-fa0><i className='fas fa-folder-open blueT fa-fw'></i>Open</n-fa0>
             :
             <n-fa1><i className='fas fa-folder grayT fa-fw'></i>Closed</n-fa1>
           }
-        </span>
-        
-        <span className='cap wordBr'>{Pref.variant}: <strong>{v.variant}</strong></span>
-        
+        </div>
+      </div>
+          
+      <div className='floattaskbar shallow light'>
+        <MatchButton 
+          text='Edit'
+          icon='fa-solid fa-cube fa-rotate-90'
+          doFunc={()=>editSet(!editState)}
+          lock={!ventry.live || !canEdt}
+        />
+        {doRad &&
+          <MatchButton 
+            text={`Remove ${Pref.radio.toUpperCase()}`}
+            icon='fa-solid fa-burst'
+            doFunc={()=>toggleRad(v.versionKey)}
+            lock={!doRad}
+          />
+        }
+        {canEdt &&
+          <MatchButton 
+            text={v.live ? 'Archive' : 'Re-activate'}
+            icon='fa-solid fa-folder'
+            doFunc={()=>handleVive(v._id, v.versionKey, v.live)}
+            lock={!canEdt}
+          />
+        }
+        {doRmv &&
+          <MatchButton 
+            text='Delete'
+            icon='fa-solid fa-minus-circle'
+            doFunc={()=>openVarActions('variant_multi_delete_form', v)}
+            lock={!doRmv}
+          />
+        }
       </div>
       
       <div className='vmarginhalf'>
@@ -237,7 +193,8 @@ const VentryCard = ({
           
           {app.partsGlobal && 
             <AssemblyList 
-              variantData={ventry} 
+              variantData={ventry}
+              doCmp={doCmp}
               canRmv={canRmv}
             /> 
           }
@@ -351,12 +308,12 @@ const InlineForm = ({ widgetData, variantData, rootURL, editState, editSet })=> 
       </p>
   
       <p>Work Instructions
-        <input
+        <textarea
           type='text'
           id='wikdress'
-          className='interInput dbbleWide'
+          className='interInput'
           defaultValue={variantData.instruct}
-          placeholder='Full Address' />
+          placeholder='Full Address'></textarea>
       </p>
           
       <span className='rightRow'>

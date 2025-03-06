@@ -5,7 +5,7 @@ import './style.css';
 
 import { branchOptions, FinishOptions } from './FlowElements';
 
-import { branchesSort } from '/client/utility/Arrays';
+import { branchesOpenSort } from '/client/utility/Arrays';
 
 const FlowBuilder = ({ app, options, defaultEnd, baseline, onClick })=> {
 
@@ -16,7 +16,7 @@ const FlowBuilder = ({ app, options, defaultEnd, baseline, onClick })=> {
   
   const [ toggle, toggleChange ] = useState( false );
   
-  const brancheS = branchesSort(app.branches);
+  const brancheS = branchesOpenSort(app.branches, true);
   
   useEffect( ()=>{
     if(baseline) {
@@ -111,7 +111,7 @@ const FlowBuilder = ({ app, options, defaultEnd, baseline, onClick })=> {
   }
     
   function clear() {
-    stepsSetSet( [] );
+    stepsSet( [] );
     // lock save button
     onClick(false);
   }
@@ -129,7 +129,8 @@ const FlowBuilder = ({ app, options, defaultEnd, baseline, onClick })=> {
         <p className='nomargin'>
           <label htmlFor='phasefltr' className='cap'>{Pref.branch}<br />
             <select 
-              id='phasefltr' 
+              id='phasefltr'
+              className='cap'
               onChange={(e)=>branchSet( e.target.value )} 
               required>
               <option value={false}></option>
@@ -170,6 +171,7 @@ const FlowBuilder = ({ app, options, defaultEnd, baseline, onClick })=> {
               <input 
                 id='rHow'
                 type='text'
+                placeholder='optional'
                 className='dbbleWide' /> 
               <button
                 type='submit' 
@@ -188,8 +190,8 @@ const FlowBuilder = ({ app, options, defaultEnd, baseline, onClick })=> {
             <div key={index}>
               <div>{entry.step}</div>
               <div>{entry.type}</div>
-              <div>{niceBr}</div>
-              <div>{entry.how}</div>
+              <div className='cap'>{niceBr}</div>
+              <div className='wordBr'>{entry.how}</div>
               <div>
                 <OrderButton 
                   id='up'

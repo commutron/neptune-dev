@@ -29,7 +29,7 @@ const StartView = ({user, app}) =>	{
   
   return(
     <PlainFrame title={Pref.neptuneIs} container='splashContainer'>
-      <div className='homeNavi'>
+      <div className='homeNavi' data-station={localStorage.getItem("local_station") || ''}>
         {isReadOnly ?
           <NavPlaceholder 
             title='Production'

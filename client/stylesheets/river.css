@@ -143,9 +143,6 @@ button.stoneExtra {
 }
 .cssProgCore {
   position: absolute;
-	/*top: 50%;*/
-	/*left: 50%;*/
-	/*transform: translate(-50%, -50%) rotate(0deg);*/
 	text-align: center;
 	line-height: 1;
 }
@@ -392,6 +389,13 @@ button.stoneExtra {
 }
 .riverNG:where(:hover,:active) {
   background-color: var(--alizarin);
+}
+
+#goNcFld, #goNcFixAdd, #goNcAdd {
+  --pro_prob: var(--pomegranate);
+}
+#goShAdd {
+  --pro_prob: var(--carrot);
 }
 
 n-trib-row, n-short-row, .testFail {

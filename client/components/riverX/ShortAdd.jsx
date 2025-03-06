@@ -7,7 +7,7 @@ const ShortAdd = ({ seriesId, serial, units, pastPN, pastRF, app, doneClose })=>
 
   function handleShort(e) {
     e.preventDefault();
-    this.goSh.disabled = true;
+    this.goShAdd.disabled = true;
     const partNum = this.partNum.value.trim();
     const refs = this.shRefs.value.trim().toLowerCase()
                   .replace(Pref.listCut, "|").split("|").filter(f=>f);
@@ -27,7 +27,7 @@ const ShortAdd = ({ seriesId, serial, units, pastPN, pastRF, app, doneClose })=>
           autoClose: 5000,
           closeOnClick: false
         });
-        this.goSh.disabled = false;
+        this.goShAdd.disabled = false;
       }
     });
   }
@@ -100,7 +100,7 @@ const ShortAdd = ({ seriesId, serial, units, pastPN, pastRF, app, doneClose })=>
       
       <button
         type='submit'
-        id='goSh'
+        id='goShAdd'
         disabled={lock}
         className='smallAction orangeHover bold transparent'
       >{Pref.post}</button>

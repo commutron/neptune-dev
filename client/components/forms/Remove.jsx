@@ -62,7 +62,7 @@ const Remove = ({ action, entry, title, check, access })=> {
     }
   }
   
-  let checkshort = check.split('T')[0];
+  let checkshort = check?.split('T')[0];
   
   if(!access) {
     return null;

@@ -98,7 +98,7 @@ const MonthlyReport = ({ app, isDebug })=> {
       setYrItmOnT( Array.from(dataItemState, x => x.totalOnTime).reduce((x,y)=>x+y) );
     }
   }, [dataItemState]);
-console.log(dataItemState);
+
   return(
     <div className='w100 minWfit space2v'>
         
@@ -111,7 +111,11 @@ console.log(dataItemState);
           // falsey={false}
           changeFunc={(e)=>yearSet(e.target.value)} 
         />
-        <PrintThis />
+        <span>
+          <n-sm>Updated Daily</n-sm>
+          <PrintThis />
+        </span>
+        
       </div>
       
       {dataItemState === false ?
@@ -142,6 +146,7 @@ console.log(dataItemState);
             statGoal='totalWasDue'
             statPer='percentOnTime' 
             app={app}
+            subText='Items are listed by week of their ship due date (not when they were completed).'
           />
           
           <div className='printBr' />
@@ -201,7 +206,7 @@ console.log(dataItemState);
         
         </Fragment>
       }
-
+      
     </div>
   );
 };

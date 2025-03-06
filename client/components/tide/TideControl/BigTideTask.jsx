@@ -1,5 +1,5 @@
 import React, { useEffect, Fragment } from 'react';
-import Pref from '/client/global/pref.js';
+// import Pref from '/client/global/pref.js';
 
 const BigTideTask = ({ 
   id, ctxLabel, ancOptionS, brancheS,
@@ -35,6 +35,18 @@ const BigTideTask = ({
         disabled={lockTaskState}
         required>
         <option value={false} className='darkgrayT em'>Required</option>
+        <optgroup label='Production' className='blackT nsty'>
+          {brancheS.filter(n=>n.pro).map( (v, ix)=>(
+            <option key={ix+'o2'} className='blackT nsty' value={v.branch}
+            >{v.branch}</option>
+          ))}
+        </optgroup>
+        <optgroup label='Supportive' className='blackT nsty'>
+          {brancheS.filter(n=>!n.pro).map( (v, ix)=>(
+            <option key={ix+'o2'} className='blackT nsty' value={v.branch}
+            >{v.branch}</option>
+          ))}
+        </optgroup>
         {ancOptionS.length > 0 ?
           <optgroup label='Ancillary' className='blackT nsty'>
             {ancOptionS.map( (v, ix)=>(
@@ -43,12 +55,6 @@ const BigTideTask = ({
             ))}
           </optgroup>
         : null}
-        <optgroup label={Pref.branches} className='blackT nsty'>
-          {brancheS.map( (v, ix)=>(
-            <option key={ix+'o2'} className='blackT nsty' value={v.branch}
-            >{v.branch}</option>
-          ))}
-        </optgroup>
       </select>
       {subop?.subTasks?.length ?
         <Fragment>

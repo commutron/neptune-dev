@@ -5,7 +5,7 @@ const MonthsTable = ({
   title, goodtitle, donetitle, date, data, yeartotal, 
   yrStatTotal, yrDoneTotal,
   stat, goal, statTotal, statGoal, statPer,
-  app, extraClass, miss 
+  app, extraClass, miss, subText
 })=> {
 
   if(!data) {
@@ -79,6 +79,11 @@ const MonthsTable = ({
               <i className='redT'>Red</i> = 
               Technically missed its standard ship day but was completed by its Sales Fulfill date.
             </n-sm></p>
+          }
+          {subText &&
+            <p className='indent3'>
+              <n-sm>{subText}</n-sm>
+            </p>
           }
         </div>
         

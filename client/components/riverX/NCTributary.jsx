@@ -3,16 +3,18 @@ import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 import Pref from '/client/global/pref.js';
 
 const NCTributary = ({ seriesId, nonCons, sType, rapIs, canVerify })=> {
-
+  
+  const station = localStorage.getItem("local_station");
+  
   function handleAction(ncKey, ACT, extra) {
-    Meteor.call('runNCAction', seriesId, ncKey, ACT, extra, (error)=> {
+    Meteor.call('runNCAction', seriesId, ncKey, ACT, extra, station, (error)=> {
 			error && console.log(error);
 		});
 		document.getElementById('lookup').focus();
   }
   
   function handleCluster(ncKeys, ACT) {
-    Meteor.call('loopNCActions', seriesId, ncKeys, ACT, (error)=> {
+    Meteor.call('loopNCActions', seriesId, ncKeys, ACT, station, (error)=> {
 			error && console.log(error);
 		});
 		document.getElementById('lookup').focus();
@@ -209,6 +211,12 @@ const NCStream = ({ entry, rest, doAction, inspector, verifier })=>{
           </ContextMenuTrigger>
         
           <ContextMenu id={entry.key}>
+          {entry.loc &&
+            <Fragment>
+              <p className='bold centreText nomargin' style={{cursor:'default'}}>{entry.loc}</p>
+              <MenuItem divider />
+            </Fragment>
+          }
           {!fixed &&
             <MenuItem 
               onClick={()=>handleClick('INSPECT', null, true)} 
@@ -238,7 +246,7 @@ const NCStream = ({ entry, rest, doAction, inspector, verifier })=>{
                 maxLength='128'
                 defaultValue={entry.comm || null}
                 placeholder='comment'
-                className='wide black whiteT' 
+                className='wide slimIn black whiteT' 
                 onChange={(e)=>commSet(this[entry.key+'addnewtag'].value)} />
             </MenuItem>
             <MenuItem onClick={()=>handleComment(commState)} disabled={!commState}>

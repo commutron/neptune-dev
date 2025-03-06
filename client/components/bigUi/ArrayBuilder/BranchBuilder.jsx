@@ -31,11 +31,12 @@ const BranchHeadRow = ()=> (
     <div>Position</div>
     <div>Name</div>
     <div>Common</div>
-    <div>Open</div>
-    <div>Clear</div>
-    <div>Dam</div>
-    <div>User</div>
-    <div>Consume</div>
+    <div title='Public/Available'>Open</div>
+    <div title='Production Process'>Pro</div>
+    <div title='Require Kit Clearance'>Clear</div>
+    <div title='Require Problem Resolution'>Dam</div>
+    <div title='Reqire User Access'>User</div>
+    <div title='Verify Consumables'>Consume</div>
     <div></div>
   </div>
 );
@@ -48,6 +49,7 @@ const BranchEditRow = ({ branch, isDebug })=> {
   const [ posState, posSet ] = useState(br.position);
   const [ comState, comSet ] = useState(br.common);
   const [ openState, openSet ] = useState(br.open);
+  const [ proState, proSet ] = useState(br.pro || false);
   const [ clearState, clearSet ] = useState(br.reqClearance);
   const [ damState, damSet ] = useState(br.reqProblemDam);
   const [ uLockState, uLockSet ] = useState(br.reqUserLock);
@@ -57,6 +59,7 @@ const BranchEditRow = ({ branch, isDebug })=> {
     posSet(br.position);
     comSet(br.common);
     openSet(br.open);
+    proSet(br.pro || false);
     clearSet(br.reqClearance);
     damSet(br.reqProblemDam);
     uLockSet(br.reqUserLock);
@@ -69,6 +72,7 @@ const BranchEditRow = ({ branch, isDebug })=> {
                   posState,
                   comState,
                   openState,
+                  proState,
                   clearState,
                   damState,
                   uLockState,
@@ -131,31 +135,37 @@ const BranchEditRow = ({ branch, isDebug })=> {
         id={id+'chkOpen'}
         title='Open'
         chk={openState}
-        chFunc={(e)=>openSet(e.target.checked)}
+        chFunc={openSet}
+      />
+      <BrCheck
+        id={id+'chkPro'}
+        title='Pro'
+        chk={proState}
+        chFunc={proSet}
       />
       <BrCheck
         id={id+'chkClear'}
         title='Require Kit Clearance'
         chk={clearState}
-        chFunc={(e)=>clearSet(e.target.checked)}
+        chFunc={clearSet}
       />
       <BrCheck
         id={id+'chkProbDam'}
         title='Require Problem Dam'
         chk={damState}
-        chFunc={(e)=>damSet(e.target.checked)}
+        chFunc={damSet}
       />
       <BrCheck
         id={id+'chkUsrLck'}
         title='Require User Locking'
         chk={uLockState}
-        chFunc={(e)=>uLockSet(e.target.checked)}
+        chFunc={uLockSet}
       />
       <BrCheck
         id={id+'chkConsume'}
         title='Require Consumable Tracing'
         chk={consumeState}
-        chFunc={(e)=>consumeSet(e.target.checked)}
+        chFunc={consumeSet}
       />
       
       <div>
@@ -324,7 +334,7 @@ const BrCheck = ({ id, title, chk, chFunc })=>(
       id={id}
       className='tableAction'
       checked={chk}
-      onChange={chFunc}
+      onChange={(e)=>chFunc(e.target.checked)}
     />
   </div>
 );

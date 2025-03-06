@@ -112,7 +112,7 @@ const ServiceDock = ({ maintData, serve })=> {
   			<div className='fakeFielset vmargin'>
           <ModelInline 
             title='Service Not Required'
-            color='orange' 
+            color='wet' 
             border='borderOrange'
             icon='fa-solid fa-ban'
           >
@@ -121,7 +121,7 @@ const ServiceDock = ({ maintData, serve })=> {
                 type='button'
                 id='noneed'
                 title='Service Not Required'
-                className='action wetSolid'
+                className='action orangeSolid'
                 disabled={false}
                 onClick={()=>notReq()}
               >{noReq ? 'Yes, Service Is Required' : 'No, Service is Not Required'}</button>

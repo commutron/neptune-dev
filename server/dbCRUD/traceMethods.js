@@ -209,7 +209,7 @@ function checkNoise(bData, rootI, accessKey) {
     (async ()=> {
       const docStatus = await docsData(bData, rootI)
         .catch((err)=>{
-          console.error(err);
+          // console.error(err);
           return false;
         });
       

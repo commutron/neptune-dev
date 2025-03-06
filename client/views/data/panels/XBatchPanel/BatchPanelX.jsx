@@ -155,7 +155,7 @@ const BatchPanelX = ({
         />
       </Fragment>
         
-      <div className='floattaskbar stick light'>
+      <div className='floattaskbar stick'>
         
         <PopoverButton 
           targetid='editspop'

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import moment from 'moment';
 import 'moment-timezone';
 import Pref from '/client/global/pref.js';
@@ -85,7 +85,7 @@ const DownstreamView = ({ traceDT, dayTime, user, app, isDebug })=> {
     }
   }
   
-  const brancheS = branchesOpenSort(app.branches);
+  const brancheS = useMemo( ()=> branchesOpenSort(app?.branches || [], true), [app]);
   
   return(
     <div

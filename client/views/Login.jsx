@@ -27,7 +27,7 @@ const Login = ({ login, uID, username, timeClock })=> {
           uID={uID}
           username={username} />
       
-        <div className='homeNaviMini'>
+        <div className='homeNaviMini' data-station={localStorage.getItem("local_station") || ''}>
 
           {!login || !timeClock ?   
             <NavPlaceholder 

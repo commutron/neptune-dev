@@ -4,7 +4,7 @@ import Pref from '/public/pref.js';
 
 import BranchBuilder, { BranchListEditor } from '/client/components/bigUi/ArrayBuilder/BranchBuilder';
 
-const BranchesSlide = ({ app, isAdmin, isDebug })=> {
+const BranchesSlide = ({ app, isDebug })=> {
   
   function handleBranchAdd(e) {
     e.preventDefault();

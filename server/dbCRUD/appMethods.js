@@ -36,6 +36,7 @@ Meteor.methods({
           common: 'done',
           position: Number(0),
           open: true,
+          pro: true,
           reqClearance: false,
           reqConsumable: false,
           reqProblemDam: true,
@@ -142,8 +143,7 @@ Meteor.methods({
     return pinMatch;
   },
   
-  // / / / / / / / / / / / / / / / 
-  // Branches
+  // / / / // Branches / / / / / / //
   addBranchOption(nameVal, commonVal) {
     const appDoc = AppDB.findOne({orgKey: Meteor.user().orgKey});
     if(appDoc && Roles.userIsInRole(Meteor.userId(), 'admin')) {
@@ -157,6 +157,7 @@ Meteor.methods({
               common: commonVal,
               position: Number(nextPos),
               open: true,
+              pro: false,
               reqClearance: false,
               reqConsumable: false,
               reqProblemDam: false,
@@ -175,13 +176,14 @@ Meteor.methods({
     }
   },
   
-  editBranchConfig(key, posVal, commonVal, opVal, clrVal, prbVal, usrVal, conVal) {
+  editBranchConfig(key, posVal, commonVal, opVal, opPro, clrVal, prbVal, usrVal, conVal) {
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
       AppDB.update({orgKey: Meteor.user().orgKey, 'branches.brKey': key}, {
         $set : { 
           'branches.$.common': commonVal,
           'branches.$.position': Number(posVal),
           'branches.$.open': opVal,
+          'branches.$.pro': opPro,
           'branches.$.reqClearance': clrVal,
           'branches.$.reqConsumable': conVal,
           'branches.$.reqProblemDam': prbVal,

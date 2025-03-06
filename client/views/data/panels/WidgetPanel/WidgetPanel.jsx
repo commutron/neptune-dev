@@ -131,14 +131,12 @@ const WidgetPanel = ({
             <VariantCards
               variantData={variantData}
               widgetData={widgetData} 
-              groupData={groupData}
               batchRelated={batchRelated}
               app={app}
               user={user}
               canEdt={canEdt}
               canRun={canRun}
               canRmv={canRmv}
-              modelFunc={openDirect}
             />
           }
         </div>

@@ -9,7 +9,7 @@ const MultiCard = ({  })=> {
   };
   
   return(
-    <div className='centre pop vmargin space min200 max875 tealGlow'>
+    <div className='centre pop vmargin space min200 max875 darkCard tealGlow'>
       <p className='med wide bottomLine cap centreText'>Multi {Pref.xBatch} mode</p>
       <div className='centre vmarginhalf w100' style={{flex:'auto'}}>
   	    <button

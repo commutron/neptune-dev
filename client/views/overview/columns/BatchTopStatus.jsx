@@ -75,7 +75,7 @@ const BatchTopStatus = ({ batchID, tBatch })=> {
           name={dV ? 'Verified' :
                 dV === false ? 'Unverified' :
                 'Not Found'}
-          title='Instruction Doc Satus'
+          title='Instruction Doc'
           onIcon='fa-solid fa-file-circle-check fa-2x greenT' 
           midIcon='fa-solid fa-file-shield fa-2x orangeT'
           offIcon='fa-solid fa-minus fa-2x grayT fade' 

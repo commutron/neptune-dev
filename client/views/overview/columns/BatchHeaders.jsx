@@ -28,7 +28,6 @@ const BatchHeaders = ({
     
     {!oB ? null :
       oB.map( (entry, index)=>{
-        // const tBatch = traceDT.find( t => t.batchID === entry._id );
         return(
           <BatchHeaderChunk
             key={`${entry._id}livefixed${index}`}

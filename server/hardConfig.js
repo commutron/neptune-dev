@@ -27,7 +27,7 @@ class Config {
     
     this.freche = 12; // in hours, time limit for refreshed on-demand caches
     this.avgSpan = 1000; // in days, how far back to count for average statistics
-    this.yrsSpan = 3; // in years, how far back to count years for statistics
+    this.yrsSpan = 5; // in years, how far back to count years for statistics
     
     this.estLean = 2; // to shift estimated minutes toward est and away from quoted
                       // 0 will only use quote, 1 will split down the middle.

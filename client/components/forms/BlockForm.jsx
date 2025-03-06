@@ -9,9 +9,6 @@ const BlockAdd = ({ id, edit, noText, smIcon, lgIcon, doneLock, canRun })=> {
   const bttn = edit ? 'edit' : 'Add ' + Pref.block;
   const title = edit ? 'edit ' + Pref.block : 'add ' + Pref.block;
   
-  if(!canRun) { 
-    return null;
-  }
   return(
     <ModelSmall
       button={bttn}
@@ -21,6 +18,7 @@ const BlockAdd = ({ id, edit, noText, smIcon, lgIcon, doneLock, canRun })=> {
       lgIcon={lgIcon}
       smIcon={smIcon}
       noText={noText}
+      lock={edit ? !canRun : false}
     >
       <BlockAddForm
         id={id}

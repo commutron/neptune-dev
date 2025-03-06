@@ -9,7 +9,7 @@ import {
 function collectBranchCondition(privateKey, batchID) {
   return new Promise(resolve => {
     const app = AppDB.findOne({orgKey: privateKey});
-    const branches = app.branches;
+    const branches = app.branches.filter( b => b.open && b.pro );
     const batchX = XBatchDB.findOne({_id: batchID});
     
     if(batchX) {
@@ -126,13 +126,6 @@ function collectBranchCondition(privateKey, batchID) {
 }
 
 const reduceTide = (tArr)=> {
-  // return tArr.reduce((x,y)=> {
-  //   const start = moment(y.startTime);
-  //   const stop = !y.stopTime ? moment() : moment(y.stopTime);
-  //   const dur = moment.duration(stop.diff(start)).asMinutes();
-  //   return x + dur;
-  // }, 0);
-  
   let durr = 0;
   for(let td of tArr) {
     const start = td.startTime;
@@ -146,8 +139,8 @@ const reduceTide = (tArr)=> {
 function collectBranchTime(privateKey, batchID) {
   return new Promise(resolve => {
     const app = AppDB.findOne({orgKey: privateKey});
-    const brancheS = sortBranches(app.branches).filter( b => b.open );
-         
+    const brancheS = sortBranches( app.branches.filter( b => b.open && b.pro ) );
+
     const bx = XBatchDB.findOne({_id: batchID});
     
     let branchTime = [];
@@ -188,7 +181,7 @@ function collectBranchTime(privateKey, batchID) {
 function collectProgress(privateKey, batchID) {
   return new Promise(resolve => {
     const app = AppDB.findOne({orgKey: privateKey});
-    const brancheS = sortBranches(app.branches).filter( b => b.open );
+    const brancheS = sortBranches( app.branches.filter( b => b.open && b.pro ) );
 
     const bx = XBatchDB.findOne({_id: batchID});
     

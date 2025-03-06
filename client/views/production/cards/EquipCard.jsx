@@ -24,7 +24,7 @@ const EquipCard = ({ equipData, maintainData })=> {
   };
   
   return(
-    <div className='centre pop vmargin space min200 max600 midnightGlow'>
+    <div className='centre pop vmargin space min200 max600 darkCard midnightGlow'>
       <p className='med wide bottomLine cap'>{Pref.equip} {Pref.premaintain}</p>
       <div className='centre' style={{justifyContent: 'space-between', flex: 'auto'}}>
       	<div className='rowWrap vmarginhalf'>   

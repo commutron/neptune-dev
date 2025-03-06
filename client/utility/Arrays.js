@@ -8,8 +8,9 @@ export const branchesSort = (branches)=> {
           b1.position < b2.position ? 1 : 
           b1.position > b2.position ? -1 : 0 );
 };
-export const branchesOpenSort = (branches)=> {
-  const open = branches.filter( b => b.open === true );
+export const branchesOpenSort = (branches, pro)=> {
+  const open = !pro ? branches.filter( b => b.open ) :
+                      branches.filter( b => b.open && b.pro );
   return open.sort((b1, b2)=>
           b1.position < b2.position ? 1 : 
           b1.position > b2.position ? -1 : 0 );

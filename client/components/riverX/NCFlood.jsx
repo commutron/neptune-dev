@@ -6,11 +6,13 @@ import { NonConCheck, onFire } from '/client/utility/NonConOptions';
 
 const NCFlood = ({ seriesId, live, user, ncTypesCombo })=> {
   
+  const station = localStorage.getItem("local_station");
+  
   const flatCheckList = Array.from(ncTypesCombo, x => 
                                   x.key ? x.live === true && x.typeText : x);
   
   function handleFloodNC(e) {
-    this.go.disabled = true;
+    this.goNcFld.disabled = true;
     e.preventDefault();
     const type = this.ncType.value.trim();
     
@@ -23,7 +25,7 @@ const NCFlood = ({ seriesId, live, user, ncTypesCombo })=> {
     if( !tgood || refSplit.length < 1 || refSplit[0] === '' ) {
       this.ncRefs.reportValidity();
       this.ncType.reportValidity();
-      this.go.disabled = false;
+      this.goNcFld.disabled = false;
     }else{
       toast.warn('Please Wait For Confirmation...', {
         toastId: ( 'floodpOp' ),
@@ -32,7 +34,7 @@ const NCFlood = ({ seriesId, live, user, ncTypesCombo })=> {
       });
       for(let ref of refSplit) {
         if(ref.length > 0 && ref.length < 8) {
-          Meteor.call('floodNCX', seriesId, ref, type, (error, reply)=>{
+          Meteor.call('floodNCX', seriesId, ref, type, station, (error, reply)=>{
             error && console.log(error);
             if(reply) {
               toast.update(( 'floodpOp' ), {
@@ -41,7 +43,7 @@ const NCFlood = ({ seriesId, live, user, ncTypesCombo })=> {
                 autoClose: 3000
               });
               this.ncRefs ? this.ncRefs.value = '' : null;
-              this.go ? this.go.disabled = false : null;
+              this.goNcFld ? this.goNcFld.disabled = false : null;
             }
           });
         }else{
@@ -50,7 +52,7 @@ const NCFlood = ({ seriesId, live, user, ncTypesCombo })=> {
             autoClose: 10000,
             closeOnClick: false
           });
-          this.go.disabled = false;
+          this.goNcFld.disabled = false;
         }
       }
     }
@@ -148,7 +150,7 @@ const NCFlood = ({ seriesId, live, user, ncTypesCombo })=> {
         }
           <button
             type='submit'
-            id='go'
+            id='goNcFld'
             disabled={lock}
             className='smallAction redHover bold transparent'
           >Record On All WIP {Pref.items}</button>

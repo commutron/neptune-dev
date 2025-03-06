@@ -16,6 +16,8 @@ const HomeIcon = () => {
     document.getElementById('n_logo_icon_popover')?.togglePopover();
   };
   
+  const station = localStorage.getItem("local_station");
+  
   return(
     <div className='homeIcon' onContextMenu={(e)=>tgglePowerMenu(e)}>
       <a className={'homeIconLink ' + warningLight} href='/' title='Home'></a>
@@ -31,10 +33,20 @@ const HomeIcon = () => {
         popover='auto' 
         className='popmenu homeMenu'
       >
-        <div>
-          <i>{'Neptune v.' + Pref.neptuneVersion}</i><br />
+        <div className='colNoWrap'>
+          <i>{'Neptune v.' + Pref.neptuneVersion}</i>
           {isDebug ? <small>{Meteor.release}<br /></small> : null}
           <i>Status: {Meteor.status().status}</i>
+          {Pref.stations &&
+            <select 
+              className='miniIn18 slimIn blackHover darkMenu whiteT' 
+              onChange={(e)=>localStorage.setItem("local_station", e.target.value === false ? false : e.target.value)}
+              defaultValue={station}
+              required>
+              <option></option>
+              {Pref.stations.map((v, x)=><option key={x}>{v}</option>)}
+            </select>
+          }
         </div>
         
         {Meteor.userId() ? 

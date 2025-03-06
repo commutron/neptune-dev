@@ -113,6 +113,10 @@
   opacity: 1;
 }
 
+.darkCard {
+  background-color: var(--dark);
+  z-index: 1;
+}
 .miniHistory {
   margin: 1vh 0;
   min-width: 14vmax;
@@ -125,6 +129,7 @@
   margin: 0;
   padding: 0;
   width: 100%;
+  
 }
 .actionForm fieldset {
   display: flex;
@@ -134,7 +139,9 @@
   padding: 0;
   width: 100%;
 }
-
+.actionForm button {
+  border: 2px solid var(--pro_prob, var(--black));
+}
 .firstBadge {
   width: 100%;
   height: 100%;

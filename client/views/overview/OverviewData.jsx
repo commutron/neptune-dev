@@ -16,7 +16,7 @@ const View = ({
   allEquip, openMaint
 })=> {
   
-  const brancheS = useMemo( ()=> branchesOpenSort(app?.branches || []), [app]);
+  const brancheS = useMemo( ()=> branchesOpenSort(app?.branches || [], true), [app]);
   
   if( !ready || !readyT || !app ) {
     return(

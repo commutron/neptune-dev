@@ -174,7 +174,7 @@ const PermissionHelp = ({ auths, admin })=> {
             <li>Create and edit {Pref.rapidExs}</li>
             
             <li>Add or Remove {Pref.tag}s</li>
-            <li>Add and Edit notes</li>
+            <li>Add, Edit, Solve and Remove notes</li>
             
             <li>Change {Pref.unit}</li>
             <li>Undo Complete beyond {Pref.completeGrace} hours</li>
@@ -252,6 +252,7 @@ const PermissionHelp = ({ auths, admin })=> {
             <li>Record nonconformances</li>
             <li>Record {Pref.shortfall}s</li>
             <li>Record "Repaired" nonconformances</li>
+            <li>Add {Pref.xBatch} notes</li>
           </ul>
         </ul>
       : null}

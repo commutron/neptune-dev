@@ -221,6 +221,7 @@ n-timeline-item:last-child n-timeline-marker:after {
   margin: 1dvmin;
   padding: 1dvmin;
   border-radius: 2px;
+  background-color: var(--contrastlight);
   box-shadow: var(--dropShadow000);
   display: flex;
   align-items: center;
@@ -292,7 +293,6 @@ n-timeline-item:last-child n-timeline-marker:after {
 .popmenu > button {
   background-color: var(--contrastlight);
 }
-.popbutton:hover,
 .popmenu div:hover,
 .popmenu button:hover {
   background-color: var(--contrast);

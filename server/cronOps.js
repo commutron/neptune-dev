@@ -388,7 +388,7 @@ async function countDoneItemsTarget(accessKey) {
         ontimeItm: dst[1]
       });
     }
-
+    // console.log(bStats.length);
     const stdRanges = getRanges();
     let monthweekXY = runMonthWeeksItems(bStats, stdRanges[1]);
     

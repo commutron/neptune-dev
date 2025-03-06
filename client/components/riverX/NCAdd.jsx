@@ -4,7 +4,9 @@ import { toast } from 'react-toastify';
 
 import { NonConCheck, onFire } from '/client/utility/NonConOptions';
 
-const NCAdd = ({ seriesId, serial, units, user, app, ncTypesCombo })=> {
+const NCAdd = ({ seriesId, serial, units, user, ncTypesCombo })=> {
+  
+  const station = localStorage.getItem("local_station");
   
   const flatCheckList = Array.from(ncTypesCombo, x => 
                                   x.key ? x.live === true && x.typeText : x);
@@ -26,7 +28,7 @@ const NCAdd = ({ seriesId, serial, units, user, app, ncTypesCombo })=> {
       Session.set('ncAddTypeSticky', type);
       for(let ref of refSplit) {
         if(ref.length > 0 && ref.length < 8) {
-          Meteor.call('addNCX', seriesId, serial, ref, uMulti, type, where, andFix, 
+          Meteor.call('addNCX', seriesId, serial, ref, uMulti, type, where, station, andFix, 
           (error)=>{
             error && console.log(error);
           });
@@ -163,14 +165,14 @@ const NCAdd = ({ seriesId, serial, units, user, app, ncTypesCombo })=> {
       }
       <button
         type='submit'
-        id='go'
+        id='goNcAdd'
         disabled={lock}
         className='smallAction redHover bold transparent'
       >Repair Later</button>
       
       <button
         type='button'
-        id='goFix'
+        id='goNcFixAdd'
         onClick={(e)=>handleNC(e, true)}
         disabled={lock}
         className='smallAction redHover bold transparent'

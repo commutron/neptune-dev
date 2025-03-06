@@ -247,7 +247,7 @@ export const OverMenuBar = ({ brancheS, branchON, changeBranch, light }) => {
         shrink={brancheS.length >= 14}
       />
       
-      {brancheS.map( (br, ix)=> {
+      {brancheS.filter(p => p.pro).map( (br, ix)=> {
         return(
           <FilterElement
             key={br.brKey+ix}

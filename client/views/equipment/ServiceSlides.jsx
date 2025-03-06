@@ -88,8 +88,8 @@ const ServiceSlides = ({
             
               <div className='comfort'>
                 <div className='margin5 rowWrap gapsC'>
-                  <span>
-                    <p>Last Modified: <n-num>{moment(sv.updatedAt).format('MMMM Do, YYYY. h:mm a,')}</n-num></p>
+                  <span className='startSelf'>
+                    <p>Last Modified: <n-num>{moment(sv.updatedAt).format('MMMM Do, YYYY. h:mm a')}</n-num></p>
                     <p className='cap'>Frequency: <n-num>{sv.recur} {sv.timeSpan}{sv.recur > 1 ? 's' : ''}</n-num></p>
                     <p className='cap'>Due/Cycle Day: <n-num>{
                       sv.timeSpan === 'year' ? month[sv.whenOf] : 
@@ -100,7 +100,7 @@ const ServiceSlides = ({
                     <p>Workdays Late Grace: <n-num>{sv.grace}</n-num></p>
                   </span>
                   
-                  <dl className='overscroll max400'>
+                  <dl className='startSelf overscroll max400'>
                     <dt className='vmarginquarter'>Checklist:</dt>
                     {sv.tasks.map( (entry, index)=>( 
                       <dd key={index} className='line15x cap'>☑ {entry}</dd>
