@@ -1,280 +1,280 @@
-import React, { useRef, useState, useLayoutEffect, useEffect, useMemo, Fragment } from 'react';
-import moment from 'moment';
-import 'moment-business-time';
-import { toast } from 'react-toastify';
+// import React, { useRef, useState, useLayoutEffect, useEffect, useMemo, Fragment } from 'react';
+// import moment from 'moment';
+// import 'moment-business-time';
+// import { toast } from 'react-toastify';
 
-import PagingSelect from '/client/components/tinyUi/PagingSelect';
-import { chunkArray } from '/client/utility/Convert';
-import UserName from '/client/utility/Username.js';
-import IssueDetail from './IssueDetail';
+// import PagingSelect from '/client/components/tinyUi/PagingSelect';
+// import { chunkArray } from '/client/utility/Convert';
+// import UserName from '/client/utility/Username.js';
+// import IssueDetail from './IssueDetail';
 
-const IssueHistory = ({ eqId, issData, isDebug, isEqSup, liveUsers })=>{
+// const IssueHistory = ({ eqId, issData, isDebug, isEqSup, liveUsers })=>{
   
-  const issSort = useMemo( ()=> issData.reverse(), [issData]);
+//   const issSort = useMemo( ()=> issData.reverse(), [issData]);
   
-  const [ debounce, debSet ] = useState(undefined);
+//   const [ debounce, debSet ] = useState(undefined);
   
-  const [ pageState, pageSet ] = useState(0);
-  const [ openState, openSet ] = useState(null);
-  const [ textState, textSet ] = useState(false);
+//   const [ pageState, pageSet ] = useState(0);
+//   const [ openState, openSet ] = useState(null);
+//   const [ textState, textSet ] = useState(false);
   
-  const [ inpieces, inpiecesSet ] = useState([]);
+//   const [ inpieces, inpiecesSet ] = useState([]);
   
-  const timer = useRef(null);
+//   const timer = useRef(null);
   
-  const fltrOpen = ()=> openState ? issSort.filter( f => f.open ) :
-                        openState === false ? issSort.filter( f => !f.open ) :
-                        issSort;
+//   const fltrOpen = ()=> openState ? issSort.filter( f => f.open ) :
+//                         openState === false ? issSort.filter( f => !f.open ) :
+//                         issSort;
   
-  const fltrText = (iss)=> !textState  ? iss : 
-                        iss.filter( f => 
-                          f.title.toLowerCase().includes(textState.toLowerCase())
-                          ||
-                          f.problog.find( l => 
-                            l.text.toLowerCase()
-                              .includes(textState.toLowerCase()))
-                        );
+//   const fltrText = (iss)=> !textState  ? iss : 
+//                         iss.filter( f => 
+//                           f.title.toLowerCase().includes(textState.toLowerCase())
+//                           ||
+//                           f.problog.find( l => 
+//                             l.text.toLowerCase()
+//                               .includes(textState.toLowerCase()))
+//                         );
                     
-  useLayoutEffect(() => {
-    const issRel = fltrOpen();
-    const issRef = fltrText(issRel);
+//   useLayoutEffect(() => {
+//     const issRel = fltrOpen();
+//     const issRef = fltrText(issRel);
                     
-    inpiecesSet( chunkArray(issRef, 10) );
-    debSet(0);
-  },[issData]);
+//     inpiecesSet( chunkArray(issRef, 10) );
+//     debSet(0);
+//   },[issData]);
   
-  useEffect(() => {
-    if(debounce !== undefined) {
-      clearTimeout(timer.current);
-      timer.current = setTimeout(() => {
+//   useEffect(() => {
+//     if(debounce !== undefined) {
+//       clearTimeout(timer.current);
+//       timer.current = setTimeout(() => {
         
-        const issRel = fltrOpen();
-        const issRef = fltrText(issRel);
+//         const issRel = fltrOpen();
+//         const issRef = fltrText(issRel);
     
-        inpiecesSet( chunkArray(issRef, 10) );
-        debSet(750);
-      },debounce);
-    }
-  },[openState, textState]);
+//         inpiecesSet( chunkArray(issRef, 10) );
+//         debSet(750);
+//       },debounce);
+//     }
+//   },[openState, textState]);
 
-  isDebug && console.log(issData);
+//   isDebug && console.log(issData);
   
-  function changeOpen(iKey, open) {
-    Meteor.call('editEqIssueState', eqId, iKey, open, (err, re)=>{
-      err && console.log(err);
-      if(re) {
-        null;
-      }else{
-        toast.warning('Not Allowed');
-      }
-    });
-  }
+//   function changeOpen(iKey, open) {
+//     Meteor.call('editEqIssueState', eqId, iKey, open, (err, re)=>{
+//       err && console.log(err);
+//       if(re) {
+//         null;
+//       }else{
+//         toast.warning('Not Allowed');
+//       }
+//     });
+//   }
   
-  function changeTitle(iKey, title) {
-    Meteor.call('editEqIssueTitle', eqId, iKey, title, (err, re)=>{
-      err && console.log(err);
-      if(re) {
-        null;
-      }else{
-        toast.warning('Not Allowed');
-      }
-    });
-  }
+//   function changeTitle(iKey, title) {
+//     Meteor.call('editEqIssueTitle', eqId, iKey, title, (err, re)=>{
+//       err && console.log(err);
+//       if(re) {
+//         null;
+//       }else{
+//         toast.warning('Not Allowed');
+//       }
+//     });
+//   }
   
-  function logIssue(iKey, text) {
-    Meteor.call('logEqIssue', eqId, iKey, text, (err, re)=>{
-      err && console.log(err);
-      if(re) {
-        null;
-      }else{
-        toast.warning('Not Allowed');
-      }
-    });
-  }
+//   function logIssue(iKey, text) {
+//     Meteor.call('logEqIssue', eqId, iKey, text, (err, re)=>{
+//       err && console.log(err);
+//       if(re) {
+//         null;
+//       }else{
+//         toast.warning('Not Allowed');
+//       }
+//     });
+//   }
   
-  return(
-    <Fragment>
+//   return(
+//     <Fragment>
     
-    <div className='w100 scrollWrap forceScrollStyle cap'>
-      <IlterTools
-        openSet={openSet}
-        textSet={textSet}
-        debSet={debSet}
-      />
-      <table className='w100'>
-        <thead>
-          <tr className='leftText'>
-            <th>Created</th>
-            <th>Issue</th>
-            <th>Latest</th>
-            <th>Status</th>
-            <th>Creator</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {(inpieces[pageState] || []).map( (is)=> {
-            const frmt = 'MMM D YYYY';
-            const ltst = is.problog[is.problog.length-1].text;
-            return(
-              <tr key={is.issueKey}>
-                <td>{moment(is.createdAt).format(frmt)} {
-                  !moment(is.createdAt).isSame(is.updatedAt, 'day') &&
-                    <em>(updated {moment(is.updatedAt).format(frmt)})</em>}
-                </td>
-                <td>{is.title}</td>
-                <td>{ltst.slice(0, 256) + (ltst.length > 256 ? '...' : '')}</td>
-                <td>{is.open ? 'WIP' : 'Resolved'}</td>
-                <td>{UserName(is.createdWho)}</td>
-                <td className='centreRow'>
-                  {is.problog.length > 0 ? 
-                    <IssueDetail
-                      dialogId={is.issueKey+'issHistory'}
-                      title={is.title.slice(0, 64) + (is.title.length > 64 ? '...' : '')}
-                      eqId={eqId}
-                      issData={is}
-                      handleOpen={(v)=>changeOpen(is.issueKey, v)}
-                      handleChange={(v)=>changeTitle(is.issueKey, v)}
-                      handleLog={(v)=>logIssue(is.issueKey, v)}
-                    />
-                  : null}
-                </td>
-              </tr>
-          )})}
-        </tbody>
-      </table>
+//     <div className='w100 scrollWrap forceScrollStyle cap'>
+//       <IlterTools
+//         openSet={openSet}
+//         textSet={textSet}
+//         debSet={debSet}
+//       />
+//       <table className='w100'>
+//         <thead>
+//           <tr className='leftText'>
+//             <th>Created</th>
+//             <th>Issue</th>
+//             <th>Latest</th>
+//             <th>Status</th>
+//             <th>Creator</th>
+//             <th></th>
+//           </tr>
+//         </thead>
+//         <tbody>
+//           {(inpieces[pageState] || []).map( (is)=> {
+//             const frmt = 'MMM D YYYY';
+//             const ltst = is.problog[is.problog.length-1].text;
+//             return(
+//               <tr key={is.issueKey}>
+//                 <td>{moment(is.createdAt).format(frmt)} {
+//                   !moment(is.createdAt).isSame(is.updatedAt, 'day') &&
+//                     <em>(updated {moment(is.updatedAt).format(frmt)})</em>}
+//                 </td>
+//                 <td>{is.title}</td>
+//                 <td>{ltst.slice(0, 256) + (ltst.length > 256 ? '...' : '')}</td>
+//                 <td>{is.open ? 'WIP' : 'Resolved'}</td>
+//                 <td>{UserName(is.createdWho)}</td>
+//                 <td className='centreRow'>
+//                   {is.problog.length > 0 ? 
+//                     <IssueDetail
+//                       dialogId={is.issueKey+'issHistory'}
+//                       title={is.title.slice(0, 64) + (is.title.length > 64 ? '...' : '')}
+//                       eqId={eqId}
+//                       issData={is}
+//                       handleOpen={(v)=>changeOpen(is.issueKey, v)}
+//                       handleChange={(v)=>changeTitle(is.issueKey, v)}
+//                       handleLog={(v)=>logIssue(is.issueKey, v)}
+//                     />
+//                   : null}
+//                 </td>
+//               </tr>
+//           )})}
+//         </tbody>
+//       </table>
       
-      <PagingSelect 
-        multiArray={inpieces}
-        isSet={pageState}
-        doChange={(e)=>pageSet(e)} 
-      />
+//       <PagingSelect 
+//         multiArray={inpieces}
+//         isSet={pageState}
+//         doChange={(e)=>pageSet(e)} 
+//       />
       
-    </div>
+//     </div>
     
-    <BackdateIssue eqId={eqId} liveUsers={liveUsers} />
+//     <BackdateIssue eqId={eqId} liveUsers={liveUsers} />
     
-    </Fragment>
-  );
-};
+//     </Fragment>
+//   );
+// };
 
-export default IssueHistory;
+// export default IssueHistory;
 
-const IlterTools = ({ openSet, textSet, debSet })=> (
-  <div className='centreRow bmargin vspacehalf'>
-    <div className='rowWrap'>
-      <label className='beside gapR'
-      ><input type='radio' name='isopen' className='minlineRadio' 
-        onChange={()=>{debSet(0);openSet(null)}}
-        defaultChecked={true} 
-      />All</label>
+// const IlterTools = ({ openSet, textSet, debSet })=> (
+//   <div className='centreRow bmargin vspacehalf'>
+//     <div className='rowWrap'>
+//       <label className='beside gapR'
+//       ><input type='radio' name='isopen' className='minlineRadio' 
+//         onChange={()=>{debSet(0);openSet(null)}}
+//         defaultChecked={true} 
+//       />All</label>
       
-      <label className='beside gapR'
-      ><input type='radio' name='isopen' className='minlineRadio' 
-        onChange={()=>{debSet(0);openSet(true)}}
-      />WIP</label>
+//       <label className='beside gapR'
+//       ><input type='radio' name='isopen' className='minlineRadio' 
+//         onChange={()=>{debSet(0);openSet(true)}}
+//       />WIP</label>
       
-      <label className='beside gapR'
-      ><input type='radio' name='isopen' className='minlineRadio' 
-        onChange={()=>{debSet(0);openSet(false)}}
-      />Resolved</label>
-    </div>
+//       <label className='beside gapR'
+//       ><input type='radio' name='isopen' className='minlineRadio' 
+//         onChange={()=>{debSet(0);openSet(false)}}
+//       />Resolved</label>
+//     </div>
           
-    <span className='flexSpace' />
+//     <span className='flexSpace' />
     
-    <label className='beside gapL'
-    ><input type='search' className='dbbleWide' 
-      placeholder='Search Log'
-      onChange={(e)=> textSet( e.target.value.length > 0 ? e.target.value : false)}
-      autoFocus
-      required
-    /></label>
-  </div>
-);
+//     <label className='beside gapL'
+//     ><input type='search' className='dbbleWide' 
+//       placeholder='Search Log'
+//       onChange={(e)=> textSet( e.target.value.length > 0 ? e.target.value : false)}
+//       autoFocus
+//       required
+//     /></label>
+//   </div>
+// );
         
-const BackdateIssue = ({ eqId, liveUsers })=> {
+// const BackdateIssue = ({ eqId, liveUsers })=> {
   
-  const tzoffset = (new Date()).getTimezoneOffset() * 60000;
+//   const tzoffset = (new Date()).getTimezoneOffset() * 60000;
   
-  function newBackIssue(e) {
-    e.preventDefault();
-    const title = this.backtitle.value.trim();
-    const log = this.backlog.value.trim();
+//   function newBackIssue(e) {
+//     e.preventDefault();
+//     const title = this.backtitle.value.trim();
+//     const log = this.backlog.value.trim();
     
-    const date = this.backdate.value;
-    const userID = this.backuser.value;
-    const wip = this.backwip.checked;
+//     const date = this.backdate.value;
+//     const userID = this.backuser.value;
+//     const wip = this.backwip.checked;
     
-    Meteor.call('backdateEqIssue', eqId, title, log, date, userID, wip, (err, re)=>{
-      err && console.log(err);
-      if(re) {
-        this.backtitle.value = '';
-        this.backlog.value = '';
-        this.backuser.value = Meteor.userId();
-        this.backwip.checked = true;
+//     Meteor.call('backdateEqIssue', eqId, title, log, date, userID, wip, (err, re)=>{
+//       err && console.log(err);
+//       if(re) {
+//         this.backtitle.value = '';
+//         this.backlog.value = '';
+//         this.backuser.value = Meteor.userId();
+//         this.backwip.checked = true;
         
-        let nxtiso = new Date(Date.now() - tzoffset).toISOString();
-        this.backdate.value = nxtiso.substring(0, nxtiso.indexOf("T") + 6);
-      }else{
-        toast.warning('Not Allowed');
-      }
-    });
-  }
+//         let nxtiso = new Date(Date.now() - tzoffset).toISOString();
+//         this.backdate.value = nxtiso.substring(0, nxtiso.indexOf("T") + 6);
+//       }else{
+//         toast.warning('Not Allowed');
+//       }
+//     });
+//   }
   
-  let iso = new Date(Date.now() - tzoffset).toISOString();
-  let max = iso.substring(0, iso.indexOf("T") + 6);
+//   let iso = new Date(Date.now() - tzoffset).toISOString();
+//   let max = iso.substring(0, iso.indexOf("T") + 6);
   
-  return(
-    <div>
-      <form id='backeqissue' onSubmit={(e)=>newBackIssue(e)}>
-        <h4>Backdate New Issue</h4>
-        <div className='balance gapsC'>
-          <div>
-            <p>
-              <label>Issue<br />
-                <input type='text' id='backtitle' required />
-              </label>
-              <span className='blk small max250 vmarginquarter'>Only the Point-Person will be able to edit the title.</span>
-            </p>
-            <p>
-              <label>Action / Troubleshooting<br />
-                <textarea id='backlog' rows='4' style={{maxWidth: '240px'}} required></textarea>
-              </label>
-              <span className='blk small max250'>Issue logs are permanent and non-editable</span>
-            </p>
-          </div>
-        <div>
-          <p>
-            <label>Date<br />
-              <input 
-                type='datetime-local'
-                id='backdate'
-                defaultValue={max}
-                max={max}
-                required
-              />
-            </label>
-          </p>
-          <p>
-            <label>Point-Person<br />
-              <select id='backuser' defaultValue={Meteor.userId()} required>
-                {liveUsers.map( (u)=>(
-                  <option key={u._id} value={u._id}>{u.username}</option>
-                ))}
-              </select>
-            </label>
-          </p>
-          <p>
-            <label className='beside'>
-            <input type='checkbox' id='backwip' className='gapR' defaultChecked={true} />
-            Work In Progress</label>
-          </p>
-          </div>
-        </div>
-        <p className='centreText'>
-          <button type='submit' className='action midnightSolid'>Post</button>
-        </p>
-      </form>
-    </div>
-  );
-};
+//   return(
+//     <div>
+//       <form id='backeqissue' onSubmit={(e)=>newBackIssue(e)}>
+//         <h4>Backdate New Issue</h4>
+//         <div className='balance gapsC'>
+//           <div>
+//             <p>
+//               <label>Issue<br />
+//                 <input type='text' id='backtitle' required />
+//               </label>
+//               <span className='blk small max250 vmarginquarter'>Only the Point-Person will be able to edit the title.</span>
+//             </p>
+//             <p>
+//               <label>Action / Troubleshooting<br />
+//                 <textarea id='backlog' rows='4' style={{maxWidth: '240px'}} required></textarea>
+//               </label>
+//               <span className='blk small max250'>Issue logs are permanent and non-editable</span>
+//             </p>
+//           </div>
+//         <div>
+//           <p>
+//             <label>Date<br />
+//               <input 
+//                 type='datetime-local'
+//                 id='backdate'
+//                 defaultValue={max}
+//                 max={max}
+//                 required
+//               />
+//             </label>
+//           </p>
+//           <p>
+//             <label>Point-Person<br />
+//               <select id='backuser' defaultValue={Meteor.userId()} required>
+//                 {liveUsers.map( (u)=>(
+//                   <option key={u._id} value={u._id}>{u.username}</option>
+//                 ))}
+//               </select>
+//             </label>
+//           </p>
+//           <p>
+//             <label className='beside'>
+//             <input type='checkbox' id='backwip' className='gapR' defaultChecked={true} />
+//             Work In Progress</label>
+//           </p>
+//           </div>
+//         </div>
+//         <p className='centreText'>
+//           <button type='submit' className='action midnightSolid'>Post</button>
+//         </p>
+//       </form>
+//     </div>
+//   );
+// };

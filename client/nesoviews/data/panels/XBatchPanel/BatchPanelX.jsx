@@ -6,7 +6,6 @@
 // import XBatchTimeline from '/client/components/bigUi/BatchFeed/XBatchTimeline';
 
 // import InfoTab from './InfoTab';
-// import TimeTab from './TimeTab';
 // import ProblemTab from './ProblemTab';
 
 // import EventCustom from '/client/components/forms/Batch/Child/EventCustom';

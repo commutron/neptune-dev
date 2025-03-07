@@ -4,7 +4,6 @@
 // import Tabs from '/client/components/smallUi/Tabs/Tabs';
 
 // import VariantCards from './VariantCards';
-// import WTimeTab from './WTimeTab';
 
 
 // const WidgetPanel = ({ widgetData, variantData,
