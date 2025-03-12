@@ -10,8 +10,8 @@ const ReleaseAction = ({ id, rType, actionText, contextText, qReady })=> {
   const [ datetime, datetimeSet ] = useState( moment().format() );
   
   function handleDatetime(e) {
-    const input = this.rDateTime.value;
-    datetimeSet( input );
+    const input = this.relmanualDateTime.value;
+    datetimeSet( moment(input).format() );
   }
   
   function handleRelease(e, caution) {
@@ -33,7 +33,7 @@ const ReleaseAction = ({ id, rType, actionText, contextText, qReady })=> {
     <div className='centre listSortInput' style={sty} disabled={!qReady}>
       {!qReady && <strong className='borderBlack bottomLine medBig centreText'>Quote Time Budget Required</strong>}
       <Flatpickr
-        id='rDateTime'
+        id='relmanualDateTime'
         value={datetime}
         className='minWide'
         onChange={(e)=>handleDatetime(e)}

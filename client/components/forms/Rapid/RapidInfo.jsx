@@ -12,7 +12,7 @@ export const RapidInfoCreate = ({
   cal, cancelFunc 
 })=> {
  
-  function handleCreate(e) {
+  function handleRapidCreate(e) {
     e.preventDefault();
     
     const rapidType = this.rType.value;
@@ -41,7 +41,7 @@ export const RapidInfoCreate = ({
       allQ={allQ}
       rSetItems={rSetItems}
       stateSet={cancelFunc}
-      handleFunc={handleCreate}
+      handleFunc={handleRapidCreate}
       cal={cal}
     />
   );
@@ -55,7 +55,7 @@ const RapidInfoEdit = ({
   
   const [ editState, editSet ] = useState(false);
  
-  function handleEdit(e) {
+  function handleRapidEdit(e) {
     e.preventDefault();
     
     const rapidType = this.rType.value;
@@ -91,7 +91,7 @@ const RapidInfoEdit = ({
         allQ={allQ}
         rSetItems={rSetItems}
         stateSet={editSet}
-        handleFunc={handleEdit}
+        handleFunc={handleRapidEdit}
         cal={cal}
       />
     );

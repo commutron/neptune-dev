@@ -23,7 +23,8 @@ function groupActiveWidgets(widgetsList, allXBatch) {
 
 const GroupSlide = ({ 
   groupData, widgetsList, batchDataX, app, 
-  inter, openActions, handleInterize, handleHibernate,
+  inter, openActions, 
+  handleInterize, handleHibernate, handleEnableEmail,
   canRun, canEdt, canCrt, canRmv 
 })=>{
   
@@ -99,6 +100,12 @@ const GroupSlide = ({
           icon='fa-solid fa-star gapR'
         />
         <PopoverMenu targetid='actionspop' attach='actions'>
+          <PopoverAction 
+            doFunc={()=>handleEnableEmail(g._id, !g.emailOptIn)}
+            text={`${g.emailOptIn ? 'Disable' : 'Enable'} Automated Emails`}
+            icon='fa-solid fa-envelope-circle-check'
+            lock={!canEdt}
+          />
           {inter &&
           <PopoverAction 
             doFunc={()=>handleInterize(g._id)}
@@ -157,12 +164,19 @@ const GroupSlide = ({
         
       </div>
       
-      {groupData.emailOptIn &&
+      {g.emailOptIn &&
         <p className='w100 indenText'>
         <span style={mockTag}>
           <i className="fa-solid fa-envelope-circle-check fa-lg gapR"></i>Automated Emails Enabled
         </span>
         </p>
+      }
+      {g.emailPrime ?
+        <p className='indenText'>Emails sent to {g.emailPrime} and {g.emailSecond?.length || 0} others</p>
+        :
+        g.emailOptIn && !g.emailPrime ?
+        <p className='indenText bold'>No Primary Email Address set</p>
+        : null
       }
       
       <p className='w100 capFL indenText wordBr'>

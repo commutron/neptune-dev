@@ -234,16 +234,15 @@ const InlineForm = ({ widgetData, variantData, rootURL, editState, editSet })=> 
   
   function handleFunc(e) {
     e.preventDefault();
-    
     const wId = widgetData._id;
     const vId = variantData._id;
     
-    const variant = this.rev.value.trim();
+    const variant = this[vId+'_rev'].value.trim();
     
-    const url = this.wikdress.value.trim();
+    const url = this[vId+'_wikdress'].value.trim();
     const wiki = cleanURL(url, rootURL);
     
-    const unit = this.unit.value.trim();
+    const unit = this[vId+'_unit'].value.trim();
     
     Meteor.call('editVariant', wId, vId, variant, wiki, unit, (error, reply)=>{
       error && console.log(error);
@@ -283,7 +282,7 @@ const InlineForm = ({ widgetData, variantData, rootURL, editState, editSet })=> 
       <p className='cap'>{Pref.variant}
         <input
           type='text'
-          id='rev'
+          id={variantData._id+'_rev'}
           className='interInput'
           defaultValue={variantData.variant}
           placeholder='1a'
@@ -294,7 +293,7 @@ const InlineForm = ({ widgetData, variantData, rootURL, editState, editSet })=> 
       <p className='cap'>{Pref.unit} Quantity
         <input
           type='number'
-          id='unit'
+          id={variantData._id+'_unit'}
           className='interInput'
           pattern='[0-999]*'
           maxLength='3'
@@ -310,7 +309,7 @@ const InlineForm = ({ widgetData, variantData, rootURL, editState, editSet })=> 
       <p>Work Instructions
         <textarea
           type='text'
-          id='wikdress'
+          id={variantData._id+'_wikdress'}
           className='interInput'
           defaultValue={variantData.instruct}
           placeholder='Full Address'></textarea>

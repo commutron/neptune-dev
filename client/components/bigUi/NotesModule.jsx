@@ -42,7 +42,7 @@ const NotesContent = ({ sourceId, noteObj, editMethod, lines, cal })=> {
   
   function handleChange(e) {
     e.preventDefault();
-    const noteContent = this.noteVal.value.trim();
+    const noteContent = this[sourceId+'_noteVal'].value.trim();
     
     Meteor.call(editMethod, sourceId, noteContent, (err)=>{
       err && console.log(err);
@@ -60,10 +60,10 @@ const NotesContent = ({ sourceId, noteObj, editMethod, lines, cal })=> {
   return(
     <div>
       {editState ?
-        <form id='noteForm' onSubmit={(e)=>handleChange(e)}>
+        <form id={sourceId+'_noteForm'} onSubmit={(e)=>handleChange(e)}>
           <textarea 
             rows={lines || 4}
-            id='noteVal'
+            id={sourceId+'_noteVal'}
             className='vmarginquarter w100 thinScroll'
             defaultValue={noteObj?.content || ''}
           ></textarea>
@@ -78,7 +78,7 @@ const NotesContent = ({ sourceId, noteObj, editMethod, lines, cal })=> {
               title='save'
               type='submit'
               className='miniAction med gap greenLineHover'
-              form='noteForm'
+              form={sourceId+'_noteForm'}
             ><i className='fas fa-check'></i> save</button>
           </span>
         </form>

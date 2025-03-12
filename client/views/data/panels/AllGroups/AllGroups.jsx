@@ -18,11 +18,9 @@ const AllGroups = ({
   const openActions = (model, select)=> {
     selectedGroupSet(select);
     if(model === 'groupform') {
-      const dialog = document.getElementById('multifuncion_group_form');
-      dialog?.showModal();
+      document.getElementById('multifuncion_group_form')?.showModal();
     }else if(model === 'groupemail') {
-      const dialog = document.getElementById('multifuncion_gemail_form');
-      dialog?.showModal();
+      document.getElementById('multifuncion_gemail_form')?.showModal();
     }else if(model === 'widgetform') {
       const dialog = document.getElementById('multi_widget_new_form');
       dialog?.showModal();
@@ -47,6 +45,12 @@ const AllGroups = ({
       }else{
         toast.warning(`Not ${Pref.hibernatated}. Live ${Pref.variants} found`);
       }
+    });
+  }
+  function handleEnableEmail(gID, val) {
+    Meteor.call('groupEmailOptIn', gID, val, (error, reply)=>{
+      error && console.log(error);
+      // reply && toast.success('Saved');
     });
   }
   
@@ -78,7 +82,7 @@ const AllGroups = ({
         rootURL={app.instruct}
       />
       <GroupEmails
-        groupData={selectedGroup}
+        gObj={selectedGroup}
         clearOnClose={()=>selectedGroupSet(false)}
       />
       <WidgetNew 
@@ -115,6 +119,7 @@ const AllGroups = ({
             openActions={openActions}
             handleInterize={handleInterize}
             handleHibernate={handleHibernate}
+            handleEnableEmail={handleEnableEmail}
             canRun={canRun}
             canEdt={canEdt}
             canCrt={canCrt}

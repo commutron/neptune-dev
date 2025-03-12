@@ -6,8 +6,8 @@ import ModelNative from '/client/layouts/Models/ModelNative';
 
 const WidgetNew = ({ groupId, clearOnClose })=> {
 
-  function save() {
-    this.go.disabled = true;
+  function saveNewWidget() {
+    this.goSvNwWg.disabled = true;
     const newName = this.nwNm.value.trim().toLowerCase();
     const desc = this.prodiption.value.trim();
     
@@ -17,7 +17,7 @@ const WidgetNew = ({ groupId, clearOnClose })=> {
         FlowRouter.go('/data/widget?request=' + newName);
       }else{
         toast.error('Server Error');
-        this.go.disabled = false;
+        this.goSvNwWg.disabled = false;
       }
     });
   }
@@ -30,7 +30,7 @@ const WidgetNew = ({ groupId, clearOnClose })=> {
       colorT='blueT'
       closeFunc={clearOnClose}>
       
-      <form className='fitWide' onSubmit={(e)=>save(e)} disabled={!groupId}>
+      <form className='fitWide' onSubmit={(e)=>saveNewWidget(e)} disabled={!groupId}>
         <p>
           <input
             type='text'
@@ -55,7 +55,7 @@ const WidgetNew = ({ groupId, clearOnClose })=> {
             type='submit'
             formMethod='dialog'
             className='action nSolid'
-            id='go'
+            id='goSvNwWg'
             disabled={false}>SAVE</button>
         </span>
       </form>
@@ -67,8 +67,8 @@ export default WidgetNew;
 
 export const WidgetEdit = ({ id, now })=> {
 
-  function save() {
-    const newName = this.nwNm.value.trim().toLowerCase();
+  function saveEditWidget() {
+    const newName = this.edtNm.value.trim().toLowerCase();
     const desc = this.prodiption.value.trim();
 
     Meteor.call('editWidget', id, newName, desc, (error, reply)=>{
@@ -89,17 +89,17 @@ export const WidgetEdit = ({ id, now })=> {
       icon='fa-solid fa-cube'
       colorT='blueT'>
       
-    <form className='fitWide' onSubmit={(e)=>save(e)}>
+    <form className='fitWide' onSubmit={(e)=>saveEditWidget(e)}>
       <p>
         <input
           type='text'
-          id='nwNm'
+          id='edtNm'
           defaultValue={now.widget}
           placeholder='ID ie. A4-R-0221'
           pattern='[A-Za-z0-9 _\-]*'
           autoFocus={true}
           required />
-        <label htmlFor='nwNm'>{Pref.widget} ID</label>
+        <label htmlFor='edtNm'>{Pref.widget} ID</label>
       </p>
       <p>
         <input

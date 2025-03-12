@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
@@ -7,16 +7,23 @@ import { cleanURL } from '/client/utility/Convert';
 
 const GroupForm = ({ gObj, clearOnClose, rootURL })=> {
   
-  const groupId = gObj?._id || null;
-  const name = gObj?.group || '';
-  const alias = gObj?.alias || '';
-  const wiki = gObj?.wiki || '';
+  const [groupId, setgId] = useState(null);
+  const [name, setgName] = useState('');
+  const [alias, setgAlias] = useState('');
+  const [wiki, setgWiki] = useState('');
+  
+  useEffect( ()=> {
+    setgId(gObj?._id || null);
+    setgName(gObj?.group || '');
+    setgAlias(gObj?.alias || '');
+    setgWiki(gObj?.wiki || '');
+  },[gObj]);
 
   function createCustomer() {
-    const groupName = this.gName.value.trim();
-    const groupAlias = this.gAlias.value.trim().toLowerCase();
+    const groupName = name.trim();
+    const groupAlias = alias.trim().toLowerCase();
     
-    const gURL = this.gWiki.value.trim();
+    const gURL = wiki.trim();
     const groupWiki = cleanURL(gURL, rootURL);
     
     if(!groupId) {
@@ -24,6 +31,7 @@ const GroupForm = ({ gObj, clearOnClose, rootURL })=> {
         if(error)
           console.log(error);
         if(reply) {
+          clearOnClose();
           toast.success('Saved');
         }else{
           toast.error('Server Error');
@@ -34,6 +42,7 @@ const GroupForm = ({ gObj, clearOnClose, rootURL })=> {
         if(error)
           console.log(error);
         if(reply) {
+          clearOnClose();
           toast.success('Saved');
           FlowRouter.go('/data/overview?request=groups&specify=' + groupAlias);
         }else{
@@ -57,7 +66,8 @@ const GroupForm = ({ gObj, clearOnClose, rootURL })=> {
           <input
             type='text'
             id='gName'
-            defaultValue={name}
+            value={name}
+            onChange={(e)=>setgName(e.target.value)}
             placeholder='ie. Trailer Safegaurd'
             className='dbbleWide'
             pattern='[A-Za-z0-9 _\-]*'
@@ -72,7 +82,8 @@ const GroupForm = ({ gObj, clearOnClose, rootURL })=> {
           <input
             type='text'
             id='gAlias'
-            defaultValue={alias}
+            value={alias}
+            onChange={(e)=>setgAlias(e.target.value)}
             placeholder='ie. TSG'
             pattern='[A-Za-z0-9 _\-]*'
             maxLength={Pref.aliasMax}
@@ -84,7 +95,8 @@ const GroupForm = ({ gObj, clearOnClose, rootURL })=> {
         <input
           type='text'
           id='gWiki'
-          defaultValue={wiki}
+          value={wiki}
+          onChange={(e)=>setgWiki(e.target.value)}
           placeholder='http://192.168.1.68/pisces'
           className='dbbleWide' />
         <label htmlFor='gWiki' className='cap'>{Pref.group} {Pref.instruct} index</label>

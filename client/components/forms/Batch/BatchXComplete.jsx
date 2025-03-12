@@ -136,7 +136,7 @@ const BatchXComplete = ({ batchData, allFlow, allFall, nowater, quantity, canRun
             >
               <div title="Must enter organization PIN to reopen">
                 <input
-                  id='orgPIN'
+                  id='orgPINunlock'
                   autoComplete="false"
                   className='miniIn12 interSelect centreText'
                   pattern='[\d\d\d\d]*'
@@ -147,7 +147,7 @@ const BatchXComplete = ({ batchData, allFlow, allFall, nowater, quantity, canRun
                 /><br />
                 <button
                   className='action purpleSolid'
-                  onClick={(e)=>undoFinishBatchX(true, this.orgPIN.value)}
+                  onClick={(e)=>undoFinishBatchX(true, this.orgPINunlock.value)}
                 >Yes, Reopen</button>
               </div>
             </ModelInline>

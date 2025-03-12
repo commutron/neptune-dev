@@ -8,7 +8,7 @@ import ModelNative from '/client/layouts/Models/ModelNative';
 
 const BatchEdit = ({ batchData, seriesData, allVariants, canEdit, access })=> {
    
-  function save() {
+  function saveBatchEdit() {
     const batchId = batchData._id;
     
     const vKey = this.vrsn.value;
@@ -50,7 +50,7 @@ const BatchEdit = ({ batchData, seriesData, allVariants, canEdit, access })=> {
       icon='fa-solid fa-cubes'
       colorT='blueT'>
       
-    <form className='centre' onSubmit={(e)=>save(e)}>
+    <form className='centre' onSubmit={(e)=>saveBatchEdit(e)}>
       <div className='centreRow'>
         <label className='breath' htmlFor='vrsn'>{Pref.variant}<br />
           <select

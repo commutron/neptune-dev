@@ -153,30 +153,22 @@ Meteor.methods({
     }
   },
   
-  groupPrimeEmailSet(groupId, address) {
+  groupPrimeEmailSet(groupId, address, secondArr) {
     if(typeof address === 'string') {
       if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
+        const cleanprime = address === '' ? false : address;
         GroupDB.update({_id: groupId, orgKey: Meteor.user().orgKey}, {
           $set : { 
-            emailPrime: address
-          }});
-          return true;
+            emailPrime: cleanprime,
+            emailSecond: secondArr
+          }
+        });
+        return true;
       }else{
         return false;
       }
     }else{
       throw new Meteor.Error(403, 'Input is not a string');
-    }
-  },
-  groupPrimeEmailRemove(groupId) {
-    if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
-      GroupDB.update({_id: groupId, orgKey: Meteor.user().orgKey}, {
-        $set : { 
-          emailPrime: false
-        }});
-        return true;
-    }else{
-      return false;
     }
   },
   

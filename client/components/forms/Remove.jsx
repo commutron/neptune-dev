@@ -9,7 +9,7 @@ import ModelNative from '/client/layouts/Models/ModelNative';
 // check : a string for a conformation
 // entry : the object to be deleted
       
-const Remove = ({ action, entry, title, check, access })=> {
+const Remove = ({ action, entry, title, check, access, clearOnClose })=> {
   
   function handleRemove(e) {
     this.cutGo.disabled = true;
@@ -49,6 +49,8 @@ const Remove = ({ action, entry, title, check, access })=> {
           if(reply === 'inUse') {
             toast.warning('Cannot do this, entry is in use');
           }else if(reply) {
+            clearOnClose();
+            this.confirmInput.value = '';
             toast.success('Entry removed');
           }else{
             toast.error('Rejected by Server');

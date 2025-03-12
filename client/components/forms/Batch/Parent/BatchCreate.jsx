@@ -61,7 +61,7 @@ const BatchCreate = ({ groupId, widgetId, allVariants, prerun, clearOnClose })=>
     }
   }, [prerun, endDateState]);
    
-  function save() {
+  function saveNewBatch() {
     const vKey = this.vrsn.value;
     const batchNum = this.oNum.value.trim().toLowerCase();
     const salesNum = this.soNum.value.trim().toLowerCase();
@@ -102,7 +102,7 @@ const BatchCreate = ({ groupId, widgetId, allVariants, prerun, clearOnClose })=>
       colorT='blueT'
       closeFunc={()=>clearOnClose()}>
       
-    <form className='centre max500' onSubmit={(e)=>save(e)}>
+    <form className='centre max500' onSubmit={(e)=>saveNewBatch(e)}>
       <span className='overscroll'>
         <div className='centreRow'>
           <label className='breath' htmlFor='vrsn'>{Pref.variant}<br />

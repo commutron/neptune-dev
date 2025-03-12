@@ -26,7 +26,7 @@ const BatchXIncomplete = ({ batchData, seriesData, access })=> {
     workingSet(true);
     
     const comm = this.fincomment.value.trim();
-    const pinVal = this.orgPINgo.value;
+    const pinVal = this.orgPINinFin.value;
     
     if(Roles.userIsInRole(Meteor.userId(), 'qa')) {
       Meteor.apply('FORCEfinishBatchX', 
@@ -168,7 +168,7 @@ const BatchXIncomplete = ({ batchData, seriesData, access })=> {
       
       <p><strong>This Action CANNOT be undone</strong>
         <input
-          id='orgPINgo'
+          id='orgPINinFin'
           autoComplete="false"
           className='noCopy miniIn12 interSelect centreText gap orangeHover'
           pattern='[\d\d\d\d]*'

@@ -9,7 +9,8 @@ const lookupTable = [
 ];
 
 function liteEncode(userstring) {
-	
+  // const encoder = new TextEncoder();
+  // const ePass = encoder.encode(userstring).toString();
 	const userArray = [...userstring];
 	const intArray = userArray.map( (char)=> lookupTable.indexOf(char) );
 	

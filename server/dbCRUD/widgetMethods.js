@@ -192,11 +192,11 @@ Meteor.methods({
     if(inUseXA) {
       return 'liveRiver';
     }else if(inUseX) {
-      return 'deadRiver';
+      return 'offRiver';
     }else if(inUseSA) {
       return 'liveAlt';
     }else if(inUseS) {
-      return 'deadAlt';
+      return 'offAlt';
     }else{
       return false;
     }

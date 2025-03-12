@@ -14,7 +14,7 @@ const UnitSetAll = ({ bID, seriesId, bdone, sqty, vqty })=> {
       autoClose: false
     });
     
-    const unit = this.unit.value.trim();
+    const unit = this.allunit.value.trim();
     
     Meteor.call('setAllItemUnits', seriesId, unit, (error, reply)=>{
       error && console.log(error);
@@ -52,7 +52,7 @@ const UnitSetAll = ({ bID, seriesId, bdone, sqty, vqty })=> {
         <p>
           <input
             type='number'
-            id='unit'
+            id='allunit'
             className='max100'
             pattern='[0000-9999]*'
             maxLength='4'
@@ -64,7 +64,7 @@ const UnitSetAll = ({ bID, seriesId, bdone, sqty, vqty })=> {
             inputMode='numeric'
             required
           />
-          <label htmlFor='unit'>{Pref.unit} Quantity <em>max {Pref.unitLimit}</em></label>
+          <label htmlFor='allunit'>{Pref.unit} Quantity <em>max {Pref.unitLimit}</em></label>
         </p>
         <p>
           <button

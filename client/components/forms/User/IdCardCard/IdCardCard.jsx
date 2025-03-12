@@ -30,8 +30,6 @@ const IdCardCard = ({ user })=> {
 
     const userstring = user.username + "<+>" + goodPass;
     
-    // const encoder = new TextEncoder();
-    // const ePass = encoder.encode(userstring).toString();
     const ePass = liteEncode(userstring);
     
     let svgNode = DATAMatrix({

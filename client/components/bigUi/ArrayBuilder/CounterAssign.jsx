@@ -10,9 +10,9 @@ const CounterAssign = ({ bID, app, waterfall, access })=> {
 
   function handleAssign(e) {
     e.preventDefault();
-    this.go.disabled = true;
+    this.cntrGo.disabled = true;
 
-    let wfKey = this.choice.value;
+    let wfKey = this.cntrChoice.value;
     const option = app.countOption.find( x => x.key === wfKey);
     const wfGate = option ? option.gate : null;
     const wfType = option ? option.type : null;
@@ -25,8 +25,8 @@ const CounterAssign = ({ bID, app, waterfall, access })=> {
       (error, reply)=>{
         error && console.log(error);
         reply ? toast.success('Saved') : toast.error('Server Error');
-        this.go.disabled = false;
-        this.choice.value = '';
+        this.cntrGo.disabled = false;
+        this.cntrChoice.value = '';
       });
     }else{
       toast.warning('Cannot Save');
@@ -73,8 +73,8 @@ const CounterAssign = ({ bID, app, waterfall, access })=> {
       <p className='centreText'>A counter is a record of items, without serial numbers, passing through a gate.</p>
       <form className='centre' onSubmit={(e)=>handleAssign(e)}>
         <div className='rowWrap'>
-          <label htmlFor='choice'>Process Gate<br />
-            <select id='choice' required>
+          <label htmlFor='cntrChoice'>Process Gate<br />
+            <select id='cntrChoice' required>
             <option></option>
             {cOpS.map( (entry)=>{
               let opLock = waterfall.find( x => x.wfKey === entry.key);
@@ -105,7 +105,7 @@ const CounterAssign = ({ bID, app, waterfall, access })=> {
         <p>
           <button
             type='submit'
-            id='go'
+            id='cntrGo'
             disabled={false}
             className='action nSolid'
           >Add A Counter</button>

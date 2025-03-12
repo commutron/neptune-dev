@@ -87,9 +87,9 @@ const FlowFormRoute = ({
               <b>In use by an Active {Pref.xBatch} as the {Pref.buildFlow}</b>
             : warn === 'liveAlt' ?
               <b>In use by an Active {Pref.xBatch} as the {Pref.buildFlowAlt}</b>
-            : warn === 'liveAlt' ?
+            : warn === 'offRiver' ?
               <b>In use by an Inactive {Pref.xBatch} as the {Pref.buildFlow}</b>
-            : warn === 'liveAlt' ?
+            : warn === 'offAlt' ?
               <b>In use by an Inactive {Pref.xBatch} as the {Pref.buildFlowAlt}</b>
             :
               <b>In use by ~unknown~</b>}
@@ -111,7 +111,6 @@ const FlowFormRoute = ({
             type='submit'
             formMethod='dialog'
             id={id+'goFlow'}
-            className='medBig'
             disabled={!flow || !access}
             form='flowRouteSave'
             className='action nSolid'>SAVE</button>

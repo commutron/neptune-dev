@@ -1,14 +1,6 @@
 import React from 'react';
 
-const FilterActive = ({ title, open, done, total, onClick, onTxtChange })=>	{
-  
-  function changeBasicFilter() {
-    onClick(this.basic.value);
-  }
-  function changeTextFilter() {
-    onTxtChange(this.text.value);
-  }
-  
+const FilterActive = ({ total, onClick, onTxtChange })=>	{
   return(
     <div className='itmFltrBlock noCopy'>
       <div className=''>
@@ -16,8 +8,8 @@ const FilterActive = ({ title, open, done, total, onClick, onTxtChange })=>	{
           <i className='fas fa-font fa-fw'></i>
           <input
             type='search'
-            ref={(i)=>this.text = i}
-            onChange={(e)=>changeTextFilter(e)}
+            id='fltrtext'
+            onChange={(e)=>onTxtChange(e.target.value)}
             disabled={!onTxtChange} />
         </label>
       </div>
@@ -25,11 +17,11 @@ const FilterActive = ({ title, open, done, total, onClick, onTxtChange })=>	{
         <label className='fltrsInput'>
           <i className='fas fa-map-marker-alt fa-fw'></i>
           <select
-            ref={(i)=> this.basic = i}
-            onChange={(e)=>changeBasicFilter(e)}>
+            id='fltrbasic'
+            onChange={(e)=>onClick(e.target.value)}>
             <option value='all'>All</option>
-            <option value='done'>Inactive</option>
             <option value='inproc'>In Progress</option>
+            <option value='done'>Inactive</option>
           </select>
         </label>
       </div>
