@@ -670,6 +670,7 @@ Meteor.publish('hotDataEx', function(dataView, dataRequest, hotWidget){
             'completed': 1,
             'completedAt': 1,
             'quantity': 1
+            // 'river': 1
         }})
       ];
     }else {

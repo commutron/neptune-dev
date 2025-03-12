@@ -6,7 +6,7 @@ import ModelNative from '/client/layouts/Models/ModelNative';
 import FlowBuilder from '/client/components/bigUi/ArrayBuilder/FlowBuilder';
 
 const FlowFormRoute = ({ 
-  id, app, existFlows, preFill, access, clearOnClose
+  id, app, existFlows, preFillKey, access, clearOnClose
 })=> {
   
   const [ warn, warnSet ] = useState(false);
@@ -23,13 +23,13 @@ const FlowFormRoute = ({
     }
   }
   
-  function save() {
-    this.goFlow.disabled = true;
+  function handleSaveFlowRoute() {
+    this[id+'goFlow'].disabled = true;
     const widgetId = id;
     const flowObj = flow;
     
     // edit existing
-    const editId = preFill ? preFill.flowKey : false;
+    const editId = preFillKey ? preFillKey : false;
     
     if(!flowObj) {
       toast.warning("Can't Save, missing flow");
@@ -37,6 +37,7 @@ const FlowFormRoute = ({
       Meteor.call('setBasicPlusFlowRoute', widgetId, editId, flowObj, (error)=>{
         error && console.log(error);
         toast.success('Saved');
+        clearOnClose();
       });
     }else{
       toast.warning('Error, key not found');
@@ -44,20 +45,20 @@ const FlowFormRoute = ({
   }
   
   useEffect( ()=> {
-    if(!preFill) {
+    if(!preFillKey) {
       warnSet(false);
       baseSet(false);
       flowSet(false);
     }else{
-      const fill = existFlows.find( f => f.flowKey === preFill );
+      const fill = existFlows.find( f => f.flowKey === preFillKey );
       fill ? baseSet(fill) : null;
       
-      Meteor.call('activeFlowCheck', preFill, (error, reply)=>{
+      Meteor.call('activeFlowCheck', preFillKey, (error, reply)=>{
         error && console.log(error);
         warnSet(reply);
       });
     }
-  }, [preFill]);
+  }, [preFillKey]);
 
   const fTitle = base ? base.title : '';
   const fFlow = base ? base.flow : false;
@@ -75,25 +76,25 @@ const FlowFormRoute = ({
         :
         <div>
         <form
-          id='flowSave'
-          onSubmit={(e)=>save(e)}
+          id='flowRouteSave'
+          onSubmit={(e)=>handleSaveFlowRoute(e)}
         >
-        {warn ?
           <div className='centre centreText'>
-            <p><b>{fTitle}</b> is in use by:
-            {warn === 'liveRiver' ?
-              <b> an Active {Pref.xBatch} as the {Pref.buildFlow}</b>
+            <p className='cap nomargin nospace'>{fTitle}</p>
+            <p className='nomargin nospace'>
+            {!warn ? <em>Not In Use</em> :
+              warn === 'liveRiver' ?
+              <b>In use by an Active {Pref.xBatch} as the {Pref.buildFlow}</b>
             : warn === 'liveAlt' ?
-              <b> an Active {Pref.xBatch} as the {Pref.buildFlowAlt}</b>
+              <b>In use by an Active {Pref.xBatch} as the {Pref.buildFlowAlt}</b>
             : warn === 'liveAlt' ?
-              <b> an Inactive {Pref.xBatch} as the {Pref.buildFlow}</b>
+              <b>In use by an Inactive {Pref.xBatch} as the {Pref.buildFlow}</b>
             : warn === 'liveAlt' ?
-              <b> an Inactive {Pref.xBatch} as the {Pref.buildFlowAlt}</b>
+              <b>In use by an Inactive {Pref.xBatch} as the {Pref.buildFlowAlt}</b>
             :
-              <b> an unknown something</b>}
+              <b>In use by ~unknown~</b>}
             </p>
           </div>
-        : null}
         </form>
         
         <FlowBuilder
@@ -109,10 +110,10 @@ const FlowFormRoute = ({
           <button
             type='submit'
             formMethod='dialog'
-            id='goFlow'
+            id={id+'goFlow'}
             className='medBig'
             disabled={!flow || !access}
-            form='flowSave'
+            form='flowRouteSave'
             className='action nSolid'>SAVE</button>
           <br />
         </div>

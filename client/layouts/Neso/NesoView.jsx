@@ -318,15 +318,15 @@ const NotifySend = ({ unice, users })=> {
   function sendOneToOne(e) {
     e.preventDefault();
     
-    const message = this.typedMssg.value;
-    const tousrnm = this.userInput.value;
+    const message = e.target.typedMssg.value;
+    const tousrnm = e.target.userInput.value;
     
     const userVal = uList.find( u => u.label === tousrnm)?.value;
     
     if(userVal) {
       Meteor.call('sendUserDM', userVal, unice, message, (error, re)=>{
         error && console.log(error);
-        this.typedMssg.value = "";
+        e.target.typedMssg.value = "";
         
         if(re === 'ether') {
           toast(

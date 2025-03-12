@@ -22,12 +22,11 @@ const ModelUser = ({
   }, [user.inbox?.length]);
   
   const close = ()=> {
-    const dialog = document.getElementById('userRightPanel');
-    dialog?.close();
+    document.getElementById('userRightPanel')?.close();
   };
 
   useEffect( ()=> {
-    const dialog = document.querySelector("#userRightPanel");
+    const dialog = document.getElementById('userRightPanel');
     dialog.addEventListener("click", (ev)=> 
       ev.target.id === 'userRightPanel' ? close() : null );
   }, []);
@@ -194,15 +193,15 @@ const NotifyMini = ({ unice, inbox, users })=> {
   function sendOneToOne(e) {
     e.preventDefault();
   
-    const message = this.typedMssg.value;
-    const tousrnm = this.userSend.value;
+    const message = e.target.typedMssg.value;
+    const tousrnm = e.target.userSend.value;
     
     const userVal = uList.find( u => u.label === tousrnm)?.value;
     
     if(userVal) {
       Meteor.call('sendUserDM', userVal, unice, message, (error, re)=>{
         error && console.log(error);
-        this.typedMssg.value = "";
+        e.target.typedMssg.value = "";
         
         if(re === 'ether') {
           toast(

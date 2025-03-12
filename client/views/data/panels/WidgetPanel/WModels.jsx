@@ -26,7 +26,7 @@ const WModels = ({
       />
       <FlowFormHead
         id={widgetData._id}
-        preFill={selectedFlow}
+        preFillKey={selectedFlow}
         existFlows={widgetData.flows}
         app={app}
         access={canEdt}
@@ -34,7 +34,7 @@ const WModels = ({
       />
       <FlowFormRoute
         id={widgetData._id}
-        preFill={selectedFlow}
+        preFillKey={selectedFlow}
         existFlows={widgetData.flows}
         app={app}
         access={canEdt}

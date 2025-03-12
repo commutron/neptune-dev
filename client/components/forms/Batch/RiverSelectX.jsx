@@ -5,8 +5,8 @@ import { toast } from 'react-toastify';
 
 const RiverSelect = ({ bID, wFlows, river, riverTitle, lock, access })=> {
 
-  function handleChange() {
-    let flow = this.riverchoice.value;
+  function handleChange(e) {
+    let flow = e.target.value;
     flow === 'false' ? flow = false : null;
    
     Meteor.call('setRiverX', bID, flow, (error)=>{

@@ -8,17 +8,17 @@ import NCFlood from '/client/components/riverX/NCFlood';
 import ShortAdd from '/client/components/riverX/ShortAdd';
 
 const XFormBar = ({ 
-  batchData, seriesData, itemData, rapIs, widgetData, radioactive,
+  batchData, seriesData, itemData, rapIs, radioactive,
   timeOpen, ncTypesCombo, 
   action, showVerifyState, handleVerify, 
-  user, users, app 
+  user, app 
 })=> {
   
   const [ show, showSet ] = useState('NC');
   
   function handleDone() {
     showSet( 'NC' );
-    this.ncselect.checked = true;
+    this.ncFormSelect.checked = true;
     if(user.shFocusReset) {
       document.getElementById('lookup').focus();
     }else{
@@ -64,12 +64,11 @@ const XFormBar = ({
             check={showVerifyState === true}
             change={()=>handleVerify(null, true)}
             lock={!verAuth} 
-            // icon='fa-solid fa-redo-alt'
             icon='fa-solid fa-check-double'
             color='butBlue'
           />}
           <FormToggle
-            id='ncselect'
+            id='ncFormSelect'
             type='radio'
             name='formbarselect'
             title={Pref.nonCon}
@@ -79,7 +78,7 @@ const XFormBar = ({
             color='butRed'
           />
           <FormToggle
-            id='shortselect'
+            id='shortFormSelect'
             type='radio'
             name='formbarselect'
             title={Pref.shortfall}

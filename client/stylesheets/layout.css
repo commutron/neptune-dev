@@ -911,6 +911,7 @@ n-sm-model-content {
 .rightText { text-align: right; }
 
 .middle {
+  display: flex;
   align-content: center;
   align-items: center;
 }

@@ -7,8 +7,8 @@ const EventCustom = ({ batchId })=> {
   
   function save(e) {
     this.gocevent.disabled = true;
-    const title = this.titleVal.value;
-    const detail = this.detailVal.value;
+    const title = this.eventtitleVal.value;
+    const detail = this.eventdetailVal.value;
    
     Meteor.call('pushCustomEvent', batchId, title, detail, (error, re)=>{
       error && console.log(error);
@@ -29,7 +29,7 @@ const EventCustom = ({ batchId })=> {
           <span>
             <input
               type='text'
-              id='titleVal'
+              id='eventtitleVal'
               className='dbbleWide'
               autoFocus={true}
               required />
@@ -40,7 +40,7 @@ const EventCustom = ({ batchId })=> {
           <span>
             <textarea
               type='text'
-              id='detailVal'
+              id='eventdetailVal'
               className='dbbleWide'
               required
             ></textarea>

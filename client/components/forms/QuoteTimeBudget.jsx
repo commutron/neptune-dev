@@ -33,7 +33,7 @@ const QuoteTimeBudget = ({ bID, qtB, qtbB, lockOut, brancheS })=> {
 
 export default QuoteTimeBudget;
 
-const QuoteTimeBudgetForm = ({ bID, qtB, qtbB, auth, lockOut, brancheS, selfclose })=> {
+const QuoteTimeBudgetForm = ({ bID, qtB, qtbB, auth, lockOut, brancheS })=> {
   
   const [ totalState, totalSet ] = useState(qtB || 0);
   
@@ -43,7 +43,7 @@ const QuoteTimeBudgetForm = ({ bID, qtB, qtbB, auth, lockOut, brancheS, selfclos
   
   useEffect( ()=>{
     let ops = qtbB || [];
-    for( let br of brancheS ) {
+    for( let br of brancheS.filter(b=>b.pro) ) {
       if(br.subTasks) {
         for( let sb of br.subTasks ) {
           if(!ops.find( x => x[0] === br.branch+"|"+sb )) {
@@ -91,12 +91,10 @@ const QuoteTimeBudgetForm = ({ bID, qtB, qtbB, auth, lockOut, brancheS, selfclos
         err && console.log(err);
         if(re) {
           toast.success('Saved');
-          // selfclose();
         }else{
           toast.error('Server Error');
         }
       });
-      e.target.hourNum.value = '';
     }else{ toast.error('NO Permission'); }
   };
   
@@ -108,7 +106,7 @@ const QuoteTimeBudgetForm = ({ bID, qtB, qtbB, auth, lockOut, brancheS, selfclos
       Meteor.call('setBatchXTimeBreakdown', bID, brkArray, (err, re)=>{
         err && console.log(err);
         if(re) {
-          toast.success('Saved');// selfclose();
+          toast.success('Saved');
         }else{
           toast.error('Server Error');
         }
@@ -129,7 +127,7 @@ const QuoteTimeBudgetForm = ({ bID, qtB, qtbB, auth, lockOut, brancheS, selfclos
           <label>Hours<br />
           <input
             type='number'
-            id='hourNum'
+            id='globalHourNum'
             className='numberSet miniIn12'
             pattern="^\d*(\.\d{0,2})?$"
             maxLength='7'
@@ -140,7 +138,7 @@ const QuoteTimeBudgetForm = ({ bID, qtB, qtbB, auth, lockOut, brancheS, selfclos
             inputMode='numeric'
             defaultValue={moment.duration(qtB, 'minutes').asHours()}
             disabled={!auth || lockOut}
-            onInput={(e)=>inputHours(this.hourNum.value)}
+            onInput={(e)=>inputHours(e.target.value)}
             required
           /></label>
           <label className='gapL min6'

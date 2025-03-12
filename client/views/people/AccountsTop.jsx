@@ -22,13 +22,13 @@ const AccountsTop = ({ users })=> {
   
   function massNotify(e) {
     e.preventDefault();
-    const message = this.massmesSage.value;
+    const message = e.target.massmesSage.value;
     
     Meteor.call('sendAllUserDM', message, (error, re)=>{
       error && console.log(error);
       if(re) {
         toast.success('messages sent');
-        this.massmesSage.value = '';
+        e.target.massmesSage.value = '';
       }
     });
   }

@@ -7,7 +7,7 @@ import ModelNative from '/client/layouts/Models/ModelNative';
 
 import { MultiSelect } from "react-multi-select-component";
 
-const FlowFormHead = ({ id, preFill, existFlows, app, access, clearOnClose })=> {
+const FlowFormHead = ({ id, preFillKey, existFlows, app, access, clearOnClose })=> {
   
   const [ warn, warnSet ] = useState(false);
   const [ base, baseSet ] = useState(false);
@@ -20,7 +20,7 @@ const FlowFormHead = ({ id, preFill, existFlows, app, access, clearOnClose })=> 
     if(!access) { 
       null;
     }else{
-      const fill = existFlows.find( f => f.flowKey === preFill ) || null;
+      const fill = existFlows.find( f => f.flowKey === preFillKey ) || null;
       baseSet(fill);
       flowInputSet(fill?.title || '');
     
@@ -49,7 +49,7 @@ const FlowFormHead = ({ id, preFill, existFlows, app, access, clearOnClose })=> 
         });
       }
     }
-  }, [id, preFill, app]);
+  }, [id, preFillKey, app]);
   
   function save() {
     this.goFloH.disabled = true;
@@ -80,7 +80,7 @@ const FlowFormHead = ({ id, preFill, existFlows, app, access, clearOnClose })=> 
   return(
     <ModelNative
       dialogId={`${id}_flowhead_form`}
-      title={preFill ? 'Edit Flow' : 'New Flow'}
+      title={preFillKey ? 'Edit Flow' : 'New Flow'}
       icon='fa-solid fa-project-diagram'
       colorT='blueT'
       closeFunc={()=>clearOnClose()}>
