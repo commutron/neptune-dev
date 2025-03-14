@@ -36,7 +36,8 @@ const ModelUser = ({
       toast.warning(`You are ${Pref.engaged} on ${Meteor.user().engaged.tName.toString().split("<*>")[0]}\nCLICK TO SIGN OUT IMMEDIATELY`, 
         { autoClose: 10000,
           onClose: ()=> Meteor.logout(),
-          onClick: ()=> Meteor.logout()
+          onClick: ()=> Meteor.logout(),
+          position: 'top-center'
         });
     }else{
 		  Meteor.logout();

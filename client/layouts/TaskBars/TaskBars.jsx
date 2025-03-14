@@ -55,6 +55,14 @@ export const ExTaskBar = ({ subLink }) => (
     />
     
     <TaskElement
+      title={`${Pref.nonCons}`}
+      subON={subLink === 'nonconsundefined'}
+      goLink='/data/noncons'
+      icon='fa-solid fa-xmarks-lines'
+      iconAdj='shrink-1'
+    />
+    
+    <TaskElement
       title={Pref.widget + ' ' + Pref.radio.toUpperCase() + 's'}
       subON={subLink === 'overviewradioactive'}
       goLink='/data/overview?request=radioactive'

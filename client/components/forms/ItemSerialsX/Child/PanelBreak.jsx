@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 
 import ModelNative from '/client/layouts/Models/ModelNative';
 
-const PanelBreak = ({ seriesId, batchId, batchNum, item, access })=> {
+const PanelBreak = ({ seriesId, batchId, batchNum, item })=> {
   
   const [ newSerials, newSerialsSet ] = useState([]);
   const [ confirmState, confirmSet ] = useState(false);

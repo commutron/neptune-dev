@@ -5,7 +5,7 @@ import DateRangeSelect from '/client/components/smallUi/DateRangeSelect';
 import PrintThis from '/client/components/tinyUi/PrintThis';
 import WIPReport from './WIPReport';
 import MonthKPIReport from './MonthKPIReport';
-import ProblemReport from './ProblemReport';
+import InDepthReport from './InDepthReport';
 import NCTimeReport from './NCTimeReport';
 import BuildHistory from './BuildHistory';
 
@@ -49,7 +49,7 @@ const ReportsWrap = ({
             isDebug={isDebug} 
           />
         :      
-          <ProblemReport 
+          <InDepthReport 
             start={start} 
             end={end} 
             dataset={dataset} 
@@ -104,31 +104,21 @@ const ReportRangeRequest = ({
       <span className='middle'>
         <input
           type='radio'
+          id='inputLV'
+          name='inputData'
+          onChange={()=>setData('live')}
+        />
+        <label htmlFor='inputLV'>In Depth (Live)</label>
+      </span>
+      <em>or</em>
+      <span className='middle'>
+        <input
+          type='radio'
           id='inputDN'
           name='inputData'
           onChange={()=>setData('completed')}
         />
-        <label htmlFor='inputDN'>Completed Items</label>
-      </span>
-      <em>or</em>
-      <span className='middle'>
-        <input
-          type='radio'
-          id='inputNC'
-          name='inputData'
-          onChange={()=>setData('noncon')}
-        />
-        <label htmlFor='inputNC'>{Pref.nonCons}</label>
-      </span>
-      <em>or</em>
-      <span className='middle'>
-        <input
-          type='radio'
-          id='inputSH'
-          name='inputData'
-          onChange={()=>setData('short')}
-        />
-        <label htmlFor='inputSH'>{Pref.shortfalls}</label>
+        <label htmlFor='inputDN'>In Depth (Completed)</label>
       </span>
     </p>
     

@@ -31,19 +31,30 @@ function findRelevantSeries(from, to) {
   });
 }
 
-function loopSerieses(serieses) {
+function loopSeriesesAll(serieses) {
   return new Promise(resolve => {
     let allItems = [];
     let allNonCons = [];
     let allShortfalls = [];
     
     for(let srs of serieses) {
-      // -- nc rate calculation filter --
       allNonCons.push(...srs.nonCon.filter( n => !n.trash && !(n.inspect && !n.fix) ));
       allShortfalls.push(...srs.shortfall);
       allItems.push(...srs.items);
     }
     resolve({allItems, allNonCons, allShortfalls});
+  });
+}
+
+function loopSeriesesNC(serieses) {
+  return new Promise(resolve => {
+    let totalSerials = 0;
+    let allNonCons = [];
+    for(let srs of serieses) {
+      totalSerials += srs.items.length;
+      allNonCons.push(...srs.nonCon.filter( n => !n.trash && !(n.inspect && !n.fix) ));
+    }
+    resolve({totalSerials, allNonCons});
   });
 }
 
@@ -154,6 +165,22 @@ function loopNonCons(nonCons, from, to) {
     
     let serials = new Set();
     
+    for(let nt of inTime) {
+      serials.add(nt.serial);
+    }
+    const uniqueSerials = serials.size;
+    
+    resolve({foundNC, uniqueSerials});
+  });
+}
+
+function loopNonConsCross(nonCons, from, to) {
+  return new Promise(resolve => {
+    const inTime = nonCons.filter( x => moment(x.time).isBetween(from, to) );
+    const foundNC = countMulti(inTime);
+    
+    let serials = new Set();
+    
     // let typeBreakdown = [];
     let types = new Set();
     for(let nt of inTime) {
@@ -170,7 +197,7 @@ function loopNonCons(nonCons, from, to) {
     //   typeBreakdown.push( [ type, tyTotal ] );
     // }
     
-    let whereBreakdown = [];
+    // let whereBreakdown = [];
     let wheres = new Set();
     for(let nw of inTime) {
       wheres.add(nw.where);
@@ -223,21 +250,20 @@ function loopNonCons(nonCons, from, to) {
 
 Meteor.methods({
   
-  buildProblemReport(startDay, endDay, dataset) {
+  buildKPInDepthReport(startDay, endDay, dataset) {
       
     const from = moment(startDay).tz(Config.clientTZ).startOf('day').format();
     const to = moment(endDay).tz(Config.clientTZ).endOf('day').format();
-    const nc = dataset === 'noncon';
     const dn = dataset === 'completed';
     
     async function getBatches() {
       try {
         seriesSlice = await findRelevantSeries(from, to);
-        seriesArange = await loopSerieses(seriesSlice, from, to);
+        seriesArange = await loopSeriesesAll(seriesSlice, from, to);
         itemStats = dn ? [] : await loopItems(seriesArange.allItems, from, to);
-        nonConStats = !nc ? [] : await loopNonCons(seriesArange.allNonCons, from, to);
+        nonConStats = dn ? [] : await loopNonCons(seriesArange.allNonCons, from, to);
         nonConItemStats = !dn ? [] : await loopNCItems(seriesArange.allItems, from, to, seriesArange.allNonCons);
-        shortfallStats = nc || dn ? [] : await loopShortfalls(seriesArange.allShortfalls, from, to);
+        shortfallStats = dn ? [] : await loopShortfalls(seriesArange.allShortfalls, from, to);
         
         const seriesInclude = seriesSlice.length;
         const itemsInclude = seriesArange.allItems.length;
@@ -246,6 +272,30 @@ Meteor.methods({
           seriesInclude, itemsInclude, itemStats, 
           nonConStats, nonConItemStats, 
           shortfallStats
+        });
+      }catch (err) {
+        throw new Meteor.Error(err);
+      }
+    }
+    return getBatches();
+  },
+  
+  buildNonConReport(startDay, endDay) {
+      
+    const from = moment(startDay).tz(Config.clientTZ).startOf('day').format();
+    const to = moment(endDay).tz(Config.clientTZ).endOf('day').format();
+    
+    async function getBatches() {
+      try {
+        seriesSlice = await findRelevantSeries(from, to);
+        seriesArangeNC = await loopSeriesesNC(seriesSlice, from, to);
+        nonConStats = await loopNonConsCross(seriesArangeNC.allNonCons, from, to);
+        
+        const seriesInclude = seriesSlice.length;
+        const itemsInclude = seriesArangeNC.totalSerials;
+       
+        return JSON.stringify({
+          seriesInclude, itemsInclude, nonConStats
         });
       }catch (err) {
         throw new Meteor.Error(err);

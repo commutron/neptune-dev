@@ -36,6 +36,17 @@
     'minusOne plusOne';
 }
 
+.waterfallGridClick button:active {
+  filter: blur(3px);
+}
+.waterfallGridClick button:disabled {
+  filter: brightness(0.75);
+}
+.waterfallGridClick button.countStop:disabled {
+  filter: none;
+  border: none;
+}
+
 .countMinus,
 .countPlus {
   width: 100%;
@@ -47,24 +58,6 @@
 }
 .countPlus:disabled { opacity: 1; }
 .countPlus:disabled:hover { opacity: 1; }
-
-.countPlus:active, .countPlus:disabled,
-.countMinus:active, .countMinus:disabled,
-.countOn:active, .countOn:disabled,
-.countOff:active, .countOff:disabled,
-.slidePlus:active, .slidePlus:disabled,
-.slideMinus:active, .slideMinus:disabled {
-  filter: blur(3px);
-}
-.countPlus.countStop:disabled,
-.countMinus.countStop:disabled,
-.slidePlus.countStop:disabled,
-.slideMinus.countStop:disabled,
-.slidePlus.countStop:disabled,
-.slideMinus.countStop:disabled {
-  filter: none;
-  border: none;
-}
 
 .countMinus {
   grid-area: minusOne;

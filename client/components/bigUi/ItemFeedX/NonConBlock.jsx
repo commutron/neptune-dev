@@ -42,41 +42,24 @@ const NonConBlock = ({
     }else{editSet(false)}
   }
   
-  function handleReInspect(e) {
+  function handleNCextra(action) {
     const ncKey = entry.key;
-    Meteor.call('reInspectNCX', seriesId, ncKey, (error)=> {
-			error && console.log(error);
-			editSet(false);
-		});
-  }
-  
-  function handleTrash(e) {
-    const ncKey = entry.key;
-    if(!canVerify) {
+    const mthod = action === 'reIn' ? 'reInspectNCX' :
+                  action === 'trsh' ? 'trashNCX' :
+                  action === 'rstr' ? 'unTrashNCX' :
+                  action === 'prmv' ? 'removeNCX' :
+                  null;
+    if(!canVerify && action === 'trsh') {
       toast.warning("'First-off' permission is needed skip a nonconformance");
-    }else{
-      Meteor.call('trashNCX', seriesId, ncKey, (error)=> {
+    }else if(mthod) {
+      Meteor.call(mthod, seriesId, ncKey, (error)=> {
   			error && console.log(error);
   			editSet(false);
+  			action === 'prmv' && confirmSet(false);
   		});
+    }else{
+      toast.warning("Invalid Method");
     }
-  }
-  
-  function handleUnTrash(e) {
-    const ncKey = entry.key;
-    Meteor.call('unTrashNCX', seriesId, ncKey, (error)=> {
-			error && console.log(error);
-			editSet(false);
-		});
-  }
-  
-  function popNC(e) {
-    const ncKey = entry.key;
-    Meteor.call('removeNCX', seriesId, ncKey, (error)=>{
-      error && console.log(error);
-      confirmSet(false);
-      editSet(false);
-    });
   }
   
   const dt = entry;
@@ -102,19 +85,19 @@ const NonConBlock = ({
                   <dd><button
                         className='smallAction redHover blackT inlineButton'
                         disabled={!canQA}
-                        onClick={(e)=>confirmSet(true)}
+                        onClick={()=>confirmSet(true)}
                       >Permanently Delete</button>
                   </dd>
                   {confirmState &&
                     <dd><b>Are you sure? </b><button
                         className='smallAction redHover blackT inlineButton'
                         disabled={!canQA}
-                        onClick={(e)=>popNC(e)}
+                        onClick={()=>handleNCextra('prmv')}
                       >YES</button>
                       <button
                         className='smallAction blackHover inlineButton'
                         disabled={!canQA}
-                        onClick={(e)=>confirmSet(false)}
+                        onClick={()=>confirmSet(false)}
                       >NO</button>
                     </dd>
                   }
@@ -249,7 +232,7 @@ const NonConBlock = ({
                 {ins ?
                   <button
                     className='smallAction orangeHover blackT inlineButton vmarginhalf'
-                    onClick={(e)=>handleReInspect(e)}
+                    onClick={()=>handleNCextra('reIn')}
                     disabled={done}>
                     <i className='med'> ReInspect</i>
                   </button>
@@ -258,13 +241,13 @@ const NonConBlock = ({
                   <button
                     className='smallAction orangeHover blackT inlineButton vmarginhalf'
                     disabled={irap ? !canQA : !canVerify}
-                    onClick={(e)=>handleTrash(e)}
+                    onClick={()=>handleNCextra('trsh')}
                   >Remove</button>
                 : trashed &&
                   <button
                     className='smallAction orangeHover blackT inlineButton vmarginhalf'
                     disabled={!canInspect}
-                    onClick={(e)=>handleUnTrash(e)}
+                    onClick={()=>handleNCextra('rstr')}
                   >Restore</button>
                 }
                 <button

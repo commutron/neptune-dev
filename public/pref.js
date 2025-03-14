@@ -114,7 +114,7 @@ class Pref {
     this.rapidExn = 'extension';
     this.rapidExs = 'extensions';
     
-    this.radioactive = 'nonconformace report';
+    this.radioactive = 'nonconformance report';
     this.radio = 'ncr';
     this.hold = 'hold';
     this.isHold = 'on hold';
@@ -192,7 +192,7 @@ class Pref {
     this.fixFlow = 'repair process';
     this.fixStep = 'repair step';
     this.nonCon = 'nonCon';
-    this.nonCons = 'nonconformaces';
+    this.nonCons = 'nonconformances';
     this.nonConRef = 'reference';
     this.nonConType = 'defect';
     this.repair = 'repair';

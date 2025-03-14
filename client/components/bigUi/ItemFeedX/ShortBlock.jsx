@@ -4,7 +4,7 @@ import Pref from '/client/global/pref.js';
 
 import UserNice from '/client/components/smallUi/UserNice.jsx';
 
-const ShortBlock = ({ seriesId, serial, units, entry, done, iopen, canQA, cal })=> {
+const ShortBlock = ({ seriesId, serial, units, entry, iopen, canQA, cal })=> {
   
   const [ editState, editSet ] = useState(false);
   const [ confirmState, confirmSet ] = useState(false);

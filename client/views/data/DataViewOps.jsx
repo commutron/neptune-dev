@@ -15,6 +15,7 @@ import WidgetPanel from './panels/WidgetPanel/WidgetPanel';
 import RextendPanel from './panels/RextendPanel';
 import TestFailPanel from './panels/TestFailPanel';
 
+import NonConExPanel from './panels/NonConExPanel';
 import RadioPanel from './panels/RadioPanel';
 import ScrapPanel from './panels/ScrapPanel';
 
@@ -187,6 +188,27 @@ const DataViewOps = ({
         <VisWrap
           brancheS={brancheS}
           app={app}
+        />
+      </TraverseWrap>
+    );
+  }
+  
+  if(view === 'noncons') {
+    return (
+      <TraverseWrap
+	      batchData={false}
+        widgetData={false}
+        variantData={false}
+        groupData={false}
+        title={Pref.nonCons + ' Trace'}
+        subLink={subLink}
+        action={false}
+        base={true}
+      >
+        <NonConExPanel
+          brancheS={brancheS}
+          app={app}
+          request={request}
         />
       </TraverseWrap>
     );
