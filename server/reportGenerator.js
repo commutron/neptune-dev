@@ -174,46 +174,30 @@ function loopNonCons(nonCons, from, to) {
   });
 }
 
-function loopNonConsCross(nonCons, from, to) {
+function loopNonConsCross(nonCons, from, to, branch) {
   return new Promise(resolve => {
     const inTime = nonCons.filter( x => moment(x.time).isBetween(from, to) );
     const foundNC = countMulti(inTime);
+    const brAll = !branch || branch === 'ALL';
     
     let serials = new Set();
     
-    // let typeBreakdown = [];
     let types = new Set();
     for(let nt of inTime) {
       types.add(nt.type);
       serials.add(nt.serial);
     }
-    // for(let type of types) {
-    //   let tyTotal = 0;
-    //   for(let ncT of inTime) {
-    //     if(ncT.type === type) {
-    //       tyTotal += ( Number(ncT.multi) || 1 );
-    //     }
-    //   }
-    //   typeBreakdown.push( [ type, tyTotal ] );
-    // }
     
-    // let whereBreakdown = [];
     let wheres = new Set();
-    for(let nw of inTime) {
-      wheres.add(nw.where);
+    if(brAll) {
+      for(let nw of inTime) {
+        wheres.add(nw.where);
+      }
+    }else{
+      wheres.add(branch);
     }
-    // for(let where of wheres) {
-    //   let whTotal = 0;
-    //   for(let ncW of inTime) {
-    //     if(ncW.where === where) {
-    //       whTotal += 1;
-    //     }
-    //   }
-    //   whereBreakdown.push( [where, whTotal ] );
-    // }
     
     const locals = [...wheres].sort();
-    // console.log(wheres, locals);
     
     let crossref = [["",...locals,"Total"]];
     
@@ -236,8 +220,9 @@ function loopNonConsCross(nonCons, from, to) {
         endline[index] += whCount;
       }
       whArr.push(tyTtl);
-      
-      crossref.push(whArr);
+      if(brAll || tyTtl > 0) {
+        crossref.push(whArr);
+      }
     }
     crossref.push(["total",endline,foundNC].flat());
     
@@ -280,7 +265,7 @@ Meteor.methods({
     return getBatches();
   },
   
-  buildNonConReport(startDay, endDay) {
+  buildNonConReport(startDay, endDay, branch) {
       
     const from = moment(startDay).tz(Config.clientTZ).startOf('day').format();
     const to = moment(endDay).tz(Config.clientTZ).endOf('day').format();
@@ -289,7 +274,7 @@ Meteor.methods({
       try {
         seriesSlice = await findRelevantSeries(from, to);
         seriesArangeNC = await loopSeriesesNC(seriesSlice, from, to);
-        nonConStats = await loopNonConsCross(seriesArangeNC.allNonCons, from, to);
+        nonConStats = await loopNonConsCross(seriesArangeNC.allNonCons, from, to, branch);
         
         const seriesInclude = seriesSlice.length;
         const itemsInclude = seriesArangeNC.totalSerials;

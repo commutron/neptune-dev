@@ -26,7 +26,7 @@ const TimeWindower = ({ app, changeCount, changeBracket, stickyValue, sessionSti
 
   return(
     <nav>
-      <span className='liteTipW' data-tip='Filter by time span'>
+      <span className='liteTip' data-tip='Filter by time span'>
         <i className='fas fa-filter fa-fw darkgrayT'></i>
         <select
           id='rangeSelect'

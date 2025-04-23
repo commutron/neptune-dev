@@ -8,6 +8,10 @@
 .chartNoHeightContain {
   height: auto;
 }
+.chart50vContain {
+  height: 50vh;
+  height: 50dvh;
+}
 
 .chart10Shrink {
   width: 10vmin;

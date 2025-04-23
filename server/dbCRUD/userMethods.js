@@ -548,9 +548,11 @@ Meteor.methods({
     return user ? user.username : 'unknown';
   },
   
-  sendUserDM(userID, title, message, rere) {
-    const orgKey = Meteor.user().orgKey;
-    const thisID = Meteor.userId();
+  sendUserDM(userID, title, message, rere, accessKey) {
+    const orgKey = accessKey || Meteor.user().orgKey;
+    const thisID = accessKey ? 'progmatic_CRON' : Meteor.userId();
+    const replyID = accessKey ? false : thisID;
+    const sentsrc = accessKey ? 'automated' : 'direct';
     const sentTime = new Date();
     const mssgTitle = title || '';
     const mssgDetail = message || '';
@@ -558,13 +560,13 @@ Meteor.methods({
       Meteor.users.update(userID, {
         $push : { inbox : {
           notifyKey: new Meteor.Collection.ObjectID().valueOf(),
-          keyword: 'direct',
-          type: 'direct',
+          keyword: sentsrc,
+          type: sentsrc,
           title: mssgTitle,
           detail: mssgDetail,
           time: sentTime,
           unread: true,
-          replyId: thisID,
+          replyId: replyID,
           reply: rere
         }
       }});

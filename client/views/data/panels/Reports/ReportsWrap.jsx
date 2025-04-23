@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import Pref from '/client/global/pref.js';
+// import Pref from '/client/global/pref.js';
 
 import DateRangeSelect from '/client/components/smallUi/DateRangeSelect';
 import PrintThis from '/client/components/tinyUi/PrintThis';
 import WIPReport from './WIPReport';
 import MonthKPIReport from './MonthKPIReport';
 import InDepthReport from './InDepthReport';
-import NCTimeReport from './NCTimeReport';
 import BuildHistory from './BuildHistory';
 
 const ReportsWrap = ({ 
@@ -21,14 +20,6 @@ const ReportsWrap = ({
     <div className='space overscroll'>
       
       <div className='rowWrapR noPrint'><PrintThis /></div>
-
-      <div className='space'>
-        <h2 style={{marginBottom:'32px'}}>Remaining Work In Progress Report</h2>
-        <WIPReport />
-      </div>
-      
-      <hr className='vmargin' />
-      <div className='printBr' />
       
       <div className='space'>
         <h2 style={{marginBottom:'32px'}}>KPI Report</h2>
@@ -61,8 +52,8 @@ const ReportsWrap = ({
       <div className='printBr' />
       
       <div className='space'>
-        <h2 style={{marginBottom:'32px'}}>Monthly NonCon Time Report</h2>
-        <NCTimeReport />
+        <h2 style={{marginBottom:'32px'}}>Remaining Work In Progress Report</h2>
+        <WIPReport />
       </div>
       
       <hr className='vmargin' />

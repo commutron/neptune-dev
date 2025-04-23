@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
-import { asRate, percentOf } from '/client/utility/Convert';
-
+import { percentOf } from '/client/utility/Convert';
+import { ToggleSwitch } from '/client/components/smallUi/ToolBarTools';
 import ReportStatsTable from '/client/components/tables/ReportStatsTable'; 
 import ReportCrossTable from '/client/components/tables/ReportCrossTable';
+import NonConCrossCH from '/client/components/charts/NonCon/NonConCrossCH';
 
-const ProblemReport = ({ start, end, dataset })=> {
+const NCcrossReport = ({ start, end, dataset, branch })=> {
   
   const [ working, workingSet ] = useState(false);
+  const [ table, tableSet ] = useState(false);
   const [ replyData, replySet ] = useState(false);
   const [ crossData, crossSet ] = useState(false);
   
@@ -18,7 +20,7 @@ const ProblemReport = ({ start, end, dataset })=> {
   
   function getReport() {
     workingSet(true);
-    Meteor.call('buildNonConReport', start, end, (err, reply)=> {
+    Meteor.call('buildNonConReport', start, end, branch, (err, reply)=> {
       err && console.log(err);
       if(reply) {
         const re = JSON.parse(reply);
@@ -58,32 +60,54 @@ const ProblemReport = ({ start, end, dataset })=> {
           disabled={!start || !end || working}
         >Generate Report</button>
       </div>
-        
+      
+      
       {working ?
         <p>This may take a while...<n-fa0><i className='fas fa-spinner fa-lg fa-spin gapL'></i></n-fa0></p>
       :
-        <ReportStatsTable 
-          title={`KPI report (${title})`}
-          dateString={`${start} to ${end}`}
-          rows={replyData}
-          extraClass='max600' 
-        />
+        !branch || branch === 'ALL' ?
+          <ReportStatsTable 
+            title={`${title} KPI report`}
+            dateString={`${start} to ${end}`}
+            rows={replyData}
+            extraClass='max600' 
+          />
+        : null
       }
       
       <div className='printBr' />
       
       {crossData &&
-        <ReportCrossTable 
-          title={`Cross Reference (${title})`}
-          dateString={`${start} to ${end}`}
-          rows={crossData}
-          extraClass='max1200'
-        />
+        <div>
+          <div className='rowWrap noPrint'>
+            <span className='flexSpace' />
+            <ToggleSwitch 
+              tggID='toggleTbleCht'
+              toggleLeft='Chart'
+              toggleRight='Table'
+              toggleVal={table}
+              toggleSet={tableSet}
+            />
+          </div>
+          {table ?
+            <ReportCrossTable 
+              title={`${title} Types (${branch})`}
+              dateString={`${start} to ${end}`}
+              rows={crossData}
+              extraClass='max1200'
+            />
+          :
+            <NonConCrossCH 
+              rawdata={crossData} 
+              branch={branch} 
+              dateString={`${start} to ${end}`}
+            />
+          }
+        </div>
       }
-          
     </div>
   );
 };
 
-export default ProblemReport;
+export default NCcrossReport;
 

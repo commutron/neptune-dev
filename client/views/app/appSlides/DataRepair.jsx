@@ -43,15 +43,34 @@ const DataRepair = ({ app, users })=> {
   return(
     <div className='space3v'>
       <div className='autoGrid cardify twoDfill'>
-        
         <DoCard
           title='Force Randomize Org PIN'
           sub='Runs every day at 12:00am (CST)'
           icon='dice'
-          color='darkOrangeSolid'
+          color='nSolid'
           button='Randomize PIN'
           action={()=>doCallThing('randomizePIN')}
         />
+        <DoCard
+          title='Test DM Log Clear'
+          sub='Runs every day at 12:01am (CST)'
+          icon='message'
+          color='nSolid'
+          button='Clear +90 days'
+          action={()=>doCallThing('removeOldDMLog')}
+        />
+        <DoCard
+          title='Clear `Usage Logs` and `Breadcrubs`'
+          sub='Only affects users with "debug" turned OFF'
+          icon='user-shield'
+          color='nSolid'
+          button='Clear Logs'
+          action={()=>doCallThing('clearNonDebugUserUsageLogs')}
+        />
+      </div>
+      
+      <h2 className='centreText vmargin yellowT dropCeiling borderOrange topLine'>Large Tasks - May Cause Disruption For All Users</h2>
+      <div className='autoGrid cardify twoDfill'>
         
         <DoCard
           title='Run Maintenance Schedule Robot'
@@ -126,23 +145,10 @@ const DataRepair = ({ app, users })=> {
           action={()=>doCallThing('ResetAppLatestSerial')}
         />
         
-        <DoCard
-          title='Test DM Log Clear'
-          sub='Runs every day at 12:01am (CST)'
-          icon='message'
-          color='nSolid'
-          button='Clear +90 days'
-          action={()=>doCallThing('removeOldDMLog')}
-        />
+        </div>
         
-        <DoCard
-          title='Clear `Usage Logs` and `Breadcrubs`'
-          sub='Only affects users with "debug" turned OFF'
-          icon='user-shield'
-          color='nSolid'
-          button='Clear Logs'
-          action={()=>doCallThing('clearNonDebugUserUsageLogs')}
-        />
+      <h2 className='centreText vmargin dropCeiling topLine'>Diagnostic</h2>
+      <div className='autoGrid cardify twoDfill'>
         
         <div>
           <h3><i className="fas fa-superscript fa-lg gap"></i>
@@ -153,6 +159,13 @@ const DataRepair = ({ app, users })=> {
             className='action blackSolid'
           >Get Values</button>
         </div>
+        
+        <ShipDiagnose />
+        
+      </div>
+      
+      <h2 className='centreText vmargin redT dropCeiling borderRed topLine'>High Risk - Use With Extreme Caution</h2>
+      <div className='autoGrid cardify twoDfill'>
       
         <DoCard
           title='Delete all CacheDB Entries'
@@ -177,11 +190,8 @@ const DataRepair = ({ app, users })=> {
           button='Remove Damaged Batch'
           action={()=>doCallThing('fixRemoveDamagedBatch')}
         />
-        
       </div>
       <div className='autoFlex'>
-      
-        <ShipDiagnose />
       
         <NcCorrect />
       

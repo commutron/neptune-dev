@@ -253,29 +253,32 @@ a:has(.onlyHover):where(:hover, :active, :focus-visible) .onlyHover {
   opacity: 1;
 }
 .smplTip::after,
-.liteTip::after,
-.liteTipW::before {
+.liteTip::after {
   content: attr(data-tip);
-  position: absolute;
+  position: fixed;
   margin: 0;
   padding: 0.25em 0.5em;
   border-radius: 3px;
+  font-size: 0.7rem;
 }
 .smplTip::after {
   background-color: rgb(230,230,230);
   color: black;
-  font-size: 0.7rem;
-}
-.liteTip::after, .liteTipW::before {
-  background-color: rgb(0,0,0);
-  color: white;
-  font-size: 0.7rem;
 }
 .liteTip::after {
-  transform: translate(-55%,-110%);
+  background-color: rgb(0,0,0);
+  color: white;
 }
-.liteTipW::before {
-  transform:translate(25%,-110%);
+.liteTip {
+  display: flex;
+  place-items: center;
+  place-content: center;
+}
+.liteTip::after {
+  transform: translateY(-110%);
+}
+.liteTip.tall::after {
+  transform: translateY(-150%);
 }
 
 .leapText {
@@ -510,6 +513,11 @@ button.variableInput.biggest { height: 64px; }
 
 .auxTip {
   vertical-align: middle;
+}
+.taskTip {
+  display: flex;
+  place-items: center;
+  place-content: center;
 }
 .taskTip::after, 
 .auxTip::before, 

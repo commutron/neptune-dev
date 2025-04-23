@@ -163,7 +163,7 @@ const FormToggle = ({
   };
   
   return(
-    <label htmlFor={id} style={sty} className={'taskLink ' + color}>
+    <label htmlFor={id} data-tip={title} style={sty} className={'taskLink liteTip tall ' + color}>
       <input
         type={type}
         id={id}

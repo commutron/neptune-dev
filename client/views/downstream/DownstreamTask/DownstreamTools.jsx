@@ -32,7 +32,7 @@ const DownstreamTools = ({
   return(
     <nav className='downstreamToolbar gridViewTools'>
       
-      <span className='liteTipW' data-tip='Number of Ship Days'>
+      <span className='liteTip' data-tip='Number of Ship Days'>
         <i className='darkgrayT numFont'>{numUP > 9 ? numUP : '0'+numUP}</i>
         <i className='fas fa-calendar-day fa-fw darkgrayT'></i>
         <input

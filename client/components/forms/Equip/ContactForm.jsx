@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useLayoutEffect } from 'react';
 // import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
@@ -6,49 +6,46 @@ import ModelNative from '/client/layouts/Models/ModelNative';
 
 const ContactForm = ({ ctctKey, equipData, clearOnClose })=> {
   
-  const ct = !ctctKey ? null : equipData.contacts?.find( (c)=> c.key === ctctKey) || false;
-  const df_prime = ct?.prime || '';
-  const df_source = ct?.source || '';
-  const df_compy = ct?.company || '';
-  const df_dpmt =  ct?.department || '';
-  const df_name = ct?.name || '';
-    
-  const df_phone = ct?.phone || '';
-  const df_email = ct?.email || '';
-  const df_cost = ct?.cost || '';
-  const df_notes = ct?.notes || '';
-
-  const handleContact = (e)=> {
+  const [ working, workSet ] = useState(false);
+  const [ df_prime, set_prime ] = useState(false);
+  const [ df_source, set_source ] = useState('');
+  const [ df_compy, set_compy ] = useState('');
+  const [ df_dpmt, set_dpmt ] = useState('');
+  const [ df_name, set_name ] = useState('');
+  const [ df_phone, set_phone] = useState('');
+  const [ df_email, set_email  ] = useState('');
+  const [ df_cost, set_cost ] = useState('');
+  const [ df_notes, set_notes ] = useState('');
+  
+  useLayoutEffect( ()=> {
+    const ct = !ctctKey ? null : equipData.contacts?.find( (c)=> c.key === ctctKey) || false;
+    set_prime(ct?.prime || false);
+    set_source(ct?.source || '');
+    set_compy(ct?.company || '');
+    set_dpmt(ct?.department || '');
+    set_name(ct?.name || '');
+    set_phone(ct?.phone || '');
+    set_email(ct?.email || '');
+    set_cost(ct?.cost || '');
+    set_notes(ct?.notes || '');
+  }, [ctctKey, working]);
+  
+  const handleContact = ()=> {
+    workSet(true);
     this.eqcontactGo.disabled = true;
     
     const eqid = equipData._id;
     
-    const prim = e.target.newprime.checked;
-    const sorc = e.target.newsource.value;
-    const comp = e.target.newcomp.value;
-    const dpmt = e.target.newdprt.value;
-    const name = e.target.newname.value;
+    const prim = df_prime === true || df_prime === 'true' ? true : false;
     
-    const phon = e.target.newphone.value;
-    const emal = e.target.newemail.value;
-    const cost = e.target.newcost.value;
-    const nots = e.target.newnotes.value;
-    
-    Meteor.call("setEqContact", eqid, ctctKey, prim, sorc, comp, dpmt, name, phon, emal, cost, nots,
+    Meteor.call("setEqContact", 
+      eqid, ctctKey, prim, 
+      df_source, df_compy, df_dpmt, df_name, df_phone, df_email, df_cost, df_notes,
     (error, reply)=>{
       error && console.log(error);
       if(reply) {
         this.eqcontactGo.disabled = false;
-        
-        e.target.newprime.checked= df_prime;
-        e.target.newsource.value= df_source;
-        e.target.newcomp.value = df_compy;
-        e.target.newdprt.value= df_dpmt;
-        e.target.newname.value = df_name;
-        e.target.newphone.value = df_phone;
-        e.target.newemail.value = df_email;
-        e.target.newcost.value = df_cost;
-        e.target.newnotes.value = df_notes;
+        workSet(false);
       }else{
         toast.error('Server Error');
         this.eqcontactGo.disabled = false;
@@ -71,6 +68,7 @@ const ContactForm = ({ ctctKey, equipData, clearOnClose })=> {
   
   return(
     <ModelNative
+      id={ctctKey || 'new_eq_contact'}
       dialogId={'multi_eqip_contact_form'}
       title={`${ctctKey ? 'Edit' : 'New'} Contact`}
       icon='fa-solid fa-address-book'
@@ -80,30 +78,34 @@ const ContactForm = ({ ctctKey, equipData, clearOnClose })=> {
       <form className='space' onSubmit={(e)=>handleContact(e)}>
         
         <p className='rowWrap gapsC'>
-        <ContactInput 
-          inid='newsource'
-          label='Support Type'
-          dfval={df_source}
-          req={true}
-        />
-        <ContactInput 
-          inid='newname'
-          label='Contact Person'
-          dfval={df_name}
-        />
+          <ContactInput 
+            inid='newsource'
+            label='Support Type'
+            dfval={df_source}
+            setval={set_source}
+            req={true}
+          />
+          <ContactInput 
+            inid='newname'
+            label='Contact Person'
+            dfval={df_name}
+            setval={set_name}
+          />
         </p>
         
         <p className='rowWrap gapsC'>
-        <ContactInput 
-          inid='newcomp'
-          label='Company'
-          dfval={df_compy}
-        />
-        <ContactInput 
-          inid='newdprt'
-          label='Department'
-          dfval={df_dpmt}
-        />
+          <ContactInput 
+            inid='newcomp'
+            label='Company'
+            dfval={df_compy}
+            setval={set_compy}
+          />
+          <ContactInput 
+            inid='newdprt'
+            label='Department'
+            dfval={df_dpmt}
+            setval={set_dpmt}
+          />
         </p>
         
         <p className='rowWrap gapsC'>
@@ -112,12 +114,14 @@ const ContactForm = ({ ctctKey, equipData, clearOnClose })=> {
           label='Phone'
           type='tel'
           dfval={df_phone}
+          setval={set_phone}
         />
         <ContactInput 
           inid='newemail'
           label='Email'
           type='email'
           dfval={df_email}
+          setval={set_email}
         />
         </p>
         
@@ -126,6 +130,7 @@ const ContactForm = ({ ctctKey, equipData, clearOnClose })=> {
             inid='newcost'
             label='Pricing'
             dfval={df_cost}
+            setval={set_cost}
           />
           <ContactInput 
             inid='newprime'
@@ -133,6 +138,7 @@ const ContactForm = ({ ctctKey, equipData, clearOnClose })=> {
             cls='minlineRadio'
             label='Priority'
             dfval={df_prime}
+            setval={set_prime}
           />
         </p>
         <p className='centre'>
@@ -141,7 +147,8 @@ const ContactForm = ({ ctctKey, equipData, clearOnClose })=> {
             <textarea 
               id='newnotes' 
               className='max250'
-              defaultValue={df_notes}
+              value={df_notes}
+              onChange={(e=>set_notes(e.target.value))}
             ></textarea></label>
           </span>
         </p>
@@ -173,15 +180,16 @@ const ContactForm = ({ ctctKey, equipData, clearOnClose })=> {
 
 export default ContactForm;
 
-const ContactInput = ({ inid, type, cls, label, dfval, req })=> (
+const ContactInput = ({ inid, type, cls, label, dfval, setval, req })=> (
   <span>
     <label htmlFor={inid}>{label}<br />
     <input 
       id={inid} 
       className={cls || 'miniIn24'}
       type={type || 'text'}
-      defaultValue={dfval || ''}
-      defaultChecked={type === 'checkbox' ? dfval : null}
+      value={dfval || ''}
+      onChange={type === 'checkbox' ? e=>setval(e.target.checked) : e=>setval(e.target.value)}
+      checked={type === 'checkbox' ? dfval : null}
       required={req || false}
     /></label>
   </span>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import { toast } from 'react-toastify';
 import './style.css';
 
@@ -27,19 +27,34 @@ const BranchBuilder = ({ app, isDebug })=> {
 export default BranchBuilder;
 
 const BranchHeadRow = ()=> (                 
-  <div className='bold'>                      
-    <div>Position</div>
-    <div>Name</div>
-    <div>Common</div>
-    <div title='Public/Available'>Open</div>
-    <div title='Production Process'>Pro</div>
-    <div title='Require Kit Clearance'>Clear</div>
-    <div title='Require Problem Resolution'>Dam</div>
-    <div title='Reqire User Access'>User</div>
-    <div title='Verify Consumables'>Consume</div>
-    <div></div>
-  </div>
+  <Fragment>
+    <div className='bold'>                      
+      <div>Position</div>
+      <div>Name</div>
+      <div>Common</div>
+      <div>Open</div>
+      <div>Pro</div>
+      <div>Clear</div>
+      <div>Dam</div>
+      <div>User</div>
+      <div>Consume</div>
+      <div></div>
+    </div>
+    <div className='bold small'>                      
+      <div>List and Menu Order</div>
+      <div>Full/Long Name</div>
+      <div>Short Name for lables where space is limited</div>
+      <div>Available category for public use</div>
+      <div>Production process for Upstream, Overview and Downstream</div>
+      <div>Require Kit Clearance in Upstream</div>
+      <div>Require Noncon and Shortage resolution before progressing in Process Flow</div>
+      <div>Require User Access Permission in Process Flow</div>
+      <div>Include Consumables in First-Off/Verify forms</div>
+      <div></div>
+    </div>
+  </Fragment>
 );
+
 
 const BranchEditRow = ({ branch, isDebug })=> {
   
@@ -215,14 +230,24 @@ export const BranchListEditor = ({ app })=> {
 };
 
 const BranchListHead = ()=> (                 
-  <div className='bold'>                      
-    <div>Position</div>
-    <div>Name</div>
-    <div>Sub-Tasks</div>
-    <div>Build Methods</div>
-    <div>Inspect Methods</div>
-    <div></div>
-  </div>
+  <Fragment>
+    <div className='bold'>                      
+      <div>Position</div>
+      <div>Name</div>
+      <div>Sub-Tasks</div>
+      <div>Build Methods</div>
+      <div>Inspect Methods</div>
+      <div></div>
+    </div>
+    <div className='bold small'>
+      <div></div>
+      <div></div>
+      <div>For Time Tracking</div>
+      <div>For First-off/Verify forms</div>
+      <div>For First-off/Verify forms</div>
+      <div></div>
+    </div>
+  </Fragment>
 );
 
 const BranchListRow = ({ branch })=> {

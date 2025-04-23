@@ -2,7 +2,7 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 
 export const SortSelect = ({ sortState, changeFunc, extraClass })=> (
-  <span className='liteTipW' data-tip='Sort list by'>
+  <span className='liteTip' data-tip='Sort list by'>
     <i className='fa-solid fa-sort-amount-down fa-fw darkgrayT'></i>
     <select
       id='sortSelect'
@@ -19,7 +19,7 @@ export const SortSelect = ({ sortState, changeFunc, extraClass })=> (
 
 
 export const FocusSelect = ({ gList, focusState, changeFunc })=> (
-  <span className='liteTipW' data-tip={`Filter by ${Pref.group}`}>
+  <span className='liteTip' data-tip={`Filter by ${Pref.group}`}>
     <i className='fa-solid fa-industry fa-fw darkgrayT'></i>
     <select
       id='focusSelect'
@@ -38,7 +38,7 @@ export const FilterSelect = ({
   unqID, title, selectList, selectState, falsey, changeFunc, 
   extraClass, icon, optgroup
 })=> (
-  <span className='liteTipW' data-tip={title}>
+  <span className='liteTip' data-tip={title}>
     <i className={`${icon || 'fas fa-filter'} fa-fw darkgrayT`}></i>
     <select
       id={'filterSelect'+unqID}
@@ -85,7 +85,7 @@ export const FilterSelect = ({
 export const YearSelect = ({ 
   yearsList, append, falsey, filterState, changeFunc, extraClass
 })=> (
-  <span className='liteTipW' data-tip='Filter by Year'>
+  <span className='liteTip' data-tip='Filter by Year'>
     <i className='fa-solid fa-calendar-alt fa-fw darkgrayT'></i>
     <select
       id='yearSelect'

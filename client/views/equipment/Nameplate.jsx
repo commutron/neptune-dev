@@ -62,16 +62,16 @@ const Nameplate = ({ equipData, users, isEqSup, isEdit })=> {
       </div>
       
       <div className='vmargin autoFlex gapsC'>
-      {equipData.contacts?.map( (c, index)=>(
-        <dl key={index} className='readlines max300'>
-          <dt>{c.prime && <i className='fa-solid fa-star gapR'></i>}{c.source}</dt>
-          <dd><i className="fa-solid fa-building fa-fw gapR"></i>{c.company}</dd>
-          <dd><i className="fa-solid fa-briefcase fa-fw gapR"></i>{c.department}</dd>
-          <dd><i className="fa-solid fa-user fa-fw gapR"></i>{c.name}</dd>
-          <dd><i className="fa-solid fa-at fa-fw gapR"></i><CopyLink text={c.email} doCopy={doCopy} /></dd>
-          <dd><i className="fa-solid fa-phone fa-fw gapR"></i><CopyLink text={c.phone} doCopy={doCopy} /></dd>
-          <dd><i className="fa-solid fa-dollar-sign fa-fw gapR"></i>{c.cost}</dd>
-          <dd><i className="fa-solid fa-note-sticky fa-fw gapR"></i>{c.notes}</dd>
+      {equipData.contacts?.map( (c)=>(
+        <dl key={c.key} className='readlines max300'>
+          <dt>{c.prime && <n-fa1><i className='fa-solid fa-star gapR'></i></n-fa1>}{c.source}</dt>
+          <CRMLine icon='fa-building' data={c.company} />
+          <CRMLine icon='fa-briefcase' data={c.department} />
+          <CRMLine icon='fa-user' data={c.name} />
+          <CRMCopy icon='fa-at' data={c.email} doCopy={doCopy} />
+          <CRMCopy icon='fa-phone' data={c.phone} doCopy={doCopy} />
+          <CRMLine icon='fa-dollar-sign' data={c.cost} />
+          <CRMLine icon='fa-note-sticky' data={c.notes} />
           {isEqSup || isEdit ? 
             <dd><button onClick={()=>openAction(c.key)} className='small'><i className="fa-solid fa-square-pen fa-fw gapR"></i>Edit Contact</button></dd>
           : null}
@@ -86,6 +86,13 @@ export default Nameplate;
 
 const DataLine = ({ l, n })=>( 
   <p className='split cap'>{l}: <n-num>{n}</n-num></p>
+);
+
+const CRMLine = ({ icon, data })=>( 
+  <dd><n-fa0><i className={`fa-solid ${icon} fa-fw gapR`}></i></n-fa0>{data}</dd>
+);
+const CRMCopy = ({ icon, data, doCopy })=>( 
+  <dd><n-fa0><i className={`fa-solid ${icon} fa-fw gapR`}></i></n-fa0><CopyLink text={data} doCopy={doCopy} /></dd>
 );
 
 const CopyLink = ({text, doCopy})=> (
