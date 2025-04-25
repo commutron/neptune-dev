@@ -41,7 +41,7 @@ const AppView = ({
   
   return(
     <PlainFrame title='Settings'>
-      <div className='simpleContent lightTheme centre middle'>
+      <div className='simpleContent lightTheme centre beside'>
         <p className='medBig centreText vmargin'>App settings are limited to administrators only</p>
         <p><button
           className='action blackHover'

@@ -40,7 +40,7 @@ const ModelSmall = ({
           className='transparent'
           onClick={()=>reveal()}
           disabled={lock}>
-          <n-model-button className={`navIcon actionIconWrap ${inLine ? 'middle' : ''}`}>
+          <n-model-button className={`navIcon actionIconWrap ${inLine ? 'beside' : ''}`}>
             {wrapIcon ?
               <n-fa1><i className={`fas ${icon} ${iSize} fa-fw ${color}`}></i></n-fa1>
             : <n-fa0><i className={`fas ${icon} ${iSize} fa-fw ${color}`}></i></n-fa0>}

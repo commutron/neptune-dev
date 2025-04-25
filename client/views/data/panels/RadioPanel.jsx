@@ -55,7 +55,7 @@ const RadioPanel = ({ app })=> {
   return(
     <div className='section overscroll' key={1}>
       <div className='space'>
-        <div className='med vbreak comfort middle noPrint'>
+        <div className='med vbreak comfort beside noPrint'>
         <span className='flexSpace' />
         <NumStat
           num={radios && radios.length}

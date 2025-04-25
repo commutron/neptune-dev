@@ -128,7 +128,7 @@ const UserColorSetting = ({ userSetting, labelText, helpText })=> {
       data-describe={helpText}>
       <div>{labelText}</div>
       <div>
-        <span className='middle'>
+        <span className='beside'>
           <button
             className='roundAction colorSwatch gapR'
             title='Reset'

@@ -24,7 +24,7 @@ const MultiBatchKPI = ({ widgetId })=> {
   
   return(
     <div className='w100'>
-      <h4 className='comfort'><span className='cap'>{`Mean Average of completed ${Pref.xBatchs}`}</span><span className='smaller middle fadeMore'
+      <h4 className='comfort'><span className='cap'>{`Mean Average of completed ${Pref.xBatchs}`}</span><span className='smaller beside fadeMore'
         >Based on completed orders only. Updates once a day.
       </span></h4>
       

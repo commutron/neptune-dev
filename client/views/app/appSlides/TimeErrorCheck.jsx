@@ -59,7 +59,7 @@ const TimeErrorCheck = ()=> {
         </button>
       </div>
       
-      <div className='rowWrapR middle '>
+      <div className='rowWrapR beside '>
         <button
           className='chartTableAction endSelf'
           title='Download Table'

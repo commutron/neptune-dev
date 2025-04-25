@@ -71,7 +71,7 @@ const RextendPanel = ({ app })=> {
   return(
     <div className='section space overscroll'>
       
-      <div className='comfort stickInPlace middle overscroll'>
+      <div className='comfort stickInPlace beside overscroll'>
         <span className='rowWrap gapsC'>
           <FocusSelect
             gList={gList}

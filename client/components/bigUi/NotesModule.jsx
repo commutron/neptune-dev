@@ -87,7 +87,7 @@ const NotesContent = ({ sourceId, noteObj, editMethod, lines, cal })=> {
         >{noteObj?.content || ''}</pre>
       }
       {!editState &&
-        <div className='footerBar middle'>
+        <div className='footerBar beside'>
           <button 
             title='edit'
             type='button'

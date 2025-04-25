@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import Pref from '/client/global/pref.js';
 
 import { SpinWrap } from '/client/components/tinyUi/Spin';
+
+import TerminalWrap from '/client/layouts/TerminalLayout';
+
 import TerminalFindOps from './TerminalFindOps';
+
 
 
 const TerminalData = ({
@@ -24,7 +28,13 @@ const TerminalData = ({
                         Roles.userIsInRole(x._id, 'active') === true &&
                         Roles.userIsInRole(x._id, 'readOnly') === false);
     
-  return (
+  return(
+    <TerminalWrap
+      user={user}
+      users={activeUsers}
+      app={app}
+    >
+     {/* 
     <TerminalFindOps
       orb={orb}
       anchor={anchor}
@@ -40,6 +50,22 @@ const TerminalData = ({
       hotxSeries={hotxSeries}
       hotxRapids={hotxRapids}
     />
+    */}
+    <Fragment>
+    
+    <div><button>Start Scan</button></div>
+    <div><button>Stop Scan</button></div>
+    <div>Scan Result</div>
+    <div>Scan Action</div>
+    <div>Scan Data</div>
+    <div>connected data</div>
+    
+    
+    <div>Availible Actions</div>
+    <div>Time Start/Stop</div>
+    
+    </Fragment>
+    </TerminalWrap>
   );
 };
 

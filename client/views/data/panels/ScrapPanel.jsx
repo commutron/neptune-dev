@@ -205,7 +205,7 @@ const ScrapCharts = ({ workingList, cycleCount, cycleBracket })=> {
   }, [workingList]);
   
   return(
-    <div className='centreRow middle'>
+    <div className='centreRow beside'>
       <TrendLine 
         title={`${Pref.scrapped} ${Pref.items} over last ${cycleCount} ${cycleBracket}s`}
         localXY={workingRate}

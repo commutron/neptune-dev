@@ -171,7 +171,7 @@ const QuoteTimeBudgetForm = ({ bID, qtB, qtbB, auth, lockOut, brancheS })=> {
       >
         <div className='rightRow doJustWeen'>
           <label></label>
-          <span className='middle'>
+          <span className='beside'>
             {/*<label className='min6'>Hours</label>*/}
             <label className='min8'>Minutes</label>
             <label className='min8'>Seconds</label>
@@ -179,7 +179,7 @@ const QuoteTimeBudgetForm = ({ bID, qtB, qtbB, auth, lockOut, brancheS })=> {
         </div>
         <div className='rightRow doJustWeen vspace'>
           <label className='bold'>Sub-Task Sum</label>
-          <span className='middle'>
+          <span className='beside'>
             {/*<label className='gapL min6'>
               <i className='numberSet liteToolOff beside'
               >{moment.duration(breakState[op[0]] || 0, 'minutes').asHours().toFixed(2,10)}</i>
@@ -200,7 +200,7 @@ const QuoteTimeBudgetForm = ({ bID, qtB, qtbB, auth, lockOut, brancheS })=> {
             className='w100 split doJustWeen breaklines'
           >
           <label>{op[0].split('|')[0]} {op[0].split('|')[1] === '!X' ? null : op[0].split('|')[1]}</label>
-          <span className='middle'>
+          <span className='beside'>
             {/*<label className='gapL min6'>
               <i className='numberSet liteToolOff beside'
               >{moment.duration(breakState[op[0]] || 0, 'minutes').asHours().toFixed(2,10)}</i>

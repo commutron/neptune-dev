@@ -81,7 +81,7 @@ const ReportRangeRequest = ({
   <div>
     <p className='centreRow rowWrap'>
       <i>Find</i>
-      <span className='middle'>
+      <span className='beside'>
         <input
           type='radio'
           id='inputStats'
@@ -92,7 +92,7 @@ const ReportRangeRequest = ({
         <label htmlFor='inputStats'>Basic Summary</label>
       </span>
       <em>or</em>
-      <span className='middle'>
+      <span className='beside'>
         <input
           type='radio'
           id='inputLV'
@@ -102,7 +102,7 @@ const ReportRangeRequest = ({
         <label htmlFor='inputLV'>In Depth (Live)</label>
       </span>
       <em>or</em>
-      <span className='middle'>
+      <span className='beside'>
         <input
           type='radio'
           id='inputDN'

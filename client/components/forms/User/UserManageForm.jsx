@@ -26,6 +26,18 @@ const UserManageForm = ({
     }
     confirmSet(false);
   }
+  
+  function changeRole(check, user, role) {
+    const flip = check ? 'permissionUnset' : 'permissionSet';
+    Meteor.call(flip, user, role, (error, reply)=>{
+      error && console.log(error);
+      if(reply) {
+        toast.success('Saved');
+      }else{
+        console.log("BLOCKED BY SERVER");
+      }
+    });
+  }
 
   const admin = Roles.userIsInRole(id, 'admin');
   const adminFlag = admin ? Pref.admin : '';
@@ -88,6 +100,7 @@ const UserManageForm = ({
                     user={id}
                     role={entry}
                     roleName={entry}
+                    change={changeRole}
                   />
               )}})}
           </dl>
@@ -103,6 +116,7 @@ const UserManageForm = ({
                   user={id}
                   role={entry}
                   roleName={entry}
+                  change={changeRole}
                 />
               )})}
           </dl>
@@ -118,6 +132,7 @@ const UserManageForm = ({
                   user={id}
                   role={entry}
                   roleName={entry}
+                  change={changeRole}
                 />
               )})}
           </dl>
@@ -133,6 +148,7 @@ const UserManageForm = ({
                   user={id}
                   role={'BRK'+entry.brKey}
                   roleName={entry.branch}
+                  change={changeRole}
                 />
               )})}
           </dl>
@@ -201,11 +217,11 @@ const SetCheckSuper = ({ user, role, roleName })=>	{
     });
   }
   return(
-    <dd>
+    <dd className='nomargin'>
       <label 
         htmlFor={role}
         title={`Only ${Pref.allowedSupers} user can have a 'super' permission at a time`}
-        className='middle'>
+        className='beside'>
         <input
           type='checkbox'
           id={role}
@@ -217,31 +233,19 @@ const SetCheckSuper = ({ user, role, roleName })=>	{
   );
 };
 
-const SetCheck = ({ user, role, roleName })=> {
+const SetCheck = ({ user, role, roleName, change })=> {
   const check = Roles.userIsInRole(user, role);
-  
-  function change() {
-    const flip = check ? 'permissionUnset' : 'permissionSet';
-    Meteor.call(flip, user, role, (error, reply)=>{
-      error && console.log(error);
-      if(reply) {
-        toast.success('Saved');
-      }else{
-        console.log("BLOCKED BY SERVER");
-      }
-    });
-  }
   
   const lockout = role === 'active' && user === Meteor.userId();
     
   return(
-    <dd>
-      <label htmlFor={role} className='middle'>
+    <dd className='nomargin'>
+      <label htmlFor={role} className='beside'>
         <input
           type='checkbox'
           id={role}
           defaultChecked={check}
-          onChange={()=>change()}
+          onChange={()=>change(check, user, role)}
           readOnly 
           disabled={lockout} 
       />{roleName}</label>

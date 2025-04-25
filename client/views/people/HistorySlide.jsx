@@ -45,7 +45,7 @@ const HistorySlide = ({ app, user, users, traceDT, isDebug })=> {
   
   return(
     <div className='space5x5 overscroll'>
-      <div className='med vbreak comfort middle'>
+      <div className='med vbreak comfort beside'>
         <div className='line2x'>
           <Flatpickr
             value={moment().format('YYYY-MM-DD')}

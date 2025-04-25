@@ -39,7 +39,7 @@ export const OpenModelNative = ({ dialogId, title, icon, iconObj, colorB, colorT
   return(
     <button
       title={title}
-      className={`action middle ${colorB}`}
+      className={`action beside ${colorB}`}
       onClick={()=>open()}
       disabled={lock}>
       {iconObj || <i className={`${icon} fa-fw fa-lg gap ${colorT}`}></i>}

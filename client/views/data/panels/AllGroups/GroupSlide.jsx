@@ -136,7 +136,7 @@ const GroupSlide = ({
       <div className='wide comfort'>
       
         {g.internal &&
-          <div className='centreText comfort middle w100 vmargin intrBlueSq cap'>
+          <div className='centreText comfort beside w100 vmargin intrBlueSq cap'>
             <i className='fas fa-home fa-fw fa-2x nT gapL'></i>
             <span>
               <h3>Internal {Pref.group}</h3>
@@ -146,7 +146,7 @@ const GroupSlide = ({
           </div>}
           
         {g.hibernate &&
-          <div className='centreText comfort middle w100 vmargin wetasphaltBorder cap'>
+          <div className='centreText comfort beside w100 vmargin wetasphaltBorder cap'>
             <i className='fas fa-archive fa-fw fa-2x wetasphaltT gapL'></i>
             <h3>{Pref.hibernatated} {Pref.group}</h3>
             <i className='fas fa-archive fa-fw fa-2x wetasphaltT gapR'></i>

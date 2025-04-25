@@ -193,7 +193,7 @@ const FailCharts = ({ workingList, cycleCount, cycleBracket })=> {
   }, [workingList, cycleCount, cycleBracket]);
   
   return(
-    <div className='centreRow middle'>
+    <div className='centreRow beside'>
       <TrendLine 
         title={`failed ${Pref.items} items over last ${cycleCount} ${cycleBracket}s`}
         localXY={workingRate}

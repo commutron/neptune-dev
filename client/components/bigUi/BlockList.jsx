@@ -40,7 +40,7 @@ const BlockRow = ({ entry, id, doneLock, truncate, canRun })=> {
         {dt.block}
         <legend>
   		    {!truncate &&
-    		    <span className='middle'>
+    		    <span className='beside'>
       		    {unlock && !solved &&
                 <SolveBlock 
                   id={id} 

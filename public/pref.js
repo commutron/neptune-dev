@@ -22,6 +22,7 @@ class Pref {
       'readOnly',
       'peopleSuper',
       'equipSuper',
+      'npiSuper',
       'active'
     ];
     this.auths = [

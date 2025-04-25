@@ -13,7 +13,7 @@ const ModelMedium = ({
   };
     
   let iSize = smIcon ? '' : lgIcon ? 'fa-2x' : 'fa-lg';
-  let iAlgn = inline ? 'middle' : '';
+  let iAlgn = inline ? 'beside' : '';
   
   return(
     <span>

@@ -45,7 +45,7 @@ const ServiceSlides = ({
           <div key={sv.serveKey} className='w100'>
             <div className='comfort'>
           
-              <div className='big cap gap middle'>{sv.name}</div>
+              <div className='big cap gap beside'>{sv.name}</div>
           
               <div className='centreRow vmarginhalf'>
                 <TasksForm
