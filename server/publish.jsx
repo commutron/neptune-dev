@@ -735,6 +735,7 @@ Meteor.publish('thinEquip', function(){
           'name': 1,
           'close': 1
       }})
+      // MaintainDB.find({orgKey: orgKey})
       // TimeDB.find({})
     ];
   }

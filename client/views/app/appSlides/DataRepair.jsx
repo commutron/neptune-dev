@@ -166,7 +166,15 @@ const DataRepair = ({ app, users })=> {
       
       <h2 className='centreText vmargin redT dropCeiling borderRed topLine'>High Risk - Use With Extreme Caution</h2>
       <div className='autoGrid cardify twoDfill'>
-      
+        
+        <DoCard
+          title='Delete "Missed" Maintain Entries'
+          icon='crosshairs'
+          color='redSolid'
+          button='Bulk Delete Entries'
+          action={()=>doCallThing('removePMnoise')}
+        />
+        
         <DoCard
           title='Delete all CacheDB Entries'
           icon='snowplow'

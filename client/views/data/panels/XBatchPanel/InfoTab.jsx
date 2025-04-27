@@ -62,7 +62,7 @@ const InfoTab = ({
             isDebug={isDebug}
           />
           
-          <div className='middle espace cap kpiStat'>
+          <div className='beside espace cap kpiStat'>
             <AlterFulfill
               batchId={b._id}
               createdAt={b.createdAt}

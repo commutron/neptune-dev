@@ -142,7 +142,7 @@ const TimeBudgetsChunk = ({
               >{totalBudgetAs} <i className='med'>{totalMessage} budgeted</i>
             </p>
             {addTime > 0 && 
-              <div className='middle'>
+              <div className='beside'>
                 <input
                   type='checkbox'
                   className='minHeight'

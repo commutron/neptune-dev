@@ -27,7 +27,7 @@ const ReportCrossTable = ({ title, dateString, rows, extraClass, colHl })=> {
   return(
     <div className='printTable'>
       <div className={`space wide ${extraClass}`}>
-        <div className='comfort middle'>
+        <div className='comfort beside'>
           <h3 className='cap'>
             <n-print>{dateString} </n-print>{title}
           </h3>

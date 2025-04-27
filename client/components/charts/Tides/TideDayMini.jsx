@@ -50,7 +50,7 @@ const TideDayMini = ({ tideTimes, dateTime, showUser, app, users })=> {
   }, [tideTimes]);
   
   return(
-    <div className='balance middle'>
+    <div className='balance beside'>
       
       {showUser &&
         <NumStatRing

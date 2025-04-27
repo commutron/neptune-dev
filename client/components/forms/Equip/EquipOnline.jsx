@@ -23,8 +23,10 @@ const EquipOnline = ({ id, equip, online })=> {
         title={`Currently Online\nChange to Offline`}
         onClick={()=>handle(false)}
         disabled={!auth}
-      ><n-fa1><i className='fa-solid fa-rss greenT fa-2x fa-fw' data-fa-transform="rotate-315 up-2"></i></n-fa1>
-      <br /><small>Online</small>
+      ><n-fa1 class='block'>
+        <i className='fa-solid fa-power-off greenT fa-2x fa-fw'></i>
+      </n-fa1>
+      <small>Online</small>
       </button>
     );
   }
@@ -35,8 +37,11 @@ const EquipOnline = ({ id, equip, online })=> {
       title={`Currently Offline\nChange to Online`}
       onClick={()=>handle(true)}
       disabled={!auth}
-    ><n-fa0><i className='fa-solid fa-circle wetasphaltT fa-2x fa-fw' data-fa-transform="shrink-10 down-5"></i></n-fa0>
-    <br /><small>Offline</small>
+    ><n-fa0 class='fa-stack fa-2x fa-fw block faLayerCorrect'>
+        <i className="fa-solid fa-slash wetasphaltT fa-stack-1x"></i>
+        <i className="fa-solid fa-power-off wetasphaltT fa-stack-1x"></i>
+      </n-fa0>
+      <small>Offline</small>
     </button>
   );
 };

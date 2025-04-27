@@ -41,6 +41,8 @@ const nextService = (sv)=> {
       return new Date(next.format());
     }else{
       next.add(sv.recur, sv.timeSpan);
+      
+      console.log(next);
     }
   }
 };
@@ -83,7 +85,7 @@ const doneCheck = (mn)=> {
   const eq = EquipDB.findOne({_id: mn.equipId},{fields:{'service':1}});
   const sv = eq.service.find( s => s.serveKey === mn.serveKey );
     
-  const all = sv.tasks.every( t => mn.checklist.find( c => c.task === t ) );
+  const all = sv.tasks.length === 0 || sv.tasks.every( t => mn.checklist.find( c => c.task === t ) );
   if(all){
     return true;
   }else{
@@ -239,7 +241,11 @@ Meteor.methods({
               $set: {
                 status: 'notrequired'
               }
-            });
+            },{multi: true});
+            // MaintainDB.remove({
+            //   status: 'willnotrequire', 
+            //   expire: { $lt: new Date() }
+            // },{multi: true});
             
             const maint = MaintainDB.find({status: false},
                             { fields: {
@@ -492,6 +498,26 @@ Meteor.methods({
   
   getMaintTime(mID) {
     return TimeDB.find({ 'link': mID }, { fields: { 'who':1,'startTime':1,'stopTime':1 } }).fetch();
+  },
+  
+  removePMnoise() {
+    // const orgKey = Meteor.user().orgKey;
+    if( Roles.userIsInRole(Meteor.userId(), 'admin') ) {
+      const threeyear = ( d => new Date(d.setDate(d.getDate()-(365*3))) )(new Date);
+      MaintainDB.remove({
+        status: 'willnotrequire', 
+        expire: { $lt: new Date() }
+      });
+      MaintainDB.remove({
+        status: 'notrequired', 
+        expire: { $lt: threeyear }
+      });
+      MaintainDB.remove({
+        status: 'missed', 
+        expire: { $lt: threeyear }
+      });
+      return true;
+    }
   }
   
 });

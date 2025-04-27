@@ -29,7 +29,7 @@ const ReportBasicTable = ({ title, dateString, rows, extraClass })=> {
   return(
     <div className='printTable'>
       <div className={`space wide ${extraClass}`}>
-        <div className='comfort middle'>
+        <div className='comfort beside'>
           <h3 className='cap'>
             <n-print>{dateString} </n-print>{title}
           </h3>

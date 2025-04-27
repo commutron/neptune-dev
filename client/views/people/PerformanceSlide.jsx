@@ -126,7 +126,7 @@ const PerformanceSlide = ({ app, user, users, traceDT, isDebug })=> {
 
   return(
     <div className='space5x5 overscroll2x'>
-      <div className='med vbreak comfort middle'>
+      <div className='med vbreak comfort beside'>
         <WeekBrowse
           sendUp={(i)=>getBack(i)}
           app={app}

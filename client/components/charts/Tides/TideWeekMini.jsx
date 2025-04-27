@@ -44,7 +44,7 @@ const TideWeekMini = ({ tideTimes, dateTime, app, user })=> {
   }, [tideTimes]);
   
   return(
-    <div className='balance middle'>
+    <div className='balance beside'>
       
       <NumStatRing
         total={batchTotal.length}

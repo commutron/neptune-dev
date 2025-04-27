@@ -36,6 +36,10 @@
 .smallAction {
   min-width: var(--txx0);
 }
+.faLayerCorrect {
+  height: 1em;
+  width: auto;
+}
 
 .inlineModel {
   width: 100%;

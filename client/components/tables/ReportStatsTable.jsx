@@ -28,7 +28,7 @@ const ReportStatsTable = ({ title, dateString, rows, extraClass })=> {
         
         <div className={`space wide ${extraClass}`}>
           
-          <div className='comfort middle'>
+          <div className='comfort beside'>
             <h3 className='cap'>
               <n-print>{dateString} </n-print>{title}
             </h3>

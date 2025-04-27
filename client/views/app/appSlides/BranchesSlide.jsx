@@ -31,7 +31,7 @@ const BranchesSlide = ({ app, isDebug })=> {
       <p>Options for Branch / Department / Tracking Catagory</p>
       <p>
         <i className='fas fa-exclamation-circle'></i>
-        <i> Entries are case sensitive, smt =/= SMT.</i>
+        <i> Entries are case sensitive, "smt" does not equal "SMT".</i>
         <i> Capitalizing is unnecessary in most cases and only recommended for abbreviations.</i>
       </p>
       

@@ -175,7 +175,7 @@ const XBatchTimeline = ({
 export default XBatchTimeline;
 
 const CheckBox = ({ id, label, title, dfVal, chFunc })=> (
-  <span title={title} className='middle'>
+  <span title={title} className='beside'>
     <input
       type='checkbox'
       id={id}

@@ -101,23 +101,21 @@ const ServeForm = ({
   return(
     <form id='setServicePattern' className='fitWide' onSubmit={(e)=>saveService(e)}>
       
-      <p>
-        <span>
-          <label htmlFor='pName' title='Name'>Service is commonly referred to as
-          <input
-            type='text'
-            id='pName'
-            className='gap miniIn24'
-            defaultValue={name}
-            maxLength='64'
-            minLength='1'
-            onChange={(e)=>setName(e.target.value)}
-            required /></label>
-        </span>
-        <span className='block max400 vmarginquarter'>
-          <n-sm>Should match references in instructions.</n-sm>
-        </span>
-      </p>
+      <MadLibInput
+        id='pName'
+        tiptitle='Name'
+        label='Service is commonly referred to as'
+        sub='Should match references in instructions.'
+      ><input
+        type='text'
+        id='pName'
+        className='gap miniIn24'
+        defaultValue={name}
+        maxLength='64'
+        minLength='1'
+        onChange={(e)=>setName(e.target.value)}
+        required />
+      </MadLibInput>
       
       <p>
         <span>
@@ -147,114 +145,103 @@ const ServeForm = ({
       </p>
       
       {recur > 1 &&
-        <p>
-          <span>
-            <label htmlFor='pNext' title='Next Service'>Next Service is due
-            <input
-              type='date'
-              id='pNext'
-              className='gap miniIn18'
-              defaultValue={next || new Date()}
-              onChange={(e)=>setNext(e.target.value)}
-              required 
-            /></label>
-            <span className='block max400 vmarginquarter'>
-              <n-sm>Future service will be counted from this day.</n-sm>
-            </span>
-          </span>
-        </p>
+        <MadLibInput
+          id='pNext'
+          tiptitle='Next Service'
+          label='Next Service is due'
+          sub='Future service will be counted from this day.'
+        ><input
+          type='date'
+          id='pNext'
+          className='gap miniIn18'
+          defaultValue={next || new Date()}
+          onChange={(e)=>setNext(e.target.value)}
+          required 
+        /></MadLibInput>
       }
       
-      <p>
-        <span>
-          <label htmlFor='pWhen' title='perform service when'>Perform Service by
-          <select
-            id='pWhen'
-            className='gap miniIn18'
-            value={pivot}
-            onChange={(e)=>setPivot(e.target.value === 'startOf' || e.target.value === 'endOf' ? e.target.value : Number(e.target.value))}
-            required>
-            <option value='startOf'>Start of the {timeSpan}</option>
-            <option value='endOf'>End of the {timeSpan}</option>
-            {timeSpan === 'week' ?
-              <Fragment>
-                {["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]
-                .map( (day, index)=>(
-                  <option key={'w'+index} value={index}>{day}</option>
-                ))}
-              </Fragment>
-            : timeSpan === 'month' ?
-              <Fragment>
-                {["1st","2nd","3rd","4th","5th","6th", "7th", "8th", "9th", "10th",
-                "11th","12th","13th","14th","15th","16th", "17th", "18th", "19th", "20th",
-                "21st","22nd","23rd","24th","25th","26th", "27th", "28th", "29th", "30th", "31st"]
-                .map( (date, index)=>(
-                  <option key={'d'+index} value={index+1}>{date} of the month</option>
-                ))}
-              </Fragment>
-            : timeSpan === 'year' ?
-              <Fragment>
-                {["January","Febuary","March","April","May","June",
-                "July","August","September","October","November","December"]
-                .map( (month, index)=>(
-                  <option key={'m'+index} value={index}>{month}</option>
-                ))}
-              </Fragment>
-            : null}
-          </select></label>
-          {timeSpan === 'month' &&
-          <span className='block max400 vmarginquarter'>
-            <n-sm> Nonexistent days flow into the next month. For example, June 31st becomes July 1st.</n-sm>
-          </span>}
-        </span>
-      </p>
+      <MadLibInput
+        id='pWhen'
+        tiptitle='perform service when'
+        label='Perform Service by'
+        sub={timeSpan === 'month' ? 'Nonexistent days flow into the next month. For example, June 31st becomes July 1st.' : 
+             `End of ${timeSpan} is determined by workweek and holidays schedule`}
+      ><select
+        id='pWhen'
+        className='gap miniIn18'
+        value={pivot}
+        onChange={(e)=>setPivot(e.target.value === 'startOf' || e.target.value === 'endOf' ? e.target.value : Number(e.target.value))}
+        required>
+        <option value='startOf'>Start of the {timeSpan}</option>
+        <option value='endOf'>End of the {timeSpan}</option>
+        {timeSpan === 'week' ?
+          <Fragment>
+            {["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]
+            .map( (day, index)=>(
+              <option key={'w'+index} value={index}>{day}</option>
+            ))}
+          </Fragment>
+        : timeSpan === 'month' ?
+          <Fragment>
+            {["1st","2nd","3rd","4th","5th","6th", "7th", "8th", "9th", "10th",
+            "11th","12th","13th","14th","15th","16th", "17th", "18th", "19th", "20th",
+            "21st","22nd","23rd","24th","25th","26th", "27th", "28th", "29th", "30th", "31st"]
+            .map( (date, index)=>(
+              <option key={'d'+index} value={index+1}>{date} of the month</option>
+            ))}
+          </Fragment>
+        : timeSpan === 'year' ?
+          <Fragment>
+            {["January","Febuary","March","April","May","June",
+            "July","August","September","October","November","December"]
+            .map( (month, index)=>(
+              <option key={'m'+index} value={index}>{month}</option>
+            ))}
+          </Fragment>
+        : null}
+      </select></MadLibInput>
       
-      <p>
-        <span>
-          <label htmlFor='pPeriod' title='service period days'>Workdays to Complete Service 
-          <input
-            type='number'
-            id='pPeriod'
-            className='gap miniIn6'
-            defaultValue={period}
-            min={1}
-            max={Math.max(0,timeSpan === 'day' ? recur : timeSpan === 'week' ? 7 - grace : 31 - grace)}
-            inputMode='numeric'
-            onChange={(e)=>setPeriod(Number(e.target.value))}
-            required
-          /></label>
-        </span>
-        <span className='block max400 vmarginquarter'>
-          <n-sm>Service window opens this many days before due date.</n-sm>
-        </span>
-      </p>
+      <MadLibInput
+        id='pPeriod'
+        tiptitle='service period days'
+        label='Workdays to Complete Service'
+        sub='Service window opens this many days before due date.'
+      ><input
+        type='number'
+        id='pPeriod'
+        className='gap miniIn6'
+        defaultValue={period}
+        min={1}
+        max={Math.max(0,timeSpan === 'day' ? recur : timeSpan === 'week' ? 7 - grace : 31 - grace)}
+        inputMode='numeric'
+        onChange={(e)=>setPeriod(Number(e.target.value))}
+        required
+      /></MadLibInput>
       
-      <p>
-        <span>
-          <label htmlFor='pGrace' title='late/grace workdaysdays'>Workdays Grace after due
-          <input
-            type='number'
-            id='pGrace'
-            className='gap miniIn6'
-            defaultValue={grace}
-            min={0}
-            max={Math.max(0, timeSpan === 'day' ? recur - period :
-                 timeSpan === 'week' ? ( recur * 5  ) - period :
-                 timeSpan === 'month' ? ( recur * 20  ) - period : 60)}
-            inputMode='numeric'
-            onChange={(e)=>setGrace(Number(e.target.value))}
-            required /></label>
-        </span>
-        <span className='block max400 vmarginquarter'>
-          <n-sm>After the grace period an incomplete service is considered missed.</n-sm>
-        </span>
-      </p>
+      <MadLibInput
+        id='pGrace'
+        tiptitle='late/grace workdaysdays'
+        label='Workdays Grace after due'
+        sub='After the grace period an incomplete service is considered missed.'
+      ><input
+        type='number'
+        id='pGrace'
+        className='gap miniIn6'
+        defaultValue={grace}
+        min={0}
+        max={Math.max(0, timeSpan === 'day' ? recur - period :
+             timeSpan === 'week' ? ( recur * 5  ) - period :
+             timeSpan === 'month' ? ( recur * 20  ) - period : 60)}
+        inputMode='numeric'
+        onChange={(e)=>setGrace(Number(e.target.value))}
+        required 
+      /></MadLibInput>
       
       <p className='medSm centreText'
       >Service window will be open for <n-num>{period + grace}</n-num> workdays. Overlaping Service windows may cause errors.</p>
       
       {serveKey && servicing ?
-        <p className='medSm centreText'
+        <p className='medSm centreText darkOrangeT'
         >Editing this service pattern will alter an open service window.</p>
       : null}
       
@@ -271,3 +258,14 @@ const ServeForm = ({
     </form>
   );
 };
+
+const MadLibInput = ({ id, tiptitle, label, sub, children })=> (
+  <p>
+    <span>
+      <label htmlFor={id} title={tiptitle}>{label}{children}</label>
+      <span className='block max400 vmarginquarter'>
+        <n-sm>{sub}</n-sm>
+      </span>
+    </span>
+  </p>
+);

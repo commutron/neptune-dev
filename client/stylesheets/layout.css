@@ -909,12 +909,11 @@ n-sm-model-content {
 .leftText { text-align: left !important; }
 .rightText { text-align: right; }
 
-.middle {
+.beside {
   display: flex;
   align-content: center;
   align-items: center;
 }
-
 .split {
   display: flex;
   justify-content: space-between;
@@ -1137,13 +1136,6 @@ n-sm-model-content {
   margin: 0;
   padding: 0;
 }
-
-.beside {
-  display: flex;
-  align-content: center;
-  align-items: center;
-}
-
 .evenRow, .rightRow {
   margin: 0;
   display: flex;
@@ -1389,7 +1381,7 @@ button.numberSet {
   vertical-align: middle;
   line-height: normal;
 }
-.navIcon.middle {
+.navIcon.beside {
   display: flex;
   align-items: center;
 }

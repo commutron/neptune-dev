@@ -48,7 +48,7 @@ const DailyReport = ({ dayIFin, app, user, isDebug })=> {
                       
   return(
     <div className='space36v overscroll'>
-      <div className='med vbreak comfort middle noPrint'>
+      <div className='med vbreak comfort beside noPrint'>
         <div className='line2x'>
           <Flatpickr
             value={moment().format('YYYY-MM-DD')}

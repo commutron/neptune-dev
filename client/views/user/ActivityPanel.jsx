@@ -40,7 +40,7 @@ const ActivityPanel = ({ app, brancheS, user, isDebug, users, traceDT })=> {
     
   return(
     <div className='space5x5'>
-      <div className='med vbreak comfort middle'>
+      <div className='med vbreak comfort beside'>
         <WeekBrowse
           sendUp={(i)=>getBack(i)}
           app={app}

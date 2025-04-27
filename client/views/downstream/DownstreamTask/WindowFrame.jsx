@@ -53,7 +53,7 @@ const WindowFrame = ({
             className='overGridRowFixed grayFade beside'
             onClick={()=>holdshowSet(!holdShow)}
           >
-            <span className='gap middle med'>
+            <span className='gap beside med'>
             {holdShow ?
               <n-fa0><i className="fa-solid fa-angles-down fa-lg gap"></i></n-fa0> :
               <n-fa1><i className="fa-solid fa-angles-right fa-lg gap"></i></n-fa1>
