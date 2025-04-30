@@ -1,0 +1,105 @@
+.kioskFrame {
+  align-content: center;
+  overflow-y: hidden !important;
+  overflow-x: hidden !important;
+  -webkit-overflow-scrolling: touch;
+
+  display: grid;
+  grid-template-rows: var(--vert_frame) calc(var(--vert_main) - var(--vert_border)) var(--vert_border);
+  grid-template-columns: var(--vert_border) auto var(--vert_border);
+  grid-template-areas: 
+    "tenHeader tenHeader kR"
+    "kL kioskContent kR"
+    "kL oneFooter kR";
+  background-color: var(--neptuneColor);
+}
+/*.oneFooter {*/
+/*  grid-area: oneFooter;*/
+/*}*/
+.kioskContent {
+  grid-area: kioskContent;
+  height: 100%;
+  display: grid;
+  grid-template-rows: 2fr 1fr;
+  grid-template-columns: 1fr 3fr 1fr;
+  grid-template-areas: 
+    "kioskBatch kioskTask kioskItem"
+    "kioskProd kioskProb kioskStat";
+}
+
+.kioskBatch {
+  grid-area: kioskBatch;
+  background-color: var(--belizeHole);
+}
+.kioskTask {
+  grid-area: kioskTask;
+  background-color: var(--wetasphalt);
+  box-shadow: var(--dropShadow2);
+  z-index: 2;
+}
+.kioskItem {
+  grid-area: kioskItem;
+  background-color: var(--turquoise);
+}
+.kioskProd {
+  grid-area: kioskProd;
+  background-color: var(--peterriver);
+}
+.kioskProb {
+  grid-area: kioskProb;
+  background-color: var(--pomegranate);
+}
+.kioskStat {
+  grid-area: kioskStat;
+  background-color: var(--silver);
+}
+
+/*.proPrime {*/
+/*  grid-area: proPrime;*/
+/*  overflow-y: auto;*/
+/*  overflow-x: hidden;*/
+/*  background-color: rgb(35,35,35);*/
+/*  transition: all 150ms ease-in-out;*/
+/*  display: inline-grid;*/
+/*  grid-template-columns: repeat(auto-fit, minmax(13vmax, 1fr));*/
+/*  grid-template-rows: auto;*/
+/*  align-items: stretch;*/
+/*  justify-content: flex-start;*/
+
+/*  min-width: 13vmax;*/
+/*  width: 100%;*/
+/*  max-width: 14vmax;*/
+/*}*/
+
+.kioskFrame .followTask i {
+  font-size: calc(var(--vert_border) * 2.25);
+}
+/*.miniHistory {*/
+/*  margin: 1vh 0;*/
+/*  min-width: 14vmax;*/
+/*  max-width: 15vmax;*/
+/*}*/
+
+/*.firstBadge {*/
+/*  width: 100%;*/
+/*  height: 100%;*/
+/*  font-size: calc(var(--vert_border) * 2.5);*/
+/*  z-index: 2;*/
+/*}*/
+/*@media screen and (prefers-reduced-motion: no-preference) {*/
+/*  .firstBadge { animation: pulse2 500ms ease-out 1; }*/
+/*}*/
+/*.firstBadge::after {*/
+/*  content: "𝗙𝗶𝗿𝘀𝘁\a" attr(data-steps);*/
+/*  position: fixed;*/
+/*  z-index: 10;*/
+/*  top: var(--vert_border);*/
+/*  left: calc(var(--vert_adapt) * 3.2);*/
+/*  min-width: 75px;*/
+/*  margin: 0.5dvh 0;*/
+/*  background-color: var(--peterriver);*/
+/*  color: black;*/
+/*  white-space: pre-wrap;*/
+/*  text-align: center;*/
+/*  box-shadow: var(--dropShadow00);*/
+/*}*/

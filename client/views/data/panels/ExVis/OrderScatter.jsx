@@ -1,22 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
-import moment from 'moment';
-import { 
-  VictoryZoomContainer,
-  VictoryScatter,
-  VictoryArea,
-  VictoryChart, 
-  VictoryAxis,
-  VictoryTooltip
-} from 'victory';
-import Theme from '/client/global/themeV.js';
 import { ToggleSwitch } from '/client/components/smallUi/ToolBarTools';
 import PrintThis from '/client/components/tinyUi/PrintThis';
+import ScatterCH from '/client/components/charts/ScatterCH';
 
-
-const OrderScatter = ({ app })=> {
+const OrderScatter = ({})=> {
   
   const mounted = useRef(true);
   
+  const [ cvrtData, cvrtDataSet ] = useState(false);
   const [ tickXY, tickXYSet ] = useState(false);
   const [ tggl, tgglSet ] = useState(false);
   const [ perQty, perQtySet ] = useState(false);
@@ -26,12 +17,37 @@ const OrderScatter = ({ app })=> {
       err && console.log(err);
       if(re && mounted.current) {
         tickXYSet(re);
-        // console.log(re);
+        // console.log({re});
       }
     });
     
     return () => { mounted.current = false; };
   }, []);
+  
+  useEffect( ()=> {
+    // tickXY = {
+    //   y1: b.quantity,
+    //   x1: b.createdAt,
+    //   y2: trnGap,
+    //   x2: b.salesStart,
+    //   z: `${b.batch} (so.${b.salesOrder})`,
+    // }
+    // labels={ z + ' Qty: '+ y1 
+    //           + '\n' 
+    //           + 'Workdays: ' 
+    //           + y2
+    //           + ' (' + Math.round(y2 / (y1 || 1))
+    //           + ' per item)'
+    //       }
+    
+    const cnvrt = (tickXY || []).map((r) => { return {
+                x: tggl ? r.x2.toISOString() : r.x1.toISOString(), y: tggl ? perQty ? Math.round(r.y2 / (r.y1 || 1)) : r.y2 : r.y1
+        }});
+    cvrtDataSet(cnvrt);
+  }, [tickXY, tggl, perQty]);
+  
+  const title = tggl ? 'Workdays Duration. From Sales Start to Completed' : 
+               'Created Order Quantity';
   
   return(
     <div className='chartNoHeightContain'>
@@ -61,79 +77,12 @@ const OrderScatter = ({ app })=> {
         <PrintThis />
       </div>
       
-      <VictoryChart
-        theme={Theme.NeptuneVictory}
-        padding={{top: 10, right: 25, bottom: 25, left: 30}}
-        domainPadding={25}
-        height={200}
-        containerComponent={<VictoryZoomContainer />}
-      >
-        <VictoryAxis
-          tickFormat={(t) => !tickXY ? '*' : moment(t).format('MMM D YYYY')}
-          fixLabelOverlap={true}
-          style={ {
-            axis: { stroke: 'grey' },
-            grid: { stroke: '#5c5c5c' },
-            ticks: { stroke: '#5c5c5c' },
-            tickLabels: { 
-              fontSize: '6px' }
-          } }
-          scale={{x: "time", y: "linear"}}
-        />
-        <VictoryAxis 
-          dependentAxis
-          fixLabelOverlap={true}
-          style={ {
-            axis: { stroke: 'grey' },
-            grid: { stroke: '#5c5c5c' },
-            ticks: { stroke: '#5c5c5c' },
-            tickLabels: { 
-              fontSize: '6px' }
-          } }
-        />
-        <VictoryArea
-          data={tickXY || []}
-          x={(d)=> tggl ? d.x2 : d.x1}
-          y={(d)=> tggl ? perQty ? d.y2 / (d.y1 || 1) : d.y2 : d.y1}
-          interpolation='basis'
-          style={{
-            data: { 
-              fill: 'rgba(41, 128, 185, 0.2)'
-            },
-          }}
-        /> 
-        <VictoryScatter
-          data={tickXY || []}
-          x={(d)=> tggl ? d.x2 : d.x1}
-          y={(d)=> tggl ? perQty ? Math.round(d.y2 / (d.y1 || 1)) : d.y2 : d.y1}
-          style={{
-            data: {
-              fill: 'rgb(41, 128, 185)'
-            },
-            labels: { 
-              padding: 2,
-            } 
-          }}
-          symbol={(d) => tggl ? d.s2 : d.s1}
-          labels={(d)=> d.datum.z + ' Qty: '+ d.datum.y1 + '\n' 
-                        + 'Workdays: ' + d.datum.y2
-                        + ' (' + Math.round(d.datum.y2 / (d.datum.y1 || 1)) + ' per item)'
-          }
-          labelComponent={
-            <VictoryTooltip 
-              style={{ fontSize: '6px', borderWidth: '1px' }}
-            />}
-        />
-      </VictoryChart>
+      <ScatterCH
+        strdata={cvrtData}
+        title={title}
+        fillColor='rgb(52, 152, 219, 0.5)'
+      />
       
-      <p className='centreText small'
-      >{tggl ? 'Workdays Duration. From Sales Start to Completed' : 
-               'Created Order Quantity'}
-      </p>
-      <p className='grayT small'>
-        Scroll to Zoom. Click and Drag to Pan.<br />
-        Data curve is smoothed by a basis spline function<br />
-      </p>
     </div>
   );
 };

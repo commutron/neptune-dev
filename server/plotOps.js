@@ -17,14 +17,11 @@ export function plotCreatedOrders(batches) {
     const trnGap = gap( did, b.salesStart );
     
     orderset.push({
-      y1: b.quantity,
       x1: b.createdAt,
-      y2: trnGap,
       x2: b.salesStart,
+      y1: b.quantity,
+      y2: trnGap,
       z: `${b.batch} (so.${b.salesOrder})`,
-      s1: 'plus',
-      s2: b.completedAt ? 'diamond' : 'star',
-      size: '2'
     });
   }
   return orderset;
@@ -89,9 +86,7 @@ export function plotNonCons(batches, branches) {
       r: brncRt,
       y: brncQt,
       x: batch.completedAt || new Date(),
-      z: `${batch.batch} = `,
-      symbol: 'square',
-      size: 2
+      z: `${batch.batch} = `
     });
   }
   return ncnset;
@@ -121,8 +116,6 @@ export function plotShorts(batches, branches) {
       y: brshQt,
       x: batch.completedAt || new Date(),
       z: `${batch.batch} = `,
-      symbol: 'triangleUp',
-      size: 2
     });
   }
   return shtset;

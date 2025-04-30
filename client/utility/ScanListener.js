@@ -46,27 +46,22 @@ function onMessage(event) {
 export function ScanListenerUtility(user) {
   window.addEventListener('visibilitychange', reFocus);
   window.addEventListener('focus', reFocus);
-  // navigator.usb ? console.log('WebUSB IS supported') : 
-                  // console.log('WebUSB NOT supported');
-    
+  
   const autoScan = user.autoScan;
   
   const wikiwin = document.getElementById('instruct');
   wikiwin && wikiwin.contentWindow.document.addEventListener('focus',function(){
     // console.log("contentWindow listener");
   });
-  
-  const doc = wikiwin ? wikiwin.contentWindow.document.querySelector(".notverified") : null;
-  doc && console.log("Iframe Document Element Found");
 
   if(!autoScan) {
     // console.log('auto window scanning OFF');
+    null;
   }else{
     // console.log('auto window scanning ON');
     window.addEventListener('keydown', onPress);
     window.addEventListener('message', onMessage);
   }
-
 }
 
 export function ScanListenerOff() {
@@ -74,5 +69,41 @@ export function ScanListenerOff() {
   window.removeEventListener('focus', reFocus);
   window.removeEventListener('keydown', onPress);
   window.removeEventListener('message', onMessage);
+  Session.set('scanListener', '');
+}
+
+function onRead(event) {
+  const element = document.activeElement;
+  if(element.id !== 'allowKeyboard') {
+    event.stopPropagation();
+    const inputKey = event.key;
+    const inputCode = event.keyCode;
+    let scanListener = Session.get('scanListener') || '';
+    if( inputKey ) {
+      if( inputCode === 13 ) { // "enter"
+        if( scanListener.length >= 8 && scanListener.length <= 14 ) {
+          !event.preventDefault ? null : event.preventDefault();
+          Session.set('now', scanListener);
+        }
+        scanListener = '';
+      }else if( !inputKey.match(/[0-9]/) ) {
+        scanListener = '';
+      }else if( inputKey.match(/[0-9]/) ) {
+        scanListener = scanListener.concat(event.key);
+      }
+      Session.set('scanListener', scanListener);
+    }
+  }else{
+    null;
+  }
+}
+
+export function ScanListenLiteUtility() {
+  // console.log('auto window scanning ON');
+  window.addEventListener('keydown', onRead);
+}
+
+export function ScanListenLiteOff() {
+  window.removeEventListener('keydown', onRead);
   Session.set('scanListener', '');
 }

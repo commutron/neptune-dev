@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useLayoutEffect, Fragment } from 'react';
 import { Meteor } from 'meteor/meteor';
 
-import { ScanListenerUtility, ScanListenerOff } from '/client/utility/ScanListener.js';
+import { ScanListenLiteUtility, ScanListenLiteOff } from '/client/utility/ScanListener.js';
 
 import HomeIcon from './HomeIcon';
 // import FindBox from './FindBox';
@@ -13,10 +13,8 @@ import TideFollow from '/client/components/tide/TideFollow';
 // import EquipMenu from '/client/views/production/lists/EquipMenu';
 // import TimeStop from '/client/components/tide/TimeStop';
 
-
-
 const TerminalWrap = ({ 
-  user, users, app, 
+  orb, user, users, app, 
   children
 })=> {
   
@@ -28,11 +26,13 @@ const TerminalWrap = ({
   
   
   useEffect( ()=> {
-    if(Meteor.user()) {
-      ScanListenerUtility(Meteor.user());
-    }
-    return ()=> ScanListenerOff();
+    ScanListenLiteUtility();
+    return ()=> ScanListenLiteOff();
   }, []);
+  
+  useEffect( ()=> {
+    console.log('orb in hand');
+  }, [orb]);
   
   const eng = user?.engaged || false;
   const etPro = eng?.task === 'PROX';
@@ -40,11 +40,9 @@ const TerminalWrap = ({
   // 'MAINT', 'EQFX';
   const etKey = eng?.tKey;
   
-  
-  const viewContainer = 'pro_100';
                         
   return(
-    <div className={viewContainer + ' containerPro do_not_use'}>
+    <div className={'kioskFrame do_not_use'}>
       <div className='tenHeader'>
         <div className='topBorder' />
         <HomeIcon />
@@ -60,7 +58,8 @@ const TerminalWrap = ({
       
       <Fragment>
         
-        <div className='proPrime forceScrollStyle darkTheme'>
+        <div className='kioskContent forceScrollStyle darkTheme'>
+          
           {React.cloneElement(children,
             { 
               tideKey: etKey,
@@ -78,7 +77,7 @@ const TerminalWrap = ({
       
         
       </Fragment>
-      
+      {/*<div className='oneFooter' />*/}
     </div>
   );
 };

@@ -1,24 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
-import moment from 'moment';
-import { 
-  VictoryZoomContainer,
-  VictoryScatter,
-  VictoryArea,
-  VictoryChart, 
-  VictoryAxis,
-  VictoryTooltip
-} from 'victory';
 import Pref from '/client/global/pref.js';
-import Theme from '/client/global/themeV.js';
 import { ToggleSwitch } from '/client/components/smallUi/ToolBarTools';
 import { FilterSelect } from '/client/components/smallUi/ToolBarTools';
 import PrintThis from '/client/components/tinyUi/PrintThis';
+import ScatterCH from '/client/components/charts/ScatterCH';
 
-
-const ProbScatter = ({ fetchFunc, fill, fillfade, title, brancheS, app })=> {
+const ProbScatter = ({ fetchFunc, fillfade, title, brancheS, app })=> {
   
   const mounted = useRef(true);
   
+  const [ cvrtData, cvrtDataSet ] = useState(false);
   const [ tickXY, tickXYSet ] = useState(false);
   
   const [ brOps, brOpsSet ] = useState([]);
@@ -32,7 +23,9 @@ const ProbScatter = ({ fetchFunc, fill, fillfade, title, brancheS, app })=> {
       ops.push(anc);
     }
     for(let br of brancheS) {
-      ops.push(br.branch);
+      if(br.pro) {
+        ops.push(br.branch);
+      }
     }
     brOpsSet(ops);
     
@@ -48,8 +41,15 @@ const ProbScatter = ({ fetchFunc, fill, fillfade, title, brancheS, app })=> {
     return () => { mounted.current = false; };
   }, []);
   
-  const dataset = !tickXY ? [] : showZero ? tickXY : tickXY.filter(t=>t.y[brFtr] > 0);
-
+  useEffect( ()=> {
+    const raw = !tickXY ? [] : showZero ? tickXY : tickXY.filter(t=>t.y[brFtr] > 0);
+    const cnvrt = raw.map((d) => { return {
+                x: d.x.toISOString(), y: showRate ? d.r[brFtr] : d.y[brFtr]
+        }});
+    cvrtDataSet(cnvrt);
+  }, [tickXY, showRate, showZero]);
+  
+  
   return(
     <div className='chartNoHeightContain'>
       <div className='rowWrap noPrint'>
@@ -89,74 +89,13 @@ const ProbScatter = ({ fetchFunc, fill, fillfade, title, brancheS, app })=> {
         <PrintThis />  
       </div>
       
-      <VictoryChart
-        theme={Theme.NeptuneVictory}
-        padding={{top: 10, right: 25, bottom: 25, left: 30}}
-        domainPadding={25}
-        height={200}
-        containerComponent={<VictoryZoomContainer />}
-      >
-        <VictoryAxis
-          tickFormat={(t) => !tickXY ? '*' : moment(t).format('MMM D YYYY')}
-          fixLabelOverlap={true}
-          style={ {
-            axis: { stroke: 'grey' },
-            grid: { stroke: '#5c5c5c' },
-            ticks: { stroke: '#5c5c5c' },
-            tickLabels: { 
-              fontSize: '6px' }
-          } }
-          scale={{x: "time", y: "linear"}}
-        />
-        <VictoryAxis 
-          dependentAxis
-          fixLabelOverlap={true}
-          style={ {
-            axis: { stroke: 'grey' },
-            grid: { stroke: '#5c5c5c' },
-            ticks: { stroke: '#5c5c5c' },
-            tickLabels: { 
-              fontSize: '6px' }
-          } }
-        />
-        
-        <VictoryArea
-          data={dataset}
-          y={(d)=> !tickXY ? d.y : showRate ? d.r[brFtr] : d.y[brFtr]}
-          interpolation='basis'
-          style={{
-            data: { 
-              fill: fillfade
-            },
-          }}
-        />
-        
-        <VictoryScatter
-          data={dataset}
-          y={(d)=> !tickXY ? d.y : showRate ? d.r[brFtr] : d.y[brFtr]}
-          style={{
-            data: { 
-              fill: fill,
-              strokeWidth: 0
-            },
-            labels: { 
-              padding: 2,
-            } 
-          }}
-          labels={(d)=> !tickXY ? d.datum.z : d.datum.z + d.datum.y[brFtr]}
-          labelComponent={
-            <VictoryTooltip 
-              style={{ fontSize: '6px' }}
-            />}
-        />
-        
-      </VictoryChart>
-      
-      <p className='centreText cap small'>{title}</p>
-      <p className='grayT small'>
-        Scroll to Zoom. Click and Drag to Pan.<br />
-        Data curve is smoothed by a basis spline function<br />
-      </p>
+      <ScatterCH
+        strdata={cvrtData}
+        title={title}
+        fillColor={fillfade}
+        intgr={!showRate}
+      />
+
     </div>
   );
 };

@@ -38,8 +38,7 @@ const TrendWrap = ({ brancheS, app })=> (
       <ProbScatter 
         key='N0NC0N'
         fetchFunc='getAllNConCount'
-        fillfade='rgba(211,84,0,0.2)'
-        fill='rgb(231, 76, 60)'
+        fillfade='rgba(231, 76, 60, 0.5)'
         title={Pref.nonCons}
         brancheS={brancheS}
         app={app} />
@@ -47,8 +46,7 @@ const TrendWrap = ({ brancheS, app })=> (
       <ProbScatter 
         key='SH0R7'
         fetchFunc='getAllShortCount'
-        fillfade='rgba(230, 126, 34,0.2)'
-        fill='rgb(230, 126, 34)'
+        fillfade='rgba(230, 126, 34,0.5)'
         title={Pref.shortfalls}
         brancheS={brancheS}
         app={app} />

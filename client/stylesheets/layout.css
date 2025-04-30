@@ -29,10 +29,12 @@ main {
 	margin: auto;
 	height: 100%;
 	aspect-ratio: 1;
-  content: "PROTOTYPE DO NOT USE";
+  content: "PROTOTYPE";
   color: rgb(255,255,255,0.1);
-  font-size: 20dvh;
+  font-size: 25dvh;
   text-align: center;
+  align-content: center;
+  z-index: 100;
 }
 
 .forceScroll { overflow-y: auto !important; }

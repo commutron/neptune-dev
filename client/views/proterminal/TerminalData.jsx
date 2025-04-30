@@ -12,24 +12,21 @@ import TerminalFindOps from './TerminalFindOps';
 
 
 const TerminalData = ({
-  coldReady, hotReady,
-  orb, anchor, user, org, users, app,
-  allGroup, allWidget, allVariant,
-  allxBatch,
-  hotxBatch, hotxSeries, hotxRapids
+  orb, user, users, app,
+  hotReady, hotxBatch, hotxSeries, hotxRapids
 })=> {
-  
 
-  if( !coldReady || !hotReady || !user || !app ) {
+  if( !user || !app ) {
     return( <SpinWrap /> );
   }
   
   const activeUsers = users.filter( x => 
                         Roles.userIsInRole(x._id, 'active') === true &&
                         Roles.userIsInRole(x._id, 'readOnly') === false);
-    
+  
   return(
     <TerminalWrap
+      orb={orb}
       user={user}
       users={activeUsers}
       app={app}
@@ -53,16 +50,29 @@ const TerminalData = ({
     */}
     <Fragment>
     
-    <div><button>Start Scan</button></div>
-    <div><button>Stop Scan</button></div>
-    <div>Scan Result</div>
-    <div>Scan Action</div>
-    <div>Scan Data</div>
-    <div>connected data</div>
+    <div className='kioskBatch'>
+      <div>Scan Data</div>
+    </div>
     
+    <div className='kioskTask'>
+      <div><button>Start Scan</button></div>
+      <div><button>Stop Scan</button></div>
+      <div>Scan Result = {orb || ____}</div>
+      <div>Scan Action</div>
+      
+      <div>Availible Actions</div>
+      <div>Time Start/Stop</div>
+    </div>
     
-    <div>Availible Actions</div>
-    <div>Time Start/Stop</div>
+    <div className='kioskItem'>
+      <div>Scan Data</div>
+    </div>
+    
+    <div className='kioskProd'>
+      <div>connected data</div>
+    </div>
+    <div className='kioskProb'></div>
+    <div className='kioskStat'></div>
     
     </Fragment>
     </TerminalWrap>
@@ -77,8 +87,6 @@ export default withTracker( () => {
   let login = Meteor.userId() ? true : false;
   let user = login ? Meteor.user() : false;
   let org = user ? user.org : false;
-  let readOnly = user ? Roles.userIsInRole(Meteor.userId(), 'readOnly') : false;
-  const coldSub = login ? Meteor.subscribe('thinData') : false;
   
   let hotxBatch = false;
   let hotxSeries = false;
@@ -87,22 +95,9 @@ export default withTracker( () => {
   let keyMatch = false;
   let subBatch = false;
     
-  if( coldSub && !subBatch ) {
+  if( !subBatch ) {
     
-    if( Pref.regex5.test(orb) ) {
-
-      onexBatch = XBatchDB.find({ batch: orb },{fields:{'batch':1}},{limit:1}).count();
-      if(onexBatch) {
-        keyMatch = true;
-        subBatch = orb;
-      }else{
-        subBatch = orb;
-      }
-      hotxBatch = XBatchDB.findOne({ batch: orb });
-      hotxSeries = XSeriesDB.findOne({ batch: orb });
-      hotxRapids = XRapidsDB.find({ extendBatch: orb }).fetch();
-      
-    }else if( Pref.regexSN.test(orb) ) {
+    if( Pref.regexSN.test(orb) ) {
   		
       const itemsxSeries = XSeriesDB.findOne( { 'items.serial': orb } );
       if( itemsxSeries ) {
@@ -123,21 +118,12 @@ export default withTracker( () => {
   
   if( !login ) {
     return {
-      coldReady: false,
       hotReady: false
-    };
-  }else if( readOnly ) {
-    FlowRouter.go('/');
-    return {
-      coldReady: coldSub.ready(), 
-      hotReady: hotSub.ready(),
     };
   }else{
     return {
-      coldReady: coldSub.ready(),
       hotReady: hotSub.ready(),
       orb: orb,
-      anchor: Session.get( 'nowWanchor' ),
       user: user,
       org: org,
       users: Meteor.users.find( {}, { sort: { username: 1 } } ).fetch(),
