@@ -35,6 +35,7 @@ main {
   text-align: center;
   align-content: center;
   z-index: 100;
+  pointer-events: none;
 }
 
 .forceScroll { overflow-y: auto !important; }

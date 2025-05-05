@@ -30,6 +30,8 @@ const TerminalData = ({
       user={user}
       users={activeUsers}
       app={app}
+      hotReady={hotReady}
+      hotxBatch={hotxBatch}
     >
      {/* 
     <TerminalFindOps
@@ -50,29 +52,17 @@ const TerminalData = ({
     */}
     <Fragment>
     
-    <div className='kioskBatch'>
-      <div>Scan Data</div>
-    </div>
-    
-    <div className='kioskTask'>
-      <div><button>Start Scan</button></div>
-      <div><button>Stop Scan</button></div>
-      <div>Scan Result = {orb || ____}</div>
-      <div>Scan Action</div>
-      
-      <div>Availible Actions</div>
-      <div>Time Start/Stop</div>
-    </div>
-    
     <div className='kioskItem'>
-      <div>Scan Data</div>
+      <div>
+        <div>Scan Result = {orb || '____'}</div>
+      </div>
     </div>
     
     <div className='kioskProd'>
-      <div>connected data</div>
+      <div>Time Start/Stop status</div>
     </div>
-    <div className='kioskProb'></div>
-    <div className='kioskStat'></div>
+    <div className='kioskProb'><div>Problems blockers warnings</div></div>
+    <div className='kioskStat'><div>Item Status</div></div>
     
     </Fragment>
     </TerminalWrap>

@@ -777,8 +777,6 @@ input[type='radio'].interInput {
   border-color: var(--neptuneColor);
   border-right-color: transparent;
   letter-spacing: 1px;
-  -webkit-appearance: none;
-  -moz-appearance: none;
 }
 .defaultAcc #pnFind:focus-visible {
   border-color: var(--neptuneColor);

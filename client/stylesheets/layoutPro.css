@@ -170,8 +170,6 @@
   font-size: calc(var(--vert_border) * 4.25);
 	color: white;
 	background-color: transparent;
-  -webkit-appearance: none;
-  -moz-appearance: none;
 }
 
 @media screen and (max-width: 885px){

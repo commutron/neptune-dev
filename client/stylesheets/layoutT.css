@@ -27,52 +27,119 @@
     "kioskProd kioskProb kioskStat";
 }
 
+.kioskBatch,
+.kioskItem,
+.kioskProd,
+.kioskProb,
+.kioskStat {
+  background-color: var(--dark);
+  padding: calc(var(--vert_border) * 2);
+  border: 1px solid var(--neptuneColor);
+}
 .kioskBatch {
   grid-area: kioskBatch;
-  background-color: var(--belizeHole);
 }
 .kioskTask {
   grid-area: kioskTask;
-  background-color: var(--wetasphalt);
-  box-shadow: var(--dropShadow2);
-  z-index: 2;
+  background-color: var(--blackblack);
+  display: flex;
+  place-content: center;
+  place-items: center;
 }
 .kioskItem {
   grid-area: kioskItem;
-  background-color: var(--turquoise);
 }
 .kioskProd {
   grid-area: kioskProd;
-  background-color: var(--peterriver);
 }
 .kioskProb {
   grid-area: kioskProb;
-  background-color: var(--pomegranate);
 }
 .kioskStat {
   grid-area: kioskStat;
-  background-color: var(--silver);
 }
 
-/*.proPrime {*/
-/*  grid-area: proPrime;*/
-/*  overflow-y: auto;*/
-/*  overflow-x: hidden;*/
-/*  background-color: rgb(35,35,35);*/
-/*  transition: all 150ms ease-in-out;*/
-/*  display: inline-grid;*/
-/*  grid-template-columns: repeat(auto-fit, minmax(13vmax, 1fr));*/
-/*  grid-template-rows: auto;*/
-/*  align-items: stretch;*/
-/*  justify-content: flex-start;*/
-
-/*  min-width: 13vmax;*/
-/*  width: 100%;*/
-/*  max-width: 14vmax;*/
-/*}*/
+.kioskFlash {
+  grid-area: kioskBatch / kioskBatch / kioskStat / kioskStat;
+  z-index: 10;
+  pointer-events: none;
+  display: grid;
+  place-content: center;
+  font-size: 100dvh;
+  color: var(--dark);
+  background-color: var(--kflash_dark);
+  background-image: repeating-linear-gradient(
+    -45deg,
+    var(--kflash_light),
+    var(--kflash_light) 2px,
+    transparent 5px,
+    transparent 5px
+   ),
+    repeating-linear-gradient(
+    45deg,
+    var(--kflash_light),
+    var(--kflash_light) 2px,
+    transparent 2px,
+    transparent 3px
+   );
+}
+.kioskFlash.good {
+  --kflash_light: var(--emerald);
+  --kflash_dark: var(--greenSea);
+}
+.kioskFlash.bad {
+  --kflash_light: var(--alizarin);
+  --kflash_dark: var(--pomegranate);
+}
 
 .kioskFrame .followTask i {
   font-size: calc(var(--vert_border) * 2.25);
+}
+#kioskSelect {
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  font-size: calc(var(--vert_adapt) - 25%);
+  border: none;
+  padding: 0;
+  line-height: 1.1;
+  background-color: rgb(25, 25, 25);
+  cursor: pointer;
+  color-scheme: dark;
+}
+#kioskSelect:focus-visible {
+  outline-color: var(--neptuneColor);
+  outline-offset: -1px;
+}
+#kioskSelect > option {
+  font-size: calc(var(--vert_adapt) - 50%);
+}
+#kioskSelect > option:enabled:not(:first-child) {
+  color: white;
+}
+
+.kioskTask .fillstatic {
+  height: 100%;
+  width: 100%;
+  color: var(--black);
+}
+.kioskListen {
+  height: 100%;
+  min-height: min-content;
+  width: 100%;
+  padding: 5%;
+  min-width: min-content;
+  display: inline-grid;
+  place-items: center;
+  background-color: transparent;
+  overflow: clip;
+}
+.kioskListen > :first-child {
+  font-size: calc(var(--vert_adapt) * 7);
+  line-height: 1;
+}
+.kioskListen > :last-child {
+  font-size: calc(var(--vert_adapt));
 }
 /*.miniHistory {*/
 /*  margin: 1vh 0;*/

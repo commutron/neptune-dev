@@ -201,6 +201,15 @@ Meteor.methods({
     return results;
   },
   
+  kallInfo(orb) {
+    console.log(orb);
+    if(typeof orb === 'string' && orb.length === 10 ) {
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
   firstVerifyLookup(orb) {
     this.unblock();
     const itemsSeries = XSeriesDB.find({
