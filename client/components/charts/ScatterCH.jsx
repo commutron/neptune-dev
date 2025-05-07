@@ -24,9 +24,9 @@ ChartJS.register(
   Legend
 );
 
-const ScatterCH = ({ strdata, title, fillColor, intgr })=> {
+const ScatterCH = ({ strdata, multidata, title, fillColor, intgr })=> {
   
-  const [ data, dataSet ] = useState({labels:[], datasets:[]});
+  const [ data, dataSet ] = useState({datasets:[]});
   
   const options = {
     responsive: true,
@@ -55,17 +55,33 @@ const ScatterCH = ({ strdata, title, fillColor, intgr })=> {
   };
 
   useEffect( ()=> {
-    dataSet({
-      datasets: [{ 
-        label: title || 'set1',
-        data: strdata || [],
-        backgroundColor: fillColor || 'rgb(127, 140, 141, 0.2)',
-        fill: true,
-        borderWidth: 5,
-        pointRadius: 5
-      }]
-    });
-  }, [strdata]);
+    dataSet({datasets:[]});
+    if(multidata) {
+      dataSet({
+        datasets: multidata.map( (d)=>{ 
+          return {
+            label: d.data_name,
+            data: d.data_array,
+            backgroundColor: d.data_color,
+            fill: true,
+            borderWidth: 5,
+            pointRadius: 5
+          };
+        })
+      });
+    }else{
+      dataSet({
+        datasets: [{ 
+          label: title || 'set1',
+          data: strdata || [],
+          backgroundColor: fillColor || 'rgb(127, 140, 141, 0.2)',
+          fill: true,
+          borderWidth: 5,
+          pointRadius: 5
+        }]
+      });
+    }
+  }, [strdata, multidata]);
     
   return(
     <div>

@@ -47,8 +47,7 @@ const ProbScatter = ({ fetchFunc, fillfade, title, brancheS, app })=> {
                 x: d.x.toISOString(), y: showRate ? d.r[brFtr] : d.y[brFtr]
         }});
     cvrtDataSet(cnvrt);
-  }, [tickXY, showRate, showZero]);
-  
+  }, [tickXY, showRate, showZero, brFtr]);
   
   return(
     <div className='chartNoHeightContain'>

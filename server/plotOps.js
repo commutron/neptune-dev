@@ -89,7 +89,8 @@ export function plotNonCons(batches, branches) {
       z: `${batch.batch} = `
     });
   }
-  return ncnset;
+  const ncnsetS = ncnset.sort((a,b)=> a.x > b.x ? 1 : a.x < b.x ? -1 : 0);
+  return ncnsetS;
 }
 
 export function plotShorts(batches, branches) {
@@ -118,7 +119,8 @@ export function plotShorts(batches, branches) {
       z: `${batch.batch} = `,
     });
   }
-  return shtset;
+  const shtsetS = shtset.sort((a,b)=> a.x > b.x ? 1 : a.x < b.x ? -1 : 0);
+  return shtsetS;
 }
 
 export function plotTest(batches) {
