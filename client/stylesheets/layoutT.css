@@ -20,7 +20,7 @@
   grid-area: kioskContent;
   height: 100%;
   display: grid;
-  grid-template-rows: 2fr 1fr;
+  grid-template-rows: calc((var(--vert_main) - var(--vert_border)) * 0.6) auto;
   grid-template-columns: 1fr 3fr 1fr;
   grid-template-areas: 
     "kioskBatch kioskTask kioskItem"
@@ -33,8 +33,12 @@
 .kioskProb,
 .kioskStat {
   background-color: var(--dark);
-  padding: calc(var(--vert_border) * 2);
   border: 1px solid var(--neptuneColor);
+}
+.kioskProd,
+.kioskProb,
+.kioskStat {
+  padding: calc(var(--vert_border) * 2);
 }
 .kioskBatch {
   grid-area: kioskBatch;
@@ -62,11 +66,10 @@
 .kioskFlash {
   grid-area: kioskBatch / kioskBatch / kioskStat / kioskStat;
   z-index: 10;
-  pointer-events: none;
   display: grid;
   place-content: center;
-  font-size: 100dvh;
-  color: var(--dark);
+  place-items: center;
+  color: var(--blackfrost);
   background-color: var(--kflash_dark);
   background-image: repeating-linear-gradient(
     -45deg,
@@ -83,13 +86,31 @@
     transparent 3px
    );
 }
+.kioskFlash > n-faW,
+.kioskFlash > n-faA,
+.kioskFlash > n-faX {
+  font-size: calc(var(--vert_main) - var(--vert_border));
+  display: flex;
+}
+.kioskFlash.wait {
+  --kflash_light: var(--blackFade);
+  --kflash_dark: var(--blackfrost);
+  filter: blur(50px);
+  animation: fadeSlow ease 2s;
+  /*transition: all ease 2s;*/
+}
 .kioskFlash.good {
-  --kflash_light: var(--emerald);
+  --kflash_light: var(--emeraldfrost);
   --kflash_dark: var(--greenSea);
 }
 .kioskFlash.bad {
-  --kflash_light: var(--alizarin);
+  --kflash_light: var(--alizarinfrost);
   --kflash_dark: var(--pomegranate);
+}
+.kioskFlash.clear {
+  --kflash_light: transparent;
+  --kflash_dark: transparent;
+  pointer-events: none;
 }
 
 .kioskFrame .followTask i {
@@ -119,33 +140,30 @@
 }
 
 .kioskTask .fillstatic {
-  height: 100%;
-  width: 100%;
   color: var(--black);
 }
 .kioskListen {
   height: 100%;
-  min-height: min-content;
   width: 100%;
-  padding: 5%;
   min-width: min-content;
   display: inline-grid;
-  place-items: center;
+  place-content: center;
   background-color: transparent;
   overflow: clip;
 }
+.fillstatic,
 .kioskListen > :first-child {
-  font-size: calc(var(--vert_adapt) * 7);
+  font-size: calc((var(--vert_main) - var(--vert_border)) * 0.4);
   line-height: 1;
 }
 .kioskListen > :last-child {
-  font-size: calc(var(--vert_adapt));
+  font-size: 7vmin;
 }
-/*.miniHistory {*/
-/*  margin: 1vh 0;*/
-/*  min-width: 14vmax;*/
-/*  max-width: 15vmax;*/
-/*}*/
+.kioskItem .miniHistory {
+  padding-block: 0 var(--vert_border);
+  padding-inline: var(--vert_border);
+  min-width: 100%;
+}
 
 /*.firstBadge {*/
 /*  width: 100%;*/

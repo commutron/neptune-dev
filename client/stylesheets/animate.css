@@ -4,6 +4,11 @@
   0% { opacity: 0; }
   100% { opacity: 1; }
 }
+@keyframes fadeSlow {
+  0% { opacity: 0; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
+}
 
 @keyframes fadeAway {
   0% { opacity: 1; }

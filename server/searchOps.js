@@ -202,9 +202,10 @@ Meteor.methods({
   },
   
   kallInfo(orb) {
-    console.log(orb);
-    if(typeof orb === 'string' && orb.length === 10 ) {
-      return true;
+    // console.log(orb);
+    
+    if(typeof orb === 'string' && Config.regexSN.test(orb) ) {
+      return XSeriesDB.findOne({'items.serial': orb},{fields:{'_id':1}}) ? true : false;
     }else{
       return false;
     }

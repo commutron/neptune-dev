@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import Pref from '/client/global/pref.js';
@@ -6,10 +6,6 @@ import Pref from '/client/global/pref.js';
 import { SpinWrap } from '/client/components/tinyUi/Spin';
 
 import TerminalWrap from '/client/layouts/TerminalLayout';
-
-import TerminalFindOps from './TerminalFindOps';
-
-
 
 const TerminalData = ({
   orb, user, users, app,
@@ -32,40 +28,8 @@ const TerminalData = ({
       app={app}
       hotReady={hotReady}
       hotxBatch={hotxBatch}
-    >
-     {/* 
-    <TerminalFindOps
-      orb={orb}
-      anchor={anchor}
-      user={user}
-      org={org}
-      activeUsers={activeUsers}
-      app={app}
-      allGroup={allGroup}
-      allWidget={allWidget}
-      allVariant={allVariant}
-      allxBatch={allxBatch}
-      hotxBatch={hotxBatch}
       hotxSeries={hotxSeries}
-      hotxRapids={hotxRapids}
     />
-    */}
-    <Fragment>
-    
-    <div className='kioskItem'>
-      <div>
-        <div>Scan Result = {orb || '____'}</div>
-      </div>
-    </div>
-    
-    <div className='kioskProd'>
-      <div>Time Start/Stop status</div>
-    </div>
-    <div className='kioskProb'><div>Problems blockers warnings</div></div>
-    <div className='kioskStat'><div>Item Status</div></div>
-    
-    </Fragment>
-    </TerminalWrap>
   );
 };
 

@@ -44,7 +44,6 @@ export const ExTaskBar = ({ subLink }) => (
       subON={subLink === 'reportsundefined'}
       goLink='/data/reports'
       icon='fas fa-clipboard-list'
-      iconAdj='up-1'
     />
     
     <TaskElement
@@ -74,7 +73,6 @@ export const ExTaskBar = ({ subLink }) => (
       subON={subLink === 'overviewrapidex'}
       goLink='/data/overview?request=rapidex'
       icon='fa-solid fa-bolt'
-      iconAdj='up-1'
     />
     
     <TaskElement
@@ -82,7 +80,6 @@ export const ExTaskBar = ({ subLink }) => (
       subON={subLink === 'overviewtestfail'}
       goLink='/data/overview?request=testfail'
       icon='fas fa-microchip'
-      iconAdj='up-1'
     />
     
     <TaskElement
@@ -90,7 +87,6 @@ export const ExTaskBar = ({ subLink }) => (
       subON={subLink === 'overviewscraps'}
       goLink='/data/overview?request=scraps'
       icon='fas fa-trash-alt'
-      iconAdj='up-1'
     />
     
   </div>
@@ -122,7 +118,6 @@ export const UpTaskBar = ({ subLink, showParts, isAuth }) => (
       subON={subLink === 'shortfalls'}
       goLink='/upstream/shortfalls'
       icon='fas fa-exclamation'
-      iconAdj='up-1'
     />
     
     <TaskElement
@@ -130,7 +125,6 @@ export const UpTaskBar = ({ subLink, showParts, isAuth }) => (
       subON={subLink === 'docs'}
       goLink='/upstream/docs'
       icon='fa-solid fa-file-invoice'
-      iconAdj='up-1'
     />
     
     <TaskElement
@@ -138,7 +132,6 @@ export const UpTaskBar = ({ subLink, showParts, isAuth }) => (
       subON={subLink === 'values'}
       goLink='/upstream/values'
       icon='fas fa-calculator'
-      iconAdj='up-1'
     />
     
     {isAuth || Roles.userIsInRole(Meteor.userId(), 'admin') ?
@@ -147,7 +140,6 @@ export const UpTaskBar = ({ subLink, showParts, isAuth }) => (
         subON={subLink === 'emailrec'}
         goLink='/upstream/emailrec'
         icon='fas fa-at'
-        iconAdj='up-1'
       />
     : null}
       
@@ -251,7 +243,6 @@ export const OverMenuBar = ({ brancheS, branchON, changeBranch, light }) => {
         branchON={branchON === false}
         changeBranch={changeBranch}
         icon='fa-solid fa-globe'
-        iconAdj='down-1'
         shrink={brancheS.length >= 14}
       />
       

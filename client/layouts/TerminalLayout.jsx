@@ -4,7 +4,6 @@ import { Meteor } from 'meteor/meteor';
 import { ScanListenLiteUtility, ScanListenLiteOff } from '/client/utility/ScanListener.js';
 
 import HomeIcon from './HomeIcon';
-// import FindBox from './FindBox';
 
 // import TideControl from '/client/components/tide/TideControl/TideControl';
 import TideFollow from '/client/components/tide/TideFollow';
@@ -12,6 +11,8 @@ import TideFollow from '/client/components/tide/TideFollow';
 
 // import EquipMenu from '/client/views/production/lists/EquipMenu';
 // import TimeStop from '/client/components/tide/TimeStop';
+import MiniHistory from '/client/components/riverX/MiniHistory';
+
 
 function testWithPaste(event) {
   event.preventDefault();
@@ -23,9 +24,10 @@ function testWithPaste(event) {
 
 const TerminalWrap = ({ 
   orb, user, users, app, 
-  hotReady, hotxBatch,
-  children
+  hotReady, hotxBatch, hotxSeries,
 })=> {
+  
+  const [ gem, gemSet ] = useState(false);
   
   const [ kactionState, kactionSet ] = useState(false);
   const [ klisten, klistenSet ] = useState(false);
@@ -33,6 +35,9 @@ const TerminalWrap = ({
   const [ konfirm, konfirmSet ] = useState(undefined);
   
   const [ ncTypesComboFlat, ncTypesComboSet ] = useState([]);
+  const [ kitem, kitemSet ] = useState(false);
+  const [ kinc, kincSet ] = useState(false);
+  const [ kish, kishSet ] = useState(false);
   
   useEffect( ()=> {
     ScanListenLiteUtility();
@@ -44,16 +49,18 @@ const TerminalWrap = ({
   
   const kflash = (state)=> {
     konfirmSet(state);
-    Meteor.setTimeout(()=>konfirmSet(undefined),!state ? 7500 : 750);
+    Meteor.setTimeout(()=>konfirmSet(undefined),!state ? 5000 : 1000);
   };
   
   useEffect( ()=> {
     if(klisten && kactionState === 'info') {
+      konfirmSet(0);
       Meteor.apply('kallInfo', 
         [ orb ],
         {wait: true},
         (error, re)=> {
           error && console.error(error);
+          gemSet(re ? orb : false);
           kondeckSet(re);
           kflash(re);
         } 
@@ -62,13 +69,30 @@ const TerminalWrap = ({
   }, [orb]);
   
   useEffect( ()=> {
+    if(kondeckState && hotxSeries) {
+      const item = hotxSeries.items.find(x => x.serial === gem);
+      kitemSet( item || false );
+      const iNC = hotxSeries.nonCon.filter(x => x.serial === gem);
+      kincSet( iNC || false );
+      const iSH = hotxSeries.shortfall.filter(x => x.serial === gem);
+      kishSet( iSH || false );
+    }else{
+      kitemSet(false);
+      kincSet(false);
+      kishSet(false);
+    }
+  }, [kondeckState, hotxSeries, gem]);
+  
+  useEffect( ()=> {
     console.log({kactionState});
     
     console.log({kondeckState});
     
     console.log({hotxBatch});
     
-  }, [kactionState, kondeckState, hotxBatch]);
+    console.log({hotxSeries});
+    
+  }, [kactionState, kondeckState, hotxBatch, hotxSeries]);
   
   const startListen = ()=> {
     klistenSet(true);
@@ -101,7 +125,7 @@ const TerminalWrap = ({
             className={!kactionState ? 'grayT' : ''}
             disabled={klisten}>
             <option value='' className='grayT'>Select Terminal Action</option>
-            <option value='info'>Info</option>
+            <option value='info'>Info (Scan Tester)</option>
             <option value='serial' disabled={true}>Initiate Serial</option>
             <option value='checkpoint' disabled={true}>Checkpoint</option>
             <option value='complete' disabled={true}>Complete</option>
@@ -117,7 +141,7 @@ const TerminalWrap = ({
         
         <div className='kioskContent forceScrollStyle darkTheme'>
           
-          <div className={`kioskTask ${klisten ? 'nBg' : kactionState ? 'intrBlueSq' : ''}`}>
+          <div className={`kioskTask ${klisten ? 'nBg' : ''}`}>
             {!kactionState ?
               <n-fa0><i className="fa-solid fa-power-off fa-fw fillstatic"></i></n-fa0>
             :
@@ -140,37 +164,72 @@ const TerminalWrap = ({
             }
           </div>
           
-          
-          <div className='kioskBatch'>
-            {hotxBatch ?
-              <div>{hotxBatch.batch}</div>
+          <div className='kioskBatch forceScrollStyle forceScroll'>
+            {!kactionState || !kondeckState ? null :
+              hotxBatch ? 
+                <div className='stick darkCard spacehalf'>
+                  <h3 className='nomargin centreText'>{hotxBatch.batch}</h3>
+                </div>
               :
-              <div>no batch on deck</div>
+                <div>no batch on deck</div>
             }
           </div>
           
-          {konfirm === undefined ? null :
-           konfirm ?
-            <div className='kioskFlash good'>
-              <n-faA><i className='fas fa-check fa-fw'></i></n-faA>
-            </div>
-            :
-            <div className='kioskFlash bad'>
-              <n-faX><i className='fas fa-times fa-fw'></i></n-faX>
-            </div>
-          }
-          
-          {React.cloneElement(children,
-            { 
-              tideKey: etKey,
-              engagedPro: etPro,
-              engagedMlti: etMlt,
-              
-              ncTypesCombo: ncTypesComboFlat,
-              
-              kondeckState: kondeckState
+          <div className='kioskItem forceScrollStyle forceScroll'>
+            {!kactionState ? null :
+              <Fragment>
+                <div className='stick darkCard spacehalf'>
+                  {gem ? <h3 className='nomargin centreText'>{gem}</h3> :
+                    `Last Scan "${orb}"`
+                  }</div>
+                {kitem &&
+                  // const altIs = kitem.altPath.find( x => x.river !== false );
+                  // const altFlow = altIs && widgetData.flows.find( f => f.flowKey === altIs.river );
+                  // const altitle = altFlow && altFlow.title;
+                    <MiniHistory
+                      history={kitem.history}
+                      iAlt={kitem.altPath}
+                    /> 
+                }
+              </Fragment>
             }
-          )}
+          </div>
+          
+          <div className='kioskProb'>
+            {!kactionState ? null :
+              kinc ? 
+                <ul>{kinc.map((n, i)=><li key={i}>{n.ref}, {n.type}</li>)}</ul>
+              : null
+            }
+            {!kactionState ? null :
+              kish ? 
+                <ul>{kish.map((s, i)=><li key={i}>{s.partNum}</li>)}</ul>
+              : null
+            }
+          </div>
+          
+          <div className='kioskStat'>
+            {!kactionState ? null :
+              kitem ? kitem.completed ? "Complete" : "In Progress" : null
+            }
+          </div>
+          
+          <div className={`kioskFlash ${konfirm === undefined ? 'clear' : konfirm === 0 ? 'wait' : konfirm ? 'good' : 'bad'}`}>
+          {konfirm === undefined ? null :
+           konfirm === 0 ?
+            <n-faW><i className='fas fa-stroopwafel fa-fw fa-spin'></i></n-faW>
+            :
+            konfirm ?
+              <n-faA><i className='fas fa-check fa-fw'></i></n-faA>
+            :
+              <n-faX><i className='fas fa-times fa-fw'></i></n-faX>
+          }
+          </div>
+          
+          <div className='kioskProd'>
+            <div>Time Start/Stop Utility</div>
+          </div>
+         
         </div>
       
       </Fragment>

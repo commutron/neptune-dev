@@ -23,6 +23,7 @@ import RemoveBatch from '/client/components/forms/Batch/Child/RemoveBatch';
 
 import { PopoverButton, PopoverMenu, PopoverAction, MatchButton } from '/client/layouts/Models/Popover';
 
+import BatchOneSheet from '/client/views/paper/BatchOneSheet';
 import BatchExport from '/client/views/paper/BatchExport';
 
 const BatchPanelX = ({ 
@@ -271,7 +272,7 @@ const BatchPanelX = ({
         <MatchButton 
           title='Print Label'
           text='Print Label' 
-          icon='fa-solid fa-print'
+          icon='fa-solid fa-pager'
           doFunc={()=>FlowRouter.go('/print/generallabel/' + 
                     batchData.batch + 
                     '?group=' + groupData.alias +
@@ -281,6 +282,17 @@ const BatchPanelX = ({
                     '&desc=' + widgetData.describe +
                     '&sales=' + (batchData.salesOrder || '') +
                     '&quant=' + batchData.quantity)}
+        />
+        
+        <BatchOneSheet
+          group={groupData.alias}
+          widget={widgetData.widget}
+          desc={widgetData.describe}
+          variantData={variantData}
+          batchData={batchData}
+          riverTitle={flowData.riverTitle}
+          rootURL={app.instruct}
+          extraClass='popbutton'
         />
         
         <BatchExport
