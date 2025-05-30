@@ -210,29 +210,36 @@ function collectProgress(privateKey, batchID) {
         let counter = 0;
         let maxCount = 0;
         
-        const falls = bx.waterfall.filter( x => x.branchKey === branch.brKey );
+        let flowlength = 0;
+        let falllength = 0;
         
-        for(let fll of falls) {
-          const wfCount = countWaterfall(fll.counts);
-          counter = counter + wfCount;
-          const fllMax = fll.action === 'slider' ? 100 : totalTotal;
-          maxCount = maxCount + fllMax;
+        for(let fll of bx.waterfall) {
+          if(fll.branchKey === branch.brKey) {
+            falllength += 1;
+            const wfCount = countWaterfall(fll.counts);
+            counter = counter + wfCount;
+            const fllMax = fll.action === 'slider' ? 100 : totalTotal;
+            maxCount = maxCount + fllMax;
+          }
         }
         
-        const firsts = riverFlow.filter( x => x.branchKey === branch.brKey && x.type === 'first' );
-        
-        for(let frt of firsts) {
-          const didFirst = items.findIndex(x=> x.history.findIndex(y=> y.key === frt.key) >= 0) >= 0;
-          didFirst ? counter = counter + 1 : null;
-          maxCount = maxCount + 1;
-        }
-        
-        const steps = riverFlow.filter( x => x.branchKey === branch.brKey && x.type !== 'first' );
-        
-        for(let stp of steps) {
-          const wipTally = historyFlat.filter( x => x.key === stp.key ).length;
-          counter = counter + ( doneItems + wipTally );
-          maxCount = maxCount + totalItems;
+        for(let rv of riverFlow) {
+          if(rv.branchKey !== branch.brKey) {
+            continue;
+          }else if(rv.type === 'first') {
+            
+            flowlength += 1;
+            const didFirst = items.findIndex(x=> x.history.findIndex(y=> y.key === rv.key) >= 0) >= 0;
+            didFirst ? counter = counter + 1 : null;
+            maxCount = maxCount + 1;
+            
+          }else if(rv.type !== 'first') {
+            
+            flowlength += 1;
+            const wipTally = historyFlat.filter( x => x.key === rv.key ).length;
+            counter = counter + ( doneItems + wipTally );
+            maxCount = maxCount + totalItems;
+          }
         }
         
         const calPer = ( counter / maxCount ) * 100;
@@ -247,7 +254,7 @@ function collectProgress(privateKey, batchID) {
                         
         branchProg.push({
           branch: branch.branch,
-          steps: falls.length + firsts.length + steps.length,
+          steps: falllength + flowlength,
           calNum: calNum,
           ncLeft: nonConLeft,
           shLeft: shortLeft

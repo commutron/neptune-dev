@@ -228,17 +228,15 @@ Meteor.methods({
       
       // -- nc rate calculation filter --
       const nc = countMulti( srs ? srs.nonCon.filter( n => !n.trash && !(n.inspect && !n.fix) ) : [] );
-      const units = items.length > 0 ? items.reduce((t,i)=> t + i.units, 0) : 0;
-      const rate = asRate(nc, units);
+      const rate = asRate(nc, items.reduce((t,i)=> t + i.units, 0));
       const pb = rate < 1 ? Math.round(rate) : Math.ceil(rate*0.1);
           
-      const done = items.filter( i => i.completed );
-      const donePer = b.completed ? 100 : percentOf( items.length, done.length );
+      const doneL = items.filter( i => i.completed ).length;
+      const donePer = b.completed ? 100 : percentOf( items.length, doneL );
       
       const goalTimePer = quadRegression(donePer);
       
-      const tide = b.tide || [];
-      const totalTideMinutes = batchTideTime(tide);
+      const totalTideMinutes = batchTideTime( b.tide || [] );
       
       const mEst = getEst(b.widgetId, b.quantity, 0);
       const budget = b.quoteTimeBudget || [];

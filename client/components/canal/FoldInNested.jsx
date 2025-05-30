@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 const FoldInNested = ({ 
 	batchId, seriesId, serial, sKey, step, benchmark,
 	lockout, topClass, topTitle,
-	riverFlowStateSet, closeUndoOption, commTxtState
+	riverFlowStateSet, commTxtState
 })=> {
 	
 	const [ subState, subSet ] = useState(false);
@@ -40,7 +40,6 @@ const FoldInNested = ({
   
   function passNested(subSerial, exists, complete) {
   	riverFlowStateSet( false );
-  	closeUndoOption();
   	const comm = commTxtState;
   	
 		Meteor.call('addNestedX', seriesId, serial, 

@@ -11,69 +11,69 @@
   --txx5: 2.5rem;
   
   --neptuneColor: #007fff;
-  --turquoise: rgb(26, 188, 156);
-  --turquoisetrans: rgba(26, 188, 156, 0.5);
-  --turquoisefade: rgba(26, 188, 156, 0.2);
+  --turquoise: oklab(0.71 -0.13 0.01);
+  --turquoisetrans: oklab(0.71 -0.13 0.01 / 0.5);
+  --turquoisefade: oklab(0.71 -0.13 0.01 / 0.2);
   
-  --greenSea: rgb(22, 160, 133);
+  --greenSea: oklab(0.63 -0.12 0.01);
   
-  --emerald: rgb(46, 204, 113); /* light green */
-  --emeraldfrost: rgba(46, 204, 113, 0.8);
-  --emeraldtrans: rgba(46, 204, 113, 0.4);
+  --emerald: oklab(0.75 -0.16 0.08); /* light green */
+  --emeraldfrost: oklab(0.75 -0.16 0.08 / 0.8);
+  --emeraldtrans: oklab(0.75 -0.16 0.08 / 0.4);
   
-  --nephritis: rgb(39, 174, 96); /* dark green */
+  --nephritis: oklab(0.66 -0.14 0.07); /* dark green */
   
-  --peterriver: rgb(52, 152, 219);/* light blue */
-  --peterriverfrost: rgb(52, 152, 219, 0.8);
-  --peterriverfade: rgb(52, 152, 219, 0.5);
+  --peterriver: oklab(0.65 -0.06 -0.12);/* light blue */
+  --peterriverfrost: oklab(0.65 -0.06 -0.12 / 0.8);
+  --peterriverfade: oklab(0.65 -0.06 -0.12 / 0.5);
   
-  --belizeHole: rgb(41, 128, 185); /* dark blue */
-  --belizeHolefade: rgba(41, 128, 185, 0.2); /* dark blue fade */
+  --belizeHole: oklab(0.58 -0.06 -0.11); /* dark blue */
+  --belizeHolefade: oklab(0.58 -0.06 -0.11 / 0.2); /* dark blue fade */
   
-  --amethyst: rgb(155, 89, 182); /* light purple */
-  --amethystfade: rgba(155, 89, 182, 0.5);
+  --amethyst: oklab(0.58 0.11 -0.11); /* light purple */
+  --amethystfade: oklab(0.58 0.11 -0.11 / 0.5);
   
-  --wisteria: rgb(142, 68, 173); /* dark purple */
+  --wisteria: oklab(0.53 0.12 -0.12); /* dark purple */
   
-  --sunflower: rgb(241, 196, 15);
-  --sunflowerfade: rgba(241, 196, 15, 0.5);
+  --sunflower: oklab(0.84 -0.01 0.17);
+  --sunflowerfade: oklab(0.84 -0.01 0.17 / 0.5);
   
-  --orange: rgb(243, 156, 18);
-  --orangefrost: rgba(243, 156, 18, 0.8);
-  --orangefade: rgba(243, 156, 18, 0.1);
+  --orange: oklab(0.76 0.06 0.15);
+  --orangefrost: oklab(0.76 0.06 0.15 / 0.8);
+  --orangefade: oklab(0.76 0.06 0.15 / 0.1);
   
-  --carrot: rgb(230, 126, 34);
+  --carrot: oklab(0.7 0.09 0.13);
   
-  --pumpkin: rgb(211, 84, 0);
-  --pumpkinfrost: rgba(211, 84, 0, 0.8);
-  --pumpkinfade: rgba(211, 84, 0, 0.2);
+  --pumpkin: oklab(0.6 0.13 0.12);
+  --pumpkinfrost: oklab(0.6 0.13 0.12 / 0.8);
+  --pumpkinfade: oklab(0.6 0.13 0.12 / 0.2);
   
-  --alizarin: rgb(231, 76, 60);
-  --alizarinfrost: rgba(231, 76, 60, 0.8);
-  --alizarintrans: rgba(231, 76, 60, 0.5);
+  --alizarin: oklab(0.63 0.17 0.1);
+  --alizarinfrost: oklab(0.63 0.17 0.1 / 0.8);
+  --alizarintrans: oklab(0.63 0.17 0.1 / 0.5);
   
-  --pomegranate: rgb(192, 57, 43); /* dark red */
-  --pomegranatefrost: rgba(192, 57, 43, 0.8);
-  --pomegranatetrans: rgba(192, 57, 43, 0.5);
+  --pomegranate: oklab(0.54 0.15 0.09); /* dark red */
+  --pomegranatefrost: oklab(0.54 0.15 0.09 / 0.8);
+  --pomegranatetrans: oklab(0.54 0.15 0.09 / 0.5);
   
-  --silver: rgb(189, 195, 199); /* hsl(204deg 8.2% 76.08%); */
-  --silverfade: rgba(189, 195, 199, 0.5);
-  --silverfader: rgba(189, 195, 199, 0.2);
+  --silver: oklab(0.81 0 -0.01); /* hsl(204deg 8.2% 76.08%); */
+  --silverfade: oklab(0.81 0 -0.01 / 0.5);
+  --silverfader: oklab(0.81 0 -0.01 / 0.2);
   
-  --clouds: rgb(236, 240, 241); /*off white */
-  --cloudstrans: rgba(227,231,232, 0.5);
+  --clouds: oklab(0.95 0 0); /*off white */
+  --cloudstrans: oklab(0.95 0 0 / 0.5);
   
-  --concrete: rgb(149, 165, 166);
-  --concretefade: rgba(149, 165, 166, 0.2);
+  --concrete: oklab(0.71 -0.02 -0.01);
+  --concretefade: oklab(0.71 -0.02 -0.01 / 0.2);
   
-  --wetasphalt: rgb(52, 73, 94); /* lighter grey-blue */
-  --wetasphalttrans: rgba(52, 73, 94, 0.5);
+  --wetasphalt: oklab(0.4 -0.02 -0.04); /* lighter grey-blue */
+  --wetasphalttrans: oklab(0.4 -0.02 -0.04 / 0.5);
   
-  --midnightblue: rgb(44, 62, 80); /* darker grey-blue */
-  --midnightbluefade: rgba(44, 62, 80, 0.3); /* darker grey-blue */
+  --midnightblue: oklab(0.36 -0.01 -0.04); /* darker grey-blue */
+  --midnightbluefade: oklab(0.36 -0.01 -0.04 / 0.3); /* darker grey-blue */
   
-  --asbestos: rgb(127, 140, 141); /* gray */
-  --asbestosfade: rgb(127, 140, 141, 0.2);
+  --asbestos: oklab(0.63 -0.01 -0.01); /* gray */
+  --asbestosfade: oklab(0.63 -0.01 -0.01 / 0.2);
   
   --whiteT: white;
   --black: rgb(48,48,48);

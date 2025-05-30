@@ -59,7 +59,7 @@ class Pref {
     this.pagingSize = 25;
     this.idleMinutes = 0; // minus idle time from timeInDay calculation
     this.breakMin = 15; // fixed break minutes
-    this.noiseUpdate = 15; // over-stream update interval
+    this.noiseUpdate = 10; // over-stream update interval
     this.noiseChill = 30; // over-stream update slower interval for read-only users
     this.statisticalStartHour = 6; // 6am
     this.statisticalEndHour = 20; // 8pm

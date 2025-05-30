@@ -1,7 +1,5 @@
 import React from 'react';
 import { toast } from 'react-toastify';
-
-import StoneProgRing from './StoneProgRing';
 	
 const StoneReg = ({ 
 	batchId,
@@ -55,18 +53,7 @@ const StoneReg = ({
 	
   return(
 		<div className={topClass + ' stoneFrame noCopy'} title={topTitle}>
-    	<StoneProgRing
-				serial={barcode}
-				allItems={allItems}
-				// isAlt={isAlt}
-				// hasAlt={hasAlt}
-				sKey={sKey}
-        step={step}
-        type={type}
-        flowCounts={flowCounts}
-        workingState={workingState}
-        lockout={lockout}
-      >
+    	
       	<button
       	  className={shape}
   				name={step}
@@ -78,7 +65,6 @@ const StoneReg = ({
 					<i>{step}</i>
 					{apend}
 				</button>
-			</StoneProgRing>
 		</div>
   );
 };

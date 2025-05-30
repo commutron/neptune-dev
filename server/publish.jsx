@@ -108,7 +108,6 @@ Meteor.publish('appData', function(){
   }
 });
 
-
 Meteor.publish('debugData', function(){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
@@ -133,7 +132,6 @@ Meteor.publish('debugData', function(){
     ];
   }
 });
-
 
 // isWhat
 Meteor.publish('bNameData', function(){
@@ -405,28 +403,25 @@ Meteor.publish('thinData', function(){
     return this.ready();
   }else{
     return [
-      GroupDB.find({orgKey: orgKey}, {
+      GroupDB.find({orgKey: orgKey, hibernate: {$ne: true}}, {
         fields: {
           'group': 1,
           'alias': 1,
           'wiki' : 1
         }}),
-      
       WidgetDB.find({orgKey: orgKey}, {
         fields: {
           'widget': 1,
           'describe': 1,
           'groupId': 1,
         }}),
-        
-      VariantDB.find({orgKey: orgKey}, {
+      VariantDB.find({orgKey: orgKey, live: true}, {
         fields: {
           'groupId': 1,
           'widgetId': 1,
           'versionKey': 1,
           'variant': 1
         }}),
-          
       XBatchDB.find({orgKey: orgKey, live: true}, {
         sort: {batch:-1},
         fields: {
@@ -438,7 +433,6 @@ Meteor.publish('thinData', function(){
           'completed': 1,
           'completedAt': 1,
         }}),
-        
       EquipDB.find({orgKey: orgKey}, {
         fields: {
           'alias': 1,
@@ -505,6 +499,112 @@ Meteor.publish('hotDataPlus', function(scanOrb, keyMatch){
       VariantDB.find({widgetId: wID, orgKey: orgKey}, {
         fields: {
           'orgKey': 0
+        }})
+    ];
+  }
+});
+
+Meteor.publish('thinKiosk', function(){
+  const user = Meteor.users.findOne({_id: this.userId});
+  const orgKey = user ? user.orgKey : false;
+  if(!this.userId){
+    return this.ready();
+  }else{
+    return [
+      TraceDB.find({
+        orgKey: orgKey, 
+        live: true,
+        completed:{$ne: true},
+        serialize: true
+      }, {
+        fields: {
+          'batch': 1,
+          'batchID': 1,
+          // 'tags': 1,
+          'salesOrder': 1,
+          'isWhat': 1,
+          'describe': 1,
+          'rad': 1,
+          'quantity': 1,
+          'hold': 1,
+          'onFloor': 1,
+          // 'docStatus': 1
+        }
+      })
+    ];
+  }
+});
+
+Meteor.publish('hotDataKiosk', function(subSerial, subBatch){
+  const user = Meteor.users.findOne({_id: this.userId});
+  const valid = user ? true : false;
+  const orgKey = valid ? user.orgKey : false;
+
+  const trueBatch = subBatch || Meteor.call( 'serialLookup', subSerial );
+
+  const bxData = XBatchDB.findOne({batch: trueBatch, orgKey: orgKey});
+  
+  const wID = !bxData ? false : bxData.widgetId;
+  const vID = !bxData ? false : bxData.versionKey;
+  const gID = !bxData ? false : bxData.groupId;
+  
+  if(!this.userId){
+    return this.ready();
+  }else{
+    return [
+      XBatchDB.find({batch: trueBatch, orgKey: orgKey}, {
+        fields: {
+          'batch': 1,
+    			'groupId': 1,
+  			  'widgetId': 1,
+  			  'versionKey': 1,
+          // tags: [],
+          'live': 1,
+  			  'hold': 1,
+  			  'salesOrder': 1,
+  			  'salesStart': 1,
+  			  'salesEnd': 1,
+          'completed': 1,
+    			'completedAt': 1,
+    		// 	'completedWho': 1,
+    			'quantity': 1,
+    		// 	'serialize': 1,
+    			'river': 1,
+    		  // 'waterfall': 1,
+    		  // 'blocks': [],
+          // 'releases': [],
+          // 'events': []'
+        }}),
+      XSeriesDB.find({batch: trueBatch, orgKey: orgKey}, {
+        fields: {
+          'orgKey': 0
+        }}),
+      XRapidsDB.find({extendBatch: trueBatch, orgKey: orgKey}, {
+        fields: {
+          'orgKey': 0,
+          'createdAt': 0,
+          'createdWho': 0,
+          'closedWho': 0
+        }}),
+      VariantDB.find({versionKey: vID}, {
+        fields: {
+          'groupId': 1,
+          'widgetId': 1,
+          'versionKey': 1,
+          'variant': 1
+          // 'radioactive': 1
+        }}),
+      WidgetDB.find({_id: wID}, {
+        fields: {
+          'widget': 1,
+          'describe': 1,
+          'groupId': 1,
+          'flows': 1
+        }}),
+      GroupDB.find({_id: gID}, {
+        fields: {
+          'alias': 1,
+          'internal': 1
         }})
     ];
   }

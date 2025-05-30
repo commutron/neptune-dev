@@ -1,20 +1,16 @@
 import React from 'react';
 import { toast } from 'react-toastify';
-import StoneProgRing from './StoneProgRing.jsx';
 
 const StoneFinish = ({ 
 	batchId,
 	seriesId, serial, sKey, step, type, 
 	rapIs, rarapid,
-	flowCounts, benchmark,
+	benchmark,
 	lockout, 
 	topClass, topTitle,
 	
-	allItems,
-	
 	enactEntry,
 	resolveEntry,
-	workingState,
 	commTxtState
 })=> { 
 	
@@ -53,16 +49,7 @@ const StoneFinish = ({
     
   return(
 		<div className={topClass + ' stoneFrame noCopy'} title={topTitle}>
-    	<StoneProgRing
-				serial={serial}
-				allItems={allItems}
-				sKey={sKey}
-        step={step}
-        type={type}
-        flowCounts={flowCounts}
-        workingState={workingState}
-        lockout={lockout}
-      >
+    
       	<button
       	  className='stone iFinish'
       	  name={rapIs ? `${step} Extension` : step }
@@ -73,7 +60,6 @@ const StoneFinish = ({
 					<i>{rapIs && rarapid ? `${step} ${rarapid}` : step }</i>
 					{type !== step && <label>{type}</label>}
 				</button>
-			</StoneProgRing>
 		</div>
   );
 };

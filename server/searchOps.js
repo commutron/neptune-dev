@@ -201,16 +201,6 @@ Meteor.methods({
     return results;
   },
   
-  kallInfo(orb) {
-    // console.log(orb);
-    
-    if(typeof orb === 'string' && Config.regexSN.test(orb) ) {
-      return XSeriesDB.findOne({'items.serial': orb},{fields:{'_id':1}}) ? true : false;
-    }else{
-      return false;
-    }
-  },
-  
   firstVerifyLookup(orb) {
     this.unblock();
     const itemsSeries = XSeriesDB.find({
@@ -603,5 +593,4 @@ Meteor.methods({
     return cleanData;
   }
 
-  
 });

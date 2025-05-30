@@ -3,12 +3,11 @@ import { avgOfArray } from '/client/utility/Convert';
 import { countWaterfall } from '/client/utility/Arrays';
   
 function flowLoop(river, items, firstsFlat, wndw) {
-  const byKey = (t, ky)=> { return ( k => k.key === ky && k.good === true )};
-  const byNew = (t, ky)=> { return ( k => k.key === ky && wndw(k.time) && k.good === true )};
+  const findKey = (t, history, ky)=> {
+    const i = history.findIndex( h => h.key === ky && h.good === true );
+    return i === -1 ? false : wndw(history[i].time) ? 'FRESH' : true;
+  };
   
-  const doneItems = items.filter( x => x.completed );
-  const wipItems = items.filter( x => !x.completed && x.history.length > 0 );
-      
   let stepsData = [];
   for( let [index, step] of river.entries()) {
     
@@ -35,22 +34,25 @@ function flowLoop(river, items, firstsFlat, wndw) {
       let itemPassd = 0;
       let unitPassd = 0;
       
-      for(var dix = doneItems.length-1; dix>=0; dix--){
-        const di = doneItems[dix];
+      for(var ix = items.length-1; ix>=0; ix--){
+        const item = items[ix];
         
-        di.history.find( byKey(this, step.key) ) ? 
-                          (itemCount += 1, unitCount += di.units ) : 
-                          (itemPassd += 1, unitPassd += di.units );
+        if(item.completed) {
+          
+          const dchk = findKey(this, item.history, step.key);
+          dchk ? (itemCount += 1, unitCount += item.units ) : 
+                 (itemPassd += 1, unitPassd += item.units );
+          dchk === "FRESH" && (itemCountNew += 1, unitCountNew += item.units);
+          
+        }else if(item.history.length > 0) {
+          
+          const wchk = findKey(this, item.history, step.key);
+          wchk && (itemCount += 1, unitCount += item.units );
+          wchk === "FRESH" && (itemCountNew += 1, unitCountNew += item.units);
         
-        di.history.find( byNew(this, step.key) ) ? (itemCountNew += 1, unitCountNew += di.units ) : null;
-      }
-      
-      for(var wix = wipItems.length-1; wix>=0; wix--){
-        const wi = wipItems[wix];
-        
-        wi.history.find( byKey(this, step.key) ) ? (itemCount += 1, unitCount += wi.units ) : null;
-        
-        wi.history.find( byNew(this, step.key) ) ? (itemCountNew += 1, unitCountNew += wi.units ) : null;
+        }else{
+          continue;
+        }
       }
     
       stepsData.push({
@@ -73,8 +75,7 @@ function flowLoop(river, items, firstsFlat, wndw) {
 }
 
 function unitTotalCount(items) {
-  const count = items.length > 0 ? items.reduce((t,i)=> t + i.units, 0) : 0;
-  return count;
+  return items.reduce((t,i)=> t + i.units, 0);
 }
 
 function outScrap(items) { 
@@ -82,14 +83,11 @@ function outScrap(items) {
 }
 
 function getFirsts(items) { 
-  const firsts = Array.from( items, 
-                  x => x.history.filter( y => y.type === 'first') );
-  const fFlat = [].concat(...firsts);
-  return fFlat;
+  return [].concat(...Array.from( items, x => x.history.filter( y => y.type === 'first') ) );
 }
     
 function FlowCounter(flow, seriesData) {
-  const srsItems = seriesData && Array.isArray(seriesData.items) ? seriesData.items : [];
+  const srsItems = seriesData?.items || [];
   
   const now = new Date().toDateString();
   const wndw = (t)=> new Date(t).toDateString() === now;

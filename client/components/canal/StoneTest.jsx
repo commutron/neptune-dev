@@ -1,6 +1,5 @@
 import React, { Fragment, useState } from 'react';
 import { toast } from 'react-toastify';
-import StoneProgRing from './StoneProgRing.jsx';
 
 const StoneTest = ({ 
 	batchId,
@@ -61,16 +60,7 @@ const StoneTest = ({
   return(
    	<Fragment>
   		<div className={topClass + ' stoneFrame noCopy'} title={topTitle}>
-      	<StoneProgRing
-  				serial={barcode}
-  				allItems={allItems}
-  				sKey={sKey}
-          step={step}
-          type={type}
-          flowCounts={flowCounts}
-          workingState={workingState}
-          lockout={lockout}
-        >
+      	
 					<div className='centre'>
 						<button
 		      	  className='crackedTop iTest'
@@ -91,7 +81,7 @@ const StoneTest = ({
 		  				<label>Fail<br />{step}</label>
 						</button>
 					</div>
-				</StoneProgRing>
+			
 			</div>
 			
 			{failing &&

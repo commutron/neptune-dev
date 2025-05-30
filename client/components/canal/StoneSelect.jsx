@@ -5,33 +5,23 @@ import StoneControl from './StoneControl';
 import TestFails from './TestFails';
 import NCTributary from './NCTributary';
 import Shortfalls from './Shortfalls';
-import CompleteRest from './CompleteRest';
 
 const StoneSelect = ({ 
   bID, 
-  bComplete,
   flow,
   rapIs, rarapid,
   seriesId,
   item,
   allItems,
-  altIs, altitle, wFlowOps, wFlowNow,
+  altIs, altitle,
   nonCons,
   shortfalls,
-  scrapCheck,
   
   brancheS,
-  canVerify, users,
+  canVerify,
   flowCounts,
-  app,
-  
-  showVerifyState,
-  optionVerify,
+
   handleVerify,
-  
-  undoOption,
-  openUndoOption,
-  closeUndoOption,
   
   timeOutCntrl, riverFlowStateSet
 })=> {
@@ -40,16 +30,13 @@ const StoneSelect = ({
  
   useEffect(() => {
     return () => { 
-      closeUndoOption();
       mounted.current = false;
     };
   }, []);
   
-  const [ commDoState, commDoSet ] = useState(false);
   const [ commTxtState, commTxtSet ] = useState("");
   
-  const commTrigger = (flip)=> {
-    commDoSet(flip);
+  const commTrigger = ()=> {
     commTxtSet("");
   };
   
@@ -57,26 +44,7 @@ const StoneSelect = ({
     Session.set('ncWhere', null);
 	  Session.set('nowStepKey', null);
     Session.set('nowWanchor', null);
-		if(mounted.current) { closeUndoOption() }
 	}, [ item.serial ]);
-	
-  // Complete or Scrap
-  if((item.completed && !rapIs) || scrapCheck) {
-    Session.set('ncWhere', 'isC0mpl3t3d');
-	  Session.set('nowStepKey', 'c0mp13t3');
-    Session.set('nowWanchor', '');
-    return(
-      <CompleteRest
-        seriesId={seriesId}
-        serial={item.serial}
-        iComplete={item.completedAt}
-        history={item.history}
-        altitle={altitle}
-        scrap={scrapCheck}
-        bComplete={bComplete}
-        shortfallS={shortfalls} />
-    );
-  }
   
   const nc = nonCons.filter( 
               x => x.serial === item.serial && !x.trash && x.inspect === false )
@@ -89,11 +57,6 @@ const StoneSelect = ({
   const allAnswered = shortfalls.length === 0 ||
             shortfalls.every( x => x.inEffect === true || x.reSolve === true );
   
-  function handleStepUndo() {
-		Meteor.call('popHistoryX', seriesId, item.serial, ()=>{
-			closeUndoOption();
-		});
-	}
 	
   for(let flowStep of flow) {
     const brKey = flowStep && flowStep.branchKey;
@@ -158,29 +121,14 @@ const StoneSelect = ({
             branchObj={branchObj}
             allItems={allItems}
             canVerify={canVerify}
-            users={users}
-            app={app}
             flowCounts={flowCounts}
             blockStone={blockStone}
             doneStone={doneStone}
-            compEntry={compEntry}
-            handleVerify={handleVerify}
-            openUndoOption={openUndoOption}
-            closeUndoOption={closeUndoOption}
             timeOutCntrl={timeOutCntrl}
             riverFlowStateSet={riverFlowStateSet}
             commTrigger={(e)=>commTrigger(e)}
             commTxtState={commTxtState}
           />
-  	      
-          <div className='undoStepWrap'>
-  					{undoOption ? 
-  					  <GoBack 
-  					    handleStepUndo={(e)=>handleStepUndo(e)}
-  					    selfCancel={closeUndoOption}
-  					  />
-  					: null}
-  				</div>
   				
   				{rapIs && rarapid ?
   				  <div className='altTitle cap'>
@@ -227,19 +175,3 @@ const StoneSelect = ({
 };
   
 export default StoneSelect;
-
-const GoBack = ({ handleStepUndo, selfCancel })=> {
-  
-  useEffect( ()=>{
-    let t = Meteor.setTimeout(selfCancel, Pref.stepUndoWindow);
-    return ()=> { Meteor.clearTimeout(t) };
-  },[]);
-  
-  return(
-    <button
-			className='textAction'
-			onClick={(e)=>{e.target.disabled = true;handleStepUndo(e)}}
-			disabled={false}
-		><i className="fas fa-undo-alt spinRe gapR"></i>Go Back</button>
-  );
-};

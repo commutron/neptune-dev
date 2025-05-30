@@ -219,9 +219,9 @@ n-timeline-item:last-child n-timeline-marker:after {
 .floattaskbar {
   max-height: calc(var(--vert_adapt)*2);
   margin: 1dvmin;
-  padding: 1dvmin;
+  padding: 0 1dvmin;
   border-radius: 2px;
-  background-color: var(--contrastlight);
+  background-color: oklab(from var(--clouds) 0.93 a b);
   box-shadow: var(--dropShadow000);
   display: flex;
   align-items: center;
@@ -233,6 +233,7 @@ n-timeline-item:last-child n-timeline-marker:after {
 }
 .floattaskbar > span,
 .floattaskbar > button {
+  padding: 1dvmin 0;
   word-wrap: normal;
   word-break: keep-all;
   overflow-wrap: normal;
@@ -257,7 +258,7 @@ n-timeline-item:last-child n-timeline-marker:after {
   inset: auto;
   top: anchor(bottom);
   left: anchor(left);
-  margin-block-start: 0.8dvmin;
+  /*margin-block-start: 0.8dvmin;*/
   opacity: 0;
   overflow: hidden;
   border: 1px solid darkgray;
@@ -291,11 +292,11 @@ n-timeline-item:last-child n-timeline-marker:after {
 .popmenu,
 .popmenu > div,
 .popmenu > button {
-  background-color: var(--contrastlight);
+  background-color: oklab(from var(--clouds) 0.93 a b);
 }
 .popmenu div:hover,
 .popmenu button:hover {
-  background-color: var(--contrast);
+  background-color: oklab(from var(--clouds) 0.92 a b);
 }
 
 @position-try --bottom {

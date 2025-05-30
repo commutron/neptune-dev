@@ -16,7 +16,7 @@ import MetaSlide from './views/app/appSlides/MetaSlide';
 // import InitialSetup from './views/InitialSetup.jsx';
 
 import ProdData from './views/production/ProdData';
-import TerminalData from './views/proterminal/TerminalData';
+import KioskBaseData from './views/kiosk/KioskBaseData';
 
 import UpstreamData from './views/upstream/UpstreamData';
 import OverviewData from './views/overview/OverviewData';
@@ -190,7 +190,7 @@ privlegedRoutes.route('/process', {
   name: 'process',
   action() {
     mount(CleanLayout, {
-      content: (<TerminalData />)
+      content: (<KioskBaseData />)
     });
   }
 });
@@ -349,7 +349,7 @@ FlowRouter.globals.push({
     },
     meta1: {
       name: "theme-color",
-      content: "#007fff"
+      content: "oklab(0.61 -0.05 -0.21)"
     },
     meta2: {
       name: "mobile-web-app-capable",

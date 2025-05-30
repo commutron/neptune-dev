@@ -15,11 +15,9 @@ const StoneControl = ({
 	altIs, rapIs, rarapid,
 	branchObj,
 	allItems,
-	canVerify, users, app,
+	canVerify,
 	flowCounts,
-	blockStone, doneStone, compEntry,
-	handleVerify,
-	openUndoOption, closeUndoOption,
+	blockStone, doneStone,
 	timeOutCntrl, riverFlowStateSet,
 	commTrigger, commTxtState
 })=> {
@@ -67,13 +65,11 @@ const StoneControl = ({
 	  holdSet( true );
 	  riverFlowStateSet( false );
 	  workingSet( true );
-	  closeUndoOption();
   }
   function resolveEntry(blockUndo, repeat) {
   	commTrigger(false);
   	riverFlowStateSet( 'slow' );
 		if(mounted.current) { workingSet( false ); }
-		!blockUndo && openUndoOption();
 		repeat && unlockAllow();
 	  document.getElementById('lookup').focus();
   }
@@ -147,7 +143,6 @@ const StoneControl = ({
 			topTitle={topTitle}
       lockout={lockout}
       riverFlowStateSet={riverFlowStateSet}
-      closeUndoOption={closeUndoOption}
     	commTxtState={commTxtState}
     />;
     

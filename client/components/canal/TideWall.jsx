@@ -3,9 +3,6 @@ import React, { useState, Fragment } from 'react';
 import TideControl from '/client/components/tide/TideControl/TideControl';
 import TideSwitch from '/client/components/tide/TideControl/TideSwitch';
 import BigTideTask from '/client/components/tide/TideControl/BigTideTask';
-
-import CompleteRest from './CompleteRest.jsx';
-import MiniHistory from './MiniHistory.jsx';
   
 const TideWall = ({ 
   bID, bComplete, bOpen, rapidData,
@@ -54,25 +51,6 @@ const TideWall = ({
         
       : null }
       
-      {itemData ?
-        itemData.completed ?
-          <CompleteRest
-            seriesId={seriesData._id}
-            serial={itemData.serial}
-            iComplete={itemData.completedAt}
-            history={itemData.history}
-            iAlt={itemData.altPath}
-            altitle={altitle}
-            scrap={scrap}
-            bComplete={bComplete}
-            shortfallS={shortfallS} />
-        :
-          <MiniHistory 
-            history={itemData.history} 
-            iAlt={itemData.altPath}
-            altitle={altitle} />
-      : null
-      }
   	</span>
   );
 };

@@ -24,18 +24,18 @@
   grid-template-columns: 1fr 3fr 1fr;
   grid-template-areas: 
     "kioskBatch kioskTask kioskItem"
-    "kioskProd kioskProb kioskStat";
+    "kioskTime kioskProb kioskStat";
 }
 
 .kioskBatch,
 .kioskItem,
-.kioskProd,
+.kioskTime,
 .kioskProb,
 .kioskStat {
   background-color: var(--dark);
   border: 1px solid var(--neptuneColor);
 }
-.kioskProd,
+.kioskTime,
 .kioskProb,
 .kioskStat {
   padding: calc(var(--vert_border) * 2);
@@ -53,8 +53,8 @@
 .kioskItem {
   grid-area: kioskItem;
 }
-.kioskProd {
-  grid-area: kioskProd;
+.kioskTime {
+  grid-area: kioskTime;
 }
 .kioskProb {
   grid-area: kioskProb;
@@ -75,15 +75,15 @@
     -45deg,
     var(--kflash_light),
     var(--kflash_light) 2px,
-    transparent 5px,
-    transparent 5px
+    oklab(0 0 0 / 0) 5px,
+    oklab(0 0 0 / 0) 5px
    ),
     repeating-linear-gradient(
     45deg,
     var(--kflash_light),
     var(--kflash_light) 2px,
-    transparent 2px,
-    transparent 3px
+    oklab(0 0 0 / 0) 2px,
+    oklab(0 0 0 / 0) 3px
    );
 }
 .kioskFlash > n-faW,
@@ -139,8 +139,9 @@
   color: white;
 }
 
-.kioskTask .fillstatic {
+.fillstatic {
   color: var(--black);
+  line-height: 1;
 }
 .kioskListen {
   height: 100%;
@@ -150,11 +151,11 @@
   place-content: center;
   background-color: transparent;
   overflow: clip;
+  line-height: 1;
 }
-.fillstatic,
+.kioskTask .fillstatic,
 .kioskListen > :first-child {
   font-size: calc((var(--vert_main) - var(--vert_border)) * 0.4);
-  line-height: 1;
 }
 .kioskListen > :last-child {
   font-size: 7vmin;
@@ -163,6 +164,40 @@
   padding-block: 0 var(--vert_border);
   padding-inline: var(--vert_border);
   min-width: 100%;
+}
+.kioskTime .fillstatic,
+.kioskStat .fillstatic {
+  font-size: calc((var(--vert_main) - var(--vert_border)) * 0.2);
+}
+
+.skopegrid {
+  display: flex;
+  flex-flow: column;
+  width: 80%;
+  grid-gap: calc(var(--vert_border) * 2);
+  align-self: flex-start;
+  margin: calc(var(--vert_border) * 2) 0;
+  height: calc(100% - (var(--vert_border) * 4));
+  overflow-y: auto;
+}
+.skope {
+  font-size: var(--tx2);
+  padding: 8px 10px;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  border: 2px solid;
+  background-color: oklab(from var(--silver) 0.2 a b);
+  border-color: oklab(from var(--silver) 0.25 a b);
+}
+.skope > :first-child {
+  letter-spacing: 1px;
+}
+.skope:where(:focus-visible,:hover) {
+  background-color: oklab(from var(--silver) 0.15 a b);
+}
+.skope:active {
+  background-color: oklab(from var(--silver) 0.10 a b);
 }
 
 /*.firstBadge {*/
