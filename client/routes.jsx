@@ -186,8 +186,8 @@ privlegedRoutes.route('/production', {
   }
 });
 
-privlegedRoutes.route('/process', {
-  name: 'process',
+privlegedRoutes.route('/kiosk', {
+  name: 'kiosk',
   action() {
     mount(CleanLayout, {
       content: (<KioskBaseData />)

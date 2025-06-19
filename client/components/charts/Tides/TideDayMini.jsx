@@ -4,8 +4,7 @@ import { TimeInDay } from '/client/utility/WorkTimeCalc.js';
 import { UsersTimeTotal } from '/client/utility/WorkTimeCalc.js';
 import { round1Decimal } from '/client/utility/Convert.js';
 import Pref from '/client/global/pref.js';
-import NumStatRing from '/client/components/charts/Dash/NumStatRing.jsx';
-
+import NumStatBox from '/client/components/charts/Dash/NumStatBox';
 
 const TideDayMini = ({ tideTimes, dateTime, showUser, app, users })=> {
   
@@ -50,35 +49,30 @@ const TideDayMini = ({ tideTimes, dateTime, showUser, app, users })=> {
   }, [tideTimes]);
   
   return(
-    <div className='balance beside'>
+    <div className='rowWrapR gapminC gapsR vmargin'>
       
-      {showUser &&
-        <NumStatRing
-          total={userTotal}
-          nums={[1]}
+      {showUser && 
+        <NumStatBox
+          number={userTotal}
           name={userTotal == 1 ? 'Person' : 'People'}
           title={`how many different people`}
-          maxSize='chart10Contain'
-        />}
+          borderColour="var(--emerald)"
+        />
+      }
       
-      <NumStatRing
-        total={batchTotal.length}
-        nums={batchTotal}
+      <NumStatBox
+        number={batchTotal.length}
         name={batchTotal.length == 1 ? Pref.xBatch : Pref.xBatchs}
         title={`how many different ${Pref.xBatchs}`}
-        colour='blue'
-        maxSize='chart10Contain'
+        borderColour="var(--peterriver)"
       />
-      
-      <NumStatRing
-        total={durrTotal}
-        nums={[ durrTotal, (userHours - durrTotal) ]}
+      <NumStatBox
+        number={durrTotal}
         name='Total Hours'
         title={`total of durations in hours \nout of potential max user time: ${userHours} hours`}
-        colour='blueBi'
-        maxSize='chart10Contain'
+        borderColour="var(--peterriver)"
       />
-      
+        
     </div>
   );
 };

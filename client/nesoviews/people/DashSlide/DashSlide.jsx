@@ -1,6 +1,5 @@
 // import React, { useState, useEffect } from 'react';
 // import Pref from '/client/global/pref.js';
-// import NumStatRing from '/client/components/charts/Dash/NumStatRing';
 // import PeoplePanel from './PeoplePanel';
 
 
@@ -110,38 +109,6 @@
 //       </p>
       
 //       <div className='balance'>
-            
-//         <NumStatRing
-//           total={eUsersState.length}
-//           nums={[eUsersState.length, dUsersState.length ]}
-//           name={`${eUsersState.length == 1 ? 'Person Is' : 'People Are'} ${Pref.engaged}`} 
-//           title={`${eUsersState.length} people currently\n${Pref.engaged} with ${Pref.xBatchs}`} 
-//           colour='greenBi'
-//         />
-        
-//         <NumStatRing
-//           total={branchesXY.length}
-//           nums={branchesXY}
-//           name={`${branchesXY.length == 1 ? `${Pref.branch} Is` : `${Pref.branches} Are`} ${Pref.engaged}`} 
-//           title={`People currently ${Pref.engaged} in\n${branchesXY.length} ${Pref.branches}`} 
-//           colour='blue'
-//         />
-        
-//         <NumStatRing
-//           total={xyBatchState.length}
-//           nums={xyBatchState}
-//           name={`${xyBatchState.length == 1 ? `${Pref.xBatch} Is` : `${Pref.xBatchs} Are`} ${Pref.engaged}`}
-//           title={`${xyBatchState.length} ${Pref.xBatchs} currently\n${Pref.engaged} by people`} 
-//           colour='blue'
-//         />
-        
-//         <NumStatRing
-//           total={xyEqState.length}
-//           nums={xyEqState}
-//           name={`${Pref.equip} servicing`}
-//           title={`${xyEqState.length} ${Pref.equip} currently\nundergoing service`} 
-//           colour={[ "#2c3e50", "#34495e" ]}
-//         />
             
 //       </div>
     

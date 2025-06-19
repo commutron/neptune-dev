@@ -7,7 +7,7 @@ const QuickRecent = ({ user })=> {
   const rec = [...new Set(tpl)].filter( r => Pref.regex5.test(r));
   
   return(
-    <div className='centre pop vmargin space min200 max250 darkCard blueGlow'>
+    <div className='centre pop vmargin space min200 max250 minHeight darkCard blueGlow'>
       <p className='med wide bottomLine cap'>Recent {Pref.xBatchs}</p>
       <div className='rowWrap vmarginhalf'>
       {rec.length > 0 ?

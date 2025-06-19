@@ -9,6 +9,9 @@ const HomeIcon = () => {
 	const isReadOnly = Roles.userIsInRole(Meteor.userId(), 'readOnly');
 	const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
 	
+	const isNightly = Roles.userIsInRole(Meteor.userId(), 'nightly');
+  const isKit = Roles.userIsInRole(Meteor.userId(), 'kitting');
+  
   const warningLight = isDebug ? 'debugWarningLight' : '';
   
   const tgglePowerMenu = (e)=> {
@@ -38,7 +41,8 @@ const HomeIcon = () => {
           {isDebug ? <small>{Meteor.release}<br /></small> : null}
           <i>Status: {Meteor.status().status}</i>
           {Pref.stations &&
-            <select 
+            <select
+              id='home_station_picker'
               className='miniIn18 slimIn blackHover darkMenu whiteT' 
               onChange={(e)=>localStorage.setItem("local_station", e.target.value === false ? false : e.target.value)}
               defaultValue={station}
@@ -57,14 +61,12 @@ const HomeIcon = () => {
               icon='fa-regular fa-paper-plane'
               lock={isReadOnly}
             />
-            {/*
-              <PopoverAction 
-                doFunc={()=>FlowRouter.go('/process')}
-                text="Process"
-                icon='fa-solid fa-location-arrow'
-                lock={isReadOnly}
-              />
-            */}
+            <PopoverAction 
+              doFunc={()=>FlowRouter.go('/kiosk')}
+              text="Process"
+              icon='fa-solid fa-location-arrow'
+              lock={!(isNightly || isKit)}
+            />
             <PopoverAction 
               doFunc={()=>FlowRouter.go('/equipment')}
               text={Pref.equip}

@@ -1,11 +1,9 @@
-import React, { useState, useEffect, useLayoutEffect, Fragment } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { Meteor } from 'meteor/meteor';
 import moment from 'moment';
-
+import Pref from '/client/global/pref.js';
 // import TideControl from '/client/components/tide/TideControl/TideControl';
-// import { NonConMerge } from '/client/utility/NonConOptions';
 
-// import EquipMenu from '/client/views/production/lists/EquipMenu';
 // import TimeStop from '/client/components/tide/TimeStop';
 import MiniHistory from '/client/components/riverX/MiniHistory';
 
@@ -13,16 +11,16 @@ import MiniHistory from '/client/components/riverX/MiniHistory';
 const KioskElements = ({ 
   kactionState, klisten, bScope,
   
-  orb, user, users, app, 
+  gem, user, users, app, 
   
-  hotReady, hotxBatch, hotxSeries,
-  hotGroup, hotWidget, hotVariant
+  hotReady, hotxBatch, hotxSeries, hotVariant
+  // hotGroup, hotWidget
 })=> {
   
-  const [ gem, gemSet ] = useState(false);
+  const [ jwl, jwlSet ] = useState(false);
 
-  const [ kondeckState, kondeckSet ] = useState(false);
   const [ konfirm, konfirmSet ] = useState(undefined);
+  const [ kmsg, kmsgSet ] = useState('');
   
   const [ kitem, kitemSet ] = useState(false);
   const [ kinc, kincSet ] = useState(false);
@@ -30,118 +28,155 @@ const KioskElements = ({
   
   const kflash = (state)=> {
     konfirmSet(state);
-    Meteor.setTimeout(()=>konfirmSet(undefined),!state ? 5000 : 1000);
+    Meteor.setTimeout(()=>konfirmSet(undefined),!state ? 5000 : 500);
   };
+  
+  const errorCode = (err)=> err === 'invalid' ? ['Invalid Format', ''] : 
+                            err === 'duplicate' ? ['Serial Duplicate', 'Serial number has been already been assigned.'] : 
+                            err === 'nobatch' ? ['Batch Unavailable', `${Pref.xBatch} is complete or has an error.`] : 
+                            err === 'maxsrs' ? ['Maximum Quantity', `${Pref.series} is full. Increase ${Pref.xBatch} quantity.`] : 
+                            err === 'nomatch' ? ['Serial Not Found', ''] :
+                            ['Undefined', 'Unknown Error'];
   
   useEffect( ()=> {
     if(konfirm !== undefined) {
       Session.set('now', '');
+    }else if(!gem) {
+      jwlSet(false);
     }else if(klisten && kactionState === 'info') {
       konfirmSet(0);
       Meteor.apply('kallInfo', 
-        [ orb ],
+        [ gem ],
         {wait: true},
         (error, re)=> {
           error && console.error(error);
-          gemSet(re ? orb : false);
-          kondeckSet(re);
-          kflash(re);
+          kflash(re ? true : false);
+          kmsgSet(re ? gem : 'nomatch');
+          jwlSet(re ? gem : false);
+          !re && Session.set('now', '');
+        } 
+      );
+    }else if(klisten && kactionState === 'serial') {
+      konfirmSet(0);
+      Meteor.apply('kallNewSerial',
+        [ gem, bScope ],
+        {wait: true},
+        (error, re)=> {
+          error && console.error(error);
+          kflash(!re || !re[0] ? false : true);
+          kmsgSet(re?.[1] || null);
+          jwlSet(re?.[0] ? gem : false);
+          !re || !re[0] ? Session.set('now', '') : null;
+          
+          console.log(re);
         } 
       );
     }
-  }, [orb]);
+  }, [gem]);
   
   useEffect( ()=> {
-    if(kondeckState && hotxSeries) {
-      const item = hotxSeries.items.find(x => x.serial === gem);
+    if(hotxSeries) {
+      const item = hotxSeries.items.find(x => x.serial === jwl);
       kitemSet( item || false );
-      const iNC = hotxSeries.nonCon.filter(x => x.serial === gem);
+      const iNC = hotxSeries.nonCon.filter(x => x.serial === jwl && !x.trash);
       kincSet( iNC || false );
-      const iSH = hotxSeries.shortfall.filter(x => x.serial === gem);
+      const iSH = hotxSeries.shortfall.filter(x => x.serial === jwl);
       kishSet( iSH || false );
     }else{
       kitemSet(false);
       kincSet(false);
       kishSet(false);
     }
-  }, [kondeckState, hotxSeries, gem]);
+  }, [hotxSeries, jwl]);
   
   useEffect( ()=> {
     // console.log({kactionState});
     
-    // console.log({kondeckState});
-    
     console.log({hotxBatch});
     
     console.log({hotxSeries});
-  
-    console.log({hotGroup, hotWidget, hotVariant});
+    
+    console.log({hotVariant});
     
     // console.log({allTrace});
     
-  }, [kactionState, kondeckState, hotxBatch, hotxSeries]);
+  }, [kactionState, hotxBatch, hotxSeries]);
   
-  
-  // const eng = user?.engaged || false;
-  // const etPro = eng?.task === 'PROX';
-  // const etMlt = eng?.task === 'MLTI';
-  // 'MAINT', 'EQFX';
-  // const etKey = eng?.tKey;
-  
+  const shortate = (eff, slv)=> {
+    if(eff === null) { return 'Decide' }
+    else if(eff === true) { return 'Leave' }
+    else if(!slv) { return 'Wait' }
+    else if(slv === true) { return 'Good' }
+    else{ return 'unknown' }
+  };
                         
   return(
     <Fragment>
           
       <div className='kioskBatch forceScrollStyle forceScroll'>
         {
-          hotxBatch ? 
+          hotxBatch &&
             <div className='stick darkCard spacehalf'>
               <h3 className='nomargin centreText'>{hotxBatch.batch}</h3>
               <ul>
                 <li>{hotxBatch.live ? 'live' : 'not live'}</li>
                 <li>{hotxBatch.completed ? moment(hotxBatch.completedAt).calendar() : 'in progress'}</li>
-                <li>{hotxBatch.quantity}</li>
-                <li>{hotxBatch.river}</li>
+                <li>Batch Quanity: {hotxBatch.quantity}</li>
                 <li>{moment(hotxBatch.salesStart).calendar()}</li>
                 <li>{moment(hotxBatch.salesEnd).calendar()}</li>
               </ul>
+              
+              {hotxSeries &&
+                <b>Series Quanity: {hotxSeries.items.length}</b>
+              }
             </div>
-          :
-            <div>no batch on deck</div>
         }
       </div>
           
       <div className='kioskItem forceScrollStyle forceScroll'>
         {!kactionState ? null :
-          <Fragment>
-            <div className='stick darkCard spacehalf'>
-              {gem ? <h3 className='nomargin centreText'>{gem}</h3> :
-                `Last Scan "${orb}"`
-              }</div>
-            {kitem &&
-              // const altIs = kitem.altPath.find( x => x.river !== false );
-              // const altFlow = altIs && widgetData.flows.find( f => f.flowKey === altIs.river );
-              // const altitle = altFlow && altFlow.title;
-                <MiniHistory
-                  history={kitem.history}
-                  iAlt={kitem.altPath}
-                /> 
-            }
-          </Fragment>
+          kitem &&
+            // const altIs = kitem.altPath.find( x => x.river !== false );
+            // const altFlow = altIs && widgetData.flows.find( f => f.flowKey === altIs.river );
+            // const altitle = altFlow && altFlow.title;
+            <Fragment>
+              <div className='stick darkCard'>
+                <h3 className='nomargin centreText vspacehalf'>{kitem.serial}</h3>
+              </div>
+              <MiniHistory
+                history={kitem.history || []}
+                iAlt={kitem.altPath}
+              /> 
+            </Fragment>
         }
       </div>
           
-      <div className='kioskProb'>
+      <div className='kioskProb forceScrollStyle forceScroll'>
+        {kactionState === 'serial' &&
+          hotVariant?.radioactive &&
+            <div className='centreText medBig bold red'>NCR: {hotVariant.radioactive}</div>
+        }
+        <table className='w100 contrastList overscroll'>
+        <tbody>
         {!kactionState ? null :
           kinc ? 
-            <ul>{kinc.map((n, i)=><li key={i}>{n.ref}, {n.type}</li>)}</ul>
+            kinc.map((n, i)=><tr key={i} className='borderRed'>
+                              <td className='up'>{n.ref}</td>
+                              <td className='cap'>{n.type}</td>
+                              <td>{n.inspect ? 'Inspected' : n.fix ? 'Fixed' : ''}</td>
+                             </tr>)
           : null
         }
         {!kactionState ? null :
           kish ? 
-            <ul>{kish.map((s, i)=><li key={i}>{s.partNum}</li>)}</ul>
+            kish.map((s, i)=><tr key={i} className='borderOrange'>
+                              <td className='cap'>{s.refs.join(', ')}</td>
+                              <td className='up'>{s.partNum}</td>
+                              <td>{shortate(s.inEffect, s.reSolve)}</td>
+                             </tr>)
           : null
         }
+        </tbody></table>
       </div>
           
       <div className='kioskStat centreRow'>
@@ -159,15 +194,21 @@ const KioskElements = ({
         <n-faW><i className='las la-stroopwafel la-fw la-spin'></i></n-faW>
         :
         konfirm ?
-          <n-faA><i className='las la-check-circle la-fw'></i></n-faA>
+          <Fragment>
+            <n-faA><i className='las la-check-circle la-fw'></i></n-faA>
+            <span>{kmsg}</span>
+          </Fragment>
         :
-          <n-faX><i className='las la-times-circle la-fw'></i></n-faX>
+          <Fragment>
+            <n-faX><i className='las la-times-circle la-fw'></i></n-faX>
+            {errorCode(kmsg).map((m,i)=><span key={i}>{m}</span>)}
+          </Fragment>
       }
       </div>
       
       <div className='kioskTime centreRow'>
         <n-fa0T><i className="las la-clock la-fw fillstatic"></i></n-fa0T>
-        {/*!kactionState || !kondeckState ? 
+        {/*!kactionState ? 
           <n-fa0T><i className="las la-clock la-fw fillstatic"></i></n-fa0T>
         :
           <div>Time Start/Stop Utility</div>

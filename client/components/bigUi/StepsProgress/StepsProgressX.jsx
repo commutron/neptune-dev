@@ -33,47 +33,42 @@ const StepsProgressX  = ({
     <div>
       {!truncate &&
         <div className='centreRow rowStr'>
-          <label>
-            <NumBox
-              num={b.quantity}
-              name='Total Quantity'
-              color='blackT' />
-          </label>
+          <NumBox
+            num={b.quantity}
+            name='Total Quantity'
+            color='blackT' 
+          />
           
           {totalI !== b.quantity ?  
-            <label>
-              <NumBox
-                num={totalI}
-                name={Pref.items}
-                color='blackT' />
-            </label>
+            <NumBox
+              num={totalI}
+              name={Pref.items}
+              color='blackT' 
+            />
           :null}
           
           {totalIU > totalI ?
-            <label>
-              <NumBox
-                num={totalIU}
-                name={`${Pref.item} ${Pref.unit}s`}
-                color='blackT' />
-            </label>
+            <NumBox
+              num={totalIU}
+              name={`${Pref.item} ${Pref.unit}s`}
+              color='blackT'
+            />
           :null}
           
           {( dt?.altItems || 0 ) > 0 ?  
-            <label>
-              <NumBox
-                num={dt?.altItems || 0}
-                name={`Alt ${Pref.items}`}
-                color='tealT' />
-            </label>
+            <NumBox
+              num={dt?.altItems || 0}
+              name={`Alt ${Pref.items}`}
+              color='tealT'
+            />
           :null}
           
           {scrapCount > 0 ? 
-            <label>
-              <NumBox
-                num={scrapCount}
-                name={`${Pref.scrap} ${Pref.item}s`}
-                color='redT' />
-            </label>
+            <NumBox
+              num={scrapCount}
+              name={`${Pref.scrap} ${Pref.item}s`}
+              color='redT'
+            />
           :null}
         </div>}
       

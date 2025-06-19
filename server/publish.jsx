@@ -544,9 +544,9 @@ Meteor.publish('hotDataKiosk', function(subSerial, subBatch){
 
   const bxData = XBatchDB.findOne({batch: trueBatch, orgKey: orgKey});
   
-  const wID = !bxData ? false : bxData.widgetId;
+  // const wID = !bxData ? false : bxData.widgetId;
   const vID = !bxData ? false : bxData.versionKey;
-  const gID = !bxData ? false : bxData.groupId;
+  // const gID = !bxData ? false : bxData.groupId;
   
   if(!this.userId){
     return this.ready();
@@ -558,7 +558,7 @@ Meteor.publish('hotDataKiosk', function(subSerial, subBatch){
     			'groupId': 1,
   			  'widgetId': 1,
   			  'versionKey': 1,
-          // tags: [],
+          tags: [],
           'live': 1,
   			  'hold': 1,
   			  'salesOrder': 1,
@@ -577,35 +577,57 @@ Meteor.publish('hotDataKiosk', function(subSerial, subBatch){
         }}),
       XSeriesDB.find({batch: trueBatch, orgKey: orgKey}, {
         fields: {
-          'orgKey': 0
+    			'batch': 1,
+    	    'groupId': 1,
+    			'widgetId': 1,
+    			'versionKey': 1,
+          // 'items': 1,
+          'items.serial': 1,
+          'items.createdAt': 1,
+          'items.completed': 1,
+          'items.units': 1,
+          'items.history': 1,
+          // 'nonCon': 1,
+          'nonCon.serial': 1,
+          'nonCon.ref': 1,
+          'nonCon.type': 1,
+          'nonCon.fix': 1,
+          'nonCon.inspect': 1,
+          'nonCon.trash': 1,
+          // 'shortfall': 1,
+          'shortfall.partNum': 1,
+          'shortfall.refs': 1,
+          'shortfall.serial': 1,
+          'shortfall.inEffect': 1,
+          'shortfall.reSolve' : 1
         }}),
-      XRapidsDB.find({extendBatch: trueBatch, orgKey: orgKey}, {
-        fields: {
-          'orgKey': 0,
-          'createdAt': 0,
-          'createdWho': 0,
-          'closedWho': 0
-        }}),
+      // XRapidsDB.find({extendBatch: trueBatch, orgKey: orgKey}, {
+      //   fields: {
+      //     'orgKey': 0,
+      //     'createdAt': 0,
+      //     'createdWho': 0,
+      //     'closedWho': 0
+      //   }}),
       VariantDB.find({versionKey: vID}, {
         fields: {
           'groupId': 1,
           'widgetId': 1,
           'versionKey': 1,
-          'variant': 1
-          // 'radioactive': 1
+          'variant': 1,
+          'radioactive': 1
         }}),
-      WidgetDB.find({_id: wID}, {
-        fields: {
-          'widget': 1,
-          'describe': 1,
-          'groupId': 1,
-          'flows': 1
-        }}),
-      GroupDB.find({_id: gID}, {
-        fields: {
-          'alias': 1,
-          'internal': 1
-        }})
+      // WidgetDB.find({_id: wID}, {
+      //   fields: {
+      //     'widget': 1,
+      //     'describe': 1,
+      //     'groupId': 1,
+      //     'flows': 1
+      //   }}),
+      // GroupDB.find({_id: gID}, {
+      //   fields: {
+      //     'alias': 1,
+      //     'internal': 1
+      //   }})
     ];
   }
 });

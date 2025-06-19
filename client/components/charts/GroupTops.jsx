@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import moment from 'moment';
 import Pref from '/client/global/pref.js';
-import NumStatRing from '/client/components/charts/Dash/NumStatRing';
+import NumStatBox from '/client/components/charts/Dash/NumStatBox';
 
 const GroupTops = ({ groupId, alias })=> {
   
   const thingMounted = useRef(true);
   
-  const [ tickXY, tickXYSet ] = useState(false);
   const [ total, totalSet ] = useState(false);
   const [ avgNC, avgNCSet ] = useState(false);
   const [ avgPf, avgPfSet ] = useState(false);
@@ -18,7 +17,6 @@ const GroupTops = ({ groupId, alias })=> {
       err && console.log(err);
       if(re) {
         if(thingMounted.current) {
-          tickXYSet(re.ontime);
           totalSet(re.ontime.find(z=>z.x=='on time').y);
           avgNCSet(re.avgNC);
           avgPfSet(re.avgPf);
@@ -43,44 +41,34 @@ const GroupTops = ({ groupId, alias })=> {
   return(
     <div className='centreRow vmarginhalf' title={title}>
       
-      <NumStatRing
-        total={total !== false ? `${total}%` :
-          <n-fa0><i className='fas fa-spinner fa-spin'></i></n-fa0>}
-        nums={tickXY || []}
+      <NumStatBox
+        number={total !== false ? `${total}%` : <n-fa0><i className='fas fa-spinner fa-spin'></i></n-fa0>}
         name='On Time'
-        colour={["rgb(46, 204, 113)", "rgb(241, 196, 15)"]}
-        maxSize='chart10Shrink'
+        title=""
+        borderColour="rgb(46, 204, 113)"
       />
       
-      <NumStatRing
-        total={avgPf !== false ? avgPf :
-          <n-fa1><i className='fas fa-spinner fa-spin'></i></n-fa1>}
-        nums={[{x:1,y:1}]}
+      <NumStatBox
+        number={avgPf !== false ? avgPf : <n-fa1><i className='fas fa-spinner fa-spin'></i></n-fa1>}
         name='Performance'
-        colour={['#000']}
-        noGap={true}
-        maxSize='chart10Shrink'
+        title=""
+        borderColour="var(--amethyst)"
       />
       
-      <NumStatRing
-        total={avgNC !== false ? avgNC :
-          <n-fa2><i className='fas fa-spinner fa-spin'></i></n-fa2>}
-        nums={[{x:1,y:1}]}
+      <NumStatBox
+        number={avgNC !== false ? avgNC : <n-fa2><i className='fas fa-spinner fa-spin'></i></n-fa2>}
         name='NonCon Rate'
-        colour='redTri'
-        noGap={true}
-        maxSize='chart10Shrink'
+        title=""
+        borderColour="var(--alizarin)"
       />
       
-      <NumStatRing
-        total={trendIcon}
-        nums={[{x:1,y:1}]}
+      <NumStatBox
+        number={trendIcon}
         name='Trending'
         title={`Metrics are trending ${trend || 'flat'}.\nTrend is a messure of the 3 other stats.`}
-        colour={
-          !trend || trend == 'flat' ? ['#000'] : 
-          trend == 'down' ? 'redTri' : 'greenBi'}
-        maxSize='chart10Shrink'
+        borderColour={
+          !trend || trend == 'flat' ? 'black' : 
+          trend == 'down' ? 'var(--alizarin)' : 'var(--emerald)'}
       />
       
     </div>

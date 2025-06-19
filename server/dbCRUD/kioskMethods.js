@@ -15,5 +15,65 @@ Meteor.methods({
     }
   },
   
+  kallNewSerial(serial, batch, unitNum) {
+    const isRole = Roles.userIsInRole(Meteor.userId(), ['admin', 'kitting']);
+    const orgKey = Meteor.user().orgKey;
+    
+    if(!isRole) {
+      return [false, undefined];
+    }else{
+      const regexANY = Config.regexSN.test(serial);
+      if(!serial || !batch || !regexANY) {
+        return [false, 'invalid'];
+      }else{
+        const exists = XSeriesDB.find({"items.serial": serial},{limit:1}).count();
+        
+        if(exists) {
+          return [false, 'duplicate'];
+        }else{
+          
+          const doc = XBatchDB.findOne({
+            batch: batch, 
+            orgKey: orgKey, 
+            completed: false},{
+              fields:{'quantity':1}
+            });
+            
+          if(!doc) {
+            return [false, 'nobatch'];
+          }else{
+    
+            const srs = XSeriesDB.find({
+              batch: batch, 
+              $expr: { $lt: [{ $size: "$items" }, doc.quantity] }
+            },{limit:1}).count();
+        
+            if(!srs) {
+              return [false, 'maxsrs'];
+            }else{
+              const unit = unitNum || 1;
+              
+              XSeriesDB.update({batch: batch}, {
+                $push : { items : {
+                  serial: serial,
+                  createdAt: new Date(),
+                  createdWho: Meteor.userId(),
+                  completed: false,
+                  completedAt: false,
+                  completedWho: false,
+                  units: Number(unit),
+                  subItems: [],
+                  history: [],
+                  altPath: []
+              }}});
+              
+              return [true, `${serial} Created`];
+            }
+          }
+        }
+      }
+    }
+  }
+  
     
 });

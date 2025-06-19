@@ -4,8 +4,7 @@ import { TimeInWeek } from '/client/utility/WorkTimeCalc.js';
 import { UserTime } from '/client/utility/WorkTimeCalc.js';
 import { round1Decimal } from '/client/utility/Convert.js';
 import Pref from '/client/global/pref.js';
-import NumStatRing from '/client/components/charts/Dash/NumStatRing.jsx';
-
+import NumStatBox from '/client/components/charts/Dash/NumStatBox';
 
 const TideWeekMini = ({ tideTimes, dateTime, app, user })=> {
   
@@ -45,25 +44,18 @@ const TideWeekMini = ({ tideTimes, dateTime, app, user })=> {
   
   return(
     <div className='balance beside'>
-      
-      <NumStatRing
-        total={batchTotal.length}
-        nums={batchTotal}
+      <NumStatBox
+        number={batchTotal.length}
         name={batchTotal.length == 1 ? Pref.xBatch : Pref.xBatchs}
         title={`how many different ${Pref.xBatchs}`}
-        colour='blue'
-        maxSize='chart10Contain'
+        borderColour="var(--peterriver)"
       />
-      
-      <NumStatRing
-        total={durrTotal}
-        nums={[ durrTotal, ((maxHours) - durrTotal) ]}
+      <NumStatBox
+        number={`${durrTotal}/${maxHours}`}
         name='Total Hours'
         title={`total of durations in hours \nout of ${maxHours}`}
-        colour='blueBi'
-        maxSize='chart10Contain'
+        borderColour="var(--neptuneColor)"
       />
-      
     </div>
   );
 };

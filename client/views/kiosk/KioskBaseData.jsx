@@ -17,12 +17,22 @@ const KioskBaseData = ({ coldReady, user, users, app, allTrace })=> {
                         Roles.userIsInRole(x._id, 'active') === true &&
                         Roles.userIsInRole(x._id, 'readOnly') === false);
   
+  const doSerial = Roles.userIsInRole(Meteor.userId(), ['admin', 'kitting']);
+  
+  const eng = user?.engaged || false;
+  const eBatch = eng?.tName || false;
+  // const etPro = eng?.task === 'PROX';
+  // const etMlt = eng?.task === 'MLTI';
+  // 'MAINT', 'EQFX';
+  // const etKey = eng?.tKey;
+
   return(
     <KioskWrap
       user={user}
+      eBatch={eBatch}
+      doSerial={doSerial}
       users={activeUsers}
       app={app}
-      coldReady={coldReady}
       allTrace={allTrace}
     />
   );

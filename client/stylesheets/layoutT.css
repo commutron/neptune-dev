@@ -89,8 +89,15 @@
 .kioskFlash > n-faW,
 .kioskFlash > n-faA,
 .kioskFlash > n-faX {
-  font-size: calc(var(--vert_main) - var(--vert_border));
+  font-size: calc( (var(--vert_main) - var(--vert_border) ) * 0.7);
   display: flex;
+}
+.kioskFlash > span:nth-child(2) {
+  font-size: calc( (var(--vert_main) - var(--vert_border) ) * 0.1);
+}
+.kioskFlash > span:nth-child(3) {
+  text-transform: capitalize;
+  font-size: calc( (var(--vert_main) - var(--vert_border) ) * 0.05);
 }
 .kioskFlash.wait {
   --kflash_light: var(--blackFade);

@@ -117,7 +117,7 @@ const ModelUser = ({
           tag={user.inbox?.length}
         />
         
-        <div className='userMenuPing thinScroll'> 
+        <div className='userMenuPing forceScrollStyle'> 
           <NotifyMini
             inbox={user.inbox}
             unice={unice}

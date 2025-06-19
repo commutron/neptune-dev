@@ -7,7 +7,7 @@ import Spin from '/client/components/tinyUi/Spin';
 import { FocusSelect, FilterSelect } from '/client/components/smallUi/ToolBarTools';
 import TimeWindower from '/client/components/bigUi/TimeWindower/TimeWindower';
 import { StatLine } from '/client/components/tinyUi/NumLine';
-import NumStatRing from '/client/components/charts/Dash/NumStatRing';
+import NumStatBox from '/client/components/charts/Dash/NumStatBox';
 import TrendLine from '/client/components/charts/Trends/TrendLine';
 import ScrapTableAll from '/client/components/tables/ScrapTableAll';
 
@@ -213,14 +213,11 @@ const ScrapCharts = ({ workingList, cycleCount, cycleBracket })=> {
         cycleBracket={cycleBracket}
         lineColor='rgb(231, 76, 60)' />
     
-      <NumStatRing
-        total={workingList.length}
-        nums={[ 0, workingList.length, 0 ]}
+      <NumStatBox
+        number={workingList.length}
         name={`Total ${Pref.scrap} ${Pref.items}`}
         title={`Total ${Pref.scrap} ${Pref.items}\nof all time`}
-        colour='redTri'
-        maxSize='chart15Contain'
-        noGap={true}
+        borderColour="var(--pomegranate)"
       />
     </div>
   );

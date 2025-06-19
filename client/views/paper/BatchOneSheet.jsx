@@ -64,7 +64,6 @@ const BatchOneSheet = ({
     
     const outsource = await getInstructData(instructURL);
     
-    
     const solder = outsource?.solder || '';
     const flux = outsource?.flux || '';
     const partstock = outsource?.partstock || ''; // null, 'stock', 'supply', 'both', 'other'
@@ -108,15 +107,15 @@ const BatchOneSheet = ({
             </td>
           </tr>
           <tr>
-            <td colspan='2' style="padding:1% 5% 2% 5%;line-height: 1.5;vertical-align:top;">
-              ${ProdLine(toCap(group, true))}
+            <td colspan='2' style="padding:1% 5%;line-height: 1.5;vertical-align:top;">
+              ${ProdLine(group.toUpperCase())}
               ${ProdLine(widget.toUpperCase())}
               ${ProdLine(ver)}
               ${ProdLine(desc)}
             </td>
           </tr>
           <tr>
-            <td colspan='2' style="padding:1% 5% 2% 5%;line-height: 1.5;vertical-align:top;">
+            <td colspan='2' style="padding:1% 5%;line-height: 1.5;vertical-align:top;">
               <p style="margin:1rem 0">Due Date: <b>${due}</b></p>
               <p style="margin:1rem 0">Sales Order: <b>${so}</b></p>
               <p style="margin:1rem 0">Quantity: <b>${qty}</b></p>
@@ -127,14 +126,16 @@ const BatchOneSheet = ({
         </tbody>
       </table>
       
-      <table style="width:100%;margin:0 auto;line-height:1;border-collapse:collapse;table-layout:fixed">
-        <tbody>
-          <tr>${verify ? GenVerify('VERIFIED', 'lightgreen') : GenVerify('NOT VERIFIED', 'rgb(211,84,0)')}</tr>
-          ${notice ? `<tr><td style="padding:15px;line-height:1.1;vertical-align:top;border:1px groove rgb(211,84,0)">
-              <p>⚠ Notice: ${notice}</p>
-            </td></tr>` : ''}
-        </tbody>
-      </table>
+      ${outsource &&
+        <table style="width:100%;margin:0 auto;line-height:1;border-collapse:collapse;table-layout:fixed">
+          <tbody>
+            <tr>${verify ? GenVerify('VERIFIED', 'lightgreen') : GenVerify('NOT VERIFIED', 'rgb(211,84,0)')}</tr>
+            ${notice ? `<tr><td style="padding:15px;line-height:1.1;vertical-align:top;border:1px groove rgb(211,84,0)">
+                <p>⚠ Notice: ${notice}</p>
+              </td></tr>` : ''}
+          </tbody>
+        </table>
+      }
      
       <table style="width:100%;margin:20 auto;line-height:1;border-collapse:separate;table-layout:fixed">
         <tbody>
@@ -225,4 +226,3 @@ const GenVerify = (text, color)=> {
             background-color:${color}"
           >Instructions ${text}</td></tr>`;
 };
-          

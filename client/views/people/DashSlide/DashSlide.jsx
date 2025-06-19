@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
-import NumStatRing from '/client/components/charts/Dash/NumStatRing';
+import NumStatBox from '/client/components/charts/Dash/NumStatBox';
 import PeoplePanel from './PeoplePanel';
 
 
@@ -109,38 +109,31 @@ const DashSlide = ({ users, loggedIn, traceDT, brancheS, isDebug })=> {
         </button>
       </p>
       
-      <div className='balance'>
-            
-        <NumStatRing
-          total={eUsersState.length}
-          nums={[eUsersState.length, dUsersState.length ]}
-          name={`${eUsersState.length == 1 ? 'Person Is' : 'People Are'} ${Pref.engaged}`} 
-          title={`${eUsersState.length} people currently\n${Pref.engaged} with ${Pref.xBatchs}`} 
-          colour='greenBi'
-        />
+      <div className='autoColGrid gapminC gapsR vmargin'>
         
-        <NumStatRing
-          total={branchesXY.length}
-          nums={branchesXY}
+        <NumStatBox
+          number={eUsersState.length}
+          name={`${eUsersState.length == 1 ? 'Person Is' : 'People Are'} ${Pref.engaged}`} 
+          title={`${eUsersState.length}/${dUsersState.length} people currently\n${Pref.engaged} with ${Pref.xBatchs}`}
+          borderColour="var(--emerald)"
+        />
+        <NumStatBox
+          number={branchesXY.length}
           name={`${branchesXY.length == 1 ? `${Pref.branch} Is` : `${Pref.branches} Are`} ${Pref.engaged}`} 
           title={`People currently ${Pref.engaged} in\n${branchesXY.length} ${Pref.branches}`} 
-          colour='blue'
+          borderColour="var(--belizeHole)"
         />
-        
-        <NumStatRing
-          total={xyBatchState.length}
-          nums={xyBatchState}
+        <NumStatBox
+          number={xyBatchState.length}
           name={`${xyBatchState.length == 1 ? `${Pref.xBatch} Is` : `${Pref.xBatchs} Are`} ${Pref.engaged}`}
           title={`${xyBatchState.length} ${Pref.xBatchs} currently\n${Pref.engaged} by people`} 
-          colour='blue'
+          borderColour="var(--peterriver)"
         />
-        
-        <NumStatRing
-          total={xyEqState.length}
-          nums={xyEqState}
+        <NumStatBox
+          number={xyEqState.length}
           name={`${Pref.equip} servicing`}
           title={`${xyEqState.length} ${Pref.equip} currently\nundergoing service`} 
-          colour={[ "#2c3e50", "#34495e" ]}
+          borderColour="var(--midnightblue)"
         />
             
       </div>

@@ -8,9 +8,10 @@ import KioskElements from '/client/views/kiosk/KioskElements';
 const KioskScopeData = ({
   kactionState, klisten, bScope,
   
-  orb, user, users, app,
-  hotReady, hotxBatch, hotxSeries, hotxRapids,
-  hotGroup, hotWidget, hotVariant
+  gem, user, users, app,
+  hotReady, hotxBatch, hotxSeries,
+  // hotGroup, hotWidget,
+  hotVariant
 })=> {
   
   console.log({bScope});
@@ -21,8 +22,7 @@ const KioskScopeData = ({
       klisten={klisten}
       bScope={bScope}
       
-      
-      orb={orb}
+      gem={gem}
       user={user}
       
       app={app}
@@ -30,70 +30,57 @@ const KioskScopeData = ({
       hotReady={hotReady}
       hotxBatch={hotxBatch}
       hotxSeries={hotxSeries}
-      hotGroup={hotGroup}
-      hotWidget={hotWidget}
+      // hotGroup={hotGroup}
+      // hotWidget={hotWidget}
       hotVariant={hotVariant}
     />
   );
 };
 
 
-export default withTracker( ({ bScope }) => {
+export default withTracker( ({ kactionState, bScope }) => {
 
   const orb = Session.get('now');
-  
-  let login = Meteor.userId() ? true : false;
-  // let user = login ? Meteor.user() : false;
-  // let org = user ? user.org : false;
-  
-  // let onhandBatch = false;
-  // let onhandSeries = false;
-  // let hotxRapids = [];
+  const gem = Pref.regexSN.test(orb) ? orb : null;
+
   
   let subSerial = false;
-  let subBatch = bScope;
+  let subBatch = false;
     
-    console.log({subBatch});
-    
-  if( !subSerial && !subBatch ) {
-    
-    if( Pref.regexSN.test(orb) ) {
-  		
-      const localSeries = XSeriesDB.findOne( { 'items.serial': orb } );
-      if( localSeries ) {
-        // onhandSeries = localSeries;
-        // onhandBatch = XBatchDB.findOne( { batch: localSeries.batch } );
-        // hotxRapids = XRapidsDB.find( { extendBatch: localSeries.batch } ).fetch();
-        subBatch = localSeries.batch;
-      }else{
-        subSerial = orb;
+  if( !subSerial && !subBatch ) {  
+  
+    if(kactionState === 'info') {
+      if(gem) {
+        subSerial = gem;
       }
+      
+    }else if(kactionState === 'serial') {
+      subBatch = bScope;
+      
     }else{
       null;
     }
+    
+      // const localSeries = XSeriesDB.findOne( { 'items.serial': orb } );
+      // if( localSeries ) {
+      //   subBatch = localSeries.batch;
+      // }else{
+      //   subSerial = orb;
+      // }
   }
 
   const hotSub = Meteor.subscribe('hotDataKiosk', subSerial, subBatch);
   
-  if( !login ) {
-    return {
-      hotReady: false
-    };
-  }else{
-    return {
-      hotReady: hotSub.ready(),
-      orb: orb,
-      // user: user,
-      // org: org,
-      // users: Meteor.users.find( {}, { sort: { username: 1 } } ).fetch(),
-      // app: AppDB.findOne({org: org}),
+  return {
+    hotReady: hotSub.ready(),
+    orb: orb,
+    gem: gem,
 
-      hotGroup: GroupDB.findOne({}),
-      hotWidget: WidgetDB.findOne({}),
-      hotVariant: VariantDB.findOne({}),
-      hotxBatch: XBatchDB.findOne({}),
-      hotxSeries: XSeriesDB.findOne({}),
-      // hotxRapids: hotxRapids
-    };
-  }
+    // hotGroup: GroupDB.findOne({}),
+    // hotWidget: WidgetDB.findOne({}),
+    hotVariant: VariantDB.findOne({}),
+    hotxBatch: XBatchDB.findOne({}),
+    hotxSeries: XSeriesDB.findOne({}),
+    // hotxRapids: XRapidsDB.find({}).fetch()
+  };
 })(KioskScopeData);

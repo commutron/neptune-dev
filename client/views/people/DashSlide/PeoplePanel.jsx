@@ -54,14 +54,15 @@ export default PeoplePanel;
 const IdleList = ({ userList, title })=> (
   <div className='w100 vmargin cap'>
     <h3 className='med indent10'>{title}</h3>
-    <ul className='autoGrid'>
+    <div className='autoColGrid'>
       {(userList || []).map( (entry)=>{
-        const pro = entry.proTimeShare && entry.proTimeShare[0].timeAsDecimal > 0;
+        const pro = entry.proTimeShare?.[0]?.timeAsDecimal || 0;
         return(
-          <li key={entry._id} className='leftText line2x'>
-            <UserNice id={entry._id} />{!pro && <em className='smTxt' title='non-production'> (NP)</em>}
-          </li>
+          <div key={entry._id} className='colNoWrap maxWide bottomLine spacehalf'>
+            <UserNice id={entry._id} />
+            <em className='smaller'>{pro == 0 ? "Non-Production" : `${Math.round(pro*100)}% Production`}</em>
+          </div>
       )})}
-    </ul>
+    </div>
   </div>
 );

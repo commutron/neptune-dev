@@ -211,7 +211,7 @@ Meteor.methods({
           $or: [ 
             { status: false },
             { status: 'willnotrequire' }
-          ], close: { $gt: new Date() }},{
+          ]},{
           $set: {
             name: sv.name,
             open: new Date( open ),
@@ -233,19 +233,19 @@ Meteor.methods({
         return new Promise(function(resolve, reject) {
           try {
             const now = moment().tz(Config.clientTZ);
-            
-            MaintainDB.update({
-              status: 'willnotrequire', 
-              expire: { $lt: new Date() }
-            },{
-              $set: {
-                status: 'notrequired'
-              }
-            },{multi: true});
-            // MaintainDB.remove({
+            const nowplain = new Date(now.format());
+            // MaintainDB.update({
             //   status: 'willnotrequire', 
-            //   expire: { $lt: new Date() }
+            //   expire: { $lt: nowplain }
+            // },{
+            //   $set: {
+            //     status: 'notrequired'
+            //   }
             // },{multi: true});
+            MaintainDB.remove({
+              status: 'willnotrequire', 
+              expire: { $lt: nowplain }
+            });
             
             const maint = MaintainDB.find({status: false},
                             { fields: {
@@ -283,14 +283,14 @@ Meteor.methods({
                     Meteor.call('handleIntMaintEmail', orgKey, supr, titl, mn.name, "did_not");
                   });
                 }
-              }else if( now.isSame(moment(mn.close).add(1, 'days'), 'day') ) {
-                Meteor.defer( ()=>{
-                  const equip = EquipDB.findOne({_id: mn.equipId},{fields:{'equip':1,'stewards':1}});
-                  const titl = equip ? equip.equip : "";
-                  const stew = equip ? equip.stewards : [];
-                  const sendto = [...new Set([supr,stew].flat())];
-                  Meteor.call('handleIntMaintEmail', orgKey, sendto, titl, mn.name, "in_grace", mn.expire); 
-                });
+              // }else if( now.isSame(moment(mn.close).add(1, 'days'), 'day') ) {
+              //   Meteor.defer( ()=>{
+              //     const equip = EquipDB.findOne({_id: mn.equipId},{fields:{'equip':1,'stewards':1}});
+              //     const titl = equip ? equip.equip : "";
+              //     const stew = equip ? equip.stewards : [];
+              //     const sendto = [...new Set([supr,stew].flat())];
+              //     Meteor.call('handleIntMaintEmail', orgKey, sendto, titl, mn.name, "in_grace", mn.expire); 
+              //   });
               }else if( now.isSame(moment(mn.open), 'day') ) {
                 Meteor.defer( ()=>{
                   const equip = EquipDB.findOne({_id: mn.equipId},{fields:{'equip':1,'stewards':1}});
@@ -347,7 +347,7 @@ Meteor.methods({
                   $or: [ 
                     { status: false },
                     { status: 'willnotrequire' }
-                  ], close: { $gt: new Date() }},{
+                  ]},{
                   $set: {
                     name: sv.name,
                     open: new Date( open ),
@@ -503,18 +503,18 @@ Meteor.methods({
   removePMnoise() {
     // const orgKey = Meteor.user().orgKey;
     if( Roles.userIsInRole(Meteor.userId(), 'admin') ) {
-      const threeyear = ( d => new Date(d.setDate(d.getDate()-(365*3))) )(new Date);
+      const years = ( d => new Date(d.setDate(d.getDate()-(365*2))) )(new Date);
       MaintainDB.remove({
         status: 'willnotrequire', 
         expire: { $lt: new Date() }
       });
       MaintainDB.remove({
         status: 'notrequired', 
-        expire: { $lt: threeyear }
+        expire: { $lt: years }
       });
       MaintainDB.remove({
         status: 'missed', 
-        expire: { $lt: threeyear }
+        expire: { $lt: years }
       });
       return true;
     }

@@ -41,7 +41,7 @@ const MiniHistory = ({ history, iAlt, altitle })=> {
         		  </p>
           )})}
         </div>
-        : <h3 className='centreText'>{Pref.Item} Unstarted</h3> }
+        : <h4 className='centreText'>{Pref.Item} Unstarted</h4> }
     </div>
   );
 };

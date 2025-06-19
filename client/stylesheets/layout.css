@@ -696,6 +696,7 @@ main {
 .gapL { margin-inline-start: 5px; }
 .gapsR { row-gap: 2vh; }
 .gapsC { column-gap: 2vw; }
+.gapminC { column-gap: 5px; }
 
 .badge {
   position: absolute;
@@ -1207,12 +1208,14 @@ n-sm-model-content {
   border-bottom: 1px groove;
 }
 
-.autoGrid {
+.autoGrid, .autoColGrid {
   display: grid;
   grid-template-columns: repeat( auto-fit, minmax(20ch, 1fr) );
   grid-auto-flow: dense;
-  grid-template-rows: repeat( auto-fit, minmax(20ch, 1fr) );
   align-items: baseline;
+}
+.autoGrid {
+  grid-template-rows: repeat( auto-fit, minmax(20ch, 1fr) );
 }
 .autoGrid.cardify > div {
   margin: 0;

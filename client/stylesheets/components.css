@@ -148,16 +148,17 @@ n-timeline-item:last-child n-timeline-marker:after {
 }
 
 .dashNumBox {
-  min-width: 10vmin;
-  min-height: 10vmin;
-  font-size: 5vmin;
+  min-width: 8vmin;
+  min-height: 8vmin;
+  font-size: 4vmin;
   border: none;
+  border-radius: 0.25vmin;
   padding: 1vmin 1.5vmin;
   margin: 0 0.5vmin;
   text-align: center;
 }
 .dashNumBox p {
-  font-size: 2vmin;
+  font-size: 1.75vmin;
   margin: 0;
 }
 .dashNumBox, .kpiStat {

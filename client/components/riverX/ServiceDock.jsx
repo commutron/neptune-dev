@@ -5,7 +5,9 @@ import ModelInline from '/client/layouts/Models/ModelInline';
 
 const ServiceDock = ({ maintData, serve })=> {
   
-  const noReq = maintData.status === 'willnotrequire' || maintData.status === 'notrequired';
+  const not = maintData.status === 'notrequired';
+  const willnot = maintData.status === 'willnotrequire';
+  const noReq = not || willnot;
   
   const [ work, setWork ] = useState( false );
   const [ notes, setNotes ] = useState( maintData.notes );
@@ -55,13 +57,6 @@ const ServiceDock = ({ maintData, serve })=> {
   
   return(
     <Fragment>
-    
-      {noReq &&
-        <div className='fakeFielset beside'>
-          <p><i className="fa-solid fa-ban fa-4x orangeT"></i></p>
-          <p className='bigbig centreText'>Service is Not Required</p>
-        </div>
-      }
       
       {!noReq &&
   			<div className='fakeFielset overscroll'>
@@ -108,6 +103,21 @@ const ServiceDock = ({ maintData, serve })=> {
         </label>
 			</div>
 			
+			{not ?
+        <div className='fakeFielset beside gapminC'>
+          <n-fa1><i className="fa-solid fa-ban fa-3x orangeT"></i></n-fa1>
+          <p className='big vmarginquarter centreText'>Service is Not Required</p>
+          <p className='nomargin centreText'>Marked by Employee</p>
+        </div>
+        :
+        willnot &&
+        <div className='fakeFielset beside gapminC'>
+          <n-fa2><i className="fa-solid fa-ban fa-3x orangeT"></i></n-fa2>
+          <p className='big vmarginquarter centreText'>Service is Not Required</p>
+          <p className='nomargin centreText'>Marked by Neptune</p>
+        </div>
+      }
+			
 			{maintData.status !== 'complete' &&
   			<div className='fakeFielset vmargin'>
           <ModelInline 
@@ -115,6 +125,7 @@ const ServiceDock = ({ maintData, serve })=> {
             color='wet' 
             border='borderOrange'
             icon='fa-solid fa-ban'
+            open={willnot}
           >
             <div className='centre'>
               <button

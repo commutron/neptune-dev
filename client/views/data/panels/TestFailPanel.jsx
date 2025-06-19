@@ -7,7 +7,7 @@ import TimeWindower from '/client/components/bigUi/TimeWindower/TimeWindower';
 import { FocusSelect, FilterSelect } from '/client/components/smallUi/ToolBarTools';
 
 import { StatLine } from '/client/components/tinyUi/NumLine';
-import NumStatRing from '/client/components/charts/Dash/NumStatRing';
+import NumStatBox from '/client/components/charts/Dash/NumStatBox';
 import TrendLine from '/client/components/charts/Trends/TrendLine';
 import FailAllTable from '/client/components/tables/FailAllTable';
 
@@ -201,14 +201,11 @@ const FailCharts = ({ workingList, cycleCount, cycleBracket })=> {
         cycleBracket={cycleBracket}
         lineColor='rgb(192, 57, 43)' />
     
-      <NumStatRing
-        total={workingList.length}
-        nums={[ workingList.length, 0, 0 ]}
+      <NumStatBox
+        number={workingList.length}
         name={`Failed ${Pref.items}`}
         title={`Failed ${Pref.items}`}
-        colour='redTri'
-        maxSize='chart15Contain'
-        noGap={true}
+        borderColour="var(--pomegranate)"
       />
     </div>
   );

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-const ModelInline = ({ title, color, border, icon, lock, children })=> {
+const ModelInline = ({ title, color, border, icon, lock, open, children })=> {
   
-  const [ sect, setSect ] = useState( false );
+  const [ sect, setSect ] = useState( open ? true : false );
 
   return(
     <div className={'vmarginhalf inlineModel centre ' + (sect ? 'open' : '')}>

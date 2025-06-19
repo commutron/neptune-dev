@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect, Fragment } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { Meteor } from 'meteor/meteor';
 import moment from 'moment';
 
@@ -19,7 +19,7 @@ function testWithPaste(event) {
   }
 }
 
-const KioskWrap = ({ user, users, app, coldReady, allTrace })=> {
+const KioskWrap = ({ user, eBatch, doSerial, users, app, allTrace })=> {
   
   const [ bScope, bScopeSet ] = useState(false);
   
@@ -49,15 +49,20 @@ const KioskWrap = ({ user, users, app, coldReady, allTrace })=> {
     klistenSet(!klisten);
   };
   
-  // const eng = user?.engaged || false;
-  // const etPro = eng?.task === 'PROX';
-  // const etMlt = eng?.task === 'MLTI';
-  // 'MAINT', 'EQFX';
-  // const etKey = eng?.tKey;
+  const doText = kactionState === 'info' ? 'Listening...' :
+                 kactionState === 'serial' ? 'Initiate Serial...' :
+                 '...';
   
+  const KListener = <button 
+                      title={!klisten ? 'Start Listening' : 'Stop Listening'}
+                      className='kioskListen' 
+                      onClick={()=>toggleListen()}>
+                      <n-fa0><i className={`las la-compact-disc la-fw ${!klisten ? '' : 'la-spin'}`}></i></n-fa0>
+                      <span>{!klisten ? 'Ready' : doText}</span>
+                    </button>;
                         
   return(
-    <div className={'kioskFrame do_not_use'}>
+    <div className='kioskFrame do_not_use'>
       <div className='tenHeader'>
         <div className='topBorder' />
         <HomeIcon />
@@ -71,28 +76,22 @@ const KioskWrap = ({ user, users, app, coldReady, allTrace })=> {
             disabled={klisten}>
             <option value='' className='grayT'>Select Terminal Action</option>
             <option value='info'>Info (Scan Tester)</option>
-            <option value='serial'>Initiate Serial</option>
-            <option value='checkpoint' disabled={true}>Checkpoint</option>
-            <option value='complete' disabled={true}>Complete</option>
+            <option value='serial' disabled={!doSerial}>Initiate Serial</option>
+            {/*<option value='checkpoint' disabled={true}>Checkpoint</option>
+            <option value='complete' disabled={true}>Complete</option>*/}
           </select>
         </div>
         <div className='auxRight'>
           
         </div>
-        <TideFollow tOpen={null} />
+        <TideFollow tOpen={bScope && bScope === eBatch} />
       </div>
       
       <div className='kioskContent forceScrollStyle darkTheme'>
           
         <div className={`kioskTask ${klisten ? 'nBg' : ''}`}>
           {kactionState === 'info' ?
-            <button 
-              title={!klisten ? 'Start Listening' : 'Stop Listening'}
-              className='kioskListen' 
-              onClick={()=>toggleListen()}>
-              <n-fa0><i className={`las la-compact-disc la-fw ${!klisten ? '' : 'la-spin'}`}></i></n-fa0>
-              <span>{!klisten ? 'Ready' : 'Listening...'}</span>
-            </button>
+            KListener
             :
             kactionState === 'serial' ?
               !bScope ?
@@ -109,7 +108,7 @@ const KioskWrap = ({ user, users, app, coldReady, allTrace })=> {
                   })}
                 </div>
               :
-              <h1>{bScope} - {allTrace.find(t=>t.batch === bScope)?._id}</h1>
+                KListener
             : <n-fa0><i className="las la-power-off la-fw fillstatic"></i></n-fa0>
           }
         </div>
