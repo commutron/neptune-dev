@@ -1,8 +1,9 @@
 import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
+import ModelInline from '/client/layouts/Models/ModelInline';
 
-const EquipHibernate = ({ id, equip, connect })=> {
+const EquipHibernate = ({ id, equip, connect, auth })=> {
 
   function handle(flip) {
     Meteor.call('hibernateEquipment', id, flip, (error, reply)=>{
@@ -15,8 +16,6 @@ const EquipHibernate = ({ id, equip, connect })=> {
     });
   }
   
-  const auth = Roles.userIsInRole(Meteor.userId(), ['equipSuper','edit']);
-
   if(connect) {
     return(
       <button
@@ -43,3 +42,40 @@ const EquipHibernate = ({ id, equip, connect })=> {
 };
 
 export default EquipHibernate;
+
+export const EquipNullify = ({ id, equip })=> {
+
+  function handleNullEq() {
+    Meteor.call('nullifyEquipment', id, (error, reply)=>{
+      error && console.log(error);
+      if(reply) {
+        FlowRouter.go('/equipment/' + equip);
+      }else{
+        toast.warning('Not Allowed');
+      }
+    });
+  }
+  
+  return(
+		<div className='fakeFielset vmargin'>
+      <ModelInline 
+        title='Decommission Equipment'
+        color='wet' 
+        border='borderOrange'
+        icon='fa-solid fa-dumpster'
+      >
+        <div className='centre'>
+          <p>Permanently shutdown this equipment.</p>
+          <p>All Service Schedules and Preventive Maintenance records will be deleted.</p>
+          <button
+            type='button'
+            id='yesnulleq'
+            title='Confirm Decommission'
+            className='action orangeSolid'
+            onClick={()=>handleNullEq()}
+          >Yes, Decommission</button>
+        </div>
+      </ModelInline>
+    </div>
+  );
+};

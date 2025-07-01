@@ -226,7 +226,7 @@ n-timeline-item:last-child n-timeline-marker:after {
   box-shadow: var(--dropShadow000);
   display: flex;
   align-items: center;
-  column-gap: 2dvmin;
+  column-gap: 0.5dvmin;
   overflow: clip hidden;
 }
 .floattaskbar.shallow {
@@ -234,7 +234,7 @@ n-timeline-item:last-child n-timeline-marker:after {
 }
 .floattaskbar > span,
 .floattaskbar > button {
-  padding: 1dvmin 0;
+  padding: 1dvmin;
   word-wrap: normal;
   word-break: keep-all;
   overflow-wrap: normal;
@@ -296,8 +296,9 @@ n-timeline-item:last-child n-timeline-marker:after {
   background-color: oklab(from var(--clouds) 0.93 a b);
 }
 .popmenu div:hover,
-.popmenu button:hover {
-  background-color: oklab(from var(--clouds) 0.92 a b);
+.popmenu button:hover,
+.popbutton:hover {
+  background-color: oklab(from var(--clouds) 0.91 a b);
 }
 
 @position-try --bottom {

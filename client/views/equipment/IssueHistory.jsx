@@ -8,7 +8,7 @@ import { chunkArray } from '/client/utility/Convert';
 import UserName from '/client/utility/Username.js';
 import IssueDetail from './IssueDetail';
 
-const IssueHistory = ({ eqId, issData, isDebug, isEqSup, liveUsers })=>{
+const IssueHistory = ({ eqId, issData, isDebug, eqNul, liveUsers })=>{
   
   const issSort = useMemo( ()=> issData.reverse(), [issData]);
   
@@ -152,7 +152,9 @@ const IssueHistory = ({ eqId, issData, isDebug, isEqSup, liveUsers })=>{
       
     </div>
     
-    <BackdateIssue eqId={eqId} liveUsers={liveUsers} />
+    {!eqNul &&
+      <BackdateIssue eqId={eqId} liveUsers={liveUsers} />
+    }
     
     </Fragment>
   );

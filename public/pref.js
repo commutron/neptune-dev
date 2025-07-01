@@ -10,7 +10,7 @@ class Pref {
     
     this.InitialAppSetup = false;
     
-    this.neptuneVersion = '3.17.5';
+    this.neptuneVersion = '3.18.1';
     this.neptuneIs = 'Neptune Process Tracking';
 
     this.prefName = 'default';
@@ -20,10 +20,14 @@ class Pref {
       'debug',
       'nightly',
       'readOnly',
-      'peopleSuper',
-      'equipSuper',
-      'npiSuper',
+      'multitask_time',
       'active'
+    ];
+    this.power = [
+      'peopleSuper',
+      'npiSuper',
+      'equipSuper',
+      'equipPlus'
     ];
     this.auths = [
       'qa',
@@ -38,8 +42,7 @@ class Pref {
     ];
     this.areas = [
       'sales',
-      'kitting',
-      'multitask_time'
+      'kitting'
     ];
     this.stations = [
       'SPI',

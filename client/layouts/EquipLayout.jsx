@@ -28,11 +28,13 @@ const EquipLayout = ({
                   e1.alias < e2.alias ? -1 : 
                   e1.alias > e2.alias ? 1 : 0 );
         
-  const menuList = equipS.map( (entry)=> {
-                    const ttle = !entry.online && !entry.hibernate ? '・ ' + entry.alias : entry.alias;
-                    const clss = entry.hibernate ? 'strike darkgrayT' : '';
-                    const br = brancheS.find( b => b.brKey === entry.branchKey)?.branch || 'Facility';
-                    return [ttle, clss, br];
+  const menuList = equipS.map( (e)=> {
+                    const ttle = !e.online && !e.hibernate ? `・ ${e.alias}` :
+                                 e.hibernate ? `✕ ${e.alias}` : e.alias;
+                    const strk = e.nullify;
+                    const clss = e.hibernate ? 'darkgrayT' : '';
+                    const br = brancheS.find( b => b.brKey === e.branchKey)?.branch || 'Facility';
+                    return [ttle, strk, br, clss];
                   });
   
   const defaultSlide = specify ? equipS.findIndex( x => x.alias === specify ) : false;
@@ -75,6 +77,7 @@ const EquipLayout = ({
             />
           }
           defaultSlide={defaultSlide}
+          collapse='Decommissioned'
           menuClass='darkMenu'
           textStyle='up'>
         

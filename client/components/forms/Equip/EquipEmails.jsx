@@ -5,9 +5,10 @@ import Pref from '/client/global/pref.js';
 import { MultiSelect } from "react-multi-select-component";
 import ModelSmall from '/client/layouts/Models/ModelSmall';
 
-const EquipEmailsManager = ({ id, stewards, liveUsers })=> {
+const EquipEmailsManager = ({ id, stewards, liveUsers, auth })=> {
 
-  const access = Roles.userIsInRole(Meteor.userId(), ['peopleSuper','equipSuper','edit']);
+  const pSup = Roles.userIsInRole(Meteor.userId(), 'peopleSuper');
+  const access = pSup || auth;
   
   return(
     <ModelSmall

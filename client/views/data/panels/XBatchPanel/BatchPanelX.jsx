@@ -87,7 +87,7 @@ const BatchPanelX = ({
   const canSrs = isOpen && (!seriesData || seriesData.items.length < 1) && accessR;
   const canCnt = isOpen && accessR;
   const canUnt = seriesData && variantData.runUnits > 1 && (accessE || accessQ);
-  const canItm = isOpen && seriesData && Roles.userIsInRole(Meteor.userId(), 'create');
+  const canItm = isOpen && seriesData && Roles.userIsInRole(Meteor.userId(), ['create', 'kitting']);
   const canImp = isOpen && accessQ;
   const canEvt = accessE || accessR;
   const canRmv = isOpen && Roles.userIsInRole(Meteor.userId(), 'remove');
@@ -187,22 +187,10 @@ const BatchPanelX = ({
           />
           }
           <PopoverAction 
-            doFunc={()=>openAction(b._id+'_items_form')}
-            text={`Add ${Pref.itemSerial} numbers`}
-            icon={'fa-solid fa-barcode'}
-            lock={!canItm}
-          />
-          <PopoverAction 
             doFunc={()=>openAction(b._id+'_units_form')}
             text={`Set ${Pref.unit}s`}
             icon='fa-solid fa-table-cells'
             lock={!canUnt}
-          />
-          <PopoverAction
-            doFunc={()=>openAction(b._id+'_counter_form')}
-            text={`Assign ${Pref.counter}s`}
-            icon='fa-solid fa-stopwatch'
-            lock={!canCnt}
           />
     			
     			{/*}
@@ -243,6 +231,7 @@ const BatchPanelX = ({
             icon='fa-solid fa-flag-checkered'
             lock={!canImp}
           />
+            
           {isDebug ?
           <Fragment>
             <MatchButton 
@@ -266,6 +255,19 @@ const BatchPanelX = ({
           </Fragment>
         : null}
         </PopoverMenu>
+        
+        <MatchButton 
+          text={`${Pref.itemSerial} numbers`}
+          icon={'fa-solid fa-qrcode'}
+          doFunc={()=>openAction(b._id+'_items_form')}
+          lock={!canItm}
+        />
+        <MatchButton 
+          text={`${Pref.counter}s`}
+          icon='fa-solid fa-stopwatch'
+          doFunc={()=>openAction(b._id+'_counter_form')}
+          lock={!canCnt}
+        />
         
         <span className='flexSpace' />
         

@@ -7,7 +7,7 @@ import { AdminUp } from './AdminForm';
 
 const UserManageForm = ({ 
   userObj, id, name, org, 
-  keys, auths, areas, brancheS
+  keys, power, auths, areas, brancheS
 })=> {
   
   const [ confirmState, confirmSet ] = useState(false);
@@ -80,84 +80,95 @@ const UserManageForm = ({
       }
       </div>
       
-      <div className='balance'>
-        <fieldset className='readlines min200'>
-          <legend>Account Access</legend>
-          <dl>
-            {keys.map( (entry, index)=>{
-              if(entry === 'peopleSuper') {
-                return(
-                  <SetCheckSuper
-                    key={index+'ky'}
-                    user={id}
-                    role={entry}
-                    roleName={entry}
-                  />
-              )}else{
-                return(
-                  <SetCheck
-                    key={index+'ky'}
-                    user={id}
-                    role={entry}
-                    roleName={entry}
-                    change={changeRole}
-                  />
-              )}})}
-          </dl>
-        </fieldset>
+      <div className='gapminC rowWrap rowStr'>
+        <RoleList
+          title='Account Access'
+          sub='Basic App and Module Access'
+          list={keys.map( (entry, index)=>{
+            return(
+              <SetCheck
+                key={index+'ky'}
+                user={id}
+                role={entry}
+                roleName={entry}
+                change={changeRole}
+              />
+            )})}
+          foot='"Active" required to sign in.'
+        />
         
-        <fieldset className='readlines min200'>
-          <legend>Account Permissions</legend>
-          <dl>
-            {auths.map( (entry, index)=>{
+        <RoleList
+          title='Power User'
+          sub='Advanced Control and Access to more sensitive information'
+          list={power.map( (entry, index)=>{
+            if(entry === 'peopleSuper') {
+              return(
+                <SetCheckSuper
+                  key={index+'ky'}
+                  user={id}
+                  role={entry}
+                  roleName={entry}
+                />
+            )}else{
               return(
                 <SetCheck
-                  key={index+'au'}
+                  key={index+'ky'}
                   user={id}
                   role={entry}
                   roleName={entry}
                   change={changeRole}
                 />
-              )})}
-          </dl>
-        </fieldset>
+            )}})}
+        />
         
-        <fieldset className='readlines min200'>
-          <legend>Job Areas</legend>
-          <dl>
-            {areas.map( (entry, index)=>{
-              return(
-                <SetCheck
-                  key={index+'ar'}
-                  user={id}
-                  role={entry}
-                  roleName={entry}
-                  change={changeRole}
-                />
-              )})}
-          </dl>
-        </fieldset>
+        <RoleList
+          title='Action Permissions'
+          sub='Able to take type of action across areas'
+          list={auths.map( (entry, index)=>{
+            return(
+              <SetCheck
+                key={index+'au'}
+                user={id}
+                role={entry}
+                roleName={entry}
+                change={changeRole}
+              />
+            )})}
+        />
         
-        <fieldset className='readlines min200'>
-          <legend>Task {Pref.branches}</legend>
-          <dl>
-            {reqBrancheS.map( (entry, index)=>{
-              return(
-                <SetCheck
-                  key={index+'br'}
-                  user={id}
-                  role={'BRK'+entry.brKey}
-                  roleName={entry.branch}
-                  change={changeRole}
-                />
-              )})}
-          </dl>
-        </fieldset>
+        <RoleList
+          title='Job Areas'
+          sub='Able to take broad actions in area'
+          list={areas.map( (entry, index)=>{
+            return(
+              <SetCheck
+                key={index+'ar'}
+                user={id}
+                role={entry}
+                roleName={entry}
+                change={changeRole}
+              />
+            )})}
+        />
+        
+        <RoleList
+          title={`Task ${Pref.branches}`}
+          sub={`Production actions for ${Pref.branches}. (mainly inspections)`}
+          list={reqBrancheS.map( (entry, index)=>{
+            return(
+              <SetCheck
+                key={index+'br'}
+                user={id}
+                role={'BRK'+entry.brKey}
+                roleName={entry.branch}
+                change={changeRole}
+              />
+            )})}
+        />
       </div>
       
-      <div>
+      <div className='gapminC rowWrap'>
         <AdminUp userId={id} />
-        <br />
         {!admin ?
           <fieldset>
             <legend>Forgot Password</legend>
@@ -199,8 +210,16 @@ const UserManageForm = ({
 
 export default UserManageForm;
 
+const RoleList = ({ title, sub, list, foot })=> (
+  <fieldset className='readlines min200 max250'>
+    <legend>{title}</legend>
+    <small>{sub}</small>
+    <dl>{list}</dl>
+    {foot && <small>{foot}</small>}
+  </fieldset>
+);
 
-const SetCheckSuper = ({ user, role, roleName })=>	{
+const SetCheckSuper = ({ user, role, roleName })=> {
   const check = Roles.userIsInRole(user, role);
   
   function changeSuper() {

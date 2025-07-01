@@ -266,7 +266,10 @@
 
 .fade { opacity: 0.6; }
 .fadeMore { opacity: 0.4; }
-.noFade, .noFade button:disabled { opacity: 1 !important; }
+.noFade, .noFade button:disabled { 
+  opacity: 1 !important;
+  color: inherit;
+}
 
 .wordBr {
   word-break: break-word;

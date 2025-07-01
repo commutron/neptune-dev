@@ -1,7 +1,7 @@
 import React from 'react';
 import { toast } from 'react-toastify';
 
-const EquipOnline = ({ id, equip, online })=> {
+const EquipOnline = ({ id, equip, online, auth })=> {
 
   function handle(line) {
     Meteor.call('onofflineEquipment', id, line, (error, reply)=>{
@@ -14,8 +14,6 @@ const EquipOnline = ({ id, equip, online })=> {
     });
   }
   
-  const auth = Roles.userIsInRole(Meteor.userId(), ['equipSuper','edit']);
-
   if(online) {
     return(
       <button

@@ -10,7 +10,7 @@ import CreateTag from '/client/components/tinyUi/CreateTag';
 
 import EquipForm from '/client/components/forms/Equip/EquipForm';
 import EquipOnline from '/client/components/forms/Equip/EquipOnline';
-import EquipHibernate from '/client/components/forms/Equip/EquipHibernate';
+import EquipHibernate, { EquipNullify } from '/client/components/forms/Equip/EquipHibernate';
 import EquipEmails from '/client/components/forms/Equip/EquipEmails';
 import EquipRemove from '/client/components/forms/Equip/EquipRemove';
 import ServeForm from '/client/components/forms/Equip/ServeForm';
@@ -72,6 +72,7 @@ const EquipSlide = ({
         <hr className='vmargin' />
       </div>
       
+      {!eq.nullify &&
       <div className='wide rowWrapR'>
       
         <div className='centreRow'>
@@ -80,6 +81,7 @@ const EquipSlide = ({
               id={eq._id}
               equip={eq.alias}
               online={eq.online}
+              auth={isEqSup || isEdit}
             />
           }
           
@@ -87,6 +89,7 @@ const EquipSlide = ({
             id={eq._id}
             equip={eq.alias}
             connect={!eq.hibernate}
+            auth={isEqSup || isEdit}
           />
           
           <h3 className='spacehalf gapL cap'
@@ -126,6 +129,7 @@ const EquipSlide = ({
             id={eq._id}
             stewards={eq.stewards}
             liveUsers={liveUsers}
+            auth={isEqSup || isEdit}
           />
           
           {maintainData.length === 0 && ( !eq.issues || eq.issues.length === 0 ) ?
@@ -136,9 +140,15 @@ const EquipSlide = ({
          
         </div>
         
-      </div>
+      </div>}
       
-      {eq.hibernate ?
+      {eq.nullify ?
+        <div className='centreText comfort beside w100 vmargin wetasphaltBorder cap'>
+          <i className='fas fa-dumpster fa-fw fa-2x wetasphaltT gapL'></i>
+          <h3>Equipment Decommissioned</h3>
+          <i className='fas fa-dumpster fa-fw fa-2x wetasphaltT gapR'></i>
+        </div>
+      : eq.hibernate ?
         <p className='bold vspacehalf max875'>Disconnected equipment is unavailable, in storage, undergoing repairs, or similar, so maintenance will not be scheduled.</p>
       : !eq.online && !eq.hibernate ?
         <p className='bold vspacehalf max875'>Offline equipment is temporarily not in use, so frequent daily and weekly maintenance will default to 'not required'.<br/>Less frequent monthly and yearly maintenance will still be required by default.</p>
@@ -191,6 +201,7 @@ const EquipSlide = ({
         <div className='cardify autoFlex overscroll'>
           <IssueHistory 
             eqId={eq._id}
+            eqNul={eq.nullify}
             issData={eq.issues || []} 
             isDebug={isDebug}
             isEqSup={isEqSup}
@@ -199,6 +210,10 @@ const EquipSlide = ({
         </div>
       
       </Tabs>
+      
+      {eq.hibernate && isEqSup && !eq.nullify ?
+        <EquipNullify id={eq._id} equip={eq.alias} />
+      : null}
       
       <div className='wide'>
         <p className='smTxt indent'>All deadlines and schedules are calculated in workdays only.</p>
@@ -245,7 +260,7 @@ const EquipHotData = ({
 export default withTracker( ({ equipLite, app, users, isDebug, brancheS }) => {
   const hotSub = Meteor.subscribe('hotEquip', equipLite._id);
   const isEqSup = Roles.userIsInRole(Meteor.userId(), ['admin','equipSuper']);
-  const isEdit = Roles.userIsInRole(Meteor.userId(), 'edit');
+  const isEdit = Roles.userIsInRole(Meteor.userId(), ['edit','equipPlus']);
   
   return {
     hotReady: hotSub.ready(),

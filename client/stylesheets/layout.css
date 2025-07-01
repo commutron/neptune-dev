@@ -671,7 +671,8 @@ main {
   background-color: rgb(35,35,35);
 }
 .darkMenu .slideNestedMenuButton,
-.darkMenu .slideNestedLand {
+.darkMenu .slideNestedLand,
+.darkMenu .slideNestedClp {
   color: var(--silver);
 }
 .darkMenu .slideNestedSearch {
@@ -685,7 +686,8 @@ main {
 .darkMenu .slideNestedMenuButton.slideOn,
 .darkMenu .slideNestedMenuButton:where(:hover,:active),
 .darkMenu .slideNestedLand.slideOn,
-.darkMenu .slideNestedLand:where(:hover,:active) {
+.darkMenu .slideNestedLand:where(:hover,:active),
+.darkMenu .slideNestedClp:where(:hover,:active) {
   color: rgb(35,35,35);
   background-color: var(--silver);
 }
@@ -1631,7 +1633,7 @@ n-col-table-head > span {
 .tabsVertMenu .tabOn,
 .tabsVertMenu .tabOff:hover {
   border-right: none;
-  background-color: var(--contrastlight);
+  background-color: oklab(from var(--clouds) 0.94 a b);
   box-shadow: var(--dropShadowLeft00);
 }
 .tabsVertMenu .tabOff {
@@ -1640,5 +1642,5 @@ n-col-table-head > span {
 }
 
 .tabsVertContent {
-  background-color: var(--contrastlight);
+  background-color: oklab(from var(--clouds) 0.94 a b);
 }

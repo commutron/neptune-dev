@@ -848,6 +848,7 @@ Meteor.publish('thinEquip', function(){
           'branchKey': 1,
           'hibernate': 1,
           'online': 1,
+          'nullify': 1
       }}),
       MaintainDB.find({orgKey: orgKey, status: false,
                       close: { $gte: new Date(week0), $lte: new Date(week6) }

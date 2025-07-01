@@ -76,7 +76,7 @@ Meteor.methods({
   },
   
   setEqContact(eqId, cKey, prime, source, company, dprt, name, phone, email, cost, notes) {
-    const auth = Roles.userIsInRole(Meteor.userId(), ['equipSuper','edit']);
+    const auth = Roles.userIsInRole(Meteor.userId(), ['equipSuper', 'equipPlus', 'edit']);
     
     if(auth) {
       if(cKey) {
@@ -120,7 +120,7 @@ Meteor.methods({
   },
   
   cutEqContact(eqId, cKey) {
-    const auth = Roles.userIsInRole(Meteor.userId(), ['equipSuper','edit']);
+    const auth = Roles.userIsInRole(Meteor.userId(), ['equipSuper','equipPlus','edit']);
     if(auth) {
       EquipDB.update({_id: eqId, orgKey: Meteor.user().orgKey, 'contacts.key': cKey}, {
         $set : {
@@ -136,7 +136,7 @@ Meteor.methods({
   },
   
   onofflineEquipment(eqId, line) {
-    const auth = Roles.userIsInRole(Meteor.userId(), ['equipSuper','edit']);
+    const auth = Roles.userIsInRole(Meteor.userId(), ['equipSuper','equipPlus','edit']);
     const accessKey = Meteor.user().orgKey;
     
     if(auth) {
@@ -159,7 +159,7 @@ Meteor.methods({
   },
   
   hibernateEquipment(eqId, hibernate) {
-    const auth = Roles.userIsInRole(Meteor.userId(), ['equipSuper','edit']);
+    const auth = Roles.userIsInRole(Meteor.userId(), ['equipSuper','equipPlus','edit']);
     const accessKey = Meteor.user().orgKey;
     
     if(auth) {
@@ -185,8 +185,30 @@ Meteor.methods({
     }
   },
   
+  nullifyEquipment(eqId) {
+    const auth = Roles.userIsInRole(Meteor.userId(), 'equipSuper');
+    const accessKey = Meteor.user().orgKey;
+    const eq = EquipDB.findOne({_id: eqId, orgKey: accessKey});
+    
+    if(auth && eq.hibernate) {
+      EquipDB.update({_id: eqId, orgKey: accessKey}, {
+        $set : {
+          updatedAt: new Date(),
+  			  updatedWho: Meteor.userId(),
+  			  nullify: true,
+  			  online: false,
+          stewards: [],
+          service: []
+        }});
+      MaintainDB.remove({equipId: eqId});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
   stewardEquipment(eqId, stewArr) {
-    const auth = Roles.userIsInRole(Meteor.userId(), ['equipSuper','peopleSuper','edit']);
+    const auth = Roles.userIsInRole(Meteor.userId(), ['equipSuper','equipPlus','peopleSuper','edit']);
     const arry = Array.isArray(stewArr); // user IDs
     
     if(auth && arry) {

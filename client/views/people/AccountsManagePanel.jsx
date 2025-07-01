@@ -56,7 +56,7 @@ const AccountsManagePanel = ({ app, users, traceDT, brancheS, isDebug })=> {
                   <b><i className='far fa-clock fa-fw'></i>   Time</b>,
                   <b><i className='fas fa-key fa-fw'></i>  Access</b>,
                 ]}
-                wide={false}
+                wide={true}
                 hold={false}
                 disable={[ (!isPeopleSuper && !isAdmin), !isAdmin, (!isPeopleSuper && !isAdmin)]}>
                 
@@ -78,6 +78,7 @@ const AccountsManagePanel = ({ app, users, traceDT, brancheS, isDebug })=> {
                       name={entry.username}
                       org={entry.org}
                       keys={Pref.keys}
+                      power={Pref.power}
                       auths={Pref.auths}
                       areas={Pref.areas}
                       brancheS={brancheS}
