@@ -14,6 +14,16 @@ const WidgetsDepth = ({ filterString, widgetData, active })=> {
 
   return(
     <div className='wide vspacehalf max1000'>
+      <div className='leapHead stick'>
+        <div></div>
+        <div></div>
+        <div className='balance cap'>
+          <span>{Pref.variants}</span>
+          <span>{Pref.xBatchs}</span>
+          <span>Total Quantity</span>
+          <span>NC Rate</span>
+        </div>
+      </div>
       {w.length < 1 ? 
         <p className='centreText'>no {Pref.widget}s created</p>
       :
@@ -58,35 +68,31 @@ const WidgetIndexCard = ({ data, barStyle })=>{
       title={data.widget.toUpperCase()}
       cTwo={data.describe}
       cThree={
-        <span className='balancer'>
+        <span className='balance'>
           <NumStat
             num={moreData[0]}
-            name={Pref.variants}
             title={`Total ${Pref.variants}`}
             color='blueT'
             size='medBig'
-            moreClass='gapR' />
+          />
           <NumStat
             num={totalBatches}
-            name={Pref.xBatchs}
             title={`Total ${Pref.xBatchs}`}
             color='blueT'
             size='medBig'
-            moreClass='gapR' />
+          />
           <NumStat
             num={totalItems}
-            name='Total Quantity'
             title={`Total quantities of all ${Pref.xBatchs}`}
             color='blueT'
             size='medBig'
-            moreClass='gapR' />
+          />
           <NumStat
             num={moreData[2]}
-            name='NC Rate'
             title={`Average ${Pref.nonCon} rate`}
             color='redT'
             size='medBig'
-            moreClass='gapR' />
+          />
         </span>
       }
       sty={barStyle}

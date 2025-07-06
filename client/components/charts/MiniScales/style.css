@@ -30,7 +30,3 @@
   background: none;
   background-color: var(--pomegranate);
 }
-
-.meterprogStack.empty > .VictoryContainer > svg {
-  background-color: whitesmoke;
-}

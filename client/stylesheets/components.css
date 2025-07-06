@@ -141,6 +141,9 @@ n-timeline-item:last-child n-timeline-marker:after {
   color: white;
   bottom: 55%;
 }
+.miniStack.noTip::after {
+  display: none;
+}
 @media screen and (prefers-reduced-motion: no-preference) { 
   .miniStack::after {
     transition: opacity 150ms ease-in;
@@ -259,7 +262,6 @@ n-timeline-item:last-child n-timeline-marker:after {
   inset: auto;
   top: anchor(bottom);
   left: anchor(left);
-  /*margin-block-start: 0.8dvmin;*/
   opacity: 0;
   overflow: hidden;
   border: 1px solid darkgray;
@@ -268,18 +270,10 @@ n-timeline-item:last-child n-timeline-marker:after {
   transition: display 200ms, opacity 200ms;
   transition-behavior: allow-discrete;
 }
-@supports not(:popover-open) {
+@supports not selector(:popover-open) {
   .popmenu {
     display: none;
     pointer-events: none;
-  }
-}
-@supports not(anchor-name: --pop-actions) {
-  .popmenu {
-    position: absolute;
-    inset: unset;
-    transform: translateY(calc(50% + var(--tx0)));
-    margin: 0;
   }
 }
 .popmenu:popover-open {

@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import moment from 'moment';
-import 'moment-timezone';
 import Pref from '/client/global/pref.js';
 import UserNice from '/client/components/smallUi/UserNice';
 import { CalcSpin } from '/client/components/tinyUi/Spin';
@@ -63,7 +61,7 @@ const TimeBudgetsChunk = ({
                     Math.abs(percentOverUnder(totalBudgetMinutes, totalTideMinutes)) :
                     min2hr(bufferNice);
   
-  const bufferMessage = quote2tide < 0 ? "exceeding" : "remaining";
+  const bufferMessage = quote2tide < 0 ? "exceeding budget" : "of budget remaining";
   
   const totalLeftMinutes = quote2tide < 0 ? 0 : bufferNice;
   const totalOverMinutes = quote2tide < 0 ? bufferNice : 0;
@@ -118,7 +116,7 @@ const TimeBudgetsChunk = ({
         />
       </div>
       
-      {!moment(b.createdAt).isAfter(tideWall) && 
+      {b.createdAt < tideWall &&
         <div className='big'>
           <p className='orangeT'
           >** This legacy {Pref.xBatch} was created before Start-Stop was enacted. 
@@ -136,7 +134,15 @@ const TimeBudgetsChunk = ({
       <div className='space'>
         <div className='containerE'>
           <div className='oneEcontent numFont'>
-            <TimeBudgetBar a={totalTideMinutes} b={totalLeftMinutes} c={totalOverMinutes} />
+            <TimeBudgetBar 
+              a={totalTideMinutes} 
+              b={totalLeftMinutes} 
+              c={totalOverMinutes}
+            />
+            
+            <p className='bigger line1x'
+              >{totalTideAs} <i className='med'>{conversion} logged</i>
+            </p>
             
             <p className='bigger line1x'
               >{totalBudgetAs} <i className='med'>{totalMessage} budgeted</i>
@@ -152,10 +158,6 @@ const TimeBudgetsChunk = ({
                   >Including {extraAs} {totalMessage} of extra time</i>
               </div>
             }
-              
-            <p className='bigger line1x'
-              >{totalTideAs} <i className='med'>{conversion} logged</i>
-            </p>
             
             <p className='bigger line1x' 
               >{bufferAs} <i className='med'>{conversion} {bufferMessage}</i>
@@ -189,6 +191,7 @@ const TimeBudgetsChunk = ({
                   <TimeSplitBar
                     title={Pref.branches}
                     nums={branchTime}
+                    chunks={branchTime.map(b=>b.y>0)}
                     colour='blue' />
                   <dl className='readlines'>
                     {branchTime.map((br, ix)=>{

@@ -57,31 +57,3 @@ const MiniStack = ({
 };
 
 export default MiniStack;
-
-/* old backup
-container class inc "meterprogStack"
-<VictoryStack
-  colorScale={["rgb(200,200,200)", "rgb(39,174,96)", "rgb(46,204,113)", "white"]}
-  horizontal={true}
-  padding={0}
-  height={12}
->
-  <VictoryBar 
-    data={dataArr[0]}
-    barRatio={5}
-  />
-  <VictoryBar 
-    data={dataArr[1]}
-    barRatio={5}
-  />
-  <VictoryBar
-    data={dataArr[2]}
-    barRatio={5}
-  />
-  <VictoryBar
-    data={dataArr[3]}
-    barRatio={5}
-    style={ { height: '20px' } }
-  />
-</VictoryStack>
-*/

@@ -1,35 +1,19 @@
 import React from "react";
-import { VictoryBar, VictoryStack } from 'victory';
 
-const TimeSplitBar = ({ title, nums, colour })=> {
-  
-  const colours =
-    colour === 'blue' ? ["#4181cb","#044289","#499eff","#0579ff","#7b9dc4"] :
-    colour === 'green' ? ["#2ecc71","#22f97c","#02d85b","#4fff98","#028237"] :
-    colour === 'red' ? ["#e74c46","#a30500","#720300","#8c0c08","#9b0500"] :
-    colour === 'pale' ? ["#b4b3a8", "#807f6b", "#97957f", "#bdbca3", "#efeed4"] :
-    null;
-
-  return(
-    <div className='noCopy hzBarContain25' title={title}>
-    
-      <VictoryStack
-        colorScale={colours}
-        horizontal={true}
-        padding={0}
-        height={45}
-      >
-        {nums.map((ph, ix)=>{
-          return(
-            <VictoryBar 
-              key={ix}
-              data={[{ x: "ph", y: ph.y }]}
-              barWidth={40}
-            />
-        )})}
-      </VictoryStack>
-    </div>
-  );
-};
+const TimeSplitBar = ({ title, chunks })=> (
+  <div className='noCopy' title={title}>
+    <n-piece-bar-wrap>
+      <n-piece-bar style={{height:'1.5vmax'}}>
+        {chunks.map( (et, ix)=>{
+          if(!et) { 
+            return <n-pc-off key={ix}></n-pc-off>;
+          }else{
+            return <n-pc-on key={ix}></n-pc-on>;
+          }
+        })}
+      </n-piece-bar>
+  </n-piece-bar-wrap>
+  </div>
+);
   
 export default TimeSplitBar;

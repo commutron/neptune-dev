@@ -16,14 +16,17 @@ import React from 'react';
     wordWrap: 'keep-all',
   };
  
-const NumStat = ({ num, icon, name, title, color, size, moreClass }) => (
-  <div style={sty} title={title} className={'numFont noCopy centre  ' + (moreClass || '')}>
+const NumStat = ({ num, icon, name, title, color, size, moreClass })=> (
+  <div 
+    style={sty} 
+    title={title} 
+    className={`numFont noCopy ${moreClass || ''} ${name ? 'centre' : 'beside'}`}>
     <span 
       style={bSty} 
       className={color + ' ' + size}
       >{num !== false ? num : <n-fa1><i className={icon}></i></n-fa1>}
     </span>
-    <n-sm style={sSty} class='label'>{name}</n-sm>
+    {name && <n-sm style={sSty} class='label'>{name}</n-sm>}
   </div>
 );
 

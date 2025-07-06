@@ -357,22 +357,28 @@ a:has(.onlyHover):where(:hover, :active, :focus-visible) .onlyHover {
     transition: opacity 250ms ease-in-out;
   }
 }
-  
-.leapLine {
+.leapHead, .leapLine {
   display: grid;
   grid-template-rows: min-content;
   grid-template-columns: minmax(1ch, 0.5fr) repeat( auto-fit, minmax(0px, 1fr) );
 	grid-auto-flow: column;
 	grid-gap: 2vmin;
 	align-items: center;
-	padding: 2vmin;
-	border-bottom: 1px outset grey;
 	border-left-width: 1vmax;
   background-color: white;
   color: var(--black);
   overflow: hidden;
   word-break: break-all;
   word-wrap: break-word;
+}
+.leapHead {
+  padding: 1vmin 2vmin;
+  margin-bottom: 0.5vmin;
+  font-size: var(--sm9);
+}
+.leapLine {
+  padding: 2vmin;
+  border-bottom: 1px outset grey;
   box-shadow: var(--dropShadow000);
 }
 .leapLine > span:first-child {
