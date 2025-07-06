@@ -255,6 +255,7 @@ const GoBack = ({ handleStepUndo, selfCancel })=> {
   return(
     <button
 			className='textAction'
+			title='Undo Last Step'
 			onClick={(e)=>{e.target.disabled = true;handleStepUndo(e)}}
 			disabled={false}
 		><i className="fas fa-undo-alt spinRe gapR"></i>Go Back</button>

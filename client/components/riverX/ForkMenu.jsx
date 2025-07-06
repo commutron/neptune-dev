@@ -21,7 +21,7 @@ const ForkMenu = ({ seriesId, serial, wFlowOps, wFlowNow, altIs })=> {
       {Roles.userIsInRole(Meteor.userId(), ['verify', 'run']) &&
         <ContextMenuTrigger
   				id={serial+'pathChange'}
-  				attributes={ {className:'moreStepAction centre'} }
+  				attributes={ {className:'moreStepAction centre', title:'Select Alt Flow'} }
   				holdToDisplay={1}
           renderTag='div'
           >

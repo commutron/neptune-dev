@@ -97,19 +97,11 @@ button n-model-button,
 input[type='submit'],
 input[type='reset'],
 input[type='checkbox'] {
- 	-webkit-transition: all 125ms ease-in-out;
-  -moz-transition: all 125ms ease-in-out;
-  -o-transition: all 125ms ease-in-out;
   transition: all 125ms ease-in-out;
   border: 0;
   border-color: black;
   padding: 0;
   text-indent: 0;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  -o-user-select: none;
   user-select: none;
   cursor: pointer;
 }

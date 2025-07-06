@@ -6,10 +6,11 @@ function HeadWater( batchData, seriesData, widgetData ) {
   let flow = [];
   let flowCounts = false;
   
-  const itemS = seriesData && seriesData.items.sort( (x,y)=> x.serial - y.serial);
-  const srange = itemS && itemS.length > 0 ?
-                  `${itemS[0].serial} - ${itemS[itemS.length-1].serial}` : null;
-      
+  // const itemS = seriesData && seriesData.items.sort( (x,y)=> x.serial - y.serial);
+  // const srange = itemS && itemS.length > 0 ?
+                  // `${itemS[0].serial} - ${itemS[itemS.length-1].serial}` : null;
+  const itemS = seriesData?.items;
+  const srange = itemS && itemS.length > 0;
   
   if( batchData && widgetData ) {
     const river = widgetData.flows.find( x => x.flowKey === batchData.river);

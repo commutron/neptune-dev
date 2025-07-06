@@ -145,8 +145,6 @@ const MiniInfo = ({ batchData, srange, flowCounts, rapidMerge, bClosed, app, can
       <p>Serialized Items: <n-num>{flowCounts.liveItems}</n-num></p>
     : null}
     
-    {srange && <p>Serials: <n-num>{srange}</n-num></p>}
-    
     {flowCounts.scrapCount > 0 &&
       <p>Scrapped Items: <n-num className='redT'>{flowCounts.scrapCount}</n-num></p>}
       

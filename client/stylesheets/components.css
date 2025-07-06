@@ -268,7 +268,13 @@ n-timeline-item:last-child n-timeline-marker:after {
   transition: display 200ms, opacity 200ms;
   transition-behavior: allow-discrete;
 }
-@supports not (anchor-name: --pop-actions) {
+@supports not(:popover-open) {
+  .popmenu {
+    display: none;
+    pointer-events: none;
+  }
+}
+@supports not(anchor-name: --pop-actions) {
   .popmenu {
     position: absolute;
     inset: unset;
