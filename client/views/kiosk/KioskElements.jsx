@@ -118,17 +118,16 @@ const KioskElements = ({
           hotxBatch &&
             <div className='stick darkCard spacehalf'>
               <h3 className='nomargin centreText'>{hotxBatch.batch}</h3>
-              <ul>
-                <li>{hotxBatch.live ? 'live' : 'not live'}</li>
-                <li>{hotxBatch.completed ? moment(hotxBatch.completedAt).calendar() : 'in progress'}</li>
-                <li>Batch Quanity: {hotxBatch.quantity}</li>
-                <li>{moment(hotxBatch.salesStart).calendar()}</li>
-                <li>{moment(hotxBatch.salesEnd).calendar()}</li>
-              </ul>
-              
+              <dl>
+                <dt>{hotxBatch.live ? 'Live' : 'Not Live'}</dt>
+                <dt>Start: {moment(hotxBatch.salesStart).calendar()}</dt>
+                <dt>Due: {moment(hotxBatch.salesEnd).calendar()}</dt>
+                <dt>Completed: {hotxBatch.completed ? moment(hotxBatch.completedAt).calendar() : <em>in progress</em>}</dt>
+                <dt>Batch Quanity: {hotxBatch.quantity}</dt>
               {hotxSeries &&
-                <b>Series Quanity: {hotxSeries.items.length}</b>
+                <dt>Series Quanity: {hotxSeries.items.length}</dt>
               }
+              </dl>
             </div>
         }
       </div>
@@ -136,7 +135,7 @@ const KioskElements = ({
       <div className='kioskItem forceScrollStyle forceScroll'>
         {!kactionState ? null :
           kitem &&
-            // const altIs = kitem.altPath.find( x => x.river !== false );
+            // const altIs = kitem.altPath.find( x => x.r2403130005iver !== false );
             // const altFlow = altIs && widgetData.flows.find( f => f.flowKey === altIs.river );
             // const altitle = altFlow && altFlow.title;
             <Fragment>

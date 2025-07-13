@@ -178,7 +178,7 @@ const StoneSelect = ({
     	      />
   	       : null}
   	      
-          <div className='undoStepWrap'>
+          <div className='undoStepWrap liteTip nottall' data-tip='Undo Last Step'>
   					{undoOption ? 
   					  <GoBack 
   					    handleStepUndo={(e)=>handleStepUndo(e)}
@@ -188,7 +188,7 @@ const StoneSelect = ({
   				</div>
   				
   				{flowStep.type !== 'first' &&
-  				  <div className='stoneComm'>
+  				  <div className='stoneComm liteTip nottall' data-tip='Add Comment'>
       				<CommTrigger
       					commTrigger={()=>commTrigger(!commDoState)} />
           	</div>}

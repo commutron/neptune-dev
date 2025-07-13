@@ -2,7 +2,7 @@ import React from 'react';
 import Pref from '/client/global/pref.js';
 
 const SearchHelp = ()=> (
-  <div className='pop vmargin space darkCard'>
+  <div className='popSm vmargin spacehalf smTxt darkCard'>
     <div className='cap rowWrap'>
       <dl className='margin5'>
         <dt>Searchable</dt>

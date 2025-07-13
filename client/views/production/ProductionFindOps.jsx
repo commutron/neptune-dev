@@ -184,6 +184,8 @@ const ProductionFindOps = ({
   
 // Item
 	if( Pref.regexSN.test(orb) ) {
+	  console.log('valid serial format');
+	  
     if(hotxSeries) {
       let item = itemData(hotxSeries.items, orb);
       let widget = linkedWidget(hotxSeries.widgetId);
@@ -221,6 +223,26 @@ const ProductionFindOps = ({
             root={app.instruct}
             anchor={anchor} />
         </ProWrap>
+      );
+    }else{
+      console.log('Would You like to create this??');
+      return(
+        <ProWindow 
+          brancheS={brancheS} 
+          plainBatchS={plainBatchS} 
+          user={user}
+          canMulti={canMulti}
+          allEquip={allEquip}
+        >
+          <QuickCards
+            gem={orb}
+            orbslice={orb}
+            canMulti={canMulti}
+            user={user}
+            allEquip={allEquip}
+            allMaint={allMaint}
+          />
+        </ProWindow>
       );
     }
   }
@@ -324,6 +346,8 @@ const ProductionFindOps = ({
   
   if(!isNaN(orb) && orb.length >= 5) {
     Session.set('nowBatch', orb);
+    console.log('Number Greater Than 5');
+    
     return(
       <ProWindow 
         brancheS={brancheS} 
@@ -342,7 +366,6 @@ const ProductionFindOps = ({
       </ProWindow>
     );
   }
-  
   Session.set('nowBatch', false);
 	return(
 	  <ProWindow 
@@ -369,9 +392,11 @@ const ProductionFindOps = ({
 
 export default ProductionFindOps;
 
-const QuickCards = ({ orbslice, canMulti, user, allEquip, allMaint })=> (
+const QuickCards = ({ gem, orbslice, canMulti, user, allEquip, allMaint })=> (
   <div className='scrollWrap forceScrollStyle' style={{height: '100%', minHeight: '100%'}}>
     {orbslice && <PartialCard orb={orbslice} /> }
+    {user.engaged && <ClockedCard user={user} />}
+    {gem && <InlineNewSerial gem={gem} user={user} /> }
     <div className='balancer gapsR gapsC wide space'>
       <QuickRecent user={user} />
       {canMulti && <MultiCard />}
@@ -380,3 +405,39 @@ const QuickCards = ({ orbslice, canMulti, user, allEquip, allMaint })=> (
     </div>
   </div>
 );
+
+const ClockedCard = ({ user })=> {
+// engaged
+// tKey:"Hu8Kqhwu3sghXYbnT"
+// tName:"22007"
+// tSubt
+// tTask
+// task:"PROX"
+  
+  const eng = user.engaged.tName;
+  const title = eng.startsWith('Eq') ? eng.split("<*>")[0].substring(eng.indexOf("-")+1) : eng;
+
+  return(
+    <div className='centre pop wmargin vmargin spacehalf min200 max400 darkCard nGlow'>
+      {user.engaged ?
+        <div className='centre centreText cap'>
+          <span className='biggester numFont'>{title}</span>
+          <span className='letterSpaced' style={{fontWeight: 'lighter'}}>{user.engaged.tTask}, {user.engaged.tSubt}</span>  
+        </div> 
+      : null}
+    </div>
+  );
+};
+
+const InlineNewSerial = ({gem, user})=> {
+  
+  if(gem && user.engaged && user.engaged.task === "PROX") {
+    return(
+      <div className='centreText'>
+        <strong>Option to create this serial</strong>
+      </div>
+    );
+  }
+  
+  return null;
+};

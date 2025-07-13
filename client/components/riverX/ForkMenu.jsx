@@ -17,11 +17,11 @@ const ForkMenu = ({ seriesId, serial, wFlowOps, wFlowNow, altIs })=> {
 	}
   
   return(
-    <div className='riverPath cap'>
+    <div className='riverPath cap liteTip nottall' data-tip='Set Alt Flow'>
       {Roles.userIsInRole(Meteor.userId(), ['verify', 'run']) &&
         <ContextMenuTrigger
   				id={serial+'pathChange'}
-  				attributes={ {className:'moreStepAction centre', title:'Select Alt Flow'} }
+  				attributes={ {className:'moreStepAction centre'} }
   				holdToDisplay={1}
           renderTag='div'
           >

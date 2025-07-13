@@ -8,8 +8,8 @@ import { toast } from 'react-toastify';
 import ModelNative from '/client/layouts/Models/ModelNative';
 import { onFire } from '/client/utility/NonConOptions';
 
-const BatchCreate = ({ groupId, widgetId, allVariants, prerun, clearOnClose })=> {
-  
+const BatchCreate = ({ groupId, gemail, widgetId, allVariants, prerun, clearOnClose })=> {
+
   const liveVs = allVariants.filter( v => v.live );
   
   const [ tempver, tempverSet ] = useState(liveVs[0] ? liveVs[0].versionKey : false);
@@ -23,7 +23,7 @@ const BatchCreate = ({ groupId, widgetId, allVariants, prerun, clearOnClose })=>
         re && pstSet(re);
        });
      
-      radSet( liveVs.find( v => v.versionKey === tempver ).radioactive );
+      radSet( liveVs.find( v => v.versionKey === tempver )?.radioactive || false );
     }
    }, [prerun, tempver]);
    
@@ -259,6 +259,14 @@ const BatchCreate = ({ groupId, widgetId, allVariants, prerun, clearOnClose })=>
           }
         </div>
       </span>
+      
+      {gemail &&
+        <p>
+        <span className='mockTag'>
+          <i className="fa-solid fa-envelope-circle-check fa-lg gapR"></i>{Pref.Group} Email Enabled
+        </span>
+        </p>
+      }
       
       <div className='vmargin'>
         <button

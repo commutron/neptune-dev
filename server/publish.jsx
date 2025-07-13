@@ -766,7 +766,8 @@ Meteor.publish('hotDataEx', function(dataView, dataRequest, hotWidget){
             'alias': 1,
             'hibernate': 1,
             'internal': 1,
-            'wiki': 1
+            'wiki': 1,
+            'emailOptIn': 1
           }}),
         WidgetDB.find({_id: hothotWidgetID, orgKey: orgKey}, {
           fields: {

@@ -4,7 +4,7 @@ import React from 'react';
 export const CommTrigger = ({ commTrigger })=> (
   <button
 			id='stoneCommTrigger'
-			title='Add Comment'
+			name='Add Comment'
 			className='moreStepAction centre'
 		  onClick={()=>commTrigger(true)} 
 		><i className='fas fa-comment fa-fw fa-lg'></i>

@@ -42,6 +42,7 @@ const WModels = ({
       />
       <BatchCreate
         groupId={groupData._id}
+        gemail={groupData.emailOptIn}
         widgetId={widgetData._id}
         allVariants={variantData}
         access={doBch}

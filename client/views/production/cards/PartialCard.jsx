@@ -17,14 +17,16 @@ const PartialCard = ({ orb })=> {
     });
   }, [orb]);
   
+  if(!lookup || lookup.length === 0) {
+    return null;
+  }
+  
   return(
-    <div className='centre bottomLine borderGray darkCard wmargin spacehalf min200 max600'>
-      {!lookup ? <em>...</em> :
-        lookup.length === 1 ? <em>~ Partial Match Auto Redirect ~</em> :
-        lookup.length === 0 ? null :
+    <div className='popSm bottomLine borderGray darkCard wmargin spacehalf min200 max600 centreText'>
+      {lookup.length === 1 ? <em>~ Partial Match Auto Redirect ~</em> :
         <Fragment>
-          <p className='med wide centreText bottomLine borderGray'>Possible partial matches</p>
-          <div className='vmarginquarter'>
+          <p className='med wide centreText bottomLine borderGray'>Partial Matches</p>
+          <div className='vmarginquarter centre'>
             {lookup.map( (e, ix)=>(
               <button 
                 key={ix}

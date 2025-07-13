@@ -21,6 +21,15 @@ const ServicePanel = ()=> {
 	  });
   }, []);
   
+  const goPro = (eq, sv)=> {
+    const find = 'Eq-' + (eq.alias || '') +' ~ '+ sv.name;
+    
+    Session.set('now', find);
+    Session.set('nowSV', sv._id);
+  
+    FlowRouter.go('/production');
+	};
+  
   return(
     <div className='space5x5'>
       {!equipData ?
@@ -45,7 +54,13 @@ const ServicePanel = ()=> {
                         x1.close > x2.close ? 1 : 0 )
                       .map( (sv, ix)=>(
               <dd key={ix} className='cap'
-              >{sv.name} - {moment(sv.close).format('dddd MMMM Do')}
+              ><button
+                className='cap textLinkButton'
+                onClick={()=>goPro(eq, sv)}
+              ><i className='fa-solid fa-paper-plane greenT fa-fw gapR'></i>
+               <i>{sv.name} - {moment(sv.close).format('dddd MMMM Do')}</i>
+              </button>
+  
               </dd>
             ))}
           </dl>

@@ -5,6 +5,7 @@
 .midnightGlow { background-image: linear-gradient(200deg, oklab(0 0 0 / 0) 50%, var(--wetasphalttrans) 90%); }
 .tealGlow { background-image: linear-gradient(200deg, oklab(0 0 0 / 0) 50%, var(--turquoisetrans) 90%); }
 .darkredGlow { background-image: linear-gradient(200deg, oklab(0 0 0 / 0) 50%, var(--pomegranatetrans) 90%); }
+.nGlow { background-image: linear-gradient(180deg, oklab(0 0 0 / 0) 50%, var(--neptuneColor) 200%); }
 
 .countFillConcrete0 { background-image: linear-gradient(var(--asbestos), oklab(0 0 0 / 0) 0%); }
 .countFillConcrete5 { background-image: linear-gradient(var(--asbestos), oklab(0 0 0 / 0) 9%); }

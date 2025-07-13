@@ -110,7 +110,7 @@ Meteor.methods({
     const accessKey = Meteor.user().orgKey;
     const auth = Roles.userIsInRole(Meteor.userId(), ['edit','run']);
     
-    const doc = XBatchDB.findOne({_id: batchId},{fields:{'orgKey':1,'batch':1,'tide':1}});
+    const doc = XBatchDB.findOne({_id: batchId},{fields:{'orgKey':1,'batch':1,'versionKey':1,'tide':1}});
     const srs = XSeriesDB.findOne({batch: doc.batch},{fields:{'_id':1}});
 
     if(auth && doc.orgKey === accessKey) {
@@ -123,6 +123,18 @@ Meteor.methods({
                       XBatchDB.findOne({batch: newBatchNum},{fields:{'_id':1}});
     
       if(!openTide && !duplicate) {
+        if(vKey !== doc.versionKey){
+          XBatchDB.update({_id: batchId, orgKey: accessKey}, {
+            $push : {
+              altered: {
+                changeDate: new Date(),
+                changeWho: Meteor.userId(),
+                changeReason: 'user edit',
+                changeKey: 'version (vKey)',
+                oldValue: doc.versionKey,
+                newValue: vKey
+          }}});
+        }
         XBatchDB.update({_id: batchId, orgKey: accessKey}, {
           $set : {
             batch: newBatchNum,
@@ -132,7 +144,7 @@ Meteor.methods({
     			  quantity: Number(quantity),
     			  updatedAt: new Date(),
     			  updatedWho: Meteor.userId()
-          }});
+        }});
         
         if(srs) {
           XSeriesDB.update({batch: doc.batch}, {

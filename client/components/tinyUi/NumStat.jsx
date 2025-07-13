@@ -1,26 +1,22 @@
 import React from 'react';
   
-  const sty = {
-    textAlign: 'center',
-  };
-  const bSty = {
-    verticalAlign: 'bottom',
-    wordBreak: 'keep-all',
-    wordWrap: 'keep-all'
-  };
-  
-  const sSty = {
-    verticalAlign: 'top',
-    textTransform: 'capitalize',
-    wordBreak: 'keep-all',
-    wordWrap: 'keep-all',
-  };
+const bSty = {
+  verticalAlign: 'bottom',
+  wordBreak: 'keep-all',
+  wordWrap: 'keep-all'
+};
+
+const sSty = {
+  verticalAlign: 'top',
+  textTransform: 'capitalize',
+  wordBreak: 'keep-all',
+  wordWrap: 'keep-all',
+};
  
 const NumStat = ({ num, icon, name, title, color, size, moreClass })=> (
-  <div 
-    style={sty} 
+  <div
     title={title} 
-    className={`numFont noCopy ${moreClass || ''} ${name ? 'centre' : 'beside'}`}>
+    className={`numFont noCopy ${moreClass || ''} ${name ? 'centre' : 'centreText'}`}>
     <span 
       style={bSty} 
       className={color + ' ' + size}

@@ -43,7 +43,7 @@ const UserDataWrap = ({
         <Slides
           menu={[
             <b><i className='fas fa-clock fa-fw gapR'></i>Project Activity</b>,
-            <b><i className='fas fa-gears fa-fw gapR'></i>Equipment</b>,
+            <b><i className='fas fa-screwdriver-wrench fa-fw gapR'></i>Equipment PM</b>,
             <b><i className='fas fa-id-card fa-fw gapR'></i>Credentials</b>,
             <b><i className='fas fa-sliders fa-fw gapR'></i>Preferences</b>,
             <b><i className='fas fa-key fa-fw gapR'></i>Access & Privacy</b>,

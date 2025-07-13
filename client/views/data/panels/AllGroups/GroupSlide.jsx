@@ -37,14 +37,6 @@ const GroupSlide = ({
   const doNew = canCrt && !g.hibernate;
   const doRmv = (!widgetsList || widgetsList.length === 0) && g.hibernate && canRmv;
   
-  const mockTag = {
-    padding: '3px 7px 3px 5px',
-    borderRadius: '1px 25px 25px 1px',
-    backgroundColor: 'var(--nephritis)',
-    fontSize: '0.9rem',
-    color: 'white'
-  };
-  
   return(
     <div className='section overscroll' key={g.alias}>
       {doRmv &&
@@ -166,8 +158,8 @@ const GroupSlide = ({
       
       {g.emailOptIn &&
         <p className='w100 indenText'>
-        <span style={mockTag}>
-          <i className="fa-solid fa-envelope-circle-check fa-lg gapR"></i>Automated Emails Enabled
+        <span className='mockTag'>
+          <i className="fa-solid fa-envelope-circle-check fa-lg gapR"></i>{Pref.Group} Emails Enabled
         </span>
         </p>
       }

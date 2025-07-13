@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import Pref from '/client/global/pref.js';
 import LeapLine from '/client/components/tinyUi/LeapLine';
 import NumStat from '/client/components/tinyUi/NumStat';
@@ -17,11 +17,11 @@ const WidgetsDepth = ({ filterString, widgetData, active })=> {
       <div className='leapHead stick'>
         <div></div>
         <div></div>
-        <div className='balance cap'>
-          <span>{Pref.variants}</span>
+        <div className='cap'>
+          {/*}<span>{Pref.variants}</span>*/}
           <span>{Pref.xBatchs}</span>
-          <span>Total Quantity</span>
-          <span>NC Rate</span>
+          <span>Qty</span>
+          <span>NC</span>
         </div>
       </div>
       {w.length < 1 ? 
@@ -68,13 +68,13 @@ const WidgetIndexCard = ({ data, barStyle })=>{
       title={data.widget.toUpperCase()}
       cTwo={data.describe}
       cThree={
-        <span className='balance'>
-          <NumStat
+        <Fragment>
+          {/*<NumStat
             num={moreData[0]}
             title={`Total ${Pref.variants}`}
             color='blueT'
             size='medBig'
-          />
+          />*/}
           <NumStat
             num={totalBatches}
             title={`Total ${Pref.xBatchs}`}
@@ -93,7 +93,7 @@ const WidgetIndexCard = ({ data, barStyle })=>{
             color='redT'
             size='medBig'
           />
-        </span>
+        </Fragment>
       }
       sty={barStyle}
       address={'/data/widget?request=' + data._id}

@@ -50,7 +50,7 @@ function sendExternalEmail(to, cc, subject, date, body, foot, flvr, fine, plainb
       <tbody>
         <tr><td colspan='2' style="background-color:#2781c3;width:100%;height:15px"></td></tr>
         <tr>
-          <td style="padding:0 10px">
+          <td style="padding:0 10px;line-height:1.2">
             <div style="text-align:center">
             <span style="letter-spacing:1px;font-weight:900;font-size:30px;color:black">COMMUTRON</span>
             <br /><span style="font-weight:600;font-size:20px;letter-spacing:4px;color:#2878ba">Industries Ltd</span>
@@ -300,7 +300,7 @@ Meteor.methods({
       const date = moment().tz(Config.clientTZ).format('h:mm a(CST), dddd, MMM Do YYYY');
       const dueDate = moment(salesEnd).tz(Config.clientTZ).format('dddd, MMMM Do YYYY');
       
-      const body = `A Work Order has been issued for your sales order ${'<b>'}${salesOrder}${'</b>'} of ${'<b>'}${toCap(isW, true)}${'</b>'}.`;
+      const body = `A Work Order has been issued for your sales order ${'<b>'}${salesOrder}${'</b>'}<br />of ${'<b>'}${toCap(isW, true)}${'</b>'}.`;
       const foot = `Order due date is set for ${'<b>'}${dueDate}${'</b>'}.`;
       const flvr = '';
       

@@ -276,6 +276,15 @@ n-timeline-item:last-child n-timeline-marker:after {
     pointer-events: none;
   }
 }
+@supports not (anchor-name: --pop-actions) {
+  .popmenu {
+    inset: unset;
+    transform: translateY(calc(50% + var(--tx0)));
+  }
+  .floattaskbar.stick {
+    position: relative !important;
+  }
+}
 .popmenu:popover-open {
   display: grid;
   opacity: 1;

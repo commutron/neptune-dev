@@ -279,14 +279,25 @@ Meteor.methods({
   
   getEquipAssigned() {
     let nextService = [];
-    const equip = EquipDB.find({online: true, stewards: { $in: [Meteor.userId()] }}, {
+    const equip = EquipDB.find({
+                    hibernate: {$ne: true}, 
+                    nullify: {$ne: true}, 
+                    stewards: { $in: [Meteor.userId()] }
+                  }, {
       fields: {
         'equip': 1,
         'alias': 1
     }}).fetch();
     
     for(let eq of equip) {
-      const maint = MaintainDB.find({equipId: eq._id, status: false}, {
+      const maint = MaintainDB.find({
+                      equipId: eq._id,
+                      $or: [
+                        { status: false },
+                        { status: 'willnotrequire' }
+                        // only future not required
+                       ]
+      }, {
         fields: {
           'close': 1,
           'name': 1

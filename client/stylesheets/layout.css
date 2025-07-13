@@ -1612,6 +1612,13 @@ n-col-table-head > span {
   border-style: solid;
   border-color: white;
 }
+.mockTag {
+  padding: 3px 7px 3px 5px;
+  border-radius: 1px 25px 25px 1px;
+  background-color: var(--nephritis);
+  font-size: 0.9rem;
+  color: white;
+}
 
 
 .tabsVert {
