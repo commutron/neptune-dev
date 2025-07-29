@@ -36,7 +36,7 @@ Meteor.methods({
             batch: batch, 
             orgKey: orgKey, 
             completed: false},{
-              fields:{'quantity':1}
+              fields:{'versionKey':1,'quantity':1}
             });
             
           if(!doc) {
@@ -51,8 +51,8 @@ Meteor.methods({
             if(!srs) {
               return [false, 'maxsrs'];
             }else{
-              const unit = unitNum || 1;
-              
+              const unit = unitNum || Meteor.call('quickVunit', doc.versionKey);
+             
               XSeriesDB.update({batch: batch}, {
                 $push : { items : {
                   serial: serial,

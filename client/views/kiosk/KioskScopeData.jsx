@@ -14,8 +14,6 @@ const KioskScopeData = ({
   hotVariant
 })=> {
   
-  console.log({bScope});
-  
   return(
     <KioskElements
       kactionState={kactionState}
@@ -61,12 +59,12 @@ export default withTracker( ({ kactionState, bScope }) => {
       null;
     }
     
-      // const localSeries = XSeriesDB.findOne( { 'items.serial': orb } );
-      // if( localSeries ) {
-      //   subBatch = localSeries.batch;
-      // }else{
-      //   subSerial = orb;
-      // }
+    // const localSeries = XSeriesDB.findOne( { 'items.serial': orb } );
+    // if( localSeries ) {
+    //   subBatch = localSeries.batch;
+    // }else{
+    //   subSerial = orb;
+    // }
   }
 
   const hotSub = Meteor.subscribe('hotDataKiosk', subSerial, subBatch);

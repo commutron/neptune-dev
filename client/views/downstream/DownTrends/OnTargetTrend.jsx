@@ -110,6 +110,7 @@ const OnTargetTrend = ({ app, isDebug })=>{
           { data_name: 'finish on quote',data_array: dataQ, data_color: "rgb(142, 68, 173)" }
         ]}
         title='On Target Percent KPI'
+        area={false}
       />
 
     </div>

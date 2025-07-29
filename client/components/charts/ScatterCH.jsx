@@ -24,7 +24,7 @@ ChartJS.register(
   Legend
 );
 
-const ScatterCH = ({ strdata, multidata, title, fillColor, intgr })=> {
+const ScatterCH = ({ strdata, multidata, title, fillColor, area, intgr })=> {
   
   const [ data, dataSet ] = useState({datasets:[]});
   
@@ -63,7 +63,8 @@ const ScatterCH = ({ strdata, multidata, title, fillColor, intgr })=> {
             label: d.data_name,
             data: d.data_array,
             backgroundColor: d.data_color,
-            fill: true,
+            borderColor: d.data_color,
+            fill: area !== undefined ? area : true,
             borderWidth: 5,
             pointRadius: 5
           };
@@ -74,8 +75,9 @@ const ScatterCH = ({ strdata, multidata, title, fillColor, intgr })=> {
         datasets: [{ 
           label: title || 'set1',
           data: strdata || [],
-          backgroundColor: fillColor || 'rgb(127, 140, 141, 0.2)',
-          fill: true,
+          backgroundColor: fillColor || 'rgb(127, 140, 141, 0.5)',
+          borderColor: fillColor || 'rgb(127, 140, 141, 0.5)',
+          fill: area !== undefined ? area : true,
           borderWidth: 5,
           pointRadius: 5
         }]

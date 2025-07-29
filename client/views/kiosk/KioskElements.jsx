@@ -58,8 +58,9 @@ const KioskElements = ({
       );
     }else if(klisten && kactionState === 'serial') {
       konfirmSet(0);
+      const vUnit = hotVariant?.runUnits || 1;
       Meteor.apply('kallNewSerial',
-        [ gem, bScope ],
+        [ gem, bScope, vUnit ],
         {wait: true},
         (error, re)=> {
           error && console.error(error);
@@ -68,7 +69,7 @@ const KioskElements = ({
           jwlSet(re?.[0] ? gem : false);
           !re || !re[0] ? Session.set('now', '') : null;
           
-          console.log(re);
+          // console.log(re);
         } 
       );
     }
@@ -91,15 +92,10 @@ const KioskElements = ({
   
   useEffect( ()=> {
     // console.log({kactionState});
-    
-    console.log({hotxBatch});
-    
-    console.log({hotxSeries});
-    
-    console.log({hotVariant});
-    
+    // console.log({hotxBatch});
+    // console.log({hotxSeries});
+    // console.log({hotVariant});
     // console.log({allTrace});
-    
   }, [kactionState, hotxBatch, hotxSeries]);
   
   const shortate = (eff, slv)=> {

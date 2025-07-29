@@ -17,7 +17,6 @@ const OrderScatter = ({})=> {
       err && console.log(err);
       if(re && mounted.current) {
         tickXYSet(re);
-        // console.log({re});
       }
     });
     
@@ -25,25 +24,17 @@ const OrderScatter = ({})=> {
   }, []);
   
   useEffect( ()=> {
-    // tickXY = {
     //   y1: b.quantity,
     //   x1: b.createdAt,
     //   y2: trnGap,
     //   x2: b.salesStart,
     //   z: `${b.batch} (so.${b.salesOrder})`,
-    // }
-    // labels={ z + ' Qty: '+ y1 
-    //           + '\n' 
-    //           + 'Workdays: ' 
-    //           + y2
-    //           + ' (' + Math.round(y2 / (y1 || 1))
-    //           + ' per item)'
-    //       }
     
     const cnvrt = (tickXY || []).map((r) => { return {
                 x: tggl ? r.x2.toISOString() : r.x1.toISOString(), y: tggl ? perQty ? Math.round(r.y2 / (r.y1 || 1)) : r.y2 : r.y1
         }});
-    cvrtDataSet(cnvrt);
+    const cnvrtS = cnvrt.sort((a,b)=> a.x > b.x ? 1 : a.x < b.x ? -1 : 0);
+    cvrtDataSet(cnvrtS);
   }, [tickXY, tggl, perQty]);
   
   const title = tggl ? 'Workdays Duration. From Sales Start to Completed' : 

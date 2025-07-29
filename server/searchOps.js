@@ -224,7 +224,12 @@ Meteor.methods({
   
   quickVariant(vKey) {
     const variant = VariantDB.findOne({versionKey: vKey},{fields:{'variant':1}});
-    const found = variant ? null : variant.variant;
+    const found = variant ? variant.variant : null;
+    return found;
+  },
+  quickVunit(vKey) {
+    const variant = VariantDB.findOne({versionKey: vKey},{fields:{'runUnits':1}});
+    const found = variant ? variant.runUnits : 1;
     return found;
   },
   

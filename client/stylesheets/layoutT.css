@@ -103,7 +103,7 @@
   --kflash_light: var(--blackFade);
   --kflash_dark: var(--blackfrost);
   filter: blur(50px);
-  animation: fadeSlow ease 2s;
+  animation: fadeSlow ease 500ms;
   /*transition: all ease 2s;*/
 }
 .kioskFlash.good {
@@ -119,7 +119,14 @@
   --kflash_dark: transparent;
   pointer-events: none;
 }
-
+.kioskFlash.proFlash {
+  max-height: 25vh;
+}
+.proFlash > n-faW,
+.proFlash > n-faA,
+.proFlash > n-faX {
+  font-size: calc( (var(--vert_main) - var(--vert_border) ) * 0.3);
+}
 .kioskFrame .followTask i {
   font-size: calc(var(--vert_border) * 2.25);
 }

@@ -614,7 +614,8 @@ Meteor.publish('hotDataKiosk', function(subSerial, subBatch){
           'widgetId': 1,
           'versionKey': 1,
           'variant': 1,
-          'radioactive': 1
+          'radioactive': 1,
+          'runUnits': 1
         }}),
       // WidgetDB.find({_id: wID}, {
       //   fields: {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import Pref from '/client/global/pref.js';
 
 import { ProWrap, ProWindow } from '/client/layouts/ProLayout';
@@ -11,6 +11,7 @@ import XDoProCard from './cards/XDoProCard';
 import PartialCard from './cards/PartialCard';
 import EquipCard from './cards/EquipCard';
 import MultiCard from './cards/MultiCard';
+import InlineNewSerial from './cards/NewInlineSerial';
 import ServiceCard, { RepairCard } from './cards/ServiceCard';
 
 import BatchesList from './lists/BatchesList';
@@ -21,7 +22,7 @@ const ProductionFindOps = ({
   hotxBatch, hotxSeries, hotxRapids,
   allxBatch,
   allGroup, allWidget, allVariant,
-  user, time, app, canMulti,
+  user, time, app, canMulti, canSerial,
   activeUsers, plainBatchS, brancheS, 
   allEquip, allMaint,
   orb, eqS, anchor
@@ -83,6 +84,7 @@ const ProductionFindOps = ({
         <QuickCards
           orbslice={orb}
           canMulti={canMulti}
+          canSerial={canSerial}
           user={user}
           allEquip={allEquip}
           allMaint={allMaint}
@@ -238,6 +240,7 @@ const ProductionFindOps = ({
             gem={orb}
             orbslice={orb}
             canMulti={canMulti}
+            canSerial={canSerial}
             user={user}
             allEquip={allEquip}
             allMaint={allMaint}
@@ -359,6 +362,7 @@ const ProductionFindOps = ({
         <QuickCards
           orbslice={orb}
           canMulti={canMulti}
+          canSerial={canSerial}
           user={user}
           allEquip={allEquip}
           allMaint={allMaint}
@@ -382,6 +386,7 @@ const ProductionFindOps = ({
       <QuickCards
         orbslice={orb}
         canMulti={canMulti}
+        canSerial={canSerial}
         user={user}
         allEquip={allEquip}
         allMaint={allMaint}
@@ -392,11 +397,11 @@ const ProductionFindOps = ({
 
 export default ProductionFindOps;
 
-const QuickCards = ({ gem, orbslice, canMulti, user, allEquip, allMaint })=> (
+const QuickCards = ({ gem, orbslice, canMulti, canSerial, user, allEquip, allMaint })=> (
   <div className='scrollWrap forceScrollStyle' style={{height: '100%', minHeight: '100%'}}>
     {orbslice && <PartialCard orb={orbslice} /> }
     {user.engaged && <ClockedCard user={user} />}
-    {gem && <InlineNewSerial gem={gem} user={user} /> }
+    {gem && <InlineNewSerial canSerial={canSerial} gem={gem} user={user} /> }
     <div className='balancer gapsR gapsC wide space'>
       <QuickRecent user={user} />
       {canMulti && <MultiCard />}
@@ -427,17 +432,4 @@ const ClockedCard = ({ user })=> {
       : null}
     </div>
   );
-};
-
-const InlineNewSerial = ({gem, user})=> {
-  
-  if(gem && user.engaged && user.engaged.task === "PROX") {
-    return(
-      <div className='centreText'>
-        <strong>Option to create this serial</strong>
-      </div>
-    );
-  }
-  
-  return null;
 };

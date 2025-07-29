@@ -1,6 +1,6 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Meteor } from 'meteor/meteor';
-import moment from 'moment';
+// import moment from 'moment';
 
 import { ScanListenLiteUtility, ScanListenLiteOff } from '/client/utility/ScanListener.js';
 
@@ -11,13 +11,13 @@ import TideFollow from '/client/components/tide/TideFollow';
 
 import KioskScopeData from '/client/views/kiosk/KioskScopeData';
 
-function testWithPaste(event) {
-  event.preventDefault();
-  const val = (event.clipboardData || window.clipboardData).getData("text");
-  if(val) {
-    Session.set('now', val);
-  }
-}
+// function testWithPaste(event) {
+//   event.preventDefault();
+//   const val = (event.clipboardData || window.clipboardData).getData("text");
+//   if(val) {
+//     Session.set('now', val);
+//   }
+// }
 
 const KioskWrap = ({ user, eBatch, doSerial, users, app, allTrace })=> {
   
@@ -30,7 +30,7 @@ const KioskWrap = ({ user, eBatch, doSerial, users, app, allTrace })=> {
     ScanListenLiteUtility();
     return ()=> {
       ScanListenLiteOff();
-      window.removeEventListener('paste', testWithPaste);
+      // window.removeEventListener('paste', testWithPaste);
       Session.set('now', '');
     };
   }, []);
@@ -41,11 +41,11 @@ const KioskWrap = ({ user, eBatch, doSerial, users, app, allTrace })=> {
   }, [kactionState]);
   
   const toggleListen = ()=> {
-    if(klisten) {
-      window.removeEventListener('paste', testWithPaste);
-    }else{
-      window.addEventListener("paste", testWithPaste);
-    }
+    // if(klisten) {
+    //   window.removeEventListener('paste', testWithPaste);
+    // }else{
+    //   window.addEventListener("paste", testWithPaste);
+    // }
     klistenSet(!klisten);
   };
   

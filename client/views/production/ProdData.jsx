@@ -25,7 +25,8 @@ const ProdData = ({
   const brancheS = useMemo( ()=> branchesOpenSort(app?.branches || []), [app]);
   
   const canMulti = useMemo( ()=> Roles.userIsInRole(Meteor.userId(), 'multitask_time'), [user]);
-  
+  const canSerial = useMemo( ()=> Roles.userIsInRole(Meteor.userId(), ['admin', 'kitting']), [user]);
+    
   const plainBatchS = useMemo( ()=> {
           const plain = [];
           if(canMulti && allxBatch?.length > 0) {
@@ -58,6 +59,7 @@ const ProdData = ({
       time={time}
       org={org}
       canMulti={canMulti}
+      canSerial={canSerial}
       activeUsers={activeUsers}
       plainBatchS={plainBatchS}
       brancheS={brancheS}
