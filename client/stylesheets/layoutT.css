@@ -103,7 +103,7 @@
   --kflash_light: var(--blackFade);
   --kflash_dark: var(--blackfrost);
   filter: blur(50px);
-  animation: fadeSlow ease 500ms;
+  animation: fadeSlow ease 250ms;
   /*transition: all ease 2s;*/
 }
 .kioskFlash.good {

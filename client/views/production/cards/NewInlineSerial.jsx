@@ -17,8 +17,8 @@ const InlineNewSerial = ({ canSerial, gem, user })=> {
         konfirmSet(!re || !re[0] ? false : true);
     		re && re[0] ? Meteor.setTimeout(()=>Session.set('now', ''), 750) : null;
     		re && re[0] ? Meteor.setTimeout(()=>Session.set('now', newGem), 800) : null;
-        // console.log(re);
-      } 
+        !re || !re[0] ? console.log(re) : null;
+      }
     );
   };
   

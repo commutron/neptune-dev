@@ -9,8 +9,8 @@ const HomeIcon = () => {
 	const isReadOnly = Roles.userIsInRole(Meteor.userId(), 'readOnly');
 	const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
 	
-	const isNightly = Roles.userIsInRole(Meteor.userId(), 'nightly');
-  const isKit = Roles.userIsInRole(Meteor.userId(), 'kitting');
+// 	const isNightly = Roles.userIsInRole(Meteor.userId(), 'nightly');
+  // const isKit = Roles.userIsInRole(Meteor.userId(), 'kitting');
   
   const warningLight = isDebug ? 'debugWarningLight' : '';
   
@@ -65,7 +65,7 @@ const HomeIcon = () => {
               doFunc={()=>FlowRouter.go('/kiosk')}
               text="Process"
               icon='fa-solid fa-location-arrow'
-              lock={!(isNightly || isKit)}
+              // lock={!(isNightly || isKit)}
             />
             <PopoverAction 
               doFunc={()=>FlowRouter.go('/equipment')}
