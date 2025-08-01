@@ -9,7 +9,7 @@ import {
   FinishOptions
 } from '/client/components/bigUi/ArrayBuilder/FlowElements';
 
-import { branchesSort } from '/client/utility/Arrays';
+import { branchesOpenSort } from '/client/utility/Arrays';
 
 export const FlowStepsWrap = ({ 
   rapidData, hasSeries, rSetItems,
@@ -134,7 +134,7 @@ const AddFlowSteps = ({
     endSet(dfEnd);
   }, [editState]);
   
-  const brancheS = branchesSort(app.branches);
+  const brancheS = branchesOpenSort(app.branches, true);
   
   function sendUp() {
     // steps set from state

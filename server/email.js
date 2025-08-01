@@ -208,12 +208,12 @@ Meteor.methods({
       
       const db = Meteor.call("serverDatabaseSize");
       
-      const body = `Users: ${db.u}, Groups: ${db.g}, Widgets: ${db.w}, Variants: ${db.v}, Batches: ${db.b}, Series(Items): ${db.i}, Rapids: ${db.r}, Traces: ${db.t}, Equips: ${db.e}, Maints: ${db.m}`;
+      const body = `<ul><li>Users: ${db.u}, Active-Users: ${db.uA}</li><li>Groups: ${db.g}, Widgets: ${db.w}, Variants: ${db.v}</li><li>Batches: ${db.b}, Live-Batches: ${db.bL}, Series(Items): ${db.i}, Rapids: ${db.r}, Traces: ${db.t}</li><li>Equips: ${db.e}, Maints: ${db.m}</li><li>TimeDB-Times: ${db.tm}, Caches: ${db.ch}, Email-Log: ${db.em}</li></ul>`;
       const asid = `OrgPIN: ${pin}`;
       const foot = `WorkingHours: ${hrs}`;
       const link = `config: tz:${Config.clientTZ} reply:${Config.replyEmail} tel:${Config.orgTel}`;
       
-      sendInternalEmail(to, subject, date, title, body, asid, foot, link, ":P");
+      sendInternalEmail(to, subject, date, title, body, asid, foot, link, ";P");
       
       return true;
     }else{
