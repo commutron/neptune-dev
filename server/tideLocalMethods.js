@@ -630,4 +630,44 @@ Meteor.methods({
     }
   },
   
+  checktaskrec() {
+    let taskSet = new Set();
+    let subSet = new Set();
+    
+    XBatchDB.find({ tide: {$exists: true} },{fields:{'tide.task':1,'tide.subtask':1}})
+    .forEach( x => {
+      x.tide.map( y => {
+        y.task && taskSet.add(y.task);
+        y.subtask && subSet.add(y.subtask);
+      });
+    });
+    
+    let opSet = new Set();
+    
+    AppDB.find({},{fields:{'branches':1}})
+    .forEach( x => {
+      x.branches.map( y => {
+        if(y.subTasks) {
+          y.subTasks.map( z => {
+            opSet.add(z);
+          });
+        }
+      });
+    });  
+    
+    const tasks = [...taskSet];
+    
+    const subs = [...subSet];
+    const ops = [...opSet];
+    
+    const stillOp = _.intersection(ops, subs);
+    
+    const neverUsedOp = _.difference(ops, subs);
+    const notInOp = _.difference(subs, ops);
+    
+    
+    return { tasks, subs, ops, stillOp, neverUsedOp, notInOp };
+                
+  }
+  
 });

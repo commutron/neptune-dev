@@ -162,6 +162,14 @@ const DataRepair = ({ app, users })=> {
         
         <ShipDiagnose />
         
+        <DoCard
+          title='Get All Tasks Used'
+          icon='binoculars'
+          color='tealSolid'
+          button='Search'
+          action={()=>doCallThing('checktaskrec', true)}
+        />
+        
       </div>
       
       <h2 className='centreText vmargin redT dropCeiling borderRed topLine'>High Risk - Use With Extreme Caution</h2>
