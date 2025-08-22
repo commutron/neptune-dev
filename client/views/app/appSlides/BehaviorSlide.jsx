@@ -87,8 +87,6 @@ const BehaviorSlide = ({app})=> {
       
       <FirstRepeat app={app} />
       
-      <AncillarySteps app={app} />
-      
       <AlterReason app={app} />
       
     </div>
@@ -149,46 +147,6 @@ const FirstRepeat = ({ app })=> {
             </li>
         )})}
       </ol>
-    </div>
-  );
-};
-
-const AncillarySteps = ({ app })=> {
-  
-  function ancRemove(name) {
-    toast.info('This may take a moment');
-    Meteor.call('removeAncOption', name, (error, reply)=>{
-      if(error)
-        console.log(error);
-      if(reply) {
-        toast.success('Saved');
-      }else{
-        toast.warning('Cannot be removed, entry is in use');
-      }
-    });
-  }
-  
-  return(
-    <div>
-      <h2 className='cap'>Ancillary ({Pref.ancillary}) Step Options</h2>
-      <i>Not strictly assembly but part of the total proccess.</i><br />
-      <i>Outside of the tracked process flow/fall.</i>
-      <AppSetSimple
-        title='step'
-        action='addAncOp'
-        rndmKey={Math.random().toString(36).substr(2, 5)} />
-      <ul>
-        {app.ancillaryOption.map( (entry, index)=>{
-          return( 
-            <li key={index}>
-              <i>{entry}</i>
-              <button 
-                className='miniAction redT'
-                onClick={()=>ancRemove(entry)}
-              ><i className='fas fa-times fa-fw'></i></button>
-            </li>
-        )})}
-      </ul>
     </div>
   );
 };

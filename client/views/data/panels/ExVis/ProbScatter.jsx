@@ -19,9 +19,6 @@ const ProbScatter = ({ fetchFunc, fillfade, title, brancheS, app })=> {
   
   useEffect( ()=> {
     let ops = ['wip'];
-    for(let anc of app.ancillaryOption) {
-      ops.push(anc);
-    }
     for(let br of brancheS) {
       if(br.pro) {
         ops.push(br.branch);

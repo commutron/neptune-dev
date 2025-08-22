@@ -7,15 +7,11 @@ import { SpinWrap } from '/client/components/tinyUi/Spin';
 
 import KioskWrap from '/client/layouts/KioskLayout';
 
-const KioskBaseData = ({ coldReady, user, users, app, allTrace })=> {
+const KioskBaseData = ({ coldReady, user, app, allTrace })=> {
 
   if( !coldReady || !user || !app ) {
     return( <SpinWrap /> );
   }
-  
-  const activeUsers = users.filter( x => 
-                        Roles.userIsInRole(x._id, 'active') === true &&
-                        Roles.userIsInRole(x._id, 'readOnly') === false);
   
   const doSerial = Roles.userIsInRole(Meteor.userId(), ['admin', 'kitting']);
   
@@ -31,7 +27,6 @@ const KioskBaseData = ({ coldReady, user, users, app, allTrace })=> {
       user={user}
       eBatch={eBatch}
       doSerial={doSerial}
-      users={activeUsers}
       app={app}
       allTrace={allTrace}
     />
@@ -53,7 +48,7 @@ export default withTracker( () => {
       coldReady: coldSub.ready(),
       user: user,
       org: org,
-      users: Meteor.users.find( {}, { sort: { username: 1 } } ).fetch(),
+      // users: Meteor.users.find( {}, { sort: { username: 1 } } ).fetch(),
       app: AppDB.findOne({org: org}),
       allTrace: TraceDB.find({}, { sort: { batch: -1 } }).fetch(),
     };

@@ -35,8 +35,6 @@ const ActivityPanel = ({ app, brancheS, user, isDebug, users, traceDT })=> {
   useEffect( ()=>{
     getData(true);
   }, [weekChoice]);
-  
-  const ancOptionS = app.ancillaryOption.sort();
     
   return(
     <div className='space5x5'>
@@ -70,7 +68,6 @@ const ActivityPanel = ({ app, brancheS, user, isDebug, users, traceDT })=> {
           user={user}
           isDebug={isDebug}
           app={app}
-          ancOptionS={ancOptionS}
           brancheS={brancheS} />
       </table>
       }

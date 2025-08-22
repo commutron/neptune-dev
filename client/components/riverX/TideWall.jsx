@@ -10,7 +10,7 @@ import MiniHistory from './MiniHistory.jsx';
 const TideWall = ({ 
   bID, bComplete, bOpen, rapidData,
   itemData, seriesData, shortfallS, altitle, scrap,
-  ancOptionS, brancheS,
+  brancheS,
   tideKey, timeOpen, engagedPro, engagedMlti
 })=> {
   
@@ -49,7 +49,6 @@ const TideWall = ({
           {!engagedMlti &&
             <BigTideTask
               ctxLabel={ctxLabel}
-              ancOptionS={ancOptionS}
               brancheS={brancheS} 
               taskState={taskState}
               subtState={subtState}
@@ -89,7 +88,7 @@ export default TideWall;
 
 export const TideBump = ({ 
   bID, bOpen,
-  ancOptionS, brancheS,
+  brancheS,
   tideKey, timeOpen, engagedPro
 })=> {
   
@@ -112,7 +111,6 @@ export const TideBump = ({
         </n-med-tide-container>
         <BigTideTask
           ctxLabel='Set Different Task'
-          ancOptionS={ancOptionS}
           brancheS={brancheS} 
           taskState={taskState}
           subtState={subtState}

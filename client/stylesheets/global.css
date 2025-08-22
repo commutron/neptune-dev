@@ -84,13 +84,6 @@ a:where(:hover,:focus-visible) {
 }
 
 button,
-[type="button"],
-[type="reset"],
-[type="submit"] {
-  -webkit-appearance: button;
-}
-
-button,
 button span,
 button label,
 button n-model-button,

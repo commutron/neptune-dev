@@ -89,11 +89,11 @@ const EmailRec = ({ app, users })=> {
           <h4>Currently Emailing</h4>
           <dl className='vmargin'>
             {Array.isArray(pcbEmails) && pcbEmails.map( (entry, index)=>{
-              const niceName = eList.find( x => x.value === entry );
-              if(niceName) {
+              const user = users.find( x => x._id === entry );
+              if(user) {
                 return( 
                   <dt key={index} className='comfort bottomLine'>
-                    <i>{niceName.label}</i>
+                    <i>{user.username} <small>({user.emails?.[0].address || 'no email'})</small></i>
                     <button 
                       className='miniAction redT'
                       onClick={()=>clearPCBEmail(entry)}

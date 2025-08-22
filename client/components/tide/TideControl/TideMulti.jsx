@@ -160,7 +160,6 @@ const TideMultiCore = ({ user, brancheS, plainBatchS })=> {
 			      	id='multitaskselectONE'
 			      	key='multitaskselectONE'
 			        ctxLabel='Set A Task'
-			        ancOptionS={[]}
 			        brancheS={brancheS} 
 			        taskState={taskStateOne}
 			        subtState={subtStateOne}
@@ -191,7 +190,6 @@ const TideMultiCore = ({ user, brancheS, plainBatchS })=> {
 			      	id='multitaskselectTWO'
 			      	key='multitaskselectTWO'
 			        ctxLabel='Set A Task'
-			        ancOptionS={[]}
 			        brancheS={brancheS} 
 			        taskState={taskStateTwo}
 			        subtState={subtStateTwo}

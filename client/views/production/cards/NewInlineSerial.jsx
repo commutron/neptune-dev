@@ -41,12 +41,12 @@ const InlineNewSerial = ({ canSerial, gem, user })=> {
   		return(
       	<div className={`kioskFlash proFlash ${konfirm === 0 ? 'wait' : konfirm ? 'good' : 'bad'}`}>
 		      {konfirm === 0 ?
-		        <n-faW><i className='las la-stroopwafel la-fw la-spin'></i></n-faW>
+		        <n-faW><i className='fas fa-stroopwafel fa-fw fa-spin'></i></n-faW>
 		        :
 		        konfirm ?
-		          <n-faA><i className='las la-check-circle la-fw'></i></n-faA>
+		          <n-faA><i className='fas fa-check-circle fa-fw'></i></n-faA>
 		        :
-		          <n-faX><i className='las la-times-circle la-fw'></i></n-faX>
+		          <n-faX><i className='fas fa-times-circle fa-fw'></i></n-faX>
 		      }
 		      </div>
     	);

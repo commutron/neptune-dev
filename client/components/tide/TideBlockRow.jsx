@@ -12,8 +12,7 @@ const TideBlockRow = ({
   editKey, editMode,
   splitKey, splitMode,
   setEdit, setEnd, setSplit,
-  
-  ancOptionS, brancheS,
+  brancheS,
   isSuper, isDebug
 })=> {
   
@@ -99,7 +98,6 @@ const TideBlockRow = ({
         
         <TideTaskExplicit
           taskIs={taskU}
-          ancOptionS={ancOptionS}
           brancheS={brancheS}
           editOn={editOn}
           splitOn={splitOn}
@@ -219,7 +217,7 @@ export default TideBlockRow;
 
 
 const TideTaskExplicit = ({ 
-  taskIs, ancOptionS, brancheS,
+  taskIs, brancheS,
   editOn, splitOn, equipLock,
   tempTask, setTempTask, tempSubT, setTempSubT
 })=> {
@@ -256,11 +254,6 @@ const TideTaskExplicit = ({
         defaultValue={taskIs}
         disabled={false}>
         {!taskIs && <option value={false}></option>}
-        <optgroup label='Ancillary'>
-          {ancOptionS.map( (a, ix)=>(
-            <option key={ix+'o1'} value={a + ' | '}>{a}</option>
-          ))}
-        </optgroup>
         <optgroup label={Pref.branches}>
           {brancheS.map( (v, ix)=>(
             <Fragment key={ix+'o2'}>

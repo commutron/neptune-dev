@@ -1407,7 +1407,7 @@ button.numberSet {
 .tableTextarea {
   max-width: 30ch;
   min-width: 15ch;
-  height: 1.5rem;
+  min-height: 1.5rem;
 }
 .tableAction.narrow {
   max-width: 5ch;

@@ -5,6 +5,7 @@ import { branchesSort } from '/client/utility/Arrays.js';
 import Slides from '/client/layouts/TaskBars/Slides';
 
 import BranchesSlide from './appSlides/BranchesSlide';
+import QtTaskSlide from './appSlides/QtTaskSlide';
 import BehaviorSlide from './appSlides/BehaviorSlide';
 import TrackStepSlide from './appSlides/TrackStepSlide';
 import CounterSlide from './appSlides/CounterSlide';
@@ -31,6 +32,7 @@ const AppWrap = ({ isAdmin, isDebug, users, app })=> {
         menu={[
           <b><i className='fas fa-wave-square fa-fw gapR'></i>Flow Behavior</b>,
           <b><i className='fas fa-code-branch fa-fw gapR'></i>{Pref.branches}</b>,
+          <b><i className='fas fa-gem fa-fw gapR'></i>Quality Time</b>,
           <b><i className='fas fa-shoe-prints fa-fw gapR'></i>Track Steps</b>,
           <b><i className='fas fa-stopwatch fa-fw gapR'></i>Counter Steps</b>,
           <b><i className='fas fa-times-circle fa-fw gapR'></i>NonCon Types</b>,
@@ -46,24 +48,28 @@ const AppWrap = ({ isAdmin, isDebug, users, app })=> {
           
         <BehaviorSlide key={0} app={app} />
         <BranchesSlide key={1} app={app} isDebug={isDebug} />
+        <QtTaskSlide 
+          key={2} 
+          app={app} 
+          branchesS={brancheS}
+          isDebug={isDebug} />
         <TrackStepSlide 
-          key={2}
+          key={3}
           app={app}
           branchesS={brancheS}
           sorted={sortedTrackOptions} />
         <CounterSlide
-          key={3}
+          key={4}
           app={app}
           branchesS={brancheS} />
-        <NCTypeSlide key={4} app={app} />
-        <ScalesTagsSlide key={5} app={app} />
-        <AddressSlide key={6} app={app} />
-        <NotifySlide key={7} app={app} />
-        <CRONSlide key={8} />
-        <TimeErrorCheck key={9} />
-        <DataRepair key={10} app={app} users={users} />
-        <MetaSlide key={11} />
-        
+        <NCTypeSlide key={5} app={app} />
+        <ScalesTagsSlide key={6} app={app} />
+        <AddressSlide key={7} app={app} />
+        <NotifySlide key={8} app={app} />
+        <CRONSlide key={9} />
+        <TimeErrorCheck key={10} />
+        <DataRepair key={11} app={app} users={users} />
+        <MetaSlide key={12} />
       </Slides>
 			
     </div>

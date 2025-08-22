@@ -126,3 +126,19 @@ export function toCap(str, all) {
     return str.trim().replace(/^\w/, (c) => c.toUpperCase());
   }
 }/* joshtronic of Digital Ocean Community Tutorials */
+
+export function textToArray(str) {
+  if(typeof str == 'string') {
+    const arrVal = str.split(/,|;/);
+    let cleanArr = [];
+    for( let val of arrVal ) {
+      const cln = val.trim();
+      if(cln !== "") {
+        cleanArr.push(cln);
+      }
+    }
+    return cleanArr;
+  }else{
+    return [];
+  }
+}

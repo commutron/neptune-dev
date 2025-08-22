@@ -14,7 +14,7 @@ import BlockList from '/client/components/bigUi/BlockList';
 const BatchCardX = ({
   batchData, bOpen, bClosed, rapidData,
   // user,
-  app, brancheS, ancOptionS,
+  app, brancheS,
   floorReleased, 
   srange, flowCounts, fallCounts,
   tideKey, timeOpen, engagedPro,
@@ -32,7 +32,6 @@ const BatchCardX = ({
           <TideBump
             bID={batchData._id}
             bOpen={bOpen}
-            ancOptionS={ancOptionS}
             brancheS={brancheS}
             tideKey={tideKey}
             timeOpen={timeOpen}

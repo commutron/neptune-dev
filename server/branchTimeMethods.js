@@ -362,24 +362,6 @@ Meteor.methods({
         };
       });
       
-      const ancOptionS = app.ancillaryOption.sort();
-      for(let anc of ancOptionS) {
-        let ancDurr = 0;
-        let ancMlti = false;
-        for(let t of slim) {
-          if( Array.isArray(t.branchGuess)
-            && t.branchGuess[1].includes( anc ) ) {
-              ancDurr = ancDurr + ( t.duration / t.branchGuess[1].length );
-            if( t.multi ) { ancMlti = true; }
-          }
-        }
-        slimTimes.push({
-          x: anc,
-          y: ancDurr,
-          w: ancMlti
-        });
-      }
-      
       for(let br of branchOptions) {
         let brDurr = 0;
         let brMlti = false;

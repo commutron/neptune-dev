@@ -177,8 +177,8 @@ const KioskElements = ({
       <div className='kioskStat centreRow'>
         {!kactionState ? null :
           kitem ? kitem.completed ? 
-            <n-faZ><i className='las la-flag-checkered la-fw fillstatic'></i></n-faZ> :
-            <n-faA><i className='las la-route la-fw fillstatic'></i></n-faA>
+            <n-faZ><i className='fas fa-flag-checkered fa-fw fillstatic'></i></n-faZ> :
+            <n-faA><i className='fas fa-route fa-fw fillstatic'></i></n-faA>
           : null
         }
       </div>
@@ -186,25 +186,25 @@ const KioskElements = ({
       <div className={`kioskFlash ${konfirm === undefined ? 'clear' : konfirm === 0 ? 'wait' : konfirm ? 'good' : 'bad'}`}>
       {konfirm === undefined ? null :
        konfirm === 0 ?
-        <n-faW><i className='las la-stroopwafel la-fw la-spin'></i></n-faW>
+        <n-faW><i className='fas fa-stroopwafel fa-fw fa-spin'></i></n-faW>
         :
         konfirm ?
           <Fragment>
-            <n-faA><i className='las la-check-circle la-fw'></i></n-faA>
+            <n-faA><i className='fas fa-check-circle fa-fw'></i></n-faA>
             <span>{kmsg}</span>
           </Fragment>
         :
           <Fragment>
-            <n-faX><i className='las la-times-circle la-fw'></i></n-faX>
+            <n-faX><i className='fas fa-times-circle fa-fw'></i></n-faX>
             {errorCode(kmsg).map((m,i)=><span key={i}>{m}</span>)}
           </Fragment>
       }
       </div>
       
       <div className='kioskTime centreRow'>
-        <n-fa0T><i className="las la-clock la-fw fillstatic"></i></n-fa0T>
+        <n-fa0T><i className="fas fa-clock fa-fw fillstatic"></i></n-fa0T>
         {/*!kactionState ? 
-          <n-fa0T><i className="las la-clock la-fw fillstatic"></i></n-fa0T>
+          <n-fa0T><i className="fas fa-clock fa-fw fillstatic"></i></n-fa0T>
         :
           <div>Time Start/Stop Utility</div>
         */}

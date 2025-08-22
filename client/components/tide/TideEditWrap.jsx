@@ -11,7 +11,7 @@ import TideBlockRow from '/client/components/tide/TideBlockRow';
 const TideEditWrap = ({ 
   weekData, traceDT, updateData, 
   user, isDebug, 
-  app, ancOptionS, brancheS 
+  app, brancheS 
 })=> {
   
   const isSuper = Roles.userIsInRole(Meteor.userId(), 'peopleSuper');
@@ -139,7 +139,6 @@ const TideEditWrap = ({
                 setEdit={(e)=>editBlock(e)}
                 setEnd={(e)=>endBlock(e)}
                 setSplit={(e)=>splitBlock(e)}
-                ancOptionS={ancOptionS}
                 brancheS={brancheS}
                 isSuper={isSuper}
                 isDebug={isDebug} />
@@ -161,7 +160,6 @@ const TideEditWrap = ({
               setEdit={(e)=>editBlock(e)}
               setEnd={(e)=>endBlock(e)}
               setSplit={(e)=>splitBlock(e)}
-              ancOptionS={ancOptionS}
               brancheS={brancheS}
               isSuper={isSuper}
               isDebug={isDebug} />

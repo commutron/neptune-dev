@@ -22,9 +22,8 @@ const BranchesSlide = ({ app, isDebug })=> {
       });
     }
   }
-
   
-  return (
+  return(
     <div className='invert space3v'>
       
       <h2 className='cap'><i className='fas fa-code-branch fa-fw'></i> {Pref.branches}</h2>
@@ -50,29 +49,29 @@ const BranchesSlide = ({ app, isDebug })=> {
       <hr />
       
       <h2 className='dropCeiling'>Add New Branch</h2>
-      <form onSubmit={(e)=>handleBranchAdd(e)}>
-        <p>
+      <form onSubmit={(e)=>handleBranchAdd(e)} className='rowWrap gapminC'>
+        <span>
           <label htmlFor='newBrchNm'>Branch Name</label><br />
           <input
             type='text'
             id='newBrchNm'
             required />
-        </p>
-        <p>
+        </span>
+        <span>
           <label htmlFor='newBrchCmn'>Branch Common</label><br />
           <input
             type='text'
             id='newBrchCmn'
             required />
-        </p>
-        <p>
+        </span>
+        <span className='endSelf'>
           <button
             type='submit'
             id='nwBgo'
-            className='action clearGreen'
+            className='action greenSolid'
             disabled={false}
           >Add</button>
-        </p>
+        </span>
       </form>
       
     </div>

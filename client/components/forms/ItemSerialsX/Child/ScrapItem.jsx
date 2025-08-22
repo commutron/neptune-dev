@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 
 import ModelNative from '/client/layouts/Models/ModelNative';
 
-const ScrapItem = ({ seriesId, item, ancillary })=> {    
+const ScrapItem = ({ seriesId, item })=> {    
       
   function handleScrap() {
     this.scpGO.disabled = true;
@@ -39,15 +39,8 @@ const ScrapItem = ({ seriesId, item, ancillary })=> {
         <input
           id='discStp'
           className='cap'
-          list='shortcuts'
           required />
         <label htmlFor='discStp'>current process</label>
-        <datalist id='shortcuts' className='cap'>
-            {ancillary.map( (entry, index)=>{
-              return ( 
-                <option key={index} value={entry}>{entry}</option>
-            )})}
-        </datalist>
       </p>
       <p>
         <textarea

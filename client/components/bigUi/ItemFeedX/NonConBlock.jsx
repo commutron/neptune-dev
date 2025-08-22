@@ -210,22 +210,13 @@ const NonConBlock = ({
               required />
               <datalist id='ncWhereList'>
                 <option value={dt.where || ''}>{dt.where || ''}</option>
-                <optgroup label={Pref.branches}>
-                  {brancheS.map( (entry, index)=>{
-                    return(
-                      <option 
-                        key={`${index}pos${entry.position}`}
-                        value={entry.branch}
-                      >{entry.branch}</option>
-                  )})}
-                </optgroup>
-                <optgroup label={Pref.ancillary}>
-                  {app.ancillaryOption.map( (entry, index)=>{
-                    return (
-                      <option key={index} value={entry}>{entry}</option>
-                      );
-                  })}
-                </optgroup>
+                {brancheS.map( (entry, index)=>{
+                  return(
+                    <option 
+                      key={`${index}pos${entry.position}`}
+                      value={entry.branch}
+                    >{entry.branch}</option>
+                )})}
               </datalist>
             
               <span className='rightRow'>

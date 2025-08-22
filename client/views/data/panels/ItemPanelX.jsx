@@ -110,7 +110,6 @@ const ItemPanelX = ({
   	  <ScrapItem
         seriesId={srs._id}
         item={itemData}
-        ancillary={app.ancillaryOption}
         access={canScp}
       />
   	  <RemoveItem

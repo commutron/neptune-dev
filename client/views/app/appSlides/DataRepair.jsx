@@ -164,6 +164,7 @@ const DataRepair = ({ app, users })=> {
         
         <DoCard
           title='Get All Tasks Used'
+          sub='Low impact. Result in console.'
           icon='binoculars'
           color='tealSolid'
           button='Search'
@@ -308,12 +309,14 @@ const AncCorrect = ({ app })=> {
   return(
     <div>
       <h3><i className="fas fa-exchange-alt fa-lg gap"></i>
-        Replace "Ancillary Task" Data
+        Replace Task Data
       </h3>
       <p className='max250'>Potentialy very damaging. This will change data of all batches.</p>
       <p className='centreText'><b>Be VERY carefull</b></p>
       
+      <em>Non-Operational/depreciated</em>
       <form onSubmit={(e)=>fixAtaskthing(e)}>
+        <fieldset disabled={true}>
         <p><label>Current Task<br />
           <select
             id='tskSlctCut'
@@ -321,9 +324,6 @@ const AncCorrect = ({ app })=> {
             required
             >
               <option value={false}></option>
-              {app.ancillaryOption.map( (a, ix)=>(
-                <option key={ix+'o1'} value={a}>{a}</option>
-              ))}
           </select>
         </label></p>
         <p><label>New Task<br />
@@ -357,6 +357,7 @@ const AncCorrect = ({ app })=> {
             className='action blackSolid'
           >Replace</button>
         </p>
+        </fieldset>
       </form>
     </div>
   );

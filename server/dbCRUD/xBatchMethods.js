@@ -455,12 +455,13 @@ Meteor.methods({
         });
       }
       
-      if(rType.includes('pcbKitRelease') && !caution) {
-        const batch = XBatchDB.findOne({_id: batchId},{fields:{'groupId':1,'widgetId':1,'versionKey':1,'salesOrder':1}});
+      if(rType.includes('pcbKitRelease')) {
         
-        const vbtch = XBatchDB.find({_id: batchId, completed: true},{fields:{'_id':1}}).count();
+        const first = XBatchDB.find({_id: batchId, 'releases.type': 'pcbKitRelease'},{fields:{'_id':1}}).count();
         
-        if(vbtch === 0) {
+        if(first === 0) {
+          const batch = XBatchDB.findOne({_id: batchId},{fields:{'groupId':1,'widgetId':1,'versionKey':1,'salesOrder':1}});
+        
           Meteor.defer( ()=>{
             const wig = WidgetDB.findOne({_id: batch.widgetId},{fields:{'widget':1,'describe':1}});
             const ver = VariantDB.findOne({versionKey: batch.versionKey},{fields:{'variant':1,'instruct':1}});

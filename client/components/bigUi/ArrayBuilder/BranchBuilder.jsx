@@ -2,6 +2,8 @@ import React, { Fragment, useState } from 'react';
 import { toast } from 'react-toastify';
 import './style.css';
 
+import { textToArray } from '/client/utility/Convert';
+
 const BranchBuilder = ({ app, isDebug })=> {
   
   const branches = app.branches || [];
@@ -234,7 +236,6 @@ const BranchListHead = ()=> (
     <div className='bold'>                      
       <div>Position</div>
       <div>Name</div>
-      <div>Sub-Tasks</div>
       <div>Build Methods</div>
       <div>Inspect Methods</div>
       <div></div>
@@ -242,7 +243,6 @@ const BranchListHead = ()=> (
     <div className='bold small'>
       <div></div>
       <div></div>
-      <div>For Time Tracking</div>
       <div>For First-off/Verify forms</div>
       <div>For First-off/Verify forms</div>
       <div></div>
@@ -255,24 +255,13 @@ const BranchListRow = ({ branch })=> {
   const br = branch;
   const id = br.brKey;
   
-  const [ subtaskState, subtaskSet ] = useState(br.subTasks || []);
   const [ buildState, buildSet ] = useState(br.buildMethods);
   const [ inspectState, inspectSet ] = useState(br.inspectMethods);
   
   function handleMulti(val, goes) {
-    const textVal = val;
-    const arrVal = textVal.split(/,|;/);
-    
-    let cleanArr = [];
-    for( let mth of arrVal ) {
-      const cln = mth.trim();
-      if(cln !== "") {
-        cleanArr.push(cln);
-      }
-    }
-    if(goes === 'task') {
-      subtaskSet(cleanArr);
-    }else if(goes === 'build') {
+    let cleanArr = textToArray(val);
+
+    if(goes === 'build') {
       buildSet(cleanArr);
     }else{
       inspectSet(cleanArr);
@@ -280,8 +269,6 @@ const BranchListRow = ({ branch })=> {
   }
   
   function handleCancelLists() {
-    subtaskSet(br.subTasks);
-    this[id+'tpSbTsk'].value = (br.subTasks || []).join(", ");
     buildSet(br.buildMethods);
     this[id+'tpBldMth'].value = br.buildMethods.join(", ");
     inspectSet(br.inspectMethods);
@@ -289,7 +276,7 @@ const BranchListRow = ({ branch })=> {
   }
   
   function handleSaveLists() {
-    Meteor.call('editBranchLists', id, subtaskState, buildState, inspectState,
+    Meteor.call('editBranchLists', id, buildState, inspectState,
       (error, reply)=>{
         error && console.log(error);
         if(reply) {
@@ -304,12 +291,6 @@ const BranchListRow = ({ branch })=> {
     <div>
       <div>{br.position}</div>
       <div>{br.branch}</div>
-      <BrTxtAr
-        id={id+'tpSbTsk'}
-        title='Sub-Tasks'
-        dfVal={(br.subTasks || []).join(", ")}
-        chFunc={(e)=>handleMulti(e.target.value, 'task')}
-      />
       <BrTxtAr
         id={id+'tpBldMth'}
         title='Build Methods'
@@ -340,7 +321,7 @@ const BranchListRow = ({ branch })=> {
   );
 };
 
-const DoButton = ({ id, title, icon, color, clFunc, disabled })=> (
+export const DoButton = ({ id, title, icon, color, clFunc, disabled })=> (
   <button
     type='button'
     title={title}
@@ -364,12 +345,12 @@ const BrCheck = ({ id, title, chk, chFunc })=>(
   </div>
 );
 
-const BrTxtAr = ({ id, title, dfVal, chFunc })=> (
+export const BrTxtAr = ({ id, title, dfVal, chFunc })=> (
   <div>
     <textarea
       title={title}
       id={id}
-      className='tableTextarea'
+      className='tableTextarea w100'
       defaultValue={dfVal}
       onChange={chFunc}
       required

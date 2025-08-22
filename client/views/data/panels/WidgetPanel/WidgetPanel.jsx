@@ -10,6 +10,7 @@ import FlowTable from '/client/components/tables/FlowTable';
 import WTimeTab from './WTimeTab';
 import WProbTab from './WProbTab';
 
+import QuoteTaskTime from '/client/components/forms/QuoteTaskTime';
 
 const WidgetPanel = ({ 
   groupData, widgetData, variantData,

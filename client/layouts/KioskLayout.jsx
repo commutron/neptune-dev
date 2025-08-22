@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { Meteor } from 'meteor/meteor';
 // import moment from 'moment';
 
@@ -19,7 +19,7 @@ import KioskScopeData from '/client/views/kiosk/KioskScopeData';
 //   }
 // }
 
-const KioskWrap = ({ user, eBatch, doSerial, users, app, allTrace })=> {
+const KioskWrap = ({ user, eBatch, doSerial, app, allTrace })=> {
   
   const [ bScope, bScopeSet ] = useState(false);
   
@@ -57,8 +57,17 @@ const KioskWrap = ({ user, eBatch, doSerial, users, app, allTrace })=> {
                       title={!klisten ? 'Start Listening' : 'Stop Listening'}
                       className='kioskListen' 
                       onClick={()=>toggleListen()}>
-                      <n-fa0><i className={`las la-compact-disc la-fw ${!klisten ? '' : 'la-spin'}`}></i></n-fa0>
-                      <span>{!klisten ? 'Ready' : doText}</span>
+                      {!klisten ?
+                        <Fragment>
+                          <n-fa0><i className='fas fa-compact-disc fa-fw'></i></n-fa0>
+                          <span>Ready</span>
+                        </Fragment>
+                      :
+                        <Fragment>
+                          <n-fa00><i className='fas fa-compact-disc fa-fw fa-spin'></i></n-fa00>
+                          <span>{doText}</span>
+                        </Fragment>
+                      }
                     </button>;
                         
   return(
@@ -109,7 +118,7 @@ const KioskWrap = ({ user, eBatch, doSerial, users, app, allTrace })=> {
                 </div>
               :
                 KListener
-            : <n-fa0><i className="las la-power-off la-fw fillstatic"></i></n-fa0>
+            : <n-fa0><i className="fas fa-power-off fa-fw fillstatic"></i></n-fa0>
           }
         </div>
         

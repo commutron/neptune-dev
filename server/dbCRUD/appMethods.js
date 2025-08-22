@@ -70,7 +70,7 @@ Meteor.methods({
         high: Number(70)
       },
       missingType: 'not installed',
-      ancillaryOption: [],
+      // ancillaryOption: [], // depreciated
       repeatOption: [],
       alterFulfillReasons: [],
       tagOption: [],
@@ -239,6 +239,92 @@ Meteor.methods({
           return true;
         }else{
           return false;
+        }
+      }catch (err) {
+        throw new Meteor.Error(err);
+      }
+    }else{
+      return false;
+    }
+  },
+  
+  addQualityTimeTasks(nameVal, brKey) {
+    const appDoc = AppDB.findOne({orgKey: Meteor.user().orgKey});
+    if(appDoc && Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      try{
+        const nextPos = appDoc.qtTasks.length;
+        AppDB.update({orgKey: Meteor.user().orgKey}, {
+          $push : { 
+            qtTasks : {
+              qtKey: new Meteor.Collection.ObjectID().valueOf(),
+              qtTask: nameVal,
+              brKey: brKey,
+              position: Number(nextPos),
+              subTasks: []
+            }
+        }});
+        return true;
+      }catch (err) {
+        throw new Meteor.Error(err);
+      }
+    }else{
+      return false;
+    }
+  },
+  
+  editQualityTimeTasks(qtkey, qtName, brKey, posVal, sbTskArr) {
+    if(Array.isArray(sbTskArr) && Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      AppDB.update({orgKey: Meteor.user().orgKey, 'qtTasks.qtKey': qtkey}, {
+        $set : { 
+          'qtTasks.$.qtTask': qtName,
+          'qtTasks.$.brKey': brKey,
+          'qtTasks.$.position': Number(posVal),
+          'qtTasks.$.subTasks': sbTskArr,
+      }});
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  generateQualityTimeTasks() {
+    const appDoc = AppDB.findOne({orgKey: Meteor.user().orgKey});
+    if(appDoc && Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      try{
+        const qtExists = appDoc.qtTasks;
+        if(qtExists) {
+          return false;
+        }else{
+          AppDB.update({orgKey: Meteor.user().orgKey}, {
+            $set : { 
+              qtTasks : []
+          }});
+          AppDB.update({orgKey: Meteor.user().orgKey}, {
+            $unset : { 
+              ancillaryOption: ""
+          }});
+          
+          for(let b of appDoc.branches) {
+            if(b.open) {
+              const transferTask = b.subTasks;
+              AppDB.update({orgKey: Meteor.user().orgKey}, {
+                $push : { 
+                  qtTasks : {
+                    qtKey: new Meteor.Collection.ObjectID().valueOf(),
+                    qtTask: b.branch,
+                    brKey: b.brKey,
+                    position: Number(b.position),
+                    subTasks: transferTask
+                  }
+              }});
+              
+              AppDB.update({orgKey: Meteor.user().orgKey, 'branches.brKey': b.brKey}, {
+                $unset : { 
+                  'branches.$.subTasks': ""
+              }});
+            }
+          }
+          return true;
         }
       }catch (err) {
         throw new Meteor.Error(err);
@@ -642,30 +728,6 @@ Meteor.methods({
       AppDB.update({orgKey: Meteor.user().orgKey}, {
         $set : { 
           missingType : newType || 'missing'
-      }});
-      return true;
-    }else{
-      return false;
-    }
-  },
-  
-  addAncOp(value) {
-    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
-      AppDB.update({orgKey: Meteor.user().orgKey}, {
-        $push : { 
-          ancillaryOption : value
-      }});
-      return true;
-    }else{
-      return false;
-    }
-  },
-    
-  removeAncOption(value) {
-    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
-      AppDB.update({orgKey: Meteor.user().orgKey}, {
-        $pull : { 
-          ancillaryOption : value
       }});
       return true;
     }else{

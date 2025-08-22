@@ -321,13 +321,11 @@
 @supports (filter: none) {
 	.colorShift {
     animation: hueCycle 90s infinite linear;
-    overflow: hidden;
   }
 }
 @supports not (filter: none) {
   .colorShift {
     animation: spinAround 90s infinite linear;
-    overflow: hidden;
   }
 }
 

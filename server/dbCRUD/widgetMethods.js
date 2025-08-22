@@ -122,6 +122,25 @@ Meteor.methods({
     }
   },
   
+  setFlowQuoteTime(widgetId, flowKey, qtArray) {
+    try{
+      if(Roles.userIsInRole(Meteor.userId(), ['sales', 'admin'])) {
+        WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey, 'flows.flowKey': flowKey}, {
+          $set : { 
+            'flows.$.quoteTaskTime': {
+              updatedAt: new Date(),
+              qtt: qtArray
+            }
+          }});
+        return true;
+      }else{
+        return false;
+      }
+    }catch (err) {
+      throw new Meteor.Error(err);
+    }
+  },
+  
   rebuildWidgetFlows(widgetId) {
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
       

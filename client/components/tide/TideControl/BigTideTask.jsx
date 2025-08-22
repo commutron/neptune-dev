@@ -2,7 +2,7 @@ import React, { useEffect, Fragment } from 'react';
 // import Pref from '/client/global/pref.js';
 
 const BigTideTask = ({ 
-  id, ctxLabel, ancOptionS, brancheS,
+  id, ctxLabel, brancheS,
   taskState, subtState, lockTaskState, taskSet, subtSet
 })=> {
   
@@ -47,14 +47,6 @@ const BigTideTask = ({
             >{v.branch}</option>
           ))}
         </optgroup>
-        {ancOptionS.length > 0 ?
-          <optgroup label='Ancillary' className='blackT nsty'>
-            {ancOptionS.map( (v, ix)=>(
-              <option key={ix+'o1'} className='blackT nsty' value={v}
-              >{v}</option>
-            ))}
-          </optgroup>
-        : null}
       </select>
       {subop?.subTasks?.length ?
         <Fragment>
