@@ -80,13 +80,21 @@ Meteor.methods({
             updatedAt: new Date(),
     			  updatedWho: Meteor.userId(),
         }});
+        AppDB.update({orgKey: Meteor.user().orgKey}, {
+          $set : { 
+            internalID : false
+        }});
         return true;
-      }else if(inter < Config.interMax) {
+      }else if(inter === 0) {
         GroupDB.update({_id: groupId, orgKey: Meteor.user().orgKey}, {
           $set : {
             internal: true,
             updatedAt: new Date(),
     			  updatedWho: Meteor.userId(),
+        }});
+        AppDB.update({orgKey: Meteor.user().orgKey}, {
+          $set : { 
+            internalID : groupId
         }});
         return true;
       }else{

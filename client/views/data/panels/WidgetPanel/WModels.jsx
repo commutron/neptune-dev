@@ -3,6 +3,7 @@ import React, { Fragment } from 'react';
 import { WidgetEdit } from '/client/components/forms/WidgetForm';
 import FlowFormHead from '/client/components/forms/FlowFormHead';
 import FlowFormRoute from '/client/components/forms/FlowFormRoute';
+import QuoteTaskTime from '/client/components/forms/QuoteTaskTime';
 import VariantForm from '/client/components/forms/VariantForm';
 import BatchCreate from '/client/components/forms/Batch/Parent/BatchCreate';
 import Remove from '/client/components/forms/Remove';
@@ -10,7 +11,7 @@ import Remove from '/client/components/forms/Remove';
 const WModels = ({ 
   widgetData, groupData, variantData, users, app,
   selectedFlow, bload, clearOnClose, unloadOnClose,
-  doVar, canEdt, doBch, doRmv
+  doVar, canEdt, canSls, doBch, doRmv
 })=> {
   return(
   	<Fragment>
@@ -38,6 +39,14 @@ const WModels = ({
         existFlows={widgetData.flows}
         app={app}
         access={canEdt}
+        clearOnClose={clearOnClose}
+      />
+      <QuoteTaskTime
+        id={widgetData._id}
+        flowKey={selectedFlow}
+        existFlows={widgetData.flows}
+        app={app}
+        access={canSls}
         clearOnClose={clearOnClose}
       />
       <BatchCreate

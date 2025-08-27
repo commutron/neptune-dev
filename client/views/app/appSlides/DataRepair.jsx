@@ -171,6 +171,15 @@ const DataRepair = ({ app, users })=> {
           action={()=>doCallThing('checktaskrec', true)}
         />
         
+        <DoCard
+          title='Scan Data Counts'
+          sub='How many widgets have multiple flows. How many batches have salesEnd altered.'
+          icon='binoculars'
+          color='blueSolid'
+          button='Search'
+          action={()=>doCallThing('flowCountScan', true)}
+        />
+        
       </div>
       
       <h2 className='centreText vmargin redT dropCeiling borderRed topLine'>High Risk - Use With Extreme Caution</h2>

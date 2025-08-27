@@ -66,7 +66,7 @@ const ScatterCH = ({ strdata, multidata, title, fillColor, area, intgr })=> {
             borderColor: d.data_color,
             fill: area !== undefined ? area : true,
             borderWidth: 5,
-            pointRadius: 5
+            pointRadius: 3
           };
         })
       });
@@ -79,7 +79,7 @@ const ScatterCH = ({ strdata, multidata, title, fillColor, area, intgr })=> {
           borderColor: fillColor || 'rgb(127, 140, 141, 0.5)',
           fill: area !== undefined ? area : true,
           borderWidth: 5,
-          pointRadius: 5
+          pointRadius: 3
         }]
       });
     }

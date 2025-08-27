@@ -134,7 +134,6 @@ Meteor.methods({
       return false;
     }
   },
-  
   checkPIN(pinVal) {
     const org = AppDB.findOne({ orgKey: Meteor.user().orgKey },{fields:{'orgPIN':1}});
     const orgPIN = org ? org.orgPIN : null;
@@ -295,9 +294,12 @@ Meteor.methods({
         if(qtExists) {
           return false;
         }else{
+          const inter = GroupDB.findOne({ internal: true },{fields:{'_id':1}});
+          
           AppDB.update({orgKey: Meteor.user().orgKey}, {
             $set : { 
-              qtTasks : []
+              qtTasks : [],
+              internalID : inter._id
           }});
           AppDB.update({orgKey: Meteor.user().orgKey}, {
             $unset : { 

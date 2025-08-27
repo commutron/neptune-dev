@@ -8,6 +8,31 @@ import PrintThis from '/client/components/tinyUi/PrintThis';
 // import { min2hr, avgOfArray } from '/client/utility/Convert.js';
 import ReportCrossTable from '/client/components/tables/ReportCrossTable'; 
 
+import {
+  Chart as ChartJS,
+  TimeScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Title,
+  Tooltip,
+  Legend
+} from 'chart.js';
+import { Bar } from 'react-chartjs-2';
+import 'chartjs-adapter-moment';
+
+ChartJS.register(
+  TimeScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Title,
+  Tooltip,
+  Legend
+);
+
 const ZPlanGrid = ({ traceDT, app, isDebug })=> {
   
   const [arrayData, arrayDataSet] = useState(false);
@@ -92,9 +117,9 @@ const ZPlanGrid = ({ traceDT, app, isDebug })=> {
     */
   }
   
-  useEffect( ()=>{
-    Meteor.setTimeout(()=>getData(),2000);
-  }, []);
+  // useEffect( ()=>{
+  //   Meteor.setTimeout(()=>getData(),2000);
+  // }, []);
     
   return(
     <div className='space2v'>
@@ -103,7 +128,7 @@ const ZPlanGrid = ({ traceDT, app, isDebug })=> {
         <PrintThis />
       </div>
       
-      {arrayData === false ?
+      {/*arrayData === false ?
           <div>
             <p className='centreText'>Constructing...</p>
             <CalcSpin />
@@ -116,7 +141,7 @@ const ZPlanGrid = ({ traceDT, app, isDebug })=> {
           extraClass=''
           colHl={goback + 1}
         />
-      }
+      
       
       <p className='vmargin'>
         <dd>onFloor = R</dd>
@@ -128,9 +153,118 @@ const ZPlanGrid = ({ traceDT, app, isDebug })=> {
         <dd>isLater = startby to shipby = Q</dd>
         <dd>isExtra = ship to fulfill = B</dd>
       </p>
-           
+       */}
+       
+       <TestBarCH
+       
+       />
     </div>
   );
 };
   
 export default ZPlanGrid;
+
+const TestBarCH = ({ strdata, multidata, title, fillColor, area, intgr })=> {
+  
+  const [ data, dataSet ] = useState({datasets:[]});
+  
+  // let strt = moment();
+  // const nxt = (i)=> new Date( strt.clone().add(i, 'days').format() ).getTime();
+  
+  // const nxt = (i)=> ( ( d => new Date(d.setDate(d.getDate()-i)) )(new Date) ).getTime();
+  
+  // const start = nxt(1);
+  // const end = nxt(10);
+  
+  // console.log({start, end});
+  
+  
+  var dates = [new Date("2019-12-24"), new Date("2019-12-26"), new Date("2019-12-30"), new Date("2020-1-2"), new Date("2020-1-4"), new Date("2020-1-9"), new Date("2020-1-10") ];
+
+  const mockdata = dates.map((d, i) => i == 0 ? null : [dates[i - 1], d]).slice(1);
+               
+  
+  const options = {
+    responsive: true,
+    indexAxis: 'y',
+    // grouped: false,
+    scales: {
+      x: {
+        type: 'time',
+        time: {
+          // unit: 'day',
+          tooltipFormat: 'MMM D YYYY',
+          displayFormats: {
+            day: 'MMM D YYYY'
+          }
+        },
+        // ticks: {            
+        //   min: mockmin, 
+        //   max: mockmax,
+        // },
+        labels: dates
+      },
+      y: {
+        type: 'category',
+      }
+    },
+    
+    
+    // plugins: {
+    //   legend: {
+    //     display: false
+    //   },
+    //   title: {
+    //     display: true,
+    //     text: title || '',
+    //   },
+    // },
+  };
+
+  useEffect( ()=> {
+    // dataSet({datasets:[]});
+    const gen = mockdata;
+        
+    
+    dataSet({
+      labels: ['25453', '25353', '25004', '25158'],
+      datasets: [{
+        // barPercentage: 1,
+        // barThickness: 6,
+        maxBarThickness: 30,
+        minBarLength: 10,
+        backgroundColor: 'oklab(0.65 -0.06 -0.12)',
+        label: 'SMT',
+        data: gen
+    },
+    {
+        maxBarThickness: 30,
+        minBarLength: 10,
+        backgroundColor: 'oklab(0.75 -0.16 0.08)',
+        label: 'Thru-hole',
+        data: gen
+    }]});
+    //   dataSet({
+    //     datasets: multidata.map( (d)=>{ 
+    //       return {
+    //         label: d.data_name,
+    //         data: d.data_array,
+    //         backgroundColor: d.data_color,
+    //         borderColor: d.data_color,
+    //         fill: area !== undefined ? area : true,
+    //         borderWidth: 5,
+    //         pointRadius: 5
+    //       };
+    //     })
+    //   });
+   
+  }, [strdata, multidata]);
+    
+  return(
+    <div>
+      <div className='chart50vContain centreRow'>
+        <Bar options={options} data={data} />
+      </div>
+    </div>
+  );
+};

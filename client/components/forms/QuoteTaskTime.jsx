@@ -3,69 +3,60 @@ import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import ModelMedium from '/client/layouts/Models/ModelMedium';
+import ModelNative from '/client/layouts/Models/ModelNative';
+
 import { toCap } from '/client/utility/Convert';
 
-const QuoteTaskTime = ({ wID, flowKey, qtbB, lockOut, brancheS })=> {
+const QuoteTaskTime = ({ 
+  id, flowKey, existFlows, app, access, clearOnClose
+})=> {
   
-  const access = Roles.userIsInRole(Meteor.userId(), ['sales', 'admin']);
-  
-  return(
-    <ModelMedium
-      button={Pref.timeBudget}
-      title={Pref.timeBudget}
-      color='blueT'
-      icon='fa-money-check-dollar gapR'
-      lgIcon={true}
-      inline={true}
-      lock={!access}>
-      <QuoteTaskTimeForm
-        wID={wID}
-        flowKey={flowKey}
-        qtbB={qtbB}
-        auth={access}
-        lockOut={lockOut}
-        brancheS={brancheS}
-      />
-    </ModelMedium>
-  );
-};
-
-export default QuoteTaskTime;
-
-const QuoteTaskTimeForm = ({ wID, flowKey, qtbB, auth, lockOut, brancheS })=> {
+  const [ warn, warnSet ] = useState(false);
+  const [ base, baseSet ] = useState(false);
   
   const [ inputOps, inputOpsSet ] = useState([]);
   const [ breakState, breakSet ] = useState({});
   const [ subsumState, subsumSet ] = useState(0);
   
-  useEffect( ()=>{
-    let ops = qtbB || [];
-    for( let br of brancheS.filter(b=>b.pro) ) {
-      if(br.subTasks) {
-        for( let sb of br.subTasks ) {
-          if(!ops.find( x => x[0] === br.branch+"|"+sb )) {
-            ops.push( [ br.branch+"|"+sb, 0 ] );
-          }
-        }
-      }else{
-        if(!ops.find( x => x[0] === br.branch+"|!X" )) {
-          ops.push( [ br.branch+"|!X", 0 ] );
-        }
-      }
+  
+  const [ flow, flowSet ] = useState(false);
+  
+   useEffect( ()=> {
+    if(!flowKey) {
+      warnSet(false);
+      baseSet(false);
+      flowSet(false);
+    }else{
+      const fill = existFlows.find( f => f.flowKey === flowKey );
+      fill ? baseSet(fill) : null;
+      
+      Meteor.call('activeFlowCheck', flowKey, (error, reply)=>{
+        error && console.log(error);
+        warnSet(reply);
+      });
     }
-    const opS = ops.sort( (a,b)=> a[0] > b[0] ? 1 : a[0] < b[0] ? -1 : 0);
-    inputOpsSet(opS);
-    
-    const opsObj = opS.reduce((acc, curr, index) =>(acc[curr[0]] = curr[1], acc), {});
-    breakSet(opsObj);
-  }, []);
+  }, [flowKey]);
   
   useEffect( ()=>{
-    const objArr = Object.entries(breakState);
-    const arrTtl = objArr.reduce((x,y)=> x + y[1], 0);
-    subsumSet( arrTtl );
-  }, [breakState]);
+    const qtS = app.qtTasks.sort( (a,b)=> a.position > b.position ? -1 : a.position < b.position ? 1 : 0);
+    let ops = [];
+    for( let qt of qtS ) {
+      const qtbr = app.branches.find( b => b.brKey === qt.brKey );
+      if(qtbr && qtbr.open && qtbr.pro ) {
+        ops.push( [ qt.qtKey, qt.qtTask, qt.subTasks.join(', '), 0 ] );
+      }
+    }
+    inputOpsSet(ops);
+    
+    // const opsObj = ops.reduce((acc, curr) =>(acc[curr[0]] = curr[3], acc), {});
+    // breakSet(opsObj);
+  }, []);
+  
+  // useEffect( ()=>{
+  //   const objArr = Object.entries(breakState);
+  //   const arrTtl = objArr.reduce((x,y)=> x + y[3], 0);
+  //   subsumSet( arrTtl );
+  // }, [breakState]);
   
   const inputMinutes = (e) => {
     const val = e.target.value;
@@ -75,14 +66,13 @@ const QuoteTaskTimeForm = ({ wID, flowKey, qtbB, auth, lockOut, brancheS })=> {
       [e.target.name]: inMin
     });
   };
-
   
-  const setBreakdown = (e)=> {
+  const setQtFlow = (e)=> {
     e.preventDefault();
     const brkArray = Object.entries(breakState).filter( x => x[1] > 0);
     
-    if(auth) {
-      Meteor.call('setFlowQuoteTime', wID, flowKey, brkArray, (err, re)=>{
+    if(access) {
+      Meteor.call('setFlowQuoteTime', id, flowKey, brkArray, (err, re)=>{
         err && console.log(err);
         if(re) {
           toast.success('Saved');
@@ -93,92 +83,104 @@ const QuoteTaskTimeForm = ({ wID, flowKey, qtbB, auth, lockOut, brancheS })=> {
     }else{ toast.error('NO Permission'); }
   };
   
-  const aT = !auth ? Pref.norole : '';
-  const lT = lockOut ? `${toCap(Pref.xBatch, true)} is locked` : '';
+  const aT = !access ? Pref.norole : '';
+  const lT = !access ? `${toCap(Pref.xBatch, true)} is locked` : '';
+
+  const fTitle = base ? base.title : '';
+  const fFlow = base ? base.flow : false;
 
   return(
-    <div className='centre'>
-      {auth && !lockOut ? null : <p>{aT} {lT}</p>}
-      
-      <h3>{toCap(Pref.timeBudget, true)} Sub-Task Breakdown</h3>
-      <p><em>Set in minutes</em></p>
-     
-      <form
-        id='brkdwnqtb'
-        className='centre overscroll'
-        onSubmit={(e)=>setBreakdown(e)}
-      >
-        <div className='rightRow doJustWeen'>
-          <label></label>
-          <span className='beside'>
-            {/*<label className='min6'>Hours</label>*/}
-            <label className='min8'>Minutes</label>
-            <label className='min8'>Seconds</label>
-          </span>
-        </div>
-        <div className='rightRow doJustWeen vspace'>
-          <label className='bold'>Sub-Task Sum</label>
-          <span className='beside'>
-            {/*<label className='gapL min6'>
-              <i className='numberSet liteToolOff beside'
-              >{moment.duration(breakState[op[0]] || 0, 'minutes').asHours().toFixed(2,10)}</i>
-            </label>*/}
-            <label className='gapL min8'>
-              <i className={`numberSet liteToolOff beside`}
-              >{subsumState.toFixed(1,10)}</i>
-            </label>
-            <label className='gapL min8'>
-              <i className={`numberSet liteToolOff beside`}
-              >{moment.duration(subsumState || 0, 'minutes').asSeconds().toFixed(0,10)}</i>
-            </label>
-          </span>
-        </div>
-        {inputOps.map( (op, index)=>(
-          <div 
-            key={index}
-            className='w100 split doJustWeen breaklines'
-          >
-          <label>{op[0].split('|')[0]} {op[0].split('|')[1] === '!X' ? null : op[0].split('|')[1]}</label>
-          <span className='beside'>
-            {/*<label className='gapL min6'>
-              <i className='numberSet liteToolOff beside'
-              >{moment.duration(breakState[op[0]] || 0, 'minutes').asHours().toFixed(2,10)}</i>
-            </label>*/}
-            <label className='gapL'>
-              <input
-                  type='number'
-                  id={op[0]}
-                  name={op[0]}
-                  className='numberSet miniIn8'
-                  pattern="^\d*(\.\d{0,2})?$"
-                  maxLength='8'
-                  minLength='1'
-                  max='100000'
-                  min='0'
-                  step=".1"
-                  inputMode='numeric'
-                  defaultValue={op[1] || null}
-                  disabled={!auth || lockOut}
-                  onChange={(e)=>inputMinutes(e)}
-                />
-            </label>
-            <label className='gapL min8'>
-              <i className='numberSet liteToolOff beside'
-              >{moment.duration(breakState[op[0]] || 0, 'minutes').asSeconds().toFixed(0,10)}</i>
-            </label>
-          </span>
+    <ModelNative
+      dialogId={id+'_flowquote_form'}
+      title='Assign Quoted Time'
+      icon='fa-solid fa-gem'
+      colorT='blueT'
+      closeFunc={()=>clearOnClose()}>
+      <div className='centre'>
+        {access ? null : <p>{aT} {lT}</p>}
+        
+        <h3>{toCap(Pref.timeBudget, true)} Qt-Task Budget</h3>
+        <p><em>Set in minutes</em></p>
+       
+        <form
+          id='qttbgt'
+          className='centre overscroll'
+          onSubmit={(e)=>setQtFlow(e)}
+        >
+          <div className='rightRow doJustWeen'>
+            <label></label>
+            <span className='beside'>
+              {/*<label className='min6'>Hours</label>*/}
+              <label className='min8'>Minutes</label>
+              <label className='min8'>Seconds</label>
+            </span>
           </div>
-        ))}
-        <p className='vmargin'>
-          <button
-            type='submit'
-            // formMethod='dialog'
-            id='goQTBB'
-            className='action nSolid numberSet minIn7'
-            disabled={!auth || lockOut}
-          >Update {toCap(Pref.timeBudget, true)} Breakdown</button>
-        </p>
-      </form>
-    </div>
+          <div className='rightRow doJustWeen vspace'>
+            <label className='bold'>Qt-Task Sum</label>
+            <span className='beside'>
+              {/*<label className='gapL min6'>
+                <i className='numberSet liteToolOff beside'
+                >{moment.duration(breakState[op[0]] || 0, 'minutes').asHours().toFixed(2,10)}</i>
+              </label>*/}
+              <label className='gapL min8'>
+                <i className={`numberSet liteToolOff beside`}
+                >{subsumState.toFixed(1,10)}</i>
+              </label>
+              <label className='gapL min8'>
+                <i className={`numberSet liteToolOff beside`}
+                >{moment.duration(subsumState || 0, 'minutes').asSeconds().toFixed(0,10)}</i>
+              </label>
+            </span>
+          </div>
+          {inputOps.map( (op, index)=>(
+            <div 
+              key={index}
+              className='w100 split doJustWeen breaklines'
+            >
+            <label>{op[1]}</label>
+            <span className='beside'>
+              {/*<label className='gapL min6'>
+                <i className='numberSet liteToolOff beside'
+                >{moment.duration(breakState[op[0]] || 0, 'minutes').asHours().toFixed(2,10)}</i>
+              </label>*/}
+              <label className='gapL'>
+                <input
+                    type='number'
+                    id={op[0]}
+                    name={op[1]}
+                    className='numberSet miniIn8'
+                    pattern="^\d*(\.\d{0,2})?$"
+                    maxLength='8'
+                    minLength='1'
+                    max='100000'
+                    min='0'
+                    step=".1"
+                    inputMode='numeric'
+                    defaultValue={op[3] || null}
+                    disabled={!access}
+                    onChange={(e)=>inputMinutes(e)}
+                  />
+              </label>
+              <label className='gapL min8'>
+                <i className='numberSet liteToolOff beside'
+                >{moment.duration(breakState[op[3]] || 0, 'minutes').asSeconds().toFixed(0,10)}</i>
+              </label>
+            </span>
+            </div>
+          ))}
+          <p className='vmargin'>
+            <button
+              type='submit'
+              formMethod='dialog'
+              id='goQTTB'
+              className='action nSolid numberSet minIn7'
+              disabled={!access}
+            >Update {toCap(Pref.timeBudget, true)}</button>
+          </p>
+        </form>
+      </div>
+    </ModelNative>
   );
 };
+
+export default QuoteTaskTime;

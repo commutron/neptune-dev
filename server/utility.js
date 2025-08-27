@@ -78,8 +78,10 @@ export function countMultiRefs(shArr) {
 }
 
 export function noIg() {
-  const xg = GroupDB.findOne({internal: true},{fields:{'_id':1}});
-  return xg ? xg._id : 'n0ne';
+  const app = AppDB.findOne({},{fields:{internalID:1}});
+  return app.internalID || 'n0ne';
+  // const xg = GroupDB.findOne({internal: true},{fields:{'_id':1}});
+  // return xg ? xg._id : 'n0ne';
 }
 
 export function getEst(widgetId, quantity, pTgt) {

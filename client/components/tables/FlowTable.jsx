@@ -5,13 +5,10 @@ import { toast } from 'react-toastify';
 import { MatchButton } from '/client/layouts/Models/Popover';
 import { FlowRemove } from '../forms/FlowFormHead';
 
-const FlowTable = ({ id, flows, app, openActions })=> {
-  
-  const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
-  const canEdt = Roles.userIsInRole(Meteor.userId(), 'edit');
+const FlowTable = ({ id, flows, app, openActions, canEdt, canSls })=> {
   
   function handleRebuild() {
-    if(isAdmin) {
+    if(canSls) {
       Meteor.call('rebuildWidgetFlows', id, (error, re)=>{
         if(error)
           console.log(error);
@@ -36,6 +33,7 @@ const FlowTable = ({ id, flows, app, openActions })=> {
                 id={id} 
                 entry={entry} 
                 canEdt={canEdt}
+                canSls={canSls}
                 openActions={openActions}
               />
               
@@ -68,11 +66,11 @@ const FlowTable = ({ id, flows, app, openActions })=> {
           </details>
         )})}
         
-        {isAdmin &&
+        {canSls &&
           <div className='space1v'>
             <button
-              className='action up'
-              disabled={!isAdmin}
+              className='smallAction up'
+              disabled={!canSls}
               onClick={(e)=>handleRebuild()}
             >Rebuild {Pref.flow}s for current app settings</button>
           </div>}
@@ -80,7 +78,7 @@ const FlowTable = ({ id, flows, app, openActions })=> {
   );
 };
 
-const FlowToolbar = ({ id, entry, canEdt, openActions })=> (
+const FlowToolbar = ({ id, entry, canEdt, canSls, openActions })=> (
   <div className='floattaskbar shallow light'>
       <MatchButton 
         text='Edit Flow'
@@ -94,6 +92,13 @@ const FlowToolbar = ({ id, entry, canEdt, openActions })=> (
         icon='fa-solid fa-stream'
         doFunc={()=>openActions('proflow', entry.flowKey)}
         lock={!canEdt}
+      />
+      
+      <MatchButton 
+        text='Assign Quoted Time'
+        icon='fa-solid fa-alarm-clock'
+        doFunc={()=>openActions('qtflow', entry.flowKey)}
+        lock={!canSls}
       />
       
       <FlowRemove 

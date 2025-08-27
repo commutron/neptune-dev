@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 import CreateTag from '/client/components/tinyUi/CreateTag';
 import Tabs from '/client/components/smallUi/Tabs/Tabs';
@@ -10,8 +10,6 @@ import FlowTable from '/client/components/tables/FlowTable';
 import WTimeTab from './WTimeTab';
 import WProbTab from './WProbTab';
 
-import QuoteTaskTime from '/client/components/forms/QuoteTaskTime';
-
 const WidgetPanel = ({ 
   groupData, widgetData, variantData,
   batchRelated,
@@ -20,6 +18,38 @@ const WidgetPanel = ({
 
   const [ selectedFlow, selectedFlowSet ] = useState(false);
   const [ bload, bloadSet ] = useState(false);
+  
+  useEffect( ()=> {
+    if(variantData) { 
+      const root = app.instruct || '';
+      
+      const urls = variantData.map( v => v.instruct );
+      let modules = [];
+      
+      for(let u of urls) {
+        const http = u.slice(0,4) === 'http' ? u + ".json" : 
+                   u.slice(0,1) === '/' ? root + u + ".json" :
+                   root + '/' + u + ".json";
+        if(http) {
+          try {
+            fetch(http, {})
+            .then( (response)=> {
+              if(response?.ok) { return response.json(); }
+            })
+            .then( (articles)=> {
+              if(articles) { modules.push(articles) }
+            });
+          } catch(e) {
+            null;
+          }
+        }
+      }
+      
+      console.log(modules);
+      let titles = [...new Set( modules.flat() ) ];
+      console.log(titles);
+    }
+  }, []);
   
   const w = widgetData;
   const v = variantData;
@@ -32,6 +62,8 @@ const WidgetPanel = ({
       document.getElementById(w._id+'_flowhead_form')?.showModal();
     }else if(model === 'proflow') {
       document.getElementById(w._id+'_flowroute_form')?.showModal();
+    }else if(model === 'qtflow') {
+      document.getElementById(w._id+'_flowquote_form')?.showModal();
     }
   };
   
@@ -43,6 +75,7 @@ const WidgetPanel = ({
   const batchIDs = Array.from( bS, x => x._id );
   const batches = Array.from( bS, x => x.batch );
   
+  const canSls = Roles.userIsInRole(Meteor.userId(), ['admin','sales']);
   const canEdt = Roles.userIsInRole(Meteor.userId(), 'edit');
   const canRun = Roles.userIsInRole(Meteor.userId(), 'run');
   const canCrt = Roles.userIsInRole(Meteor.userId(), 'create');
@@ -67,6 +100,7 @@ const WidgetPanel = ({
         unloadOnClose={()=>bloadSet(false)}
         doVar={doVar} 
         canEdt={canEdt}
+        canSls={canSls}
         doBch={doBch}
         doRmv={doRmv}
       />
@@ -147,6 +181,8 @@ const WidgetPanel = ({
           flows={w.flows}
           app={a}
           openActions={openActions}
+          canEdt={canEdt}
+          canSls={canSls}
         />
         
         <WTimeTab
