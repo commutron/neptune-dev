@@ -7,7 +7,7 @@ import { branchOptions, FinishOptions } from './FlowElements';
 
 import { branchesOpenSort } from '/client/utility/Arrays';
 
-const FlowBuilder = ({ app, options, defaultEnd, baseline, onClick })=> {
+const FlowBuilder = ({ app, options, imods, defaultEnd, baseline, onClick })=> {
 
   const [ branchSelect, branchSet ] = useState(false);
   const [ steps, stepsSet ] = useState( [] );
@@ -171,6 +171,7 @@ const FlowBuilder = ({ app, options, defaultEnd, baseline, onClick })=> {
               <input 
                 id='rHow'
                 type='text'
+                list='imoduleList'
                 placeholder='optional'
                 className='dbbleWide' /> 
               <button
@@ -178,6 +179,9 @@ const FlowBuilder = ({ app, options, defaultEnd, baseline, onClick })=> {
                 className='smallAction blackHover'
               >Add</button>
             </label>
+            <datalist id="imoduleList">
+              {imods.map( (m,mx)=> <option key={mx}>{m}</option> )}
+            </datalist>
           </p>
         </form>
       </div>

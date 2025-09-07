@@ -1,17 +1,17 @@
 import React, { Fragment } from 'react';
 
 import { WidgetEdit } from '/client/components/forms/WidgetForm';
-import FlowFormHead from '/client/components/forms/FlowFormHead';
-import FlowFormRoute from '/client/components/forms/FlowFormRoute';
-import QuoteTaskTime from '/client/components/forms/QuoteTaskTime';
+import FlowFormHead from '/client/components/forms/Flow/FlowFormHead';
+import FlowFormRoute from '/client/components/forms/Flow/FlowFormRoute';
+import QuoteTaskTime from '/client/components/forms/Flow/QuoteTaskTime';
 import VariantForm from '/client/components/forms/VariantForm';
 import BatchCreate from '/client/components/forms/Batch/Parent/BatchCreate';
 import Remove from '/client/components/forms/Remove';
 
 const WModels = ({ 
   widgetData, groupData, variantData, users, app,
-  selectedFlow, bload, clearOnClose, unloadOnClose,
-  doVar, canEdt, canSls, doBch, doRmv
+  selectedFlow, bload, imods, clearOnClose, unloadOnClose,
+  doVar, canEdt, canSls, doBch, doRmv, isDebug
 })=> {
   return(
   	<Fragment>
@@ -37,6 +37,7 @@ const WModels = ({
         id={widgetData._id}
         preFillKey={selectedFlow}
         existFlows={widgetData.flows}
+        imods={imods}
         app={app}
         access={canEdt}
         clearOnClose={clearOnClose}
@@ -47,6 +48,7 @@ const WModels = ({
         existFlows={widgetData.flows}
         app={app}
         access={canSls}
+        isDebug={isDebug}
         clearOnClose={clearOnClose}
       />
       <BatchCreate

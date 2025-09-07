@@ -62,7 +62,7 @@ const TrackStepSlide = ({ app, branchesS, sorted })=> {
           <label htmlFor={rndmKey + 'type'}>Type<br />
             <select 
               id={rndmKey + 'type'}
-              className='tableAction'
+              className='miniIn12'
               required
             >
               <option></option>
@@ -78,9 +78,11 @@ const TrackStepSlide = ({ app, branchesS, sorted })=> {
             <select id={rndmKey + 'branch'} required>
               <option></option>
               {branchesS.map( (entry, index)=>{
-                return( 
-                  <option key={index} value={entry.brKey}>{entry.branch}</option>
-              )})}
+                if(entry.pro) {
+                  return( 
+                    <option key={index} value={entry.brKey}>{entry.branch}</option>
+                )}
+              })}
             </select>
           </label>
           <label htmlFor={rndmKey + 'add'}><br />

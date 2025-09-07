@@ -78,7 +78,7 @@ export const ProWrap = ({
                         
       const river = widgetData.flows.find( x => x.flowKey === riverKey );
       if(river) {
-        river.type === 'plus' && getNCListKeys.push(river.ncLists);
+        river.ncLists && getNCListKeys.push(river.ncLists);
       }
       const allKeys = rapIs ? true : false;
       getNCTypesCombo = NonConMerge(getNCListKeys, app, user, allKeys);
@@ -164,7 +164,7 @@ export const ProWrap = ({
             aria-label='Explore'
             className='taskLink auxTip'
             onClick={()=>FlowRouter.go(exploreLink)}>
-            <i className='fas fa-rocket' data-fa-transform='left-1'></i>
+            <i className='fas fa-rocket'></i>
           </button>
         </div>
         <TideFollow tOpen={timeOpen} canMulti={canMulti} />
@@ -226,6 +226,7 @@ export const ProWrap = ({
       {canMulti ?
         <TideMulti
           user={user}
+          app={app}
           brancheS={brancheS}
           plainBatchS={plainBatchS}
         />

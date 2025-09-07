@@ -218,3 +218,7 @@ n-tide-task label {
   color: var(--silver);
   margin: 0.5dvh 0;
 }
+.kioskFrame .tideFollowTip::before {
+  top: calc(var(--vert_border) * 1.5);
+  right: calc(var(--vert_adapt) * 1.1);
+}

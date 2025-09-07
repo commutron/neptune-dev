@@ -100,6 +100,7 @@ class Pref {
     this.norole = 'insufficient permissions';
     
     // simpleBatch and counters
+    this.xBch = 'WO';
     this.xBatch = 'work order';
     this.XBatch = 'Work Order';
     this.xBatchs = 'work orders';

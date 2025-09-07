@@ -334,7 +334,7 @@ dialog {
   box-shadow: var(--dropShadow2);
   background-color: var(--clouds);
   padding-inline: calc(var(--vert_border)*2);
-  padding-block: calc(var(--vert_border)*2) calc(var(--vert_border)*4);
+  padding-block: 0 calc(var(--vert_border)*4);
 }
 dialog::backdrop {
   background-color: rgb(10,10,10,0.5);
@@ -411,6 +411,9 @@ th {
   padding: 0 10px;
   border-right: 1px solid lightgray;
   font-family: var(--styled-font);
+  /*font-weight: 400;*/
+  font-size: var(--sm9);
+  letter-spacing: 0.01ch;
 }
 
 td {

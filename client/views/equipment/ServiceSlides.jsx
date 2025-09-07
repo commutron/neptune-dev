@@ -36,8 +36,8 @@ const ServiceSlides = ({
           const cmplt = maint.filter( m => m.status === 'complete' ).length;
           const inplt = maint.filter( m => m.status === 'incomplete' ).length;
           const ntrqd = maint.filter( m => m.status === 'notrequired' ).length;
-          const missd = maint.filter( m => m.status === 'missed' ).length;
-          const nxtcr = maint.filter( m => !m.status ).length;
+          // const missd = maint.filter( m => m.status === 'missed' ).length;
+          // const nxtcr = maint.filter( m => !m.status ).length;
           
           const req = maint.length - ntrqd;
           

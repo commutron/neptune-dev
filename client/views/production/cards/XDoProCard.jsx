@@ -118,6 +118,7 @@ const XDoProCard = ({
             altitle={altitle}
             shortfallS={shortfallS}
             scrap={scrapCheck}
+            app={app}
             brancheS={brancheS}
             tideKey={tideKey}
             timeOpen={timeOpen}

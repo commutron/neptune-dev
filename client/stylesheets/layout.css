@@ -777,16 +777,21 @@ n-sm-model {
   max-height: 60dvh;
   padding: 1vmax 1vmax;
 }
-n-model-head {
+n-model-head,
+.model_header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   text-transform: capitalize;
-  height: 3vmax;
-  font-size: 2.25vmax;
+  /*height: 3vmax;*/
+  font-size: var(--tx2);
+  padding-block: 0.5rem;
+  border-bottom: 1px groove #d3d3d3;
+  margin-bottom: 0.5rem;
   font-weight: 600;
   white-space: nowrap;
   column-gap: 6px;
+  background: inherit;
 }
 n-model-head > span {
   max-width: 80%;
@@ -906,6 +911,9 @@ n-sm-model-content {
 }
 .leftRow {
   justify-content: flex-start;
+}
+.rightJust {
+  justify-content: flex-end;
 }
 .centreRow > span { margin: 5px 10px; }
 
@@ -1560,6 +1568,7 @@ n-col-table-head > span {
 .flxGrow { flex-grow: 2; }
 
 .minH60 { min-height: 60px; }
+.minH240 { min-height: 240px; }
 
 @media (orientation: portrait) {
   .navButtonText {

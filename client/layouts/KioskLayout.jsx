@@ -71,7 +71,7 @@ const KioskWrap = ({ user, eBatch, doSerial, app, allTrace })=> {
                     </button>;
                         
   return(
-    <div className='kioskFrame do_not_use'>
+    <div className='kioskFrame'>
       <div className='tenHeader'>
         <div className='topBorder' />
         <HomeIcon />

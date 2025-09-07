@@ -169,7 +169,7 @@ n-timeline-item:last-child n-timeline-marker:after {
   box-shadow: 0 0px 4px -1px var(--kpiColor, rgb(149,165,166));
 }
 .kpiStat {
-  width: clamp(100px, 16vmax, 250px);
+  width: clamp(100px, 100%, 250px);
   border: 1px solid var(--kpiColor, rgb(149,165,166));
   margin: 5px 0;
   color: black;
@@ -181,7 +181,8 @@ n-timeline-item:last-child n-timeline-marker:after {
   display: grid;
   grid-auto-columns: minmax(4vmax, max-content) 1fr;
   grid-auto-flow: column;
-  max-height: 5dvh;
+  /*max-height: 5dvh;*/
+  max-height: min-content;
   width: clamp(100px, 100%, 250px);
   line-height: 1;
   padding: 0;

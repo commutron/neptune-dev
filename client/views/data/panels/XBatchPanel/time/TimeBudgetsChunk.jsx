@@ -101,6 +101,7 @@ const TimeBudgetsChunk = ({
             lockOut={b.lock} 
             brancheS={brancheS}
           />
+          <em>quoteTimeBreakdown replaced by quoteTimeCycles{b.quoteTimeCycles ? " [Enabled]" : ""}</em>
         </div>
         
         <ToggleBar

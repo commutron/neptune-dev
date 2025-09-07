@@ -87,7 +87,7 @@ const DataViewOps = ({
           if(river) {
             riverTitle = river.title;
             riverFlow = river.flow;
-            river.type === 'plus' && ncListKeys.push(river.ncLists);
+            river.ncLists && ncListKeys.push(river.ncLists);
           }
         }
         resolve('Success');
@@ -475,6 +475,7 @@ const DataViewOps = ({
             app={app}
             user={user}
             users={users}
+            isDebug={isDebug}
           />
           <BatchesList
             batchData={allBatches}

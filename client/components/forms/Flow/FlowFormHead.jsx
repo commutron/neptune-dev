@@ -2,14 +2,12 @@ import React, { useState, useLayoutEffect } from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-import { MatchButton } from '/client/layouts/Models/Popover';
 import ModelNative from '/client/layouts/Models/ModelNative';
-
 import { MultiSelect } from "react-multi-select-component";
+import InUseCheck from './InUseCheck';
 
 const FlowFormHead = ({ id, preFillKey, existFlows, app, access, clearOnClose })=> {
   
-  const [ warn, warnSet ] = useState(false);
   const [ base, baseSet ] = useState(false);
   
   const [ flowInput, flowInputSet ] = useState('');
@@ -37,16 +35,11 @@ const FlowFormHead = ({ id, preFillKey, existFlows, app, access, clearOnClose })
       if(!fill) {
         const ncDefault = ncCombo.filter( x => x.dfOn === true );
         ncListSet(ncDefault);
-        warnSet(false);
       }else{
-        if(fill.type === 'plus') {
+        if(fill.ncLists) {
           const ncDefault = ncCombo.filter( x => fill.ncLists.find( y => y === x.value ));
           ncListSet(ncDefault);
         }
-        Meteor.call('activeFlowCheck', fill.flowKey, (error, reply)=>{
-          error && console.log(error);
-          warnSet(reply);
-        });
       }
     }
   }, [id, preFillKey, app]);
@@ -91,10 +84,10 @@ const FlowFormHead = ({ id, preFillKey, existFlows, app, access, clearOnClose })
           className='centre'
           onSubmit={(e)=>save(e)}
         >
-        
-          <div className='centre'>
-            <p>{warn ? <span><b>{flowInput}</b> is or has been used by a {Pref.xBatch}</span> : null}</p>
-          </div>
+          <InUseCheck
+            flowtitle={flowInput}
+            preFillKey={preFillKey}
+          />
         
           <em className='small'>duplicate {Pref.flow} names are ill advised but not blocked</em>
           <p>
@@ -138,32 +131,3 @@ const FlowFormHead = ({ id, preFillKey, existFlows, app, access, clearOnClose })
 };
 
 export default FlowFormHead;
-
-export const FlowRemove = ({ id, fKey, access })=>	{
-  
-  function pull() {
-    Meteor.call('pullFlow', id, fKey, (error, reply)=>{
-      if(error)
-        console.log(error);
-      if(reply === 'inUse') {
-        toast.warning('Cannot be removed, is currently in use');
-      }else if(reply) {
-        toast.success('Saved');
-      }else{
-        toast.error('Server Error');
-      }
-    });
-  }
-
-  const title = access ? 'delete process flow if not in use' : Pref.norole;
-    
-  return(
-    <MatchButton 
-      title={title}
-      text='Delete Flow' 
-      icon='fa-solid fa-minus-circle'
-      doFunc={pull}
-      lock={!access}
-    />
-  );
-};

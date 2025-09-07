@@ -12,7 +12,7 @@ const ModelNative = ({ dialogId, title, icon, colorT, dark, closeFunc, children 
       id={dialogId}
       className={`forceScrollStyle ${dark ? 'darkTheme' : ''}`}
     >
-      <div className='stick split bottomLine medBig bold cap'>
+      <div className='model_header stick cap'>
         <span className='beside gapR'>
           <i className={`${icon} fa-fw fa-lg gapR ${colorT}`}></i>
           {title}

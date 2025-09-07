@@ -54,6 +54,7 @@
   background-color: transparent;
   border-color: transparent;
 }
+.border3 { border: 3px solid; }
 
 .nT { color: var(--neptuneColor); }
 .nBg { background-color: var(--neptuneColor); }
@@ -196,6 +197,7 @@
 .borderWhite { border-color: var(--clouds); }
 .borderBlack { border-color: var(--black); }
 .borderGray { border-color: var(--asbestos); }
+.borderLightGray { border-color: var(--asbestosfade); }
 .borderGreen { border-color: var(--nephritis); }
 .borderBlue { border-color: var(--belizeHole); }
 .borderRed { border-color: var(--alizarin); }

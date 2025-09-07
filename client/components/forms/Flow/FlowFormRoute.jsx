@@ -4,14 +4,13 @@ import { toast } from 'react-toastify';
 
 import ModelNative from '/client/layouts/Models/ModelNative';
 import FlowBuilder from '/client/components/bigUi/ArrayBuilder/FlowBuilder';
+import InUseCheck from './InUseCheck';
 
 const FlowFormRoute = ({ 
-  id, app, existFlows, preFillKey, access, clearOnClose
+  id, app, imods, existFlows, preFillKey, access, clearOnClose
 })=> {
   
-  const [ warn, warnSet ] = useState(false);
   const [ base, baseSet ] = useState(false);
-  
   const [ flow, flowSet ] = useState(false);
   
   function setFlow(recSet) {
@@ -46,17 +45,11 @@ const FlowFormRoute = ({
   
   useEffect( ()=> {
     if(!preFillKey) {
-      warnSet(false);
       baseSet(false);
       flowSet(false);
     }else{
       const fill = existFlows.find( f => f.flowKey === preFillKey );
       fill ? baseSet(fill) : null;
-      
-      Meteor.call('activeFlowCheck', preFillKey, (error, reply)=>{
-        error && console.log(error);
-        warnSet(reply);
-      });
     }
   }, [preFillKey]);
 
@@ -79,28 +72,17 @@ const FlowFormRoute = ({
           id='flowRouteSave'
           onSubmit={(e)=>handleSaveFlowRoute(e)}
         >
-          <div className='centre centreText'>
-            <p className='cap nomargin nospace'>{fTitle}</p>
-            <p className='nomargin nospace'>
-            {!warn ? <em>Not In Use</em> :
-              warn === 'liveRiver' ?
-              <b>In use by an Active {Pref.xBatch} as the {Pref.buildFlow}</b>
-            : warn === 'liveAlt' ?
-              <b>In use by an Active {Pref.xBatch} as the {Pref.buildFlowAlt}</b>
-            : warn === 'offRiver' ?
-              <b>In use by an Inactive {Pref.xBatch} as the {Pref.buildFlow}</b>
-            : warn === 'offAlt' ?
-              <b>In use by an Inactive {Pref.xBatch} as the {Pref.buildFlowAlt}</b>
-            :
-              <b>In use by ~unknown~</b>}
-            </p>
-          </div>
+          <InUseCheck
+            flowtitle={fTitle}
+            preFillKey={preFillKey}
+          />
         </form>
         
         <FlowBuilder
           app={app}
           options={app.trackOption}
           defaultEnd={app.lastTrack}
+          imods={imods}
           baseline={fFlow}
           onClick={(e)=>setFlow(e)} />
           

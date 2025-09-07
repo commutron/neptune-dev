@@ -105,7 +105,7 @@ const BatchXComplete = ({ batchData, allFlow, allFall, nowater, quantity, canRun
             datetimeSet={(e)=>datetimeSet(e)}
           />
           {canBackDate && !moment(batchData.completedAt).isSame(datetime, 'minute') ?
-            <div className='vmarginhalf blueBorder'>
+            <div className='vmarginhalf border3 borderBlue'>
               <p>
                 <button
                   onClick={(e)=>backdateFinish(e)}

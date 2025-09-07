@@ -6,8 +6,6 @@ import Config from '/server/hardConfig.js';
 import { avg4est } from './calcOps.js';
 import { syncLocale, getEst } from './utility.js';
 import { getShipLoad } from '/server/shipOps';
-
-import { noIg } from './utility';
     
 Meteor.methods({
   
@@ -243,20 +241,6 @@ Meteor.methods({
     }else{
       return false;
     }
-  },
-  
-  flowCountScan() {
-    const xid = noIg();
-    
-    const total = WidgetDB.find({groupId: { $ne: xid }},{fields:{'_id':1}}).count();
-    const one = WidgetDB.find({groupId: { $ne: xid },flows: { $size: 1 } },{fields:{'_id':1}}).count();
-    const flows = [ 'flowcount', total, total - one ];
-    
-    const wo = XBatchDB.find({groupId: { $ne: xid }},{fields:{'_id':1}}).count();
-    const salesCh = XBatchDB.find({groupId: { $ne: xid }, 'altered.changeKey': 'salesEnd' },{fields:{'_id':1}}).count();
-    const change = [ 'changeEnd', wo, salesCh ];
-    
-    return [ flows, change ];
   }
   
 });

@@ -59,7 +59,7 @@ const QuoteTimeBudgetForm = ({ bID, qtB, qtbB, auth, lockOut, brancheS })=> {
     const opS = ops.sort( (a,b)=> a[0] > b[0] ? 1 : a[0] < b[0] ? -1 : 0);
     inputOpsSet(opS);
     
-    const opsObj = opS.reduce((acc, curr, index) =>(acc[curr[0]] = curr[1], acc), {});
+    const opsObj = opS.reduce((acc, curr) =>(acc[curr[0]] = curr[1], acc), {});
     breakSet(opsObj);
   }, []);
   
@@ -88,22 +88,6 @@ const QuoteTimeBudgetForm = ({ bID, qtB, qtbB, auth, lockOut, brancheS })=> {
     e.preventDefault();
     if(auth) {
       Meteor.call('pushBatchXTimeBudget', bID, totalState, (err, re)=>{
-        err && console.log(err);
-        if(re) {
-          toast.success('Saved');
-        }else{
-          toast.error('Server Error');
-        }
-      });
-    }else{ toast.error('NO Permission'); }
-  };
-  
-  const setBreakdown = (e)=> {
-    e.preventDefault();
-    const brkArray = Object.entries(breakState).filter( x => x[1] > 0);
-    
-    if(auth) {
-      Meteor.call('setBatchXTimeBreakdown', bID, brkArray, (err, re)=>{
         err && console.log(err);
         if(re) {
           toast.success('Saved');
@@ -144,9 +128,6 @@ const QuoteTimeBudgetForm = ({ bID, qtB, qtbB, auth, lockOut, brancheS })=> {
           <label className='gapL min6'
           >Minutes<br /><i className='numberSet liteToolOff beside'>{totalState}</i>
           </label>
-          {/*<label className='gapL min6'
-          >Seconds<br /><i className='numberSet liteToolOff beside'>{moment.duration(totalState, 'minutes').asSeconds().toFixed(0,10)}</i>
-          </label>*/}
         </p>
         <p>
           <button
@@ -159,31 +140,18 @@ const QuoteTimeBudgetForm = ({ bID, qtB, qtbB, auth, lockOut, brancheS })=> {
         </p>
       </form>
       
-      <h3>{toCap(Pref.timeBudget, true)} Sub-Task Breakdown</h3>
-      <p><em>Set in minutes</em></p>
+      <h4>{toCap(Pref.timeBudget, true)} Breakdown</h4>
+      <p><em>DEPRECIATED</em></p>
       {subsumState > totalState ? 
         <p className='redT bold'>Sum of sub-tasks is greater than total {Pref.timeBudget}.</p>
         : null}
       <form
         id='brkdwnqtb'
         className='centre overscroll'
-        onSubmit={(e)=>setBreakdown(e)}
       >
-        <div className='rightRow doJustWeen'>
-          <label></label>
-          <span className='beside'>
-            {/*<label className='min6'>Hours</label>*/}
-            <label className='min8'>Minutes</label>
-            <label className='min8'>Seconds</label>
-          </span>
-        </div>
         <div className='rightRow doJustWeen vspace'>
           <label className='bold'>Sub-Task Sum</label>
           <span className='beside'>
-            {/*<label className='gapL min6'>
-              <i className='numberSet liteToolOff beside'
-              >{moment.duration(breakState[op[0]] || 0, 'minutes').asHours().toFixed(2,10)}</i>
-            </label>*/}
             <label className='gapL min8'>
               <i className={`numberSet liteToolOff beside ${subsumState > totalState ? 'redT' : ''}`}
               >{subsumState.toFixed(1,10)}</i>
@@ -201,10 +169,6 @@ const QuoteTimeBudgetForm = ({ bID, qtB, qtbB, auth, lockOut, brancheS })=> {
           >
           <label>{op[0].split('|')[0]} {op[0].split('|')[1] === '!X' ? null : op[0].split('|')[1]}</label>
           <span className='beside'>
-            {/*<label className='gapL min6'>
-              <i className='numberSet liteToolOff beside'
-              >{moment.duration(breakState[op[0]] || 0, 'minutes').asHours().toFixed(2,10)}</i>
-            </label>*/}
             <label className='gapL'>
               <input
                   type='number'
@@ -219,7 +183,7 @@ const QuoteTimeBudgetForm = ({ bID, qtB, qtbB, auth, lockOut, brancheS })=> {
                   step=".1"
                   inputMode='numeric'
                   defaultValue={op[1] || null}
-                  disabled={!auth || lockOut}
+                  disabled={true}
                   onChange={(e)=>inputMinutes(e)}
                 />
             </label>
@@ -236,7 +200,7 @@ const QuoteTimeBudgetForm = ({ bID, qtB, qtbB, auth, lockOut, brancheS })=> {
             // formMethod='dialog'
             id='goQTBB'
             className='action nSolid numberSet minIn7'
-            disabled={!auth || lockOut}
+            disabled={true}
           >Update {toCap(Pref.timeBudget, true)} Breakdown</button>
         </p>
       </form>

@@ -10,7 +10,7 @@ import MiniHistory from './MiniHistory.jsx';
 const TideWall = ({ 
   bID, bComplete, bOpen, rapidData,
   itemData, seriesData, shortfallS, altitle, scrap,
-  brancheS,
+  app, brancheS,
   tideKey, timeOpen, engagedPro, engagedMlti
 })=> {
   
@@ -49,6 +49,7 @@ const TideWall = ({
           {!engagedMlti &&
             <BigTideTask
               ctxLabel={ctxLabel}
+              app={app}
               brancheS={brancheS} 
               taskState={taskState}
               subtState={subtState}

@@ -1,38 +1,18 @@
 import React, { useState } from 'react';
 import UserNice from '/client/components/smallUi/UserNice.jsx';
 
-const NotesModule = ({ sourceId, noteObj, editMethod, cal, pocket, lines })=> {
-
-  if(pocket) {
-    return(
-      <details open={false} className='blueBorder spaceTxt vmarginhalf'>
-        <summary>
-          <i className='cap'>Notes:</i>
-        </summary>
-        <NotesContent
-          sourceId={sourceId}
-          noteObj={noteObj}
-          editMethod={editMethod}
-          lines={lines}
-          cal={cal}
-        />
-      </details>
-    );
-  }
-  
-  return(
-    <fieldset className='noteCard'>
-      <legend className='cap'>Notes</legend>
-      <NotesContent
-        sourceId={sourceId}
-        noteObj={noteObj}
-        editMethod={editMethod}
-        lines={lines}
-        cal={cal}
-      />
-    </fieldset>
-  );
-};
+const NotesModule = ({ sourceId, noteObj, editMethod, cal, lines })=> (
+  <fieldset className='noteCard'>
+    <legend className='cap'>Notes</legend>
+    <NotesContent
+      sourceId={sourceId}
+      noteObj={noteObj}
+      editMethod={editMethod}
+      lines={lines}
+      cal={cal}
+    />
+  </fieldset>
+);
 
 export default NotesModule;
 

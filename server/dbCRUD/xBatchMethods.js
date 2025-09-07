@@ -41,7 +41,8 @@ Meteor.methods({
           updatedAt: new Date(),
           timeAsMinutes: qTimeNum
         }],
-        // quoteTimeBreakdown: {
+        // quoteTimeCycles // updated via widget flow
+        // quoteTimeBreakdown: { // depreciated
         //   updatedAt: new Date(),
         //   timesAsMinutes: qTimeArr
         // },
@@ -559,11 +560,18 @@ Meteor.methods({
   setRiverX(batchId, riverId) {
     const accessKey = Meteor.user().orgKey;
     if(Roles.userIsInRole(Meteor.userId(), 'run')) {
+      const widget = WidgetDB.findOne({'flows.flowKey': riverId},{
+        fields:{'flows':{ $elemMatch: { 'flowKey': riverId }}}
+      });
+      const flow = widget && widget.flows && widget.flows[0];
+      const qtArray = flow && flow.qtTime ? flow.qtTime : [];
+      
       XBatchDB.update({_id: batchId, orgKey: accessKey}, {
         $set : {
           updatedAt: new Date(),
   			  updatedWho: Meteor.userId(),
           river: riverId,
+          quoteTimeCycles: qtArray
         }});
       Meteor.defer( ()=>{ 
         Meteor.call('updateOneMinify', batchId, accessKey); 

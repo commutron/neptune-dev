@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import ModelNative from '/client/layouts/Models/ModelNative';
 import BigTideTask from '/client/components/tide/TideControl/BigTideTask';
 
-const TideMulti = ({ user, brancheS, plainBatchS })=> (
+const TideMulti = ({ user, app, brancheS, plainBatchS })=> (
 	<ModelNative
     dialogId='multiprojdialog'
     title={`Multiple ${Pref.xBatch} Mode`}
@@ -16,6 +16,7 @@ const TideMulti = ({ user, brancheS, plainBatchS })=> (
     >
       <TideMultiCore
         user={user}
+        app={app}
         brancheS={brancheS}
         plainBatchS={plainBatchS}
       />
@@ -24,7 +25,7 @@ const TideMulti = ({ user, brancheS, plainBatchS })=> (
 
 export default TideMulti;
 
-const TideMultiCore = ({ user, brancheS, plainBatchS })=> {
+const TideMultiCore = ({ user, app, brancheS, plainBatchS })=> {
   
   const thingMounted = useRef(true);
   
@@ -160,6 +161,7 @@ const TideMultiCore = ({ user, brancheS, plainBatchS })=> {
 			      	id='multitaskselectONE'
 			      	key='multitaskselectONE'
 			        ctxLabel='Set A Task'
+			        app={app}
 			        brancheS={brancheS} 
 			        taskState={taskStateOne}
 			        subtState={subtStateOne}
@@ -190,6 +192,7 @@ const TideMultiCore = ({ user, brancheS, plainBatchS })=> {
 			      	id='multitaskselectTWO'
 			      	key='multitaskselectTWO'
 			        ctxLabel='Set A Task'
+			        app={app}
 			        brancheS={brancheS} 
 			        taskState={taskStateTwo}
 			        subtState={subtStateTwo}

@@ -739,6 +739,7 @@ button.variableInput.biggest { height: 64px; }
   background-color: transparent;
   margin: 0 0 0 0.5ch;
   width: 18ch;
+  min-width: 18ch;
   background-color: var(--cloudstrans);
 }
 

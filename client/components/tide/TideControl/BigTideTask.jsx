@@ -1,26 +1,43 @@
-import React, { useEffect, Fragment } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 // import Pref from '/client/global/pref.js';
 
 const BigTideTask = ({ 
-  id, ctxLabel, brancheS,
+  id, ctxLabel, app, brancheS,
   taskState, subtState, lockTaskState, taskSet, subtSet
 })=> {
   
-  const subop = taskState && brancheS.find( b=> b.branch === taskState );
+  const [ br, brSet ] = useState(false);
   
-  useEffect( ()=> {
-    if(!subop?.subTasks?.length) {
-      subtSet(undefined);
+  const qttasks = taskState && app.qtTasks.filter( q => q.brKey === br ) || [];
+  let subop = [];
+  for(let qs of qttasks) {
+    for(let st of qs.subTasks) {
+      subop.push([qs.qtKey, st]);
     }
-  }, [taskState]);
+  }
+  
+  // console.log({subop});
+  
+  // useEffect( ()=> {
+  //   if(!subop?.subTasks?.length) {
+  //     subtSet(undefined);
+  //   }
+  // }, [taskState]);
   
   function handleTask(val) {
     const trueVal = val === 'false' ? false : val;
-    taskSet(trueVal);
+    brSet(trueVal);
+    const brName = brancheS.find( b=> b.brKey === trueVal ).branch;
+    taskSet(brName);
     subtSet(false);
   }
   function handleSubt(val) {
     const trueVal = val === 'false' ? false : val;
+    
+    const data = trueVal ? trueVal.split(",") : [null,false];
+    
+    console.log(data);
+    
     subtSet(trueVal);
   }
 
@@ -37,7 +54,7 @@ const BigTideTask = ({
         <option value={false} className='darkgrayT em'>Required</option>
         <optgroup label='Production' className='blackT nsty'>
           {brancheS.filter(n=>n.pro).map( (v, ix)=>(
-            <option key={ix+'o2'} className='blackT nsty' value={v.branch}
+            <option key={ix+'o2'} className='blackT nsty' value={v.brKey}
             >{v.branch}</option>
           ))}
         </optgroup>
@@ -48,7 +65,7 @@ const BigTideTask = ({
           ))}
         </optgroup>
       </select>
-      {subop?.subTasks?.length ?
+      {subop.length ?
         <Fragment>
         <label htmlFor='sbtskSlct'>Sub-Task</label>
         <select
@@ -59,8 +76,8 @@ const BigTideTask = ({
           disabled={lockTaskState}
           required>
           <option value={false} className='darkgrayT em'>Required</option>
-          {subop.subTasks.map( (v, ixs)=>(
-            <option key={ixs+'o3'} className='blackT nsty' value={v}>{v}</option>
+          {subop.map( (v, ixs)=>(
+            <option key={ixs+'o3'} className='blackT nsty' value={v}>{v[1]}</option>
           ))}
         </select>
         </Fragment>

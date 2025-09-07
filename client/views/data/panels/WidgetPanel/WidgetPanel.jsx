@@ -13,41 +13,45 @@ import WProbTab from './WProbTab';
 const WidgetPanel = ({ 
   groupData, widgetData, variantData,
   batchRelated,
-  app, user, users
+  app, user, users, isDebug
 })=> {
 
   const [ selectedFlow, selectedFlowSet ] = useState(false);
   const [ bload, bloadSet ] = useState(false);
+  const [ imods, imodsSet ] = useState(new Set());
   
   useEffect( ()=> {
     if(variantData) { 
       const root = app.instruct || '';
       
-      const urls = variantData.map( v => v.instruct );
-      let modules = [];
+      const urls = variantData.map( v => v.live && v.instruct );
       
       for(let u of urls) {
-        const http = u.slice(0,4) === 'http' ? u + ".json" : 
-                   u.slice(0,1) === '/' ? root + u + ".json" :
-                   root + '/' + u + ".json";
+        const http = !u ? undefined :
+                    u.slice(0,4) === 'http' ? u + ".json" : 
+                    u.slice(0,1) === '/' ? root + u + ".json" :
+                    root + '/' + u + ".json";
         if(http) {
           try {
             fetch(http, {})
+            .catch( ()=> {
+              null;
+            })
             .then( (response)=> {
               if(response?.ok) { return response.json(); }
             })
             .then( (articles)=> {
-              if(articles) { modules.push(articles) }
+              if(articles && articles.modules) { 
+                let names = imods;
+                articles.modules.map( m=> m.module ).forEach( a => names.add(a) );
+                imodsSet(names);
+              }
             });
           } catch(e) {
             null;
           }
         }
       }
-      
-      console.log(modules);
-      let titles = [...new Set( modules.flat() ) ];
-      console.log(titles);
     }
   }, []);
   
@@ -96,6 +100,7 @@ const WidgetPanel = ({
         app={app}
         selectedFlow={selectedFlow}
         bload={bload}
+        imods={[...imods].sort()}
         clearOnClose={()=>selectedFlowSet(false)}
         unloadOnClose={()=>bloadSet(false)}
         doVar={doVar} 
@@ -103,6 +108,7 @@ const WidgetPanel = ({
         canSls={canSls}
         doBch={doBch}
         doRmv={doRmv}
+        isDebug={isDebug}
       />
       
       <div className='floattaskbar stick light'>
@@ -183,6 +189,7 @@ const WidgetPanel = ({
           openActions={openActions}
           canEdt={canEdt}
           canSls={canSls}
+          isDebug={isDebug}
         />
         
         <WTimeTab

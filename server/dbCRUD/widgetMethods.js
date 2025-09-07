@@ -23,7 +23,9 @@ Meteor.methods({
             flowKey: new Meteor.Collection.ObjectID().valueOf(),
 				    title: 'default flow',
 				    type: 'plus',
+				    updatedAt: new Date(),
             flow: [endTrack],
+            qtTime: [],
             ncLists: ncKeys
           }
         ]
@@ -84,7 +86,9 @@ Meteor.methods({
             flowKey: new Meteor.Collection.ObjectID().valueOf(),
   				  title: flowTitle,
   				  type: 'plus',
+  				  updatedAt: new Date(),
             flow: [endTrack],
+            qtTime: [],
             ncLists: ncLists
           }
       }});
@@ -101,7 +105,7 @@ Meteor.methods({
       WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey, 'flows.flowKey': editId}, {
         $set : {
           'flows.$.title': flowTitle,
-          'flows.$.type': 'plus',
+          'flows.$.updatedAt': new Date(),
           'flows.$.ncLists': ncLists
       }});
       return true;
@@ -114,6 +118,7 @@ Meteor.methods({
     if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
       WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey, 'flows.flowKey': editId}, {
         $set : {
+          'flows.$.updatedAt': new Date(),
           'flows.$.flow': flowObj,
       }});
       return true;
@@ -127,11 +132,16 @@ Meteor.methods({
       if(Roles.userIsInRole(Meteor.userId(), ['sales', 'admin'])) {
         WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey, 'flows.flowKey': flowKey}, {
           $set : { 
-            'flows.$.quoteTaskTime': {
-              updatedAt: new Date(),
-              qtt: qtArray
-            }
+            'flows.$.updatedAt': new Date(),
+            'flows.$.type': 'quoted',
+            'flows.$.qtTime': qtArray
           }});
+          
+        XBatchDB.update({live: true, river: flowKey}, {
+          $set : {
+            quoteTimeCycles: qtArray
+          }
+        });
         return true;
       }else{
         return false;
@@ -170,6 +180,7 @@ Meteor.methods({
             'flows.flowKey': editKey
           }, {
             $set : {
+              'flows.$.updatedAt': new Date(),
               'flows.$.flow': newFlowObj,
           }});
         }

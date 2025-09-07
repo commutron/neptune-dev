@@ -417,18 +417,40 @@ const ClockedCard = ({ user })=> {
 // tName:"22007"
 // tSubt
 // tTask
-// task:"PROX"
+// task:"PROX" // 'MLTI'
   
-  const eng = user.engaged.tName;
-  const title = eng.startsWith('Eq') ? eng.split("<*>")[0].substring(eng.indexOf("-")+1) : eng;
-
+  const eng = user.engaged;
+  const title = eng.task === 'MLTI' ?
+                 `Multi ${Pref.xBch}: ${eng.tName[0]} & ${eng.tName[1]}` :
+                eng.tName.startsWith('Eq') ? 
+                  eng.tName.split("<*>")[0].substring(eng.tName.indexOf("-")+1) : 
+                `${Pref.xBatch} ${eng.tName}`;
+  
+  const subtitle = eng.task === 'MLTI' ?
+                 `${eng.tTask[0]}, ${eng.tSubt[0] || ""} & ${eng.tTask[1]}, ${eng.tSubt[1] || ""}` :
+                 `${eng.tTask}, ${eng.tSubt || ""}`;
+  
+  const goshortcut = (goto)=> {
+	  if(typeof goto !== 'string') {
+	    document.getElementById('multiprojdialog')?.showModal();
+	  }else if(goto?.startsWith('Eq')) {
+      const eqstr = goto.split("<*>");
+      Session.set('now', eqstr[0]);
+      Session.set('nowSV', eqstr[1].split("[+]")[0]);
+    }else{
+      Session.set('now', goto);
+    }
+	};
+	
   return(
-    <div className='centre pop wmargin vmargin spacehalf min200 max400 darkCard nGlow'>
-      {user.engaged ?
-        <div className='centre centreText cap'>
-          <span className='biggester numFont'>{title}</span>
-          <span className='letterSpaced' style={{fontWeight: 'lighter'}}>{user.engaged.tTask}, {user.engaged.tSubt}</span>  
-        </div> 
+    <div className='centre pop wmargin min200 max600 darkCard nGlow'>
+      {eng ?
+        <button
+          onClick={()=>goshortcut(eng.tName)}
+          className='miniAction spacehalf centre centreText cap'>
+          <span className='biggest numFont'>{title}</span>
+          <span className='letterSpaced' style={{fontWeight: 'lighter'}}>{subtitle}</span>  
+        </button> 
       : null}
     </div>
   );
