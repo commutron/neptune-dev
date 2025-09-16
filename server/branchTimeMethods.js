@@ -322,7 +322,6 @@ Meteor.methods({
     return bestGuess;
   },
   
-  
   assembleBranchTime(batchNum) {
     this.unblock();
     const accessKey = Meteor.user().orgKey;
@@ -377,8 +376,8 @@ Meteor.methods({
         
         for(let bt of bslim) {
           brDurr = brDurr + ( bt.duration / bt.branchGuess[1].length );
-
-          if(br.subTasks && bt.branchGuess[2]) {
+          
+          if(bt.branchGuess[2]) {
             subs.add(bt.branchGuess[2]);
             subt.push({ sub: bt.branchGuess[2], dur: bt.duration, mlt: bt.multi });
           }
@@ -431,6 +430,139 @@ Meteor.methods({
       slimTimes.push({ x: 'after complete', y: zDurr, w: zMlti });
       slimTimes.push({ x: 'out of route', y: yDurr, w: yMlti });
       slimTimes.push({ x: 'unknown', y: xDurr, w: xMlti });
+      
+      return slimTimes;
+    }else{
+      return slimTimes;
+    }
+  },
+  
+  collateBranchTime(batchNum) {
+    this.unblock();
+    const accessKey = Meteor.user().orgKey;
+    const app = AppDB.findOne({ orgKey: accessKey});
+    const branchOptions = sortBranches(app.branches);
+    const qtOptions = app.qtTasks;
+    //.sort((b1, b2)=> b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 );
+    
+    // const trackOptions = [...app.trackOption, app.lastTrack];
+    
+    const batch = XBatchDB.findOne({batch: batchNum, orgKey: accessKey});
+    // quoteTimeCycles // NEW
+    // quoteTimeBreakdown: { // depreciated
+    //   updatedAt: new Date(),
+    //   timesAsMinutes: qTimeArr
+    // },
+        
+    // const series = XSeriesDB.findOne({batch: batchNum});
+    // const river = batch.river;
+    // const waterfall = batch.waterfall || [];
+    
+    let slimTimes = [];
+    
+    if( batch && Array.isArray(batch.tide) ) {  
+      const slim = batch.tide.map( x => {
+        const dt = x.task ? [ x.task, x.subtask, x.qtKey ] : null;
+                        
+        const dur = addTideDuration(x);
+        return {
+          tasks: dt,
+          duration: dur,
+          multi: x.focus ? true : false
+        };
+      });
+      
+      for(let br of branchOptions) {
+        let brDurr = 0;
+        let brMlti = false;
+        
+        const brQts = qtOptions.filter( q => q.brKey === br.brKey );
+        let brSubTasks = [];
+        for( q of brQts) {
+          brSubTasks.push(...q.subTasks);
+        }
+        
+        const bslim = slim.filter( t => Array.isArray(t.tasks) &&
+                        t.tasks[0] === br.branch );
+        
+        let subs = new Set();
+        let qtKeys = new Set();
+        let subt = [];
+        let sbtt = [];
+        
+        let qtkArr = [];
+        
+        for(let bt of bslim) {
+          brDurr = brDurr + ( bt.duration );
+          
+          if(bt.tasks[1]) {
+            subs.add(bt.tasks[1]);
+            
+            bt.tasks[2] ? qtKeys.add(bt.tasks[2]) : null;
+            
+            subt.push({ 
+              sub: bt.tasks[1], 
+              dur: bt.duration, 
+              mlt: bt.multi, 
+              qt: bt.tasks[2]
+            });
+          }
+          if( bt.multi ) { brMlti = true; }
+        }
+        
+        for(let sb of subs) {
+          const ft = subt.filter( f => f.sub === sb );
+          const ct = ft.reduce((x,y)=> x + y.dur, 0);
+          const ml = ft.some( s => s.mlt );
+          sbtt.push({
+            a: sb,
+            b: ct,
+            w: ml
+          });
+        }
+        
+        for(let qtk of qtKeys) {
+          const byQt = subt.filter( f => f.qt === qtk );
+          const sum = byQt.reduce((x,y)=> x + y.dur, 0);
+          const ml = byQt.some( s => s.mlt );
+          qtkArr.push({
+            q: qtk,
+            sum: sum,
+            w: ml
+          });
+        }
+        
+        slimTimes.push({
+          x: br.branch,
+          y: brDurr,
+          z: sbtt,
+          w: brMlti,
+          q: qtkArr
+        });
+      }
+      let aDurr = 0;
+      let aMlti = false;
+      let zDurr = 0;
+      let zMlti = false;
+      let yDurr = 0;
+      let yMlti = false;
+      for(let t of slim) {
+        if( t.tasks[0] === 'before release' ) {
+          aDurr = aDurr + t.duration;
+          t.multi ? aMlti = true : null;
+        }else if( t.tasks[0] === 'after complete' ) {
+          zDurr = zDurr + t.duration;
+          t.multi ? zMlti = true : null;
+        }else if( t.tasks[0] === 'out of route' ) {
+          yDurr = yDurr + t.duration;
+          t.multi ? yMlti = true : null;
+        }else{
+          null;
+        }
+      }
+      slimTimes.unshift({ x: 'before release', y: aDurr, w: aMlti });
+      slimTimes.push({ x: 'after complete', y: zDurr, w: zMlti });
+      slimTimes.push({ x: 'out of route', y: yDurr, w: yMlti });
       
       return slimTimes;
     }else{

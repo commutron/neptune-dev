@@ -20,12 +20,19 @@ const TimeBudgetsChunk = ({
 }) =>	{
   
   const [ branchTime, branchTimeSet ] = useState(false);
-  
+
   useEffect( ()=>{
-    Meteor.call('assembleBranchTime', b.batch, (err, reply)=>{
-      err && console.log(err);
-      reply && branchTimeSet( reply );
-    });
+    if(b.quoteTimeCycles) {
+      Meteor.call('collateBranchTime', b.batch, (err, reply)=>{
+        err && console.log(err);
+        reply && branchTimeSet( reply );
+      });
+    }else{
+      Meteor.call('assembleBranchTime', b.batch, (err, reply)=>{
+        err && console.log(err);
+        reply && branchTimeSet( reply );
+      });
+    }
   }, []);
   
   const totalsCalc = splitTidebyPeople(b.tide);
@@ -83,7 +90,7 @@ const TimeBudgetsChunk = ({
   const totalPeople = totalsCalc.peopleTime;
   const tP = totalPeople.length;
   
-  const qtbB = b.quoteTimeBreakdown ? b.quoteTimeBreakdown.timesAsMinutes : [];
+  const qtbB = !b.quoteTimeCycles && b.quoteTimeBreakdown ? b.quoteTimeBreakdown.timesAsMinutes : [];
   
   const cnv = conversion === 'minutes' ? 'min' :
               conversion === 'percent' ? '%' : 'hrs';
