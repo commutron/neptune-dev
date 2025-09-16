@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import UserNice from '/client/components/smallUi/UserNice';
 import { CalcSpin } from '/client/components/tinyUi/Spin';
 import ToggleBar from '/client/components/smallUi/Tabs/ToggleBar';

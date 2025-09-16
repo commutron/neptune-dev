@@ -101,10 +101,11 @@
   top: 50%;
   z-index: 2;
   opacity: 0.8;
-  padding: 24px 4px;
+  padding: 24px 0;
   font-family: FontAwesome;
   background-color: var(--asbestos);
   color: var(--clouds);
+  transition: 0s;
 }
 .riverExpandToggle { left: 14vmax; }
 .riverShrinkToggle { left: 28vmax; }

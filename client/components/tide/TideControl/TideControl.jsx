@@ -1,6 +1,6 @@
 import { Random } from 'meteor/random'
 import React, { useRef, useState, useEffect } from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import { toast } from 'react-toastify';
 import './style.css';
 import { MultiDivert } from '/client/components/tide/TideControl/TideMulti';
@@ -8,7 +8,7 @@ import { MultiDivert } from '/client/components/tide/TideControl/TideMulti';
 const TideControl = ({ 
   batchID, tideKey, engagedPro, engagedMlti,
   timeOpen, tideLockOut,
-  taskState, subtState, stopOnly, lockTaskSet
+  taskState, qtSubState, stopOnly, lockTaskSet
 })=> {
   
   const thingMounted = useRef(true);
@@ -56,8 +56,10 @@ const TideControl = ({
     setWorking(true);
     lockTaskSet && lockTaskSet(true);
     let newRndm = actionID;
+    const newSubT = qtSubState?.[1] || false;
+    const newQtK = qtSubState?.[0] || null;
     Meteor.setTimeout( ()=>{
-      Meteor.apply('startTideTask', [ batchID, newRndm, taskState, subtState ],
+      Meteor.apply('startTideTask', [ batchID, newRndm, taskState, newSubT, newQtK ],
       {wait: true},
       (error, reply)=> replyCallback(error, reply) );
     }, 1000);
@@ -68,14 +70,16 @@ const TideControl = ({
     setWorking(true);
     lockTaskSet && lockTaskSet(true);
     let newRndm = actionID;
+    const newSubT = qtSubState?.[1] || false;
+    const newQtK = qtSubState?.[0] || null;
     Meteor.setTimeout( ()=>{
-      Meteor.apply('switchTideTask', [ tideKey, engagedPro, batchID, newRndm, taskState, subtState ],
+      Meteor.apply('switchTideTask', [ tideKey, engagedPro, batchID, newRndm, taskState, newSubT, newQtK ],
       {wait: true},
       (error, reply)=> replyCallback(error, reply) );
     }, 1000);
   }
   
-  const disable = lock || tideLockOut || !taskState || subtState === false;
+  const disable = lock || tideLockOut || !taskState || !qtSubState;
   
   if(engagedMlti) {
     return <MultiDivert lock={lock} />;

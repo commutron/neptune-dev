@@ -37,11 +37,10 @@ const ServiceCard = ({ eqData, maintData, brancheS, tideKey, timeOpen, engagedPr
           engagedPro={engagedPro}
           engagedMlti={engagedMlti}
           brancheS={brancheS}
-          taskOptions={[]}
-          subOptions={[]}
           forceSelect={true}
           forceTask={brancheS.find( b=> b.brKey === eqData.branchKey)?.branch || 'Facility'}
           forceSubTask={Pref.premaintain}
+          forceQtKey='EqQtPM_GENERIC'
           lockOut={moment().isAfter(maintData.expire)}
         />  
       :
@@ -129,11 +128,10 @@ export const RepairCard = ({ eqData, brancheS, tideKey, timeOpen, engagedPro, en
           engagedPro={engagedPro}
           engagedMlti={engagedMlti}
           brancheS={brancheS}
-          taskOptions={[]}
-          subOptions={[]}
           forceSelect={true}
           forceTask={brancheS.find( b=> b.brKey === eqData.branchKey)?.branch || 'Facility'}
           forceSubTask={Pref.fixmaintain}
+          forceQtKey='EqQtFix_GENERIC'
           lockOut={false}
         />  
       :

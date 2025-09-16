@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from 'react';
 import moment from 'moment';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import { toast } from 'react-toastify';
 import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock';
 import Flatpickr from 'react-flatpickr';
@@ -12,7 +12,7 @@ const TideBlockRow = ({
   editKey, editMode,
   splitKey, splitMode,
   setEdit, setEnd, setSplit,
-  brancheS,
+  brancheS, app,
   isSuper, isDebug
 })=> {
   
@@ -25,7 +25,7 @@ const TideBlockRow = ({
   const tideWho = tideObj.who;
   const startTime = tideObj.startTime;
   const stopTime = tideObj.stopTime;
-  const taskU = tideObj.task ? tideObj.task + ' | ' + (tideObj.subtask || '') : false;
+  const taskU = tideObj.task ? [tideObj.task, tideObj.subtask || '', tideObj.qtKey || ''] : false;
   const overlap = tideObj.focus ? true : false;
   
   const editOn = tideKey === editKey;
@@ -36,6 +36,7 @@ const TideBlockRow = ({
   const [ tempSplit, setTempSplit ] = useState(false);
   const [ tempTask, setTempTask ] = useState(false);
   const [ tempSubT, setTempSubT ] = useState(false);
+  const [ tempQt, setTempQt ] = useState(false);
   
   function safeCancel() {
     !splitOn ? editMode(false) : splitMode(false);
@@ -56,7 +57,8 @@ const TideBlockRow = ({
       const newStop = tempStop || [stopTime];
       const taskIs = tempTask || tideObj.task;
       const subtIs = tempTask ? tempSubT : tideObj.subtask;
-      setEdit({dbHome, tideKey, newStart, newStop, taskIs, subtIs});
+      const qtIs = tempTask ? tempQt : tideObj.qtKey;
+      setEdit({dbHome, tideKey, newStart, newStop, taskIs, subtIs, qtIs});
     }
   }
  
@@ -99,13 +101,17 @@ const TideBlockRow = ({
         <TideTaskExplicit
           taskIs={taskU}
           brancheS={brancheS}
+          app={app}
           editOn={editOn}
           splitOn={splitOn}
           equipLock={tideObj.type === 'MAINT' || tideObj.type === 'EQFX'}
           tempTask={tempTask}
           setTempTask={setTempTask}
           tempSubT={tempSubT}
-          setTempSubT={setTempSubT} />
+          setTempSubT={setTempSubT}
+          tempQt={tempQt}
+          setTempQt={setTempQt} 
+        />
         
         <td className='noRightBorder numFont centreText timeInputs'>
           <i className="fas fa-play fa-fw fa-xs greenT"></i>
@@ -217,32 +223,44 @@ export default TideBlockRow;
 
 
 const TideTaskExplicit = ({ 
-  taskIs, brancheS,
+  taskIs, brancheS, app,
   editOn, splitOn, equipLock,
-  tempTask, setTempTask, tempSubT, setTempSubT
+  setTempTask, setTempSubT, setTempQt
 })=> {
   
   const handleTask = (val)=> {
     if( !val || val === 'false' ) {
       setTempTask(false);
       setTempSubT(false);
+      setTempQt(false);
     }else{
-      const twoval = val.split("|");
-      const tskval = twoval[0].trim();
-      const sbtval = twoval[1].trim();
+      const arrval = val.split(",");
+      const tskval = arrval[0].trim();
+      const sbtval = arrval[1].trim();
+      const qtkval = arrval[2].trim();
       setTempTask(tskval);
       setTempSubT( sbtval === '' ? false : sbtval);
+      setTempQt( qtkval === '' ? null : qtkval);
     }
   };
   
   if( !editOn || splitOn || equipLock ) {
+    const tskSr = taskIs || ['','',null];
     return(
-      <td className='noRightBorder smTxt'>
-        {taskIs ? 
-          taskIs.trim().replace(' | ', ' - ').replace(' |', '')
-        : '   '}
-      </td>
+      <td className='noRightBorder smTxt'>{tskSr[0]} - {tskSr[1]||"___"}</td>
     );
+  }
+  
+  let taskops = [];
+  for( br of brancheS ) {
+    let brops = [];
+    const qttasks = app.qtTasks.filter( q => q.brKey === br.brKey );
+    for(let qs of qttasks) {
+      for(let st of qs.subTasks) {
+        brops.push([br.branch, st, qs.qtKey]);
+      }
+    }
+    taskops.push([br.branch, brops]);
   }
 
   return(
@@ -251,24 +269,21 @@ const TideTaskExplicit = ({
         id='tskSlctEdit'
         className='cap tableInput smTxt'
         onChange={(e)=>handleTask(e.target.value)}
-        defaultValue={taskIs}
         disabled={false}>
-        {!taskIs && <option value={false}></option>}
-        <optgroup label={Pref.branches}>
-          {brancheS.map( (v, ix)=>(
-            <Fragment key={ix+'o2'}>
-            <option value={v.branch + ' | '}>{v.branch}</option>
-            {v.subTasks && v.subTasks.map( (stsk, ixs)=>(
-              <option key={ixs+'o3'} value={v.branch + ' | ' + stsk}>&emsp;{stsk}</option>
+        <option value={false} disabled={true}></option>
+        <option value={taskIs}>{taskIs[0]}-{taskIs[1]}</option>
+        {taskops.map( (b, ix)=>(
+          <optgroup key={ix} label={b[0]}>
+            {b[1].map( (sb, ixs)=>(
+              <option key={ixs+'o3'} value={sb}>&emsp;{sb[1]}</option>
             ))}
-            </Fragment>
-          ))}
-        </optgroup>
+          </optgroup>
+        ))}
         <optgroup label='Other'>
-          <option value='before release | '>before release</option>
-          <option value='after finish | '>after finish</option>
-          <option value='out of route | '>out of route</option>
-          {/*<option value='extend | '>extend</option>*/}
+          <option value={['before release',"",""]}>before release</option>
+          <option value={['after finish',"",""]}>after finish</option>
+          <option value={['out of route',"",""]}>out of route</option>
+          {/*<option value={['extend',"",""]}>extend</option>*/}
         </optgroup>
       </select>
     </td>

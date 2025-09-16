@@ -33,6 +33,7 @@ const BatchCardX = ({
             bID={batchData._id}
             bOpen={bOpen}
             brancheS={brancheS}
+            app={app}
             tideKey={tideKey}
             timeOpen={timeOpen}
             engagedPro={engagedPro}

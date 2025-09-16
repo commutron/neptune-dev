@@ -2,7 +2,7 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import { toast } from 'react-toastify';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import Spin from '../components/tinyUi/Spin.jsx';
 
 const InitialSetup = ({ ready, option })=> {

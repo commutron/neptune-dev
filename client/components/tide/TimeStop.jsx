@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-// import Pref from '/client/global/pref.js';
+// import Pref from '/public/pref.js';
 import { toast } from 'react-toastify';
 import './TideControl/style.css';
 import { MultiRunning } from '/client/components/tide/TideControl/TideMulti';

@@ -49,7 +49,7 @@ Meteor.methods({
   },
 
   // RECORD - Always call with 'apply'
-  startTimeSpan(type, link, project, newTask, newSubTask) {
+  startTimeSpan(type, link, project, newTask, newSubT, newQtK) {
     
     const user = Meteor.user();
     const spinning = user && user.engaged;
@@ -65,8 +65,8 @@ Meteor.methods({
       // focus: 1,2,3
       
       const taskVal = !newTask || newTask === 'false' ? false : newTask;
-      const subtVal = !newSubTask || newSubTask === 'false' ? false : newSubTask;
-      
+      const subtVal = !newSubT || newSubT === 'false' ? false : newSubT;
+
       const newDocId = TimeDB.insert({
         type: type,
         link: link,
@@ -75,7 +75,8 @@ Meteor.methods({
         startTime: new Date(),
         stopTime: false,
         task: taskVal,
-        subtask: subtVal
+        subtask: subtVal,
+        qtKey: newQtK
       });
       
       Meteor.users.update(Meteor.userId(), {
@@ -85,7 +86,8 @@ Meteor.methods({
             tKey: newDocId,
             tName: project,
             tTask: taskVal,
-            tSubt: subtVal
+            tSubt: subtVal,
+            qtKey: newQtK
           }
         }
       });
@@ -118,7 +120,7 @@ Meteor.methods({
     }
   },
   
-  switchTimeSpan(nowId, isPROX, type, link, project, newTask, newSubTask) {
+  switchTimeSpan(nowId, isPROX, type, link, project, newTask, newSubT, newQtK) {
     try {
       
       const stopTime = (id)=> {
@@ -138,8 +140,8 @@ Meteor.methods({
         });
       };
       
-      const startTime = (typ, lnk, proj, nTsk, nSbTsk)=> {
-        Meteor.call('startTimeSpan', typ, lnk, proj, nTsk, nSbTsk, (err, re)=>{
+      const startTime = (typ, lnk, proj, nTsk, nSbTsk, nQtKy)=> {
+        Meteor.call('startTimeSpan', typ, lnk, proj, nTsk, nSbTsk, nQtKy, (err, re)=>{
           err && new Meteor.Error(err);
           if(re) { return true }
         });
@@ -147,11 +149,11 @@ Meteor.methods({
       
       if(isPROX) {
         stopTide(nowId)
-          .then(startTime(type, link, project, newTask, newSubTask))
+          .then(startTime(type, link, project, newTask, newSubT, newQtK))
           .finally(()=> { return true });
       }else{
         stopTime(nowId)
-          .then(startTime(type, link, project, newTask, newSubTask))
+          .then(startTime(type, link, project, newTask, newSubT, newQtK))
           .finally(()=> { return true });
       }
 
@@ -160,7 +162,7 @@ Meteor.methods({
     }finally{ return true }
   },
 
-  startTideTask(batchId, newTkey, newTask, newSubTask) {
+  startTideTask(batchId, newTkey, newTask, newSubT, newQtK) {
     try {
       const user = Meteor.user();
       const spinning = user && user.engaged;
@@ -182,7 +184,7 @@ Meteor.methods({
             return false;
           }else{
             const taskVal = !newTask || newTask === 'false' ? false : newTask;
-            const subtVal = !newSubTask || newSubTask === 'false' ? false : newSubTask;
+            const subtVal = !newSubT || newSubT === 'false' ? false : newSubT;
             
             XBatchDB.update({ _id: batchId }, {
               $push : { tide: { 
@@ -191,7 +193,8 @@ Meteor.methods({
                 startTime: new Date(),
                 stopTime: false,
                 task: taskVal,
-                subtask: subtVal
+                subtask: subtVal,
+                qtKey: newQtK
             }}});
             Meteor.users.update(Meteor.userId(), {
               $set: {
@@ -200,7 +203,8 @@ Meteor.methods({
                   tKey: newTkey,
                   tName: docX.batch,
                   tTask: taskVal,
-                  tSubt: subtVal
+                  tSubt: subtVal,
+                  qtKey: newQtK
                 }
               }
             });
@@ -252,7 +256,7 @@ Meteor.methods({
     }
   },
 
-  switchTideTask(tideKey, isPROX, newbatchID, newTkey, newTask, newSubTask) {
+  switchTideTask(tideKey, isPROX, newbatchID, newTkey, newTask, newSubT, newQtK) {
     try {
 
       const stopTide = (tKey)=> {
@@ -272,8 +276,8 @@ Meteor.methods({
         });
       };
       
-      const startTide = (nbID, nTky, nTsk, nSbTsk)=> {
-        Meteor.call('startTideTask', nbID, nTky, nTsk, nSbTsk, (err, re)=>{
+      const startTide = (nbID, nTky, nTsk, nSbTsk, nQtKy)=> {
+        Meteor.call('startTideTask', nbID, nTky, nTsk, nSbTsk, nQtKy, (err, re)=>{
           err && new Meteor.Error(err);
           if(re) { return true }
         });
@@ -281,11 +285,11 @@ Meteor.methods({
       
       if(isPROX) {
         stopTide(tideKey)
-          .then(startTide(newbatchID, newTkey, newTask, newSubTask))
+          .then(startTide(newbatchID, newTkey, newTask, newSubT, newQtK))
           .finally(()=> { return true });
       }else{
         stopTime(tideKey)
-          .then(startTide(newbatchID, newTkey, newTask, newSubTask))
+          .then(startTide(newbatchID, newTkey, newTask, newSubT, newQtK))
           .finally(()=> { return true });
       }
 
@@ -294,7 +298,7 @@ Meteor.methods({
     }finally{ return true }
   },
   
-  startMultiTideTask(batch1, newTkey1, newTask1, newSubTask1, batch2, newTkey2, newTask2, newSubTask2) {
+  startMultiTideTask(batch1, newTkey1, newTask1, newSubTask1, newQt1, batch2, newTkey2, newTask2, newSubTask2, newQt2) {
     try {
       const orgKey = Meteor.user().orgKey;
       
@@ -327,6 +331,7 @@ Meteor.methods({
                 stopTime: false,
                 task: taskVal1,
                 subtask: subtVal1,
+                qtKey: newQt1,
                 focus: 2
             }}});
             
@@ -341,6 +346,7 @@ Meteor.methods({
                 stopTime: false,
                 task: taskVal2,
                 subtask: subtVal2,
+                qtKey: newQt2,
                 focus: 2
             }}});
             
@@ -351,7 +357,8 @@ Meteor.methods({
                   tKey: [ newTkey1, newTkey2 ],
                   tName: [ batch1, batch2 ],
                   tTask: [ taskVal1, taskVal2 ],
-                  tSubt: [ subtVal1, subtVal2 ]
+                  tSubt: [ subtVal1, subtVal2 ],
+                  qtKey: [ newQt1, newQt2 ]
                 }
               }
             });
@@ -413,7 +420,7 @@ Meteor.methods({
     }
   },
   
-  editTideTimeBlock(dbHome, tideKey, newStart, newStop, taskIs, subtIs) {
+  editTideTimeBlock(dbHome, tideKey, newStart, newStop, taskIs, subtIs, qtIs) {
     try {
       const pplSup = Roles.userIsInRole(Meteor.userId(), 'peopleSuper');
       if(!newStart || !newStop) {
@@ -437,7 +444,8 @@ Meteor.methods({
                 'tide.$.startTime' : new Date(newStart),
                 'tide.$.stopTime' : new Date(newStop),
                 'tide.$.task' : taskVal,
-                'tide.$.subtask' : subtIs
+                'tide.$.subtask' : subtIs,
+                'tide.$.qtKey' : qtIs
             }});
             return true;
           }
@@ -457,6 +465,7 @@ Meteor.methods({
                 stopTime : new Date(newStop),
                 // task : taskVal,
                 // subtask : subtIs
+                // qtKey : qtIs
             }});
             return true;
           }
@@ -488,7 +497,8 @@ Meteor.methods({
           XBatchDB.update({ batch: batch, orgKey: accessKey, 'tide.tKey': tideKey}, {
             $set : { 
               'tide.$.task' : taskVal,
-              'tide.$.subtask' : false
+              'tide.$.subtask' : false,
+              'tide.$.qtKey' : null
           }});
           return true;
         }
@@ -583,6 +593,7 @@ Meteor.methods({
                 stopTime: new Date(stopTime),
                 task: subX.task,
                 subtask: subX.subtask || false,
+                qtKey: subX.qtKey || null,
                 focus: subX.focus || null
             }}});
             return true;
@@ -608,7 +619,8 @@ Meteor.methods({
               startTime: new Date(newSplit),
               stopTime: new Date(stopTime),
               task: time.task,
-              subtask: time.subtask || false
+              subtask: time.subtask || false,
+              qtKey: time.qtKey || null
             });
             return true;
           }

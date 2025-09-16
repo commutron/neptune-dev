@@ -15,7 +15,7 @@ const TideWall = ({
 })=> {
   
   const [ taskState, taskSet ] = useState( timeOpen?.task || false );
-  const [ subtState, subtSet ] = useState( timeOpen?.subtask || false );
+  const [ qtSubState, qtSubSet ] = useState( timeOpen ? [timeOpen.qtKey||null, timeOpen.subtask] : false );
   const [ lockTaskState, lockTaskSet ] = useState(false);
  
   const ctxLabel = timeOpen ? 'Set Different Task' : 'Set A Task';
@@ -43,7 +43,7 @@ const TideWall = ({
               engagedPro={engagedPro}
               engagedMlti={engagedMlti}
               taskState={taskState}
-              subtState={subtState}
+              qtSubState={qtSubState}
               lockTaskSet={lockTaskSet} />
           </n-big-tide-container>
           {!engagedMlti &&
@@ -52,10 +52,10 @@ const TideWall = ({
               app={app}
               brancheS={brancheS} 
               taskState={taskState}
-              subtState={subtState}
+              qtSubState={qtSubState}
               lockTaskState={lockTaskState}
               taskSet={taskSet}
-              subtSet={subtSet}
+              qtSubSet={qtSubSet}
             />
           }
         </div>
@@ -89,12 +89,12 @@ export default TideWall;
 
 export const TideBump = ({ 
   bID, bOpen,
-  brancheS,
+  brancheS, app,
   tideKey, timeOpen, engagedPro
 })=> {
   
   const [ taskState, taskSet ] = useState( timeOpen?.task || false );
-  const [ subtState, subtSet ] = useState( timeOpen?.subtask || false );
+  const [ qtSubState, qtSubSet ] = useState( timeOpen ? [timeOpen.qtKey||null, timeOpen.subtask] : false );
   const [ lockTaskState, lockTaskSet ] = useState( false );
   
   if(bOpen && engagedPro) {
@@ -107,17 +107,18 @@ export const TideBump = ({
             timeOpen={false}
             tideLockOut={false}
             taskState={taskState}
-            subtState={subtState}
+            qtSubState={qtSubState}
             lockTaskSet={lockTaskSet} />
         </n-med-tide-container>
         <BigTideTask
           ctxLabel='Set Different Task'
-          brancheS={brancheS} 
+          brancheS={brancheS}
+          app={app}
           taskState={taskState}
-          subtState={subtState}
+          qtSubState={qtSubState}
           lockTaskState={lockTaskState}
           taskSet={taskSet}
-          subtSet={subtSet} />
+          qtSubSet={qtSubSet} />
       </Fragment>
     );
   }

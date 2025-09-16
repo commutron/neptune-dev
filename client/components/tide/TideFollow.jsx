@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import ModelUser from '/client/layouts/Models/ModelUser';
 
 const TideFollow = ({ tOpen, canMulti })=> {

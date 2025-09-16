@@ -6,7 +6,7 @@ import './style.css';
 const TideSwitch = ({ 
   batchID, tideKey, 
   timeOpen, tideLockOut,
-  taskState, subtState, lockTaskSet
+  taskState, qtSubState, lockTaskSet
 })=> {
   
   const thingMounted = useRef(true);
@@ -39,8 +39,10 @@ const TideSwitch = ({
     setWorking(true);
     lockTaskSet && lockTaskSet(true);
     let newRndm = actionID;
+    const newSubT = qtSubState?.[1] || false;
+    const newQtK = qtSubState?.[0] || null;
     Meteor.setTimeout( ()=>{
-      Meteor.apply('switchTideTask', [ tideKey, true, batchID, newRndm, taskState, subtState ],
+      Meteor.apply('switchTideTask', [ tideKey, true, batchID, newRndm, taskState, newSubT, newQtK ],
       {wait: true},
       (error, reply)=> {
         if(error) {
@@ -61,7 +63,7 @@ const TideSwitch = ({
   
   if(tideKey && !timeOpen) {
     
-    const disable = lock || tideLockOut || !taskState || subtState === false;
+    const disable = lock || tideLockOut || !taskState || !qtSubState;
   
     return(
       <button

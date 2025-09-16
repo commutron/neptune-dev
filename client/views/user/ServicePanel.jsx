@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import { CalcSpin } from '/client/components/tinyUi/Spin';
 import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock';
 

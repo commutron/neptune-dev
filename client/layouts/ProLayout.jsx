@@ -196,7 +196,7 @@ export const ProWrap = ({
           type='button'
           className={!expand ? 'riverExpandToggle' : 'riverShrinkToggle'}
           onClick={()=>handleExpand(null)}>
-          <i className='fas fa-sort fa-2x' data-fa-transform='rotate-90'></i>
+          <i className='fas fa-grip-lines-vertical fa-2x'></i>
         </button>
         
         <div className='proInstruct' style={{overflowY:'hidden'}}>

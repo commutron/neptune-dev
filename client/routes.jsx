@@ -3,7 +3,7 @@ import {mount} from 'react-mounter';
 import { FlowRouterMeta, FlowRouterTitle } from 'meteor/ostrio:flow-router-meta';
 import { toast } from 'react-toastify';
 
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 import { PublicLayout } from './layouts/MainLayouts.jsx';
 import { SplashLayout } from './layouts/MainLayouts.jsx';

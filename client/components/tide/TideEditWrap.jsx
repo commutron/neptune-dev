@@ -30,12 +30,13 @@ const TideEditWrap = ({
     const newStop = Array.isArray(e.newStop) ? e.newStop[0] : false;
     const taskIs = e.taskIs;
     const subtIs = e.subtIs;
+    const qtKeyIs = e.qtIs;
     
     if(!tideKey || !newStart || !newStop) { 
       console.log([{tideKey, newStart, newStop}, 'data issue no call']);
     }else{
       Meteor.apply('editTideTimeBlock', 
-        [ e.dbHome, tideKey, newStart, newStop, taskIs, subtIs ],
+        [ e.dbHome, tideKey, newStart, newStop, taskIs, subtIs, qtKeyIs ],
         { wait: true },
         (err, asw)=>{
           err && console.log(err);
@@ -140,6 +141,7 @@ const TideEditWrap = ({
                 setEnd={(e)=>endBlock(e)}
                 setSplit={(e)=>splitBlock(e)}
                 brancheS={brancheS}
+                app={app}
                 isSuper={isSuper}
                 isDebug={isDebug} />
             </Fragment>
@@ -161,6 +163,7 @@ const TideEditWrap = ({
               setEnd={(e)=>endBlock(e)}
               setSplit={(e)=>splitBlock(e)}
               brancheS={brancheS}
+              app={app}
               isSuper={isSuper}
               isDebug={isDebug} />
           );

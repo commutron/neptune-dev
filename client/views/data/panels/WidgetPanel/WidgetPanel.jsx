@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import CreateTag from '/client/components/tinyUi/CreateTag';
 import Tabs from '/client/components/smallUi/Tabs/Tabs';
 import { PopoverButton, PopoverMenu, PopoverAction, MatchButton } from '/client/layouts/Models/Popover';

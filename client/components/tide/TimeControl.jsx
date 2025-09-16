@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import { toast } from 'react-toastify';
 import './TideControl/style.css';
 import { MultiDivert } from '/client/components/tide/TideControl/TideMulti';
@@ -9,7 +9,7 @@ const TimeControl = ({
   type, link, project,
   engagedPro, engagedMlti,
   timeLockOut,
-  taskState, subtState,
+  taskState, subtState, qtSubState,
   lockTaskSet
 })=> {
   
@@ -57,7 +57,7 @@ const TimeControl = ({
     lockTaskSet && lockTaskSet(true);
 
     Meteor.setTimeout( ()=>{
-      Meteor.apply('startTimeSpan', [ type, link, project, taskState, subtState ],
+      Meteor.apply('startTimeSpan', [ type, link, project, taskState, subtState, qtSubState ],
       {wait: true},
       (error, re)=> replyCallback(error, re) );
     }, 500);
@@ -69,7 +69,7 @@ const TimeControl = ({
     lockTaskSet && lockTaskSet(true);
     
     Meteor.setTimeout( ()=>{
-      Meteor.apply('switchTimeSpan', [ timeId, engagedPro, type, link, project, taskState, subtState ],
+      Meteor.apply('switchTimeSpan', [ timeId, engagedPro, type, link, project, taskState, subtState, qtSubState ],
       {wait: true},
       (error, re)=> replyCallback(error, re) );
     }, 500);

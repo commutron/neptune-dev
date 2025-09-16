@@ -1,6 +1,6 @@
 import { Random } from 'meteor/random'
 import React, { useRef, useState, useEffect } from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import { toast } from 'react-toastify';
 
 import ModelNative from '/client/layouts/Models/ModelNative';
@@ -41,12 +41,12 @@ const TideMultiCore = ({ user, app, brancheS, plainBatchS })=> {
   const [ actionIDOne, setActionIDOne ] = useState( Random.id() );
   const [ batchStateOne, batchSetOne ] = useState( "" );
   const [ taskStateOne, taskSetOne ] = useState( false );
-  const [ subtStateOne, subtSetOne ] = useState( false );
+  const [ qtSubStateOne, qtSubSetOne ] = useState( false );
   
   const [ actionIDTwo, setActionIDTwo ] = useState( Random.id() );
   const [ batchStateTwo, batchSetTwo ] = useState( "" );
   const [ taskStateTwo, taskSetTwo ] = useState( false );
-  const [ subtStateTwo, subtSetTwo ] = useState( false );
+  const [ qtSubStateTwo, qtSubSetTwo ] = useState( false );
   
   const [ lockTaskState, lockTaskSet ] = useState(false);
   const [ working, setWorking ] = useState(false);
@@ -54,8 +54,8 @@ const TideMultiCore = ({ user, app, brancheS, plainBatchS })=> {
   const valid = batchStateOne && batchStateTwo && 
   							batchStateOne !== batchStateTwo &&
   							taskStateOne && taskStateTwo && 
-  							subtStateOne !== false && 
-		        	  subtStateTwo !== false;
+  							qtSubStateOne !== false && 
+		        	  qtSubStateTwo !== false;
 	
   const replyCallback = (error, re)=> {
     if(error) {
@@ -87,10 +87,14 @@ const TideMultiCore = ({ user, app, brancheS, plainBatchS })=> {
   	!matchI && toast.warning('please choose from the list');
   	
   	if( valid && matchO && matchI ) {
+  		const newSubTOne = qtSubStateOne?.[1] || false;
+	    const newQtKOne = qtSubStateOne?.[0] || null;
+	    const newSubTTwo = qtSubStateTwo?.[1] || false;
+	    const newQtKTwo = qtSubStateTwo?.[0] || null;
 
 	  	Meteor.apply('startMultiTideTask', [ 
-	  		batchStateOne, actionIDOne, taskStateOne, subtStateOne, 
-	  		batchStateTwo, actionIDTwo, taskStateTwo, subtStateTwo
+	  		batchStateOne, actionIDOne, taskStateOne, newSubTOne, newQtKOne,
+	  		batchStateTwo, actionIDTwo, taskStateTwo, newSubTTwo, newQtKTwo
 	    ],
 	    {wait: true},
 	    (error, re)=> replyCallback(error, re) );
@@ -164,10 +168,10 @@ const TideMultiCore = ({ user, app, brancheS, plainBatchS })=> {
 			        app={app}
 			        brancheS={brancheS} 
 			        taskState={taskStateOne}
-			        subtState={subtStateOne}
+			        qtSubState={qtSubStateOne}
 			        lockTaskState={lockTaskState}
 			        taskSet={taskSetOne}
-			        subtSet={subtSetOne} />
+			        qtSubSet={qtSubSetOne} />
 			        
 			    </div>
 		    
@@ -195,10 +199,10 @@ const TideMultiCore = ({ user, app, brancheS, plainBatchS })=> {
 			        app={app}
 			        brancheS={brancheS} 
 			        taskState={taskStateTwo}
-			        subtState={subtStateTwo}
+			        qtSubState={qtSubStateTwo}
 			        lockTaskState={lockTaskState}
 			        taskSet={taskSetTwo}
-			        subtSet={subtSetTwo} />
+			        qtSubSet={qtSubSetTwo} />
 			        
 			    </div>
 			    

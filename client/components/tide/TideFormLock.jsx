@@ -1,6 +1,6 @@
 import React, { useEffect, Fragment } from 'react';
 import { toast } from 'react-toastify';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
         
 const TideFormLock = ({ 
   currentLive, children, 
