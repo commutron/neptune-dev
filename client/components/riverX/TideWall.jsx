@@ -8,7 +8,7 @@ import CompleteRest from './CompleteRest.jsx';
 import MiniHistory from './MiniHistory.jsx';
   
 const TideWall = ({ 
-  bID, bComplete, bOpen, rapidData,
+  bID, gID, bComplete, bOpen, rapidData,
   itemData, seriesData, shortfallS, altitle, scrap,
   app, brancheS,
   tideKey, timeOpen, engagedPro, engagedMlti
@@ -51,6 +51,7 @@ const TideWall = ({
               ctxLabel={ctxLabel}
               app={app}
               brancheS={brancheS} 
+              gID={gID}
               taskState={taskState}
               qtSubState={qtSubState}
               lockTaskState={lockTaskState}
@@ -88,7 +89,7 @@ const TideWall = ({
 export default TideWall;
 
 export const TideBump = ({ 
-  bID, bOpen,
+  bID, gID, bOpen,
   brancheS, app,
   tideKey, timeOpen, engagedPro
 })=> {
@@ -114,6 +115,7 @@ export const TideBump = ({
           ctxLabel='Set Different Task'
           brancheS={brancheS}
           app={app}
+          gID={gID}
           taskState={taskState}
           qtSubState={qtSubState}
           lockTaskState={lockTaskState}

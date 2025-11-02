@@ -1,6 +1,7 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { Meteor } from 'meteor/meteor';
 // import moment from 'moment';
+import Pref from '/public/pref.js';
 
 import { ScanListenLiteUtility, ScanListenLiteOff } from '/client/utility/ScanListener.js';
 
@@ -50,7 +51,7 @@ const KioskWrap = ({ user, eBatch, doSerial, app, allTrace })=> {
   };
   
   const doText = kactionState === 'info' ? 'Listening...' :
-                 kactionState === 'serial' ? 'Initiate Serial...' :
+                 kactionState === 'serial' ? 'Listening For New Serial...' :
                  '...';
   
   const KListener = <button 
@@ -61,11 +62,13 @@ const KioskWrap = ({ user, eBatch, doSerial, app, allTrace })=> {
                         <Fragment>
                           <n-fa0><i className='fas fa-compact-disc fa-fw'></i></n-fa0>
                           <span>Ready</span>
+                          <span>Click To Start</span>
                         </Fragment>
                       :
                         <Fragment>
-                          <n-fa00><i className='fas fa-compact-disc fa-fw fa-spin'></i></n-fa00>
+                          <n-fa00><i className='fas fa-compact-disc fa-fw spin2'></i></n-fa00>
                           <span>{doText}</span>
+                          <span>Click To Stop</span>
                         </Fragment>
                       }
                     </button>;
@@ -83,9 +86,9 @@ const KioskWrap = ({ user, eBatch, doSerial, app, allTrace })=> {
             value={kactionState}
             className={!kactionState ? 'grayT' : ''}
             disabled={klisten}>
-            <option value='' className='grayT'>Select Terminal Action</option>
-            <option value='info'>Info (Scan Tester)</option>
-            <option value='serial' disabled={!doSerial}>Initiate Serial</option>
+            <option value='' className='grayT'>Select Process</option>
+            <option value='info'>Serial Info Lookup</option>
+            <option value='serial' disabled={!doSerial}>Initiate New Serials</option>
             {/*<option value='checkpoint' disabled={true}>Checkpoint</option>
             <option value='complete' disabled={true}>Complete</option>*/}
           </select>
@@ -105,6 +108,7 @@ const KioskWrap = ({ user, eBatch, doSerial, app, allTrace })=> {
             kactionState === 'serial' ?
               !bScope ?
                 <div className='skopegrid forceScrollStyle'>
+                  <h3 className='centreText'>Select {Pref.XBatch}</h3>
                   {allTrace.map( (t)=> {
                     return <button 
                       key={t._id}
@@ -126,7 +130,6 @@ const KioskWrap = ({ user, eBatch, doSerial, app, allTrace })=> {
           kactionState={kactionState}
           klisten={klisten}
           bScope={bScope}
-        
         />
       
       </div>

@@ -342,3 +342,70 @@ n-timeline-item:last-child n-timeline-marker:after {
 .popmenu button:last-child {
   border-block-end: none;
 }
+
+.inboxCard {
+  position: relative;
+  margin-bottom: 1rem;
+  background-color: rgb(40,40,40);
+  border: 1px solid;
+  border-color: rgb(30,30,30);
+  border-radius: 2px;
+}
+.inboxCard.light {
+  background-color: rgb(250,250,250);
+  border-color: rgb(255,255,255);
+}
+.inboxCard.new {
+  border-color: var(--neptuneColor);
+}
+.inboxCard > span {
+  display: block;
+  font-size: 1.1rem;
+  margin-block: 0.5rem;
+  margin-inline: 1rem;
+}
+.inboxCard > div:first-of-type {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.2rem;
+  border-bottom: 1px solid rgb(0,0,0,0.5);
+  margin-inline: 0.4rem;
+  padding: 0.5rem 0 0.5rem 0.5rem;
+}
+.inboxCard > div:last-of-type {
+  font-size: 0.8rem;
+  margin-inline: 0.4rem;
+  padding: 0.4rem;
+  text-align: end;
+  border-top: 1px solid rgb(0,0,0,0.4);
+}
+.inboxCard > p:last-child {
+  margin: 0;
+  padding: 0.2rem 0.4rem;
+  border-top: 1px solid rgb(0,0,0,0.3);
+  background-color: rgb(35,35,35);
+}
+.inboxCard.light > div:first-child {
+  font-size: larger;
+  border-bottom: 1px solid rgb(200,200,200,0.5);
+}
+.inboxCard.light > span {
+  font-size: inherit;
+}
+.inboxCard.light > div:last-of-type {
+  font-size: smaller;
+  border-top: 1px solid rgb(200,200,200,0.4);
+}
+.inboxCard.light > p:last-child {
+  border-top: 1px solid rgb(200,200,200,0.3);
+  background-color: transparent;
+}
+.inboxCard button {
+	min-width: 1rem;
+  min-height: 1rem;
+  margin-inline: 0.5rem;
+  font-size: 1rem;
+  border-color: transparent;
+  background-color: transparent;
+  cursor: pointer;
+}

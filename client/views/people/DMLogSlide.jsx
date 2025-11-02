@@ -19,7 +19,7 @@ const DMLogSlide = ()=> {
     Meteor.call('fetchDMLog', (err, re)=>{
       err && console.log(err);
       if(re) {
-        logSet( JSON.parse(re).slice(0).reverse() );
+        logSet( JSON.parse(re).toReversed() );
         workSet(false);
       }
     });

@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment } from 'react';
 // import Pref from '/public/pref.js';
 
 const BigTideTask = ({ 
-  id, ctxLabel, app, brancheS,
+  id, ctxLabel, app, brancheS, gID,
   taskState, qtSubState, lockTaskState, taskSet, qtSubSet
 })=> {
   
@@ -17,10 +17,19 @@ const BigTideTask = ({
   }
   
   useEffect( ()=> {
-    if(!subop.length) {
-      qtSubSet(false);
-    }else if(subop.length === 1) {
-      qtSubSet(subop[0]);
+    if(taskState && qtSubState) {
+      let qnow = app.qtTasks.find( q => q.qtKey === qtSubState[0] );
+      qnow && brSet(qnow.brKey);
+    }
+  }, []);
+  
+  useEffect( ()=> {
+    if(!qtSubState) {
+      if(!subop.length) {
+        qtSubSet(false);
+      }else if(subop.length === 1) {
+        qtSubSet(subop[0]);
+      }
     }
   }, [taskState]);
   
@@ -44,22 +53,27 @@ const BigTideTask = ({
         id={id+'tskSlct'}
         className={`cap ${!taskState ? 'darkgrayT em' : ''}`}
         onChange={(e)=>handleTask(e.target.value)}
-        defaultValue={taskState}
+        value={br || false}
         disabled={lockTaskState}
         required>
         <option value={false} disabled={true} className='darkgrayT em'>Required</option>
-        <optgroup label='Production' className='blackT nsty'>
-          {brancheS.filter(n=>n.pro).map( (v, ix)=>(
-            <option key={ix+'o2'} className='blackT nsty' value={v.brKey}
-            >{v.branch}</option>
-          ))}
-        </optgroup>
-        <optgroup label='Supportive' className='blackT nsty'>
-          {brancheS.filter(n=>!n.pro).map( (v, ix)=>(
-            <option key={ix+'o2'} className='blackT nsty' value={v.brKey}
-            >{v.branch}</option>
-          ))}
-        </optgroup>
+        {!gID || gID !== app.internalID ? 
+          <optgroup label='Production' className='blackT nsty'>
+            {brancheS.filter(n=>n.pro).map( (v, ix)=>(
+              <option key={ix+'o2'} className='blackT nsty' value={v.brKey}
+              >{v.branch}</option>
+            ))}
+          </optgroup>
+        : null}
+        {!gID || gID === app.internalID ? 
+          <optgroup label='Supportive' className='blackT nsty'>
+            {brancheS.filter(n=>!n.pro).map( (v, ix)=>(
+              <option key={ix+'o2'} className='blackT nsty' value={v.brKey}
+              >{v.branch}</option>
+            ))}
+          </optgroup>
+          : null
+        }
       </select>
       {subop.length ?
         <Fragment>
@@ -68,7 +82,7 @@ const BigTideTask = ({
           id={id+'sbtskSlct'}
           className={`cap ${!qtSubState ? 'darkgrayT em' : ''}`}
           onChange={(e)=>handleSubt(e.target.value)}
-          value={qtSubState}
+          value={qtSubState?.toString() || false}
           disabled={lockTaskState}
           required>
           {subop.length > 1 &&

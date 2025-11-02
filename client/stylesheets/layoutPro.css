@@ -33,6 +33,7 @@
     "tenHeader tenHeader"
     "proPrime proInstruct"
     "proForm proForm";
+  /*transition: grid-template-columns linear 200ms;*/
 }
 .pro100 {
   grid-template-columns: 1vw 1fr;
@@ -71,7 +72,8 @@
 .proInstruct {
   grid-area: proInstruct;
   height: 100%;
-  background-color: var(--black);
+  width: 100%;
+  /*background-color: var(--black);*/
   box-shadow: var(--dropShadow2);
   z-index: 1;
 }

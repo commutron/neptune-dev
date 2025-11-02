@@ -209,6 +209,10 @@
     margin: 5%;
     padding: 2rem;
   }
+  .inboxFeed {
+    margin: 0 5% 5% 5%;
+    padding: 2rem 2rem;
+  }
 	.nesoRight {
 	  align-items: stretch;
 	  border-inline: 1px solid var(--navIndicatorB);

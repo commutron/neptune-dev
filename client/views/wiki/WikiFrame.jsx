@@ -7,7 +7,8 @@ const WikiFrame = ({ go, full, anchor })=> {
     border: '0',
     margin: '0',
     padding: '0',
-    scrollPadding: '100px 0 0 0'
+    scrollPadding: '100px 0 0 0',
+    // backgroundColor: 'transparent'
   };
   //let correct = full ? 45 : 115;
   

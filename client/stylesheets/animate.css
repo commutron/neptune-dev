@@ -340,9 +340,9 @@
   .spin2 {
     animation: spinAround 10s infinite linear;
   }
-  .fa-spin {
-    animation: fa-spin 10s infinite linear;
-  }
+  /*.fa-spin {*/
+  /*  animation: fa-spin 10s infinite linear;*/
+  /*} not working */ 
   .loading > .logoSVG {
     animation: spinAround 30s infinite linear;
   }

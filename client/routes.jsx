@@ -129,9 +129,9 @@ const limitedRoutes = FlowRouter.group({
 });
 limitedRoutes.route('/ne', {
   name: 'neso',
-  action() {
+  action: function(p, query) {
     mount(CleanLayout, {
-      content: (<NesoView />),
+      content: (<NesoView query={query} />),
       title: Pref.neptuneIs
     });
   }

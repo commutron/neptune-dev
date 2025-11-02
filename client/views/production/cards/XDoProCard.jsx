@@ -110,6 +110,7 @@ const XDoProCard = ({
   const insertTideWall = 
           <TideWall
             bID={batchData._id}
+            gID={batchData.groupId}
             bComplete={bComplete}
             bOpen={bOpen}
             rapidData={rapidData}

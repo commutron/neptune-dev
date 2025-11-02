@@ -265,7 +265,7 @@ const NotifyMini = ({ unice, inbox, users })=> {
         </div>
         :
         <div>
-          {(inbox || []).slice(0).reverse().map( (entry)=> (
+          {(inbox || []).toReversed().map( (entry)=> (
             <div key={entry.notifyKey} className={`mininboxCard ${entry.unread ? 'new' : ''}`}>
               <div><i>{entry.title}</i></div>
               <span>{entry.detail}</span>

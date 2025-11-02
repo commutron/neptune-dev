@@ -78,6 +78,7 @@ const ProductionFindOps = ({
         brancheS={brancheS} 
         plainBatchS={plainBatchS}
         user={user}
+        app={app}
         canMulti={canMulti}
         allEquip={allEquip}
       >
@@ -138,6 +139,7 @@ const ProductionFindOps = ({
         plainBatchS={plainBatchS}
         allEquip={allEquip}
         user={user}
+        app={app}
         canMulti={canMulti}
       >
         <WikiOps 
@@ -233,6 +235,7 @@ const ProductionFindOps = ({
           brancheS={brancheS} 
           plainBatchS={plainBatchS} 
           user={user}
+          app={app}
           canMulti={canMulti}
           allEquip={allEquip}
         >
@@ -356,6 +359,7 @@ const ProductionFindOps = ({
         brancheS={brancheS} 
         plainBatchS={plainBatchS} 
         user={user}
+        app={app}
         canMulti={canMulti}
         allEquip={allEquip}
       >
@@ -377,6 +381,7 @@ const ProductionFindOps = ({
 	    plainBatchS={plainBatchS}
 	    allEquip={allEquip}
 	    user={user}
+	    app={app}
 	    canMulti={canMulti}
 	   >
 	    <div className='centreText wide'>

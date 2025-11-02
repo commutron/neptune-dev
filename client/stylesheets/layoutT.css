@@ -43,6 +43,13 @@
 .kioskBatch {
   grid-area: kioskBatch;
 }
+.kioskBatch h3,
+.kioskItem h3 {
+  font-size: var(--tx5);
+}
+.kioskBatch dl {
+  font-size: var(--tx2);
+}
 .kioskTask {
   grid-area: kioskTask;
   background-color: var(--blackblack);
@@ -171,8 +178,11 @@
 .kioskListen > :first-child {
   font-size: calc((var(--vert_main) - var(--vert_border)) * 0.4);
 }
-.kioskListen > :last-child {
-  font-size: 7vmin;
+.kioskListen > :nth-child(2) {
+  font-size: 5vmin;
+}
+.kioskListen > :nth-child(3) {
+  font-size: 2vmin;
 }
 .kioskItem .miniHistory {
   padding-block: 0 var(--vert_border);

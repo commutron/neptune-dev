@@ -43,6 +43,7 @@ const ProdData = ({
         brancheS={[]} 
         plainBatchS={[]}
         user={null}
+        app={null}
         allEquip={[]}
       >
         <SpinWrap />

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { Meteor } from 'meteor/meteor';
 import moment from 'moment';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 // import TideControl from '/client/components/tide/TideControl/TideControl';
 
 // import TimeStop from '/client/components/tide/TimeStop';
@@ -28,7 +28,7 @@ const KioskElements = ({
   
   const kflash = (state)=> {
     konfirmSet(state);
-    Meteor.setTimeout(()=>konfirmSet(undefined),!state ? 5000 : 500);
+    Meteor.setTimeout(()=>konfirmSet(undefined),!state ? 5000 : 750);
   };
   
   const errorCode = (err)=> err === 'invalid' ? ['Invalid Format', ''] : 
@@ -68,7 +68,6 @@ const KioskElements = ({
           kmsgSet(re?.[1] || null);
           jwlSet(re?.[0] ? gem : false);
           !re || !re[0] ? Session.set('now', '') : null;
-          
           // console.log(re);
         } 
       );
@@ -114,14 +113,16 @@ const KioskElements = ({
           hotxBatch &&
             <div className='stick darkCard spacehalf'>
               <h3 className='nomargin centreText'>{hotxBatch.batch}</h3>
-              <dl>
+              <dl className='readlines'>
                 <dt>{hotxBatch.live ? 'Live' : 'Not Live'}</dt>
-                <dt>Start: {moment(hotxBatch.salesStart).calendar()}</dt>
-                <dt>Due: {moment(hotxBatch.salesEnd).calendar()}</dt>
-                <dt>Completed: {hotxBatch.completed ? moment(hotxBatch.completedAt).calendar() : <em>in progress</em>}</dt>
-                <dt>Batch Quanity: {hotxBatch.quantity}</dt>
-              {hotxSeries &&
-                <dt>Series Quanity: {hotxSeries.items.length}</dt>
+                <dt className='comfort'><span>Start:</span><n-num>{moment(hotxBatch.salesStart).calendar()}</n-num></dt>
+                <dt className='comfort'><span>Due:</span><n-num>{moment(hotxBatch.salesEnd).calendar()}</n-num></dt>
+                <dt className='comfort'><span>Completed:</span><n-num>{hotxBatch.completed ? moment(hotxBatch.completedAt).calendar() : <em>in progress</em>}</n-num></dt>
+                <dt className='comfort'><span>{Pref.xBch} Quantity:</span><n-num>{hotxBatch.quantity}</n-num></dt>
+              {hotxSeries ?
+                <dt className='comfort'><span>Series Quantity:</span><n-num>{hotxSeries.items.length}</n-num></dt>
+                :
+                <dt>No Series</dt>
               }
               </dl>
             </div>
@@ -177,8 +178,15 @@ const KioskElements = ({
       <div className='kioskStat centreRow'>
         {!kactionState ? null :
           kitem ? kitem.completed ? 
-            <n-faZ><i className='fas fa-flag-checkered fa-fw fillstatic'></i></n-faZ> :
-            <n-faA><i className='fas fa-route fa-fw fillstatic'></i></n-faA>
+            <Fragment>
+              <n-faZ><i className='fas fa-flag-checkered fa-fw fillstatic'></i></n-faZ>
+              <span className='centreText fade grayT'>Completed</span>
+            </Fragment>
+            :
+            <Fragment>
+              <n-faA><i className='fas fa-route fa-fw fillstatic'></i></n-faA>
+              <span className='centreText fade grayT'>In Progress</span>
+            </Fragment>
           : null
         }
       </div>
@@ -203,6 +211,7 @@ const KioskElements = ({
       
       <div className='kioskTime centreRow'>
         <n-fa0T><i className="fas fa-clock fa-fw fillstatic"></i></n-fa0T>
+        <span className='centreText fade grayT'>Task Time Recording Unavailable</span>
         {/*!kactionState ? 
           <n-fa0T><i className="fas fa-clock fa-fw fillstatic"></i></n-fa0T>
         :

@@ -31,6 +31,7 @@ const BatchCardX = ({
   const insertTideBump = 
           <TideBump
             bID={batchData._id}
+            gID={batchData.groupId}
             bOpen={bOpen}
             brancheS={brancheS}
             app={app}
@@ -137,12 +138,12 @@ const MiniInfo = ({ batchData, srange, flowCounts, rapidMerge, bClosed, app, can
         }
       </div>))}
     
-    <p>{Pref.salesOrder}: <n-num>{batchData.salesOrder}</n-num></p>
+    <p className='comfort'><span>{Pref.salesOrder}: </span><n-num>{batchData.salesOrder}</n-num></p>
     
-    <p>Total Quantity: <n-num>{batchData.quantity}</n-num></p>
+    <p className='comfort'><span>Total Quantity: </span><n-num>{batchData.quantity}</n-num></p>
     
     {srange && flowCounts.liveItems !== batchData.quantity ? 
-      <p>Serialized Items: <n-num>{flowCounts.liveItems}</n-num></p>
+      <p className='comfort'><span>Serialized Items: </span><n-num>{flowCounts.liveItems}</n-num></p>
     : null}
     
     {flowCounts.scrapCount > 0 &&

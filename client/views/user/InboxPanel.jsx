@@ -17,14 +17,7 @@ const InboxPanel = ({ app, user, users })=> {
   return(
     <div className='space5x5'>
       <div className='wide max875'>
-        <p className='rightText vmargin'><a href={'/ne'} target='_blank'>Open Standalone Message Center</a></p>
-        {(user.inbox || []).slice(0).reverse().map( (entry)=> (
-          <InboxCardWrap 
-            key={entry.notifyKey} 
-            entry={entry}
-            unice={unice} 
-          />
-        ))}
+        <p className='rightText vmargin'><a href={'/ne?cntx=inbox'} target='_blank'>Open Standalone Message Center</a></p>
         {user.inbox.length > 0 ?
           <div className='inboxCard light vmargin'>
             <div><span></span>
@@ -41,6 +34,13 @@ const InboxPanel = ({ app, user, users })=> {
           :
           <p className='centreText medBig darkgrayT'>No Messages <i className="fas fa-inbox"></i></p>
         }
+        {(user.inbox || []).toReversed().map( (entry)=> (
+          <InboxCardWrap 
+            key={entry.notifyKey} 
+            entry={entry}
+            unice={unice} 
+          />
+        ))}
       </div>
     </div>
   );

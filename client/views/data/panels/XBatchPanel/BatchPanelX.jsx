@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import CreateTag from '/client/components/tinyUi/CreateTag';
 import Tabs from '/client/components/smallUi/Tabs/Tabs';
 
@@ -50,9 +50,7 @@ const BatchPanelX = ({
     rapidsData.length > 0 ? 'Extended' : 'Extend'
   ];
   
-  const openAction = (dialogId)=> {
-    document.getElementById(dialogId)?.showModal();
-  };
+  const openAction = (dialogId)=> document.getElementById(dialogId)?.showModal();
   
   function toggleHold() {
     if(!b.hold) {

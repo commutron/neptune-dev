@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 import Pref from '/client/global/pref.js';
 
-const TagsModule = ({ action, id, vKey, tags, tagOps, truncate, rad, canRun })=>	{
+const TagsModule = ({ action, id, vKey, tags, tagOps, truncate, rad, qtCycle, canRun })=>	{
 
   const [ newOption, newOptionSet ] = useState(false);
   const [ newRad, newRadSet ] = useState(false);
@@ -79,6 +79,13 @@ const TagsModule = ({ action, id, vKey, tags, tagOps, truncate, rad, canRun })=>
 
   return(
     <div className='rowWrap margin5'>
+      {qtCycle && 
+        <IndieTag
+          key="QTcycle"
+          tagText="Quoted~Flow"
+          lock={true} />
+      }
+            
       {currTags.map( (entry, index)=>{
         return(
           <IndieTag

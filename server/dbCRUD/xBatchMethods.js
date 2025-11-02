@@ -19,7 +19,7 @@ Meteor.methods({
     const qTimeNum = isNaN(inMinutes) ? false : Number(inMinutes);
 
     if(auth && !duplicateX && doc.orgKey === accessKey) {
-
+      
       XBatchDB.insert({
   			batch: batchNum,
   			orgKey: accessKey,
@@ -537,6 +537,7 @@ Meteor.methods({
   },
   
   setBatchXTimeBreakdown(batchId, qtArray) {
+    // Depreciated
     try{
       const accessKey = Meteor.user().orgKey;
       if(Roles.userIsInRole(Meteor.userId(), ['sales', 'edit'])) {
@@ -573,6 +574,7 @@ Meteor.methods({
           river: riverId,
           quoteTimeCycles: qtArray
         }});
+      
       Meteor.defer( ()=>{ 
         Meteor.call('updateOneMinify', batchId, accessKey); 
         Meteor.call('updateOneNoise', batchId, accessKey);

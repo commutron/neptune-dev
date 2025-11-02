@@ -130,7 +130,19 @@ export const ProWrap = ({
   const viewContainer = standAlone ? 'pro_100' :
                         !expand ? 'pro_20_80' : 
                                     'pro_40_60';
-                        
+  
+  
+  let qt = app.qtTasks.find( q => q.qtKey === eng.qtKey );
+  console.log({qt});
+  
+  let bq = (batchData.quoteTimeCycles || []).find( q => q[0] === eng.qtKey );
+  let min = bq?.[1] || 0;
+  let todo = min * batchData.quantity;
+  
+  console.log({eng});
+  console.log({bq});
+  console.log({todo});
+  
   return(
     <div className={viewContainer + ' containerPro'}>
       <div className='tenHeader'>
@@ -236,7 +248,7 @@ export const ProWrap = ({
 };
 
 
-export const ProWindow = ({ brancheS, plainBatchS, allEquip, canMulti, user, children })=> {
+export const ProWindow = ({ brancheS, plainBatchS, allEquip, canMulti, user, app, children })=> {
   
   useEffect( ()=> {
     if(Meteor.user()) {
@@ -265,6 +277,7 @@ export const ProWindow = ({ brancheS, plainBatchS, allEquip, canMulti, user, chi
       {canMulti ?
         <TideMulti
           user={user}
+          app={app}
           brancheS={brancheS}
           plainBatchS={plainBatchS}
         />

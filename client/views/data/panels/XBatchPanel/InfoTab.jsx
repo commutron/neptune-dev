@@ -112,14 +112,6 @@ const InfoTab = ({
       </div>
       
       <div className='minHeight cap'>
-        <TagsModule
-          action={Pref.xBatch}
-          id={b._id}
-          tags={b.tags}
-          tagOps={app.tagOption}
-          canRun={canRun}
-        />
-        
         {radioactive &&
           <div 
             className='centreRow medBig max250 vmarginhalf' 
@@ -129,6 +121,14 @@ const InfoTab = ({
             <i>{radioactive}</i>
           </div>
         }
+        <TagsModule
+          action={Pref.xBatch}
+          id={b._id}
+          tags={b.tags}
+          tagOps={app.tagOption}
+          qtCycle={b.quoteTimeCycles?.length > 0}
+          canRun={canRun}
+        />
       </div>
         
       <SalesSegment 

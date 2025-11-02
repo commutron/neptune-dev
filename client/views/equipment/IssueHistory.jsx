@@ -10,7 +10,7 @@ import IssueDetail from './IssueDetail';
 
 const IssueHistory = ({ eqId, issData, isDebug, eqNul, liveUsers })=>{
   
-  const issSort = useMemo( ()=> issData.reverse(), [issData]);
+  const issSort = useMemo( ()=> issData.toReversed(), [issData]);
   
   const [ debounce, debSet ] = useState(undefined);
   
@@ -115,22 +115,23 @@ const IssueHistory = ({ eqId, issData, isDebug, eqNul, liveUsers })=>{
         <tbody>
           {(inpieces[pageState] || []).map( (is)=> {
             const frmt = 'MMM D YYYY';
-            const ltst = is.problog[is.problog.length-1].text;
+            const ttl = is.title || '';
+            const ltst = is.problog?.[is.problog.length-1].text || '';
             return(
               <tr key={is.issueKey}>
                 <td>{moment(is.createdAt).format(frmt)} {
                   !moment(is.createdAt).isSame(is.updatedAt, 'day') &&
                     <em>(updated {moment(is.updatedAt).format(frmt)})</em>}
                 </td>
-                <td>{is.title}</td>
-                <td>{ltst.slice(0, 256) + (ltst.length > 256 ? '...' : '')}</td>
+                <td>{ttl}</td>
+                <td>{ltst.length > 256 ? ltst.slice(0, 256) + '...' : ltst}</td>
                 <td>{is.open ? 'WIP' : 'Resolved'}</td>
                 <td>{UserName(is.createdWho)}</td>
                 <td className='centreRow'>
                   {is.problog.length > 0 ? 
                     <IssueDetail
                       dialogId={is.issueKey+'issHistory'}
-                      title={is.title.slice(0, 64) + (is.title.length > 64 ? '...' : '')}
+                      title={ttl.length > 64 ? ttl.slice(0, 64) + '...' : ttl}
                       eqId={eqId}
                       issData={is}
                       handleOpen={(v)=>changeOpen(is.issueKey, v)}
