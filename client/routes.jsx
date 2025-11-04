@@ -370,15 +370,6 @@ FlowRouter.globals.push({
 
 var disconnectTimer = null;
 
-// function customViewHeight() { 
-//   document.querySelector(':root').style
-//     .setProperty('--vh', window.innerHeight/100 + 'px');
-// }
-
-// Meteor.startup(customViewHeight);
-
-// window.addEventListener('resize', customViewHeight);
-
 Meteor.startup(disconnectIfHidden);
 
 document.addEventListener('visibilitychange', disconnectIfHidden);
@@ -427,7 +418,7 @@ Accounts.onLogin( ()=>{
 
 Accounts.onLogout( ()=>{
   document.querySelector(':root').style.setProperty('--neptuneColor', null);
-  
+  Session.set('now', null);
   if(FlowRouter.current().path !== "/ne") {
     Session.set('redirectAfterLogin', FlowRouter.current().path);
     FlowRouter.go('login');

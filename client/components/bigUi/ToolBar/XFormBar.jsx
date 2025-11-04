@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './style.css';
 import Pref from '/client/global/pref.js';
 import TideFormLock from '/client/components/tide/TideFormLock';
@@ -6,15 +6,18 @@ import TideFormLock from '/client/components/tide/TideFormLock';
 import NCAdd from '/client/components/riverX/NCAdd';
 import NCFlood from '/client/components/riverX/NCFlood';
 import ShortAdd from '/client/components/riverX/ShortAdd';
+import { min2hr } from '/client/utility/Convert';
 
 const XFormBar = ({ 
   batchData, seriesData, itemData, rapIs, radioactive,
   timeOpen, ncTypesCombo, 
   action, showVerifyState, handleVerify, 
-  user, app 
+  user, eng, app 
 })=> {
   
-  const [ show, showSet ] = useState('NC');
+  const [ show, showSet ] = useState('QT');
+  
+  useEffect( ()=> { showSet('QT') }, [eng.qtKey]);
   
   function handleDone() {
     showSet( 'NC' );
@@ -51,42 +54,65 @@ const XFormBar = ({
     height: '100%'
   };
   
-  return(
-    <div className='darkTheme proActionForm thinScroll'>
-      {showItem && !lockOutAll ?
-        <div style={tgsty}>
-          {action === 'xBatchBuild' ? null :
-          <FormToggle
-            id='firstselect'
-            type='checkbox'
-            name='toggleFirst'
-            title='Redo Step'
-            check={showVerifyState === true}
-            change={()=>handleVerify(null, true)}
-            lock={!verAuth} 
-            icon='fa-solid fa-check-double'
-            color='butBlue'
-          />}
-          <FormToggle
+  const FirstTg = <FormToggle
+          id='firstselect'
+          type='checkbox'
+          name='toggleFirst'
+          title='Redo Step'
+          check={showVerifyState === true}
+          change={()=>handleVerify(null, true)}
+          lock={!verAuth} 
+          icon='fa-solid fa-check-double fa-fw'
+          color='butBlue'
+          spec={true}
+        />;
+        
+  const QuoteTg = <FormToggle
+            id='qtStatusSelect'
+            type='radio'
+            name='formbarselect'
+            title='Quoted Time'
+            check={show === 'QT'}
+            change={()=>showSet( 'QT' )}
+            icon='fa-solid fa-hourglass-half fa-fw'
+            color='butGreen'
+          />;
+  
+  const NonTg = <FormToggle
             id='ncFormSelect'
             type='radio'
             name='formbarselect'
             title={Pref.nonCon}
             check={show === 'NC'}
             change={()=>showSet( 'NC' )}
-            icon='fa-solid fa-times'
+            icon='fa-solid fa-times fa-fw'
             color='butRed'
-          />
-          <FormToggle
+          />;
+  
+  const ShortTg = <FormToggle
             id='shortFormSelect'
             type='radio'
             name='formbarselect'
             title={Pref.shortfall}
             check={show === 'S'}
             change={()=>showSet( 'S' )}
-            icon='fa-solid fa-exclamation'
+            icon='fa-solid fa-exclamation fa-fw'
             color='butYellow'
-          />
+          />;
+  
+  return(
+    <div className='darkTheme proActionForm thinScroll'>
+      {!lockOutAll && showItem ?
+        <div className='gapminC' style={tgsty}>
+          {action === 'xBatchBuild' ? null : FirstTg}
+          {QuoteTg}
+          {NonTg}
+          {ShortTg}
+        </div>
+      : !lockOutAll && !i && showBatch ?
+        <div className='gapminC' style={tgsty}>
+          {QuoteTg}
+          {NonTg}
         </div>
       : null}
       <div style={{flexGrow: '2'}}>
@@ -95,8 +121,10 @@ const XFormBar = ({
           message={true} 
           caution={caution}
           radioactive={radioactive}
-          holding={b.hold}>
-        {b && !srs ?
+          holding={b && b.hold}>
+        {lockOutAll ? null 
+        :
+         b && !srs ?
           <p className='whiteT centreText wide'>
             <em>{Pref.nonCon}, {Pref.shortfall}, and {Pref.trackFirst} require a {Pref.series}</em>
           </p>
@@ -123,13 +151,21 @@ const XFormBar = ({
         : null
         }
             
-        {!i && showBatch ?
+        {!lockOutAll && !i && showBatch && show === 'NC' ?
           <NCFlood
             seriesId={srs._id}
             live={b.completed === false}
             user={user}
             app={app}
             ncTypesCombo={ncTypesCombo} />
+        : null}
+        
+        {timeOpen && show === 'QT' ?
+          <QtStatus 
+            batchData={batchData} 
+            app={app}
+            eng={eng}
+          />
         : null}
         </TideFormLock>
       </div>
@@ -142,7 +178,7 @@ export default XFormBar;
 const FormToggle = ({ 
   id, type, name, title, 
   check, change, lock, 
-  icon, color 
+  icon, color, spec 
 })=> {
   
   const sty = {
@@ -153,17 +189,19 @@ const FormToggle = ({
     transition: 'all 150ms ease-in-out',
     margin: '0 1vmin',
     fontSize: '30px',
-    width: '45px',
-    minHeight: '45px'
+    width: '40px',
+    minHeight: '40px',
   };
 
   const svgsty = {
     width: '30px',
-    minHeight: '30px'
+    minHeight: '30px',
+    display: 'flex',
+    palceItems: 'center'
   };
   
   return(
-    <label htmlFor={id} data-tip={title} style={sty} className={'taskLink liteTip tall ' + color}>
+    <label htmlFor={id} data-tip={title} style={sty} className={`taskLink liteTip ${spec ? 'sq' : 'tall'} ${color}`}>
       <input
         type={type}
         id={id}
@@ -173,7 +211,38 @@ const FormToggle = ({
         checked={check}
         onChange={change}
         disabled={lock}
-      /><i className={icon} style={svgsty}></i>
+      /><span key={'icon'+id} style={svgsty}><i className={icon}></i></span>
     </label>
+  );
+};
+
+const QtStatus = ({ batchData, app, eng })=> {
+  
+  let qt = app.qtTasks.find( q => q.qtKey === eng.qtKey );
+  console.log({qt});
+  
+  let bq = (batchData?.quoteTimeCycles || []).find( q => q[0] === eng.qtKey );
+  let min = bq?.[1] || 0;
+  let todo = min2hr(min * (batchData?.quantity || 0));
+  
+  const sty = {
+    // display: 'flex',
+    // flexDirection: 'column',
+    // justifyContent: 'center',
+    // alignItems: 'center',
+    // transition: 'all 150ms ease-in-out',
+    // margin: '0 1vmin',
+    fontSize: 'var(--tx1)',
+    minHeight: '40px',
+    alignItems: 'center',
+    justifyContent: 'space-evenly'
+  };
+  
+  return(
+    <div className='actionForm' style={sty}>
+      {qt && <span data-tip={qt.subTasks.join(',\n')} className='liteTip'>Qt Group: {qt.qtTask}</span>}
+      {qt && <span><n-num>{bq ? bq[1] : 0}</n-num> minutes for one item</span>}
+      {qt && <span><n-num>{bq ? todo : 0}</n-num> hours for all items</span>}
+    </div>
   );
 };

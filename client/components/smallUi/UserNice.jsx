@@ -1,9 +1,9 @@
 import React from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 const UserNice = ({ id })=> {
   const name = Meteor.users.findOne({_id : id});
-  let nice = !name ? 'not found' :
+  let nice = !name ? 'former employee' :
               name.username.replace('.', ' ').replace('_', ' ');
   return(
     <i className='cap'>{nice}</i>
@@ -18,7 +18,7 @@ export const AnonyUser = ({ id })=> {
   
   if(Pref.userTimePublic || isSelf || peopleSuper) {
     const name = Meteor.users.findOne({_id : id});
-    let nice = 'not found';
+    let nice = 'unknown';
     name ? nice = name.username : false;
     return (
       <i className='cap'>{nice}</i>

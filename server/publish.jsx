@@ -415,13 +415,13 @@ Meteor.publish('thinData', function(){
           'describe': 1,
           'groupId': 1,
         }}),
-      VariantDB.find({orgKey: orgKey, live: true}, {
-        fields: {
-          'groupId': 1,
-          'widgetId': 1,
-          'versionKey': 1,
-          'variant': 1
-        }}),
+      // VariantDB.find({orgKey: orgKey, live: true}, {
+      //   fields: {
+      //     'groupId': 1,
+      //     'widgetId': 1,
+      //     'versionKey': 1,
+      //     'variant': 1
+      //   }}),
       XBatchDB.find({orgKey: orgKey, live: true}, {
         sort: {batch:-1},
         fields: {
@@ -492,9 +492,10 @@ Meteor.publish('hotDataPlus', function(scanOrb, keyMatch){
         }}),
       WidgetDB.find({_id: wID, orgKey: orgKey}, {
         fields: {
-          'orgKey': 0,
-          'quoteStats': 0,
-          'turnStats': 0,
+          'describe': 1,
+          'groupId': 1,
+          'widget': 1,
+          'flows': 1
         }}),
       VariantDB.find({widgetId: wID, orgKey: orgKey}, {
         fields: {

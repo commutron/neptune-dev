@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
 
 const ShortAdd = ({ seriesId, serial, units, pastPN, pastRF, app, doneClose })=> {
 
+  useEffect( ()=> { return ()=> doneClose() }, []);
+  
   function handleShort(e) {
     e.preventDefault();
     this.goShAdd.disabled = true;

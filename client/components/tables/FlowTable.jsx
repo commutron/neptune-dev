@@ -134,7 +134,7 @@ const FlowToolbar = ({ id, entry, canEdt, canSls, openActions })=> (
       
       <MatchButton 
         text='Assign Quoted Time'
-        icon='fa-solid fa-alarm-clock'
+        icon='fa-solid fa-hourglass-start'
         doFunc={()=>openActions('qtflow', entry.flowKey)}
         lock={!canSls}
       />

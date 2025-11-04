@@ -57,14 +57,12 @@ const BigTideTask = ({
         disabled={lockTaskState}
         required>
         <option value={false} disabled={true} className='darkgrayT em'>Required</option>
-        {!gID || gID !== app.internalID ? 
-          <optgroup label='Production' className='blackT nsty'>
-            {brancheS.filter(n=>n.pro).map( (v, ix)=>(
-              <option key={ix+'o2'} className='blackT nsty' value={v.brKey}
-              >{v.branch}</option>
-            ))}
-          </optgroup>
-        : null}
+        <optgroup label='Production' className='blackT nsty'>
+          {brancheS.filter(n=>n.pro).map( (v, ix)=>(
+            <option key={ix+'o2'} className='blackT nsty' value={v.brKey}
+            >{v.branch}</option>
+          ))}
+        </optgroup>
         {!gID || gID === app.internalID ? 
           <optgroup label='Supportive' className='blackT nsty'>
             {brancheS.filter(n=>!n.pro).map( (v, ix)=>(

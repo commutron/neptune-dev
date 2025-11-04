@@ -12,7 +12,7 @@ const ProdData = ({
   coldReady, hotReady,
   orb, eqS, anchor, user, time, org, users, app,
   allEquip, allMaint,
-  allGroup, allWidget, allVariant,
+  allGroup, allWidget, hotVariant,
   allxBatch,
   hotxBatch, hotxSeries, hotxRapids
 })=> {
@@ -69,7 +69,7 @@ const ProdData = ({
       allMaint={allMaint}
       allGroup={allGroup}
       allWidget={allWidget}
-      allVariant={allVariant}
+      hotVariant={hotVariant}
       allxBatch={allxBatch}
       hotxBatch={hotxBatch}
       hotxSeries={hotxSeries}
@@ -166,8 +166,8 @@ export default withTracker( () => {
       allMaint: MaintainDB.find( {}, { sort: { name: -1 } } ).fetch(),
       allGroup: GroupDB.find( {}, { sort: { group: 1 } } ).fetch(),
       allWidget: WidgetDB.find( {}, { sort: { widget: 1 } } ).fetch(),
-      allVariant: VariantDB.find( {} ).fetch(),
       allxBatch: XBatchDB.find( {}, { sort: { batch: -1 } } ).fetch(),
+      hotVariant: VariantDB.findOne({}),
       hotxBatch: hotxBatch,
       hotxSeries: hotxSeries,
       hotxRapids: hotxRapids

@@ -1174,6 +1174,9 @@ n-sm-model-content {
   flex-flow: column;
   justify-content: space-between;
 }
+.autoColGrid.vfill {
+  align-items: stretch; 
+}
 
 .minWide { width: min-content !important; }
 .maxWide { width: max-content !important; }

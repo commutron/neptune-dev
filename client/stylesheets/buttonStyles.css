@@ -273,6 +273,7 @@ a:has(.onlyHover):where(:hover, :active, :focus-visible) .onlyHover {
   background-color: rgb(0,0,0);
   color: white;
   text-align: center;
+  line-height: 1.1;
 }
 .liteTip {
   display: flex;
@@ -513,7 +514,9 @@ button.variableInput.biggest { height: 64px; }
 }
 .taskLink:focus-visible,
 .taskLink > input[type=radio]:checked + svg,
-.taskLink > input[type=checkbox]:checked + svg{
+.taskLink > input[type=radio]:checked + span,
+.taskLink > input[type=checkbox]:checked + svg,
+.taskLink > input[type=checkbox]:checked + span {
   outline-style: hidden;
   outline-color: transparent;
 }
@@ -523,7 +526,9 @@ button.variableInput.biggest { height: 64px; }
     0 0 0 5px var(--box-shadow-color);
 }
 .taskLink > input[type=radio]:checked + svg,
-.taskLink > input[type=checkbox]:checked + svg {
+.taskLink > input[type=radio]:checked + span,
+.taskLink > input[type=checkbox]:checked + svg,
+.taskLink > input[type=checkbox]:checked + span {
   border-radius: 50%;
   color: var(--task-back-color);
   background-color: var(--task-front-color);
@@ -580,6 +585,10 @@ button.variableInput.biggest { height: 64px; }
   --task-front-color: var(--orange);
   --box-shadow-color: var(--orange);
 }
+.taskLink.butGreen {
+  --task-front-color: var(--emerald);
+  --box-shadow-color: var(--emerald);
+}
 .taskLink.fGreen {
   --box-shadow-color: var(--nephritis);
 }
@@ -600,7 +609,9 @@ button.variableInput.biggest { height: 64px; }
 }
 
 .taskLink > input[type=radio]:disabled + svg,
-.taskLink > input[type=checkbox]:disabled + svg { 
+.taskLink > input[type=radio]:disabled + span,
+.taskLink > input[type=checkbox]:disabled + svg
+.taskLink > input[type=checkbox]:disabled + span { 
   cursor: not-allowed;
   filter: grayscale(0.9);
 }

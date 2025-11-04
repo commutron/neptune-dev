@@ -1,24 +1,5 @@
 import moment from 'moment';
 
-export function min2hr(minutes) {
-  const asHours = moment.duration(minutes, "minutes").asHours();
-  const trunc = ( Math.round(
-                   (asHours + Number.EPSILON) * 100) 
-                      / 100 ).toFixed(2, 10);
-  return parseFloat(trunc);
-}
-
-export function minsec(minutes) {
-  const min = Math.floor(minutes);
-  const sec = parseFloat( minutes - min );
-  
-  const minStr = ( min ).toString().padStart(2, 0);
-  const secStr = ( Math.floor( moment.duration(sec, "minutes").asSeconds() ) ).toString().padStart(2, 0);
-
-  const nice = minStr + ":" + secStr;
-  return nice;
-}
-
 export function round1Decimal(thrtytw) {
   const trunc = Math.round((thrtytw + Number.EPSILON) * 10) / 10;
   // exactly rounding to 1 decimal points
@@ -73,7 +54,26 @@ export function asRate(instances, ofQty, one) {
   }
 }
 
-// milliseconds
+// time
+
+export function min2hr(minutes) {
+  const asHours = moment.duration(minutes, "minutes").asHours();
+  const trunc = ( Math.round(
+                   (asHours + Number.EPSILON) * 100) 
+                      / 100 ).toFixed(2, 10);
+  return parseFloat(trunc);
+}
+
+export function minsec(minutes) {
+  const min = Math.floor(minutes);
+  const sec = parseFloat( minutes - min );
+  
+  const minStr = ( min ).toString().padStart(2, 0);
+  const secStr = ( Math.floor( moment.duration(sec, "minutes").asSeconds() ) ).toString().padStart(2, 0);
+
+  const nice = minStr + ":" + secStr;
+  return nice;
+}
 
 export function ms2sc(milliseconds) {
   const asSeconds = moment.duration(milliseconds).asSeconds();

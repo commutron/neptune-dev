@@ -40,7 +40,7 @@ const AppWrap = ({ isAdmin, isDebug, users, app })=> {
           <b><i className='fas fa-link fa-fw gapR'></i>Page Links</b>,
           <b><i className='fas fa-bell fa-fw gapR'></i>Notifications</b>,
           <b><i className='fas fa-robot fa-fw gapR'></i>CRON Jobs</b>,
-          <b><i className='fas fa-hourglass-end fa-fw gapR'></i>Overtime Errors</b>,
+          <b><i className='fas fa-alarm-clock fa-fw gapR'></i>Overtime Errors</b>,
           <b><i className='fas fa-toolbox fa-fw gapR'></i>Data Repair</b>
         ]}
         lowmenu={[<b><i className='fas fa-copyright fa-fw gapR'></i>Meta</b>]}

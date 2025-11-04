@@ -109,7 +109,7 @@ const DashSlide = ({ users, loggedIn, traceDT, brancheS, isDebug })=> {
         </button>
       </p>
       
-      <div className='autoColGrid gapminC gapsR vmargin'>
+      <div className='autoColGrid vfill gapminC gapsR vmargin'>
         
         <NumStatBox
           number={eUsersState.length}

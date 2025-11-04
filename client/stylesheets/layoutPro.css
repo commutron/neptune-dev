@@ -27,13 +27,12 @@
   display: grid;
   grid-template-rows: 
     var(--vert_frame) 
-    calc(var(--vert_main) - 65px)
-    65px;
+    calc(var(--vert_main) - 60px)
+    60px;
   grid-template-areas: 
     "tenHeader tenHeader"
     "proPrime proInstruct"
     "proForm proForm";
-  /*transition: grid-template-columns linear 200ms;*/
 }
 .pro100 {
   grid-template-columns: 1vw 1fr;
@@ -50,7 +49,6 @@
   z-index: 9;
   box-shadow: 0 0 15px 0.5px rgb(0,0,0);
 }
-
 .proPrime {
   grid-area: proPrime;
   overflow-y: auto;
@@ -83,7 +81,7 @@
   --dark: rgb(25,25,25);
   box-shadow: 0 0 15px 0.5px rgb(0,0,0);
   width: 100vw;
-  height: 65px;
+  height: 60px;
   z-index: 8;
   display: flex;
   flex-direction: row;

@@ -21,7 +21,7 @@ import WidgetsList from './lists/WidgetsList';
 const ProductionFindOps = ({ 
   hotxBatch, hotxSeries, hotxRapids,
   allxBatch,
-  allGroup, allWidget, allVariant,
+  allGroup, allWidget, hotVariant,
   user, time, app, canMulti, canSerial,
   activeUsers, plainBatchS, brancheS, 
   allEquip, allMaint,
@@ -53,10 +53,6 @@ const ProductionFindOps = ({
   
   function groupWidgets(gId) {
     return allWidget.filter(x => x.groupId === gId);
-  }
-  
-  function variantDataByKey(vKey) {
-    return allVariant.find(x => x.versionKey === vKey);
   }
 
   function equipDataById() {
@@ -154,7 +150,7 @@ const ProductionFindOps = ({
   if( Pref.regex5.test(orb) ) {
     if(hotxBatch) {
       let widget = linkedWidget(hotxBatch.widgetId);
-      let variant = variantDataByKey(hotxBatch.versionKey);
+      let variant = hotVariant;
       Session.set('nowInstruct', variant.instruct);
       return (
 		    <ProWrap
@@ -193,7 +189,7 @@ const ProductionFindOps = ({
     if(hotxSeries) {
       let item = itemData(hotxSeries.items, orb);
       let widget = linkedWidget(hotxSeries.widgetId);
-      let variant= variantDataByKey(hotxSeries.versionKey);
+      let variant= hotVariant;
       Session.set('nowInstruct', variant.instruct);
       return (
         <ProWrap

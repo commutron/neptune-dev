@@ -38,7 +38,10 @@ export const ProWrap = ({
     if(Meteor.user()) {
       ScanListenerUtility(Meteor.user());
     }
-    return ()=> ScanListenerOff();
+    return ()=> {
+      ScanListenerOff();
+      if(!(user?.engaged)) { Session.set('now', null) }
+    };
   }, []);
   
   useEffect( ()=> {
@@ -131,18 +134,6 @@ export const ProWrap = ({
                         !expand ? 'pro_20_80' : 
                                     'pro_40_60';
   
-  
-  let qt = app.qtTasks.find( q => q.qtKey === eng.qtKey );
-  console.log({qt});
-  
-  let bq = (batchData.quoteTimeCycles || []).find( q => q[0] === eng.qtKey );
-  let min = bq?.[1] || 0;
-  let todo = min * batchData.quantity;
-  
-  console.log({eng});
-  console.log({bq});
-  console.log({todo});
-  
   return(
     <div className={viewContainer + ' containerPro'}>
       <div className='tenHeader'>
@@ -231,6 +222,7 @@ export const ProWrap = ({
         
           users={users}
           user={user}
+          eng={eng}
           app={app} 
         />
       </Fragment>
