@@ -111,18 +111,18 @@ const FallsHistory = ({ entry, count, quantity })=> {
           total={topNum}
           barColor={barColor} />
       </summary>
-      <dl className='waterfallTimeline'>
+      <table className='waterfallTimeline'><tbody>
       {entry.counts.map( (dt, index)=>{
         const tickColor = dt.tick === 0 ? 'whiteT small numFont' : dt.tick > 0 ? 'greenT' : 'redT';
         const tickSymbol = dt.tick === 0 ? dt.meta === 'start' ?  '\u25B6' : '\u2BC0' :
                             dt.tick > 0 ? '+' : '\u2212';
         return(
-          <dd key={index}>
-            <b className={tickColor}>{tickSymbol}</b>
-            {moment(dt.time).format('YYYY ddd MMM DD hh:mm:ss.SS A')}, <UserNice id={dt.who} />
-          </dd>
+          <tr key={index}>
+            <td><b className={tickColor}>{tickSymbol}<span className='med'>{Math.abs(dt.tick)}</span></b></td>
+            <td>{moment(dt.time).format('YYYY ddd MMM DD hh:mm:ss A')}, <UserNice id={dt.who} /></td>
+          </tr>
       )})}
-      </dl>
+      </tbody></table>
     </details>
   );
 };

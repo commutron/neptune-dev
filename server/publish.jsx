@@ -83,12 +83,8 @@ Meteor.publish('appData', function(){
         }}),
       Meteor.users.find({},
         {fields: {
-          'services': 0,
-          'orgKey': 0,
-          'usageLog': 0,
-          'watchlist': 0,
-          'inbox': 0,
-          'breadcrumbs': 0
+          'username': 1,
+          'roles': 1
         }})
     ];
   }else{
@@ -99,7 +95,7 @@ Meteor.publish('appData', function(){
           'orgPIN': 0,
           'devEmail': 0
         }}),
-      Meteor.users.find({orgKey: orgKey},
+      Meteor.users.find({orgKey: orgKey, roles: { $in: ["active"] }},
         {fields: {
           'username': 1,
           'roles': 1
@@ -156,10 +152,23 @@ Meteor.publish('bNameData', function(){
 Meteor.publish('peopleData', function(){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
-  // const admin = Roles.userIsInRole(this.userId, 'admin');
+  const admin = Roles.userIsInRole(this.userId, 'admin');
   // const pplSp = Roles.userIsInRole(this.userId, 'peopleSuper');
   if(!this.userId){
     return this.ready();
+  }else if(admin) {
+    return [
+      Meteor.users.find({},
+        {fields: {
+          'services': 0,
+          'orgKey': 0,
+          'usageLog': 0,
+          'watchlist': 0,
+          'inbox': 0,
+          'breadcrumbs': 0
+        }}),
+      CacheDB.find({dataName: 'userLogin_status'})
+    ];
   }else{
     return [
       // Meteor.users.find({orgKey: orgKey, roles: { $in: ["active"] }},

@@ -67,6 +67,14 @@ const DataRepair = ({ app, users })=> {
           button='Clear Logs'
           action={()=>doCallThing('clearNonDebugUserUsageLogs')}
         />
+        <DoCard
+          title='Clear `User Login Cache`'
+          sub="Dynamic list of who is signed in for 'People'. Clear if out of sync. Will not rebuild; accounts will be added as users signin."
+          icon='user-clock'
+          color='nSolid'
+          button='Clear Cache'
+          action={()=>doCallThing('resetLoginCache')}
+        />
       </div>
       
       <h2 className='centreText vmargin yellowT dropCeiling borderOrange topLine'>Large Tasks - May Cause Disruption For All Users</h2>

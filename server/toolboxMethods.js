@@ -60,6 +60,20 @@ Meteor.methods({
     }
   },
   
+  resetLoginCache() {
+    if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
+      CacheDB.update({orgKey: Meteor.user().orgKey, dataName: 'userLogin_status'}, {
+        $set : {
+          lastUpdated: new Date(),
+          dataArray: []
+        },
+      });
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
   fixRemoveDamagedBatch() {
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
       const allBatchX = XBatchDB.find({}).fetch();

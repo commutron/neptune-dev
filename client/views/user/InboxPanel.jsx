@@ -17,7 +17,7 @@ const InboxPanel = ({ app, user, users })=> {
   return(
     <div className='space5x5'>
       <div className='wide max875'>
-        <p className='rightText vmargin'><a href={'/ne?cntx=inbox'} target='_blank'>Open Standalone Message Center</a></p>
+        <p className='rightText vmargin'><a href={'/ne/inbox'} target='_blank'>Open Standalone Message Center</a></p>
         {user.inbox.length > 0 ?
           <div className='inboxCard light vmargin'>
             <div><span></span>

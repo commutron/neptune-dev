@@ -128,14 +128,24 @@ const limitedRoutes = FlowRouter.group({
   }
 });
 limitedRoutes.route('/ne', {
-  name: 'neso',
-  action: function(p, query) {
+  name: 'nesohome',
+  action: ()=> {
     mount(CleanLayout, {
-      content: (<NesoView query={query} />),
+      content: (<NesoView view={null} />),
       title: Pref.neptuneIs
     });
   }
 });
+limitedRoutes.route('/ne/:view', {
+  name: 'nesosub',
+  action: function(params) {
+    mount(CleanLayout, {
+      content: (<NesoView view={params.view} />),
+      title: Pref.neptuneIs
+    });
+  }
+});
+
 
 /*
 exposedRoutes.route('/initialsetup', {

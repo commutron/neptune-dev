@@ -68,22 +68,22 @@ const EqTimeReportContent = ({})=> {
     <div className='space max875 min600'> 
       <div className='rowWrap vmarginquarter noPrint'>
         <i>Display in</i>
-        <label className='beside'>
+        <label className='beside noBorder'>
           <input 
             type='radio' 
             name='eqtimereportunit' 
             title='hours'
-            className='interInput'
+            className='gapR'
             onChange={()=>minSet(false)}
             defaultChecked={true}
-        /> Hours</label>
+        />Hours</label>
         <i className='gap'> or </i>
-        <label className='beside'>
+        <label className='beside noBorder'>
           <input 
             type='radio' 
             name='eqtimereportunit'
             title='Minutes'
-            className='interInput'
+            className='gapR'
             onChange={()=>minSet(true)}
         /> Minutes</label>
       </div>

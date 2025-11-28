@@ -806,18 +806,18 @@ n-lg-model-content, n-md-model-content, n-sm-model-content {
 }
 n-lg-model-content {
   display: block;
-  min-height: calc(75% - 30px - 3vmax);
-  max-height: calc(90dvh - 30px - 3vmax);
+  min-height: calc(75% - 45px - 3vmax);
+  max-height: calc(90dvh - 45px - 3vmax);
 }
 n-md-model-content {
   display: block;
-  min-height: calc(60dvh - 30px - 3vmax);
-  max-height: calc(85dvh - 30px - 3vmax);
+  min-height: calc(60dvh - 45px - 3vmax);
+  max-height: calc(85dvh - 45px - 3vmax);
 }
 n-sm-model-content {
   display: block;
-  min-height: calc(40dvh - 30px - 3vmax);
-  max-height: calc(60dvh - 30px - 3vmax);
+  min-height: calc(40dvh - 45px - 3vmax);
+  max-height: calc(60dvh - 45px - 3vmax);
 }
 
 @media screen and (max-width: 1150px){
