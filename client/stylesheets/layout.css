@@ -23,21 +23,6 @@ main {
   z-index: 8;
 }
 
-.do_not_use::after {
-  position: absolute;
-  inset: 0;
-	margin: auto;
-	height: 100%;
-	aspect-ratio: 1;
-  content: "PROTOTYPE";
-  color: rgb(255,255,255,0.1);
-  font-size: 25dvh;
-  text-align: center;
-  align-content: center;
-  z-index: 100;
-  pointer-events: none;
-}
-
 .forceScroll { overflow-y: auto !important; }
 .wideScroll { overflow-x: auto !important; }
 .forceScrollStyle {
@@ -234,6 +219,7 @@ main {
 .frontCenterTitle > sup,
 .frontCenterTitle > sub {
   color: var(--asbestos);
+  font-size: 2dvh;
 }
 .homeIcon, .homeIconLink, .homeName,
 .frontCenterTitle,
@@ -517,10 +503,10 @@ main {
 
 .slidesLayout, .slidesNestedLayout {
   display: grid;
-  grid-template-rows: var(--vert_main);
+  /*grid-template-rows: var(--vert_main);*/
   grid-template-columns: minmax(min-content, 15vmin) 1fr;
   width: 100%;
-  height: calc(100% - var(--vert_frame));
+  height: var(--vert_main);
 }
 .slidesLayout {
   grid-template-areas: 
@@ -1153,11 +1139,13 @@ n-sm-model-content {
 .autoGrid, .autoColGrid {
   display: grid;
   grid-template-columns: repeat( auto-fit, minmax(20ch, 1fr) );
+  /*grid-template-columns: repeat( auto-fill, minmax(min-content, 1fr) );*/
   grid-auto-flow: dense;
   align-items: baseline;
 }
 .autoGrid {
   grid-template-rows: repeat( auto-fit, minmax(20ch, 1fr) );
+  /*grid-auto-rows: minmax(min-content, max-content);*/
 }
 .autoGrid.cardify > div {
   margin: 0;
@@ -1251,27 +1239,14 @@ n-sm-i {
 .medBig { font-size: var(--tx2); }
 
 .big { font-size: var(--tx5); }
-
-.bigbig { font-size: var(--tx6); }
-
 .bigger { font-size: var(--tx7); }
-
 .biggest { font-size: var(--txx0); }
-
-.biggester { font-size: var(--txx5); }
-
-.vbig { font-size: 2dvh; }
-.vbigger { font-size: 3dvh; }
+.biggester { font-size: 2.5rem; }
 
 .dbbleWide { min-width: 30vw; }
 .tppleWide { min-width: 45vw; }
 .inlineForm > input[type='text'].dbbleWide { width: 30vw; }
 
-input.variableInput.medBig {
-  font-size: var(--tx2); 
-  height: 40px;
-  width: 248px;
-}
 input.variableInput.big { 
   font-size: var(--tx5);
   height: 48px;
@@ -1281,11 +1256,6 @@ input.variableInput.bigger {
   font-size: var(--tx7); 
   height: 56px;
   width: 264px;
-}
-input.variableInput.biggest { 
-  font-size: var(--txx0);
-  height: 64px;
-  width: 272px;
 }
 input.miniIn6, select.miniIn6 { width: 6ch; }
 input.miniIn8, select.miniIn8 { width: 8ch; }

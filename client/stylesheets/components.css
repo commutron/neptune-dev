@@ -234,7 +234,8 @@ n-timeline-item:last-child n-timeline-marker:after {
   overflow: clip hidden;
 }
 .floattaskbar.shallow {
-  box-shadow: var(--dropShadow0000);
+  box-shadow: none;
+  outline: 2px solid var(--contrast);
 }
 .floattaskbar > span,
 .floattaskbar > button {

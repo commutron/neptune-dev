@@ -126,7 +126,6 @@
 }
 
 .yellow { background-color: var(--orange); }
-.fadeYellow { background-color: var(--orangefade); }
 .yellowT { color: var(--orange); }
 .yellowBox { color: var(--orange); }
 .yellowBox > p { color: white; }

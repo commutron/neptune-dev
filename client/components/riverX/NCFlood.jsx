@@ -74,6 +74,7 @@ const NCFlood = ({ seriesId, live, user, ncTypesCombo })=> {
             className='redIn up'
             placeholder={Pref.nonConRef}
             disabled={lock}
+            autoFocus
             required />
           <label htmlFor='ncRefs' className='whiteT'>{Pref.nonConRef}</label>
         </span>

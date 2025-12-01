@@ -258,6 +258,7 @@ Meteor.methods({
               qtKey: new Meteor.Collection.ObjectID().valueOf(),
               qtTask: nameVal,
               brKey: brKey,
+              fixed: false,
               position: Number(nextPos),
               subTasks: []
             }
@@ -271,12 +272,13 @@ Meteor.methods({
     }
   },
   
-  editQualityTimeTasks(qtkey, qtName, brKey, posVal, sbTskArr) {
+  editQualityTimeTasks(qtkey, qtName, brKey, posVal, fixed, sbTskArr, ) {
     if(Array.isArray(sbTskArr) && Roles.userIsInRole(Meteor.userId(), 'admin')) {
       AppDB.update({orgKey: Meteor.user().orgKey, 'qtTasks.qtKey': qtkey}, {
         $set : { 
           'qtTasks.$.qtTask': qtName,
           'qtTasks.$.brKey': brKey,
+          'qtTasks.$.fixed': fixed,
           'qtTasks.$.position': Number(posVal),
           'qtTasks.$.subTasks': sbTskArr,
       }});
@@ -315,6 +317,7 @@ Meteor.methods({
                     qtKey: new Meteor.Collection.ObjectID().valueOf(),
                     qtTask: b.branch,
                     brKey: b.brKey,
+                    fixed: false,
                     position: Number(b.position),
                     subTasks: transferTask
                   }

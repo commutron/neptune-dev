@@ -141,7 +141,7 @@ Meteor.methods({
           $set : {
             quoteTimeCycles: qtArray
           }
-        });
+        },{ multi: true });
         return true;
       }else{
         return false;

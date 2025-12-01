@@ -46,9 +46,9 @@ const UserDataWrap = ({
             <b><i className='fas fa-screwdriver-wrench fa-fw gapR'></i>Equipment PM</b>,
             <b><i className='fas fa-id-card fa-fw gapR'></i>Credentials</b>,
             <b><i className='fas fa-sliders fa-fw gapR'></i>Preferences</b>,
-            <b><i className='fas fa-key fa-fw gapR'></i>Access & Privacy</b>,
             <b><i className='fas fa-message fa-fw gapR'></i>Messages{iL}</b>
           ]}
+          lowmenu={[<b><i className='fas fa-key fa-fw gapR'></i>Access & Privacy</b>]}
           slide={slide}>
             
           <ActivityPanel
@@ -76,18 +76,18 @@ const UserDataWrap = ({
             brancheS={brancheS} 
           />
       
-          <PrivacyPanel
+          <InboxPanel
             key={5}
+            app={app}
+            user={user}
+            users={users} />
+          
+          <PrivacyPanel
+            key={6}
             app={app}
             user={user}
             isAdmin={isAdmin}
           />
-          
-          <InboxPanel
-            key={6}
-            app={app}
-            user={user}
-            users={users} />
           
         </Slides>
 				

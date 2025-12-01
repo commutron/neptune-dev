@@ -30,7 +30,7 @@ export const PlainFrame = ({ title, tag, container, noToast, children })=> (
         <div className='topBorder' />
         <HomeIcon />
         <div className='frontCenterTitle cap'
-        >{title}{tag && <sup className='vbig monoFont'>{tag}</sup>}
+        >{title}{tag && <sup className='monoFont'>{tag}</sup>}
         </div>
         <div className='auxRight' />
         <TideFollow />

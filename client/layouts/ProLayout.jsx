@@ -23,7 +23,7 @@ export const ProWrap = ({
   action, tideLockOut, standAlone, defaultWide,
   children
 })=> {
-  
+
   const [ expand, expandSet ] = useState( defaultWide || false);
   
   const [ isFirst, isFirstSet ] = useState(false);

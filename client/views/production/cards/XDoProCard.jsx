@@ -59,6 +59,8 @@ const XDoProCard = ({
     return <div>nope</div>;
   }
   
+  const b = batchData;
+  
   const iSerial = !itemData ? null : itemData.serial;
   
   const iComplete = !iSerial ? null : itemData.completed;
@@ -72,14 +74,14 @@ const XDoProCard = ({
             .sort((s1, s2)=>
               s1.partNum < s2.partNum ? -1 : s1.partNum > s2.partNum ? 1 : 0 );
   
-  const bCompletedAt = batchData.completedAt;
-  const bComplete = batchData.completed;
+  const bCompletedAt = b.completedAt;
+  const bComplete = b.completed;
   
   const bWrapUp = !bComplete ? false :
                     moment().diff(bCompletedAt, 'hours') <= Pref.timeAfterGrace;
   
-  const bOpen = batchData.live || bWrapUp;
-  const bClosed = !batchData.live && !bComplete;
+  const bOpen = b.live || bWrapUp;
+  const bClosed = !b.live && !bComplete;
   
   const altIs = !itemData ? false : itemData.altPath.find( x => x.river !== false );
   const altFlow = altIs && widgetData.flows.find( f => f.flowKey === altIs.river );
@@ -103,14 +105,14 @@ const XDoProCard = ({
   const flowAction = ( flowData.hasRiver || rapidData.rapIs ) && fallData.floorRel;
   
   const allFall = fallData.fallCounts.allFall;
-  const fallAction = ( batchData.waterfall.length > 0 &&
-                        batchData.completed === false ) ||
+  const fallAction = ( b.waterfall.length > 0 &&
+                        b.completed === false ) ||
                      ( rapid && rapid.cascade.length > 0 );
   
   const insertTideWall = 
           <TideWall
-            bID={batchData._id}
-            gID={batchData.groupId}
+            bID={b._id}
+            gID={b.groupId}
             bComplete={bComplete}
             bOpen={bOpen}
             rapidData={rapidData}
@@ -130,15 +132,16 @@ const XDoProCard = ({
   const insertAxion =
           <div className='proPrimeSingle'>
             <ReleaseAction 
-              id={batchData._id} 
+              id={b._id} 
               rType='floorRelease'
               actionText={Pref.release}
-              qReady={batchData.quoteTimeBudget?.[0].timeAsMinutes > 0} />
+              qReady={b.quoteTimeBudget?.[0].timeAsMinutes > 0 && b.quoteTimeCycles?.length > 0} 
+            />
           </div>;
 
   const insertWaterfall = 
           <WaterfallSelect 
-            batchData={batchData}
+            batchData={b}
             allFlow={flowData.flowCounts.allFlow}
             fallProg={fallData.fallCounts.fallProg}
             allFall={allFall}
@@ -164,7 +167,7 @@ const XDoProCard = ({
           <River
             itemData={itemData}
             seriesData={seriesData}
-            batchData={batchData}
+            batchData={b}
             widgetData={widgetData}
             app={app}
             userSpeed={user.unlockSpeed}
@@ -181,7 +184,7 @@ const XDoProCard = ({
             
   const insertRedoIsland =
           <RedoIsland
-            batchId={batchData._id}
+            batchId={b._id}
             seriesId={seriesData && seriesData._id}
             itemData={itemData}
             flowFirsts={flowFirsts}
@@ -193,7 +196,7 @@ const XDoProCard = ({
   
   const insertBatchCard = 
           <XBatchCard
-            batchData={batchData}
+            batchData={b}
             bOpen={bOpen}
             bClosed={bClosed}
             user={user}

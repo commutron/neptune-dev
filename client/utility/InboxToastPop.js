@@ -37,7 +37,7 @@ export default function InboxToastWatch(user, unice, length, autoClose) {
             </div>, {
             toastId: nKey+uID,
             autoClose: autoClose || false,
-            onClose: ()=>{ Meteor.call('setReadToast', uID, nKey) },
+            onClick: ()=>{ Meteor.call('setReadToast', uID, nKey) },
           } );
         }
       }

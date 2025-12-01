@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import UserName from '/client/utility/Username.js';
 import { addTideArrayDuration } from '/client/utility/WorkTimeCalc.js';
-import { min2hr } from '/client/utility/Convert.js';
+import { sc2hr } from '/client/utility/Convert.js';
 
 const EquipTimeTable = ({ id, timefetch, issKey })=> {
   // Maint_id + 'getMaintTime'
@@ -19,7 +19,7 @@ const EquipTimeTable = ({ id, timefetch, issKey })=> {
     const ppl = new Set(Array.from(re, a => a.who));
     for(let p of ppl) {
     	const time = re.filter( t => t.who === p );
-    	split.push([p, min2hr( addTideArrayDuration(time) ) ]);
+    	split.push([p, sc2hr( addTideArrayDuration(time) ) ]);
     }
     peopleTimeSet( split );
     

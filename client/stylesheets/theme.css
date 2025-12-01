@@ -6,10 +6,8 @@
   --tx1: 1.1rem;
   --tx2: 1.2rem;
   --tx5: 1.5rem;
-  --tx6: 1.65rem;
   --tx7: 1.75rem;
   --txx0: 2rem;
-  --txx5: 2.5rem;
   
   --neptuneColor: #007fff;
   --turquoise: oklab(0.71 -0.13 0.01);
@@ -41,7 +39,6 @@
   
   --orange: oklab(0.76 0.06 0.15);
   --orangefrost: oklab(0.76 0.06 0.15 / 0.8);
-  --orangefade: oklab(0.76 0.06 0.15 / 0.1);
   
   --carrot: oklab(0.7 0.09 0.13);
   
@@ -98,7 +95,6 @@
   --scottsCurve: cubic-bezier(0.165, 0.84, 0.44, 1);
   
   /* shaddow */
-  --dropShadow0000: 0 2px 3px rgba(0,0,0,0.12);
   --dropShadow000: 0 2px 4px 2px rgba(0,0,0,0.16);
   --dropShadow00: 0 3px 6px rgba(0,0,0,0.16),
                   0 3px 6px rgba(0,0,0,0.23);

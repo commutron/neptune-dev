@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import Pref from '/public/pref.js';
+// import Pref from '/public/pref.js';
 // import { toast } from 'react-toastify';
 
 import QtTaskBuilder from '/client/components/bigUi/ArrayBuilder/QtTaskBuilder';
@@ -30,14 +30,15 @@ const QtTaskSlide = ({ app, branchesS, isDebug })=> {
   }
 
   return(
-    <div className='invert space3v'>
+    <div className='invert space3v overscroll'>
       
-      <h2 className='cap'><i className='fas fa-gem fa-fw gapR'></i>Quality Time</h2>
+      <h2 className='cap'><i className='fas fa-gem fa-fw gapR'></i>Quality/Quoted Time</h2>
       <h3>Categorization for Quotes and Quotas</h3>
       <ul className='line15x max875'>
         <li>The Sub-Tasks are used with their connected branch when clocking-in. The Quality Time (QT) category is used to group the time records for comparison to a required/goal time.</li> 
         <li>For 'Pro' branches, the QT categories should correspond to the customer quote; these are the categories available in product quote time setup.</li>
         <li>Non-Pro branches will use the QT Sub-Tasks for 'Internal' work orders and the QT categories will be used to measure time in an organisational context.</li>
+        <li>Static Qt groups will apply time as a fixed chunk. Dynamic (Not Static) groups will scale the time to the order quantity.</li>
       </ul>
       
       <p className='lAlign max875'>

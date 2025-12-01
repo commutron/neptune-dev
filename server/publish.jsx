@@ -509,7 +509,14 @@ Meteor.publish('hotDataPlus', function(scanOrb, keyMatch){
       VariantDB.find({widgetId: wID, orgKey: orgKey}, {
         fields: {
           'orgKey': 0
-        }})
+        }}),
+      Meteor.users.find({ roles: { $in: ["active"] }},
+        {fields: {
+          'username': 1,
+          'roles': 1,
+          'engaged.qtKey': 1,
+          'engaged.tName': 1
+        }}),
     ];
   }
 });

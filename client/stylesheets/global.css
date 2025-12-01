@@ -193,7 +193,6 @@ input[type='checkbox']:hover + label, input[type='radio']:hover + label {
 input, select, textarea {
   line-height: 1.5;
   font-size: 1rem;
-  text-indent: 0.25rem;
   border-width: 1px;
   border-style: solid;
   border-bottom-color: black;
@@ -215,6 +214,7 @@ input, select {
   min-height: 2rem;
   height: 2rem;
   width: 15rem;
+  text-indent: 0.25rem;
 }
 
 input {
@@ -234,6 +234,7 @@ textarea {
   min-height: 2rem;
   field-sizing: content;
   border-color: inherit;
+  padding-inline: 0.25rem;
 }
 
 input:where(:focus,:active) {

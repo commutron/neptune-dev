@@ -35,7 +35,7 @@ const QuoteTaskTime = ({
           const qtbr = app.branches.find( b => b.brKey === qt.brKey );
           if(qtbr && qtbr.open && qtbr.pro ) {
             const qval = qtSaved.find( q => q[0] === qt.qtKey )?.[1] || 0;
-            ops.push( [ qt.qtKey, qt.qtTask, qt.subTasks.join(', '), qval ] );
+            ops.push( [ qt.qtKey, qt.qtTask, qt.subTasks.join(', '), qval, qt.fixed ] );
           }
         }
         inputOpsSet(ops);
@@ -85,7 +85,7 @@ const QuoteTaskTime = ({
       icon='fa-solid fa-gem'
       colorT='blueT'
       closeFunc={()=>clearOnClose()}>
-      <div className='centre min600'>
+      <div className='centre min750'>
         <InUseCheck
           flowtitle={fTitle}
           preFillKey={flowKey}
@@ -93,7 +93,8 @@ const QuoteTaskTime = ({
           
         {access ? null : <p>{Pref.norole}</p>}
         
-        <p><em>Time per task group for one unit, in minutes.</em></p>
+        <p><em>Default is Dynamic; enter as per one unit, will scale to order quantity.</em></p>
+        <p><em>Static groups are one chunk of time for the whole order.</em></p>
        
         <form
           id='qttbgt'
@@ -130,7 +131,7 @@ const QuoteTaskTime = ({
               key={index}
               className='w100 breaklines split doJustWeen'>
               <span className='max300'>
-                <label>{op[1]}</label>
+                <label>{op[1]}<sup className='bold smCap'>{op[4] ? 'STATIC' : ''}</sup></label>
                 <div className='small'>{op[2]}</div>
               </span>
               <span className='beside'>
@@ -140,21 +141,21 @@ const QuoteTaskTime = ({
                 </label> : null}
                 <label className='gapL'>
                   <input
-                      type='text'
-                      id={op[0]}
-                      name={op[1]}
-                      className='rightText numberSet miniIn10'
-                      pattern="^\d*(\.\d{0,2})?$"
-                      maxLength='8'
-                      minLength='1'
-                      max='100000'
-                      min='0'
-                      step=".1"
-                      inputMode='numeric'
-                      defaultValue={op[3] || null}
-                      disabled={!access}
-                      onChange={(e)=>inputMinutes(e)}
-                    />
+                    type='text'
+                    id={op[0]}
+                    name={op[1]}
+                    className='rightText numberSet miniIn10'
+                    pattern="^\d*(\.\d{0,2})?$"
+                    maxLength='8'
+                    minLength='1'
+                    max='100000'
+                    min='0'
+                    step=".1"
+                    inputMode='numeric'
+                    defaultValue={op[3] || null}
+                    disabled={!access}
+                    onChange={(e)=>inputMinutes(e)}
+                  />
                 </label>
                 <label className='gapL min8'>
                   <i className='numberSet liteToolOff beside rightJust'

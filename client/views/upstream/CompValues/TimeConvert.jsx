@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { FieldObject } from './CompValuesSlide';
-import { ms2sc, ms2mn, sc2hr } from '/client/utility/Convert';
+import { ms2sc, ms2mn, ms2hr } from '/client/utility/Convert';
 
 const TimeConvert = ()=> {
 
@@ -19,7 +19,7 @@ const TimeConvert = ()=> {
   useEffect( ()=> {
     !baseMS ? '' : secSet( ms2sc(baseMS) );
     !baseMS ? '' : minSet( ms2mn(baseMS) );
-    !baseMS ? '' : hrSet( sc2hr(baseMS) );
+    !baseMS ? '' : hrSet( ms2hr(baseMS) );
   }, [baseMS]);
   
   return(

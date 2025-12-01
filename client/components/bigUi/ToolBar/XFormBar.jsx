@@ -1,33 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import './style.css';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import TideFormLock from '/client/components/tide/TideFormLock';
 
 import NCAdd from '/client/components/riverX/NCAdd';
 import NCFlood from '/client/components/riverX/NCFlood';
 import ShortAdd from '/client/components/riverX/ShortAdd';
-import { min2hr } from '/client/utility/Convert';
+
+import { addTideArrayDuration } from '/client/utility/WorkTimeCalc.js';
+import { CountDownNum, TimeString } from '/client/components/smallUi/ClockString';
 
 const XFormBar = ({ 
   batchData, seriesData, itemData, rapIs, radioactive,
   timeOpen, ncTypesCombo, 
   action, showVerifyState, handleVerify, 
-  user, eng, app 
+  user, eng, app, users
 })=> {
   
   const [ show, showSet ] = useState('QT');
   
   useEffect( ()=> { showSet('QT') }, [eng.qtKey]);
-  
-  function handleDone() {
-    showSet( 'NC' );
-    this.ncFormSelect.checked = true;
-    if(user.shFocusReset) {
-      document.getElementById('lookup').focus();
-    }else{
-      document.querySelector('#ncRefs')?.focus();
-    }
-  }
   
   const b = batchData;
   const srs = seriesData;
@@ -51,13 +43,13 @@ const XFormBar = ({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    height: '100%'
+    height: '100%',
+    gridGap: '0 2px'
   };
   
   const FirstTg = <FormToggle
           id='firstselect'
           type='checkbox'
-          name='toggleFirst'
           title='Redo Step'
           check={showVerifyState === true}
           change={()=>handleVerify(null, true)}
@@ -70,7 +62,6 @@ const XFormBar = ({
   const QuoteTg = <FormToggle
             id='qtStatusSelect'
             type='radio'
-            name='formbarselect'
             title='Quoted Time'
             check={show === 'QT'}
             change={()=>showSet( 'QT' )}
@@ -81,7 +72,6 @@ const XFormBar = ({
   const NonTg = <FormToggle
             id='ncFormSelect'
             type='radio'
-            name='formbarselect'
             title={Pref.nonCon}
             check={show === 'NC'}
             change={()=>showSet( 'NC' )}
@@ -92,7 +82,6 @@ const XFormBar = ({
   const ShortTg = <FormToggle
             id='shortFormSelect'
             type='radio'
-            name='formbarselect'
             title={Pref.shortfall}
             check={show === 'S'}
             change={()=>showSet( 'S' )}
@@ -103,14 +92,14 @@ const XFormBar = ({
   return(
     <div className='darkTheme proActionForm thinScroll'>
       {!lockOutAll && showItem ?
-        <div className='gapminC' style={tgsty}>
+        <div style={tgsty}>
           {action === 'xBatchBuild' ? null : FirstTg}
           {QuoteTg}
           {NonTg}
           {ShortTg}
         </div>
       : !lockOutAll && !i && showBatch ?
-        <div className='gapminC' style={tgsty}>
+        <div style={tgsty}>
           {QuoteTg}
           {NonTg}
         </div>
@@ -137,7 +126,8 @@ const XFormBar = ({
                 units={i.units}
                 user={user}
                 app={app}
-                ncTypesCombo={ncTypesCombo} />
+                ncTypesCombo={ncTypesCombo} 
+              />
             : show === 'S' ?
               <ShortAdd
                 seriesId={srs._id}
@@ -145,8 +135,8 @@ const XFormBar = ({
                 units={i.units}
                 pastPN={pastPN}
                 pastRF={pastRF}
-                app={app}
-                doneClose={()=>handleDone()} />
+                user={user}
+              />
             : null
         : null
         }
@@ -157,13 +147,15 @@ const XFormBar = ({
             live={b.completed === false}
             user={user}
             app={app}
-            ncTypesCombo={ncTypesCombo} />
+            ncTypesCombo={ncTypesCombo}
+          />
         : null}
         
         {timeOpen && show === 'QT' ?
           <QtStatus 
             batchData={batchData} 
             app={app}
+            users={users}
             eng={eng}
           />
         : null}
@@ -176,7 +168,7 @@ const XFormBar = ({
 export default XFormBar;
 
 const FormToggle = ({ 
-  id, type, name, title, 
+  id, type, title, 
   check, change, lock, 
   icon, color, spec 
 })=> {
@@ -205,7 +197,7 @@ const FormToggle = ({
       <input
         type={type}
         id={id}
-        name={name}
+        name={type === 'radio' ? 'formbarselect' : 'toggleFirst'}
         title={title}
         className='radioIcon'
         checked={check}
@@ -216,14 +208,18 @@ const FormToggle = ({
   );
 };
 
-const QtStatus = ({ batchData, app, eng })=> {
+const QtStatus = ({ batchData, app, users, eng })=> {
   
   let qt = app.qtTasks.find( q => q.qtKey === eng.qtKey );
-  console.log({qt});
+  let pr = users.filter( u=> u.engaged && u.engaged.qtKey === eng.qtKey && u.engaged.tName === eng.tName ).length;
   
   let bq = (batchData?.quoteTimeCycles || []).find( q => q[0] === eng.qtKey );
   let min = bq?.[1] || 0;
-  let todo = min2hr(min * (batchData?.quantity || 0));
+  let max = qt.fixed ? min : ( min * (batchData?.quantity || 0) );
+  
+  const bTideThis = batchData.tide.filter( t => t.qtKey === eng.qtKey );
+  const tCount = addTideArrayDuration(bTideThis); // rtn in seconds
+  const remain = (max * 60) - tCount;
   
   const sty = {
     // display: 'flex',
@@ -240,9 +236,18 @@ const QtStatus = ({ batchData, app, eng })=> {
   
   return(
     <div className='actionForm' style={sty}>
-      {qt && <span data-tip={qt.subTasks.join(',\n')} className='liteTip'>Qt Group: {qt.qtTask}</span>}
-      {qt && <span><n-num>{bq ? bq[1] : 0}</n-num> minutes for one item</span>}
-      {qt && <span><n-num>{bq ? todo : 0}</n-num> hours for all items</span>}
+      {qt && <span className='liteTip line1x noCopy centreText' data-tip={qt.subTasks.join(',\n')}>Qt: {qt.qtTask}</span>}
+      
+      {qt ?
+        <Fragment>
+          <span className='line1x noCopy centreRow gapminC'
+            >{TimeString(bq ? bq[1] : 0, 'minutes', 'h:mm')} {`${qt.fixed ? 'per ' + Pref.XBatch : 'per item'}`}</span>
+
+          <span className={`line1x noCopy centreRow gapminC ${remain < 0 ? 'redT' : ''}`}
+          >{bq ? <CountDownNum dur={remain} peers={pr} /> : <n-num>0:00:00</n-num>} remaining</span>
+          
+        </Fragment>
+      : null}
     </div>
   );
 };

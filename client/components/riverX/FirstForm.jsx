@@ -36,15 +36,21 @@ const FirstForm = ({
     if(iCombo.length === 1 ) { howISet( iCombo[0].name ) }
     inspectComboSet( iCombo );
     
-    const uCombo = Array.from(users, x => { return { label: x.username, value: x._id } } );
-    userComboSet( uCombo );
-    
     const buildMethods = sBranch?.buildMethods || [];
     const bCombo = Array.from(buildMethods, x => { return { label: x, value: x } } );
     buildComboSet( bCombo );
     
   }, [sBranch]);
   
+  useLayoutEffect( ()=>{
+    let uCombo = [];
+    for(let u of users) {
+      if(u.roles.includes('active') && !u.roles.includes('readOnly')) {
+        uCombo.push({ label: u.username, value: u._id });
+      }
+    }
+    userComboSet( uCombo );
+  }, []);
   
   function consume() {
     let val = this.consume.value.trim();

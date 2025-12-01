@@ -23,7 +23,7 @@ const ProductionFindOps = ({
   allxBatch,
   allGroup, allWidget, hotVariant,
   user, time, app, canMulti, canSerial,
-  activeUsers, plainBatchS, brancheS, 
+  users, plainBatchS, brancheS, 
   allEquip, allMaint,
   orb, eqS, anchor
 })=> {
@@ -159,6 +159,7 @@ const ProductionFindOps = ({
 		      widgetData={widget}
 		      radioactive={variant.radioactive}
           user={user}
+          users={users}
           time={time}
           app={app}
           brancheS={brancheS}
@@ -202,7 +203,7 @@ const ProductionFindOps = ({
           radioactive={variant.radioactive}
           user={user}
           time={time}
-          users={activeUsers}
+          users={users}
           app={app}
           brancheS={brancheS}
           plainBatchS={plainBatchS}
@@ -216,7 +217,7 @@ const ProductionFindOps = ({
             itemData={item}
             widgetData={widget}
             user={user}
-            users={activeUsers}
+            users={users}
             brancheS={brancheS}
             app={app} />
           <WikiOps
@@ -261,7 +262,7 @@ const ProductionFindOps = ({
           itemData={false}
           user={user}
           time={time}
-          users={activeUsers}
+          users={users}
           app={app}
           brancheS={brancheS}
           plainBatchS={plainBatchS} 
@@ -294,7 +295,7 @@ const ProductionFindOps = ({
           itemData={false}
           user={user}
           time={time}
-          users={activeUsers}
+          users={users}
           app={app}
           brancheS={brancheS}
           plainBatchS={plainBatchS} 

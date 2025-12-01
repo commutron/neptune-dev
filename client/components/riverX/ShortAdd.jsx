@@ -1,11 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
-
-const ShortAdd = ({ seriesId, serial, units, pastPN, pastRF, app, doneClose })=> {
-
-  useEffect( ()=> { return ()=> doneClose() }, []);
+const ShortAdd = ({ seriesId, serial, units, pastPN, pastRF, user })=> {
   
   function handleShort(e) {
     e.preventDefault();
@@ -22,7 +19,9 @@ const ShortAdd = ({ seriesId, serial, units, pastPN, pastRF, app, doneClose })=>
     (error, reply)=>{
       error && console.log(error);
       if(reply) {
-        doneClose();
+        if(user.shFocusReset) {
+          document.getElementById('lookup').focus();
+        }
       }else{
         toast.warn("Part Number is already recorded.", {
           position: toast.POSITION.BOTTOM_CENTER,
@@ -54,6 +53,7 @@ const ShortAdd = ({ seriesId, serial, units, pastPN, pastRF, app, doneClose })=>
           className='orangeIn up'
           placeholder='13-bC_047'
           disabled={lock}
+          autoFocus
           required />
         <label htmlFor='partNum' className='whiteT'>Part Number</label>
       </span>

@@ -9,12 +9,12 @@ import { batchTideTime } from './tideGlobalMethods.js';
 import { calcShipDay } from './reportCompleted.js';
 import { getShipLoad } from '/server/shipOps';
 
-function dryPriorityCalc(bQuTmBdg, mEst, bTide, shipAim, now, shipLoad, timePer) {
+function dryPriorityCalc(bQuTmBdg, qtCyles, mEst, bTide, shipAim, now, shipLoad, timePer) {
   // console.time('dryPriorityCalc_run_time');
   const shipAimMmnt = moment(shipAim);
   
   const mQuote = Number( bQuTmBdg.length === 0 ? 0 : bQuTmBdg[0].timeAsMinutes || 0 );
-  const isQuoted = mQuote > 0;
+  const isQuoted = mQuote > 0 && qtCyles?.length > 0;
   
   const estimatedMinutes = avg4est(mQuote, mEst);
   
@@ -80,7 +80,10 @@ function collectPriority(batchID, mockDay) {
         const timeReg = quadRegression(donePer);
         const timePer = timeReg > Config.qregA ? timeReg : undefined;
       
-        const dryCalc = dryPriorityCalc(b.quoteTimeBudget, mEst, b.tide, shipAim, now, shipLoad, timePer);
+        const dryCalc = dryPriorityCalc(
+          bData.quoteTimeBudget, bData.quoteTimeCycles, 
+          mEst, b.tide, shipAim, now, shipLoad, timePer
+        );
 
         resolve({
           batch: b.batch,
@@ -138,7 +141,10 @@ function getFastPriority(bData, now, shipAim, shipLoaded) {
       const timeReg = quadRegression(donePer);
       const timePer = timeReg > Config.qregA ? timeReg : undefined;
       
-      const dryCalc = dryPriorityCalc(bData.quoteTimeBudget, mEst, bData.tide, shipAim, now, shipLoad, timePer);
+      const dryCalc = dryPriorityCalc(
+        bData.quoteTimeBudget, bData.quoteTimeCycles,
+        mEst, bData.tide, shipAim, now, shipLoad, timePer
+      );
       
       resolve({
         quote2tide: dryCalc.quote2tide,

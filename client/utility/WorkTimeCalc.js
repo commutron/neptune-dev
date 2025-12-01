@@ -163,17 +163,18 @@ export function addTideArrayDuration(tideArray) {
     return 0;
   }else{
     let tideSeconds = 0;
-    for(const td of tideArray) {
-      const mStart = moment(td.startTime);
-      const mStop = td.stopTime ? moment(td.stopTime) : moment();
-      
+    for(let td of tideArray) {
+      const mStart = td.startTime;
+      const mStop = td.stopTime ? td.stopTime : new Date();
+  
       if(td.focus) {
-        tideSeconds += Math.floor( mStop.diff(mStart, 'seconds') / td.focus);
+        tideSeconds += Math.floor( ( ( mStop - mStart ) / 1000 )  / td.focus );
       }else{
-        tideSeconds += mStop.diff(mStart, 'seconds');
+        tideSeconds += Math.floor( ( ( mStop - mStart ) / 1000 ) );
       }
     }
-    return Math.round( moment.duration(tideSeconds, 'seconds').asMinutes() );
+    // return Math.round( moment.duration(tideSeconds, 'seconds').asMinutes() );
+    return Math.round( tideSeconds );
   }
 }
 

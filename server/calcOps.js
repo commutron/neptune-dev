@@ -9,13 +9,13 @@ export function sc2mn(seconds) {
   return parseFloat(trunc);
 }
 
-export function sc2hr(seconds) {
-  const asHours = moment.duration(seconds, "seconds").asHours();
-  const trunc = ( Math.round(
-                   (asHours + Number.EPSILON) * 100) 
-                      / 100 ).toFixed(2, 10);
-  return parseFloat(trunc);
-}
+// export function sc2hr(seconds) {
+//   const asHours = moment.duration(seconds, "seconds").asHours();
+//   const trunc = ( Math.round(
+//                   (asHours + Number.EPSILON) * 100) 
+//                       / 100 ).toFixed(2, 10);
+//   return parseFloat(trunc);
+// }
 
 export function min2hr(minutes) {
   const asHours = moment.duration(minutes, "minutes").asHours();

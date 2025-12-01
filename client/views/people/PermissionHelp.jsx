@@ -1,5 +1,5 @@
 import React from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 const PermissionHelp = ({ auths, admin })=> {
   
@@ -9,158 +9,81 @@ const PermissionHelp = ({ auths, admin })=> {
     <div className='space5x5'>
     
       <h2>Available Permissions</h2>
+      <small>Last updated by Matthew, Nov. 30, 2025</small>
       
-      {admin ?
-        <ul>
-          <li><b>Admin</b></li>
-          <ul>
-            <li>Access additional user information</li>
-            <li>Activate or de-activate users</li>
-            <li>Set user permissions</li>
-            <li>Change user passwords</li>
-            <li>Set app preferences</li>
-            <li>Set workday and ship schedules</li>
-            <li>Access dangerous functions</li>
-          </ul>
-        </ul>
-      : null}
+      <RoleList
+        userroles={r}
+        role='active'
+        tasks={[
+          `View ${Pref.group} and ${Pref.xBatch} information`,
+          'Record "Build" steps',
+          'Record nonconformances',
+          `Record ${Pref.shortfall}s`,
+          'Record "Repaired" nonconformances',
+          `Add ${Pref.xBatch} notes`
+        ]}
+      />
       
-      {r.includes('debug') ?
-        <ul>
-          <li><b>Debug</b></li>
-          <li><em>Should ONLY be used for finding and fixing problems in the software</em></li>
-          <li><em>RESPECT USER PRIVACY</em></li>
-          <ul>
-            <li>Records information on your activity</li>
-            <li>Allows Admins to view private information about your account and activity</li>
-            <li>Logs meta data to your browsers console</li>
-          </ul>
-        </ul>
-      : null}
+      <RoleList
+        userroles={r}
+        role='inspect'
+        tasks={[
+          'Record "Inspect" steps and counters',
+          'Record "Inspected" nonconformances',
+          'Edit nonconformances',
+          `Edit ${Pref.shortfall}s`,
+          `Active ${Pref.rapidEx} on an ${Pref.item}`
+        ]}
+      />
       
-      {r.includes('nightly') ?
-        <ul>
-          <li><b>Nightly</b></li>
-          <ul>
-            <li>View and Use features that are under development</li>
-          </ul>
-        </ul>
-      : null}
+      <RoleList
+        userroles={r}
+        role='verify'
+        tasks={[
+          'Record "Verify" or "First-Off" inspections',
+          `Set and Remove ${Pref.shortfall}s`,
+          'Trash and re-activate nonconformances',
+          'Set nonconformances as "Inspected, no repair required"',
+          `Set ${Pref.item} to use an alternative process flow`,
+        ]}
+      />
+  
+      <RoleList
+        userroles={r}
+        role='test'
+        tasks={[
+          'Record "Test" steps and counters',
+        ]}
+      />
       
-      {r.includes('peopleSuper') ?
-        <ul>
-          <li><b>People Super</b></li>
-          <li><em>Can ONLY be enabled on {Pref.allowedSupers} user{Pref.allowedSupers === 1 ? '' : 's'}</em></li>
-          <li><em>RESPECT USER PRIVACY</em></li>
-          <ul>
-            <li>View and Edit production time records</li>
-            <li>View the daily revolving PIN</li>
-            <li>Set holidays</li>
-          </ul>
-        </ul>
-      : null}
+      <RoleList
+        userroles={r}
+        role='xray'
+        tasks={[
+          'Record "X-Ray" optional/sampling steps',
+        ]}
+      />
+  
       
-      {r.includes('equipSuper') ?
+      {r.includes('BRKt3rm1n2t1ng8r2nch') ?
         <ul>
-          <li><b>Equipment Super</b></li>
+          <li><b>Complete</b></li>
           <ul>
-            <li>Create/Edit {Pref.equip} entries</li>
-            <li>Set {Pref.maintain}-service patterns</li>
-            <li>Set {Pref.maintain}-service tasks</li>
-            <li>Receive an email if {Pref.maintain}-service is missed</li>
-            <p className='small'>*Email is sent when the grace period begins and ends</p> 
-          </ul>
-        </ul>
-      : null}
-      
-      {r.includes('qa') ?
-        <ul>
-          <li><b>QA</b></li>
-          <ul>
-            <li>Create and edit {Pref.rapidExs}</li>
-            <li>Complete an incomplete {Pref.xBatch}</li>
-            <li>Complete an incomplete {Pref.item}</li>
-            <li><i className='cap'>{Pref.scrap}</i> a {Pref.item}</li>
-            <li>Close {Pref.rapidExs}</li>
-            <li>Active an {Pref.rapidExd} on a {Pref.item}</li>
-            <li>Add nonconformances to multiple {Pref.items} at once</li>
-            <li>Change all {Pref.item} {Pref.unit}s</li>
+            <li>Complete {Pref.xBatch}</li>
+            <li>Undo Complete within {Pref.completeGrace} hours</li>
+            <li>Complete {Pref.item}</li>
           </ul>
         </ul>
       : null}
       
-      {r.includes('remove') ?
-        <ul>
-          <li><b>Remove</b></li>
-          <ul>
-            <li>Remove a {Pref.group}, {Pref.widget} or {Pref.variant} *</li>
-            <li>Remove a {Pref.xBatch}, {Pref.item} or nonconformace *</li>
-            <li>Break a serial number into multiple serial numbers *</li>
-            <p className='small'>* subject to "in-use" checks</p> 
-          </ul>
-        </ul>
-      : null}
-        
-      {r.includes('create') ?
-        <ul>
-          <li><b>Create</b></li>
-          <ul>
-            <li>Create new {Pref.equip}</li>
-            <li>Create a new {Pref.group}</li>
-            <li>Create a new {Pref.widget}</li>
-            <li>Create a new {Pref.variant}</li>
-            <li>Set {Pref.comp + 's'}</li>
-            <li>Create a new {Pref.xBatch}</li>
-            <li>Create new {Pref.itemSerial}s</li>
-          </ul>
-        </ul>
-      : null}
       
-      {r.includes('edit') ?
-        <ul>
-          <li><b>Edit</b></li>
-          <ul>
-            <li>Edit {Pref.equip}</li>
-            <li>Edit {Pref.groups}</li>
-            <li>Edit {Pref.widgets}</li>
-            <li>Add or edit {Pref.widget} {Pref.variants}</li>
-            <li>Set {Pref.comp + 's'}</li>
-            <li>Edit {Pref.xBatchs}</li>
-            <li>Set {Pref.xBatch} fulfill date</li>
-            <li>Add and Edit notes</li>
-            <li>Repeat some events</li>
-            <li>Add a Custom Event</li>
-            
-            <li>Backdate {Pref.xBatch} completion**</li>
-            <li>Change one or all {Pref.unit}s</li>
-          
-            <li>Add or edit or remove* a {Pref.flow}</li>
-            <li>Set {Pref.timeBudget}s</li>
-            <p className='small'>* subject to "in-use" checks</p>
-            <p className='small'>** requires Complete permission as well</p> 
-          </ul>
-        </ul>
-      : null}
+      multitask_time
+  
+
+     
       
-      {r.includes('sales') ?
-        <ul>
-          <li><b>Sales</b></li>
-          <ul>
-            <li>Set {Pref.timeBudget}s</li>
-            <li>Set {Pref.xBatch} fulfill date</li>
-          </ul>
-        </ul>
-      : null}
+    
       
-      {r.includes('kitting') ?
-        <ul>
-          <li><b>Kiting</b></li>
-          <ul>
-            <li>Set Upstream clearances</li>
-            <li>Set Release to the Floor</li>
-          </ul>
-        </ul>
-      : null}
         
       {r.includes('run') ?
         <ul>
@@ -197,69 +120,194 @@ const PermissionHelp = ({ auths, admin })=> {
         </ul>
       : null}
       
-      {r.includes('BRKt3rm1n2t1ng8r2nch') ?
+      
+      
+      {r.includes('edit') ?
         <ul>
-          <li><b>Complete</b></li>
+          <li><b>Edit</b></li>
           <ul>
-            <li>Complete {Pref.xBatch}</li>
-            <li>Undo Complete within {Pref.completeGrace} hours</li>
-            <li>Complete {Pref.item}</li>
+            <li>Edit {Pref.equip}</li>
+            <li>Edit {Pref.groups}</li>
+            <li>Edit {Pref.widgets}</li>
+            <li>Add or edit {Pref.widget} {Pref.variants}</li>
+            <li>Set {Pref.comp + 's'}</li>
+            <li>Edit {Pref.xBatchs}</li>
+            <li>Set {Pref.xBatch} fulfill date</li>
+            <li>Add and Edit notes</li>
+            <li>Repeat some events</li>
+            <li>Add a Custom Event</li>
+            
+            <li>Backdate {Pref.xBatch} completion**</li>
+            <li>Change one or all {Pref.unit}s</li>
+          
+            <li>Add or edit or remove* a {Pref.flow}</li>
+            <li>Set {Pref.timeBudget}s</li>
+            <p className='small'>* subject to "in-use" checks</p>
+            <p className='small'>** requires Complete permission as well</p> 
           </ul>
         </ul>
       : null}
         
-      {r.includes('test') ?
+      {r.includes('create') ?
         <ul>
-          <li><b>Test</b></li>
+          <li><b>Create</b></li>
           <ul>
-            <li>Record "Test" steps and counters</li>
+            <li>Create new {Pref.equip}</li>
+            <li>Create a new {Pref.group}</li>
+            <li>Create a new {Pref.widget}</li>
+            <li>Create a new {Pref.variant}</li>
+            <li>Set {Pref.comp + 's'}</li>
+            <li>Create a new {Pref.xBatch}</li>
+            <li>Create new {Pref.itemSerial}s</li>
+          </ul>
+        </ul>
+      : null}
+        
+      {r.includes('remove') ?
+        <ul>
+          <li><b>Remove</b></li>
+          <ul>
+            <li>Remove a {Pref.group}, {Pref.widget} or {Pref.variant} *</li>
+            <li>Remove a {Pref.xBatch}, {Pref.item} or nonconformace *</li>
+            <li>Break a serial number into multiple serial numbers *</li>
+            <p className='small'>* subject to "in-use" checks</p> 
           </ul>
         </ul>
       : null}
       
-      {r.includes('verify') ?
+      
+      {r.includes('qa') ?
         <ul>
-          <li><b>Verify</b></li>
+          <li><b>QA</b></li>
           <ul>
-            <li>Record "Verify" or "First-Off' inspections</li>
-            <li>Set and Remove {Pref.shortfall}s</li>
-            <li>Trash and re-activate nonconformances</li>
-            <li>Set nonconformances as "Inspected, no repair required"</li>
-            <li>Set {Pref.item} to use an alternative process flow</li>
+            <li>Create and edit {Pref.rapidExs}</li>
+            <li>Complete an incomplete {Pref.xBatch}</li>
+            <li>Complete an incomplete {Pref.item}</li>
+            <li><i className='cap'>{Pref.scrap}</i> a {Pref.item}</li>
+            <li>Close {Pref.rapidExs}</li>
+            <li>Active an {Pref.rapidExd} on a {Pref.item}</li>
+            <li>Add nonconformances to multiple {Pref.items} at once</li>
+            <li>Change all {Pref.item} {Pref.unit}s</li>
           </ul>
         </ul>
       : null}
       
-      {r.includes('inspect') ?
+      
+      
+      {r.includes('kitting') ?
         <ul>
-          <li><b>Inspect</b></li>
+          <li><b>Kiting</b></li>
           <ul>
-            <li>Record "Inspect" steps and counters</li>
-            <li>Record "Inspected" nonconformances</li>
-            <li>Edit nonconformances</li>
-            <li>Edit {Pref.shortfall}s</li>
-            <li>Active {Pref.rapidEx} on an {Pref.item}</li>
+            <li>Set Upstream clearances</li>
+            <li>Set Release to the Floor 'Create new serial numbers'</li>
           </ul>
         </ul>
       : null}
       
-      {r.includes('active') ?
+      {r.includes('sales') ?
         <ul>
-          <li><b>Active</b></li>
+          <li><b>Sales</b></li>
           <ul>
-            <li>View {Pref.group} and {Pref.xBatch} information</li>
-            <li>Record "Build" steps</li>
-            <li>Record nonconformances</li>
-            <li>Record {Pref.shortfall}s</li>
-            <li>Record "Repaired" nonconformances</li>
-            <li>Add {Pref.xBatch} notes</li>
+            <li>Set {Pref.timeBudget}s</li>
+            <li>Set {Pref.xBatch} fulfill date</li>
           </ul>
         </ul>
       : null}
+      
+      npiSuper
+      
+      
+      equipPlus
+      
+      
+      {r.includes('equipSuper') ?
+        <ul>
+          <li><b>Equipment Super</b></li>
+          <ul>
+            <li>Create/Edit {Pref.equip} entries</li>
+            <li>Set {Pref.maintain}-service patterns</li>
+            <li>Set {Pref.maintain}-service tasks</li>
+            <li>Receive an email if {Pref.maintain}-service is missed</li>
+            <p className='small'>*Email is sent when the grace period begins and ends</p> 
+          </ul>
+        </ul>
+      : null}
+      
+      
+      
+       {r.includes('peopleSuper') ?
+        <ul>
+          <li><b>People Super</b></li>
+          <li><em>Can ONLY be enabled on {Pref.allowedSupers} user{Pref.allowedSupers === 1 ? '' : 's'}</em></li>
+          <li><em>RESPECT USER PRIVACY</em></li>
+          <ul>
+            <li>View and Edit production time records</li>
+            <li>View the daily revolving PIN</li>
+            <li>Set holidays</li>
+          </ul>
+        </ul>
+      : null}
+      
+      
+      
+      <RoleList
+        userroles={r}
+        role='nightly'
+        tasks={[
+          'View and Use features that are under development',
+        ]}
+      />
+      
+      <RoleList
+        userroles={r}
+        role='readOnly'
+        tasks={[
+          'Read-Only',
+        ]}
+      />
+      
+      <RoleList
+        userroles={r}
+        role='debug'
+        tasks={[
+          'Records information on your activity',
+          'Allows Admins to view private information about your account and activity',
+          'Logs meta data to your browsers console'
+        ]}
+        notes='Should ONLY be used for finding and fixing problems in the software. RESPECT USER PRIVACY'
+      />
+      
+      <RoleList
+        userroles={r}
+        role='admin'
+        tasks={[
+          'Access additional user information',
+          'Activate or de-activate users',
+          'Set user permissions',
+          'Change user passwords',
+          'Set app preferences',
+          'Set workday and ship schedules',
+          'Access dangerous functions'
+        ]}
+      />
       
     </div>
   );
 };
 
 export default PermissionHelp;
+
+const RoleList = ({ userroles, role, tasks, notes })=> {
+  if(userroles.includes(role)) {
+    return(
+      <ul>
+        <li><b className='cap'>{role}</b></li>
+        <ul>
+          {tasks.map( (tsk, indx)=> <li key={indx}>{tsk}</li> )}
+        </ul>
+        {notes && <dt><em>{notes}</em></dt>}
+      </ul>
+    );
+  }
+};
 

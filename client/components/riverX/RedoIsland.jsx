@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useState, useEffect, useLayoutEffect } from 'react';
 import Pref from '/client/global/pref.js';
 
 import FirstForm from '/client/components/riverX/FirstForm';
@@ -22,7 +22,7 @@ const RedoIsland = ({
   const [ repeatOpState, repeatOpSet ] = useState(false);
   const [ redoCommTxt, redoCommSet ] = useState("");
   
-  useEffect( ()=>{
+  useLayoutEffect( ()=>{
     const stoneKey = optionVerify || selectedKeyState;
     if(stoneKey) {
       const stepObj = flowFirsts.find( x => x.key === stoneKey );
@@ -32,33 +32,19 @@ const RedoIsland = ({
       const brKey = stepObj.branchKey;
       const branchObj = brKey ? brancheS.find( b => b.brKey === brKey ) : null;
       stepBranchSet( branchObj ); 
+    }else{
+      stepKeySet(false);
+      stepNameSet(false);
+      stepBranchSet(false);
     }
   }, [optionVerify, brancheS, selectedKeyState]);
-  
   
   useEffect( ()=>{
     return ()=>handleVerify(null, false);
   }, []);
   
-  
   return(
     <div className='stoneForm noCopy blue'>
-    	{/*}<div className='wide dBotGap'>
-      	<button
-      		className='smallAction onblueHover medBig w100'
-      		onClick={()=>handleVerify(null, false)}>
-      		<i className="fa-solid fa-times fa-fw gap"></i>Cancel
-      	</button>
-    	</div>
-    	
-    	<button
-        className='blue action blueSolid whiteT space1v layerOne centreText medBig clean lnht cap'
-        onClick={()=>intendSet(!intend)}
-      >Repeat {Pref.trackFirst}</button>
-      
-      {!intend ? null :
-    	*/}
-    	
     	{redoCommTxt.trim().length >= 5 ? null :
     	  <div className='dBotGap'>
         	

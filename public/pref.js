@@ -162,8 +162,8 @@ class Pref {
     this.downstream = 'downstream';
     this.ship = 'ship';
     // build tracking
-    this.branch = 'branch';
-    this.branches = 'branches';
+    this.branch = 'department';
+    this.branches = 'departments';
     
     this.flow = 'process flow';
     this.buildFlow = 'main process flow';

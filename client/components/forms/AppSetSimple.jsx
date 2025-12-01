@@ -32,6 +32,7 @@ const AppSetSimple = ({title, action, rndmKey})=> {
           <input
             type='text'
             id={rndmKey + 'input'}
+            className='minWide'
             required
           />
         </label>

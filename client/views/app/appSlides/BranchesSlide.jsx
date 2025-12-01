@@ -24,7 +24,7 @@ const BranchesSlide = ({ app, isDebug })=> {
   }
   
   return(
-    <div className='invert space3v'>
+    <div className='invert space3v overscroll'>
       
       <h2 className='cap'><i className='fas fa-code-branch fa-fw'></i> {Pref.branches}</h2>
       <p>Options for Branch / Department / Tracking Catagory</p>

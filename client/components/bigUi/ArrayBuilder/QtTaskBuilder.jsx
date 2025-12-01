@@ -36,6 +36,7 @@ const QtTaskHead = ()=> (
       <div>Name</div>
       <div>Branch</div>
       <div>Pro</div>
+      <div>Static</div>
       <div>Sub-Tasks</div>
       <div></div>
     </div>
@@ -44,6 +45,7 @@ const QtTaskHead = ()=> (
       <div>Quality Time Category</div>
       <div>editing possible to add</div>
       <div></div>
+      <div>Fixed Time</div>
       <div>Task time is tracked and and attributed to QT time</div>
       <div></div>
     </div>
@@ -58,6 +60,7 @@ const QtTaskRow = ({ qtTask, branchesS })=> {
   const [ nmState, nmSet ] = useState(qt.qtTask);
   const [ brState, brSet ] = useState(qt.brKey);
   const [ posState, posSet ] = useState(qt.position);
+  const [ fxdState, fxdSet ] = useState(qt.fixed || false);
   const [ subtaskState, subtaskSet ] = useState(qt.subTasks || []);
   
   function handleMulti(val) {
@@ -73,7 +76,7 @@ const QtTaskRow = ({ qtTask, branchesS })=> {
   }
   
   function handleSaveLists() {
-    Meteor.call('editQualityTimeTasks', qtkey, nmState, brState, posState, subtaskState,
+    Meteor.call('editQualityTimeTasks', qtkey, nmState, brState, posState, fxdState, subtaskState,
       (error, reply)=>{
         error && console.log(error);
         if(reply) {
@@ -116,6 +119,18 @@ const QtTaskRow = ({ qtTask, branchesS })=> {
       </div>
       <div>{branchesS.find( b => b.brKey === qt.brKey)?.branch || 'underfined'}</div>
       <div>{branchesS.find( b => b.brKey === qt.brKey)?.pro || false ? <i className='fa-solid fa-check'></i> : ''}</div>
+      
+      <div>
+        <input
+          type='checkbox'
+          title='Static'
+          id={qtkey+'chStatic'}
+          className='tableAction'
+          checked={fxdState}
+          onChange={(e)=>fxdSet(e.target.checked)}
+        />
+      </div>
+
       <BrTxtAr
         id={qtkey+'tpSbTsk'}
         title='Sub-Tasks'

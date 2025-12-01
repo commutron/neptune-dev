@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 import { SpinWrap } from '/client/components/tinyUi/Spin';
 import { branchesOpenSort } from '/client/utility/Arrays.js';
@@ -16,11 +16,6 @@ const ProdData = ({
   allxBatch,
   hotxBatch, hotxSeries, hotxRapids
 })=> {
-  
-  const activeUsers = useMemo( ()=> users?.filter( x => 
-                        Roles.userIsInRole(x._id, 'active') === true &&
-                        Roles.userIsInRole(x._id, 'readOnly') === false),
-                        [users]);
   
   const brancheS = useMemo( ()=> branchesOpenSort(app?.branches || []), [app]);
   
@@ -59,9 +54,9 @@ const ProdData = ({
       user={user}
       time={time}
       org={org}
+      users={users}
       canMulti={canMulti}
       canSerial={canSerial}
-      activeUsers={activeUsers}
       plainBatchS={plainBatchS}
       brancheS={brancheS}
       app={app}

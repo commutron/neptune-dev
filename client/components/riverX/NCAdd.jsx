@@ -68,6 +68,7 @@ const NCAdd = ({ seriesId, serial, units, user, ncTypesCombo })=> {
         className='redIn up'
         placeholder='R1 C122 X_8'
         disabled={lock}
+        autoFocus
         required />
       <label htmlFor='ncRefs' className='whiteT'>{Pref.nonConRef}</label>
     </span>

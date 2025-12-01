@@ -14,28 +14,17 @@ export function addTideDuration(td) {
 }
 
 function addTideArrayDuration(tideArray) {
-  /* // Old slow with moment
-  console.time('tideArrayAddition_run_time');
-  let tideDurr = 0;
-  for(const td of tideArray) {
-    const mStart = moment(td.startTime);
-    const mStop = td.stopTime ? moment(td.stopTime) : moment();
-    
-    tideDurr += mStop.diff(mStart, 'seconds');
-  }
-  console.timeEnd('tideArrayAddition_run_time');
-  */
-  
-  // console.time('tideArrayAddFAST_run_time');
   let tideDurr = 0;
   for(let td of tideArray) {
     const mStart = td.startTime;
     const mStop = td.stopTime ? td.stopTime : new Date();
     
-    tideDurr += Math.floor( ( ( mStop - mStart ) / 1000 ) );
+    if(td.focus) {
+      tideDurr += Math.floor( ( ( mStop - mStart ) / 1000 )  / td.focus );
+    }else{
+      tideDurr += Math.floor( ( ( mStop - mStart ) / 1000 ) );
+    }
   }
-  // console.timeEnd('tideArrayAddFAST_run_time');
-  
   return Math.round( moment.duration(tideDurr, 'seconds').asMinutes() );
 }
 
