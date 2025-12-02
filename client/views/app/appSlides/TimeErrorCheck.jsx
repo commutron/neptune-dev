@@ -3,6 +3,7 @@ import moment from 'moment';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
+import { LuxonTestString } from '/client/components/smallUi/ClockString';
 import UserNice from '/client/components/smallUi/UserNice';
 
 const TimeErrorCheck = ()=> {
@@ -33,6 +34,12 @@ const TimeErrorCheck = ()=> {
   
   return(
     <div className='overscroll wide space5x5'>
+      <div className='rowWrapR'>
+        <span>
+          <h4>LUXON Test: Is it a valid time?</h4>
+          <LuxonTestString />
+        </span>
+      </div>
       <h3>Check for Time durations greater than {Pref.tooManyMin} minutes</h3>
       <p className='small'>aka a full day without any breaks</p>
       <p>Will automatically correct abandoned stop time blocks.</p>
