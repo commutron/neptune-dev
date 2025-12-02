@@ -16,6 +16,7 @@
     "create-react-class": "^15.7.0",
     "ee-first": "^1.1.1",
     "indexof": "0.0.1",
+    "luxon": "^3.7.2",
     "meteor-node-stubs": "^1.2.13",
     "moment": "^2.30.1",
     "moment-business-time": "git+https://github.com/commutron/moment-business-time.git",

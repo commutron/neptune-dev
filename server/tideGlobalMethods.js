@@ -9,8 +9,11 @@ import { noIg } from './utility';
 export function addTideDuration(td) {
   const mStart = moment(td.startTime);
   const mStop = td.stopTime ? moment(td.stopTime) : moment();
-  
-  return Math.round( mStop.diff(mStart, 'minutes', true) );
+  if(td.focus) {
+    return Math.round( mStop.diff(mStart, 'minutes', true) / td.focus );
+  }else{
+    return Math.round( mStop.diff(mStart, 'minutes', true) );
+  }
 }
 
 function addTideArrayDuration(tideArray) {

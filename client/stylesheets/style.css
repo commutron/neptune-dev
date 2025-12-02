@@ -348,7 +348,7 @@
 }
 
 .meterprogStack { 
-  padding: 5px;
+  padding: 5px 0;
   width: 100%;
 }
 .meterprogStack p { margin: 0; }

@@ -73,13 +73,15 @@ const FlowTable = ({ id, flows, app, openActions, canEdt, canSls, isDebug })=> {
                     <th>QT Task</th>
                     <th>Minutes</th>
       							<th>Hours</th>
+      							<th></th>
                   </tr>
                 </thead>
                 <tbody className='cap'>
                   <tr className='line2x bold'>
                     <td>Total Time</td>
-                    <td className='numFont smTxt'>{qtTotalM}</td>
-                    <td className='numFont smTxt'>{qtTotalH}</td>
+                    <td className='numFont smTxt rightText'>{qtTotalM}</td>
+                    <td className='numFont smTxt rightText'>{qtTotalH}</td>
+                    <th></th>
                   </tr>
                 </tbody>
                 <tbody>
@@ -184,13 +186,14 @@ const FlowRow = ({ app, step })=> {
   );
 };
 const QtRow = ({ app, qt })=> {
-  const qtname = app.qtTasks?.find( x => x.qtKey === qt[0] )?.qtTask || 'missing';
+  const qtapp = app.qtTasks?.find( x => x.qtKey === qt[0] );
   const inhr = moment.duration(qt[1], 'minutes').asHours().toFixed(2,10);
   return(
     <tr>
-      <td>{qtname}</td>
-      <td className='numFont smTxt'>{qt[1]}</td>
-      <td className='numFont smTxt'>{inhr}</td>
+      <td>{qtapp?.qtTask || 'missing'}</td>
+      <td className='numFont smTxt rightText'>{qt[1]}</td>
+      <td className='numFont smTxt rightText'>{inhr}</td>
+      <td className='bold small smCap centreText'>{qtapp?.fixed ? 'STATIC' : ''}</td>
     </tr>
   );
 };

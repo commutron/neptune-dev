@@ -16,7 +16,8 @@ import { min2hr, percentOf, percentOverUnder } from '/client/utility/Convert';
 const TimeBudgetsChunk = ({
   tideWall, b, addTime, 
   conversion, conversionSet, plus, plusSet,
-  isDebug, brancheS
+  isDebug, app
+  // brancheS
 }) =>	{
   
   const [ branchTime, branchTimeSet ] = useState(false);
@@ -38,10 +39,10 @@ const TimeBudgetsChunk = ({
   const totalsCalc = splitTidebyPeople(b.tide);
 
   const qtBready = !b.quoteTimeBudget ? false : true;
-  const qtB = qtBready && b.quoteTimeBudget.length > 0 ? 
+  const qtBudget = qtBready && b.quoteTimeBudget.length > 0 ? 
                 b.quoteTimeBudget[0].timeAsMinutes : 0;
   
-  const totalBudgetMinutes = !plus ? Number(qtB) : Number(qtB) + Number(addTime);
+  const totalBudgetMinutes = !plus ? Number(qtBudget) : Number(qtBudget) + Number(addTime);
   const totalBudgetAs = conversion === 'minutes' ? 
                         Math.round(totalBudgetMinutes) :
                         min2hr(totalBudgetMinutes);
@@ -90,12 +91,12 @@ const TimeBudgetsChunk = ({
   const totalPeople = totalsCalc.peopleTime;
   const tP = totalPeople.length;
   
-  const qtbB = !b.quoteTimeCycles && b.quoteTimeBreakdown ? b.quoteTimeBreakdown.timesAsMinutes : [];
+  const qtTaskTimesArray = b.quoteTimeCycles || [];
+  const oldTaskTimesArray = b.quoteTimeBreakdown ? b.quoteTimeBreakdown.timesAsMinutes : [];
   
-  const cnv = conversion === 'minutes' ? 'min' :
-              conversion === 'percent' ? '%' : 'hrs';
+  const cnv = conversion === 'minutes' ? 'min' : conversion === 'percent' ? '%' : 'hrs';
   
-  const mlt = 'Includes Multi-tasking';
+  console.log(branchTime);
   
   return(
     <div>
@@ -103,12 +104,13 @@ const TimeBudgetsChunk = ({
         <div className='vwrap beside'>
           <QuoteTimeBudget
             bID={b._id}
-            qtB={qtB}
-            qtbB={qtbB}
+            bQuantity={b.quantity || 0}
+            qtBudget={qtBudget}
+            qtCycles={b.quoteTimeCycles || []}
             lockOut={b.lock} 
-            brancheS={brancheS}
+            app={app}
           />
-          <em>quoteTimeBreakdown replaced by quoteTimeCycles{b.quoteTimeCycles ? " [Enabled]" : ""}</em>
+          <em>{b.quoteTimeCycles ? "QT Time (2025) Enabled" : "Legacy Task Time Estimates Used"}</em>
         </div>
         
         <ToggleBar
@@ -195,18 +197,27 @@ const TimeBudgetsChunk = ({
             :
               branchTime.length === 0 ? <div className='small'>n/a</div>
               :
-                <div>
-                  <TimeSplitBar
-                    title={Pref.branches}
-                    nums={branchTime}
-                    chunks={branchTime.map(b=>b.y>0)}
-                    colour='blue' />
-                  <dl className='readlines'>
-                    {branchTime.map((br, ix)=>{
-                      if(br.y > 0) {
-                        const brt = qtbB.find( x => x[0] === br.x+'|!X' );
-                        const sbs = !brt && qtbB.filter( x => x[0].includes(br.x) );
-                        const sbt = !brt ? sbs.reduce((a,b)=> a + b[1], 0) : brt[1];
+              <div>
+                <TimeSplitBar
+                  title={Pref.branches}
+                  nums={branchTime}
+                  chunks={branchTime.map(b=>b.y>0)}
+                  colour='blue'
+                />
+                <dl className='readlines'>
+                  {!qtTaskTimesArray ?
+                    <LegacyTaskBreakdown 
+                      branchTime={branchTime}
+                      qtbB={oldTaskTimesArray} 
+                      timeAs={timeAs}
+                      cnv={cnv}
+                      mlt='Includes Multi-tasking'
+                    />
+                  :
+                  branchTime.map((br, ix)=>{
+                    if(br.y > 0) {
+                      const brData = qtTaskTimesArray.filter( x => x[0].includes(br.x) );
+                        const brTotal = brData.reduce((a,b)=> a + b[1], 0);
                         return( 
                           <dl key={ix} className='breaklines'>
                             <dt
@@ -214,24 +225,26 @@ const TimeBudgetsChunk = ({
                               className='rightRow doJustWeen'
                             ><i className='cap'
                               >{br.x}{br.w && 
-                                <i className='fa-solid fa-layer-group fa-sm tealT gapL' title={mlt}></i>}
+                                <i className='fa-regular fa-clone fa-sm tealT gapL'></i>}
                               </i>
                               <span className='grayT rightText medSm'
-                              ><i className={sbt > 0 && br.y > sbt ? 'redT' : '' }> {timeAs(br.y)}</i><n-sm>{sbt > 0 && "/"+timeAs(sbt)}</n-sm> {cnv}</span>
+                              ><i className={brTotal > 0 && br.y > brTotal ? 'redT' : '' }> {timeAs(br.y)}</i><n-sm>{brTotal > 0 && "/"+timeAs(brTotal)}</n-sm> {cnv}</span>
                             </dt>
-                            {br.z && br.z.length > 0 ? br.z.map( (zt, ixz)=> {
-                              const sbQ = qtbB.find( x => x[0] === br.x+"|"+zt.a );
-                              const mxQ = sbQ ? sbQ[1] : null;
+                            {br.q && br.q.length > 0 ? br.q.map( (qt, ixz)=> {
+                              const sbQ = qtTaskTimesArray.find( x => x[0] === qt.q );
+                              let qtapp = sbQ ? app.qtTasks.find( q => q.qtKey === qt.q ) : null;
+                              let qtname = qtapp?.qtTask || 'missing';
+                              let mxQ = !qtapp ? null : qtapp.fixed ? sbQ[1] : ( sbQ[1] * (b.quantity || 0) );
                               return(
                                 <dd 
                                   key={ix+'sub'+ixz}
-                                  title={`${Math.round(zt.b)} minutes`}
+                                  title={`${Math.round(qt.sum)} minutes`}
                                   className='rightRow doJustWeen'
-                                ><i className='cap'>{zt.a}{zt.w && 
-                                   <i className='fa-solid fa-layer-group fa-xs tealT gapL' title={mlt}></i>}
+                                ><i className='cap'>{qtname}{qt.w && 
+                                   <i className='fa-regular fa-clone fa-xs tealT gapL'></i>}
                                  </i>
                                   <span className='rightText medSm grayT'
-                                  ><i className={mxQ && zt.b > mxQ ? 'redT' : '' }> {timeAs(zt.b)}</i><n-sm>{mxQ && "/"+timeAs(mxQ)}</n-sm> {cnv}</span>
+                                  ><i className={mxQ && qt.sum > mxQ ? 'redT' : '' }> {timeAs(qt.sum)}</i><n-sm>{mxQ && "/"+timeAs(mxQ)}</n-sm> {cnv}</span>
                                 </dd>
                             )}) : null}
                           </dl>
@@ -252,12 +265,18 @@ const TimeBudgetsChunk = ({
           <p className='footnote'>
             Update quoted time budget in hours to 2 decimal places.
           </p>
+          <p className='footnote'><i className='fa-regular fa-clone tealT gapR'></i>Indicates the user was clocked into multiple tasks at once. The durration is evenly split between the tasks.</p>
+          {b.quoteTimeCycles ?
           <p className='footnote'>
-            {Pref.branch} time is not logged but derived. If a block of time is attributed 
-            to multiple {Pref.branches} then the time block is divided by the number of {Pref.branches}.
+            Post fall 2025, task time is sorted into QT Cycle time; groups that corospond to the order quote via a breakdown on the {Pref.widget} process flow. 
           </p>
+          :
+          <p className='footnote'>
+            Pre fall 2025, task time is calculated by {Pref.branch}. When subtask was not logged, Neptune attempts to derive the task from other user interaction.
+          </p>
+          }
           <dl className='monoFont'>
-            <dd>minutes_quoted = {qtB}</dd>
+            <dd>minutes_quoted = {qtBudget}</dd>
             <dd>minutes / list length</dd>
           </dl>
         </details>
@@ -268,3 +287,44 @@ const TimeBudgetsChunk = ({
 };
 
 export default TimeBudgetsChunk;
+
+const LegacyTaskBreakdown = ({ branchTime, qtbB, timeAs, cnv, mlt })=> {
+  return(
+    <dl className='readlines'>
+      {branchTime.map((br, ix)=>{
+        if(br.y > 0) {
+          const sbs = qtbB.filter( x => x[0].includes(br.x) );
+          const sbt = sbs.reduce((a,b)=> a + b[1], 0);
+          return( 
+            <dl key={ix} className='breaklines'>
+              <dt
+                title={`${Math.round(br.y)} minutes`}
+                className='rightRow doJustWeen'
+              ><i className='cap'
+                >{br.x}{br.w && 
+                  <i className='fa-regular fa-clone fa-sm tealT gapL' title={mlt}></i>}
+                </i>
+                <span className='grayT rightText medSm'
+                ><i className={sbt > 0 && br.y > sbt ? 'redT' : '' }> {timeAs(br.y)}</i><n-sm>{sbt > 0 && "/"+timeAs(sbt)}</n-sm> {cnv}</span>
+              </dt>
+              {br.z && br.z.length > 0 ? br.z.map( (zt, ixz)=> {
+                const sbQ = qtbB.find( x => x[0] === br.x+"|"+zt.a );
+                const mxQ = sbQ ? sbQ[1] : null;
+                return(
+                  <dd 
+                    key={ix+'sub'+ixz}
+                    title={`${Math.round(zt.b)} minutes`}
+                    className='rightRow doJustWeen'
+                  ><i className='cap'>{zt.a}{zt.w && 
+                     <i className='fa-regular fa-clone fa-xs tealT gapL' title={mlt}></i>}
+                   </i>
+                    <span className='rightText medSm grayT'
+                    ><i className={mxQ && zt.b > mxQ ? 'redT' : '' }> {timeAs(zt.b)}</i><n-sm>{mxQ && "/"+timeAs(mxQ)}</n-sm> {cnv}</span>
+                  </dd>
+              )}) : null}
+            </dl>
+          );
+      }})}
+    </dl>
+  );
+};

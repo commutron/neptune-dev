@@ -222,12 +222,6 @@ const QtStatus = ({ batchData, app, users, eng })=> {
   const remain = (max * 60) - tCount;
   
   const sty = {
-    // display: 'flex',
-    // flexDirection: 'column',
-    // justifyContent: 'center',
-    // alignItems: 'center',
-    // transition: 'all 150ms ease-in-out',
-    // margin: '0 1vmin',
     fontSize: 'var(--tx1)',
     minHeight: '40px',
     alignItems: 'center',

@@ -13,18 +13,17 @@ const PrivacyPanel = ({ app, user, isAdmin })=> {
   
   return(
     <div>
+      <PermissionHelp auths={Meteor.user().roles} admin={isAdmin} />
       
+      {user.breadcrumbs?.length > 0 &&
       <div className='rightText'>
         <p>
           <button
             onClick={()=>clearthisUserCrumbs()}
             className='smallAction blackHover'
-          >Clear your non-essential usage data</button>
+          >Clear your debug tracking data</button>
         </p>
-      </div>
-      
-      <PermissionHelp auths={Meteor.user().roles} admin={isAdmin} />
-      
+      </div>}
     </div>
   );
 };

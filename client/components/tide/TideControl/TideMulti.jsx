@@ -10,7 +10,7 @@ const TideMulti = ({ user, app, brancheS, plainBatchS })=> (
 	<ModelNative
     dialogId='multiprojdialog'
     title={`Multiple ${Pref.xBatch} Mode`}
-    icon='fa-solid fa-layer-group'
+    icon='fa-regular fa-clone'
     colorT='tealT'
     dark={true}
     >
@@ -284,7 +284,7 @@ export const MultiRunning = ({ lock })=> {
       <i>
         <span className='fa-stack tideIcon'>
           <i className="fa-solid fa-circle-notch fa-stack-2x fa-spin tideIndicate"></i>
-          <i className="fa-solid fa-layer-group fa-stack-1x" data-fa-transform="shrink-1"></i>
+          <i className="fa-regular fa-clone fa-stack-1x" data-fa-transform="shrink-1"></i>
         </span>
       </i>
     </button>
@@ -309,7 +309,7 @@ export const MultiDivert = ({ lock })=> {
 	    <b>
 	      <span className='fa-stack tideIcon'>
 	        <i className="fas fa-circle-notch fa-stack-2x tideIndicate"></i>
-	        <i className="fa-solid fa-layer-group fa-stack-1x" data-fa-transform="shrink-1"></i>
+	        <i className="fa-regular fa-clone fa-stack-1x" data-fa-transform="shrink-1"></i>
 	      </span>
 	    </b>Multi</button>
     </n-tide-task>

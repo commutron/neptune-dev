@@ -288,57 +288,6 @@ Meteor.methods({
     }
   },
   
-  generateQualityTimeTasks() {
-    const appDoc = AppDB.findOne({orgKey: Meteor.user().orgKey});
-    if(appDoc && Roles.userIsInRole(Meteor.userId(), 'admin')) {
-      try{
-        const qtExists = appDoc.qtTasks;
-        if(qtExists) {
-          return false;
-        }else{
-          const inter = GroupDB.findOne({ internal: true },{fields:{'_id':1}});
-          
-          AppDB.update({orgKey: Meteor.user().orgKey}, {
-            $set : { 
-              qtTasks : [],
-              internalID : inter._id
-          }});
-          AppDB.update({orgKey: Meteor.user().orgKey}, {
-            $unset : { 
-              ancillaryOption: ""
-          }});
-          
-          for(let b of appDoc.branches) {
-            if(b.open) {
-              const transferTask = b.subTasks;
-              AppDB.update({orgKey: Meteor.user().orgKey}, {
-                $push : { 
-                  qtTasks : {
-                    qtKey: new Meteor.Collection.ObjectID().valueOf(),
-                    qtTask: b.branch,
-                    brKey: b.brKey,
-                    fixed: false,
-                    position: Number(b.position),
-                    subTasks: transferTask
-                  }
-              }});
-              
-              AppDB.update({orgKey: Meteor.user().orgKey, 'branches.brKey': b.brKey}, {
-                $unset : { 
-                  'branches.$.subTasks': ""
-              }});
-            }
-          }
-          return true;
-        }
-      }catch (err) {
-        throw new Meteor.Error(err);
-      }
-    }else{
-      return false;
-    }
-  },
-  
   addTrackStepOption(step, type, branch) {
     if(Roles.userIsInRole(Meteor.userId(), 'admin')) {
       const app = AppDB.findOne({orgKey: Meteor.user().orgKey});

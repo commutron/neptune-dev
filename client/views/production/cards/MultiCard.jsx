@@ -20,7 +20,7 @@ const MultiCard = ({  })=> {
   	    <b>
   	      <span className='fa-stack tideIcon biggester'>
   	        <i className="fas fa-circle-notch fa-stack-2x tideIndicate"></i>
-  	        <i className="fa-solid fa-layer-group fa-stack-1x" data-fa-transform="shrink-1"></i>
+  	        <i className="fa-regular fa-clone fa-stack-1x" data-fa-transform="shrink-1"></i>
   	      </span>
   	    </b>
 	    </button>

@@ -192,11 +192,11 @@ export const splitTidebyPeople = (tideArray)=> {
     for(let ul of usersNice) {
       const userTide = tideArray.filter( x => x.who === ul );
       
-      const userMinutes = addTideArrayDuration(userTide);
+      const userSeconds = addTideArrayDuration(userTide); // rtn in seconds
+      const userTime = Math.round( moment.duration(userSeconds, 'seconds').asMinutes() );
       
-      totalTimeNum = totalTimeNum + userMinutes;
+      totalTimeNum = totalTimeNum + userTime;
       
-      const userTime = Math.round( userMinutes );
       peopleTime.push({
         uID: ul,
         uTime: userTime

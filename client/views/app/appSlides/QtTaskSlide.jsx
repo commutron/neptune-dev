@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 // import Pref from '/public/pref.js';
 // import { toast } from 'react-toastify';
 
@@ -22,12 +22,6 @@ const QtTaskSlide = ({ app, branchesS, isDebug })=> {
       });
     }
   }
-  
-  function runQTupdate() {
-    Meteor.call('generateQualityTimeTasks', (error)=>{
-      error && console.log(error);
-    });
-  }
 
   return(
     <div className='invert space3v overscroll'>
@@ -50,8 +44,6 @@ const QtTaskSlide = ({ app, branchesS, isDebug })=> {
       
       <QtTaskBuilder app={app} branchesS={branchesS} isDebug={isDebug} />
       
-      {app.qtTasks ?
-      <Fragment>
       <h2 className='dropCeiling'>Add New Quality Time Category</h2>
       <form onSubmit={(e)=>handleNewQualityTime(e)} className='rowWrap gapminC'>
         <span>
@@ -83,16 +75,6 @@ const QtTaskSlide = ({ app, branchesS, isDebug })=> {
           >Add</button>
         </span>
       </form>
-      </Fragment>
-      :
-      <Fragment>
-        <h2 className='dropCeiling'>Update Database for Quality Time</h2>
-        <button
-          title='run migration'
-          onClick={()=>runQTupdate()}
-          className='action blueSolid'>Run Update Function</button>
-      </Fragment>
-      }
     </div>
   );
 };

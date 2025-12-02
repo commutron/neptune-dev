@@ -36,6 +36,7 @@ const TimeTab = ({
         plusSet={plusSet}
         isDebug={isDebug}
         brancheS={brancheS}
+        app={app}
       />
       
       {conversion !== 'raw records' && rapidsData.length > 0 ?
