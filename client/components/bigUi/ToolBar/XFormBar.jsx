@@ -230,11 +230,11 @@ const QtStatus = ({ batchData, app, users, eng })=> {
   
   return(
     <div className='actionForm' style={sty}>
-      {qt && <span className='liteTip line1x noCopy centreText' data-tip={qt.subTasks.join(',\n')}>Qt: {qt.qtTask}</span>}
+      {qt && <span className='liteTip line1x noCopy cap centreText' data-tip={qt.subTasks.join(',\n')}>Qt: {qt.qtTask}</span>}
       
       {qt ?
         <Fragment>
-          <span className='line1x noCopy centreRow gapminC'
+          <span className='line1x noCopy centreRow centreText gapminC'
             >{TimeString(bq ? bq[1] : 0, 'minutes', 'h:mm')} {`${qt.fixed ? 'per ' + Pref.XBatch : 'per item'}`}</span>
 
           <span className={`line1x noCopy centreRow gapminC ${remain < 0 ? 'redT' : ''}`}

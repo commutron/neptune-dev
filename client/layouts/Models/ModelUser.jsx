@@ -189,6 +189,7 @@ const NotifyMini = ({ unice, inbox, users })=> {
     let match = uList.find( x => x.label === target.value);
     let message = !match ? 'Exact match not found. Please choose user from the list' : '';
     target.setCustomValidity(message);
+    target.reportValidity();
   }
   
   function sendOneToOne(e) {
@@ -236,7 +237,7 @@ const NotifyMini = ({ unice, inbox, users })=> {
                 list='userDatalist'
                 onInput={(e)=>userCheck(e.target)}
                 required
-                autoComplete={navigator.userAgent.indexOf("Firefox") !== -1 ? "off" : ""}
+                autoComplete={navigator.userAgent.indexOf("Firefox") !== -1 ? "off" : "on"}
               />
               <datalist id='userDatalist'>
               {uList.map( (e)=>(

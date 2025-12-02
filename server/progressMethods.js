@@ -138,34 +138,40 @@ const reduceTide = (tArr)=> {
 
 function collectBranchTime(privateKey, batchID) {
   return new Promise(resolve => {
-    const app = AppDB.findOne({orgKey: privateKey});
+    const app = AppDB.findOne({orgKey: privateKey},{
+                fields:{ 'branches': 1, 'qtTasks': 1 
+                }});
     const brancheS = sortBranches( app.branches.filter( b => b.open && b.pro ) );
 
-    const bx = XBatchDB.findOne({_id: batchID});
+    const bx = XBatchDB.findOne({_id: batchID},{
+                fields:{ 'tide': 1, 'quoteTimeCycles': 1, 'quantity': 1
+                }});
     
     let branchTime = [];
     
     if(bx) {
       const tide = bx.tide || [];
       
-      const qbr = bx.quoteTimeBreakdown;
-      const brT = qbr ? qbr.timesAsMinutes : [];
+      const bQTtimes = bx.quoteTimeCycles || [];
 
       for(let branch of brancheS) {
    
         const brArray = tide.filter( t => t.task === branch.branch );
         const brTime = reduceTide(brArray);
         
-        const brBgt = brT.find( x => x[0] === branch.branch+'|!X' );
-        const sbtsk = !brBgt && brT.filter( x => x[0].includes(branch.branch) );
-        const budgt = !brBgt ? sbtsk.reduce((a,b)=> a + b[1], 0) : brBgt[1];
-        
-        const compr = !qbr ? null : budgt;
+        let brQTime = 0;
+        let brQtTasks = app.qtTasks.filter( q => q.brKey === branch.brKey );
+        for( let qtTask of brQtTasks ) {
+          const bqchunk = bQTtimes.find( bqt => bqt[0] === qtTask.qtKey );
+          const bsettime = !bqchunk ? 0 : qtTask.fixed ? bqchunk[1] : ( bqchunk[1] * (bx.quantity || 0) );
+          brQTime += bsettime;
+        }
+        const budgt = bQTtimes.length === 0 ? null : brQTime;
         
         branchTime.push({
           branch: branch.branch,
           time: brTime,
-          budget: compr
+          budget: budgt
         });
       }
       resolve({

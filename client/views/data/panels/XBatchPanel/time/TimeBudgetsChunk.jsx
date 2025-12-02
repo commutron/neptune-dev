@@ -96,8 +96,6 @@ const TimeBudgetsChunk = ({
   
   const cnv = conversion === 'minutes' ? 'min' : conversion === 'percent' ? '%' : 'hrs';
   
-  console.log(branchTime);
-  
   return(
     <div>
       <div className='centreRow comfort'>

@@ -35,6 +35,6 @@ export function NonConMerge(ncListKeys, app, user, allKeys) {
 }
 
 export const onFire = ()=> (
-  navigator.userAgent.indexOf("Firefox") !== -1 ? "off" : ""
+  navigator.userAgent.indexOf("Firefox") !== -1 ? "off" : "on"
 // ^^^ workaround for persistent bug in desktop Firefox ^^^
 );
