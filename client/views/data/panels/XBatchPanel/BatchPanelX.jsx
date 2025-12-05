@@ -33,8 +33,6 @@ const BatchPanelX = ({
 })=> {
   
   const b = batchData;
-  
-  console.log(b.quoteTimeCycles);
 
   const floorRelease = b.releases.find( x => x.type === 'floorRelease');
   const released = floorRelease ? true : false;

@@ -471,9 +471,10 @@ Meteor.publish('hotDataPlus', function(scanOrb, keyMatch){
                       Meteor.call( 'serialLookup', scanOrb ) :
                       Meteor.call( 'batchLookup', scanOrb ) ? scanOrb : false;
 
-  const bxData = XBatchDB.findOne({batch: trueBatch, orgKey: orgKey});
-  
+  const bxData = XBatchDB.findOne({batch: trueBatch, orgKey: orgKey},{ fields: {'widgetId':1,'versionKey':1} });
   const wID = !bxData ? false : bxData.widgetId;
+  const vKey = !bxData ? false : bxData.versionKey;
+  
   if(!this.userId){
     return this.ready();
   }else{
@@ -506,7 +507,7 @@ Meteor.publish('hotDataPlus', function(scanOrb, keyMatch){
           'widget': 1,
           'flows': 1
         }}),
-      VariantDB.find({widgetId: wID, orgKey: orgKey}, {
+      VariantDB.find({widgetId: wID, versionKey: vKey, orgKey: orgKey}, {
         fields: {
           'orgKey': 0
         }}),

@@ -211,6 +211,11 @@ const FormToggle = ({
 const QtStatus = ({ batchData, app, users, eng })=> {
   
   let qt = app.qtTasks.find( q => q.qtKey === eng.qtKey );
+  
+  if(!qt) {
+    return null;
+  }
+  
   let pr = users.filter( u=> u.engaged && u.engaged.qtKey === eng.qtKey && u.engaged.tName === eng.tName ).length;
   
   let bq = (batchData?.quoteTimeCycles || []).find( q => q[0] === eng.qtKey );
@@ -230,18 +235,13 @@ const QtStatus = ({ batchData, app, users, eng })=> {
   
   return(
     <div className='actionForm' style={sty}>
-      {qt && <span className='liteTip line1x noCopy cap centreText' data-tip={qt.subTasks.join(',\n')}>Qt: {qt.qtTask}</span>}
+      <span className='liteTip line1x noCopy cap centreText' data-tip={qt.subTasks.join(',\n')}>Qt: {qt.qtTask}</span>
       
-      {qt ?
-        <Fragment>
-          <span className='line1x noCopy centreRow centreText gapminC'
-            >{TimeString(bq ? bq[1] : 0, 'minutes', 'h:mm')} {`${qt.fixed ? 'per ' + Pref.XBatch : 'per item'}`}</span>
+      <span className='line1x noCopy centreRow centreText gapminC'
+        >{TimeString(bq ? bq[1] : 0, 'minutes', 'h:mm')} {`${qt.fixed ? 'per ' + Pref.XBatch : 'per item'}`}</span>
 
-          <span className={`line1x noCopy centreRow gapminC ${remain < 0 ? 'redT' : ''}`}
-          >{bq ? <CountDownNum dur={remain} peers={pr} /> : <n-num>0:00:00</n-num>} remaining</span>
-          
-        </Fragment>
-      : null}
+      <span className={`line1x noCopy centreRow gapminC ${remain < 0 ? 'redT' : ''}`}
+      >{bq ? <CountDownNum dur={remain} peers={pr} /> : <n-num>0:00:00</n-num>} remaining</span>
     </div>
   );
 };
