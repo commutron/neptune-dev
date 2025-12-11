@@ -92,6 +92,7 @@ const InfoTab = ({
               more={
                 <ReleaseAction 
                   id={b._id} 
+                  createdAt={b.createdAt}
                   rType='floorRelease'
                   actionText={Pref.release}
                   contextText={`to ${Pref.floor}`}

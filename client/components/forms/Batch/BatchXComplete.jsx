@@ -1,6 +1,6 @@
 import React, { useState, useLayoutEffect, useEffect, Fragment } from 'react';
 import moment from 'moment';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import { toast } from 'react-toastify';
 import '/client/components/riverX/waterfall/style';
 import Flatpickr from 'react-flatpickr';

@@ -19,7 +19,11 @@ const ProdData = ({
   
   useEffect( ()=> {
     return ()=> {
-      if(!(user?.engaged)) { Session.set('now', null) }
+      if(!user) {
+        null;
+      }else if(!(user.engaged)) { 
+        Session.set('now', null);
+      }
     };
   }, []);
   

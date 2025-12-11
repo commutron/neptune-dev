@@ -52,9 +52,8 @@ const EventCustom = ({ batchId })=> {
           type='submit'
           formMethod='dialog'
           id='gocevent'
-          className='medBig'
+          className='medBig action nSolid'
           form='ceventSave'
-          className='action nSolid'
         >Save</button>
         
       </form>

@@ -1,11 +1,11 @@
 import React, { useState, Fragment } from 'react';
 import moment from 'moment';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/themes/airbnb.css';
 
-const ReleaseAction = ({ id, rType, actionText, contextText, qtReq, qReady })=> {
+const ReleaseAction = ({ id, createdAt, rType, actionText, contextText, qtReq })=> {
   
   const [ datetime, datetimeSet ] = useState( moment().format() );
   
@@ -30,7 +30,7 @@ const ReleaseAction = ({ id, rType, actionText, contextText, qtReq, qReady })=> 
   const title = access ? `${Pref.release} ${Pref.xBatch} to the ${Pref.floor}` : Pref.norole;
   
   return(
-    <div className='centre listSortInput' style={sty} disabled={!qReady}>
+    <div className='centre listSortInput' style={sty} disabled={qtReq}>
       {qtReq && 
         <span className='borderBlack bottomLine centreText'>
           <strong className='med'>Quote Time Budget Required</strong><br />
@@ -41,9 +41,11 @@ const ReleaseAction = ({ id, rType, actionText, contextText, qtReq, qReady })=> 
         value={datetime}
         className='minWide'
         onChange={(e)=>handleDatetime(e)}
-        disabled={!access || qtReq}
+        disabled={!access || !createdAt || qtReq}
+        required
         options={{
           defaultDate: datetime,
+          minDate: createdAt,
           maxDate: moment().format(),
           minuteIncrement: 1,
           enableTime: true,

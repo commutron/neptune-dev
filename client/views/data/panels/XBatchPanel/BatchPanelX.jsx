@@ -18,6 +18,7 @@ import UnitSetAll from '/client/components/forms/ItemSerialsX/Parent/UnitSetAll'
 import CounterAssign from '/client/components/bigUi/ArrayBuilder/CounterAssign';
 import BatchIncomplete from '/client/components/forms/Batch/Child/BatchIncomplete';
 import EventCustom from '/client/components/forms/Batch/Child/EventCustom';
+import CounterOverride from '/client/components/forms/Batch/Child/CounterOverride';
 
 import RemoveBatch from '/client/components/forms/Batch/Child/RemoveBatch';
 
@@ -146,6 +147,14 @@ const BatchPanelX = ({
           seriesData={seriesData}
           access={canImp}
         />
+        {hasFall && floorRelease ?
+          <CounterOverride
+            bID={b._id}
+            quantity={b.quantity}
+            waterfall={batchData.waterfall}
+            floorRelease={floorRelease}
+          />
+        : null}
         <RemoveBatch
           batchData={batchData}
           seriesData={seriesData}
@@ -223,12 +232,21 @@ const BatchPanelX = ({
             icon='fa-solid fa-location-pin'
             lock={!canEvt}
           />
+          {hasFall && floorRelease ?
+            <PopoverAction 
+              doFunc={()=>openAction(b._id+'_countoverride_form')}
+              text='Counter Override'
+              icon='fa-solid fa-bars-progress'
+              lock={!canImp}
+            />
+          : null}
           <PopoverAction 
             doFunc={()=>openAction(b._id+'_incomplete_form')}
             text='Force Finish'
             icon='fa-solid fa-flag-checkered'
             lock={!canImp}
           />
+          
             
           {isDebug ?
           <Fragment>

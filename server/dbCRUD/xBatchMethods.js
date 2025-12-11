@@ -679,6 +679,19 @@ Meteor.methods({
       }}});
     }
   },
+  pushCounterOverrideEvent(bID, wtrfllKey, forcedatetime, quantity) {
+    if(!Roles.userIsInRole(Meteor.userId(), 'qa')) {
+      return false;
+    }else{
+      XBatchDB.update({_id: bID, orgKey: Meteor.user().orgKey, 'waterfall.wfKey': wtrfllKey}, {
+        $push : { 'waterfall.$.counts': { 
+          tick: Number(quantity),
+          time: new Date(forcedatetime),
+          who: Meteor.userId()
+      }}});
+      return true;
+    }
+  },
   
   // Finish Batch
   finishBatchX(batchId, privateKey) {
