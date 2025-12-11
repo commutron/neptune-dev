@@ -244,6 +244,7 @@ Meteor.methods({
             period: Number(period), // 1, 6, 30 // in days
             grace: Number(grace), // in days
             tasks: [],
+            qtTime: Number(0),
             disable: false
           }
         }});
@@ -316,14 +317,15 @@ Meteor.methods({
     }
   },
   
-  setServiceTasks(eqId, serveKey, tasksArr) {
+  setServiceTasks(eqId, serveKey, tasksArr, qtNum) {
     const auth = Roles.userIsInRole(Meteor.userId(), ['equipSuper','edit']);
     
     if(auth && Array.isArray(tasksArr)) {
       EquipDB.update({_id: eqId, orgKey: Meteor.user().orgKey, 'service.serveKey': serveKey}, {
         $set : {
           'service.$.updatedAt': new Date(),
-          'service.$.tasks': tasksArr
+          'service.$.tasks': tasksArr,
+          'service.$.qtTime': Number(qtNum)
         }});
       return true;
     }else{

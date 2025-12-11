@@ -535,27 +535,6 @@ Meteor.methods({
       throw new Meteor.Error(err);
     }
   },
-  
-  setBatchXTimeBreakdown(batchId, qtArray) {
-    // Depreciated
-    try{
-      const accessKey = Meteor.user().orgKey;
-      if(Roles.userIsInRole(Meteor.userId(), ['sales', 'edit'])) {
-        XBatchDB.update({_id: batchId, orgKey: accessKey}, {
-          $set : { 
-            quoteTimeBreakdown: {
-              updatedAt: new Date(),
-              timesAsMinutes: qtArray
-            }
-          }});
-        return true;
-      }else{
-        return false;
-      }
-    }catch (err) {
-      throw new Meteor.Error(err);
-    }
-  },
 
   //// River \\\\
   setRiverX(batchId, riverId) {

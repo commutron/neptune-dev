@@ -17,7 +17,6 @@ export const SortSelect = ({ sortState, changeFunc, extraClass })=> (
   </span>
 );
 
-
 export const FocusSelect = ({ gList, focusState, changeFunc })=> (
   <span className='liteTip' data-tip={`Filter by ${Pref.group}`}>
     <i className='fa-solid fa-industry fa-fw darkgrayT'></i>

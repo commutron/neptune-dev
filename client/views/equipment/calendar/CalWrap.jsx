@@ -3,21 +3,27 @@ import moment from 'moment';
 import 'moment-business-time';
 
 import CalComp from './CalComp';
+import { FilterSelect } from '/client/components/smallUi/ToolBarTools';
 
-const CalWrap = ()=> {
+const CalWrap = ({ brancheS })=> {
   
   const mounted = useRef(true);
-  const [ work, workSet ] = useState(false); 
+  const [ brKey, brKeySet ] = useState(null);
+  const [ work, workSet ] = useState(false);
   const [ float, floatSet ] = useState( false );
   
   const [ events, eventsSet ] = useState([]);
   
-  function getEvents(dateStr) {
+  const handleEqBr = (val)=> {
+  	brKeySet(val === 'false' ? null : val === 'falcility' ? false : val);
+  };
+  
+  function getEvents(dateStr, force) {
   	workSet(true);
   	
   	const date = new Date(dateStr);
 		
-		if( date.getMonth() === ( float && float.getMonth() ) ) {
+		if( !force && date.getMonth() === ( float && float.getMonth() ) ) {
 			null;
 		  workSet(false);
 		}else{
@@ -28,7 +34,7 @@ const CalWrap = ()=> {
   		const incDone = moment().isSameOrAfter(startDate);
   		const incNext = moment().isSameOrBefore(endDate);
   
-    	Meteor.call('predictMonthService', startDate, endDate, incDone, incNext,
+    	Meteor.call('predictMonthService', startDate, endDate, incDone, incNext, brKey,
     		(err, re)=>{
     		err && console.log(err);
     		if(mounted.current) {
@@ -42,17 +48,31 @@ const CalWrap = ()=> {
   }
   
   useEffect( ()=> {
-  	getEvents( new Date() );
-  }, []);
-  
+  	getEvents( new Date(), true );
+  }, [brKey]);
+
   return(
-	  <div className='space3v vmarginhalf'>
-	  	{work ?	<div className='pulseload'></div> : null }
+	  <div className='uspace vmarginhalf'>
+	  	{work ?	<div className='pulseload'></div> : null}
+	  	
+	  	<div className='rowWrapR'>
+		  	<FilterSelect
+	        unqID='fltrEQbranch'
+	        title='Filter by Branch'
+	        selectList={[['falcility','Facility'],...brancheS.map( (br)=>[br.brKey, br.branch])]}
+	        selectState={brKey}
+	        falsey='All Branches'
+	        changeFunc={(v)=>handleEqBr(v.target.value)}
+	        icon='fas fa-code-branch'
+	        extraClass='minWfit'
+	      />
+      </div>
+        
 	  	<CalComp
 	  	  events={events}
 	  	  getEvents={getEvents}
 	  	  defaultView='week'
-	  	  height='70vh'
+	  	  height='74dvh'
 	  	/>
 	  </div>
   );

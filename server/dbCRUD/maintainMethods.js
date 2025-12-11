@@ -41,7 +41,6 @@ const nextService = (sv)=> {
       return new Date(next.format());
     }else{
       next.add(sv.recur, sv.timeSpan);
-      
       // console.log(next);
     }
   }
@@ -372,16 +371,18 @@ Meteor.methods({
     }finally{ return true }
   },
   
-  predictMonthService(startDate, endDate, incDone, incNext) {
+  predictMonthService(startDate, endDate, incDone, incNext, brKey) {
     this.unblock();
     
     const orgKey = Meteor.user().orgKey;
     syncLocale(orgKey);
     const now = moment().tz(Config.clientTZ);
-    
+    const eqquery = brKey !== null ? {branchKey: brKey, hibernate: { $ne: true}} :
+                                     {hibernate: { $ne: true}};
     let futureEvents = [];
     
-    EquipDB.find({hibernate: { $ne: true}},{fields:{'alias':1,'service':1,'online':1}})
+    EquipDB.find(eqquery,
+      {fields:{'alias':1,'service':1,'online':1}})
       .forEach( (eq)=> {
         
         if(!incNext) {

@@ -254,7 +254,7 @@ const TideTaskExplicit = ({
   let taskops = [];
   for( br of brancheS ) {
     let brops = [];
-    const qttasks = app.qtTasks.filter( q => q.brKey === br.brKey );
+    const qttasks = (app.qtTasks || []).filter( q => q.brKey === br.brKey );
     for(let qs of qttasks) {
       for(let st of qs.subTasks) {
         brops.push([br.branch, st, qs.qtKey]);

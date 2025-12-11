@@ -13,7 +13,7 @@ const Landing = ({ equipData, maintainData, issues, app, brancheS })=> {
     <div>
       
       <div className='wide rowWrap'>
-        <span className='rowWrap gapsC'>
+        <span className='rowWrap gapminC'>
           <NumBox
             num={equipData.filter( e => e.online && !e.hibernate ).length}
             name='Online'
@@ -50,7 +50,7 @@ const Landing = ({ equipData, maintainData, issues, app, brancheS })=> {
         </span>
       </div>
       
-      <CalWrap />
+      <CalWrap brancheS={brancheS} />
 
     </div>
   );

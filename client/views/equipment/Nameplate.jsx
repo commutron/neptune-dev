@@ -3,7 +3,7 @@ import moment from 'moment';
 import 'moment-timezone';
 import 'moment-business-time';
 import { toast } from 'react-toastify';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 import ContactForm from '/client/components/forms/Equip/ContactForm';
 import ActionFunc from '/client/components/tinyUi/ActionFunc';
@@ -88,12 +88,20 @@ const DataLine = ({ l, n })=>(
   <p className='split cap'>{l}: <n-num>{n}</n-num></p>
 );
 
-const CRMLine = ({ icon, data })=>( 
-  <dd><n-fa0><i className={`fa-solid ${icon} fa-fw gapR`}></i></n-fa0>{data}</dd>
-);
-const CRMCopy = ({ icon, data, doCopy })=>( 
-  <dd><n-fa0><i className={`fa-solid ${icon} fa-fw gapR`}></i></n-fa0><CopyLink text={data} doCopy={doCopy} /></dd>
-);
+const CRMLine = ({ icon, data })=> {
+  if(data) {
+    return(
+      <dd><n-fa0><i className={`fa-solid ${icon} fa-fw gapR`}></i></n-fa0>{data}</dd>
+    );
+  }
+};
+const CRMCopy = ({ icon, data, doCopy })=> {
+  if(data) {
+    return( 
+      <dd><n-fa0><i className={`fa-solid ${icon} fa-fw gapR`}></i></n-fa0><CopyLink text={data} doCopy={doCopy} /></dd>
+    );
+  }
+};
 
 const CopyLink = ({text, doCopy})=> (
   <a onClick={()=>doCopy(text)} className='textLinkButton'>{text}{text && <i className="fa-regular fa-copy gapL onlyHover"></i>}</a>

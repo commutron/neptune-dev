@@ -131,9 +131,8 @@ export const TimeString = (num, unit)=> {
 
 export const LuxonTestString = ()=> {
   let dur = Duration.fromObject({ 'minutes': -95 });
-  let str = dur.toFormat('h:mm:ss',{ signMode: "negativeLargestOnly" });
+  // let str = dur.toFormat('h:mm:ss',{ signMode: "negativeLargestOnly" });
   let hum = dur.toHuman({ listStyle: "long", showZeros: true });
-  let shftF = dur.shiftTo('hours','minutes','seconds').toFormat('h:mm:ss',{ signMode: "negativeLargestOnly" });
   let shftH = dur.shiftTo('hours','minutes','seconds').toHuman({ listStyle: "short", showZeros: false });
   
   let nowtime = DateTime.now();
@@ -148,9 +147,7 @@ export const LuxonTestString = ()=> {
     
   return(
     <ul>
-      <li><n-num>dur toFormat time: {str}</n-num></li>
       <li><n-num>dur toHuman: {hum}</n-num></li>
-      <li><n-num>dur toCustom Format: {shftF}</n-num></li>
       <li><n-num>dur toCustom Human: {shftH}</n-num></li>
       <br />
       
@@ -159,7 +156,6 @@ export const LuxonTestString = ()=> {
       <li><n-num>now toLocaleString Preset: {nowtime.toLocaleString("DATETIME_MED_WITH_SECONDS")}</n-num></li>
       
       <br />
-      <li><n-num>now toFormat datetime: {nowtime.toFormat("MMM d, h:mm:ss a")}</n-num></li>
       <li><n-num>now toLocaleString datetime: {nowtime.toLocaleString(datetimecustom)}</n-num></li>
     
     </ul>

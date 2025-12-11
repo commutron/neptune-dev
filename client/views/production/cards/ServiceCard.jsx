@@ -1,13 +1,13 @@
 import React, { useMemo } from 'react';
 import moment from 'moment';
 import 'moment-business-time';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 import TimeGate from '/client/components/tide/TimeGate';
 import ServiceDock from '/client/components/riverX/ServiceDock';
 
 const ServiceCard = ({ eqData, maintData, brancheS, tideKey, timeOpen, engagedPro, engagedMlti })=> {
-  
+
   const m = maintData;
   
   const serve = useMemo( ()=> 
@@ -47,6 +47,7 @@ const ServiceCard = ({ eqData, maintData, brancheS, tideKey, timeOpen, engagedPr
         <ServiceDock
           maintData={maintData}
           serve={serve}
+          tideKey={tideKey}
         />
       }
     </div>

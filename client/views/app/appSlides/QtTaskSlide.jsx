@@ -22,6 +22,12 @@ const QtTaskSlide = ({ app, branchesS, isDebug })=> {
       });
     }
   }
+  
+  function runQTupdate() {
+    Meteor.call('generateQualityTimeTasks', (error)=>{
+      error && console.log(error);
+    });
+  }
 
   return(
     <div className='invert space3v overscroll'>
@@ -41,6 +47,9 @@ const QtTaskSlide = ({ app, branchesS, isDebug })=> {
         <i> Capitalizing is unnecessary in most cases and only recommended for abbreviations.</i>
         <i> Text Areas allow for multiple entries by seperating by comma (,) or semicolon (;) </i>
       </p>
+      
+      {app.qtTasks ?
+      <Fragment>
       
       <QtTaskBuilder app={app} branchesS={branchesS} isDebug={isDebug} />
       
@@ -75,6 +84,16 @@ const QtTaskSlide = ({ app, branchesS, isDebug })=> {
           >Add</button>
         </span>
       </form>
+      </Fragment>
+      :
+      <Fragment>
+        <h2 className='dropCeiling'>Update Database for Quality Time</h2>
+        <button
+          title='run migration'
+          onClick={()=>runQTupdate()}
+          className='action blueSolid'>Run Update Function</button>
+      </Fragment>
+      }
     </div>
   );
 };

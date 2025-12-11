@@ -1,7 +1,6 @@
 import React from 'react';
 import moment from 'moment';
 import 'moment-business-time';
-import Pref from '/client/global/pref.js';
 
 import TabsVert from '/client/components/smallUi/Tabs/TabsVert';
 
@@ -53,6 +52,7 @@ const ServiceSlides = ({
                   serveKey={sv.serveKey}
                   name={sv.name}
                   tasks={sv.tasks}
+                  qtTime={sv.qtTime || 0}
                   lockOut={eq.hibernate}
                 />
                 <ServeForm
@@ -109,6 +109,16 @@ const ServiceSlides = ({
                 </div>
                 
                 <div className='max250'>
+                  {sv.qtTime &&
+                    <div className='vmarginhalf'>
+                      <KpiStat
+                        num={<i className='fa-solid fa-hourglass-start fa-fw'></i>}
+                        name={sv.qtTime + ' Minutes Quoted'}
+                        color='var(--emerald)'
+                      />
+                    </div>
+                  }
+                  
                   <KpiStat
                     num={`${cmplt}/${req}`}
                     name='Completed When Required'

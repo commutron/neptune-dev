@@ -1,9 +1,12 @@
 import React, { useState, Fragment } from 'react';
-// import Pref from '/client/global/pref.js';
+// import Pref from '/public/pref.js';
 import { toast } from 'react-toastify';
 import ModelInline from '/client/layouts/Models/ModelInline';
+// import { CountDownNum } from '/client/components/smallUi/ClockString';
 
-const ServiceDock = ({ maintData, serve })=> {
+const ServiceDock = ({ maintData, serve
+  // tideKey
+})=> {
   
   const not = maintData.status === 'notrequired';
   const willnot = maintData.status === 'willnotrequire';
@@ -57,6 +60,14 @@ const ServiceDock = ({ maintData, serve })=> {
   
   return(
     <Fragment>
+      
+      <div className='fakeFielset centreText'>
+        <div className='beside gapminC'>
+          <i className='fa-solid fa-hourglass-start fa-fw' style={{color:'var(--emerald)'}}></i>
+          <span><n-num>{serve.qtTime || 0}</n-num> Minutes Quoted</span>
+        </div>
+        {/*<div>{serve.qtTime && <CountDownNum dur={serve.qtTime * 60} peers={1} />} Remaining</div>*/}
+      </div>
       
       {!noReq &&
   			<div className='fakeFielset overscroll'>
