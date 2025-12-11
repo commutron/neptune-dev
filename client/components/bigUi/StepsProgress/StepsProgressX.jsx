@@ -39,7 +39,7 @@ const StepsProgressX  = ({
             color='blackT' 
           />
           
-          {totalI !== b.quantity ?  
+          {hasSeries && totalI !== b.quantity ?  
             <NumBox
               num={totalI}
               name={Pref.items}
@@ -79,8 +79,8 @@ const StepsProgressX  = ({
             wFlows={widgetData.flows}
             river={b.river}
             riverTitle={riverTitle}
-            lock={b.completed ? Pref.isDone :
-                 !hasSeries ? `No ${Pref.series}` : false}
+            lock={b.completed ? Pref.isDone : false}
+                // !hasSeries ? `No ${Pref.series}` : false}
             access={canRun} />
         }
         {unitsExist &&
@@ -94,7 +94,7 @@ const StepsProgressX  = ({
       
       {wflDt.length > 0 ? 
         <details className='cap noCopy vmarginquarter bottomLine'
-          open={!truncate || rvrDt.length === 0}>
+          open={!truncate || !hasSeries}>
         <summary className='nospace line2x autoHeight'><b>{Pref.fall}</b></summary>
     
         {wflDt.map( (entry)=>{
@@ -113,7 +113,7 @@ const StepsProgressX  = ({
         </details>
       : null}
       
-      {rvrDt.length > 0 ? 
+      {rvrDt.length > 0 && hasSeries ? 
         <span className='cap noCopy vmarginquarter'>
         
         {rvrDt.map( (entry)=>{

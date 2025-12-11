@@ -25,8 +25,8 @@ const BatchDetails = ({
                     
   const ncCols = ['NC total', 'NC remain', 'NC rate', 'NC items', Pref.scrap, Pref.rapidEx];
 
-  const fullHead = ['sales order','active',...statusCols,'released',...progCols,'Perfomance',...ncCols,''];
-  const brchHead = ['sales order','active',...statusCols,...progCols,'Perfomance',...ncCols,''];
+  const fullHead = ['sales order','active',...statusCols,'released',...progCols,'Perfomance',...ncCols,'Production'];
+  const brchHead = ['sales order','active',...statusCols,...progCols,'Perfomance',...ncCols,'Production'];
   
   const headersArr = branchArea ? brchHead : fullHead;
   

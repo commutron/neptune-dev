@@ -26,6 +26,18 @@ const KittingChecks = ({
         
         <div>
           <TrinaryStat
+            status={tBatch.serialize}
+            name=''
+            title={tBatch.serialize ? 'Serialized' : 'Not Serialized'}
+            size=''
+            onIcon='fa-solid fa-layer-group fa-2x greenT'
+            midIcon='fa-solid fa-cubes-stacked fa-2x darkgrayT' 
+            offIcon='fa-solid fa-cubes-stacked fa-2x darkgrayT' 
+          />
+        </div>
+        
+        <div>
+          <TrinaryStat
             status={qReady}
             name='Quote Time Budget'
             title={qReady ? 'Entered' : 'No'}
@@ -125,8 +137,8 @@ const KittingChecks = ({
           unholdText={`Released without ${Pref.shortfall}`}
           undoText='Cancel Release'
           contextText='to the floor'
-          lockout={isDone || isRO || !qReady}
-          qReady={qReady}
+          lockout={isDone || isRO || (!qReady && tBatch.serialize)}
+          qtReq={!qReady && tBatch.serialize}
           isAuth={isAuth}>
           <TrinaryStat
             status={releasedToFloor ? !floorRelease.caution ? true : false : null}

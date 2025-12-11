@@ -26,7 +26,7 @@ const UpstreamDetails = ({
   const statusCols = ['due','remaining workdays','items quantity','flow set','docs'];
   
   const branchClearCols = Array.from(branchClear, x => x.common );
-  const kitCols = ['Quote Set', ...branchClearCols, Pref.baseSerialPart+'s', 'released'];
+  const kitCols = ['Series','Quote Set', ...branchClearCols, Pref.baseSerialPart+'s', 'released'];
   
   // due == 'fulfill', 'ship'
   const kitHead = ['sales order','active',...statusCols,...kitCols,'print','production'];

@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import Pref from '/public/pref.js';
 
 import { ProWrap, ProWindow } from '/client/layouts/ProLayout';

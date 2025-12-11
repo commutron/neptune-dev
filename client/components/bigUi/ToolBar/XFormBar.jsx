@@ -26,7 +26,7 @@ const XFormBar = ({
   const i = itemData;
     
   const showBatch = b && srs && b.completed === false;
-
+  const showFall = b && !srs && b.completed === false;
   const showItem = srs && i && (i.completed === false || rapIs);
     
   const pastPN = srs && srs.shortfall ? [...new Set( Array.from(srs.shortfall, x => x.partNum ) )] : [];
@@ -103,6 +103,10 @@ const XFormBar = ({
           {QuoteTg}
           {NonTg}
         </div>
+      : !lockOutAll && showFall ?
+        <div style={tgsty}>
+          {QuoteTg}
+        </div>
       : null}
       <div style={{flexGrow: '2'}}>
         <TideFormLock 
@@ -112,11 +116,6 @@ const XFormBar = ({
           radioactive={radioactive}
           holding={b && b.hold}>
         {lockOutAll ? null 
-        :
-         b && !srs ?
-          <p className='whiteT centreText wide'>
-            <em>{Pref.nonCon}, {Pref.shortfall}, and {Pref.trackFirst} require a {Pref.series}</em>
-          </p>
         : 
           i && showItem ?
             show === 'NC' ?

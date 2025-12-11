@@ -6,7 +6,7 @@ const PermissionHelp = ({ auths })=> {
     <div className='space5x5 overscroll'>
     
       <h2>Available Permissions</h2>
-      <small>descriptions last updated by Matthew, Nov. 30, 2025</small>
+      <small>descriptions last updated by Matthew, Dec. 10, 2025</small>
       
       <RoleList
         userroles={auths}
@@ -117,7 +117,7 @@ const PermissionHelp = ({ auths })=> {
       
       <RoleList
         userroles={auths}
-        role=''
+        role='edit'
         tasks={[
           `Edit ${Pref.equip}, ${Pref.groups}, ${Pref.widgets}, ${Pref.xBatchs}`,
           `Add or edit ${Pref.widget} ${Pref.variants}`,
@@ -175,7 +175,7 @@ const PermissionHelp = ({ auths })=> {
       
       <RoleList
         userroles={auths}
-        role='Kiting'
+        role='kitting'
         tasks={[
           'Create new serial numbers (Explore & Process)',
           'Set Upstream clearances',

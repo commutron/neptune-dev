@@ -202,7 +202,7 @@ export const DownTaskBar = ({ subLink }) => (
 
 const FilterElement = ({ title, subTitle, goLink, branchON, changeBranch, icon, iconAdj, size, shrink, lock }) => (
   <button
-    aria-label={title}
+    aria-label={toCap(title, true)}
     style={shrink ? {minHeight:'unset',padding:'3px 0'} : {}}
     className={
       `taskLink taskTip numFont 

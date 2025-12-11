@@ -29,7 +29,7 @@ const SeriesCreate = ({ batchData })=> {
     <ModelNative
       dialogId={batchData._id+'_series_form'}
       title={`Add ${Pref.series}`}
-      icon='fa-solid fa-cubes-stacked'
+      icon='fa-solid fa-layer-group'
       colorT='blueT'>
       
     <div>
@@ -71,15 +71,13 @@ export const SeriesDelete = ({ batchId, seriesId, srs })=> {
     });
   }
   
-  const emptySRS = srs.items.length === 0 &&
-                   srs.nonCon.length === 0 &&
-                   srs.shortfall.length === 0;
+  const emptySRS = srs.items.length === 0 && srs.nonCon.length === 0 && srs.shortfall.length === 0;
   
   return(
     <ModelNative
       dialogId={batchId+'_seriesdelete_form'}
       title={`Remove Empty ${Pref.series}`}
-      icon='fa-solid fa-cubes-stacked'
+      icon='fa-solid fa-layer-group'
       colorT='redT'>
       
     <div>

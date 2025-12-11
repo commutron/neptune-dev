@@ -57,7 +57,7 @@ function shrinkWhole(bData, now, accessKey, shipLoad) {
     
     const quantity = bData.quantity;
     const serialize = bData.serialize;
-    const rFlow = bData.river ? true :
+    const rFlow = serialize && bData.river ? true :
                   bData.waterfall && bData.waterfall.length > 0 ? false : 
                   null;
     
@@ -132,7 +132,7 @@ function checkMinify(bData, accessKey) {
     
     const quantity = bData.quantity;
     const serialize = bData.serialize;
-    const rFlow = bData.river ? true :
+    const rFlow = serialize && bData.river ? true :
                   bData.waterfall && bData.waterfall.length > 0 ? false : 
                   null;
              

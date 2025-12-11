@@ -173,14 +173,14 @@ const BatchPanelX = ({
           <PopoverAction 
             doFunc={()=>openAction(b._id+'_series_form')}
             text={`Add ${Pref.series}`}
-            icon='fa-solid fa-cubes-stacked'
+            icon='fa-solid fa-layer-group'
             lock={!canSrs}
           />
           :
           <PopoverAction 
             doFunc={()=>openAction(b._id+'_seriesdelete_form')}
             text={`Remove Empty ${Pref.series}`}
-            icon='fa-solid fa-cubes-stacked'
+            icon='fa-solid fa-layer-group'
             lock={!canSrs}
           />
           }

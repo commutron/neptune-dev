@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import Pref from '/public/pref.js';
@@ -16,6 +16,12 @@ const ProdData = ({
   allxBatch,
   hotxBatch, hotxSeries, hotxRapids
 })=> {
+  
+  useEffect( ()=> {
+    return ()=> {
+      if(!(user?.engaged)) { Session.set('now', null) }
+    };
+  }, []);
   
   const brancheS = useMemo( ()=> branchesOpenSort(app?.branches || []), [app]);
   

@@ -21,31 +21,38 @@ function useInterval(callback, delay) {
   }, [delay]);
 }
 
-// const ClockString = ({ doThing })=> {
-//   const fstring = "MMM d, h:mm:ss a";
-  
-//   const [ chill ] = useState(Roles.userIsInRole(Meteor.userId(), 'readOnly'));
-  
-//   const [ clockTime, clockTimeSet ] = useState( DateTime.now().toFormat(fstring) );
-//   const [ tickingTime, tickingTimeSet ] = useState( Duration.fromObject({}) );
-
-//   useInterval( ()=> {
-//     clockTimeSet( DateTime.now().toFormat(fstring) );
-//     tickingTimeSet( tickingTime => tickingTime.plus({ seconds: 1}) );
-    
-//     if(doThing && tickingTime.as('minutes') > (chill ? Pref.noiseChill : Pref.noiseUpdate)) {
-//       tickingTimeSet( Duration.fromObject() );
-//       doThing(); }
-//   },1000);
-      
-//   return(
-//     <Fragment>
-//       <span className='grayT'>Updated {tickingTime.toHuman()} ago</span>
-//       <span className='grayT'>{clockTime}</span>
-//     </Fragment>
-//   );
-// };
 const ClockString = ({ doThing })=> {
+  const dtstring = {
+    month: 'short', 
+    day: 'numeric',
+    hour: 'numeric', 
+    minute: '2-digit', 
+    // second: '2-digit', 
+  };
+  
+  const [ chill ] = useState(Roles.userIsInRole(Meteor.userId(), 'readOnly'));
+  
+  const [ clockTime, clockTimeSet ] = useState( DateTime.now().toLocaleString(dtstring) );
+  const [ tickingTime, tickingTimeSet ] = useState( Duration.fromObject({}) );
+
+  useInterval( ()=> {
+    clockTimeSet( DateTime.now().toLocaleString(dtstring) );
+    tickingTimeSet( tickingTime => tickingTime.plus({ seconds: 1}) );
+    
+    if(doThing && tickingTime.as('minutes') > (chill ? Pref.noiseChill : Pref.noiseUpdate)) {
+      tickingTimeSet( Duration.fromObject() );
+      doThing(); }
+  },1000);
+      
+  return(
+    <Fragment>
+      <span className='grayT'>Updated {tickingTime.shiftTo('minutes', 'seconds').toHuman({ showZeros: false })} ago</span>
+      <span className='grayT'>{clockTime}</span>
+    </Fragment>
+  );
+};
+
+const ClockStringFallback = ({ doThing })=> {
   const fstring = "MMM d, h:mm:ss a";
   
   const [ chill ] = useState(Roles.userIsInRole(Meteor.userId(), 'readOnly'));
@@ -123,18 +130,38 @@ export const TimeString = (num, unit)=> {
 };
 
 export const LuxonTestString = ()=> {
-  let dur = Duration.fromObject({ 'minutes': 95 });
-  let str = dur.toFormat('h:mm:ss');
+  let dur = Duration.fromObject({ 'minutes': -95 });
+  let str = dur.toFormat('h:mm:ss',{ signMode: "negativeLargestOnly" });
   let hum = dur.toHuman({ listStyle: "long", showZeros: true });
+  let shftF = dur.shiftTo('hours','minutes','seconds').toFormat('h:mm:ss',{ signMode: "negativeLargestOnly" });
+  let shftH = dur.shiftTo('hours','minutes','seconds').toHuman({ listStyle: "short", showZeros: false });
   
   let nowtime = DateTime.now();
+  
+  let datetimecustom = {
+    month: 'short', 
+    day: 'numeric',
+    hour: 'numeric', 
+    minute: '2-digit', 
+    second: '2-digit', 
+  };
+    
   return(
     <ul>
-      <li><n-num>{str}</n-num></li>
-      <li><n-num>{hum}</n-num></li>
-      <li><n-num>{nowtime.toFormat("MMM d, h:mm:ss a")}</n-num></li>
-      <li><n-num>{nowtime.toString()}</n-num></li>
-      <li><n-num>{nowtime.toLocaleString()}</n-num></li>
+      <li><n-num>dur toFormat time: {str}</n-num></li>
+      <li><n-num>dur toHuman: {hum}</n-num></li>
+      <li><n-num>dur toCustom Format: {shftF}</n-num></li>
+      <li><n-num>dur toCustom Human: {shftH}</n-num></li>
+      <br />
+      
+      <br />
+      <li><n-num>now toLocaleString Default: {nowtime.toLocaleString()}</n-num></li>
+      <li><n-num>now toLocaleString Preset: {nowtime.toLocaleString("DATETIME_MED_WITH_SECONDS")}</n-num></li>
+      
+      <br />
+      <li><n-num>now toFormat datetime: {nowtime.toFormat("MMM d, h:mm:ss a")}</n-num></li>
+      <li><n-num>now toLocaleString datetime: {nowtime.toLocaleString(datetimecustom)}</n-num></li>
+    
     </ul>
   );
 };

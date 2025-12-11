@@ -40,7 +40,6 @@ export const ProWrap = ({
     }
     return ()=> {
       ScanListenerOff();
-      if(!(user?.engaged)) { Session.set('now', null) }
     };
   }, []);
   

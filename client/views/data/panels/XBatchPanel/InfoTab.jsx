@@ -95,7 +95,7 @@ const InfoTab = ({
                   rType='floorRelease'
                   actionText={Pref.release}
                   contextText={`to ${Pref.floor}`}
-                  qReady={b.quoteTimeBudget?.[0].timeAsMinutes > 0 && b.quoteTimeCycles?.length > 0}
+                  qtReq={hasSeries && b.quoteTimeBudget?.[0].timeAsMinutes > 0 && b.quoteTimeCycles?.length > 0}
                 />
               }
             />

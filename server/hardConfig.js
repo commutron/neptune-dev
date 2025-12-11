@@ -12,7 +12,7 @@ class Config {
     
     this.loginExpire = 0.54; // in days, auto logout after experation
     this.minUsernameChar = 4;
-    this.allowedSupers = 2; // max users that may hold a 'super' role
+    this.allowedSupers = 3; // max users that may hold a 'super' role
     this.interMax = 1; // max internal groups
     
     this.maxShift = 10; // max number of consecutive hours 

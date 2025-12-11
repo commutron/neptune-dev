@@ -5,7 +5,7 @@ import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/themes/airbnb.css';
 
-const ReleaseAction = ({ id, rType, actionText, contextText, qReady })=> {
+const ReleaseAction = ({ id, rType, actionText, contextText, qtReq, qReady })=> {
   
   const [ datetime, datetimeSet ] = useState( moment().format() );
   
@@ -31,13 +31,17 @@ const ReleaseAction = ({ id, rType, actionText, contextText, qReady })=> {
   
   return(
     <div className='centre listSortInput' style={sty} disabled={!qReady}>
-      {!qReady && <strong className='borderBlack bottomLine medBig centreText'>Quote Time Budget Required</strong>}
+      {qtReq && 
+        <span className='borderBlack bottomLine centreText'>
+          <strong className='med'>Quote Time Budget Required</strong><br />
+          <small>(Total & Tasks are mandatory when serialized)</small>
+        </span>}
       <Flatpickr
         id='relmanualDateTime'
         value={datetime}
         className='minWide'
         onChange={(e)=>handleDatetime(e)}
-        disabled={!access || !qReady}
+        disabled={!access || qtReq}
         options={{
           defaultDate: datetime,
           maxDate: moment().format(),
@@ -54,14 +58,14 @@ const ReleaseAction = ({ id, rType, actionText, contextText, qReady })=> {
           title={title}
           className='action blueSolid cap'
           style={sty}
-          disabled={!access || !qReady}
+          disabled={!access || qtReq}
         >{actionText} {contextText}</button>
       </p>
       <button
         onClick={(e)=>handleRelease(e, Pref.shortfall)}
         title={title}
         className='action orangeSolid cap'
-        disabled={!access || !qReady}
+        disabled={!access || qtReq}
       >{actionText} with {Pref.shortfall}</button>
     </div>
   );
@@ -74,7 +78,7 @@ export const ReleaseWrapper = ({
   releasedBool, releaseObj, 
   actionKeyword, actionText, 
   holdText, unholdText, undoText, contextText,
-  lockout, qReady, isAuth, children
+  lockout, qtReq, isAuth, children
 })=> {
   
   const clear = releasedBool === true;
@@ -120,9 +124,9 @@ export const ReleaseWrapper = ({
           <em>{Pref.xBatch} {batchNum}</em>
         </MenuItem>
         
-        {qReady === false &&
+        {qtReq &&
           <MenuItem disabled={true}>
-            <strong className='yellowT'>Quote Time Budget Required</strong>
+            <strong className='yellowT'>Quote Time Budget Required. (Total & Tasks)</strong>
           </MenuItem>
         }
         

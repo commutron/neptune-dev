@@ -120,7 +120,7 @@ const PeopleDataWrap = ({
           
           <div key={6}>
             <PermissionHelp 
-              auths={[...Pref.keys,...Pref.auths,...Pref.areas,'BRKt3rm1n2t1ng8r2nch']} 
+              auths={[...Pref.keys,...Pref.power,...Pref.auths,...Pref.areas,'BRKt3rm1n2t1ng8r2nch']} 
               admin={false} 
             />
           </div>
