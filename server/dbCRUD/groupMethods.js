@@ -162,55 +162,17 @@ Meteor.methods({
   },
   
   groupPrimeEmailSet(groupId, address, secondArr) {
-    if(typeof address === 'string') {
-      if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
-        const cleanprime = address === '' ? false : address;
-        GroupDB.update({_id: groupId, orgKey: Meteor.user().orgKey}, {
-          $set : { 
-            emailPrime: cleanprime,
-            emailSecond: secondArr
-          }
-        });
-        return true;
-      }else{
-        return false;
-      }
+    if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
+      const cleanprime = typeof address !== 'string' || address === '' ? false : address;
+      GroupDB.update({_id: groupId, orgKey: Meteor.user().orgKey}, {
+        $set : { 
+          emailPrime: cleanprime,
+          emailSecond: secondArr
+        }
+      });
+      return true;
     }else{
-      throw new Meteor.Error(403, 'Input is not a string');
+      return false;
     }
-  },
-  
-  groupSecondEmailSet(groupId, address) {
-    if(typeof address === 'string') {
-      if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
-        GroupDB.update({_id: groupId, orgKey: Meteor.user().orgKey}, {
-          $push : { 
-            emailSecond: address
-          }});
-          return true;
-      }else{
-        return false;
-      }
-    }else{
-      throw new Meteor.Error(403, 'Input is not a string');
-    }
-  },
-  groupSecondEmailCut(groupId, address) {
-    if(typeof address === 'string') {
-      if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
-        GroupDB.update({_id: groupId, orgKey: Meteor.user().orgKey}, {
-          $pull : {
-            emailSecond: address
-          }});
-          return true;
-      }else{
-        return false;
-      }
-    }else{
-      throw new Meteor.Error(403, 'Input is not a string');
-    }
-  },
-  
-  
-
+  }
 });

@@ -26,7 +26,7 @@ const GroupEmails = ({ gObj, clearOnClose })=> {
   };
   
   function addPrimeEmail() {
-    if(eprime) {
+    if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
       Meteor.call('groupPrimeEmailSet', gObj._id, eprime, emailTwo, (error, reply)=>{
         error && toast.error(error.reason || 'Error');
         if(reply) {
