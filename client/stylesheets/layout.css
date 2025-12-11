@@ -1023,6 +1023,7 @@ n-sm-model-content {
 .dropCeiling { margin-top: calc(4vh + 1rem); }
 .overscroll { margin-bottom: 5vh; }
 .overscroll2x { margin-bottom: 10vh; }
+.overscroll3x { margin-bottom: 15vh; }
 
 .topLine {
   padding-top: 0.5rem;

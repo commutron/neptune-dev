@@ -65,7 +65,7 @@ const EquipEmails = ({ id, stewards, liveUsers, selfclose })=> {
   
   return(
     <div className='centre vmarginhalf space'>
-      <div className='min300 max500'>
+      <div className='min300 max500 overscroll3x'>
         <form onSubmit={(e)=>saveEmails(e)}>
           <span>
             <div className='vmargin'>

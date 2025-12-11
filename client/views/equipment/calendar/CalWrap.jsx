@@ -15,7 +15,7 @@ const CalWrap = ({ brancheS })=> {
   const [ events, eventsSet ] = useState([]);
   
   const handleEqBr = (val)=> {
-  	brKeySet(val === 'false' ? null : val === 'falcility' ? false : val);
+  	brKeySet(val === 'false' ? null : val === '0undefined' ? false : val);
   };
   
   function getEvents(dateStr, force) {
@@ -59,7 +59,7 @@ const CalWrap = ({ brancheS })=> {
 		  	<FilterSelect
 	        unqID='fltrEQbranch'
 	        title='Filter by Branch'
-	        selectList={[['falcility','Facility'],...brancheS.map( (br)=>[br.brKey, br.branch])]}
+	        selectList={[['0undefined','Unassigned'],...brancheS.map( (br)=>[br.brKey, br.branch])]}
 	        selectState={brKey}
 	        falsey='All Branches'
 	        changeFunc={(v)=>handleEqBr(v.target.value)}

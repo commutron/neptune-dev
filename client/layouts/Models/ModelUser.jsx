@@ -112,7 +112,7 @@ const ModelUser = ({
         
         <UserMenuElement
           title='Messages'
-          doFunc={()=>FlowRouter.go('/user?slide=5')}
+          doFunc={()=>FlowRouter.go('/user?slide=4')}
           icon='fa-solid fa-message'
           tag={user.inbox?.length}
         />

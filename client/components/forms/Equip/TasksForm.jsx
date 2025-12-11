@@ -77,8 +77,8 @@ const TasksForm = ({ id, serveKey, tasks, qtTime, selfclose })=> {
   
   return(
     <div className='centre'>
-      <div className='w100 breaklines split doJustWeen'>
-        <span className='max300'>
+      <div className='w100 max300 breaklines split doJustWeen'>
+        <span>
           <label>Expected Time</label>
           <div className='small'>In Minutes</div>
         </span>

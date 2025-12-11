@@ -145,7 +145,7 @@ const EquipForm = ({
         <p>
           <label htmlFor='eBrKey'>{Pref.branch}<br />
             <select id='eBrKey' defaultValue={orBrKey} required>
-              <option value={false}>Facility</option>
+              <option value={false}>Unassigned</option>
               {brancheS.map( (br, index)=>(
                 <option key={index} value={br.brKey} className='cap'>{br.branch}</option>
               ))}
