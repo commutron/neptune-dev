@@ -137,8 +137,8 @@ const KittingChecks = ({
           unholdText={`Released without ${Pref.shortfall}`}
           undoText='Cancel Release'
           contextText='to the floor'
-          lockout={isDone || isRO || (!qReady && tBatch.serialize)}
-          qtReq={!qReady && tBatch.serialize}
+          lockout={isDone || isRO}
+          qtReady={qReady || !tBatch.serialize}
           isAuth={isAuth}>
           <TrinaryStat
             status={releasedToFloor ? !floorRelease.caution ? true : false : null}

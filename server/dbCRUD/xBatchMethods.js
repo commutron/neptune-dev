@@ -556,6 +556,21 @@ Meteor.methods({
       
       Meteor.defer( ()=>{ 
         Meteor.call('updateOneMinify', batchId, accessKey); 
+        Meteor.call('updateOneMovement', batchId, accessKey);
+        Meteor.call('updateOneNoise', batchId, accessKey);
+      });
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
+  syncRiver(batchId) {
+    const accessKey = Meteor.user().orgKey;
+    if(Roles.userIsInRole(Meteor.userId(), 'run')) {
+      Meteor.defer( ()=>{ 
+        Meteor.call('updateOneMinify', batchId, accessKey); 
+        Meteor.call('updateOneMovement', batchId, accessKey);
         Meteor.call('updateOneNoise', batchId, accessKey);
       });
       return true;

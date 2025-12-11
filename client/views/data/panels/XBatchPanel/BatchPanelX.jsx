@@ -64,10 +64,11 @@ const BatchPanelX = ({
   }
   
   const debugTrace = (kyd)=> {
-      const method = kyd === 'rebuid' ? 'rebuildOneTrace' :
+      const method = kyd === 'river' ? 'syncRiver' :
+                     kyd === 'rebuid' ? 'rebuildOneTrace' :
                      kyd === 'move' ? 'updateOneMovement' :
                      kyd === 'noise' ? 'updateOneNoise' : null;
-    if(isDebug && method) {
+    if((isDebug || accessR || accessQ) && method) {
       Meteor.apply(method, [batchData._id], {wait: true},
       (error)=> {
         error && console.log(error);
@@ -247,7 +248,14 @@ const BatchPanelX = ({
             lock={!canImp}
           />
           
-            
+          {isDebug || accessR || accessQ ?
+            <MatchButton 
+              title='Run Update to Fix Sync Issues'
+              text='Sync Process Flow'
+              icon='fa-solid fa-trowel-bricks'
+              doFunc={()=>debugTrace('river')}
+            />
+          : null}  
           {isDebug ?
           <Fragment>
             <MatchButton 

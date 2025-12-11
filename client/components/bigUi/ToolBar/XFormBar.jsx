@@ -85,7 +85,7 @@ const XFormBar = ({
             title={Pref.shortfall}
             check={show === 'S'}
             change={()=>showSet( 'S' )}
-            icon='fa-solid fa-exclamation fa-fw'
+            icon='fa-solid fa-triangle-exclamation fa-fw'
             color='butYellow'
           />;
   

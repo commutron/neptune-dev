@@ -5,7 +5,7 @@ import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/themes/airbnb.css';
 
-const ReleaseAction = ({ id, createdAt, rType, actionText, contextText, qtReq })=> {
+const ReleaseAction = ({ id, createdAt, rType, actionText, contextText, qtReady })=> {
   
   const [ datetime, datetimeSet ] = useState( moment().format() );
   
@@ -30,8 +30,8 @@ const ReleaseAction = ({ id, createdAt, rType, actionText, contextText, qtReq })
   const title = access ? `${Pref.release} ${Pref.xBatch} to the ${Pref.floor}` : Pref.norole;
   
   return(
-    <div className='centre listSortInput' style={sty} disabled={qtReq}>
-      {qtReq && 
+    <div className='centre listSortInput' style={sty} disabled={!qtReady}>
+      {!qtReady && 
         <span className='borderBlack bottomLine centreText'>
           <strong className='med'>Quote Time Budget Required</strong><br />
           <small>(Total & Tasks are mandatory when serialized)</small>
@@ -41,7 +41,7 @@ const ReleaseAction = ({ id, createdAt, rType, actionText, contextText, qtReq })
         value={datetime}
         className='minWide'
         onChange={(e)=>handleDatetime(e)}
-        disabled={!access || !createdAt || qtReq}
+        disabled={!access || !createdAt || !qtReady}
         required
         options={{
           defaultDate: datetime,
@@ -60,14 +60,14 @@ const ReleaseAction = ({ id, createdAt, rType, actionText, contextText, qtReq })
           title={title}
           className='action blueSolid cap'
           style={sty}
-          disabled={!access || qtReq}
+          disabled={!access || !qtReady}
         >{actionText} {contextText}</button>
       </p>
       <button
         onClick={(e)=>handleRelease(e, Pref.shortfall)}
         title={title}
         className='action orangeSolid cap'
-        disabled={!access || qtReq}
+        disabled={!access || !qtReady}
       >{actionText} with {Pref.shortfall}</button>
     </div>
   );
@@ -80,7 +80,7 @@ export const ReleaseWrapper = ({
   releasedBool, releaseObj, 
   actionKeyword, actionText, 
   holdText, unholdText, undoText, contextText,
-  lockout, qtReq, isAuth, children
+  lockout, qtReady, isAuth, children
 })=> {
   
   const clear = releasedBool === true;
@@ -126,7 +126,7 @@ export const ReleaseWrapper = ({
           <em>{Pref.xBatch} {batchNum}</em>
         </MenuItem>
         
-        {qtReq &&
+        {!qtReady &&
           <MenuItem disabled={true}>
             <strong className='yellowT'>Quote Time Budget Required. (Total & Tasks)</strong>
           </MenuItem>
@@ -135,7 +135,7 @@ export const ReleaseWrapper = ({
         {!clear &&
   	      <MenuItem
   	        onClick={(e)=>handleRelease(e, false)}
-  	        disabled={lockout}
+  	        disabled={lockout || !qtReady}
   	        ><i className='fas fa-check-square fa-fw gapR'></i>{actionText} {contextText}
   	      </MenuItem>
   	    }
@@ -143,7 +143,7 @@ export const ReleaseWrapper = ({
   	    {clear &&
   	      <MenuItem
   	        onClick={(e)=>handleCautionFlip(e)}
-  	        disabled={lockout}
+  	        disabled={lockout || !qtReady}
   	       >{cautionState ?
   	          <n-fa0><i className='fas fa-check-square fa-fw gapR'></i>{unholdText}</n-fa0> :
   	          <n-fa1><i className='far fa-minus-square fa-fw gapR'></i>{holdText}</n-fa1>}
@@ -153,7 +153,7 @@ export const ReleaseWrapper = ({
   	    {!clear &&
   	      <MenuItem
   	        onClick={(e)=>handleRelease(e, Pref.shortfall)}
-  	        disabled={lockout}
+  	        disabled={lockout || !qtReady}
   	        ><i className='far fa-minus-square fa-fw gapR'></i>{holdText}
   	      </MenuItem>
   	    }
