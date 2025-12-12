@@ -117,7 +117,7 @@ export const UpTaskBar = ({ subLink, showParts, isAuth }) => (
       title={Pref.shortfalls}
       subON={subLink === 'shortfalls'}
       goLink='/upstream/shortfalls'
-      icon='fas fa-exclamation'
+      icon='fas fa-exclamation-triangle'
     />
     
     <TaskElement

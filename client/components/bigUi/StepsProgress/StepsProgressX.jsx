@@ -28,7 +28,7 @@ const StepsProgressX  = ({
   
   const unitsExist = totalIU > totalI ? true : false;
   const calcItem = countCalc === 'items' ? true : false;
-  
+
   return(
     <div>
       {!truncate &&

@@ -12,7 +12,8 @@ import BlockForm from '/client/components/forms/BlockForm';
 import BlockList from '/client/components/bigUi/BlockList';
 
 const BatchCardX = ({
-  batchData, bOpen, bClosed, rapidData,
+  batchData, seriesData,
+  bOpen, bClosed, rapidData,
   // user,
   app, brancheS,
   floorReleased, 
@@ -55,6 +56,7 @@ const BatchCardX = ({
           <div className='space1v'>
             <StepsProgressX
               b={batchData}
+              hasSeries={!seriesData ? false : true}
               flowCounts={flowCounts}
               fallCounts={fallCounts}
               rapidsData={rapidMerge}

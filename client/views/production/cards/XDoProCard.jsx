@@ -197,6 +197,7 @@ const XDoProCard = ({
   const insertBatchCard = 
           <XBatchCard
             batchData={b}
+            seriesData={seriesData}
             bOpen={bOpen}
             bClosed={bClosed}
             user={user}
