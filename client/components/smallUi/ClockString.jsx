@@ -52,30 +52,30 @@ const ClockString = ({ doThing })=> {
   );
 };
 
-const ClockStringFallback = ({ doThing })=> {
-  const fstring = "MMM d, h:mm:ss a";
+// const ClockStringFallback = ({ doThing })=> {
+//   const fstring = "MMM d, h:mm:ss a";
   
-  const [ chill ] = useState(Roles.userIsInRole(Meteor.userId(), 'readOnly'));
+//   const [ chill ] = useState(Roles.userIsInRole(Meteor.userId(), 'readOnly'));
   
-  const [ clockTime, clockTimeSet ] = useState( moment().format(fstring) );
-  const [ tickingTime, tickingTimeSet ] = useState( moment.duration() );
+//   const [ clockTime, clockTimeSet ] = useState( moment().format(fstring) );
+//   const [ tickingTime, tickingTimeSet ] = useState( moment.duration() );
 
-  useInterval( ()=> {
-    clockTimeSet( moment().format(fstring) );
-    tickingTimeSet( tickingTime => tickingTime.add(1, 'seconds') );
+//   useInterval( ()=> {
+//     clockTimeSet( moment().format(fstring) );
+//     tickingTimeSet( tickingTime => tickingTime.add(1, 'seconds') );
     
-    if(doThing && tickingTime.asMinutes() > (chill ? Pref.noiseChill : Pref.noiseUpdate)) {
-      tickingTimeSet( moment.duration() );
-      doThing(); }
-  },1000);
+//     if(doThing && tickingTime.asMinutes() > (chill ? Pref.noiseChill : Pref.noiseUpdate)) {
+//       tickingTimeSet( moment.duration() );
+//       doThing(); }
+//   },1000);
       
-  return(
-    <Fragment>
-      <span className='grayT'>Updated {tickingTime.humanize()} ago</span>
-      <span className='grayT'>{clockTime}</span>
-    </Fragment>
-  );
-};
+//   return(
+//     <Fragment>
+//       <span className='grayT'>Updated {tickingTime.humanize()} ago</span>
+//       <span className='grayT'>{clockTime}</span>
+//     </Fragment>
+//   );
+// };
 
 export default ClockString;
 

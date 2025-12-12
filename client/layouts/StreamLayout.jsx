@@ -37,14 +37,11 @@ const StreamLayout = ({
         </aside>
         
         <div className='contentAreaEx'>
-          <div 
-            className='baseContainer'>
-            
+          <div className='baseContainer'>
             <div className='traverseContent forceScroll wideScroll forceScrollStyle'>
               {children[0] || children}
             </div>
           </div>
-          
         </div>
       </Fragment>
     </PlainFrame>

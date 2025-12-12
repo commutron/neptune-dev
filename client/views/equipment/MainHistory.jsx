@@ -6,7 +6,7 @@ import PagingSelect from '/client/components/tinyUi/PagingSelect';
 import { chunkArray } from '/client/utility/Convert';
 import MainDetail from './MainDetail';
 
-const MainHistory = ({ maintData, sving, isDebug })=>{
+const MainHistory = ({ maintData, sving, svqtTime, isDebug })=>{
   
   const [ pageState, pageSet ] = useState(0);
   
@@ -44,6 +44,7 @@ const MainHistory = ({ maintData, sving, isDebug })=>{
                       dialogId={m._id+'mHistory'}
                       title={m.name + ' - Due ' + moment(m.close).format('MMM D, YYYY')}
                       mData={m}
+                      svqtTime={svqtTime}
                     />
                   : null}
                 </td>

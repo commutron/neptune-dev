@@ -6,7 +6,7 @@ import ModelNative, { OpenModelNative } from '/client/layouts/Models/ModelNative
 import TabsLite from '/client/components/smallUi/Tabs/TabsLite';
 import EquipTimeTable from './EquipTimeTable';
 
-const MainDetail = ({ dialogId, title, mData })=> (
+const MainDetail = ({ dialogId, title, mData, svqtTime })=> (
   <Fragment>
     <OpenModelNative 
       dialogId={dialogId}
@@ -62,7 +62,11 @@ const MainDetail = ({ dialogId, title, mData })=> (
             </tbody>
           </table>
           
-          <EquipTimeTable id={mData._id} timefetch='getMaintTime' />
+          <EquipTimeTable 
+            id={mData._id} 
+            qtTime={svqtTime}
+            timefetch='getMaintTime'
+          />
         </TabsLite>
       
       </div>

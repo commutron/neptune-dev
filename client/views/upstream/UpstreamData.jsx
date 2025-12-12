@@ -16,11 +16,12 @@ const View = ({
   batchX, traceDT,
 })=> {
   
-  if( !ready || !readyT || !app || !users ) {
+  if( !ready || !readyT || !app || !users || !user ) {
     return(
       <StreamLayout
         title={Pref.upstream}
         tag='kit'
+        navBar='up'
       >
         <div></div>
       </StreamLayout>

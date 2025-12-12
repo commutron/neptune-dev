@@ -132,7 +132,11 @@ const ServiceSlides = ({
                 </div>
               </div>
             
-              <MainHistory maintData={maint} sving={sving} isDebug={isDebug} />
+              <MainHistory 
+                maintData={maint} 
+                sving={sving} 
+                svqtTime={sv.qtTime}
+                isDebug={isDebug} />
           </div>
         )})}
         
