@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 import Pref from '/client/global/pref.js';
 
-const TagsModule = ({ action, id, vKey, tags, tagOps, truncate, rad, qtCycle, canRun })=>	{
+const TagsModule = ({ action, id, vKey, tags, tagOps, truncate, rad, canRun })=>	{
 
   const [ newOption, newOptionSet ] = useState(false);
   const [ newRad, newRadSet ] = useState(false);
@@ -79,13 +79,6 @@ const TagsModule = ({ action, id, vKey, tags, tagOps, truncate, rad, qtCycle, ca
 
   return(
     <div className='rowWrap margin5'>
-      {qtCycle && 
-        <IndieTag
-          key="QTcycle"
-          tagText="Quoted~Flow"
-          lock={true} />
-      }
-            
       {currTags.map( (entry, index)=>{
         return(
           <IndieTag
@@ -187,5 +180,28 @@ const IndieTag = ({ tagText, removeTag, lock }) => {
         <MenuItem onClick={()=>removeTag()}>Remove {Pref.tag}</MenuItem>
       </ContextMenu>
     </div>
+  );
+};
+
+export const UiTag = ({ tagText }) => {
+  
+  const sty = {
+    alignItems: 'center',
+    width: 'fit-content',
+    margin: '2px',
+    padding: '3px 5px 3px 5px',
+    border: '0.5px solid white',
+    borderRadius: '1px 25px 25px 1px',
+    backgroundColor: 'var(--peterriver)',
+    fontSize: '0.9rem',
+    color: 'white',
+    wordBreak: 'keep-all',
+    wordWrap: 'normal'
+  };
+  
+  return(
+    <span style={sty}>
+      <i>{tagText}</i>
+    </span>
   );
 };

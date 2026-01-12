@@ -7,10 +7,11 @@ import ToggleBar from '/client/components/smallUi/Tabs/ToggleBar';
 import StepRateDisplay from './StepRateDisplay';
 import MiniStack from '/client/components/charts/MiniScales/MiniStack';
 import NumBox from '/client/components/tinyUi/NumBox.jsx';
+import { UiTag } from '/client/components/bigUi/TagsModule';
 
 const StepsProgressX  = ({ 
   b, widgetData, hasSeries, flowCounts, fallCounts, rapidsData,
-  riverTitle, brancheS, truncate, canRun
+  riverTitle, brancheS, truncate, canRun, qtCycle
 })=> {
   
   const [ countCalc, countSet ] = useState('items');
@@ -74,15 +75,25 @@ const StepsProgressX  = ({
       
       <div className={`${!truncate ? 'bottomLine' : ''} vmarginhalf cap`}>
         {!truncate &&
-          <RiverSelect
-            bID={b._id}
-            wFlows={widgetData.flows}
-            river={b.river}
-            riverTitle={riverTitle}
-            lock={b.completed ? Pref.isDone : false}
-                // !hasSeries ? `No ${Pref.series}` : false}
-            access={canRun} />
+          <span>
+            <RiverSelect
+              bID={b._id}
+              wFlows={widgetData.flows}
+              river={b.river}
+              riverTitle={riverTitle}
+              lock={b.completed ? Pref.isDone : false}
+                  // !hasSeries ? `No ${Pref.series}` : false}
+              access={canRun} 
+            />
+            {qtCycle && 
+              <UiTag
+                key="QTcycle"
+                tagText="Quoted~Flow"
+              />
+            }
+          </span>
         }
+        <span className='flexSpace' />
         {unitsExist &&
           <ToggleBar
             toggleOptions={['units','items']}

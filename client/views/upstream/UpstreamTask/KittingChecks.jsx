@@ -76,6 +76,7 @@ const KittingChecks = ({
                 undoText='Clear'
                 contextText={`for ${br.common}`}
                 lockout={isDone || isRO}
+                qtReady={true}
                 isAuth={isAuth}>
                 <TrinaryStat
                   status={releasedBool ? !releaseObj.caution ? true : false : null}
@@ -112,6 +113,7 @@ const KittingChecks = ({
             undoText='Clear'
             contextText={`${Pref.baseSerialPart}s`}
             lockout={isDone || isRO}
+            qtReady={true}
             isAuth={isAuth}>
             <TrinaryStat
               status={!serialRelease ? null : !serialRelease.caution ? true : false}

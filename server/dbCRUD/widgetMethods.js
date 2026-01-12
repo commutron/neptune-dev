@@ -114,13 +114,17 @@ Meteor.methods({
     }
   },
   
-  setBasicPlusFlowRoute(widgetId, editId, flowObj) {
+  setBasicPlusFlowRoute(widgetId, flowKey, flowObj) {
     if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
-      WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey, 'flows.flowKey': editId}, {
+      const accessKey = Meteor.user().orgKey;
+      WidgetDB.update({_id: widgetId, orgKey: accessKey, 'flows.flowKey': flowKey}, {
         $set : {
           'flows.$.updatedAt': new Date(),
           'flows.$.flow': flowObj,
       }});
+      Meteor.defer( ()=>{ 
+        Meteor.call('updateFlowNoise', flowKey, accessKey);
+      });
       return true;
     }else{
       return false;

@@ -57,7 +57,7 @@ function shrinkWhole(bData, now, accessKey, shipLoad) {
     
     const quantity = bData.quantity;
     const serialize = bData.serialize;
-    const rFlow = serialize && bData.river ? true :
+    const rFlow = bData.river ? true :
                   bData.waterfall && bData.waterfall.length > 0 ? false : 
                   null;
     
@@ -132,7 +132,7 @@ function checkMinify(bData, accessKey) {
     
     const quantity = bData.quantity;
     const serialize = bData.serialize;
-    const rFlow = serialize && bData.river ? true :
+    const rFlow = bData.river ? true :
                   bData.waterfall && bData.waterfall.length > 0 ? false : 
                   null;
              
@@ -234,6 +234,35 @@ function checkNoise(bData, rootI, accessKey) {
           btchNCs: btchNCs,
           docStatus: docStatus
       }});
+      
+      resolve(true);
+    })();
+  });
+}
+
+function syncWidgetFlow(flowKey, accessKey) {
+  return new Promise( (resolve)=> {
+    
+    (async ()=> {
+      XBatchDB.find({live: true, river: flowKey})
+      .forEach( (b)=> {
+        
+        const brchCnd = Meteor.call('branchCondition', b._id, accessKey);
+        const brchPrg = Meteor.call('branchProgress', b._id, accessKey);
+        const btchDur = Meteor.call('branchTaskTime', b._id, accessKey);
+      
+        TraceDB.update({batchID: b._id}, {
+          $set : { 
+            lastRefreshed: new Date(),
+            onFloor: brchCnd.onFloor,
+            donePnt: Number(brchCnd.donePnt),
+            stormy: brchCnd.stormy,
+            branchCondition: brchCnd.branchSets,
+            totalItems: Number(brchPrg.totalItems),
+            branchProg: brchPrg.branchProg,
+            branchTime: btchDur.branchTime
+        }});
+      });
       
       resolve(true);
     })();
@@ -380,6 +409,16 @@ Meteor.methods({
         const rootI = appValue(accessKey, 'instruct');
         
         await checkNoise( batchBX, rootI, accessKey );
+      }catch (err) {
+        throw new Meteor.Error(err);
+      }
+    })();
+  },
+  updateFlowNoise(flowKey, privateKey) {
+    const accessKey = privateKey || Meteor.user().orgKey;
+    (async ()=> {
+      try {
+        await syncWidgetFlow(flowKey, accessKey);
       }catch (err) {
         throw new Meteor.Error(err);
       }

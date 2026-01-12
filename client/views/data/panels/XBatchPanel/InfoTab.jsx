@@ -127,7 +127,6 @@ const InfoTab = ({
           id={b._id}
           tags={b.tags}
           tagOps={app.tagOption}
-          qtCycle={b.quoteTimeCycles?.length > 0}
           canRun={canRun}
         />
       </div>
@@ -152,6 +151,7 @@ const InfoTab = ({
             fallCounts={fallCounts}
             rapidsData={rapidsData}
             riverTitle={riverTitle}
+            qtCycle={b.quoteTimeCycles?.length > 0}
             brancheS={brancheS}
             truncate={false}
             canRun={canRun} />
