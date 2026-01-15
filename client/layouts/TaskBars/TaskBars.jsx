@@ -203,11 +203,11 @@ export const DownTaskBar = ({ subLink }) => (
 const FilterElement = ({ title, subTitle, goLink, branchON, changeBranch, icon, iconAdj, size, shrink, lock }) => (
   <button
     aria-label={toCap(title, true)}
-    style={shrink ? {minHeight:'unset',padding:'3px 0'} : {}}
+    style={shrink ? {minHeight:'unset',padding:'5px 0'} : {}}
     className={
       `taskLink taskTip numFont 
       ${branchON ? 'onTL' : ''} 
-      ${size} 
+      ${size || ''} 
       ${icon ? '' : 'nomarginB'}
     `}
     onClick={()=>{FlowRouter.go( '/overview' );changeBranch( goLink )}}

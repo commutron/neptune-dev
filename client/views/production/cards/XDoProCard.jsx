@@ -134,7 +134,7 @@ const XDoProCard = ({
               id={b._id} 
               rType='floorRelease'
               actionText={Pref.release}
-              qtReady={(b.quoteTimeBudget?.[0].timeAsMinutes > 0 && b.quoteTimeCycles?.length > 0) || !seriesData}
+              qtReady={(b.quoteTimeBudget?.[0].timeAsMinutes > 0 && b.quoteTimeCycles?.length > 0)}
             />
           </div>;
 

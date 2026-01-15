@@ -34,9 +34,7 @@ export function plotPerform(batches) {
     perfset.push({
       y: p,
       x: batch.completedAt || new Date(),
-      z: `${batch.batch} = ${p > 0 ? '+'+p : p}`,
-      symbol: batch.completedAt ? 'diamond' : 'star',
-      size: '2'
+      z: `${batch.batch} = ${p > 0 ? '+'+p : p}`
     });
   }
   return perfset;
@@ -54,9 +52,7 @@ export function plotOnTime(batches) {
     onset.push({
       y: finGap,
       x: batch.completedAt || new Date(),
-      z: `${batch.batch} = ${finGap}`,
-      symbol: batch.completedAt ? 'diamond' : 'star',
-      size: '2'
+      z: `${batch.batch} = ${finGap}`
     });
   }
   return onset;

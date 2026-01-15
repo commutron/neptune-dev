@@ -69,9 +69,9 @@ const TimeTab = ({
         <PeopleScatter 
           tide={batchData.tide}
           period='day'
+          xform='MMM D YYYY'
           xlabel='MMM D YYYY'
           isDebug={isDebug} 
-          app={app}
         />
         
         <ProgLayerBurndown

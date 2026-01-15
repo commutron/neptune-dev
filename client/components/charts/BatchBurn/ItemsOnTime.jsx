@@ -29,8 +29,6 @@ const ItemsOnTime = ({ items, salesEnd, isDebug })=> {
         y: finGap,
         x: moment(i.completedAt).startOf('day').format(),
         z: `${i.serial} = ${finGap}`,
-        symbol: 'diamond',
-        size: '2'
       });
     }
     onset.length === 0 ? seriesSet(false) : seriesSet(onset);

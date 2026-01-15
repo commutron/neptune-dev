@@ -209,8 +209,8 @@ const PerformanceSlide = ({ app, user, users, traceDT, isDebug })=> {
             </span>
             
             <span className='space1v centre'>
-              <h4> {taskList.length} Known Tasks [{selectDayState || 'Week ' + weekChoice.weekNum}]</h4>
-              <dl className='readlines'>
+              <h4> {taskList.length} Tasks [{selectDayState || 'Week ' + weekChoice.weekNum}]</h4>
+              <dl className='readlines cap'>
                 {taskList.map( (ent, ix)=>(
                   <dt key={ent+ix}>{ent}</dt>
                 ))}

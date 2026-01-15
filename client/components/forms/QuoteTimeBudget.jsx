@@ -89,7 +89,7 @@ const QuoteTimeBudgetForm = ({ bID, bQuantity, qtBudget, qtCycles, app, auth, lo
       <hr />
       <h4>Set total in hours, to 2 decimal places</h4>
       <form id='totalqtb' onSubmit={(e)=>setTimeInHours(e)}>
-        <p className='inlineForm'>
+        <p className='inlineForm centreRow'>
           <label>Hours<br />
           <input
             type='number'

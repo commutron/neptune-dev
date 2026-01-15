@@ -1,91 +1,87 @@
 import React from "react";
 import moment from 'moment';
-import { 
-  VictoryZoomContainer,
-  VictoryScatter,
-  VictoryArea,
-  VictoryChart, 
-  VictoryAxis,
-  VictoryTooltip
-} from 'victory';
-import Theme from '/client/global/themeV.js';
 
+import {
+  Chart as ChartJS,
+  TimeScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Title,
+  Tooltip,
+  Legend
+} from 'chart.js';
+import { Line } from 'react-chartjs-2';
+import 'chartjs-adapter-moment';
 
-const ZeroLineScatterChart = ({ xy, fade, fill, height, leftpad })=> {
+ChartJS.register(
+  TimeScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Title,
+  Tooltip,
+  Legend
+);
+
+const ZeroLineScatterChart = ({ xy, fade, fill })=> {
+  
+  const options = {
+    responsive: true,
+    elements: {
+      line: {
+        backgroundColor: fade || 'rgb(127, 140, 141, 0.5)',
+        borderColor: fill || 'rgb(127, 140, 141)',
+        fill: true,
+        borderWidth: 2,
+      },
+      point: {
+        backgroundColor: fill || 'rgb(127, 140, 141)',
+        borderColor: fill || 'rgb(127, 140, 141)',
+        pointRadius: 3,
+        pointStyle: 'rectRot'
+      },
+    },
+    scales: {
+      x: {
+        type: 'time',
+        time: {
+          tooltipFormat: 'MMM D YYYY'
+        },
+      },
+      y: {
+        ticks: {
+          precision: 2
+        },
+        grid: {
+          color: (cntxt)=> cntxt.tick.value === 0 ? 'rgb(0,0,0)' : 'rgba(0, 0, 0, 0.1)'
+        }
+      }
+    },
+    plugins: {
+      legend: {
+        display: false
+      },
+      title: {
+        display: false,
+      },
+      tooltip: {
+        callbacks: {
+          label: (cntxt)=> cntxt.raw.z
+        }
+      }
+    },
+  };
   
   return(
-    <VictoryChart
-      theme={Theme.NeptuneVictory}
-      padding={{top: 10, right: 25, bottom: 10, left: leftpad || 25}}
-      domainPadding={25}
-      height={height || 200}
-      containerComponent={
-        <VictoryZoomContainer
-          zoomDimension="x"
-          minimumZoom={{x: 1000/500, y: 0.1}}
-        />}
-    >
-      <VictoryAxis
-        tickFormat={(t) => !xy || xy.length === 0 ? '*' : 
-                            moment(t).format('MMM D YYYY')}
-        fixLabelOverlap={true}
-        offsetY={15}
-        style={ {
-          axis: { stroke: 'grey' },
-          grid: { stroke: 'transparent' },
-          ticks: { stroke: '#5c5c5c' },
-          tickLabels: { 
-            fontSize: '6px' }
-        } }
-        scale={{x: "time", y: "linear"}}
-        orientation="bottom"
-      />
-      <VictoryAxis
-        style={ {
-          axis: { stroke: '#000', strokeWidth: '3px' },
-          ticks: { stroke: 'transparent' },
-        } }
-        tickFormat={() => ''}
-      />
-      <VictoryAxis 
-        dependentAxis
-        fixLabelOverlap={true}
-        style={ {
-          axis: { stroke: 'grey' },
-          grid: { stroke: '#5c5c5c' },
-          ticks: { stroke: '#5c5c5c' },
-          tickLabels: { 
-            fontSize: '6px' }
-        } }
-      />
-      <VictoryArea
-        data={xy && xy.length > 0 ? xy : []}
-        interpolation='basis'
-        style={{
-          data: { 
-            fill: fade
-          },
-        }}
-      />
-      <VictoryScatter
-        data={xy && xy.length > 0 ? xy : []}
-        style={{
-          data: { 
-            fill: fill,
-            strokeWidth: 0
-          },
-          labels: { 
-            padding: 2,
-          } 
-        }}
-        size={1}
-        labels={(d) => d.datum.z}
-        labelComponent={
-          <VictoryTooltip 
-            style={{ fontSize: '6px' }}
-          />}
-      />
-    </VictoryChart>
+    <div>
+      <div className='space centreRow'>
+        <Line options={options} data={{datasets:[{data:xy,normalized: true}]}} />
+      </div>
+      <p className='noPrint smaller rightText indentR grayT'>Right Click on chart to save as image to your computer</p>
+    </div>
   );
 };
 

@@ -8,6 +8,7 @@ import { PlainFrame } from '/client/layouts/MainLayouts';
 import Spin from '/client/components/tinyUi/Spin';
 import Slides from '/client/layouts/TaskBars/Slides';
 import ActivityPanel from './ActivityPanel';
+import QuotaPanel from './QuotaPanel';
 import ServicePanel from './ServicePanel';
 import InboxPanel from './InboxPanel';
 import PrivacyPanel from './PrivacyPanel';
@@ -42,7 +43,8 @@ const UserDataWrap = ({
       
         <Slides
           menu={[
-            <b><i className='fas fa-clock fa-fw gapR'></i>Project Activity</b>,
+            <b><i className='fas fa-clock fa-fw gapR'></i>Project Time Log</b>,
+            <b><i className='fas fa-gem fa-fw gapR'></i>Project Activity</b>,
             <b><i className='fas fa-screwdriver-wrench fa-fw gapR'></i>Equipment PM</b>,
             <b><i className='fas fa-id-card fa-fw gapR'></i>Credentials</b>,
             <b><i className='fas fa-sliders fa-fw gapR'></i>Preferences</b>,
@@ -59,6 +61,16 @@ const UserDataWrap = ({
             isDebug={isDebug}
             users={users}
             traceDT={traceDT} />
+            
+          <QuotaPanel
+            key={11}
+            app={app}
+            brancheS={brancheS}
+            user={user}
+            isDebug={isDebug}
+            users={users}
+            traceDT={traceDT} 
+          />
           
           <ServicePanel
             key={2}

@@ -40,7 +40,7 @@ const ClockString = ({ doThing })=> {
     tickingTimeSet( tickingTime => tickingTime.plus({ seconds: 1}) );
     
     if(doThing && tickingTime.as('minutes') > (chill ? Pref.noiseChill : Pref.noiseUpdate)) {
-      tickingTimeSet( Duration.fromObject() );
+      tickingTimeSet( Duration.fromObject({}) );
       doThing(); }
   },1000);
       

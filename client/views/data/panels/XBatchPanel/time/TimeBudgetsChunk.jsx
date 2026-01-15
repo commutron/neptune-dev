@@ -69,7 +69,7 @@ const TimeBudgetsChunk = ({
                     Math.abs(percentOverUnder(totalBudgetMinutes, totalTideMinutes)) :
                     min2hr(bufferNice);
   
-  const bufferMessage = quote2tide < 0 ? "exceeding budget" : "of budget remaining";
+  const bufferMessage = quote2tide < 0 ? "exceeding quote" : "of quoted remaining";
   
   const totalLeftMinutes = quote2tide < 0 ? 0 : bufferNice;
   const totalOverMinutes = quote2tide < 0 ? bufferNice : 0;
@@ -153,7 +153,7 @@ const TimeBudgetsChunk = ({
             </p>
             
             <p className='bigger line1x'
-              >{totalBudgetAs} <i className='med'>{totalMessage} budgeted</i>
+              >{totalBudgetAs} <i className='med'>{totalMessage} quoted</i>
             </p>
             {addTime > 0 && 
               <div className='beside'>
@@ -231,7 +231,7 @@ const TimeBudgetsChunk = ({
                             {br.q && br.q.length > 0 ? br.q.map( (qt, ixz)=> {
                               const sbQ = qtTaskTimesArray.find( x => x[0] === qt.q );
                               let qtapp = sbQ ? app.qtTasks.find( q => q.qtKey === qt.q ) : null;
-                              let qtname = qtapp?.qtTask || 'missing';
+                              let qtname = qtapp?.qtTask || '*unquoted';
                               let mxQ = !qtapp ? null : qtapp.fixed ? sbQ[1] : ( sbQ[1] * (b.quantity || 0) );
                               return(
                                 <dd 

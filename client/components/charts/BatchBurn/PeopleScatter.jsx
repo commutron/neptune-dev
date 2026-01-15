@@ -1,94 +1,101 @@
 import React, { useState, useEffect } from "react";
 import moment from 'moment';
-import { 
-  VictoryScatter, 
-  VictoryChart, 
-  VictoryAxis,
-  VictoryClipContainer,
-  VictoryZoomContainer
-} from 'victory';
-import Theme from '/client/global/themeV.js';
-import UserName from '/client/utility/Username.js';
 
-const PeopleScatter = ({ tide, period, xlabel, app, isDebug })=> {
+import {
+  Chart as ChartJS,
+  TimeScale,
+  LinearScale,
+  CategoryScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip
+} from 'chart.js';
+import { Scatter } from 'react-chartjs-2';
+import 'chartjs-adapter-moment';
+
+ChartJS.register(
+  TimeScale,
+  LinearScale,
+  CategoryScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip
+);
+
+import UserName from '/client/utility/Username.js';
+// import { toCap } from '/client/utility/Convert.js';
+
+const PeopleScatter = ({ tide, period, xform, xlabel, isDebug })=> {
   
-  const [ series, seriesSet ] = useState([]);
-  const [ idNum, idNumSet ] = useState(1);
+  const [ data, dataSet ] = useState({datasets:[]});
+  const [ uUsers, uUsersSet ] = useState([]);
+  const [ uCols, uColsSet ] = useState([]);
   
   useEffect( ()=> {
     const tideArr = tide || [];
-    const max = _.uniq( Array.from(tideArr, t=> t.who) ).length;
-    const tideS = tideArr.sort((a,b)=> a.startTime > b.startTime ? 1 : 
-                                       a.startTime < b.startTime ? -1 : 0);
     
-    let days = [];
-    for(let t of tideS) {
-      days.push({
-        x: moment(t.startTime).startOf(period).format(),
+    let wt = [];
+  
+    for(let t of tideArr) {
+      wt.push({
+        x: moment(t.startTime).startOf(period).format(xlabel),
+        a: moment(t.startTime).startOf(period).toISOString(),
         y: UserName(t.who, true)
       });
     }
-    const slim = _.uniq(days, n=> n.x + n.y );
     
-    seriesSet(slim);
-    idNumSet(max);
+    const slim = _.uniq(wt, n=> n.a + n.y );
+    const slimS = slim.sort((a,b)=> a.a > b.a ? 1 : a.a < b.a ? -1 : 0);
+    
+    uUsersSet( _.uniq(slim, n=> n.y ).map( c => c.y ) );
+    
+    uColsSet( _.uniq(slimS, n=> n.a ).map( c => c.x ) );
+    
+    dataSet({
+      datasets: [{data: slimS}]
+    });
   }, [tide]);
-          
+  
 
-  isDebug && console.log({series, idNum});
+  const options = {
+    responsive: true,
+    elements: {
+      point: {
+        backgroundColor: 'rgb(41, 128, 185)',
+        borderColor: 'rgb(41, 128, 185)',
+        pointRadius: 6
+      },
+    },
+    scales: {
+      x: {
+        type: 'category',
+        labels: uCols,
+      },
+      y: {
+        type: 'category',
+        labels: uUsers ,
+      }
+    },
+    plugins: {
+      title: {
+        display: true,
+        text: 'People Active',
+      },
+      legend: false
+    },
+  };
+
+  isDebug && console.log({data, uUsers, uCols});
     
   return(
     <div className='chartNoHeightContain'>
-      <VictoryChart
-        theme={Theme.NeptuneVictory}
-        padding={{top: 10, right: 20, bottom: 20, left: 80}}
-        domainPadding={20}
-        height={50 + ( idNum * 15 )}
-        containerComponent={
-          <VictoryZoomContainer
-            zoomDimension="x"
-            minimumZoom={{x: 1000/500, y: 0.1}}
-          />}
-      >
-        <VictoryAxis
-          tickFormat={(t) => series.length === 0 ? '*' : moment(t).format(xlabel || 'MMM D YYYY')}
-          fixLabelOverlap={true}
-          style={ {
-            axis: { stroke: 'grey' },
-            grid: { stroke: '#5c5c5c' },
-            ticks: { stroke: '#5c5c5c' },
-            tickLabels: { 
-              fontSize: '6px' }
-          } }
-          scale="time"
-        />
-
-        <VictoryAxis 
-          dependentAxis
-          fixLabelOverlap={true} 
-          style={ {
-            axis: { stroke: 'grey' },
-            grid: { stroke: '#5c5c5c' },
-            ticks: { stroke: '#5c5c5c' },
-            tickLabels: { 
-              fontSize: '6px',
-              textTransform: 'capitalize'
-            }
-          }}
-        />
-        <VictoryScatter
-          data={series}
-          groupComponent={<VictoryClipContainer/>}
-          style={ {
-            data: { 
-              fill: 'rgb(41, 128, 185)',
-              strokeWidth: 0
-          } } }
-        />
-      </VictoryChart>
-      
-      <p className='centreText small cap'>People Distribution</p>
-      
+      <div className='chart50vContain centreRow'>
+        <Scatter options={options} data={data} redraw={true} />
+      </div>
+      <p className='noPrint smaller rightText indentR grayT'>Right Click on chart to save as image to your computer</p>
+    
       <details className='footnotes wide grayT small'>
         <summary>Chart Details</summary>
         <p className='footnote'>

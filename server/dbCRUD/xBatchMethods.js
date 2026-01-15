@@ -4,6 +4,42 @@ import { batchTideTime } from '/server/tideGlobalMethods';
 import { syncLocale } from '/server/utility.js';
 import { getShipAim, getShipDue, getEndWork } from '/server/shipOps';
 
+
+const syncQtTotal = (accessKey, batchId, riverId)=> {
+  // Not currentlly in use
+  // Set quote budget when river set or when quantity change or when flow is edited
+  
+  // const bs = XBatchDB.find({ river: riverId },{fields:{'quantity':1,'quoteTimeCycles':1}}).fetch();
+  
+  const app = AppDB.findOne({ orgKey: accessKey },{fields:{'qtTasks':1}});
+  const b = XBatchDB.findOne({ _id: batchId },{fields:{'quantity':1,'quoteTimeCycles':1}});
+  let totalQT = 0;
+  for( let qtC of b.quoteTimeCycles) {
+    let qtApp = app.qtTasks.find( q => q.qtKey === qtC[0] );
+    let scaled = qtApp.fixed ? qtC[1] : ( qtC[1] * b.quantity );
+    totalQT += scaled;
+  }
+  return totalQT;
+  // or
+  /*
+  XBatchDB.update({_id: batchId, orgKey: accessKey}, {
+    $push : { 
+      'quoteTimeBudget': {
+        $each: [ {
+          updatedAt: new Date(),
+          timeAsMinutes: Number(totalQT)
+        } ],
+        $position: 0
+      }
+  }});
+  // sync trace
+  Meteor.defer( ()=>{
+    Meteor.call('updateOneMovement', batchId, accessKey);
+  });
+  */
+};
+
+
 Meteor.methods({
 
   addBatchX(batchNum, groupId, widgetId, vKey, 
@@ -146,6 +182,8 @@ Meteor.methods({
     			  updatedAt: new Date(),
     			  updatedWho: Meteor.userId()
         }});
+        
+        // syncQtTotal(accessKey, batchId)
         
         if(srs) {
           XSeriesDB.update({batch: doc.batch}, {
@@ -553,6 +591,8 @@ Meteor.methods({
           river: riverId,
           quoteTimeCycles: qtArray
         }});
+        
+        // syncQtTotal(accessKey, batchId)
       
       Meteor.defer( ()=>{ 
         Meteor.call('updateOneMinify', batchId, accessKey); 

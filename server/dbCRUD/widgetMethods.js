@@ -146,6 +146,7 @@ Meteor.methods({
             quoteTimeCycles: qtArray
           }
         },{ multi: true });
+        // {import} syncQtTotal(accessKey, batchId)
         return true;
       }else{
         return false;

@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
-import moment from 'moment';
+// import moment from 'moment';
 import ZeroLineScatterChart from '/client/components/charts/ZeroLineScatterChart';
 
 import PrintThis from '/client/components/tinyUi/PrintThis';
-
 
 const PerfScatter = ({ app })=> {
   
@@ -42,12 +41,6 @@ const PerfScatter = ({ app })=> {
       />
       
       <p className='centreText cap small'>Performance</p>
-      <p className='grayT small'>
-        ◆ = Completed <br />
-        ★ = WIP <br />
-        Scroll to Zoom. Click and Drag to Pan.<br />
-        Data curve is smoothed by a basis spline function<br />
-      </p>
     </div>
   );
 };

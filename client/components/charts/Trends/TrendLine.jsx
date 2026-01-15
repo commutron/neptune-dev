@@ -3,12 +3,20 @@ import React, { useRef, useState, useEffect } from 'react';
 // import Pref from '/client/global/pref.js';
 // import moment from 'moment';
 // import 'moment-timezone';
-import { 
-  VictoryLine, 
-  VictoryChart, 
-  VictoryAxis,
-} from 'victory';
-import Theme from '/client/global/themeV.js';
+import {
+  Chart as ChartJS,
+  TimeScale,
+  LinearScale,
+  LineElement,
+} from 'chart.js';
+import { Line } from 'react-chartjs-2';
+import 'chartjs-adapter-moment';
+
+ChartJS.register(
+  TimeScale,
+  LinearScale,
+  LineElement
+);
 
 // statType // 'newBatch', 'doneBatch', 'newNC', 'newSH'
 
@@ -75,28 +83,54 @@ export const TrendLineCache = ({
   );
 };
 
-const TrendLineChart = ({ data, cycleCount, lineColor, title })=> (
-  <div className='chart20Contain'>
-    <VictoryChart
-      theme={Theme.NeptuneVictory}
-      padding={{top: 25, right: 25, bottom: 25, left: 25}}
-      domainPadding={{x: 10, y: 40}}
-      height={400}
-    >
-      <VictoryAxis
-        tickCount={data.length}
-        tickFormat={(t) => isNaN(cycleCount-t) ? '*' : `-${cycleCount-t}`}
-        //tickValues={Array.from(data, z => '')}
-      />
-      <VictoryLine
-        data={data}
-        style={{ data: { stroke: lineColor || 'black' } }}
-        animate={{
-          duration: 2000,
-          onLoad: { duration: 500 }
-        }}
-      />
-    </VictoryChart>
-    <div className='centreText smCap'>{title}</div>
-  </div>
-);
+const TrendLineChart = ({ data, cycleCount, lineColor, title })=> {
+  
+    const options = {
+    responsive: true,
+    elements: {
+      line: {
+        borderColor: lineColor || 'black',
+        borderWidth: 1,
+      },
+      point: {
+        radius: 0
+      },
+    },
+    scales: {
+      x: {
+        type: 'time',
+        ticks: {
+          display: false
+        }
+      },
+      y: {
+        ticks: {
+          precision: 1,
+          display: false
+        },
+        grid: {
+          display: false
+        },
+        beginAtZero: true
+      }
+    },
+    plugins: {
+      legend: {
+        display: false
+      },
+      title: {
+        display: false
+      },
+      tooltip: {
+        display: false
+      }
+    },
+  };
+  
+  return(
+    <div className='chart20Contain'>
+      <Line options={options} data={{datasets:[{data:data,normalized: true}]}} />
+      <div className='centreText smCap'>{title}</div>
+    </div>
+  );
+};

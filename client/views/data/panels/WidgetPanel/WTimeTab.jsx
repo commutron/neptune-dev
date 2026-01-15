@@ -76,8 +76,6 @@ const WTimeTab = ({
       <ShipScatter 
         fetchFunc='getBatchOnTime'
         idLimit={widgetData._id}
-        height={100}
-        leftpad={50}
         extraClass='cardSelf vmargin' />
         
       <WTimeCycle wID={widgetData._id} flows={widgetData.flows} app={app} />

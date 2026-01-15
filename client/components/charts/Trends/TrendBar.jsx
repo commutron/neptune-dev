@@ -3,14 +3,20 @@ import React, { useRef, useState, useEffect } from 'react';
 // import Pref from '/client/global/pref.js';
 // import moment from 'moment';
 // import 'moment-timezone';
-import { 
-  VictoryBar,
-  VictoryChart, 
-  VictoryAxis,
-  VictoryStack
-} from 'victory';
-//import Pref from '/client/global/pref.js';
-import Theme from '/client/global/themeV.js';
+import {
+  Chart as ChartJS,
+  TimeScale,
+  LinearScale,
+  BarElement,
+} from 'chart.js';
+import { Bar } from 'react-chartjs-2';
+import 'chartjs-adapter-moment';
+
+ChartJS.register(
+  TimeScale,
+  LinearScale,
+  BarElement
+);
 
 // statType // doneBatch'
 
@@ -81,37 +87,55 @@ export const TrendBarCache = ({ title, statType, cycleCount, cycleBracket, isDeb
   );
 };
 
-const TrendBarChart = ({ dataG, dataNG, cycleCount, title })=> (
-  <div className='chart20Contain'>
-    <VictoryChart
-      theme={Theme.NeptuneVictory}
-      padding={{top: 25, right: 25, bottom: 25, left: 25}}
-      domainPadding={{x: 10, y: 40}}
-      height={400}
-    >
-      <VictoryAxis 
-        tickCount={dataG.length}
-        tickFormat={(t) => isNaN(cycleCount-t) ? '*' : `-${cycleCount-t}`}
+const TrendBarChart = ({ dataG, dataNG, cycleCount, title })=> {
+
+  const options = {
+    responsive: true,
+    animation: false,
+    scales: {
+      x: {
+        type: 'time',
+        ticks: {
+          display: false
+        },
+        time: {
+          unit: 'week'
+        },
+      },
+      y: {
+        ticks: {
+          precision: 1,
+          display: false
+        },
+        grid: {
+          display: false
+        },
+        beginAtZero: true
+      }
+    },
+    plugins: {
+      legend: {
+        display: false
+      },
+      title: {
+        display: false
+      },
+      tooltip: {
+        display: false
+      }
+    },
+  };
+  
+  return(
+    <div className='chart20Contain'>
+      <Bar 
+        options={options} 
+        data={{datasets:[
+          {data:dataG,normalized: true,stack: 'stk', backgroundColor:"rgb(46, 204, 113)"},
+          {data:dataNG,normalized: true,stack: 'stk', backgroundColor:"rgb(241, 196, 15)"}
+        ]}} 
       />
-      <VictoryStack
-        theme={Theme.NeptuneVictory}
-          colorScale={["rgb(46, 204, 113)", "rgb(241, 196, 15)"]}
-          padding={0}
-          animate={{
-            duration: 500,
-            onLoad: { duration: 500 }
-          }}
-        >
-        <VictoryBar
-          data={dataG}
-          barRatio={0.9}
-        />
-        <VictoryBar
-          data={dataNG}
-          barRatio={0.9}
-        />
-      </VictoryStack>
-    </VictoryChart>
-    <div className='centreText smCap'>{title}</div>
-  </div>
-);
+      <div className='centreText smCap'>{title}</div>
+    </div>
+  );
+};

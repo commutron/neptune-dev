@@ -188,9 +188,9 @@ const TidePeoplePlot = ({ tide, isDebug, app })=> {
     <PeopleScatter 
       tide={hrs}
       period='hour'
+      xform='MMM D YYYY hh:mma'
       xlabel='hh:mma'
       isDebug={isDebug} 
-      app={app} 
     />
   );
 };

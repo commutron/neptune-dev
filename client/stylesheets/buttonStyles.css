@@ -259,7 +259,7 @@ a:has(.onlyHover):where(:hover, :active, :focus-visible) .onlyHover {
 .smplTip::after,
 .liteTip::after {
   content: attr(data-tip);
-  position: fixed;
+  position: absolute;
   margin: 0;
   padding: 0.25em 0.5em;
   border-radius: 3px;

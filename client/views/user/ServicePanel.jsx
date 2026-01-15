@@ -57,7 +57,7 @@ const ServicePanel = ()=> {
               ><button
                 className='cap textLinkButton'
                 onClick={()=>goPro(eq, sv)}
-              ><i className='fa-solid fa-paper-plane greenT fa-fw gapR'></i>
+              ><i className='fa-solid fa-paper-plane nT fa-fw gapR'></i>
                <i>{sv.name} - {moment(sv.close).format('dddd MMMM Do')}</i>
               </button>
   

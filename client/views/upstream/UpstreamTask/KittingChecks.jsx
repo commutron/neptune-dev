@@ -140,7 +140,7 @@ const KittingChecks = ({
           undoText='Cancel Release'
           contextText='to the floor'
           lockout={isDone || isRO}
-          qtReady={qReady || !tBatch.serialize}
+          qtReady={qReady}
           isAuth={isAuth}>
           <TrinaryStat
             status={releasedToFloor ? !floorRelease.caution ? true : false : null}

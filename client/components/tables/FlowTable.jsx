@@ -22,7 +22,7 @@ const FlowTable = ({ id, flows, app, openActions, canEdt, canSls, isDebug })=> {
   return(
     <div>
       {flows.map( (entry, index)=>{ 
-        const qtTotalM = (entry.qtTime || []).reduce((x,y)=> x + y[1], 0);
+        const qtTotalM = (entry.qtTime || []).reduce((x,y)=> x + y[1], 0).toFixed(2,10);
         const qtTotalH = moment.duration(qtTotalM, 'minutes').asHours().toFixed(2,10);
         return(
           <details key={entry.flowKey} className='chip border2 borderLightGray' open={index === 0 ? true : false}>

@@ -1,10 +1,20 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { 
-  VictoryChart,
-  VictoryAxis, 
-  VictoryArea, 
-  VictoryZoomContainer } from 'victory';
-import Theme from '/client/global/themeV.js';
+import {
+  Chart as ChartJS,
+  TimeScale,
+  LinearScale,
+  LineElement,
+  Filler
+} from 'chart.js';
+import { Line } from 'react-chartjs-2';
+import 'chartjs-adapter-moment';
+
+ChartJS.register(
+  TimeScale,
+  LinearScale,
+  LineElement,
+  Filler,
+);
 
 const ProgLayerBurndown = ({ 
   batchId, seriesId, batchNum, start, floorRelease, end, riverFlow, 
@@ -16,12 +26,52 @@ const ProgLayerBurndown = ({
   useEffect(() => { return () => { mounted.current = false; }; }, []);
   
   const [ countState, countSet ] = useState( false );
+  const [ data, dataSet ] = useState({datasets:[]});
+  
+  const options = {
+    responsive: true,
+    elements: {
+      point: {
+        radius: 0
+      },
+      line: {
+        backgroundColor: 'rgba(41, 128, 185, 0.2)',
+        borderColor: 'rgb(41, 128, 185)',
+        fill: true,
+        borderWidth: 3,
+      },
+    },    
+    scales: {
+      x: {
+        type: 'time',
+        time: {
+          tooltipFormat: 'MMM D YYYY'
+        },
+      },
+      y: {
+        ticks: {
+          precision: 2
+        }
+      }
+    },
+    plugins: {
+      legend: {
+        display: false
+      },
+      title: {
+        display: false,
+      },
+    },
+  };
  
   useEffect( ()=> {
     Meteor.call('layeredHistoryRate', batchId, seriesId, start, end, riverFlow, 
     (error, reply)=> {
       error && console.log(error);
-      reply && mounted.current ? countSet( reply ) : null;
+      if(reply && mounted.current) {
+        countSet( true );
+        dataSet({datasets: reply});
+      }
       isDebug && console.log(reply);
     });
   }, []);
@@ -36,57 +86,9 @@ const ProgLayerBurndown = ({
     </div>
     {countState &&
       
-      <div className='wide balance cap'>
-      
-        <VictoryChart
-          theme={Theme.NeptuneVictory}
-          padding={{top: 25, right: 40, bottom: 25, left: 40}}
-          scale={{x: "time", y: "linear"}}
-          height={200}
-          width={400}
-          containerComponent={
-          <VictoryZoomContainer
-            zoomDimension="x"
-            minimumZoom={{x: 1000/500, y: 0.1}}
-          />}
-        >
-          <VictoryAxis 
-            style={ {
-              axis: { stroke: 'grey' },
-              grid: { stroke: '#5c5c5c' },
-              ticks: { stroke: '#5c5c5c' },
-              tickLabels: { fontSize: '6px' }
-            } }
-          />
-          <VictoryAxis
-            dependentAxis
-            tickFormat={(l)=> l.toFixed(0,10)}
-            style={ {
-              axis: { stroke: 'grey' },
-              grid: { stroke: '#5c5c5c' },
-              ticks: { stroke: '#5c5c5c' },
-              tickLabels: { fontSize: '5px' }
-            } }
-          />
+      <div className='space cap'>
         
-        {countState.map( (entry, index)=>{
-          return(
-            <VictoryArea
-              key={index+entry.name}
-              data={entry.data}
-              
-              style={{ 
-                data: { 
-                  stroke: 'rgb(41, 128, 185)',
-                  strokeWidth: '1px',
-                  fill: 'rgba(41, 128, 185, 0.2)'
-                },
-              }}
-            />
-          )}
-        )}
-        
-        </VictoryChart>
+        <Line options={options} data={data} />
         
         <div className='centreText smCap'>{title}</div>
         
