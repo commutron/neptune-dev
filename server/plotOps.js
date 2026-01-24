@@ -58,62 +58,119 @@ export function plotOnTime(batches) {
   return onset;
 }
 
-export function plotNonCons(batches, branches) {
-  let ncnset = [];
-  for( let batch of batches) {
-    const srs = XSeriesDB.findOne({batch: batch.batch});
-    const units = srs ? srs.items.length > 0 ? srs.items.reduce((t,i)=> t + i.units, 0) : 0 : 0;
-    // -- nc rate calculation filter --
-    const nncns = srs ? srs.nonCon.filter( n => !n.trash && !(n.inspect && !n.fix) ) : [];
+export async function plotNonCons(batches, branches) {
+
+  // try {
+    
+  const nonConPromise = (batch, branches)=> {
+
+    return new Promise(function(resolve) {
       
-    const ncQty = srs ? countMulti(nncns) : 0;
-    const ncRte = asRate(ncQty, units);
-    
-    let brncQt = [ ncQty ];
-    let brncRt = [ ncRte ];
-    for(let br of branches) {
-      const qty = ncQty === 0 ? 0 : countMulti(nncns.filter(n=> n.where === br));
-      brncQt.push(qty);
-      const ncRt = asRate(qty, units);
-      brncRt.push(ncRt);
-    }
-    
-    ncnset.push({
-      r: brncRt,
-      y: brncQt,
-      x: batch.completedAt || new Date(),
-      z: `${batch.batch} = `
+    // let ncnset = [];
+    // for( let batch of batches) {
+      const srs = XSeriesDB.findOne({batch: batch.batch},{fields:{'items.units':1,'nonCon':1}});
+      if(srs) {
+        const units = srs.items.length > 0 ? srs.items.reduce((t,i)=> t + i.units, 0) : 0;
+        // -- nc rate calculation filter --
+        const nncns = srs.nonCon.filter( n => !n.trash && !(n.inspect && !n.fix) );
+        
+        const ncQty = countMulti(nncns);
+        const ncRte = asRate(ncQty, units);
+        
+        let brncQt = [ ncQty ];
+        let brncRt = [ ncRte ];
+        for(let br of branches) {
+          const qty = ncQty === 0 ? 0 : countMulti(nncns.filter(n=> n.where === br));
+          brncQt.push(qty);
+          const ncRt = asRate(qty, units);
+          brncRt.push(ncRt);
+        }
+        
+        // ncnset.push({
+        //   r: brncRt,
+        //   y: brncQt,
+        //   x: batch.completedAt || new Date(),
+        //   z: `${batch.batch} = `
+        // });
+        resolve({
+          r: brncRt,
+          y: brncQt,
+          x: batch.completedAt || new Date(),
+          z: `${batch.batch} = `
+        });
+      }else{
+        // ncnset.push({
+        //   r: 0,
+        //   y: 0,
+        //   x: batch.completedAt || new Date(),
+        //   z: `${batch.batch} = `
+        // });
+        resolve({
+          r: 0,
+          y: 0,
+          x: batch.completedAt || new Date(),
+          z: `${batch.batch} = `
+        });
+      }
     });
+    
+    // const ncnsetS = ncnset.sort((a,b)=> a.x > b.x ? 1 : a.x < b.x ? -1 : 0);
+    // return ncnsetS;
+    // resolve(ncnsetS);
+    // });
+  };
+  
+  let ncnset = [];
+  
+  for await( let batch of batches) {
+    
+    const nonConData = await nonConPromise(batch, branches);
+    ncnset.push(nonConData);
+    
   }
+  
   const ncnsetS = ncnset.sort((a,b)=> a.x > b.x ? 1 : a.x < b.x ? -1 : 0);
+      
   return ncnsetS;
+  // }catch (error) {
+  //   throw new Meteor.Error(error);
+  // }
 }
 
 export function plotShorts(batches, branches) {
   let shtset = [];
   for( let batch of batches) {
-    const srs = XSeriesDB.findOne({batch: batch.batch});
-    const units = srs ? srs.items.length > 0 ? srs.items.reduce((t,i)=> t + i.units, 0) : 0 : 0;
-    const shfls = srs ? srs.shortfall : [];
-    
-    const shQty = countMultiRefs(shfls);
-    const shRte = asRate(shQty, units);
-    
-    let brshQt = [ shQty ];
-    let brshRt = [ shRte ];
-    for(let br of branches) {
-      const qty = shQty === 0 ? 0 : countMulti(shfls.filter(n=> n.where === br));
-      brshQt.push(qty);
-      const shRt = asRate(qty, units);
-      brshRt.push(shRt);
+    const srs = XSeriesDB.findOne({batch: batch.batch},{fields:{'items.units':1,'shortfall':1}});
+    if(srs) {
+      const units = srs.items.length > 0 ? srs.items.reduce((t,i)=> t + i.units, 0) : 0;
+      const shfls = srs.shortfall;
+      
+      const shQty = countMultiRefs(shfls);
+      const shRte = asRate(shQty, units);
+      
+      let brshQt = [ shQty ];
+      let brshRt = [ shRte ];
+      for(let br of branches) {
+        const qty = shQty === 0 ? 0 : countMulti(shfls.filter(n=> n.where === br));
+        brshQt.push(qty);
+        const shRt = asRate(qty, units);
+        brshRt.push(shRt);
+      }
+      
+      shtset.push({
+        r: brshRt,
+        y: brshQt,
+        x: batch.completedAt || new Date(),
+        z: `${batch.batch} = `,
+      });
+    }else{
+      shtset.push({
+        r: 0,
+        y: 0,
+        x: batch.completedAt || new Date(),
+        z: `${batch.batch} = `,
+      });
     }
-    
-    shtset.push({
-      r: brshRt,
-      y: brshQt,
-      x: batch.completedAt || new Date(),
-      z: `${batch.batch} = `,
-    });
   }
   const shtsetS = shtset.sort((a,b)=> a.x > b.x ? 1 : a.x < b.x ? -1 : 0);
   return shtsetS;
@@ -124,18 +181,27 @@ export function plotTest(batches) {
   
   for( let batch of batches) {
     const srs = XSeriesDB.findOne({batch: batch.batch},{fields:{'items':1}});
-    const itm = srs ? srs.items.some(i=> i.history.find(h=> h.type === 'test')) : false;
-    if(itm) {
-      let ngi = srs.items.filter(i=> i.history.find(h=> h.type === 'test' && h.good === false));
-      let ngf = 0;
-      for(let i of ngi) {
-        ngf += i.history.filter(h=> h.type === 'test' && h.good === false).length;
+    if(srs) {
+      const itm = srs.items.some(i=> i.history.find(h=> h.type === 'test'));
+      if(itm) {
+        let ngi = srs.items.filter(i=> i.history.find(h=> h.type === 'test' && h.good === false));
+        let ngf = 0;
+        for(let i of ngi) {
+          ngf += i.history.filter(h=> h.type === 'test' && h.good === false).length;
+        }
+        tSet.push({
+          y: ngi.length,
+          x: batch.completedAt || new Date(),
+          z: `${batch.batch} = ${ngi.length} items`,
+          r: ngf * 10
+        });
       }
+    }else{
       tSet.push({
-        y: ngi.length,
+        y: 0,
         x: batch.completedAt || new Date(),
-        z: `${batch.batch} = ${ngi.length} items`,
-        r: 2 * ngf
+        z: `${batch.batch} = 0 items`,
+        r: 0
       });
     }
   }

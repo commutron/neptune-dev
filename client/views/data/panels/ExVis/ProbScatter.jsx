@@ -41,7 +41,7 @@ const ProbScatter = ({ fetchFunc, fillfade, title, brancheS, app })=> {
   useEffect( ()=> {
     const raw = !tickXY ? [] : showZero ? tickXY : tickXY.filter(t=>t.y[brFtr] > 0);
     const cnvrt = raw.map((d) => { return {
-                x: d.x.toISOString(), y: showRate ? d.r[brFtr] : d.y[brFtr]
+                x: d.x.toISOString(), y: showRate ? d.r[brFtr] : d.y[brFtr], z: d.z
         }});
     cvrtDataSet(cnvrt);
   }, [tickXY, showRate, showZero, brFtr]);

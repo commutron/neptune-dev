@@ -159,13 +159,13 @@ Meteor.methods({
     const accessKey = Meteor.user().orgKey;
     const xid = noIg();
 
-    const ncShade = CacheDB.findOne({orgKey: accessKey, dataName: 'nccountShadow'});
+    const ncShade = CacheDB.findOne({orgKey: accessKey, dataName: 'nccountShadow'},{fields:{'lastUpdated':1}});
     const nctime = ncShade ? ncShade.lastUpdated : null;
     const stale = !nctime ? true :
               moment.duration(moment().diff(moment(nctime))).as('hours') > Config.freche;
-    if(stale) {
+    if(true) {
       const cutoff = ( d => new Date(d.setDate(d.getDate()-Config.avgSpan)) )(new Date);
-      
+
       const batches = XBatchDB.find({
         orgKey: accessKey,
         groupId: { $ne: xid },

@@ -50,7 +50,7 @@ const NonConBubble = ({ ncOp, nonCons, app, isDebug })=> {
           ncCounts.push({
             x: ncSet.where,
             y: ncType,
-            r: typeCount
+            r: typeCount * 10
           });
         }
       }

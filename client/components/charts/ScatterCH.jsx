@@ -65,6 +65,11 @@ const ScatterCH = ({ strdata, multidata, title, fillColor, area, intgr })=> {
         display: true,
         text: title || '',
       },
+      tooltip: {
+        callbacks: {
+          label: (cntxt)=> `${cntxt.raw.z || ''}${cntxt.raw.y}`
+        }
+      }
     },
   };
 
