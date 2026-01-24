@@ -39,6 +39,7 @@ const ShipScatter = ({
         xy={tickXY || []} 
         fade='rgba(46, 204, 113,0.2)'
         fill='rgb(39, 174, 96)'
+        normal={false}
       />
       
       <p className='centreText small'>Fulfill On Time</p>

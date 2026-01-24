@@ -3,8 +3,6 @@ import moment from 'moment';
 
 import {
   Chart as ChartJS,
-  TimeScale,
-  LinearScale,
   CategoryScale,
   PointElement,
   LineElement,
@@ -15,8 +13,6 @@ import { Scatter } from 'react-chartjs-2';
 import 'chartjs-adapter-moment';
 
 ChartJS.register(
-  TimeScale,
-  LinearScale,
   CategoryScale,
   PointElement,
   LineElement,
@@ -65,17 +61,20 @@ const PeopleScatter = ({ tide, period, xform, xlabel, isDebug })=> {
       point: {
         backgroundColor: 'rgb(41, 128, 185)',
         borderColor: 'rgb(41, 128, 185)',
-        pointRadius: 6
+        pointRadius: 6,
+        pointHitRadius: 10
       },
     },
     scales: {
       x: {
         type: 'category',
         labels: uCols,
+        offset: true,
       },
       y: {
         type: 'category',
-        labels: uUsers ,
+        labels: uUsers,
+        offset: true,
       }
     },
     plugins: {
@@ -103,12 +102,6 @@ const PeopleScatter = ({ tide, period, xform, xlabel, isDebug })=> {
         </p>
         <p className='footnote'>
           People are listed in no particular order. Date order takes precedence.
-        </p>
-        <p className='footnote'>
-          Scroll to zoom, click and drag to pan.
-        </p>
-        <p className='footnote'>
-          If labels are overlaping, zoom in or out. The software does the best it can. 
         </p>
       </details>
     </div>

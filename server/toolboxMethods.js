@@ -203,6 +203,7 @@ Meteor.methods({
     }
   },
   
+  /*
   generateQualityTimeTasks() {
     const appDoc = AppDB.findOne({orgKey: Meteor.user().orgKey});
     if(appDoc && Roles.userIsInRole(Meteor.userId(), 'admin')) {
@@ -253,7 +254,7 @@ Meteor.methods({
       return false;
     }
   },
-  
+  */
   diagnosePriority(batchID) {
     if(Roles.userIsInRole(Meteor.userId(), 'admin') && typeof batchID === 'string') {
       syncLocale(Meteor.user().orgKey);

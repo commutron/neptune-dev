@@ -39,6 +39,8 @@ const QuotaPanel = ({ app, brancheS, user, isDebug, users, traceDT })=> {
     
   return(
     <div className='space5x5'>
+      <h2 className='yellowT'>Work In Progress</h2>
+      <h3>Get insight about the work orders you worked on</h3>
       <div className='med vbreak comfort beside'>
         <WeekBrowse
           sendUp={(i)=>getBack(i)}

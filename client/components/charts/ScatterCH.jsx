@@ -30,6 +30,20 @@ const ScatterCH = ({ strdata, multidata, title, fillColor, area, intgr })=> {
   
   const options = {
     responsive: true,
+    elements: {
+      line: {
+        backgroundColor: fillColor || 'rgb(127, 140, 141, 0.5)',
+        borderColor: fillColor || 'rgb(127, 140, 141, 0.5)',
+        fill: area !== undefined ? area : true,
+        borderWidth: 5,
+      },
+      point: {
+        backgroundColor: fillColor || 'rgb(127, 140, 141)',
+        borderColor: fillColor || 'rgb(127, 140, 141)',
+        pointHitRadius: 10,
+        pointRadius: 3
+      },
+    },
     scales: {
       x: {
         type: 'time',
@@ -64,9 +78,6 @@ const ScatterCH = ({ strdata, multidata, title, fillColor, area, intgr })=> {
             data: d.data_array,
             backgroundColor: d.data_color,
             borderColor: d.data_color,
-            fill: area !== undefined ? area : true,
-            borderWidth: 5,
-            pointRadius: 3
           };
         })
       });
@@ -74,12 +85,7 @@ const ScatterCH = ({ strdata, multidata, title, fillColor, area, intgr })=> {
       dataSet({
         datasets: [{ 
           label: title || 'set1',
-          data: strdata || [],
-          backgroundColor: fillColor || 'rgb(127, 140, 141, 0.5)',
-          borderColor: fillColor || 'rgb(127, 140, 141, 0.5)',
-          fill: area !== undefined ? area : true,
-          borderWidth: 5,
-          pointRadius: 3
+          data: strdata || []
         }]
       });
     }

@@ -38,6 +38,7 @@ const PerfScatter = ({ app })=> {
         xy={tickXY || []} 
         fade='rgba(155,89,182,0.2)'
         fill='rgb(142, 68, 173)'
+        normal={false}
       />
       
       <p className='centreText cap small'>Performance</p>

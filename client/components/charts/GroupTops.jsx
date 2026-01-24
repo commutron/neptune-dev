@@ -49,7 +49,7 @@ const GroupTops = ({ groupId, alias })=> {
       />
       
       <NumStatBox
-        number={avgPf !== false ? avgPf : <n-fa1><i className='fas fa-spinner fa-spin'></i></n-fa1>}
+        number={avgPf !== false ? avgPf > 0 ? '+'+avgPf : avgPf : <n-fa1><i className='fas fa-spinner fa-spin'></i></n-fa1>}
         name='Performance'
         title=""
         borderColour="var(--amethyst)"

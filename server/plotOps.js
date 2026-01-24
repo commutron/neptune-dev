@@ -135,7 +135,7 @@ export function plotTest(batches) {
         y: ngi.length,
         x: batch.completedAt || new Date(),
         z: `${batch.batch} = ${ngi.length} items`,
-        q: ngf
+        r: 2 * ngf
       });
     }
   }

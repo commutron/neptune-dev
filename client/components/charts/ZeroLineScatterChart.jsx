@@ -26,7 +26,7 @@ ChartJS.register(
   Legend
 );
 
-const ZeroLineScatterChart = ({ xy, fade, fill })=> {
+const ZeroLineScatterChart = ({ xy, fade, fill, normal })=> {
   
   const options = {
     responsive: true,
@@ -40,6 +40,7 @@ const ZeroLineScatterChart = ({ xy, fade, fill })=> {
       point: {
         backgroundColor: fill || 'rgb(127, 140, 141)',
         borderColor: fill || 'rgb(127, 140, 141)',
+        pointHitRadius: 10,
         pointRadius: 3,
         pointStyle: 'rectRot'
       },
@@ -78,7 +79,10 @@ const ZeroLineScatterChart = ({ xy, fade, fill })=> {
   return(
     <div>
       <div className='space centreRow'>
-        <Line options={options} data={{datasets:[{data:xy,normalized: true}]}} />
+        <Line 
+          options={options} 
+          data={{datasets:[{data:xy,normalized: normal === undefined ? true : normal}]}} 
+        />
       </div>
       <p className='noPrint smaller rightText indentR grayT'>Right Click on chart to save as image to your computer</p>
     </div>

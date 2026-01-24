@@ -1,24 +1,34 @@
 import React, { useState, useEffect } from "react";
-import { 
-  VictoryScatter, 
-  VictoryChart, 
-  VictoryAxis, 
-  VictoryTooltip,
-  VictoryClipContainer
-} from 'victory';
-// import Pref from '/client/global/pref.js';
-import Theme from '/client/global/themeV.js';
+
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  PointElement,
+  Title,
+  Tooltip
+} from 'chart.js';
+import { Bubble } from 'react-chartjs-2';
+import 'chartjs-adapter-moment';
+
+ChartJS.register(
+  CategoryScale,
+  PointElement,
+  Title,
+  Tooltip
+);
 import { countMulti } from '/client/utility/Arrays';
 
 const NonConBubble = ({ ncOp, nonCons, app, isDebug })=> {
   
   const [ series, seriesSet ] = useState([]);
-  const [ typeNum, typeNumSet ] = useState(1);
+  const [ wheres, wheresSet ] = useState([]);
+  const [ types, typesSet ] = useState([]);
   
   useEffect( ()=> {
     const nonConOptions = ncOp || [];
     const splitByWhere = [...new Set( Array.from(nonCons, n => n.where ) ) ];
-   
+    wheresSet(splitByWhere);
+    
     const splitOut = splitByWhere.map( (where, index)=> {
       let match = nonCons.filter( y => y.where === where );
       return{
@@ -40,70 +50,57 @@ const NonConBubble = ({ ncOp, nonCons, app, isDebug })=> {
           ncCounts.push({
             x: ncSet.where,
             y: ncType,
-            z: typeCount
+            r: typeCount
           });
         }
       }
     }
     
-    typeNumSet(typeSet.size);
-      
+    typesSet([...typeSet]);
     seriesSet(ncCounts);
     
   }, []);
-          
+  
+  const options = {
+    responsive: true,
+    elements: {
+      point: {
+        backgroundColor: 'rgba(231,76,60,0.6)',
+        borderColor: 'rgb(231,76,60)',
+        pointHitRadius: 10
+      },
+    },
+    scales: {
+      x: {
+        type: 'category',
+        labels: wheres,
+        offset: true
+      },
+      y: {
+        type: 'category',
+        labels: types,
+        offset: true
+      }
+    },
+    plugins: {
+      title: {
+        display: false
+      },
+      legend: false,
+      tooltip: {
+        callbacks: {
+          label: (cntxt)=> `${cntxt.raw.x}, ${cntxt.raw.y}, qty: ${cntxt.raw.r}`
+        }
+      }
+    },
+  };
 
   isDebug && console.log({series, typeNum});
     
   return(
-    <div className='chartNoHeightContain'>
-      <VictoryChart
-        theme={Theme.NeptuneVictory}
-        padding={{top: 10, right: 20, bottom: 20, left: 100}}
-        domainPadding={20}
-        height={50 + ( typeNum * 15 )}
-      >
-        <VictoryAxis
-          style={ {
-            axis: { stroke: 'grey' },
-            grid: { stroke: '#5c5c5c' },
-            ticks: { stroke: '#5c5c5c' },
-            tickLabels: { 
-              fontSize: '6px' }
-          } }
-        />
-        <VictoryAxis 
-          dependentAxis
-          style={ {
-            axis: { stroke: 'grey' },
-            grid: { stroke: '#5c5c5c' },
-            ticks: { stroke: '#5c5c5c' },
-            tickLabels: { 
-              fontSize: '6px' }
-          } }
-        />
-        <VictoryScatter
-          data={series}
-          bubbleProperty="z"
-          minBubbleSize={3}  
-          maxBubbleSize={20}
-          labels={(d) => `Quantity: ${d.datum.z}`}
-          labelComponent={
-            <VictoryTooltip 
-              style={{ fontSize: '7px' }}
-            />}
-          groupComponent={<VictoryClipContainer/>}
-          style={ {
-            data: { 
-              fill: 'rgba(231,76,60,0.6)',
-              stroke: 'rgb(50,50,50)',
-              strokeWidth: 1
-          } } }
-        />
-      </VictoryChart>
-      
+    <div className='chart50vContain centre space'>
+      <Bubble options={options} data={{datasets:[{data:series,normalized: true}]}} />
       <p className='centreText small cap'>Defect Type and Recorded Location as Bubbles</p>
-      
     </div>
   );
 };

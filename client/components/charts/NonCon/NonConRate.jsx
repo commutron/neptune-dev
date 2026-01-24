@@ -1,8 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { CalcSpin } from '/client/components/tinyUi/Spin.jsx';
 
-import { VictoryLine, VictoryChart, VictoryAxis } from 'victory';
-import Theme from '/client/global/themeV.js';
+import {
+  Chart as ChartJS,
+  TimeScale,
+  LinearScale,
+  LineElement,
+} from 'chart.js';
+import { Line } from 'react-chartjs-2';
+import 'chartjs-adapter-moment';
+
+ChartJS.register(
+  TimeScale,
+  LinearScale,
+  LineElement
+);
 
 const NonConRate = ({ batches, title, lineColor })=> {
   
@@ -15,6 +27,41 @@ const NonConRate = ({ batches, title, lineColor })=> {
     });
   }, [batches]);
 
+  const options = {
+    responsive: true,
+    elements: {
+      point: {
+        radius: 0
+      },
+      line: {
+        backgroundColor: lineColor,
+        borderColor: lineColor,
+        borderWidth: 3,
+      },
+    },    
+    scales: {
+      x: {
+        type: 'time',
+        time: {
+          tooltipFormat: 'MMM D YYYY'
+        },
+      },
+      y: {
+        ticks: {
+          precision: 1
+        }
+      }
+    },
+    plugins: {
+      legend: {
+        display: false
+      },
+      title: {
+        display: false,
+      },
+    },
+  };
+  
   if(!ratesC) {
     return(
       <CalcSpin />
@@ -22,46 +69,9 @@ const NonConRate = ({ batches, title, lineColor })=> {
   }
   
   return(
-    <div className='chartNoHeightContain'>
-      <VictoryChart
-        theme={Theme.NeptuneVictory}
-        padding={{top: 10, right: 20, bottom: 20, left: 50}}
-        domainPadding={20}
-        scale={{x: "time", y: "linear"}}
-        height={200}
-      >
-        <VictoryAxis 
-          style={ {
-            axis: { stroke: 'grey' },
-            grid: { stroke: '#5c5c5c' },
-            ticks: { stroke: '#5c5c5c' },
-            tickLabels: { fontSize: '6px' }
-          } }
-        />
-        <VictoryAxis
-          dependentAxis
-          tickFormat={(l)=> l.toFixed(0,10)}
-          style={ {
-            axis: { stroke: 'grey' },
-            grid: { stroke: '#5c5c5c' },
-            ticks: { stroke: '#5c5c5c' },
-            tickLabels: { fontSize: '6px' }
-          } }
-        />
-        
-        <VictoryLine
-          data={ratesC}
-          style={{ 
-            data: { 
-              stroke: lineColor || 'black',
-              strokeWidth: '2px'
-            },
-          }}
-        />
-      </VictoryChart>
-      
+    <div className='space chart50vContain centre'>
+      <Line options={options} data={{datasets:[{data:ratesC,normalized: true}]}} />
       <p className='centreText small cap'>{title}</p>
-      
     </div>
   );
 };

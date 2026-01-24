@@ -28,7 +28,6 @@ const TrendLine = ({
   
   const thingMounted = useRef(true);
   const blank = [ {x:1,y:0} ];
-  // const blank = Array(cycleCount);
   const [ data, dataSet ] = useState( blank );
 
   useEffect( ()=>{

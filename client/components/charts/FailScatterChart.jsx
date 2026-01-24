@@ -1,20 +1,32 @@
 import React, { useState, useEffect, useRef } from "react";
 import moment from 'moment';
-import { 
-  VictoryZoomContainer,
-  VictoryArea,
-  VictoryScatter,
-  VictoryChart, 
-  VictoryAxis,
-  VictoryTooltip,
-} from 'victory';
-import Theme from '/client/global/themeV.js';
-import PrintThis from '/client/components/tinyUi/PrintThis';
+import {
+  Chart as ChartJS,
+  TimeScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Title,
+  Tooltip
+} from 'chart.js';
+import { Bar } from 'react-chartjs-2';
+import 'chartjs-adapter-moment';
 
+ChartJS.register(
+  TimeScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Title,
+  Tooltip
+);
+import PrintThis from '/client/components/tinyUi/PrintThis';
 
 const FailScatterChart = ({ 
   fetchFunc, idLimit,
-  print, height, leftpad, extraClass 
+  print, extraClass 
 })=> {
   
   const mounted = useRef(true);
@@ -37,8 +49,48 @@ const FailScatterChart = ({
   
   const dataset = !tickXY ? [] : showZero ? tickXY : tickXY.filter(t=>t.y > 0);
 
+  const options = {
+    responsive: true,
+    elements: {
+      line: {
+        backgroundColor: 'rgba(192, 57, 43,0.2)',
+        borderColor: 'rgb(192, 57, 43)',
+        fill: true,
+        borderWidth: 2,
+      },
+      point: {
+        backgroundColor: 'rgba(192, 57, 43,0.2)',
+        borderColor: 'rgb(192, 57, 43)',
+      },
+    },
+    scales: {
+      x: {
+        type: 'time',
+        time: {
+          tooltipFormat: 'MMM D YYYY'
+        },
+        offset: true
+      },
+      y: {
+        type: 'linear',
+        offset: true
+      }
+    },
+    plugins: {
+      title: {
+        display: false
+      },
+      legend: false,
+      tooltip: {
+        callbacks: {
+          label: (cntxt)=> cntxt.raw.z
+        }
+      }
+    },
+  };
+  
   return(
-    <div className={'chartNoHeightContain ' + extraClass || ''}>
+    <div className={extraClass || ''}>
       <div className='rowWrap noPrint'>
         {!tickXY ?
           <n-fa1><i className='fas fa-spinner fa-lg fa-spin gapR'></i>Loading</n-fa1> :
@@ -54,73 +106,23 @@ const FailScatterChart = ({
         /></label>
         {print && <PrintThis /> }
       </div>
-
-      <VictoryChart
-        theme={Theme.NeptuneVictory}
-        padding={{top: 10, right: 25, bottom: 25, left: leftpad || 30}}
-        domainPadding={25}
-        height={height || 200}
-        containerComponent={<VictoryZoomContainer />}
-      >
-        <VictoryAxis
-          tickFormat={(t) => !tickXY ? '*' : moment(t).format('MMM D YYYY')}
-          fixLabelOverlap={true}
-          style={ {
-            axis: { stroke: 'grey' },
-            grid: { stroke: '#5c5c5c' },
-            ticks: { stroke: '#5c5c5c' },
-            tickLabels: { 
-              fontSize: '6px' }
-          } }
-          scale={{x: "time", y: "linear"}}
+      
+      <div className='chart50vContain centre space'>
+        <Bar 
+          options={options} 
+          data={{
+            datasets:[
+              {type:'bubble',data:dataset,normalized: true,pointHitRadius: 10},
+              {type:'line',data:dataset,normalized: true,pointRadius:0,pointHitRadius:0}
+            ]
+          }} 
         />
-        <VictoryAxis 
-          dependentAxis
-          fixLabelOverlap={true}
-          style={ {
-            axis: { stroke: 'grey' },
-            grid: { stroke: '#5c5c5c' },
-            ticks: { stroke: '#5c5c5c' },
-            tickLabels: { 
-              fontSize: '6px' }
-          } }
-        />
-        <VictoryArea
-          data={dataset}
-          interpolation='basis'
-          style={{
-            data: { 
-              fill: 'rgba(192, 57, 43,0.2)'
-            },
-          }}
-        />
-        <VictoryScatter
-          data={dataset}
-          bubbleProperty="q"
-          minBubbleSize={2}  
-          maxBubbleSize={12}
-          style={{
-            data: { 
-              fill: 'rgb(192, 57, 43)',
-              strokeWidth: 0
-            },
-            labels: { 
-              padding: 2,
-            } 
-          }}
-          labels={(d)=> d.datum.z}
-          labelComponent={
-            <VictoryTooltip 
-              style={{ fontSize: '6px' }}
-            />}
-        />
-
-      </VictoryChart>
+      </div>
+      
       <p className='centreText small'>Test Failures</p>
       <p className='grayT small'>
         Y axis is number of items that failed<br />
         Datapoint size is scaled by how many failures<br /> 
-        Scroll to Zoom. Click and Drag to Pan.<br />
       </p>
     </div>
   );
