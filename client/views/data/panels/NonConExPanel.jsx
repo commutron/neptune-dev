@@ -15,6 +15,8 @@ const NonConExPanel = ({ brancheS, request, app })=> {
   
   const bPro = brancheS.filter(b=> b.open && b.pro).map((br)=>br.branch);
   
+  console.log(start, end);
+  
   return(
     <div className='centreBox overscroll2x'>
       <div className='rowWrapR noPrint'><PrintThis /></div>

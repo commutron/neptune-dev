@@ -136,6 +136,7 @@ export const LuxonTestString = ()=> {
   let shftH = dur.shiftTo('hours','minutes','seconds').toHuman({ listStyle: "short", showZeros: false });
   
   let nowtime = DateTime.now();
+  let isotime = nowtime.toISOTime({ precision: 'seconds', includeOffset: false });
   
   let datetimecustom = {
     month: 'short', 
@@ -157,7 +158,7 @@ export const LuxonTestString = ()=> {
       
       <br />
       <li><n-num>now toLocaleString datetime: {nowtime.toLocaleString(datetimecustom)}</n-num></li>
-    
+      <li><n-num>now toISOTime: {isotime}</n-num></li>
     </ul>
   );
 };

@@ -163,7 +163,7 @@ Meteor.methods({
     const nctime = ncShade ? ncShade.lastUpdated : null;
     const stale = !nctime ? true :
               moment.duration(moment().diff(moment(nctime))).as('hours') > Config.freche;
-    if(true) {
+    if(stale) {
       const cutoff = ( d => new Date(d.setDate(d.getDate()-Config.avgSpan)) )(new Date);
 
       const batches = XBatchDB.find({

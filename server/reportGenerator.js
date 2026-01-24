@@ -4,6 +4,7 @@ import Config from '/server/hardConfig.js';
 
 import { countMulti } from '/server/utility.js';
 
+import { Interval, DateTime } from 'luxon';
 
 function findRelevantSeries(from, to) {
   return new Promise(resolve => {
@@ -46,13 +47,17 @@ function loopSeriesesAll(serieses) {
   });
 }
 
-function loopSeriesesNC(serieses) {
+function loopSeriesesNC(serieses, from, to, interval) {
   return new Promise(resolve => {
     let totalSerials = 0;
     let allNonCons = [];
     for(let srs of serieses) {
       totalSerials += srs.items.length;
-      allNonCons.push(...srs.nonCon.filter( n => !n.trash && !(n.inspect && !n.fix) ));
+      
+      const scopeNC = srs.nonCon.filter( n => !n.trash && !(n.inspect && !n.fix) && interval.contains(DateTime.fromJSDate(n.time)));
+      // const scopeNC = srs.nonCon.filter( n => !n.trash && !(n.inspect && !n.fix) && moment(n.time).isBetween(from, to));
+      
+      allNonCons.push(...scopeNC);
     }
     resolve({totalSerials, allNonCons});
   });
@@ -176,9 +181,9 @@ function loopNonCons(nonCons, from, to) {
 
 function loopNonConsCross(nonCons, from, to, branch) {
   return new Promise(resolve => {
-    const inTime = nonCons.filter( x => moment(x.time).isBetween(from, to) );
-    const foundNC = countMulti(inTime);
+    const inTime = nonCons; // prefiltered .filter( x => moment(x.time).isBetween(from, to) );
     const brAll = !branch || branch === 'ALL';
+    const foundNC = brAll ? countMulti(inTime) : 0;
     
     let serials = new Set();
     
@@ -199,7 +204,7 @@ function loopNonConsCross(nonCons, from, to, branch) {
     
     const locals = [...wheres].sort();
     
-    let crossref = [["",...locals,"Total"]];
+    let crossref = brAll ? [["",...locals,"Total"]] : [["",...locals]];
     
     let endline = Array.from(locals, ()=> 0);
     
@@ -219,12 +224,18 @@ function loopNonConsCross(nonCons, from, to, branch) {
         tyTtl += whCount;
         endline[index] += whCount;
       }
-      whArr.push(tyTtl);
+      if(brAll) {
+        whArr.push(tyTtl);
+      }
       if(brAll || tyTtl > 0) {
         crossref.push(whArr);
       }
     }
-    crossref.push(["total",endline,foundNC].flat());
+    if(brAll) {
+      crossref.push(["total",endline,foundNC].flat());
+    }else{
+      crossref.push(["total",endline].flat());
+    }
     
     const uniqueSerials = serials.size;
     
@@ -266,14 +277,25 @@ Meteor.methods({
   },
   
   buildNonConReport(startDay, endDay, branch) {
-      
-    const from = moment(startDay).tz(Config.clientTZ).startOf('day').format();
-    const to = moment(endDay).tz(Config.clientTZ).endOf('day').format();
+    // the start day is actually a day early with moment  
+    // const from = moment(startDay).tz(Config.clientTZ).startOf('day').format();
+    // const to = moment(endDay).tz(Config.clientTZ).endOf('day').format();
+    
+    const startLx = DateTime.fromFormat(startDay, "yyyy-LL-dd", { zone: Config.clientTZ }).startOf('day');
+    const endLx = DateTime.fromFormat(endDay, "yyyy-LL-dd", { zone: Config.clientTZ }).endOf('day');
+
+    const interval = Interval.fromDateTimes(startLx, endLx);
+    
+    const from = startLx.toISO();
+    const to = endLx.toISO();
+    
+    // console.log(interval);
+    console.log(from, to);
     
     async function getBatches() {
       try {
         seriesSlice = await findRelevantSeries(from, to);
-        seriesArangeNC = await loopSeriesesNC(seriesSlice, from, to);
+        seriesArangeNC = await loopSeriesesNC(seriesSlice, from, to, interval);
         nonConStats = await loopNonConsCross(seriesArangeNC.allNonCons, from, to, branch);
         
         const seriesInclude = seriesSlice.length;

@@ -59,15 +59,9 @@ export function plotOnTime(batches) {
 }
 
 export async function plotNonCons(batches, branches) {
-
   // try {
-    
   const nonConPromise = (batch, branches)=> {
-
     return new Promise(function(resolve) {
-      
-    // let ncnset = [];
-    // for( let batch of batches) {
       const srs = XSeriesDB.findOne({batch: batch.batch},{fields:{'items.units':1,'nonCon':1}});
       if(srs) {
         const units = srs.items.length > 0 ? srs.items.reduce((t,i)=> t + i.units, 0) : 0;
@@ -86,12 +80,6 @@ export async function plotNonCons(batches, branches) {
           brncRt.push(ncRt);
         }
         
-        // ncnset.push({
-        //   r: brncRt,
-        //   y: brncQt,
-        //   x: batch.completedAt || new Date(),
-        //   z: `${batch.batch} = `
-        // });
         resolve({
           r: brncRt,
           y: brncQt,
@@ -99,12 +87,6 @@ export async function plotNonCons(batches, branches) {
           z: `${batch.batch} = `
         });
       }else{
-        // ncnset.push({
-        //   r: 0,
-        //   y: 0,
-        //   x: batch.completedAt || new Date(),
-        //   z: `${batch.batch} = `
-        // });
         resolve({
           r: 0,
           y: 0,
@@ -113,20 +95,13 @@ export async function plotNonCons(batches, branches) {
         });
       }
     });
-    
-    // const ncnsetS = ncnset.sort((a,b)=> a.x > b.x ? 1 : a.x < b.x ? -1 : 0);
-    // return ncnsetS;
-    // resolve(ncnsetS);
-    // });
   };
   
   let ncnset = [];
   
   for await( let batch of batches) {
-    
     const nonConData = await nonConPromise(batch, branches);
     ncnset.push(nonConData);
-    
   }
   
   const ncnsetS = ncnset.sort((a,b)=> a.x > b.x ? 1 : a.x < b.x ? -1 : 0);
@@ -193,7 +168,7 @@ export function plotTest(batches) {
           y: ngi.length,
           x: batch.completedAt || new Date(),
           z: `${batch.batch} = ${ngi.length} items`,
-          r: ngf * 10
+          r: ngf * 2
         });
       }
     }else{

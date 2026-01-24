@@ -15,7 +15,7 @@ const PerfScatter = ({ app })=> {
       err && console.log(err);
       if(re) {
         if(mounted.current) {
-          tickXYSet(re);
+          tickXYSet( re.sort((a,b)=> a.x > b.x ? 1 : a.x < b.x ? -1 : 0) );
         }
       }
     });
