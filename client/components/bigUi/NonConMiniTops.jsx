@@ -13,12 +13,12 @@ export const TotalNonCon = ({ noncons })=> (
   />
 );
                 
-                
 export const HasNonCon = ({ noncons, items })=> {
-  const hasNonCon = [... new Set( Array.from(noncons, x => x.serial) ) ].length;
+  const hasNonCon = new Set( Array.from(noncons, x => x.serial) ).size;
+  const itemQty = items.length > 0 ? items.reduce((t,i)=> t + i.units, 0) : 0;
   return(
     <KpiStat
-      num={((hasNonCon / items.length) * 100 ).toFixed(0) + '%'}
+      num={((hasNonCon / itemQty) * 100 ).toFixed(0) + '%'}
       name={'of ' + Pref.item + 's have nonCons'}
       color='var(--pomegranate)'
     />
@@ -26,10 +26,11 @@ export const HasNonCon = ({ noncons, items })=> {
 };
 
 export const NonConPer = ({ noncons, items })=> {
-  const ncG = countMulti( noncons.filter( n => !n.trash ) );
+  const ncG = countMulti( noncons.filter( n => !n.trash && !(n.inspect && !n.fix) ) );
+  const itemQty = items.length > 0 ? items.reduce((t,i)=> t + i.units, 0) : 0;
   return(
     <KpiStat
-      num={(ncG / items.length).toFixed(1, 10)}
+      num={(ncG / itemQty).toFixed(1, 10)}
       name={'nonCons per ' + Pref.item}
       color='var(--pomegranate)'
     />
@@ -37,7 +38,7 @@ export const NonConPer = ({ noncons, items })=> {
 };
 
 export const MostNonCon = ({ noncons, app })=> {
-  const ncG = noncons.filter( n => !n.trash );
+  const ncG = noncons.filter( n => !n.trash && !(n.inspect && !n.fix) );
   const mostType = ()=> {
     let types = [];
     for(let t of app.nonConOption) {

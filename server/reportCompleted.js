@@ -325,7 +325,6 @@ Meteor.methods({
   fetchFinishOnDay(dateString) {
     
     const localDate = moment.tz(dateString, Config.clientTZ);
-    
     let itemsMatch = [];
     
     const touchedSRS = XSeriesDB.find({

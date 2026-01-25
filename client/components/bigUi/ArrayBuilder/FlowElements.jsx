@@ -1,15 +1,15 @@
 import React, { Fragment } from 'react';
 
 export const branchOptions = ( branchSelect, trackOption )=> {
-
-  let optionsSort = trackOption.sort((t1, t2)=>
+  
+  const branchFilter = branchSelect === 'other' ?
+                  trackOption.filter( x => !x.branchKey || x.branchKey === '') :
+                  trackOption.filter( x => x.branchKey === branchSelect);
+  
+  let optionsSort = branchFilter.sort((t1, t2)=>
                   t1.step < t2.step ? -1 : t1.step > t2.step ? 1 : 0 );
-               
-  const branchArr = branchSelect === 'other' ?
-                  optionsSort.filter( x => !x.branchKey || x.branchKey === '') :
-                  optionsSort.filter( x => x.branchKey === branchSelect);
-                
-  return branchArr;
+                 
+  return optionsSort;
 };
 
 export const FinishOptions = ()=> (

@@ -1,33 +1,38 @@
 import moment from 'moment';
 import timezone from 'moment-timezone';
-import Config from '/server/hardConfig.js';
-
-import { countMulti } from '/server/utility.js';
-
 import { Interval, DateTime } from 'luxon';
+// import Config from '/server/hardConfig.js';
+
+import { 
+  countMulti, 
+  toLxDayStart, 
+  toLxDayEnd,
+  appValue
+} from '/server/utility.js';
 
 function findRelevantSeries(from, to) {
   return new Promise(resolve => {
-    const batchPack = XBatchDB.find({
-        orgKey: Meteor.user().orgKey,
-        $and : [
-          { createdAt: { $lte: new Date( to ) } },
-          { $or : [ 
-            { completed : false }, 
-            { completedAt : { $gte: new Date( from ) } } 
-          ] }
-        ]
-      },{fields:{'batch':1,'groupId':1}}).fetch();
-    
+    const accessKey = Meteor.user().orgKey;
+    const xid = appValue(accessKey, "internalID");
     let seriesPack = [];
-    for(let b of batchPack) {
-      const g = GroupDB.findOne({_id: b.groupId});
+    
+    XBatchDB.find({
+      orgKey: accessKey,
+      groupId: { $ne: xid },
+      $and : [
+        { createdAt: { $lte: new Date( to ) } },
+        { $or : [ 
+          { completed : false }, 
+          { completedAt : { $gte: new Date( from ) } } 
+        ] }
+      ]
+    },{fields:{'batch':1}})
+    .forEach( (b)=> {
       const srs = XSeriesDB.findOne({batch: b.batch});
-      if(srs && !g.internal) {
+      if(srs) {
         seriesPack.push(srs);
       }
-    }
-    
+    });
     resolve(seriesPack);
   });
 }
@@ -47,16 +52,16 @@ function loopSeriesesAll(serieses) {
   });
 }
 
-function loopSeriesesNC(serieses, from, to, interval) {
+function loopSeriesesNC(serieses, interval) {
   return new Promise(resolve => {
     let totalSerials = 0;
     let allNonCons = [];
     for(let srs of serieses) {
-      totalSerials += srs.items.length;
+      const itemQty = srs.items.length > 0 ? srs.items.reduce((t,i)=> t + i.units, 0) : 0;
+      totalSerials += itemQty;
       
       const scopeNC = srs.nonCon.filter( n => !n.trash && !(n.inspect && !n.fix) && interval.contains(DateTime.fromJSDate(n.time)));
-      // const scopeNC = srs.nonCon.filter( n => !n.trash && !(n.inspect && !n.fix) && moment(n.time).isBetween(from, to));
-      
+
       allNonCons.push(...scopeNC);
     }
     resolve({totalSerials, allNonCons});
@@ -179,7 +184,7 @@ function loopNonCons(nonCons, from, to) {
   });
 }
 
-function loopNonConsCross(nonCons, from, to, branch) {
+function loopNonConsCross(nonCons, branch) {
   return new Promise(resolve => {
     const inTime = nonCons; // prefiltered .filter( x => moment(x.time).isBetween(from, to) );
     const brAll = !branch || branch === 'ALL';
@@ -247,9 +252,11 @@ function loopNonConsCross(nonCons, from, to, branch) {
 Meteor.methods({
   
   buildKPInDepthReport(startDay, endDay, dataset) {
-      
-    const from = moment(startDay).tz(Config.clientTZ).startOf('day').format();
-    const to = moment(endDay).tz(Config.clientTZ).endOf('day').format();
+    const startLx = toLxDayStart(startDay, "yyyy-LL-dd");
+    const from = startLx.toISO();
+    const endLx = toLxDayEnd(endDay, "yyyy-LL-dd");
+    const to = endLx.toISO();
+    
     const dn = dataset === 'completed';
     
     async function getBatches() {
@@ -277,26 +284,19 @@ Meteor.methods({
   },
   
   buildNonConReport(startDay, endDay, branch) {
-    // the start day is actually a day early with moment  
-    // const from = moment(startDay).tz(Config.clientTZ).startOf('day').format();
-    // const to = moment(endDay).tz(Config.clientTZ).endOf('day').format();
-    
-    const startLx = DateTime.fromFormat(startDay, "yyyy-LL-dd", { zone: Config.clientTZ }).startOf('day');
-    const endLx = DateTime.fromFormat(endDay, "yyyy-LL-dd", { zone: Config.clientTZ }).endOf('day');
+    const startLx = toLxDayStart(startDay, "yyyy-LL-dd");
+    const endLx = toLxDayEnd(endDay, "yyyy-LL-dd");
 
     const interval = Interval.fromDateTimes(startLx, endLx);
     
     const from = startLx.toISO();
     const to = endLx.toISO();
     
-    // console.log(interval);
-    console.log(from, to);
-    
     async function getBatches() {
       try {
         seriesSlice = await findRelevantSeries(from, to);
-        seriesArangeNC = await loopSeriesesNC(seriesSlice, from, to, interval);
-        nonConStats = await loopNonConsCross(seriesArangeNC.allNonCons, from, to, branch);
+        seriesArangeNC = await loopSeriesesNC(seriesSlice, interval);
+        nonConStats = await loopNonConsCross(seriesArangeNC.allNonCons, branch);
         
         const seriesInclude = seriesSlice.length;
         const itemsInclude = seriesArangeNC.totalSerials;
@@ -309,6 +309,72 @@ Meteor.methods({
       }
     }
     return getBatches();
+  },
+  
+  getBrNcItemsPercent(branch, startDay, endDay) {
+    const startLx = toLxDayStart(startDay, "yyyy-LL-dd");
+    const endLx = toLxDayEnd(endDay, "yyyy-LL-dd");
+    const interval = Interval.fromDateTimes(startLx, endLx);
+    const from = startLx.toISO();
+    const to = endLx.toISO();
+    
+    
+      
+    // return new Promise(resolve => {
+    const accessKey = Meteor.user().orgKey;
+    // const xid = appValue(accessKey, "internalID");
+    var bRx = new RegExp('surface mount', 'i');
+    var iRx = new RegExp('smt', 'i');
+
+    let seriesPack = [];
+      
+      // console.log({from, to});
+      
+    XBatchDB.find({
+      orgKey: accessKey,
+      // groupId: { $ne: xid },
+      $and : [
+        { createdAt: { $lte: new Date( to ) } },
+        { $or : [ 
+          { completed : false }, 
+          { completedAt : { $gte: new Date( from ) } } 
+        ] }
+      ]
+    },{fields:{'batch':1}})
+    .forEach( (b)=> {
+      
+      XSeriesDB.find({
+        batch: b.batch
+      },{fields:{'batch':1,'items':1,'nonCon':1}})
+      .forEach( (srs)=> {
+     
+        if(srs.items.some( (i)=> i.history.find( h => iRx.test(h.step) ) ) ) {
+          
+          const itemQty = srs.items.length > 0 ? srs.items.reduce((t,i)=> t + i.units, 0) : 0;
+          //this is all items, not just the ones processed in time period !!
+          
+        
+          let ncScope = new Set();
+          for(let n of srs.nonCon) {
+            if(bRx.test(n.where) && 
+              !n.trash && !(n.inspect && !n.fix) && 
+              interval.contains(DateTime.fromJSDate(n.time))
+            ) {
+              ncScope.add(n.serial);
+            }
+          }
+          
+          const per = Math.round( (ncScope.size / itemQty) * 100 );
+        
+          seriesPack.push([srs.batch, per]);
+        }
+      });
+      
+    });
+    
+    return seriesPack;
+      // resolve(seriesPack);
+    // });
   }
   
 })

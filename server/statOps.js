@@ -64,7 +64,7 @@ export const totalTideTimePromise = (accessKey, rangeStart, rangeEnd)=> {
 function collectNonCon(batchID) {
   return new Promise(resolve => {
     let collection = false;
-    const bx = XBatchDB.findOne({_id: batchID});
+    const bx = XBatchDB.findOne({_id: batchID},{fields:{'batch':1}});
     if(bx) {
       const srs = XSeriesDB.findOne({batch: bx.batch});
       
@@ -80,7 +80,7 @@ function collectNonCon(batchID) {
       // nc rate
       const ncRate = asRate(nonConTotal, itemQty, true);
       // how many items have nonCons
-      const hasNonCon = [... new Set( Array.from(rNC, x => x.serial) ) ].length;
+      const hasNonCon = new Set( Array.from(rNC, x => x.serial) ).size;
       // what percent of items have nonCons
       const percentOfNCitems = itemQty === 0 ? 0 : hasNonCon >= itemQty ? 100 :
         ((hasNonCon / itemQty) * 100 ).toFixed(0);

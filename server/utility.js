@@ -1,4 +1,6 @@
 import moment from 'moment';
+import { DateTime } from 'luxon';
+import Config from '/server/hardConfig.js';
 
 export function syncLocale(accessKey) {
   const app = AppDB.findOne({orgKey:accessKey}, 
@@ -11,6 +13,18 @@ export function syncLocale(accessKey) {
     });
   }
 }
+
+export const toLxDayStart = (day, format)=> {
+  return DateTime
+          .fromFormat(day, format, { zone: Config.clientTZ })
+          .startOf('day');
+};
+export const toLxDayEnd = (day, format)=> {
+  return DateTime
+          .fromFormat(day, format, { zone: Config.clientTZ })
+          .endOf('day');
+};
+
 export function appValue(accessKey, onekey) {
   const app = AppDB.findOne({orgKey:accessKey},{fields:{[onekey]:1}});
   if( app ) { 

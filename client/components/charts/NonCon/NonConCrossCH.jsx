@@ -24,6 +24,8 @@ ChartJS.register(
 
 const NonConCrossCH = ({ rawdata, dateString, branch })=> {
   
+  const brAll = !branch || branch === 'ALL';
+  
   const [ data, dataSet ] = useState({labels:[], datasets:[]});
   
   const options = {
@@ -37,7 +39,7 @@ const NonConCrossCH = ({ rawdata, dateString, branch })=> {
     },
     plugins: {
       legend: {
-        display: !branch || branch === 'ALL',
+        display: brAll,
         position: 'top'
       },
       title: {
@@ -54,7 +56,7 @@ const NonConCrossCH = ({ rawdata, dateString, branch })=> {
     dataSet({
       labels,
       datasets: rawdata[0].map( (d, i)=>{ 
-        if(i !== 0 && i !== lastIndex) {
+        if(i !== 0 && (brAll ? i !== lastIndex : true)) {
           const clrshift = "hsl(5.61deg 78.08% " + (5 + (i*5)) + "%)";
           return {
             label: d,

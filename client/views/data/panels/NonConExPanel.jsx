@@ -22,7 +22,6 @@ const NonConExPanel = ({ brancheS, request, app })=> {
       <div className='rowWrapR noPrint'><PrintThis /></div>
       
       <div className='space'>
-        <h2>NonCon Reported Report</h2>
         <h4 className='noPrint darkOrangeT medSm'>WARNING: Long Time Ranges Can Delay Production Activities</h4>
         <div className='noPrint max750'>
           <p className='rowWrap'>
@@ -60,12 +59,29 @@ const NonConExPanel = ({ brancheS, request, app })=> {
               setTo={endSet} />
           </p>
         </div>
-        
+      </div>
+      
+      <div className='space'>
+        <h2 style={{marginBottom:'32px'}}>NonCon Types Report</h2>
         <NCcrossReport 
           start={start} 
           end={end} 
           dataset='noncon'
           branch={branch}
+        />
+      </div>
+      
+      <hr className='vmargin' />
+      <div className='printBr' />
+      
+      <div className='space'>
+        <h2 style={{marginBottom:'32px'}}>Percent Items NonCon Report</h2>
+        
+        <NCItemsPercent 
+          start={start} 
+          end={end}
+          branch={branch}
+          app={app}
         />
       </div>
       
@@ -83,3 +99,30 @@ const NonConExPanel = ({ brancheS, request, app })=> {
 };
 
 export default NonConExPanel;
+
+const NCItemsPercent = ({ start, end, branch, app })=> {
+  
+  function getReport() {
+    // workingSet(true);
+    Meteor.call('getBrNcItemsPercent', branch, start, end, (err, reply)=> {
+      err && console.log(err);
+      if(reply) {
+        
+        // workingSet(false);
+        // replySet(arrange);
+        
+        console.log(reply);
+      }
+    });
+  }
+  
+  return(
+    <div className='vmarginhalf noPrint'>
+      <button 
+        className='action blackSolid'
+        onClick={(e)=>getReport(e)} 
+        disabled={!start || !end}
+      >Get Percent Report</button>
+    </div>
+  );
+};

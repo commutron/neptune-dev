@@ -41,7 +41,7 @@ const ProblemTab = ({
 	);
 	
   const nonConArray = srsNonCon || [];
-  const nonConArrayClean = nonConArray.filter( x => !x.trash );
+  const nonConArrayClean = nonConArray.filter( n => !n.trash && !(n.inspect && !n.fix) );
   
   return(
     <div className='space'>
