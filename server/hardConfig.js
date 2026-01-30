@@ -26,7 +26,7 @@ class Config {
     this.unitLimit = 1000; // max units per item
     
     this.freche = 12; // in hours, time limit for refreshed on-demand caches
-    this.avgSpan = 1000; // in days, how far back to count for average statistics
+    this.avgSpan = 730; // in days, how far back to count for average statistics
     this.yrsSpan = 5; // in years, how far back to count years for statistics
     
     this.estLean = 2; // to shift estimated minutes toward est and away from quoted

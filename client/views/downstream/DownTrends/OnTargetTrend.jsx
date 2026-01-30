@@ -6,7 +6,6 @@ import { ToggleSwitch } from '/client/components/smallUi/ToolBarTools';
 
 import { percentOf } from '/client/utility/Convert';
 
-
 const OnTargetTrend = ({ app, isDebug })=>{
 
   const thingMounted = useRef(true);
@@ -19,10 +18,6 @@ const OnTargetTrend = ({ app, isDebug })=>{
   const [ fillDT, fillSet ] = useState( blank );
   const [ shipDT, shipSet ] = useState( blank );
   const [ dataQ, dataSetQ ] = useState( blank );
-              
-  useEffect( ()=>{
-    return () => { thingMounted.current = false };
-  }, []);
   
   function chartConvert(re) {
     const FasPercent = Array.from(re, w => { 
@@ -49,16 +44,14 @@ const OnTargetTrend = ({ app, isDebug })=>{
     workingSet(false);
   }
   
-  function runLoopLite(cName, tspan) {
+  function runLoopLite() {
     workingSet(true);
     
     const backDate = isDebug ? app.createdAt : app.tideWall;
     const dur = moment.duration(moment().diff(moment(backDate)));
-    const durCln = tspan == 'month' ?
-                    parseInt( dur.asMonths(), 10 ) :
-                    parseInt( dur.asWeeks(), 10 );
+    const durCln = parseInt( dur.asMonths(), 10 );
                     
-    Meteor.call('cycleLiteRate', cName, durCln, (err, re)=>{
+    Meteor.call('cycleLiteRate', 'doneBatchLiteMonths', durCln, (err, re)=>{
       err && console.log(err);
       if(re) {
         if(thingMounted.current) {
@@ -69,6 +62,11 @@ const OnTargetTrend = ({ app, isDebug })=>{
     });
   }
   
+  useEffect( ()=> {
+    runLoopLite();
+    return () => { thingMounted.current = false };
+  }, []);
+  
   return(
     <div>
        
@@ -77,18 +75,6 @@ const OnTargetTrend = ({ app, isDebug })=>{
           <b><i className='fas fa-spinner fa-lg fa-spin'></i></b> :
           <i><i className='fas fa-spinner fa-lg'></i></i>
         }
-        
-        <button
-          className='smallAction blackHover gap'
-          onClick={()=>runLoopLite('doneBatchLiteMonths', 'month')}
-          disabled={working}
-        >By Month</button>
-        
-        <button
-          className='smallAction blackHover gap'
-          onClick={()=>runLoopLite('doneBatchLiteWeeks', 'week')}
-          disabled={working}
-        >By Week</button>
         
         <span className='flexSpace' />
         

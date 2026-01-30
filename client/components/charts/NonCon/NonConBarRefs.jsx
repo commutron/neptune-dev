@@ -1,20 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  VictoryStack,
-  VictoryBar,
-  VictoryChart, 
-  VictoryAxis, 
-  VictoryTooltip
-} from 'victory';
 //import Pref from '/client/global/pref.js';
-import Theme from '/client/global/themeV.js';
-import { CalcSpin } from '/client/components/tinyUi/Spin.jsx';
+
+import { NonConBarCH } from '/client/components/charts/NonCon/NonConBar';
 import { countMulti } from '/client/utility/Arrays';
 
 const NonConBarRefs = ({ ncOp, nonCons, app, isDebug })=> {
   
   const [ series, seriesSet ] = useState([]);
-  const [ typeNum, typeNumSet ] = useState(null);
+  const [ types, typeNumSet ] = useState(null);
   
   useEffect( ()=> {
     const uniqueRefs =  new Set( Array.from(nonCons, x => x.ref) );
@@ -23,7 +16,8 @@ const NonConBarRefs = ({ ncOp, nonCons, app, isDebug })=> {
       let match = nonCons.filter( y => y.ref === ref );
       return{
         'name': ref,
-        'ncs': match
+        'ncs': match,
+        'index': index
       };
     });
     
@@ -38,85 +32,33 @@ const NonConBarRefs = ({ ncOp, nonCons, app, isDebug })=> {
         if(typeCount > 0) {
           typeSet.add(n);
           type.push({
-            x: n,
-            y: typeCount,
+            x: typeCount,
+            y: n,
             l: ref.name,
           });
         }
       }
-      splitByType.push(type);
+      const clrshift = "hwb(7.16deg 14.74% " + (ref.index*10) + "%)";
+        splitByType.push({
+          label: ref.name,
+          data: type,
+          backgroundColor: clrshift,
+          stack: 'stk'
+        });
     }
-    typeNumSet([...typeSet].length);
+    typeNumSet([...typeSet]);
     seriesSet( splitByType );
   }, []);
-
-    isDebug && console.log({series, typeNum});
-
-  if(typeNum === null) {
-    return(
-      <CalcSpin />
-    );
-  }
+  
+  isDebug && console.log({series, types});
   
   return(
-    <div className='chartNoHeightContain'>
-
-      <VictoryChart
-        theme={Theme.NeptuneVictory}
-        padding={{top: 10, right: 20, bottom: 20, left: 100}}
-        domainPadding={20}
-        height={50 + ( typeNum * 15 )}
-      >
-        <VictoryAxis
-          dependentAxis
-          tickFormat={(t) => Math.round(t)}
-          style={ {
-            axis: { stroke: 'grey' },
-            grid: { stroke: '#5c5c5c' },
-            ticks: { stroke: '#5c5c5c' },
-            tickLabels: { 
-              fontSize: '6px' }
-          } }
-        />
-        <VictoryAxis 
-          style={ {
-            axis: { stroke: 'grey' },
-            grid: { stroke: '#5c5c5c' },
-            ticks: { stroke: '#5c5c5c' },
-            tickLabels: { 
-              fontSize: '6px' }
-          } }
-        />
-        <VictoryStack
-          theme={Theme.NeptuneVictory}
-          colorScale='heatmap'
-          horizontal={true}
-          padding={0}
-        >
-        
-        {series.map( (entry, index)=>{
-          if(entry.length > 0) {
-            return(
-              <VictoryBar
-                key={index+entry.l}
-                data={entry}
-                labels={(l) => `${l.datum.l}`}
-                labelComponent={
-                  <VictoryTooltip
-                    orientation='top'
-                    style={{ fontSize: '7px', padding: 4 }}
-                  />}
-                barWidth={5}
-              />
-          )}
-        })}
-        </VictoryStack>
-      </VictoryChart>
-      
-      
-      <p className='centreText small'>Defect Type and Reference</p>
-      
-    </div>
+    <NonConBarCH
+      series={series}
+      types={types}
+      isDebug={isDebug}
+      title='Defect Type and Reference'
+    />
   );
 };
 

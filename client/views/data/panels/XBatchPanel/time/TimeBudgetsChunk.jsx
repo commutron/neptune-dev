@@ -21,19 +21,22 @@ const TimeBudgetsChunk = ({
 }) =>	{
   
   const [ branchTime, branchTimeSet ] = useState(false);
+  const [ qtZero, showQtZero ] = useState(false);
 
   useEffect( ()=>{
-    if(b.quoteTimeCycles) {
+    // if(b.quoteTimeCycles) {
+      console.log('run collate');
       Meteor.call('collateBranchTime', b.batch, (err, reply)=>{
         err && console.log(err);
         reply && branchTimeSet( reply );
       });
-    }else{
-      Meteor.call('assembleBranchTime', b.batch, (err, reply)=>{
-        err && console.log(err);
-        reply && branchTimeSet( reply );
-      });
-    }
+    // }else{
+    //   console.log('run assemble');
+    //   Meteor.call('assembleBranchTime', b.batch, (err, reply)=>{
+    //     err && console.log(err);
+    //     reply && branchTimeSet( reply );
+    //   });
+    // }
   }, []);
   
   const totalsCalc = splitTidebyPeople(b.tide);
@@ -43,43 +46,6 @@ const TimeBudgetsChunk = ({
                 b.quoteTimeBudget[0].timeAsMinutes : 0;
   
   const totalBudgetMinutes = !plus ? Number(qtBudget) : Number(qtBudget) + Number(addTime);
-  const totalBudgetAs = conversion === 'minutes' ? 
-                        Math.round(totalBudgetMinutes) :
-                        min2hr(totalBudgetMinutes);
-  
-  const extraAs = conversion === 'minutes' ? 
-                    Math.round(Number(addTime)) :
-                    min2hr(Number(addTime));
-  
-  const totalMessage = conversion === 'minutes' ? 'minutes' : 'hours';
-  
-  const totalTideMinutes = totalsCalc.totalTime;
-  const totalTideAs = conversion === 'minutes' ? 
-                      Math.round(totalTideMinutes) :
-                      conversion === 'percent' ?
-                        percentOf(totalBudgetMinutes, totalTideMinutes) :
-                        min2hr(totalTideMinutes);
-     
-  const quote2tide = totalBudgetMinutes - totalTideMinutes;
-  const bufferNice = Math.round(Math.abs(quote2tide));
-  
-  const bufferAs = conversion === 'minutes' ? 
-                   bufferNice :
-                   conversion === 'percent' ?
-                    Math.abs(percentOverUnder(totalBudgetMinutes, totalTideMinutes)) :
-                    min2hr(bufferNice);
-  
-  const bufferMessage = quote2tide < 0 ? "exceeding quote" : "of quoted remaining";
-  
-  const totalLeftMinutes = quote2tide < 0 ? 0 : bufferNice;
-  const totalOverMinutes = quote2tide < 0 ? bufferNice : 0;
-  
-  isDebug && console.log({
-    totalBudgetMinutes,
-    totalTideMinutes,
-    totalLeftMinutes,
-    totalOverMinutes
-  });
   
   const timeAs = (dur)=> {
     return conversion === 'minutes' ? Math.round(dur) :
@@ -91,11 +57,11 @@ const TimeBudgetsChunk = ({
   const totalPeople = totalsCalc.peopleTime;
   const tP = totalPeople.length;
   
-  const qtTaskTimesArray = b.quoteTimeCycles || [];
   const oldTaskTimesArray = b.quoteTimeBreakdown ? b.quoteTimeBreakdown.timesAsMinutes : [];
   
   const cnv = conversion === 'minutes' ? 'min' : conversion === 'percent' ? '%' : 'hrs';
   
+  console.log({branchTime});
   return(
     <div>
       <div className='centreRow comfort'>
@@ -111,17 +77,26 @@ const TimeBudgetsChunk = ({
           <em>{b.quoteTimeCycles ? "QT Time (2025) Enabled" : "Legacy Task Time Estimates Used"}</em>
         </div>
         
-        <ToggleBar
-          toggleIcons={['𝗛𝗿', '𝗠𝗻', 
-            <n-fa1><i className='fas fa-percentage fa-fw'></i></n-fa1>, 
-            <n-fa2><i className='fas fa-bars fa-fw'></i></n-fa2>
-          ]}
-          toggleOptions={[ 
-            'hours','minutes','percent','raw records'
-          ]}
-          toggleVal={conversion}
-          toggleSet={(e)=>conversionSet(e)}
-        />
+        <span className='rowWrap'>Zero Sub-Tasks
+          <label className='beside gapR'>
+            <input
+              type='checkbox'
+              className='minHeight medSm'
+              defaultChecked={qtZero}
+              onChange={()=>showQtZero(!qtZero)} 
+            /></label>
+          <ToggleBar
+            toggleIcons={['𝗛𝗿', '𝗠𝗻', 
+              <n-fa1><i className='fas fa-percentage fa-fw'></i></n-fa1>, 
+              <n-fa2><i className='fas fa-bars fa-fw'></i></n-fa2>
+            ]}
+            toggleOptions={[ 
+              'hours','minutes','percent','raw records'
+            ]}
+            toggleVal={conversion}
+            toggleSet={(e)=>conversionSet(e)}
+          />
+        </span>
       </div>
       
       {b.createdAt < tideWall &&
@@ -141,36 +116,15 @@ const TimeBudgetsChunk = ({
       : 
       <div className='space'>
         <div className='containerE'>
-          <div className='oneEcontent numFont'>
-            <TimeBudgetBar 
-              a={totalTideMinutes} 
-              b={totalLeftMinutes} 
-              c={totalOverMinutes}
-            />
-            
-            <p className='bigger line1x'
-              >{totalTideAs} <i className='med'>{conversion} logged</i>
-            </p>
-            
-            <p className='bigger line1x'
-              >{totalBudgetAs} <i className='med'>{totalMessage} quoted</i>
-            </p>
-            {addTime > 0 && 
-              <div className='beside'>
-                <input
-                  type='checkbox'
-                  className='minHeight'
-                  defaultChecked={plus}
-                  onChange={()=>plusSet(!plus)} 
-                /><i className='small fade'
-                  >Including {extraAs} {totalMessage} of extra time</i>
-              </div>
-            }
-            
-            <p className='bigger line1x' 
-              >{bufferAs} <i className='med'>{conversion} {bufferMessage}</i>
-            </p>
-          </div>
+          <TotalTide
+            totalBudgetMinutes={totalBudgetMinutes}
+            totalTime={totalsCalc.totalTime}
+            conversion={conversion}
+            plus={plus}
+            plusSet={plusSet}
+            addTime={addTime}
+            isDebug={isDebug}
+          />
       
           <div className='twoEcontent numFont'>
             <TimeBudgetBar a={tP} b={0} c={0} />
@@ -199,11 +153,11 @@ const TimeBudgetsChunk = ({
                 <TimeSplitBar
                   title={Pref.branches}
                   nums={branchTime}
-                  chunks={branchTime.map(b=>b.y>0)}
+                  chunks={branchTime.map(b=>b.brTotal>0)}
                   colour='blue'
                 />
                 <dl className='readlines'>
-                  {!qtTaskTimesArray ?
+                  {null  ?
                     <LegacyTaskBreakdown 
                       branchTime={branchTime}
                       qtbB={oldTaskTimesArray} 
@@ -212,72 +166,27 @@ const TimeBudgetsChunk = ({
                       mlt='Includes Multi-tasking'
                     />
                   :
-                  branchTime.map((br, ix)=>{
-                    if(br.y > 0) {
-                      const brData = qtTaskTimesArray.filter( x => x[0].includes(br.x) );
-                        const brTotal = brData.reduce((a,b)=> a + b[1], 0);
-                        return( 
-                          <dl key={ix} className='breaklines'>
-                            <dt
-                              title={`${Math.round(br.y)} minutes`}
-                              className='rightRow doJustWeen'
-                            ><i className='cap'
-                              >{br.x}{br.w && 
-                                <i className='fa-regular fa-clone fa-sm tealT gapL'></i>}
-                              </i>
-                              <span className='grayT rightText medSm'
-                              ><i className={brTotal > 0 && br.y > brTotal ? 'redT' : '' }> {timeAs(br.y)}</i><n-sm>{brTotal > 0 && "/"+timeAs(brTotal)}</n-sm> {cnv}</span>
-                            </dt>
-                            {br.q && br.q.length > 0 ? br.q.map( (qt, ixz)=> {
-                              const sbQ = qtTaskTimesArray.find( x => x[0] === qt.q );
-                              let qtapp = sbQ ? app.qtTasks.find( q => q.qtKey === qt.q ) : null;
-                              let qtname = qtapp?.qtTask || '*unquoted';
-                              let mxQ = !qtapp ? null : qtapp.fixed ? sbQ[1] : ( sbQ[1] * (b.quantity || 0) );
-                              return(
-                                <dd 
-                                  key={ix+'sub'+ixz}
-                                  title={`${Math.round(qt.sum)} minutes`}
-                                  className='rightRow doJustWeen'
-                                ><i className='cap'>{qtname}{qt.w && 
-                                   <i className='fa-regular fa-clone fa-xs tealT gapL'></i>}
-                                 </i>
-                                  <span className='rightText medSm grayT'
-                                  ><i className={mxQ && qt.sum > mxQ ? 'redT' : '' }> {timeAs(qt.sum)}</i><n-sm>{mxQ && "/"+timeAs(mxQ)}</n-sm> {cnv}</span>
-                                </dd>
-                            )}) : null}
-                          </dl>
-                        );
-                    }})}
+                  <QuotedTaskBreakdown
+                    branchTime={branchTime}
+                    qtTaskTimesArray={b.quoteTimeCycles || oldTaskTimesArray} 
+                    timeAs={timeAs}
+                    cnv={cnv}
+                    qtZero={qtZero}
+                    mlt='Includes Multi-tasking'
+                    app={app}
+                    quantity={b.quantity}
+                  />
+                  }
                   </dl>
                 </div>
               }
           </div>
         </div>
-      
-        <details className='footnotes'>
-          <summary>Calculation Details</summary>
-          <p className='footnote'>Sum of time blocks are each rounded to their nearest minute</p>
-          <p className='footnote'>
-            Logged time is recorded to the second and is displayed to the nearest minute.
-          </p>
-          <p className='footnote'>
-            Update quoted time budget in hours to 2 decimal places.
-          </p>
-          <p className='footnote'><i className='fa-regular fa-clone tealT gapR'></i>Indicates the user was clocked into multiple tasks at once. The durration is evenly split between the tasks.</p>
-          {b.quoteTimeCycles ?
-          <p className='footnote'>
-            Post fall 2025, task time is sorted into QT Cycle time; groups that corospond to the order quote via a breakdown on the {Pref.widget} process flow. 
-          </p>
-          :
-          <p className='footnote'>
-            Pre fall 2025, task time is calculated by {Pref.branch}. When subtask was not logged, Neptune attempts to derive the task from other user interaction.
-          </p>
-          }
-          <dl className='monoFont'>
-            <dd>minutes_quoted = {qtBudget}</dd>
-            <dd>minutes / list length</dd>
-          </dl>
-        </details>
+        
+        <TideDetails 
+          qtBudget={qtBudget}
+          qtCycles={b.quoteTimeCycles}
+        />
       </div>
       }
     </div>  
@@ -286,7 +195,142 @@ const TimeBudgetsChunk = ({
 
 export default TimeBudgetsChunk;
 
+const TotalTide = ({ totalBudgetMinutes, totalTime, conversion, plus, plusSet, addTime, isDebug })=> {
+  
+  const totalBudgetAs = conversion === 'minutes' ? 
+                        Math.round(totalBudgetMinutes) :
+                        min2hr(totalBudgetMinutes);
+  
+  const extraAs = conversion === 'minutes' ? 
+                    Math.round(Number(addTime)) :
+                    min2hr(Number(addTime));
+                    
+  const totalMessage = conversion === 'minutes' ? 'minutes' : 'hours';
+
+  const totalTideMinutes = totalTime;
+  const totalTideAs = conversion === 'minutes' ? 
+                      Math.round(totalTideMinutes) :
+                      conversion === 'percent' ?
+                        percentOf(totalBudgetMinutes, totalTideMinutes) :
+                        min2hr(totalTideMinutes);
+     
+  const quote2tide = totalBudgetMinutes - totalTideMinutes;
+  const bufferNice = Math.round(Math.abs(quote2tide));
+  
+  const bufferAs = conversion === 'minutes' ? 
+                   bufferNice :
+                   conversion === 'percent' ?
+                    Math.abs(percentOverUnder(totalBudgetMinutes, totalTideMinutes)) :
+                    min2hr(bufferNice);
+                    
+  const bufferMessage = quote2tide < 0 ? "exceeding quote" : "of quoted remaining";
+  
+  const totalLeftMinutes = quote2tide < 0 ? 0 : bufferNice;
+  const totalOverMinutes = quote2tide < 0 ? bufferNice : 0;
+  
+  isDebug && console.log({
+    totalBudgetMinutes,
+    totalTideMinutes,
+    totalLeftMinutes,
+    totalOverMinutes
+  });
+  
+  return(
+    <div className='oneEcontent numFont'>
+      <TimeBudgetBar 
+        a={totalTideMinutes} 
+        b={totalLeftMinutes} 
+        c={totalOverMinutes}
+      />
+      
+      <p className='bigger line1x'
+        >{totalTideAs} <i className='med'>{conversion} logged</i>
+      </p>
+      
+      <p className='bigger line1x'
+        >{totalBudgetAs} <i className='med'>{totalMessage} quoted</i>
+      </p>
+      {addTime > 0 && 
+        <div className='beside'>
+          <input
+            type='checkbox'
+            className='minHeight'
+            defaultChecked={plus}
+            onChange={()=>plusSet(!plus)} 
+          /><i className='small fade'
+            >Including {extraAs} {totalMessage} of extra time</i>
+        </div>
+      }
+      
+      <p className='bigger line1x' 
+        >{bufferAs} <i className='med'>{conversion} {bufferMessage}</i>
+      </p>
+    </div>
+  );
+};
+
+const QuotedTaskBreakdown = ({ 
+  branchTime, qtTaskTimesArray, timeAs, cnv, qtZero, mlt, app, quantity 
+})=> {
+  
+  const mltIcn = <i className='fa-regular fa-clone fa-xs tealT gapL'></i>;
+  
+  return(
+    <div>
+      {branchTime.map((br, ix)=>{
+        if(qtZero || br.brTotal > 0) {
+          return( 
+            <dl key={ix} className='breaklines'>
+              <dt title={`${Math.round(br.brTotal)} minutes`} className='rightRow doJustWeen'
+                ><i className='cap bold'>{br.branch}{br.brMulti && mltIcn}</i>
+                <span className='grayT rightText medSm'
+                  ><i> {timeAs(br.brTotal)}</i>{/*}<n-sm>{br.brCap > 0 && "/"+timeAs(brCap)}</n-sm>*/} {cnv}</span>
+              </dt>
+              {br.brQts.map( (qt)=> {
+                const qtedData = qtTaskTimesArray.find( x => x[0] === qt.key );
+                let qtapp = qtedData ? app.qtTasks.find( q => q.qtKey === qt.key ) : null;
+                let qtname = qtapp?.qtTask || qt.qt;
+                let mxQ = !qtapp ? null : qtapp.fixed ? qtedData[1] : ( qtedData[1] * (quantity || 0) );
+                if((qt.qt === 'unquoted' && qt.qtTotal === 0) || (!qtZero && qt.qtTotal === 0)) {
+                  return null;
+                }else{
+                  return(
+                    <dl key={ix+'qt'+qt.key} className='breaklines'>
+                      <dd 
+                        title={`${Math.round(qt.qtTotal)} minutes`}
+                        className='rightRow doJustWeen'
+                        style={{margin: '5px 0 5px 12px'}}
+                      ><i className='cap'>{qtname}{qt.qtMulti && mltIcn}</i>
+                        <span className='rightText medSm grayT'
+                        ><i className={mxQ && qt.qtTotal > mxQ ? 'redT' : '' }> {timeAs(qt.qtTotal)}</i><n-sm>{mxQ && "/"+timeAs(mxQ)}</n-sm> {cnv}</span>
+                      </dd>
+                      {qt.qtSubs.map( (qtsb, ixzz)=> {
+                        if(qtZero || qtsb.sum > 0) {
+                          return(
+                            <dd 
+                              key={ix+'qt'+qt.key+'sub'+ixzz}
+                              title={`${Math.round(qtsb.sum)} minutes`}
+                              className='rightRow doJustWeen medSm'
+                            ><i className='cap'>{qtsb.sub}{qtsb.w && mltIcn}</i>
+                              <span className='rightText grayT'
+                              ><i> {timeAs(qtsb.sum)}</i> {cnv}</span>
+                            </dd>
+                          );
+                        }
+                      })}
+                    </dl>
+                )}})}
+            </dl>
+          );
+        }
+      })}
+    </div>
+  );
+};
+
 const LegacyTaskBreakdown = ({ branchTime, qtbB, timeAs, cnv, mlt })=> {
+  
+  console.log('legacy fallback?');
   return(
     <dl className='readlines'>
       {branchTime.map((br, ix)=>{
@@ -326,3 +370,30 @@ const LegacyTaskBreakdown = ({ branchTime, qtbB, timeAs, cnv, mlt })=> {
     </dl>
   );
 };
+
+const TideDetails = ({ qtCycles, qtBudget })=> (
+  <details className='footnotes'>
+    <summary>Calculation Details</summary>
+    <p className='footnote'>Sum of time blocks are each rounded to their nearest minute</p>
+    <p className='footnote'>
+      Logged time is recorded to the second and is displayed to the nearest minute.
+    </p>
+    <p className='footnote'>
+      Update quoted time budget in hours to 2 decimal places.
+    </p>
+    <p className='footnote'><i className='fa-regular fa-clone tealT gapR'></i>Indicates the user was clocked into multiple tasks at once. The durration is evenly split between the tasks.</p>
+    {qtCycles ?
+    <p className='footnote'>
+      Post fall 2025, task time is sorted into QT Cycle time; groups that corospond to the order quote via a breakdown on the {Pref.widget} process flow. 
+    </p>
+    :
+    <p className='footnote'>
+      Pre fall 2025, task time is calculated by {Pref.branch}. When subtask was not logged, Neptune attempts to derive the task from other user interaction.
+    </p>
+    }
+    <dl className='monoFont'>
+      <dd>minutes_quoted = {qtBudget}</dd>
+      <dd>minutes / list length</dd>
+    </dl>
+  </details>
+);

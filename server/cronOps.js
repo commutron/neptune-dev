@@ -246,7 +246,40 @@ async function countDoneBatchTarget(accessKey) {
     syncLocale(accessKey);
     const xid = noIg();
     
-    const batches = XBatchDB.find({
+    // const batches = XBatchDB.find({
+    //   orgKey: accessKey, 
+    //   groupId: { $ne: xid },
+    //   completed: true
+    // },{fields:{
+    //   'batch': 1,
+    //   'salesEnd': 1,
+    //   'completedAt': 1,
+    //   'tide': 1,
+    //   'quoteTimeBudget': 1,
+    //   'lockTrunc': 1
+    // }}).fetch();
+    
+    // let bStats = [];
+    
+    // for(let gfx of batches) {
+    //   const dst = deliveryBinary(gfx._id, gfx.salesEnd, gfx.completedAt);
+    //   const fillOn = dst[0] === 'late' ? false : true;
+    //   const shipOn = dst[1] === 'late' ? false : true;
+      
+    //   const q = checkTimeBudget(gfx.tide, gfx.quoteTimeBudget, gfx.lockTrunc);
+    //   const qbgtOn = !q ? null : q < 0 ? false : true;
+      
+    //   bStats.push({
+    //     fillOn: fillOn,
+    //     shipOn: shipOn,
+    //     qbgtOn: qbgtOn,
+    //     finish: gfx.completedAt
+    //   });
+    // }
+    
+    let bStats = [];
+    
+    XBatchDB.find({
       orgKey: accessKey, 
       groupId: { $ne: xid },
       completed: true
@@ -257,11 +290,7 @@ async function countDoneBatchTarget(accessKey) {
       'tide': 1,
       'quoteTimeBudget': 1,
       'lockTrunc': 1
-    }}).fetch();
-    
-    let bStats = [];
-    
-    for(let gfx of batches) {
+    }}).forEach( gfx => {
       const dst = deliveryBinary(gfx._id, gfx.salesEnd, gfx.completedAt);
       const fillOn = dst[0] === 'late' ? false : true;
       const shipOn = dst[1] === 'late' ? false : true;
@@ -275,21 +304,21 @@ async function countDoneBatchTarget(accessKey) {
         qbgtOn: qbgtOn,
         finish: gfx.completedAt
       });
-    }
+    });
 
     const stdRanges = getRanges();
     
-    let weekXY = addRanges(bStats, stdRanges[0], 'week');
     let monthXY = addRanges(bStats, stdRanges[1], 'month');
     
     let monthweekXY = runMonthWeeks(bStats, stdRanges[1]);
     
+    // clear in production database
     CacheDB.upsert({orgKey: accessKey, dataName: 'doneBatchLiteWeeks'}, {
       $set : {
         orgKey: accessKey,
         lastUpdated: new Date(),
         dataName: 'doneBatchLiteWeeks',
-        dataSet: weekXY
+        dataSet: []
     }});
     
     CacheDB.upsert({orgKey: accessKey, dataName: 'doneBatchLiteMonths'}, {

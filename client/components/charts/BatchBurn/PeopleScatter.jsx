@@ -5,7 +5,6 @@ import {
   Chart as ChartJS,
   CategoryScale,
   PointElement,
-  LineElement,
   Title,
   Tooltip
 } from 'chart.js';
@@ -15,13 +14,11 @@ import 'chartjs-adapter-moment';
 ChartJS.register(
   CategoryScale,
   PointElement,
-  LineElement,
   Title,
   Tooltip
 );
 
 import UserName from '/client/utility/Username.js';
-// import { toCap } from '/client/utility/Convert.js';
 
 const PeopleScatter = ({ tide, period, xform, xlabel, isDebug })=> {
   
@@ -61,20 +58,20 @@ const PeopleScatter = ({ tide, period, xform, xlabel, isDebug })=> {
       point: {
         backgroundColor: 'rgb(41, 128, 185)',
         borderColor: 'rgb(41, 128, 185)',
-        pointRadius: 6,
-        pointHitRadius: 10
+        pointRadius: 8,
+        pointHitRadius: 12
       },
     },
     scales: {
       x: {
         type: 'category',
         labels: uCols,
-        offset: true,
+        offset: true
       },
       y: {
         type: 'category',
         labels: uUsers,
-        offset: true,
+        offset: true
       }
     },
     plugins: {

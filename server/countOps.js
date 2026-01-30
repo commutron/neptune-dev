@@ -4,8 +4,7 @@ import Config from '/server/hardConfig.js';
 import { batchTideTime, distTimeBudget } from './tideGlobalMethods.js';
 import { deliveryState } from './reportCompleted.js';
 import { avgOfArray, asRate, diffTrend } from './calcOps';
-import { syncLocale, allNCOptions, countMulti, countMultiRefs } from './utility';
-
+import { syncLocale, countMulti, countMultiRefs } from './utility';
 
 Meteor.methods({
   
@@ -236,27 +235,6 @@ Meteor.methods({
     return [ thinflow, thinfall ];
   },
 
-     ///////////////////////////////////////////
-    // Counts Of Each NonConformance Type /////
-  ////////////////////////////////////////////
-  countNonConTypes(batch, nonConArray, nonConOptions) {
-    function ncCounter(ncArray, ncOptions) {
-      let ncCounts = [];
-      // -- nc rate calculation filter used for widget NC chart--
-      const ncRelArr = ncArray.filter( n => !n.trash && !(n.inspect && !n.fix) );
-      for(let ncType of ncOptions) {
-        const typeCount = countMulti( ncRelArr.filter( n => n.type === ncType ) );
-        ncCounts.unshift({x: ncType, y: typeCount, l: batch});
-      }
-      return ncCounts;
-    }
-    
-    const ncOptions = Array.isArray(nonConOptions) ? nonConOptions : allNCOptions();
-    const ncOptionS = ncOptions.sort();
-    const ncArray = Array.isArray(nonConArray) ? nonConArray : [];
-    const allTypes = ncCounter(ncArray, ncOptionS);
-    return allTypes;
-  },
    // nonCons of Multiple Batches ///////
   //////////////////////////////////////
   nonConBatchesTypes(widgetId) {
@@ -274,13 +252,30 @@ Meteor.methods({
       allTypes.push(Array.from(b.nonCon, n => n.type));
     }
     const nonConReq = _.uniq( [].concat(...allTypes) );
+    const ncOptionS = nonConReq.sort();
+    
+    function ncCounter(batch, ncArray, ncOptions) {
+      let ncCounts = [];
+      // -- nc rate calculation filter used for widget NC chart--
+      const ncRelArr = ncArray.filter( n => !n.trash && !(n.inspect && !n.fix) );
+      for(let ncType of ncOptions) {
+        const typeCount = countMulti( ncRelArr.filter( n => n.type === ncType ) );
+        ncCounts.unshift({y: ncType, x: typeCount, l: batch});
+      }
+      return ncCounts;
+    }
     
     let countNonCon = [];
     for(let b of series) {
-      const count = Meteor.call('countNonConTypes', b.batch, b.nonCon, nonConReq);
-      countNonCon.push( count );
+      const ncArray = Array.isArray(b.nonCon) ? b.nonCon : [];
+      const allCounts = ncCounter(b.batch, ncArray, ncOptionS);
+      
+      countNonCon.push({
+        name: b.batch,
+        data: allCounts
+      });
     }
-    return JSON.stringify(countNonCon);
+    return [ countNonCon, ncOptionS ];
   },
   
     ////////////////////////////////////////
@@ -313,12 +308,15 @@ Meteor.methods({
       
       for( let sh of partS ) {
         const count = countMultiRefs( srs.shortfall.filter( n => n.partNum === sh ) );
-        shCounts.push({x: sh, y: count, l: srs.batch});
+        shCounts.push({y: sh, x: count, l: srs.batch});
       }
-      countShortSrs.push(shCounts);
+      countShortSrs.push({
+        name: srs.batch,
+        data: shCounts
+      });
     }
     
-    return JSON.stringify(countShortSrs);
+    return [ countShortSrs, partS];
   },
   
   nonConBatchTrend(wID) {
@@ -366,6 +364,5 @@ Meteor.methods({
       return [ ncRate.rate, ncRate.trend ];
     }
   }
-  
   
 });

@@ -1,18 +1,30 @@
 import React, { useState, useEffect } from "react";
-import { 
-  VictoryBar, 
-  VictoryChart, 
-  VictoryAxis,
-  VictoryTooltip,
-  VictoryStack
-} from 'victory';
-import Theme from '/client/global/themeV.js';
 import { countMulti } from '/client/utility/Arrays';
+import { toCap } from '/client/utility/Convert.js';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import { Bar } from 'react-chartjs-2';
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title, 
+  Tooltip,
+  Legend
+);
 
 const NonConBar = ({ ncOp, nonCons, app, isDebug })=> {
   
   const [ series, seriesSet ] = useState([]);
-  const [ typeNum, typeNumSet ] = useState(1);
+  const [ types, typeNumSet ] = useState([]);
   
   useEffect( ()=> {
     const nonConOptions = ncOp || [];
@@ -23,7 +35,8 @@ const NonConBar = ({ ncOp, nonCons, app, isDebug })=> {
         let match = ncArray.filter( y => y.where === where );
         return{
           'where': where,
-          'pNC': match
+          'pNC': match,
+          'index': index
         };
       });
       
@@ -38,15 +51,21 @@ const NonConBar = ({ ncOp, nonCons, app, isDebug })=> {
           if(typeCount > 0) {
             typeSet.add(ncType);
             ncWhere.push({
-              y: typeCount,
-              x: ncType,
-              label: ncSet.where
+              x: typeCount,
+              y: ncType,
+              l: ncSet.where
             });
           }
         }
-        ncCounts.push(ncWhere);
+        const clrshift = "hwb(7.16deg 14.74% " + (ncSet.index*10) + "%)";
+        ncCounts.push({
+          label: ncSet.where,
+          data: ncWhere,
+          backgroundColor: clrshift,
+          stack: 'stk'
+        });
       }
-      typeNumSet([...typeSet].length);
+      typeNumSet([...typeSet]);
       return ncCounts;
     }
     
@@ -58,67 +77,74 @@ const NonConBar = ({ ncOp, nonCons, app, isDebug })=> {
       console.log(err);
     }
   }, []);
-          
-    
-    Roles.userIsInRole(Meteor.userId(), 'debug') && console.log({series, typeNum});
   
   return(
-    <div className='chartNoHeightContain'>
-      <VictoryChart
-        theme={Theme.NeptuneVictory}
-        padding={{top: 10, right: 20, bottom: 20, left: 100}}
-        domainPadding={20}
-        height={50 + ( typeNum * 15 )}
-      >
-        <VictoryAxis
-          dependentAxis
-          tickFormat={(t) => Math.round(t)}
-          style={ {
-            axis: { stroke: 'grey' },
-            grid: { stroke: '#5c5c5c' },
-            ticks: { stroke: '#5c5c5c' },
-            tickLabels: { 
-              fontSize: '6px' }
-          } }
-        />
-        <VictoryAxis 
-          style={ {
-            axis: { stroke: 'grey' },
-            grid: { stroke: '#5c5c5c' },
-            ticks: { stroke: '#5c5c5c' },
-            tickLabels: { 
-              fontSize: '6px' }
-          } }
-        />
-        <VictoryStack
-          theme={Theme.NeptuneVictory}
-          colorScale='heatmap'
-          horizontal={true}
-          padding={0}
-        >
-        
-        {series.map( (entry, index)=>{
-          if(entry.length > 0) {
-            return(
-              <VictoryBar
-                key={index+entry.label}
-                data={entry}
-                labels={(l) => `${l.datum.label}`}
-                labelComponent={
-                  <VictoryTooltip
-                    orientation='top'
-                    style={{ fontSize: '7px', padding: 4 }}
-                  />}
-              />
-          )}
-        })}
-        </VictoryStack>
-      </VictoryChart>
-      
-      <p className='centreText small cap'>Defect Type and recorded location as Bars</p>
-      
-    </div>
+    <NonConBarCH
+      series={series}
+      types={types}
+      title='Defect Type and recorded location as Bars'
+      isDebug={isDebug}
+    />
   );
 };
 
 export default NonConBar;
+
+export const NonConBarCH = ({ series, types, title, isDebug })=> {
+
+  const options = {
+    indexAxis: 'y',
+    responsive: true,
+    elements: {
+      bar: {
+        maxBarThickness: 5,
+      },
+    },
+    scales: {
+      x: {
+        type: 'linear',
+        ticks: {
+          precision: 0
+        },
+        stacked: true
+      },
+      y: {
+        type: 'category',
+        labels: types,
+        stacked: true,
+        ticks: {
+          callback: function(v) { 
+            return toCap( this.getLabelForValue(v) || "" ); 
+          }
+        }
+      }
+    },
+    plugins: {
+      legend: {
+        display: true,
+        position: 'top'
+      },
+      tooltip: {
+        callbacks: {
+          label: (cntxt)=> `${toCap(cntxt.raw.l)} = ${cntxt.raw.x}`
+        }
+      },
+      title: false,
+    },
+  };
+  
+  isDebug && console.log(series);
+  
+  return(
+    <div className='chartNoHeightContain space'>
+      {types ?
+        <Bar options={options} data={{datasets:series}} />
+        :
+        <n-fa1><i className='fas fa-spinner fa-lg fa-spin gapR'></i>Loading</n-fa1>
+      }
+      
+      <p className='centreText small cap'>{title}</p>
+      
+    </div>
+  );
+};

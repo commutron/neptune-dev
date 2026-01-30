@@ -177,7 +177,6 @@ Meteor.methods({
       ).fetch();
       
       let ncset = plotNonCons(batches, brOps);
-      
       CacheDB.upsert({dataName: 'nccountShadow'}, {
         $set : {
           orgKey: accessKey,

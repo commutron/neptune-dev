@@ -58,58 +58,57 @@ export function plotOnTime(batches) {
   return onset;
 }
 
-export async function plotNonCons(batches, branches) {
+export function plotNonCons(batches, branches) {
   // try {
-  const nonConPromise = (batch, branches)=> {
-    return new Promise(function(resolve) {
-      const srs = XSeriesDB.findOne({batch: batch.batch},{fields:{'items.units':1,'nonCon':1}});
-      if(srs) {
-        const units = srs.items.length > 0 ? srs.items.reduce((t,i)=> t + i.units, 0) : 0;
-        // -- nc rate calculation filter --
-        const nncns = srs.nonCon.filter( n => !n.trash && !(n.inspect && !n.fix) );
+  const nonConFunc = (batch, branches)=> {
+    
+    const srs = XSeriesDB.findOne({batch: batch.batch},{fields:{'items.units':1,'nonCon':1}});
+    if(srs) {
+      const units = srs.items.length > 0 ? srs.items.reduce((t,i)=> t + i.units, 0) : 0;
+      // -- nc rate calculation filter --
+      const nncns = srs.nonCon.filter( n => !n.trash && !(n.inspect && !n.fix) );
+      
+      let ncQty = 0;
         
-        const ncQty = countMulti(nncns);
-        const ncRte = asRate(ncQty, units);
-        
-        let brncQt = [ ncQty ];
-        let brncRt = [ ncRte ];
-        for(let br of branches) {
-          const qty = ncQty === 0 ? 0 : countMulti(nncns.filter(n=> n.where === br));
-          brncQt.push(qty);
-          const ncRt = asRate(qty, units);
-          brncRt.push(ncRt);
-        }
-        
-        resolve({
-          r: brncRt,
-          y: brncQt,
-          x: batch.completedAt || new Date(),
-          z: `${batch.batch} = `
-        });
-      }else{
-        resolve({
-          r: 0,
-          y: 0,
-          x: batch.completedAt || new Date(),
-          z: `${batch.batch} = `
-        });
+      let brncQt = [];
+      let brncRt = [];
+      for(let br of branches) {
+        const qty = countMulti(nncns.filter(n=> n.where === br));
+        ncQty += qty;
+        brncQt.push(qty);
+        const ncRt = asRate(qty, units);
+        brncRt.push(ncRt);
       }
-    });
+      brncQt.unshift(ncQty);
+      let ncRte = asRate(ncQty, units);
+      brncRt.unshift(ncRte);
+      
+      return {
+        r: brncRt,
+        y: brncQt,
+        x: batch.completedAt || new Date(),
+        z: `${batch.batch} = `
+      };
+    }else{
+      return {
+        r: 0,
+        y: 0,
+        x: batch.completedAt || new Date(),
+        z: `${batch.batch} = `
+      };
+    }
   };
   
   let ncnset = [];
   
-  for await( let batch of batches) {
-    const nonConData = await nonConPromise(batch, branches);
+  for( let batch of batches) {
+    const nonConData = nonConFunc(batch, branches);
     ncnset.push(nonConData);
   }
   
   const ncnsetS = ncnset.sort((a,b)=> a.x > b.x ? 1 : a.x < b.x ? -1 : 0);
       
   return ncnsetS;
-  // }catch (error) {
-  //   throw new Meteor.Error(error);
-  // }
 }
 
 export function plotShorts(batches, branches) {

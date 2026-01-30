@@ -220,7 +220,7 @@ a:has(.onlyHover):where(:hover, :active, :focus-visible) .onlyHover {
 }
 
 .textLinkButton, .inlineLink,
-.leapText, .leapBar {
+.leapText {
   font-size: var(--tx0);
 }
 
@@ -313,7 +313,7 @@ a:has(.onlyHover):where(:hover, :active, :focus-visible) .onlyHover {
 }
 .leapBar {
   min-height: 4vmin;
-  font-size: calc(0.6rem + 0.5vmin);
+  font-size: clamp(0.5rem, 1.6vmin, 2vh);
   font-weight: 400;
 	padding: calc(0.5em + 0.5vw) calc(0.5em + 0.5vw);
 	border-bottom: 1px outset var(--silverfade);

@@ -45,7 +45,7 @@ Meteor.methods({
           inspectMethods: [],
         }
       ],
-      toolOption: [],
+      qtTasks: [],
       trackOption: [],
       lastTrack: {
         key: 'f1n15h1t3m5t3p',
@@ -70,7 +70,6 @@ Meteor.methods({
         high: Number(70)
       },
       missingType: 'not installed',
-      // ancillaryOption: [], // depreciated
       repeatOption: [],
       alterFulfillReasons: [],
       tagOption: [],
@@ -161,7 +160,6 @@ Meteor.methods({
               reqConsumable: false,
               reqProblemDam: false,
               reqUserLock: false,
-              subTasks: [],
               buildMethods: [],
               inspectMethods: [],
             }
@@ -194,17 +192,15 @@ Meteor.methods({
     }
   },
   
-  editBranchLists(key, sbTskArr, bMthdArr, iMthdArr) {
-    const chT = Array.isArray(sbTskArr);
-    const chB = Array.isArray(bMthdArr);
-    const chI = Array.isArray(iMthdArr);
+  editBranchLists(key, buildMthdArr, inspectMthdArr) {
+    const chB = Array.isArray(buildMthdArr);
+    const chI = Array.isArray(inspectMthdArr);
 
-    if(chT && chB && chI && Roles.userIsInRole(Meteor.userId(), 'admin')) {
+    if(chB && chI && Roles.userIsInRole(Meteor.userId(), 'admin')) {
       AppDB.update({orgKey: Meteor.user().orgKey, 'branches.brKey': key}, {
         $set : { 
-          'branches.$.subTasks': sbTskArr,
-          'branches.$.buildMethods': bMthdArr,
-          'branches.$.inspectMethods': iMthdArr
+          'branches.$.buildMethods': buildMthdArr,
+          'branches.$.inspectMethods': inspectMthdArr
       }});
       return true;
     }else{

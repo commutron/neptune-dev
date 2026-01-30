@@ -152,7 +152,7 @@
 }
 
 .waterfallHistory {
-  margin: 2vh 0;
+  margin: 10px 0;
   border-width: 2px;
   border-style: solid;
   padding-bottom: 1vh;
@@ -160,6 +160,7 @@
 .waterfallHistory summary {
   display: flex;
   align-items: center;
+  padding: 0 10px;
 }
 .waterfallHistory summary .meterprogStack {
   display: inline-block;
@@ -182,9 +183,6 @@
 }
 .waterfallTimeline tr:nth-child(even) {
   background-color: var(--asbestosfade);
-}
-.waterfallTimeline tr > td {
-  line-height: 1.25em;
 }
 .waterfallTimeline tr > td:nth-child(1) {
   text-align: center;

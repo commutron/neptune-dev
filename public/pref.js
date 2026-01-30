@@ -66,7 +66,7 @@ class Pref {
     this.noiseChill = 30; // over-stream update slower interval for read-only users
     this.statisticalStartHour = 6; // 6am
     this.statisticalEndHour = 20; // 8pm
-    this.avgSpan = 1000; // Also in server hardConfig
+    this.avgSpan = 730; // Also in server hardConfig
     this.yrsSpan = 5; // Also in server hardConfig
     this.stepUndoWindow = 1000*30; // remember to match ".spinRe"
     this.completeGrace = 24; // allow complete undo for lower permission for how many hours

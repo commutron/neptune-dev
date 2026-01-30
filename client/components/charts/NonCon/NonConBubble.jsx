@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -17,6 +16,7 @@ ChartJS.register(
   Tooltip
 );
 import { countMulti } from '/client/utility/Arrays';
+import { toCap } from '/client/utility/Convert';
 
 const NonConBubble = ({ ncOp, nonCons, app, isDebug })=> {
   
@@ -50,7 +50,7 @@ const NonConBubble = ({ ncOp, nonCons, app, isDebug })=> {
           ncCounts.push({
             x: ncSet.where,
             y: ncType,
-            r: typeCount * 2
+            r: typeCount
           });
         }
       }
@@ -74,12 +74,22 @@ const NonConBubble = ({ ncOp, nonCons, app, isDebug })=> {
       x: {
         type: 'category',
         labels: wheres,
-        offset: true
+        offset: true,
+        ticks: {
+          callback: function(v) { 
+            return toCap( this.getLabelForValue(v) || "" ); 
+          }
+        }
       },
       y: {
         type: 'category',
         labels: types,
-        offset: true
+        offset: true,
+        ticks: {
+          callback: function(v) { 
+            return toCap( this.getLabelForValue(v) || "" );
+          }
+        }
       }
     },
     plugins: {

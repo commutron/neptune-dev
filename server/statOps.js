@@ -110,6 +110,7 @@ function collectNonCon(batchID) {
 Meteor.methods({
   
   exploreTops() {
+    this.unblock();
     const xid = noIg();
     
     const allB = XBatchDB.find({

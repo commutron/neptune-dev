@@ -363,13 +363,18 @@ Meteor.methods({
     }
   },
   
+  checkForBreackdown() {
+    const firsttry = XBatchDB.find({quoteTimeBreakdown: { $exists : true }}).count();
+    return firsttry;
+  },
+  
   collateBranchTime(batchNum) {
     this.unblock();
     const accessKey = Meteor.user().orgKey;
     const app = AppDB.findOne({ orgKey: accessKey});
     const branchOptions = sortBranches(app.branches);
-    // const qtOptions = app.qtTasks;
-    //.sort((b1, b2)=> b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 );
+    const qtOptions = app.qtTasks
+    .sort((b1, b2)=> b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 );
     
     // const trackOptions = [...app.trackOption, app.lastTrack];
     
@@ -385,8 +390,8 @@ Meteor.methods({
         const dur = addTideDuration(x);
         return {
           tasks: dt,
-          duration: dur,
-          multi: x.focus ? true : false
+          dur: dur,
+          mlt: x.focus ? true : false
         };
       });
       
@@ -394,69 +399,99 @@ Meteor.methods({
         let brDurr = 0;
         let brMlti = false;
         
-        // const brQts = qtOptions.filter( q => q.brKey === br.brKey );
-        // let brSubTasks = [];
-        // for( q of brQts) {
-        //   brSubTasks.push(...q.subTasks);
-        // }
+        const brQts = qtOptions.filter( q => q.brKey === br.brKey );
         
-        const bslim = slim.filter( t => Array.isArray(t.tasks) &&
-                        t.tasks[0] === br.branch );
+        let b_q_arr = [];
         
-        let subs = new Set();
-        let qtKeys = new Set();
-        let subt = [];
-        let sbtt = [];
-        
-        let qtkArr = [];
-        
-        for(let bt of bslim) {
-          brDurr = brDurr + ( bt.duration );
+        if(batch.quoteTimeCycles) {
+          for( let qt of brQts ) {
+  
+            let qtDurr = 0;
+            let qtMlti = false;
+            
+            let qt_subs_arr = [];
+            
+            for( let qsub of qt.subTasks ) {
+              
+              const b_q_s_slim = slim.filter( t => Array.isArray(t.tasks) && t.tasks[2] === qt.qtKey && t.tasks[1] === qsub );
           
-          if(bt.tasks[1]) {
-            subs.add(bt.tasks[1]);
+              const b_q_s_sum = b_q_s_slim.reduce((x,y)=> x + y.dur, 0);
+              const b_q_s_ml = b_q_s_slim.some( s => s.mlt );
+              
+              qt_subs_arr.push({
+                sub: qsub,
+                sum: b_q_s_sum,
+                w: b_q_s_ml
+              });
+              
+              qtDurr = qtDurr + b_q_s_sum;
+              
+              b_q_s_ml ? qtMlti = true : null;
+              
+            }
             
-            bt.tasks[2] ? qtKeys.add(bt.tasks[2]) : null;
-            
-            subt.push({ 
-              sub: bt.tasks[1], 
-              dur: bt.duration, 
-              mlt: bt.multi, 
-              qt: bt.tasks[2]
+            b_q_arr.push({
+              key: qt.qtKey,
+              qt: qt.qtTask,
+              qtTotal: qtDurr,
+              qtMulti: qtMlti,
+              qtSubs: qt_subs_arr
             });
+          
+            brDurr = brDurr + qtDurr;
+              
+            qtMlti ? brMlti = true : null;
           }
-          if( bt.multi ) { brMlti = true; }
         }
         
-        for(let sb of subs) {
-          const ft = subt.filter( f => f.sub === sb );
-          const ct = ft.reduce((x,y)=> x + y.dur, 0);
-          const ml = ft.some( s => s.mlt );
-          sbtt.push({
-            a: sb,
-            b: ct,
-            w: ml
-          });
-        }
+        const b_free_slim = slim.filter( t => Array.isArray(t.tasks) && t.tasks[0] === br.branch && !t.tasks[2] );
         
-        for(let qtk of qtKeys) {
-          const byQt = subt.filter( f => f.qt === qtk );
-          const sum = byQt.reduce((x,y)=> x + y.dur, 0);
-          const ml = byQt.some( s => s.mlt );
-          qtkArr.push({
-            q: qtk,
-            sum: sum,
-            w: ml
+        let b_free_sum = 0;
+        let b_free_ml = false;
+        
+        let free_subs_arr = [];
+        
+        const free_subs = [...new Set( b_free_slim.map( t => t.tasks[1]) )];
+        
+        for( let fr of free_subs) {
+          
+          const fr_s_slim = b_free_slim.filter( t => t.tasks[1] === fr );
+          const fr_s_sum = fr_s_slim.reduce((x,y)=> x + y.dur, 0);
+          const fr_s_ml = fr_s_slim.some( s => s.mlt );
+            
+          free_subs_arr.push({
+            sub: fr || "*not-set",
+            sum: fr_s_sum,
+            w: fr_s_ml
           });
+            
+          b_free_sum = b_free_sum + fr_s_sum;
+            
+          fr_s_ml ? b_free_ml = true : null;
+          
         }
+          
+        b_q_arr.push({
+          key: null,
+          qt: 'unquoted',
+          qtTotal: b_free_sum,
+          qtMulti: b_free_ml,
+          qtSubs: free_subs_arr
+        });
+        
+          
+        brDurr = brDurr + b_free_sum;
+            
+        b_free_ml ? brMlti = true : null;
         
         slimTimes.push({
-          x: br.branch,
-          y: brDurr,
-          z: sbtt,
-          w: brMlti,
-          q: qtkArr
+          key: br.brKey,
+          branch: br.branch,
+          brTotal: brDurr,
+          brMulti: brMlti,
+          brQts: b_q_arr
         });
+        
       }
       
       return slimTimes;

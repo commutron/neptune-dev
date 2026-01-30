@@ -46,13 +46,16 @@ const WProbTab = ({ widgetData, batches, app })=> {
             <WidgetMultiBatchBar 
               widgetId={widgetData._id}
               fetchFunc='nonConBatchesTypes'
+              title='Defect Types'
+              color="hwb(7.16deg 14.74%"
             />
           </div>
         
           <WidgetMultiBatchBar 
             widgetId={widgetData._id}
             fetchFunc='shortWidgetBatches'
-            leftpad={60}
+            title='Part Shortages'
+            color="hwb(35.76deg 9.52%"
           />
           
           <FailScatterChart
