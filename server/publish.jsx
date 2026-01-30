@@ -749,7 +749,7 @@ Meteor.publish('hotDataEx', function(dataView, dataRequest, hotWidget){
       hothotWidget = otherwise.widget;
     }
   }
-                    
+  
   if(!this.userId){
     return this.ready();
   }else{
@@ -763,11 +763,11 @@ Meteor.publish('hotDataEx', function(dataView, dataRequest, hotWidget){
         }}),
         WidgetDB.find({orgKey: orgKey}, {
           fields: {
-            'createdAt': 1
+            'ncRate': 1
         }}),
         VariantDB.find({orgKey: orgKey}, {
           fields: {
-            'createdAt': 1
+            'createdAt': 1,
         }}),
         XBatchDB.find({orgKey: orgKey, completed: false }, {
           sort: {batch:-1},

@@ -24,19 +24,10 @@ const TimeBudgetsChunk = ({
   const [ qtZero, showQtZero ] = useState(false);
 
   useEffect( ()=>{
-    // if(b.quoteTimeCycles) {
-      console.log('run collate');
-      Meteor.call('collateBranchTime', b.batch, (err, reply)=>{
-        err && console.log(err);
-        reply && branchTimeSet( reply );
-      });
-    // }else{
-    //   console.log('run assemble');
-    //   Meteor.call('assembleBranchTime', b.batch, (err, reply)=>{
-    //     err && console.log(err);
-    //     reply && branchTimeSet( reply );
-    //   });
-    // }
+    Meteor.call('collateBranchTime', b.batch, (err, reply)=>{
+      err && console.log(err);
+      reply && branchTimeSet( reply );
+    });
   }, []);
   
   const totalsCalc = splitTidebyPeople(b.tide);
@@ -61,7 +52,6 @@ const TimeBudgetsChunk = ({
   
   const cnv = conversion === 'minutes' ? 'min' : conversion === 'percent' ? '%' : 'hrs';
   
-  console.log({branchTime});
   return(
     <div>
       <div className='centreRow comfort'>
@@ -157,15 +147,6 @@ const TimeBudgetsChunk = ({
                   colour='blue'
                 />
                 <dl className='readlines'>
-                  {null  ?
-                    <LegacyTaskBreakdown 
-                      branchTime={branchTime}
-                      qtbB={oldTaskTimesArray} 
-                      timeAs={timeAs}
-                      cnv={cnv}
-                      mlt='Includes Multi-tasking'
-                    />
-                  :
                   <QuotedTaskBreakdown
                     branchTime={branchTime}
                     qtTaskTimesArray={b.quoteTimeCycles || oldTaskTimesArray} 
@@ -176,9 +157,8 @@ const TimeBudgetsChunk = ({
                     app={app}
                     quantity={b.quantity}
                   />
-                  }
-                  </dl>
-                </div>
+                </dl>
+              </div>
               }
           </div>
         </div>
@@ -288,23 +268,27 @@ const QuotedTaskBreakdown = ({
               </dt>
               {br.brQts.map( (qt)=> {
                 const qtedData = qtTaskTimesArray.find( x => x[0] === qt.key );
-                let qtapp = qtedData ? app.qtTasks.find( q => q.qtKey === qt.key ) : null;
+                let qtapp = !qtedData ? null : app.qtTasks.find( q => q.qtKey === qt.key );
                 let qtname = qtapp?.qtTask || qt.qt;
-                let mxQ = !qtapp ? null : qtapp.fixed ? qtedData[1] : ( qtedData[1] * (quantity || 0) );
+                let qtnum = !qtapp ? null : qtapp.fixed ? qtedData[1] : ( qtedData[1] * (quantity || 0) );
+                
                 if((qt.qt === 'unquoted' && qt.qtTotal === 0) || (!qtZero && qt.qtTotal === 0)) {
                   return null;
                 }else{
                   return(
                     <dl key={ix+'qt'+qt.key} className='breaklines'>
-                      <dd 
-                        title={`${Math.round(qt.qtTotal)} minutes`}
-                        className='rightRow doJustWeen'
-                        style={{margin: '5px 0 5px 12px'}}
-                      ><i className='cap'>{qtname}{qt.qtMulti && mltIcn}</i>
-                        <span className='rightText medSm grayT'
-                        ><i className={mxQ && qt.qtTotal > mxQ ? 'redT' : '' }> {timeAs(qt.qtTotal)}</i><n-sm>{mxQ && "/"+timeAs(mxQ)}</n-sm> {cnv}</span>
-                      </dd>
+                      {qt.qt === 'unquoted' && br.brTotal === qt.qtTotal ? null :
+                        <dd 
+                          title={`${Math.round(qt.qtTotal)} minutes`}
+                          className='rightRow doJustWeen'
+                          style={{margin: '5px 0 5px 12px'}}
+                        ><i className='cap'>{qtname}{qt.qtMulti && mltIcn}</i>
+                          {TimeElm(qtnum, qt.qtTotal, timeAs, cnv)}
+                        </dd>
+                      }
                       {qt.qtSubs.map( (qtsb, ixzz)=> {
+                        const lgcyQe = !qtapp ? qtTaskTimesArray.find( x => x[0] === br.branch+"|"+qtsb.sub ) : null;
+                        const lgcyQn = lgcyQe?.[1] || null;
                         if(qtZero || qtsb.sum > 0) {
                           return(
                             <dd 
@@ -312,8 +296,7 @@ const QuotedTaskBreakdown = ({
                               title={`${Math.round(qtsb.sum)} minutes`}
                               className='rightRow doJustWeen medSm'
                             ><i className='cap'>{qtsb.sub}{qtsb.w && mltIcn}</i>
-                              <span className='rightText grayT'
-                              ><i> {timeAs(qtsb.sum)}</i> {cnv}</span>
+                              {TimeElm(lgcyQn, qtsb.sum, timeAs, cnv)}
                             </dd>
                           );
                         }
@@ -328,48 +311,11 @@ const QuotedTaskBreakdown = ({
   );
 };
 
-const LegacyTaskBreakdown = ({ branchTime, qtbB, timeAs, cnv, mlt })=> {
-  
-  console.log('legacy fallback?');
-  return(
-    <dl className='readlines'>
-      {branchTime.map((br, ix)=>{
-        if(br.y > 0) {
-          const sbs = qtbB.filter( x => x[0].includes(br.x) );
-          const sbt = sbs.reduce((a,b)=> a + b[1], 0);
-          return( 
-            <dl key={ix} className='breaklines'>
-              <dt
-                title={`${Math.round(br.y)} minutes`}
-                className='rightRow doJustWeen'
-              ><i className='cap'
-                >{br.x}{br.w && 
-                  <i className='fa-regular fa-clone fa-sm tealT gapL' title={mlt}></i>}
-                </i>
-                <span className='grayT rightText medSm'
-                ><i className={sbt > 0 && br.y > sbt ? 'redT' : '' }> {timeAs(br.y)}</i><n-sm>{sbt > 0 && "/"+timeAs(sbt)}</n-sm> {cnv}</span>
-              </dt>
-              {br.z && br.z.length > 0 ? br.z.map( (zt, ixz)=> {
-                const sbQ = qtbB.find( x => x[0] === br.x+"|"+zt.a );
-                const mxQ = sbQ ? sbQ[1] : null;
-                return(
-                  <dd 
-                    key={ix+'sub'+ixz}
-                    title={`${Math.round(zt.b)} minutes`}
-                    className='rightRow doJustWeen'
-                  ><i className='cap'>{zt.a}{zt.w && 
-                     <i className='fa-regular fa-clone fa-xs tealT gapL' title={mlt}></i>}
-                   </i>
-                    <span className='rightText medSm grayT'
-                    ><i className={mxQ && zt.b > mxQ ? 'redT' : '' }> {timeAs(zt.b)}</i><n-sm>{mxQ && "/"+timeAs(mxQ)}</n-sm> {cnv}</span>
-                  </dd>
-              )}) : null}
-            </dl>
-          );
-      }})}
-    </dl>
-  );
-};
+const TimeElm = (max, total, timeAs, cnv)=> (
+  <span className='rightText grayT medSm'>
+    <i className={max && total > max ? 'redT' : ''}> {timeAs(total)}</i><n-sm>{max && "/"+timeAs(max)}</n-sm> {cnv}
+  </span>
+);
 
 const TideDetails = ({ qtCycles, qtBudget })=> (
   <details className='footnotes'>

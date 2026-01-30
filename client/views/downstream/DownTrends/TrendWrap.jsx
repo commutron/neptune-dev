@@ -18,7 +18,6 @@ const TrendWrap = ({ app, isDebug })=> {
           
       <div className='rowWrapR noPrint'>
         <span>
-          <p className='small rightText'>Gaps in the data are intentional. Indicate when no orders were completed</p>
           <p className='small rightText noPrint'>Data is NOT live. Refreshed once a day</p>
         </span>
       </div>

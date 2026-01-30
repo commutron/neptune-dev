@@ -60,9 +60,6 @@ const WidgetIndexCard = ({ data, barStyle })=>{
     return null;
   }
     
-  let totalBatches = moreData[1].length;
-  let totalItems = moreData[1].reduce((x,y)=>x+y, 0); 
-    
   return(
     <LeapLine
       title={data.widget.toUpperCase()}
@@ -76,19 +73,19 @@ const WidgetIndexCard = ({ data, barStyle })=>{
             size='medBig'
           />*/}
           <NumStat
-            num={totalBatches}
+            num={moreData[1]}
             title={`Total ${Pref.xBatchs}`}
             color='blueT'
             size='medBig'
           />
           <NumStat
-            num={totalItems}
+            num={moreData[2]}
             title={`Total quantities of all ${Pref.xBatchs}`}
             color='blueT'
             size='medBig'
           />
           <NumStat
-            num={moreData[2]}
+            num={data.ncRate?.rate || 0}
             title={`Average ${Pref.nonCon} rate`}
             color='redT'
             size='medBig'

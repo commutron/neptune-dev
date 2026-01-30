@@ -116,7 +116,7 @@ Meteor.methods({
     const allB = XBatchDB.find({
       orgKey: Meteor.user().orgKey,
       groupId: { $ne: xid },
-    },{fields:{'_id':1, 'live':1, 'completed':1, 'lock':1}}).fetch();
+    },{fields:{'live':1, 'completed':1, 'lock':1}}).fetch();
     
     const xTotal = allB.length;
     const xlive = allB.filter( x => x.live === true ).length;
@@ -133,18 +133,20 @@ Meteor.methods({
   },
 
   widgetTops(wID) {
-    const widget = WidgetDB.findOne({ _id: wID });
-    const ncRate = widget.ncRate || null;
-    const rate = ncRate ? ncRate.rate : 0;
+    this.unblock();
+    const variants = 0;// VariantDB.find({widgetId: wID},{fields:{_id:1}}).count();
     
-    const variants = VariantDB.find({widgetId: wID},{fields:{_id:1}}).count();
-    
-    const batchesX = XBatchDB.find({
+    let batchQty = 0;
+    let itemQty = 0;
+    XBatchDB.find({
       orgKey: Meteor.user().orgKey, widgetId: wID},
-      {fields:{'quantity':1}}).fetch();
-    const batchInfoX = Array.from(batchesX, x => x.quantity);
-    
-    return [ variants, batchInfoX, rate ];
+      {fields:{'quantity':1}})
+    .forEach( b => {
+      batchQty += 1;
+      itemQty += b.quantity;
+    });
+
+    return [ variants, batchQty, itemQty ];
   },
   
   groupTops(gID) {

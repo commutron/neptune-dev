@@ -44,14 +44,6 @@ const DataRepair = ({ app, users })=> {
     <div className='space3v'>
       <div className='autoGrid cardify twoDfill'>
         <DoCard
-          title='Check How Many Used Quote Breakdown'
-          icon='calculator'
-          color='nSolid'
-          button='check'
-          action={()=>doCallThing('checkForBreackdown', true)}
-        />
-        
-        <DoCard
           title='Force Randomize Org PIN'
           sub='Runs every day at 12:00am (CST)'
           icon='dice'

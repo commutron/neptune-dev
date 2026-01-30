@@ -249,16 +249,13 @@ Meteor.methods({
                         
     return bestGuess;
   },
-  
-  assembleBranchTime(batchNum) {
-    this.unblock();
-    const accessKey = Meteor.user().orgKey;
-    const app = AppDB.findOne({ orgKey: accessKey});
-    const branchOptions = sortBranches(app.branches);
+    
+  reconstructBatchTask(app, batchObj, branchOptions) {
     const trackOptions = [...app.trackOption, app.lastTrack];
     
-    const batch = XBatchDB.findOne({batch: batchNum, orgKey: accessKey});
-                  
+    const batch = batchObj;
+    const batchNum = batchObj.batch;
+    
     const series = XSeriesDB.findOne({batch: batchNum});
     
     const releases = batch.releases || [];
@@ -268,104 +265,94 @@ Meteor.methods({
     const shortfall = series ? series.shortfall : [];
     const waterfall = batch.waterfall || [];
     
-    let slimTimes = [];
+    let slimGuesses = [];
     
-    if( batch && Array.isArray(batch.tide) ) {  
-      const slim = batch.tide.map( x => {
-        const known = x.task ? [ 'fromUserInput', [ x.task ], x.subtask ] : null;
-        const dt = known || 
-          branchBestGuess(x.who, x.startTime, x.stopTime,
-                        batchNum, items, nonCon, shortfall, 
-                        waterfall, releases, finishTime, 
-                        trackOptions, branchOptions);
-                        
+    for( let x of batch.tide) {
+      if(!x.task) { 
         const dur = addTideDuration(x);
-        return {
-          branchGuess: dt,
-          duration: dur,
-          multi: x.focus ? true : false
-        };
-      });
-      
-      for(let br of branchOptions) {
-        let brDurr = 0;
-        let brMlti = false;
         
-        const bslim = slim.filter( t => Array.isArray(t.branchGuess) &&
-                        ( t.branchGuess[1].includes( br.branch ) || 
-                          t.branchGuess[1].includes( br.branch + ' prep' ) )
-                      );
+        const dt = branchBestGuess(x.who, x.startTime, x.stopTime,
+                    batchNum, items, nonCon, shortfall, 
+                    waterfall, releases, finishTime, 
+                    trackOptions, branchOptions);     
         
-        let subs = new Set();
-        let subt = [];
-        let sbtt = [];
-        
-        for(let bt of bslim) {
-          brDurr = brDurr + ( bt.duration / bt.branchGuess[1].length );
-          
-          if(bt.branchGuess[2]) {
-            subs.add(bt.branchGuess[2]);
-            subt.push({ sub: bt.branchGuess[2], dur: bt.duration, mlt: bt.multi });
-          }
-          if( bt.multi ) { brMlti = true; }
-        }
-        
-        for(let sb of subs) {
-          const ft = subt.filter( f => f.sub === sb );
-          const ct = ft.reduce((x,y)=> x + y.dur, 0);
-          const ml = ft.some( s => s.mlt );
-          sbtt.push({
-            a: sb,
-            b: ct,
-            w: ml
-          });
-        }
-        slimTimes.push({
-          x: br.branch,
-          y: brDurr,
-          z: sbtt,
-          w: brMlti
+        slimGuesses.push({
+          guess: dt,
+          dur: dur,
+          mlt: x.focus ? true : false
         });
       }
-      let aDurr = 0;
-      let aMlti = false;
-      let zDurr = 0;
-      let zMlti = false;
-      let yDurr = 0;
-      let yMlti = false;
-      let xDurr = 0;
-      let xMlti = false;
-      for(let t of slim) {
-        if( !t.branchGuess || t.branchGuess[1].includes( 'guessUnsupported' ) ) {
-          xDurr = xDurr + t.duration;
-          t.multi ? xMlti = true : null;
-        }else if( t.branchGuess[1].includes( 'before release' ) ) {
-          aDurr = aDurr + t.duration;
-          t.multi ? aMlti = true : null;
-        }else if( t.branchGuess[1].includes( 'after complete' ) ) {
-          zDurr = zDurr + t.duration;
-          t.multi ? zMlti = true : null;
-        }else if( t.branchGuess[1].includes( 'out of route' ) ) {
-          yDurr = yDurr + t.duration;
-          t.multi ? yMlti = true : null;
-        }else{
-          null;
-        }
-      }
-      slimTimes.unshift({ x: 'before release', y: aDurr, w: aMlti });
-      slimTimes.push({ x: 'after complete', y: zDurr, w: zMlti });
-      slimTimes.push({ x: 'out of route', y: yDurr, w: yMlti });
-      slimTimes.push({ x: 'unknown', y: xDurr, w: xMlti });
-      
-      return slimTimes;
-    }else{
-      return slimTimes;
     }
+    return slimGuesses;
   },
-  
-  checkForBreackdown() {
-    const firsttry = XBatchDB.find({quoteTimeBreakdown: { $exists : true }}).count();
-    return firsttry;
+      
+  reconstructBranchTime(branchOptions, slim) {
+    let reconTimes = [];
+    for(let br of branchOptions) {
+      let brDurr = 0;
+      let brMlti = false;
+      
+      const bslim = slim.filter( t => Array.isArray(t.guess) &&
+                      ( t.guess[1].includes( br.branch ) || 
+                        t.guess[1].includes( br.branch + ' prep' ) )
+                    );
+      
+      for(let bt of bslim) {
+        brDurr = brDurr + ( bt.dur / bt.guess[1].length );
+        bt.mlt ? brMlti = true : null;
+      }
+      
+      if(brDurr > 0) {
+        reconTimes.push({
+          branch: '~'+br.branch,
+          brTotal: brDurr,
+          brMulti: brMlti,
+          brQts: []
+        });
+      }
+    }
+    let aDurr = 0;
+    let aMlti = false;
+    let zDurr = 0;
+    let zMlti = false;
+    let yDurr = 0;
+    let yMlti = false;
+    let xDurr = 0;
+    let xMlti = false;
+    for(let t of slim) {
+      if( !t.guess || t.guess[1].includes( 'guessUnsupported' ) ) {
+        xDurr = xDurr + t.dur;
+        t.mlt ? xMlti = true : null;
+      }else if( t.guess[1].includes( 'before release' ) ) {
+        aDurr = aDurr + t.dur;
+        t.mlt ? aMlti = true : null;
+      }else if( t.guess[1].includes( 'after complete' ) ) {
+        zDurr = zDurr + t.dur;
+        t.mlt ? zMlti = true : null;
+      }else if( t.guess[1].includes( 'out of route' ) ) {
+        yDurr = yDurr + t.dur;
+        t.mlt ? yMlti = true : null;
+      }else{
+        null;
+      }
+    }
+
+    function pushMock(name, total, multi) {
+      if(!isNaN(total) && total > 0) {
+        reconTimes.push({
+          branch: name,
+          brTotal: total,
+          brMulti: multi,
+          brQts: []
+        });
+      }
+    }
+    pushMock('~before release', aDurr, aMlti);
+    pushMock('~after complete', zDurr, zMlti);
+    pushMock('~out of route', yDurr, yMlti);
+    pushMock('~unknown', xDurr, xMlti);
+    
+    return reconTimes;
   },
   
   collateBranchTime(batchNum) {
@@ -376,16 +363,15 @@ Meteor.methods({
     const qtOptions = app.qtTasks
     .sort((b1, b2)=> b1.position < b2.position ? 1 : b1.position > b2.position ? -1 : 0 );
     
-    // const trackOptions = [...app.trackOption, app.lastTrack];
-    
     const batch = XBatchDB.findOne({batch: batchNum, orgKey: accessKey});
     // quoteTimeCycles // NEW
    
     let slimTimes = [];
     
     if( batch && Array.isArray(batch.tide) ) {  
+      let notask = false;
       const slim = batch.tide.map( x => {
-        const dt = x.task ? [ x.task, x.subtask, x.qtKey ] : null;
+        const dt = x.task ? [ x.task, x.subtask, x.qtKey ] : notask = true;
                         
         const dur = addTideDuration(x);
         return {
@@ -485,7 +471,7 @@ Meteor.methods({
         b_free_ml ? brMlti = true : null;
         
         slimTimes.push({
-          key: br.brKey,
+          // key: br.brKey,
           branch: br.branch,
           brTotal: brDurr,
           brMulti: brMlti,
@@ -494,11 +480,16 @@ Meteor.methods({
         
       }
       
+      const slimMystery = notask ? Meteor.call('reconstructBatchTask', app, batch, branchOptions) : null;
+      if(slimMystery) {
+        const recon = Meteor.call('reconstructBranchTime', branchOptions, slimMystery);
+        recon.forEach( rc => slimTimes.push(rc) );
+      }
+
       return slimTimes;
     }else{
       return slimTimes;
     }
   }
-  
   
 });
