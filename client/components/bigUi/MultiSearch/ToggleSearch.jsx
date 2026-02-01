@@ -1,12 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Pref from '/client/global/pref.js';
 
 const ToggleSearch = ({ 
   tggl, tgglSet, queryState, queryUP, resultUP
 })=> {
 
+  const [ debounce, debSet ] = useState(0);
+  const timer = useRef(null);
+  
   function batchAction() {
-    resultUP(undefined);
     const valid = queryState && queryState.length > 2;
     if(valid) {
       Meteor.call('batchExtraLookup', queryState, (error, reply)=>{
@@ -23,7 +25,6 @@ const ToggleSearch = ({
   }
   
   function serialAction() {
-    resultUP(undefined);
     const valid = queryState && queryState.length > 4;
     if(valid) {
       Meteor.call('serialLookupPartial', queryState, (error, reply)=>{
@@ -36,7 +37,6 @@ const ToggleSearch = ({
   }
   
   function verifyAction() {
-    resultUP(undefined);
     const valid = queryState && queryState.length > 2;
     if(valid) {
   	  Meteor.call('firstVerifyLookup', queryState, (error, reply)=>{
@@ -49,12 +49,21 @@ const ToggleSearch = ({
   }
   
 	useEffect( ()=> {
-    if(tggl) {
-      batchAction();
-    }else if(tggl === false) {
-      serialAction();
-    }else{
-      verifyAction();
+    if(debounce !== undefined) {
+      clearTimeout(timer.current);
+      resultUP(undefined);
+      timer.current = setTimeout(() => {
+        
+        if(tggl) {
+          batchAction();
+        }else if(tggl === false) {
+          serialAction();
+        }else{
+          verifyAction();
+        }
+        
+        debSet(500);
+      },debounce);
     }
   }, [queryState, tggl]);
   

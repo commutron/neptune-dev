@@ -75,15 +75,10 @@
 .containerE {
   display: grid;
   grid-template-rows: auto;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-column-gap: 5vw;
+  grid-template-columns: 3fr 3fr 4fr;
+  grid-column-gap: 5vmin;
   justify-items: stretch;
-  grid-template-areas: 
-    'oneE twoE threeE';
 }
-.oneEcontent { grid-area: oneE; }
-.twoEcontent { grid-area: twoE; }
-.threeEcontent { grid-area: threeE; }
 
 .oneTwoThreeContainer {
   display: grid;

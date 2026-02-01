@@ -1,5 +1,5 @@
 import React from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 import KpiStat from '/client/components/smallUi/StatusBlocks/KpiStat';
 import NumStat from '/client/components/tinyUi/NumStat.jsx';
@@ -14,13 +14,40 @@ export const TotalNonCon = ({ noncons })=> (
 );
                 
 export const HasNonCon = ({ noncons, items })=> {
+  const iQty = items.length > 0 ? items.reduce((t,i)=> t + i.units, 0) : 0;
+  
   const hasNonCon = new Set( Array.from(noncons, x => x.serial) ).size;
-  const itemQty = items.length > 0 ? items.reduce((t,i)=> t + i.units, 0) : 0;
+  
+  const asPcnt = (val, total)=> {
+    const prcnt = ((val / total) * 100 );
+    return prcnt < 1 ? prcnt.toFixed(1) : prcnt.toFixed(0);
+  };
+  
+  let splitOut = [];
+  const haswhere = new Set( Array.from(noncons, x => x.where) );
+  for( let w of haswhere) {
+    splitOut.push({
+      wh: w,
+      num: new Set( Array.from(noncons, x => x.where === w && x.serial).filter(f=>f) ).size
+    });
+  }
   return(
     <KpiStat
-      num={((hasNonCon / itemQty) * 100 ).toFixed(0) + '%'}
-      name={'of ' + Pref.item + 's have nonCons'}
+      num={asPcnt(hasNonCon, iQty) + '%'}
+      name={'of all ' + Pref.item + 's have nonCons'}
       color='var(--pomegranate)'
+      more={
+        <div className='cap'>
+          <p>% of Items have nonCons in:</p>
+          <dl className='readlines'>
+            {splitOut.map( (x, i) => 
+              <dd className='rightRow doJustWeen' key={i} style={{margin:'2px'}}>
+                <span>{x.wh}</span> <span>{asPcnt(x.num, iQty)}%</span>
+              </dd>
+            )}
+          </dl>
+        </div>
+      }
     />
   );
 };

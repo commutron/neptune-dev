@@ -105,7 +105,7 @@ const TimeBudgetsChunk = ({
           isDebug={isDebug} />
       : 
       <div className='space'>
-        <div className='containerE'>
+        <div className='containerE numFont'>
           <TotalTide
             totalBudgetMinutes={totalBudgetMinutes}
             totalTime={totalsCalc.totalTime}
@@ -116,7 +116,7 @@ const TimeBudgetsChunk = ({
             isDebug={isDebug}
           />
       
-          <div className='twoEcontent numFont'>
+          <div>
             <TimeBudgetBar a={tP} b={0} c={0} />
             <dl className='readlines'>
               {totalPeople.map((per, ix)=>{
@@ -133,7 +133,7 @@ const TimeBudgetsChunk = ({
             </dl>
           </div>
       
-          <div className='threeEcontent numFont'>
+          <div>
             
             {!branchTime ? <CalcSpin />
             :
@@ -216,7 +216,7 @@ const TotalTide = ({ totalBudgetMinutes, totalTime, conversion, plus, plusSet, a
   });
   
   return(
-    <div className='oneEcontent numFont'>
+    <div>
       <TimeBudgetBar 
         a={totalTideMinutes} 
         b={totalLeftMinutes} 
@@ -281,7 +281,7 @@ const QuotedTaskBreakdown = ({
                         <dd 
                           title={`${Math.round(qt.qtTotal)} minutes`}
                           className='rightRow doJustWeen'
-                          style={{margin: '5px 0 5px 12px'}}
+                          style={{margin: '2px 0 2px 12px'}}
                         ><i className='cap'>{qtname}{qt.qtMulti && mltIcn}</i>
                           {TimeElm(qtnum, qt.qtTotal, timeAs, cnv)}
                         </dd>

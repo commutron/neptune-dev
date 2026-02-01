@@ -116,6 +116,34 @@ const NCItemsPercent = ({ start, end, branch, app })=> {
     });
   }
   
+  function gettestone() {
+    // workingSet(true);
+    Meteor.call('TESTsmplLoop', branch, start, end, (err, reply)=> {
+      err && console.log(err);
+      if(reply) {
+        
+        // workingSet(false);
+        // replySet(arrange);
+        
+        console.log(reply);
+      }
+    });
+  }
+  
+  function gettesttwo() {
+    // workingSet(true);
+    Meteor.call('TESTbxLoop', branch, start, end, (err, reply)=> {
+      err && console.log(err);
+      if(reply) {
+        
+        // workingSet(false);
+        // replySet(arrange);
+        
+        console.log(reply);
+      }
+    });
+  }
+  
   return(
     <div className='vmarginhalf noPrint'>
       <button 
@@ -123,6 +151,22 @@ const NCItemsPercent = ({ start, end, branch, app })=> {
         onClick={(e)=>getReport(e)} 
         disabled={!start || !end}
       >Get Percent Report</button>
+      
+      <hr />
+      
+      <button 
+        className='action blackSolid'
+        onClick={(e)=>gettestone(e)} 
+        disabled={!start || !end}
+      >Test Smple Loop</button>
+      
+      <hr />
+      
+      <button 
+        className='action blackSolid'
+        onClick={(e)=>gettesttwo(e)} 
+        disabled={!start || !end}
+      >Test Batch Loop</button>
     </div>
   );
 };

@@ -1009,7 +1009,12 @@ n-sm-model-content {
 
 .readlines p { margin: 10px 0 15px 0; }
 .readlines dt { margin: 5px 0 5px 0; }
-.readlines dd { margin: 5px 0 5px 25px; }
+.readlines dd { 
+  margin: 2px 0 2px 25px;
+  background-color: rgba(255, 255, 255, 0.1);
+  line-height: 1.5;
+  padding-inline: 0.5ch;
+}
 .readPs p {
   margin: 5px 0;
   font-size: inherit;

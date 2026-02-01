@@ -136,7 +136,7 @@ export const NonConBarCH = ({ series, types, title, isDebug })=> {
   isDebug && console.log(series);
   
   return(
-    <div className='chartNoHeightContain space'>
+    <div className='space chart50vContain centre'>
       {types ?
         <Bar options={options} data={{datasets:series}} />
         :

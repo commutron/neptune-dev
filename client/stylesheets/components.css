@@ -192,6 +192,7 @@ n-timeline-item:last-child n-timeline-marker:after {
   text-wrap: pretty;
   overflow: hidden;
   cursor: default;
+  /*border-bottom: 1px inset var(--kpiColor);*/
 }
 .keyData div {
   padding: 5px 10px;

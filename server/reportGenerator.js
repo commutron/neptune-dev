@@ -375,6 +375,98 @@ Meteor.methods({
     return seriesPack;
       // resolve(seriesPack);
     // });
+  },
+  
+  TESTsmplLoop(branch, startDay, endDay) {
+    const startLx = toLxDayStart(startDay, "yyyy-LL-dd");
+    const endLx = toLxDayEnd(endDay, "yyyy-LL-dd");
+    const interval = Interval.fromDateTimes(startLx, endLx);
+    const from = startLx.toISO();
+    const to = endLx.toISO();
+    
+    
+    const accessKey = Meteor.user().orgKey;
+    const xid = appValue(accessKey, "internalID");
+    var bRx = new RegExp('surface mount', 'i');
+    var iRx = new RegExp('smt', 'i');
+
+    let seriesPack = [];
+      
+      // console.log({from, to});
+      
+    XBatchDB.find({
+      orgKey: accessKey,
+      groupId: { $ne: xid },
+      $and : [
+        { createdAt: { $lte: new Date( to ) } },
+        { $or : [ 
+          { completed : false }, 
+          { completedAt : { $gte: new Date( from ) } } 
+        ] }
+      ]
+    },{fields:{'batch':1}})
+    .forEach( (b)=> {
+      
+      XSeriesDB.find({
+        batch: b.batch
+      },{fields:{'batch':1,'items':1,'nonCon':1}})
+      .forEach( (srs)=> {
+     
+        if(srs.items.some( (i)=> i.history.find( h => iRx.test(h.step) ) ) ) {
+          
+          const itemQty = srs.items.length;
+          //this is all items, not just the ones processed in time period !!
+        
+          let ncScope = new Set();
+          for(let n of srs.nonCon) {
+            if(bRx.test(n.where) && 
+              interval.contains(DateTime.fromJSDate(n.time))
+            ) {
+              ncScope.add(n.serial);
+            }
+          }
+          
+          const per = Math.round( (ncScope.size / itemQty) * 100 );
+        
+          seriesPack.push([srs.batch, per]);
+        }
+      });
+      
+    });
+    
+    return seriesPack;
+  },
+  
+  TESTbxLoop(branch, startDay, endDay) {
+    const startLx = toLxDayStart(startDay, "yyyy-LL-dd");
+    const endLx = toLxDayEnd(endDay, "yyyy-LL-dd");
+    const from = startLx.toISO();
+    const to = endLx.toISO();
+    
+    
+    const accessKey = Meteor.user().orgKey;
+    const xid = appValue(accessKey, "internalID");
+
+    let seriesPack = [];
+      
+      // console.log({from, to});
+      
+    XBatchDB.find({
+      orgKey: accessKey,
+      groupId: { $ne: xid },
+      $and : [
+        { createdAt: { $lte: new Date( to ) } },
+        { $or : [ 
+          { completed : false }, 
+          { completedAt : { $gte: new Date( from ) } } 
+        ] }
+      ]
+    },{fields:{'batch':1}})
+    .forEach( (b)=> {
+      seriesPack.push(b.batch);
+    });
+    
+    return seriesPack;
   }
   
 })

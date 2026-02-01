@@ -1,20 +1,30 @@
 import React, { useState, useEffect } from "react";
-import { 
-  VictoryScatter, 
-  VictoryChart, 
-  VictoryAxis,
-  VictoryClipContainer
-} from 'victory';
-import Theme from '/client/global/themeV.js';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  PointElement,
+  Title,
+  Tooltip
+} from 'chart.js';
+import { Scatter } from 'react-chartjs-2';
+import 'chartjs-adapter-moment';
+
+ChartJS.register(
+  CategoryScale,
+  PointElement,
+  Title,
+  Tooltip
+);
+import { toCap } from '/client/utility/Convert.js';
 
 const ShortScatter = ({ shortfalls, app, isDebug })=> {
   
   const [ series, seriesSet ] = useState([]);
-  const [ yNum, ySet ] = useState(1);
+  const [ yArr, ySet ] = useState([]);
   
   useEffect( ()=> {
     const partNums = [...new Set(Array.from(shortfalls, x=> x.partNum))];
-    ySet(partNums.length);
+    ySet(partNums);
     
     let shCounts = [];
    
@@ -23,57 +33,59 @@ const ShortScatter = ({ shortfalls, app, isDebug })=> {
         shCounts.push({
           x: ref,
           y: sh.partNum,
-          symbol: "triangleUp",
-          size: 5
+          
         });
       }
     }
     seriesSet(shCounts);
     
   }, []);
-          
+  
+  const options = {
+    responsive: true,
+    elements: {
+      point: {
+        backgroundColor: 'rgba(243,156,18,0.2)',
+        borderColor: 'rgba(243,156,18)',
+        pointRadius: 16,
+        pointHitRadius: 16,
+        pointStyle: "triangle"
+      },
+    },
+    scales: {
+      x: {
+        type: 'category',
+        offset: true,
+        ticks: {
+          callback: function(v) { 
+            return toCap( this.getLabelForValue(v) || "" ); 
+          }
+        }
+      },
+      y: {
+        type: 'category',
+        labels: yArr,
+        offset: true,
+        ticks: {
+          callback: function(v) { 
+            return toCap( this.getLabelForValue(v) || "" ); 
+          }
+        }
+      }
+    },
+    plugins: {
+      title: false,
+      legend: false
+    },
+  }; 
 
   isDebug && console.log({series, yNum});
     
   return(
     <div className='chartNoHeightContain up'>
-      <VictoryChart
-        theme={Theme.NeptuneVictory}
-        padding={{top: 10, right: 20, bottom: 20, left: 60}}
-        domainPadding={20}
-        height={50 + ( yNum * 15 )}
-      >
-        <VictoryAxis
-          style={ {
-            axis: { stroke: 'grey' },
-            grid: { stroke: '#5c5c5c' },
-            ticks: { stroke: '#5c5c5c' },
-            tickLabels: { 
-              fontSize: '6px' }
-          } }
-        />
-        <VictoryAxis 
-          dependentAxis
-          style={ {
-            axis: { stroke: 'grey' },
-            grid: { stroke: '#5c5c5c' },
-            ticks: { stroke: '#5c5c5c' },
-            tickLabels: { 
-              fontSize: '6px' }
-          } }
-        />
-        <VictoryScatter
-          data={series}
-          groupComponent={<VictoryClipContainer/>}
-          style={ {
-            data: { 
-              fill: 'rgba(243,156,18,0.2)',
-              stroke: 'rgb(50,50,50)',
-              strokeWidth: 0.5,
-          } } }
-        />
-      </VictoryChart>
-      
+      <div className='chart50vContain centreRow'>
+        <Scatter options={options} data={{datasets: [{data: series}]}} redraw={true} />
+      </div>
       <p className='centreText small cap'>Short Parts and Referances</p>
       
     </div>
