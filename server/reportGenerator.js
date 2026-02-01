@@ -193,17 +193,18 @@ function loopNonConsCross(nonCons, branch) {
     let serials = new Set();
     
     let types = new Set();
+    let wheres = new Set();
+    
     for(let nt of inTime) {
       types.add(nt.type);
       serials.add(nt.serial);
-    }
-    
-    let wheres = new Set();
-    if(brAll) {
-      for(let nw of inTime) {
+      if(brAll) {
         wheres.add(nw.where);
+      }else{
+        wheres.add(branch);
       }
-    }else{
+    }
+    if(!brAll) {
       wheres.add(branch);
     }
     
@@ -214,15 +215,17 @@ function loopNonConsCross(nonCons, branch) {
     let endline = Array.from(locals, ()=> 0);
     
     for(let type of types) {
-      const ncOfType = inTime.filter( n => n.type === type );
+      // const ncOfType = inTime.filter( n => n.type === type );
       
       let whArr = [type];
       let tyTtl = 0;
       for(const [index, loc] of locals.entries()) {
         let whCount = 0;
-        for(let ncW of ncOfType) {
-          if(ncW.where === loc) {
-            whCount += ( Number(ncW.multi) || 1 );
+        for(let ncW of inTime) {
+          if(ncW.type === type) {
+            if(ncW.where === loc) {
+              whCount += ( Number(ncW.multi) || 1 );
+            }
           }
         }
         whArr.push( whCount );
@@ -412,7 +415,7 @@ Meteor.methods({
       },{fields:{'batch':1,'items':1,'nonCon':1}})
       .forEach( (srs)=> {
      
-        if(srs.items.some( (i)=> i.history.find( h => iRx.test(h.step) ) ) ) {
+        // if(srs.items.some( (i)=> i.history.find( h => iRx.test(h.step) ) ) ) {
           
           const itemQty = srs.items.length;
           //this is all items, not just the ones processed in time period !!
@@ -429,7 +432,7 @@ Meteor.methods({
           const per = Math.round( (ncScope.size / itemQty) * 100 );
         
           seriesPack.push([srs.batch, per]);
-        }
+        // }
       });
       
     });
@@ -463,7 +466,15 @@ Meteor.methods({
       ]
     },{fields:{'batch':1}})
     .forEach( (b)=> {
-      seriesPack.push(b.batch);
+      XSeriesDB.find({
+        batch: b.batch
+      },{fields:{'batch':1,'items':1,'nonCon':1}})
+      .forEach( (srs)=> {
+        
+        const itemQty = srs.items.length > 0 ? srs.items.reduce((t,i)=> t + i.units, 0) : 0;
+        
+        seriesPack.push([srs.batch, itemQty]);
+      });
     });
     
     return seriesPack;
