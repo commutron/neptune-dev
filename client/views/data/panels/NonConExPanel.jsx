@@ -158,7 +158,7 @@ const NCItemsPercent = ({ start, end, branch, app })=> {
       
       <button 
         className='action blackSolid'
-        onClick={(e)=>gettest('TESTbxSRSTideLoop')} 
+        onClick={(e)=>gettest('TESTbxFetchSRSTideLoop')} 
         disabled={!start || !end}
       >Test with Tide -For Batch & Fetch Series- Loop</button>
       
