@@ -410,10 +410,10 @@ Meteor.methods({
       const srs = XSeriesDB.findOne({
         batch: b.batch
       },{fields:{'batch':1,'items':1,'nonCon':1}});
+      
+      const itemQty = srs && srs.items.length > 0 ? srs.items.reduce((t,i)=> t + i.units, 0) : 0;
         
-      const itemQty = srs.items.length > 0 ? srs.items.reduce((t,i)=> t + i.units, 0) : 0;
-        
-      seriesPack.push([srs.batch, itemQty]);
+      srs ? seriesPack.push([srs.batch, itemQty]) : null;
     });
     
     return seriesPack;
