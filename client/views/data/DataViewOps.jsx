@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 import { TraverseWrap } from '/client/layouts/DataExploreLayout';
 
@@ -8,6 +8,7 @@ import ExploreLanding from './panels/ExploreLanding';
 import ReportsWrap from './panels/Reports/ReportsWrap';
 import VisWrap from './panels/ExVis/VisWrap';
 import AllGroups from './panels/AllGroups/AllGroups';
+import BranchHub from './panels/BranchHub/BranchHub';
 
 import ItemPanelX from './panels/ItemPanelX';
 import BatchPanelX from './panels/XBatchPanel/BatchPanelX';
@@ -232,6 +233,24 @@ const DataViewOps = ({
             widgetData={allWidget}
             variantData={allVariant}
             groupData={allGroup} 
+            app={app}
+            specify={specify} />
+        </TraverseWrap>
+      );
+    }else if(request === 'branches') {
+      return(
+        <TraverseWrap
+		      batchData={false}
+          widgetData={false}
+          variantData={false}
+          groupData={false}
+          title={Pref.branches}
+          subLink={subLink}
+          action={false}
+          base={true}
+        >
+          <BranchHub
+            brancheS={brancheS}
             app={app}
             specify={specify} />
         </TraverseWrap>

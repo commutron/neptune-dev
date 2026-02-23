@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import CreateTag from '/client/components/tinyUi/CreateTag';
 import WidgetsDepth from '../../lists/WidgetsDepth';
 import TagsModule from '/client/components/bigUi/TagsModule';
@@ -128,21 +128,24 @@ const GroupSlide = ({
       <div className='wide comfort'>
       
         {g.internal &&
-          <div className='centreText comfort beside w100 vmargin intrBlueSq cap'>
-            <i className='fas fa-home fa-fw fa-2x nT gapL'></i>
-            <span>
-              <h3>Internal {Pref.group}</h3>
-              <p>For in-house use, one-off projects, prototypes, or training.</p>
-            </span>
-            <i className='fas fa-globe-americas fa-fw fa-2x nT gapR'></i>
-          </div>}
+          <Gbanner 
+            title={'Internal ' + Pref.group}
+            sub='For in-house use, one-off projects, prototypes, or training.'
+            icon='fa-home'
+            icon2='fa-globe-americas'
+            colour='nT'
+            bcolour='intrBlueSq'
+          />
+        }
           
         {g.hibernate &&
-          <div className='centreText comfort beside w100 vmargin wetasphaltBorder cap'>
-            <i className='fas fa-archive fa-fw fa-2x wetasphaltT gapL'></i>
-            <h3>{Pref.hibernatated} {Pref.group}</h3>
-            <i className='fas fa-archive fa-fw fa-2x wetasphaltT gapR'></i>
-          </div>}
+          <Gbanner 
+            title={Pref.hibernatated + ' ' + Pref.group}
+            icon='fa-archive'
+            colour='wetasphaltT'
+            bcolour='wetasphaltBorder'
+          />
+        }
         
         <div className='centreRow'>
           <TagsModule
@@ -197,3 +200,14 @@ const GroupSlide = ({
 };
 
 export default GroupSlide;
+
+const Gbanner = ({ title, sub, icon, icon2, colour, bcolour })=> (
+  <div className={'centreText comfort beside w100 vmargin cap ' + bcolour}>
+    <i className={`fa-solid ${icon} fa-fw fa-2x gapL ${colour}`}></i>
+    <span>
+      <h3>{title}</h3>
+      <p>{sub || ''}</p>
+    </span>
+    <i className={`fa-solid ${icon2 || icon} fa-fw fa-2x gapR ${colour}`}></i>
+  </div>
+);

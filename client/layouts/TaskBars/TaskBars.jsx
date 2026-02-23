@@ -40,6 +40,13 @@ export const ExTaskBar = ({ subLink }) => (
     />
     
     <TaskElement
+      title={Pref.branches}
+      subON={subLink === 'overviewbranches'}
+      goLink='/data/overview?request=branches'
+      icon='fas fa-code-branch'
+    />
+    
+    <TaskElement
       title='Reports'
       subON={subLink === 'reportsundefined'}
       goLink='/data/reports'
