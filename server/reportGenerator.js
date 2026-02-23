@@ -14,6 +14,8 @@ function findRelevantSeries(from, to) {
   return new Promise(resolve => {
     const accessKey = Meteor.user().orgKey;
     const xid = appValue(accessKey, "internalID");
+    
+    let batchPack = [];
     let seriesPack = [];
     
     XBatchDB.find({
@@ -28,11 +30,15 @@ function findRelevantSeries(from, to) {
       ]
     },{fields:{'batch':1}})
     .forEach( (b)=> {
-      const srs = XSeriesDB.findOne({batch: b.batch});
+      batchPack.push(b.batch);
+    });
+    
+    for(let b of batchPack) {
+      const srs = XSeriesDB.findOne({batch: b});
       if(srs) {
         seriesPack.push(srs);
       }
-    });
+    }
     resolve(seriesPack);
   });
 }
@@ -444,22 +450,7 @@ Meteor.methods({
       batchPack.push(b.batch);
     });
     
-    return batchPack;
-  },
-  
-  TESTbxNUMTideLoop(branch, startDay, endDay) {
-    const startLx = toLxDayStart(startDay, "yyyy-LL-dd");
-    const endLx = toLxDayEnd(endDay, "yyyy-LL-dd");
-    const from = startLx.toISO();
-    const to = endLx.toISO();
-    
-    
-    const accessKey = Meteor.user().orgKey;
-    const xid = appValue(accessKey, "internalID");
-
-    let batchPack = [];
-      
-      // console.log({from, to});
+    let batchPack2 = [];
       
     XBatchDB.find({
       orgKey: accessKey,
@@ -467,13 +458,13 @@ Meteor.methods({
       'tide.startTime': { $gte: new Date( from ), $lte: new Date( to ) }
     },{fields:{'batch':1}})
     .forEach( (b)=> {
-      batchPack.push(b.batch);
+      batchPack2.push(b.batch);
     });
     
-    return batchPack;
+    return [ batchPack,  batchPack2 ];
   },
   
-  TESTbxSRSTideLoop(branch, startDay, endDay) {
+  TESTbxFetchSRSTideLoop(branch, startDay, endDay) {
     const startLx = toLxDayStart(startDay, "yyyy-LL-dd");
     const endLx = toLxDayEnd(endDay, "yyyy-LL-dd");
     const from = startLx.toISO();
@@ -499,7 +490,37 @@ Meteor.methods({
     const seriesPack = XSeriesDB.find({
       batch: { $in: batchPack }
     },{fields:{'batch':1,'items':1,'nonCon':1}}).fetch();
+    
+    return seriesPack;
+  },
+  
+  TESTbxForSRSTideLoop(branch, startDay, endDay) {
+    const startLx = toLxDayStart(startDay, "yyyy-LL-dd");
+    const endLx = toLxDayEnd(endDay, "yyyy-LL-dd");
+    const from = startLx.toISO();
+    const to = endLx.toISO();
+    
+    
+    const accessKey = Meteor.user().orgKey;
+    const xid = appValue(accessKey, "internalID");
+
+    let seriesPack = [];
       
+      // console.log({from, to});
+      
+    let batchPack = XBatchDB.find({
+      orgKey: accessKey,
+      groupId: { $ne: xid },
+      'tide.startTime': { $gte: new Date( from ), $lte: new Date( to ) }
+    },{fields:{'batch':1}}).fetch();
+    
+    for(let b of batchPack) {
+      const srs = XSeriesDB.findOne({batch: b.batch},{fields:{'batch':1,'items':1,'nonCon':1}});
+      if(srs) {
+        seriesPack.push(srs);
+      }
+    }
+    
     return seriesPack;
   }
   
