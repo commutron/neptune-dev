@@ -116,37 +116,9 @@ const NCItemsPercent = ({ start, end, branch, app })=> {
     });
   }
   
-  function gettesttwo() {
+  function gettest(func) {
     // workingSet(true);
-    Meteor.call('TESTbxLoop', branch, start, end, (err, reply)=> {
-      err && console.log(err);
-      if(reply) {
-        
-        // workingSet(false);
-        // replySet(arrange);
-        
-        console.log(reply);
-      }
-    });
-  }
-  
-  function gettestthree() {
-    // workingSet(true);
-    Meteor.call('TESTbxAsyncLoop', branch, start, end, (err, reply)=> {
-      err && console.log(err);
-      if(reply) {
-        
-        // workingSet(false);
-        // replySet(arrange);
-        
-        console.log(reply);
-      }
-    });
-  }
-  
-  function gettestfour() {
-    // workingSet(true);
-    Meteor.call('TESTbxNUMLoop', branch, start, end, (err, reply)=> {
+    Meteor.call(func, branch, start, end, (err, reply)=> {
       err && console.log(err);
       if(reply) {
         
@@ -170,7 +142,7 @@ const NCItemsPercent = ({ start, end, branch, app })=> {
       
       <button 
         className='action blackSolid'
-        onClick={(e)=>gettesttwo(e)} 
+        onClick={(e)=>gettest('TESTbxLoop')} 
         disabled={!start || !end}
       >Test Batch Loop</button>
       
@@ -178,17 +150,27 @@ const NCItemsPercent = ({ start, end, branch, app })=> {
       
       <button 
         className='action blackSolid'
-        onClick={(e)=>gettestthree(e)} 
+        onClick={(e)=>gettest('TESTbxNUMLoop')} 
         disabled={!start || !end}
-      >Test Async Batch Loop</button>
+      >Test Create Finish Batch Loop</button>
       
       <hr />
       
       <button 
         className='action blackSolid'
-        onClick={(e)=>gettestfour(e)} 
+        onClick={(e)=>gettest('TESTbxNUMTideLoop')} 
         disabled={!start || !end}
       >Test Tide Batch Loop</button>
+      
+      <hr />
+      
+      <button 
+        className='action blackSolid'
+        onClick={(e)=>gettest('TESTbxSRSTideLoop')} 
+        disabled={!start || !end}
+      >Test Tide Batch Series Loop</button>
+      
+      
     </div>
   );
 };
