@@ -11,15 +11,11 @@ const BranchHub = ({
 }) => {
   
   // const [ selectedBr, selectedBrSet ] = useState(false);
-  
-  const menuList = brancheS.map( (br)=> {
-                    const strk = !br.open;
-                    const sub = br.pro ? 'Pro' : '';
-                    return [br.common, strk, sub, ''];
-                  });
+  const oBrancheS = brancheS.filter( b => b.open );
+  const menuList = oBrancheS.map( (br)=> [br.branch, !br.pro, br.common, ''] );
   
   const defaultSlide = specify ? 
-    brancheS.findIndex( x => x.common === specify ) : false;
+    oBrancheS.findIndex( x => x.branch === specify ) : false;
   
   const canRun = Roles.userIsInRole(Meteor.userId(), 'run');
   const canEdt = Roles.userIsInRole(Meteor.userId(), 'edit');
@@ -28,7 +24,6 @@ const BranchHub = ({
   
   return(
     <Fragment>
-     
      
     <SlidesNested
       menuTitle={Pref.branches}
@@ -40,10 +35,10 @@ const BranchHub = ({
         />
       }
       defaultSlide={defaultSlide}
-      collapse='Closed'
+      collapse='Not Pro'
       textStyle='up'>
     
-      {brancheS.map( (entry, index)=> {
+      {oBrancheS.map( (entry, index)=> {
         return(
           <BranchSlide
             key={index+entry.brKey}

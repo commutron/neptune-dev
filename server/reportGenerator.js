@@ -417,6 +417,51 @@ Meteor.methods({
     });
     
     return seriesPack;
+  },
+  
+  TESTbxNUMLoop(branch, startDay, endDay) {
+    const startLx = toLxDayStart(startDay, "yyyy-LL-dd");
+    const endLx = toLxDayEnd(endDay, "yyyy-LL-dd");
+    const from = startLx.toISO();
+    const to = endLx.toISO();
+    
+    
+    const accessKey = Meteor.user().orgKey;
+    const xid = appValue(accessKey, "internalID");
+
+    let batchPack = [];
+      
+      // console.log({from, to});
+      
+    XBatchDB.find({
+      orgKey: accessKey,
+      groupId: { $ne: xid },
+      'tide.startTime': { $gte: new Date( from ), $lte: new Date( to ) }
+    },{fields:{'batch':1}})
+    .forEach( (b)=> {
+      batchPack.push(b.batch);
+    });
+    
+    return batchPack;
+  },
+  
+  TESTbxAsyncLoop(branch, startDay, endDay) {
+    const startLx = toLxDayStart(startDay, "yyyy-LL-dd");
+    const endLx = toLxDayEnd(endDay, "yyyy-LL-dd");
+    const from = startLx.toISO();
+    const to = endLx.toISO();
+    
+    async function getSRS() {
+      try {
+        const seriesSlice = await findRelevantSeries(from, to);
+       
+        return seriesSlice;
+      }catch (err) {
+        throw new Meteor.Error(err);
+      }
+    }
+    return getSRS();
   }
+  
   
 })

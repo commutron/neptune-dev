@@ -130,6 +130,34 @@ const NCItemsPercent = ({ start, end, branch, app })=> {
     });
   }
   
+  function gettestthree() {
+    // workingSet(true);
+    Meteor.call('TESTbxAsyncLoop', branch, start, end, (err, reply)=> {
+      err && console.log(err);
+      if(reply) {
+        
+        // workingSet(false);
+        // replySet(arrange);
+        
+        console.log(reply);
+      }
+    });
+  }
+  
+  function gettestfour() {
+    // workingSet(true);
+    Meteor.call('TESTbxNUMLoop', branch, start, end, (err, reply)=> {
+      err && console.log(err);
+      if(reply) {
+        
+        // workingSet(false);
+        // replySet(arrange);
+        
+        console.log(reply);
+      }
+    });
+  }
+  
   return(
     <div className='vmarginhalf noPrint'>
       <button 
@@ -145,6 +173,22 @@ const NCItemsPercent = ({ start, end, branch, app })=> {
         onClick={(e)=>gettesttwo(e)} 
         disabled={!start || !end}
       >Test Batch Loop</button>
+      
+      <hr />
+      
+      <button 
+        className='action blackSolid'
+        onClick={(e)=>gettestthree(e)} 
+        disabled={!start || !end}
+      >Test Async Batch Loop</button>
+      
+      <hr />
+      
+      <button 
+        className='action blackSolid'
+        onClick={(e)=>gettestfour(e)} 
+        disabled={!start || !end}
+      >Test Tide Batch Loop</button>
     </div>
   );
 };
