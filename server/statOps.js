@@ -113,15 +113,22 @@ Meteor.methods({
     this.unblock();
     const xid = noIg();
     
-    const allB = XBatchDB.find({
+    let xTotal = 0;
+    let xlive = 0;
+    let xDone = 0;
+    let xlocked = 0;
+    
+    XBatchDB.find({
       orgKey: Meteor.user().orgKey,
       groupId: { $ne: xid },
-    },{fields:{'live':1, 'completed':1, 'lock':1}}).fetch();
-    
-    const xTotal = allB.length;
-    const xlive = allB.filter( x => x.live === true ).length;
-    const xDone = allB.filter( x => x.completed === true ).length;
-    const xlocked = allB.filter( x => x.lock === true ).length;
+    },{fields:{'live':1, 'completed':1, 'lock':1}})
+    .forEach( x => {
+      xTotal += 1;
+      x.live === true ? xlive += 1 : null;
+      x.completed === true ? xDone += 1 : null;
+      x.lock === true ? xlocked += 1 : null;
+      
+    });
     
     const xRapid = XRapidsDB.find({
       orgKey: Meteor.user().orgKey,
@@ -161,20 +168,19 @@ Meteor.methods({
       syncLocale(Meteor.user().orgKey);
       const cutoff = ( d => new Date(d.setDate(d.getDate()-Config.avgSpan)) )(new Date);
       
-      const batches = XBatchDB.find({
+      let ontm = 0;
+      let late = 0;
+      let pftargets = [];
+      
+      XBatchDB.find({
         orgKey: Meteor.user().orgKey,
         groupId: gID,
         createdAt: { 
           $gte: new Date(cutoff)
         }
       },{fields:{'batch':1,'salesEnd':1,'completedAt':1,'lockTrunc.performTgt':1}}
-      ).fetch();
-      
-      let ontm = 0;
-      let late = 0;
-      let pftargets = [];
-      
-      for( let batch of batches) {
+      ).forEach( batch => {
+        
         const fin = getEndWork(batch._id, batch.salesEnd);
         const nowLate = moment().isAfter(fin);
         
@@ -192,7 +198,8 @@ Meteor.methods({
           const t = TraceDB.findOne({batchID: batch._id},{fields:{'performTgt':1}});
           t && t.performTgt !== undefined ? pftargets.push(t.performTgt) : null;
         }
-      }
+      });
+      
       let ontime = [{
         x: 'on time',
         y: Math.round( (ontm / (ontm+late || 1)) * 100 )
@@ -202,8 +209,9 @@ Meteor.methods({
       }];
       const avgPf = Math.round( avgOfArray(pftargets, true) );
         
-      const widgets = WidgetDB.find({ groupId: gID},{fields:{'ncRate':1}}).fetch();
-      const avgNC = avgOfArray(Array.from(widgets, x=> x.ncRate ? x.ncRate.rate : 0), true);
+      const widgetsRate = WidgetDB.find({ groupId: gID},{fields:{'ncRate':1}})
+                            .map( w => w.ncRate ? w.ncRate.rate : 0 );
+      const avgNC = avgOfArray(widgetsRate, true);
       
       const last = topStats ? topStats.stats : null;
       let tt = !last || ontime[0].y == last.ontime[0].y ? 0 : ontime[0].y > last.ontime[0].y ? 1 : -1;

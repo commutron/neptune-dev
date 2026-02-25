@@ -176,7 +176,7 @@ Meteor.methods({
     let ntyPerArr = [];
     
     const xid = noIg();
-    const compB = XBatchDB.find({live: false, groupId: { $ne: xid }});
+    const compB = XBatchDB.find({live: false, groupId: { $ne: xid }}).fetch();
     
     for( let b of compB ) {
       const srs = XSeriesDB.findOne({batch: b.batch});

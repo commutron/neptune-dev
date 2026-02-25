@@ -89,7 +89,7 @@ Meteor.methods({
     if(stale) {
       const cutoff = ( d => new Date(d.setDate(d.getDate()-Config.avgSpan)) )(new Date);
       
-      const batches = XBatchDB.find({
+      const perfset = XBatchDB.find({
         orgKey: accessKey,
         groupId: { $ne: xid },
         createdAt: { 
@@ -97,16 +97,16 @@ Meteor.methods({
         }
       },
         {fields:{'batch':1,'completedAt':1}}
-      ).fetch();
+      ).map( b => plotPerform(b) );
       
-      let perfset = plotPerform(batches);
-      
+      const perfsetS = perfset.sort((a,b)=> a.x > b.x ? 1 : a.x < b.x ? -1 : 0);
+
       CacheDB.upsert({dataName: 'performShadow'}, {
         $set : {
           orgKey: accessKey,
           lastUpdated: new Date(),
           dataName: 'performShadow',
-          dataArray: perfset
+          dataArray: perfsetS
       }});
     
       return perfset;
@@ -128,7 +128,7 @@ Meteor.methods({
       syncLocale(accessKey);
       const cutoff = ( d => new Date(d.setDate(d.getDate()-Config.avgSpan)) )(new Date);
       
-      const batches = XBatchDB.find({
+      const onset = XBatchDB.find({
         orgKey: accessKey,
         groupId: { $ne: xid },
         createdAt: { 
@@ -136,16 +136,16 @@ Meteor.methods({
         }
       },
         {fields:{'batch':1,'completedAt':1, 'salesEnd':1}}
-      ).fetch();
+      ).map( b => plotOnTime(b) );
       
-      let onset = plotOnTime(batches);
+      const onsetS = onset.sort((a,b)=> a.x > b.x ? 1 : a.x < b.x ? -1 : 0);
 
       CacheDB.upsert({dataName: 'ontimeShadow'}, {
         $set : {
           orgKey: accessKey,
           lastUpdated: new Date(),
           dataName: 'ontimeShadow',
-          dataArray: onset
+          dataArray: onsetS
       }});
     
       return onset;
@@ -165,8 +165,11 @@ Meteor.methods({
               moment.duration(moment().diff(moment(nctime))).as('hours') > Config.freche;
     if(stale) {
       const cutoff = ( d => new Date(d.setDate(d.getDate()-Config.avgSpan)) )(new Date);
-
-      const batches = XBatchDB.find({
+      
+      let batchList = [];
+      let doneDates = [];
+      
+      XBatchDB.find({
         orgKey: accessKey,
         groupId: { $ne: xid },
         createdAt: { 
@@ -174,9 +177,15 @@ Meteor.methods({
         }
       },
         {fields:{'batch':1,'completedAt':1}}
-      ).fetch();
+      ).forEach( b => {
+        batchList.push(b.batch);
+        doneDates.push([
+          b.batch, 
+          b.completedAt
+        ]);
+      });
       
-      let ncset = plotNonCons(batches, brOps);
+      let ncset = plotNonCons(batchList, doneDates, brOps);
       CacheDB.upsert({dataName: 'nccountShadow'}, {
         $set : {
           orgKey: accessKey,
@@ -203,7 +212,10 @@ Meteor.methods({
     if(stale) {
       const cutoff = ( d => new Date(d.setDate(d.getDate()-Config.avgSpan)) )(new Date);
       
-      const batches = XBatchDB.find({
+      let batchList = [];
+      let doneDates = [];
+      
+      XBatchDB.find({
         orgKey: accessKey,
         groupId: { $ne: xid },
         createdAt: { 
@@ -211,9 +223,15 @@ Meteor.methods({
         }
       },
         {fields:{'batch':1,'completedAt':1}}
-      ).fetch();
+      ).forEach( b => {
+        batchList.push(b.batch);
+        doneDates.push([
+          b.batch, 
+          b.completedAt
+        ]);
+      });
       
-      let shset = plotShorts(batches, brOps);
+      let shset = plotShorts(batchList, doneDates, brOps);
       
       CacheDB.upsert({dataName: 'shcountShadow'}, {
         $set : {
@@ -241,7 +259,10 @@ Meteor.methods({
     if(stale) {
       const cutoff = ( d => new Date(d.setDate(d.getDate()-Config.avgSpan)) )(new Date);
       
-      const batches = XBatchDB.find({
+      let batchList = [];
+      let doneDates = [];
+      
+      XBatchDB.find({
         orgKey: accessKey,
         groupId: { $ne: xid },
         createdAt: { 
@@ -249,9 +270,15 @@ Meteor.methods({
         }
       },
         {fields:{'batch':1,'completedAt':1}}
-      ).fetch();
+      ).forEach( b => {
+        batchList.push(b.batch);
+        doneDates.push([
+          b.batch, 
+          b.completedAt
+        ]);
+      });
       
-      let failset = plotTest(batches);
+      let failset = plotTest(batchList, doneDates);
       
       CacheDB.upsert({dataName: 'failShadow'}, {
         $set : {
@@ -280,7 +307,7 @@ Meteor.methods({
       syncLocale(accessKey);
       const cutoff = ( d => new Date(d.setDate(d.getDate()-Config.avgSpan)) )(new Date);
       
-      const batches = XBatchDB.find({
+      const bchset = XBatchDB.find({
         orgKey: accessKey,
         groupId: { $ne: xid },
         createdAt: { 
@@ -291,16 +318,16 @@ Meteor.methods({
           'batch':1,'createdAt':1,'quantity':1,
           'salesOrder':1,'salesStart':1,'completedAt':1
         }}
-      ).fetch();
-        
-      let bchset = plotCreatedOrders(batches);
+      ).map( b => plotCreatedOrders(b) );
+      
+      const bchsetS = bchset.sort((a,b)=> a.x1 > b.x1 ? 1 : a.x1 < b.x1 ? -1 : 0);
 
       CacheDB.upsert({dataName: 'bchShadow'}, {
         $set : {
           orgKey: accessKey,
           lastUpdated: new Date(),
           dataName: 'bchShadow',
-          dataArray: bchset
+          dataArray: bchsetS
       }});
       
       return bchset;

@@ -31,7 +31,7 @@ const AppWrap = ({ isAdmin, isDebug, users, app })=> {
       <Slides
         menu={[
           <b><i className='fas fa-wave-square fa-fw gapR'></i>Flow Behavior</b>,
-          <b><i className='fas fa-code-branch fa-fw gapR'></i>{Pref.branches}</b>,
+          <b><i className='fas fa-sitemap fa-fw gapR'></i>{Pref.branches}</b>,
           <b><i className='fas fa-gem fa-fw gapR'></i>Quality Time</b>,
           <b><i className='fas fa-shoe-prints fa-fw gapR'></i>Track Steps</b>,
           <b><i className='fas fa-stopwatch fa-fw gapR'></i>Counter Steps</b>,

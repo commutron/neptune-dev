@@ -34,7 +34,7 @@ const GroupForm = ({ gObj, clearOnClose, rootURL })=> {
           clearOnClose();
           toast.success('Saved');
         }else{
-          toast.error('Server Error');
+          toast.error('Server Error / Duplicate');
         }
       });
     }else{

@@ -2,9 +2,7 @@ import moment from 'moment';
 import timezone from 'moment-timezone';
 import Config from '/server/hardConfig.js';
 
-export function whatIsBatchX(keyword) {
-  const batch = XBatchDB.findOne({batch: keyword},{fields:
-                {'groupId':1,'widgetId':1,'versionKey':1,'salesOrder':1,'quantity':1}});
+function whatIsBatchRest(batch) {
   const group = GroupDB.findOne({_id: batch.groupId},{fields:{'alias':1,'hibernate':1}});
   const groupH = group.hibernate ? "."+group.alias : group.alias;
   const widget = WidgetDB.findOne({_id: batch.widgetId},{fields:{'widget':1,'describe':1}});
@@ -16,8 +14,12 @@ export function whatIsBatchX(keyword) {
   const rad = variant.radioactive ? variant.radioactive : false;
   return [ nice, more, rad ];
 }
+export function whatIsBatchX(keyword) {
+  const batch = XBatchDB.findOne({batch: keyword},{fields:
+                {'groupId':1,'widgetId':1,'versionKey':1}});
+  return whatIsBatchRest(batch);
+}
 
-    
 Meteor.methods({
   
   getBasicBatchInfo(keyword) {
@@ -43,15 +45,14 @@ Meteor.methods({
   newBatchLookup(daysBack) {
     const ystrday = ( d => new Date(d.setDate(d.getDate()-Number(daysBack))) )(new Date);
 
-    let newList = [];
-    
-    XBatchDB.find({
+    let newList = XBatchDB.find({
       createdAt: { $gte: ystrday }
     },
-    {fields:{ 'batch':1,'salesOrder':1,'live':1 }}
-    ).forEach( x => {
-      const is = whatIsBatchX(x.batch);
-      newList.push([
+    {fields:{ 'batch':1,'salesOrder':1,'live':1,'groupId':1,'widgetId':1,'versionKey':1 }}
+    ).map( x => {
+      const is = whatIsBatchRest(x);
+      
+      return [
         x.batch,
         x.salesOrder || 'n/a',
         is[0][0],
@@ -59,8 +60,8 @@ Meteor.methods({
         is[0][2],
         x.live,
         is[2]
-      ]);
-    });
+      ];
+    }, []);
     
     return newList;
   },
@@ -245,12 +246,11 @@ Meteor.methods({
   },
   
   getLiveBatch() {
-    const batches = XBatchDB.find({live: true},{fields:{'batch':1}}).fetch();
-    const plain = [];
-    for(let b of batches) {
-      plain.push(b.batch);
-    }
-    return plain;
+    const plainbatches = XBatchDB.find({
+      live: true
+    },{fields:{'batch':1}})
+    .map( b => b.batch );
+    return plainbatches;
   },
   
   getPastBatch(wID, vKey) {
@@ -283,18 +283,15 @@ Meteor.methods({
   },
   
   getEquipAssigned() {
-    let nextService = [];
-    const equip = EquipDB.find({
-                    hibernate: {$ne: true}, 
-                    nullify: {$ne: true}, 
-                    stewards: { $in: [Meteor.userId()] }
-                  }, {
+    let nextService = EquipDB.find({
+      hibernate: {$ne: true}, 
+      nullify: {$ne: true}, 
+      stewards: { $in: [Meteor.userId()] }
+    }, {
       fields: {
         'equip': 1,
         'alias': 1
-    }}).fetch();
-    
-    for(let eq of equip) {
+    }}).forEach( eq => {
       const maint = MaintainDB.find({
                       equipId: eq._id,
                       $or: [
@@ -312,7 +309,7 @@ Meteor.methods({
         alias: eq.alias,
         serve: maint
       });
-    }
+    });
     
     return nextService;
   },
@@ -337,7 +334,7 @@ Meteor.methods({
   },
   
   getVariantOrderDates() {
-
+  // this must be able to be better??
     const allXBatch = XBatchDB.find({},{
       fields:{
         'versionKey':1,'completedAt':1,'live':1
@@ -367,19 +364,21 @@ Meteor.methods({
    // Shortfall Items
   ///////////////////////////////////////////////////////////////////////////
   fetchShortfallParts() {
-    
+    // Faster if split
     let sMatch = [];
     
     XBatchDB.find({
       orgKey: Meteor.user().orgKey,
       completed: false
+    },{fields:
+      {'batch':1,'groupId':1,'widgetId':1,'versionKey':1,'salesOrder':1}
     }).forEach( bx => {
-      const srs = XSeriesDB.findOne({batch: bx.batch});
+      const srs = XSeriesDB.findOne({batch: bx.batch},{fields:{'shortfall':1}});
       if(srs) {
         const mShort = srs.shortfall.filter( s => !(s.inEffect || s.reSolve) );
           
         if(mShort.length > 0) {
-          const whatIs = whatIsBatchX(bx.batch);
+          const whatIs = whatIsBatchRest(bx.batch);
           const describe = whatIs[0].join(' ');
           
           const unqShort = _.uniq(mShort, false, n=> n.partNum );

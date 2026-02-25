@@ -140,7 +140,7 @@ function weekDoneAnalysis(rangeStart, rangeEnd) {
     
   let batchMetrics = [];
   
-  const generalFindX = XBatchDB.find({
+  XBatchDB.find({
     orgKey: accessKey, 
     completedAt: { 
       $gte: new Date(rangeStart),
@@ -149,16 +149,15 @@ function weekDoneAnalysis(rangeStart, rangeEnd) {
   },{fields:{
     'batch':1,'salesOrder':1,'salesEnd':1,'quoteTimeBudget':1,
     'completedAt':1,'quantity':1,'tide':1,'altered':1
-  }}).fetch();
-  
-  for(let gf of generalFindX) {
+  }}).forEach( gf => {
+    
     const batchNum = gf.batch;
     const whatIs = whatIsBatchX(batchNum);
     const describe = whatIs[0].join(' ');
     const salesOrder = gf.salesOrder;
     const allQuantity = gf.quantity;
     
-    const srs = XSeriesDB.findOne({batch: gf.batch});
+    const srs = XSeriesDB.findOne({batch: gf.batch},{fields:{'items':1,'nonCon':1}});
     const units = srs ? srs.items.length > 0 ? srs.items.reduce((t,i)=> t + i.units, 0) : 0 : 0;
     // -- nc rate calculation filter --
     const ncArr = srs ? srs.nonCon.filter( n => !n.trash && !(n.inspect && !n.fix) ) : [];
@@ -188,7 +187,7 @@ function weekDoneAnalysis(rangeStart, rangeEnd) {
       salesEnd, shipDue, endAlter, localComplete,
       fillOnTime, shipOnTime, overQuote
     ]);
-  }
+  });
   
   return batchMetrics;
 }
@@ -327,16 +326,14 @@ Meteor.methods({
     const localDate = moment.tz(dateString, Config.clientTZ);
     let itemsMatch = [];
     
-    const touchedSRS = XSeriesDB.find({
+    XSeriesDB.find({
       orgKey: Meteor.user().orgKey,
       items: { $elemMatch: { completedAt: {
       $gte: new Date(localDate.startOf('day').format()),
       $lte: new Date(localDate.endOf('day').format())
     }}}
     },{fields:{'batch':1,'items.serial':1,'items.completed':1,'items.completedAt':1}}
-    ).fetch();
-    
-    for(let srs of touchedSRS) {
+    ).forEach( srs => {
       const items = srs.items.filter( i => i.completed && localDate.isSame(i.completedAt, 'day') );
       const whatIs = whatIsBatchX(srs.batch);
       const describe = whatIs[0].join(' ');
@@ -350,7 +347,7 @@ Meteor.methods({
           [ srs.batch, whatIs[2] ], salesOrder, describe, ic.serial, time
         ]);
       }
-    }
+    });
     return itemsMatch;
   },
   
@@ -361,21 +358,20 @@ Meteor.methods({
       
       let itemsMatch = [];
       
-      const touchedSRS = XSeriesDB.find({
+      XSeriesDB.find({
         orgKey: accessKey,
         groupId: { $ne: xid },
         items: { $elemMatch: { completedAt: {
           $gte: new Date(now.startOf('week').format()),
           $lte: new Date(now.endOf('week').format())
         }}}
-      },{fields:{'items.completed':1,'items.completedAt':1}}).fetch();
-      
-      for(let srs of touchedSRS) {
+      },{fields:{'items.completed':1,'items.completedAt':1}})
+      .forEach( srs => {
         const items = srs.items.filter( i => i.completed && now.isSame(i.completedAt, 'week') );
         for(let ic of items) {
           itemsMatch.push(moment(ic.completedAt).day());
         }
-      }
+      });
     
       const totalI = itemsMatch.length;
       const days = [...new Set( itemsMatch ) ].length;

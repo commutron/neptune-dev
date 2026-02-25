@@ -54,14 +54,9 @@ Meteor.methods({
       }
     };
     
-    for(let batchID of batchIDs) {
-      let batch = XBatchDB.findOne({_id: batchID});
-      if(!batch) {
-        null;
-      }else{ 
-        totalST(batch);
-      }
-    }
+    XBatchDB.find({ _id: { $in: batchIDs } })
+    .forEach( batch => totalST(batch) );
+    
     return { 
       batchTides, 
       batchLeftBuffer, 
@@ -328,22 +323,21 @@ Meteor.methods({
     const stale = !statime ? true :
               moment.duration(moment().diff(moment(statime))).as('hours') > Config.freche;
     if(stale) {
-      const series = XSeriesDB.find(
+      let rateArr = [];
+      
+      XSeriesDB.find(
         { widgetId: wID },
         { fields: {'batch':1,'nonCon':1,'items.units':1}}
-      ).fetch();
-    
-      let rateArr = [];
-    
-      for(let srs of series) {
-        const b = XBatchDB.findOne({ batch: srs.batch },{fields:{'completed':1}});
-        if(b.completed) {
+      ).forEach( srs => {
+        const done = XBatchDB.find({ batch: srs.batch, completed: true },{limit:1}).count();
+        if(done) {
           // -- nc rate calculation filter --
           const total = countMulti( srs.nonCon.filter( n => !n.trash && !(n.inspect && !n.fix) ) );
           const units = srs.items.reduce((t,i)=> t + i.units, 0);
           rateArr.push( asRate(total, units) );
         }
-      }
+      });
+      
       const avgRate = avgOfArray(rateArr, true);
       
       const lastavg = widget.ncRate;

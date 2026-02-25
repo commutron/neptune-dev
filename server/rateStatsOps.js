@@ -167,10 +167,37 @@ import { syncLocale, countMulti, noIg } from './utility';
       const thisI = srs.items.filter( x =>
         x.completed && moment(x.completedAt).isBetween(rangeStart, rangeEnd)
       );
-      diCount = diCount + thisI.length;   
+      diCount = diCount + thisI.length;
     });
-    
     return diCount;
+  }
+  
+  export function countScrap(accessKey, rangeStart, rangeEnd) {
+    const xid = noIg();
+    
+    let scCount = 0;
+    
+    XSeriesDB.find({
+      orgKey: accessKey,
+      groupId: { $ne: xid },
+      createdAt: { 
+        $lte: new Date(rangeEnd)
+      },
+      items: { $elemMatch: { completedAt: { 
+        $gte: new Date(rangeStart),
+        $lte: new Date(rangeEnd) 
+      }}}
+    },{fields:{'items.scrapped':1,'items.history':1}}
+    ).forEach( (srs)=> {
+      const scItems = srs.items.filter( i => i.scrapped === true );
+      const thisSC = scItems.filter( x =>
+        x.history.find( y =>
+          moment(y.time).isBetween(rangeStart, rangeEnd) &&
+          y.type === 'scrap' && y.good === true )
+      );
+      scCount = scCount + thisSC.length;   
+    });
+    return scCount;
   }
   
   export function countNewNC(accessKey, rangeStart, rangeEnd) {
@@ -255,35 +282,6 @@ import { syncLocale, countMulti, noIg } from './utility';
     });
     return tfCount;
   }
-  
-  export function countScrap(accessKey, rangeStart, rangeEnd) {
-    const xid = noIg();
-    
-    let scCount = 0;
-    
-    XSeriesDB.find({
-      orgKey: accessKey,
-      groupId: { $ne: xid },
-      createdAt: { 
-        $lte: new Date(rangeEnd)
-      },
-      items: { $elemMatch: { completedAt: { 
-        $gte: new Date(rangeStart),
-        $lte: new Date(rangeEnd) 
-      }}}
-    },{fields:{'items.scrapped':1,'items.history':1}}
-    ).forEach( (srs)=> {
-      const scItems = srs.items.filter( i => i.scrapped === true );
-      const thisSC = scItems.filter( x =>
-        x.history.find( y =>
-          moment(y.time).isBetween(rangeStart, rangeEnd) &&
-          y.type === 'scrap' && y.good === true )
-      );
-      scCount = scCount + thisSC.length;   
-    });
-    return scCount;
-  }
-
 
 Meteor.methods({
   
@@ -315,7 +313,7 @@ Meteor.methods({
           loop = countNewItem;
           break;
         case 'doneItem':
-          loop = countDoneItem;
+          loop = countClosedItem;
           break;
         case 'newNC':
           loop = countNewNC;
