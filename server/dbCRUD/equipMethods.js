@@ -6,13 +6,18 @@ Meteor.methods({
 
   createEquipment(eqname, alias, eqmodel, eqserial, eqmfyear, eqmfwrnty, brKey, instruct, library) {
     
-    let duplicate = EquipDB.findOne({equip: eqname},{fields:{'_id':1}});
-    const dupe = EquipDB.findOne({alias: alias},{fields:{'_id':1}});
+    let duplicate = EquipDB.find({
+      $or : [ 
+        { equip: eqname }, 
+        { alias: alias } 
+      ]
+    },{fields:{'_id':1},limit:1}).count();
+    // const dupe = EquipDB.findOne({alias: alias},{fields:{'_id':1}});
     
     const auth = Roles.userIsInRole(Meteor.userId(), ['equipSuper','create']);
     const opWrYr = eqmfwrnty ? new Date(moment(eqmfwrnty).tz(Config.clientTZ).format()) : null;
     
-    if(!duplicate && !dupe && auth) {
+    if(!duplicate && auth) {
       EquipDB.insert({
         equip: eqname,
         alias: alias,
@@ -43,15 +48,19 @@ Meteor.methods({
   editEquipment(eqId, newEqname, newAlias, eqmodel, eqserial, eqmfyear, eqmfwrnty, brKey, instruct, library) {
     const doc = EquipDB.findOne({_id: eqId},{fields:{'equip':1,'alias':1}});
     
-    let duplicate = EquipDB.findOne({equip: newEqname},{fields:{'_id':1}});
-    let dupe = EquipDB.findOne({alias: newAlias});
+    let duplicate = EquipDB.find({
+      $or : [ 
+        { equip: newEqname }, 
+        { alias: newAlias } 
+      ]
+    },{fields:{'_id':1},limit:1}).count();
     
     doc.equip === newEqname ? duplicate = false : null;
-    doc.alias === newAlias ? dupe = false : null;
+    doc.alias === newAlias ? duplicate = false : null;
     
     const auth = Roles.userIsInRole(Meteor.userId(), ['equipSuper','edit']);
     
-    if(!duplicate && !dupe && auth) {
+    if(!duplicate && auth) {
       let setBr = !brKey || brKey === 'false' ? false : brKey;
       const opWrYr = eqmfwrnty ? new Date(moment(eqmfwrnty).tz(Config.clientTZ).format()) : null;
     

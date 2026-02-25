@@ -9,7 +9,7 @@ Meteor.methods({
     
     if( batch ) {
       
-      const duplicate = XSeriesDB.findOne({batch: batch.batch});
+      const duplicate = XSeriesDB.find({batch: batch.batch},{limit:1}).count();
     
       if(auth && !duplicate) {
   

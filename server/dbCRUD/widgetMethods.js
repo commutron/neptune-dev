@@ -2,7 +2,7 @@ Meteor.methods({
   
   //// Widgets \\\\
   addNewWidget(widget, groupId, desc) {
-    const duplicate = WidgetDB.findOne({widget: widget},{fields:{'_id':1}});
+    const duplicate = WidgetDB.find({widget: widget},{fields:{'_id':1},limit:1}).count();
     if(!duplicate && Roles.userIsInRole(Meteor.userId(), 'create')) {
       const appDoc = AppDB.findOne({orgKey: Meteor.user().orgKey});
       const endTrack = appDoc.lastTrack;
@@ -38,7 +38,7 @@ Meteor.methods({
   
   editWidget(widgetId, newName, newDesc) {
     const doc = WidgetDB.findOne({_id: widgetId},{fields:{'widget':1}});
-    let duplicate = WidgetDB.findOne({widget: newName},{fields:{'_id':1}});
+    let duplicate = WidgetDB.find({widget: newName},{fields:{'_id':1},limit:1}).count();
     doc.widget === newName ? duplicate = false : null;
     if(!duplicate && Roles.userIsInRole(Meteor.userId(), 'edit')) {
       WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey}, {
@@ -55,7 +55,7 @@ Meteor.methods({
   },
   
   deleteWidget(widgetId, pass) {
-    const inUseX = VariantDB.findOne({widgetId: widgetId},{fields:{'_id':1}});
+    const inUseX = VariantDB.find({widgetId: widgetId},{fields:{'_id':1},limit:1}).count();
     if(!inUseX) {
       const doc = WidgetDB.findOne({_id: widgetId});
       const lock = doc.createdAt.toISOString().split("T")[0];
@@ -200,8 +200,8 @@ Meteor.methods({
 
 // remove
   pullFlow(widgetId, fKey) {
-    const inUseX = XBatchDB.findOne({river: fKey},{fields:{'_id':1}});
-    const inUseS = XSeriesDB.findOne({'items.altPath.river': fKey},{fields:{'_id':1}});
+    const inUseX = XBatchDB.find({river: fKey},{fields:{'_id':1},limit:1}).count();
+    const inUseS = XSeriesDB.find({'items.altPath.river': fKey},{fields:{'_id':1},limit:1}).count();
     
     if(!inUseX && !inUseS) {
       if(Roles.userIsInRole(Meteor.userId(), 'edit')) {
@@ -218,11 +218,11 @@ Meteor.methods({
   },
   
   activeFlowCheck(fKey) {
-    const inUseXA = XBatchDB.findOne({live: true, river: fKey},{fields:{'_id':1}});
-    const inUseX = XBatchDB.findOne({live: false, river: fKey},{fields:{'_id':1}});
+    const inUseXA = XBatchDB.find({live: true, river: fKey},{fields:{'_id':1},limit:1}).count();
+    const inUseX = XBatchDB.find({live: false, river: fKey},{fields:{'_id':1},limit:1}).count();
     
-    const inUseSA = XSeriesDB.findOne({live: true, 'items.altPath.river': fKey},{fields:{'_id':1}});
-    const inUseS = XSeriesDB.findOne({live: false, 'items.altPath.river': fKey},{fields:{'_id':1}});
+    const inUseSA = XSeriesDB.find({live: true, 'items.altPath.river': fKey},{fields:{'_id':1},limit:1}).count();
+    const inUseS = XSeriesDB.find({live: false, 'items.altPath.river': fKey},{fields:{'_id':1},limit:1}).count();
     
     if(inUseXA) {
       return 'liveRiver';

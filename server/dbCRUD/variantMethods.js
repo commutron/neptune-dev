@@ -6,7 +6,7 @@ Meteor.methods({
     const accessKey = Meteor.user().orgKey;
     const name = Meteor.user().username.replace('.', ' ').replace('_', ' ');
     
-    const duplicate = VariantDB.findOne({widgetId: widgetId, variant: variant},{fields:{'_id':1}});
+    const duplicate = VariantDB.find({widgetId: widgetId, variant: variant},{fields:{'_id':1},limit:1}).count();
     if(!duplicate && Roles.userIsInRole(Meteor.userId(), 'create')) {
           
       VariantDB.insert({
@@ -46,7 +46,7 @@ Meteor.methods({
   
   editVariant(widgetId, vId, newVar, newWiki, newUnit) {
     const doc = VariantDB.findOne({_id: vId},{fields:{'variant':1}});
-    const dups = VariantDB.findOne({widgetId: widgetId, variant: newVar},{fields:{'_id':1}});
+    const dups = VariantDB.find({widgetId: widgetId, variant: newVar},{fields:{'_id':1},limit:1}).count();
     let duplicate = doc.variant !== newVar && dups ? true : false;
     
     if(!duplicate && Roles.userIsInRole(Meteor.userId(), 'edit')) {
@@ -67,7 +67,7 @@ Meteor.methods({
   changeVive(vId, vKey, status) {
     const flip = !status;
     const accessKey = Meteor.user().orgKey;
-    const inUseX = XBatchDB.findOne({versionKey: vKey, live: true});
+    const inUseX = XBatchDB.find({versionKey: vKey, live: true},{limit:1}).count();
     if(!inUseX && Roles.userIsInRole(Meteor.userId(), 'edit')) {
       VariantDB.update({_id: vId, orgKey: accessKey}, {
   			$set : {
@@ -83,7 +83,7 @@ Meteor.methods({
   deleteVariant(vObj, pass) {
     const doc = VariantDB.findOne({_id: vObj._id});
     const versionKey = doc.versionKey;
-    const inUseX = XBatchDB.findOne({versionKey: versionKey},{fields:{'_id':1}});
+    const inUseX = XBatchDB.find({versionKey: versionKey},{fields:{'_id':1},limit:1}).count();
     if(!inUseX) {
       const lock = doc.createdAt.toISOString().split("T")[0];
       const auth = Roles.userIsInRole(Meteor.userId(), 'remove');

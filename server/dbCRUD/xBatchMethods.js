@@ -45,8 +45,8 @@ Meteor.methods({
   addBatchX(batchNum, groupId, widgetId, vKey, 
             salesNum, sDate, eDate, quantity, withSeries, qTime
   ) {
-    const doc = WidgetDB.findOne({ _id: widgetId },{fields:{'orgKey':1}});
-    const duplicateX = XBatchDB.findOne({ batch: batchNum },{fields:{'_id':1}});
+    const docW = WidgetDB.findOne({ _id: widgetId },{fields:{'orgKey':1,'widget':1,'describe':1}});
+    const duplicateX = XBatchDB.find({ batch: batchNum },{fields:{'_id':1},limit:1}).count();
     const auth = Roles.userIsInRole(Meteor.userId(), 'create');
     const accessKey = Meteor.user().orgKey;
     
@@ -54,7 +54,7 @@ Meteor.methods({
     const inMinutes = moment.duration(inHours, 'hours').asMinutes();
     const qTimeNum = isNaN(inMinutes) ? false : Number(inMinutes);
 
-    if(auth && !duplicateX && doc.orgKey === accessKey) {
+    if(auth && !duplicateX && docW.orgKey === accessKey) {
       
       XBatchDB.insert({
   			batch: batchNum,
@@ -98,8 +98,8 @@ Meteor.methods({
       
       // full scheme adds lock, lockTrunc, finBffrRel, finShipAim, finShipDue, finEndWork
       if(withSeries) {
-        const duplicate = XSeriesDB.findOne({batch: batchNum},{fields:{'_id':1}});
-        
+        const duplicate = XSeriesDB.find({batch: batchNum},{fields:{'_id':1},limit:1}).count();
+    
         if(!duplicate) {
           XSeriesDB.insert({
       			batch: batchNum,
@@ -127,9 +127,8 @@ Meteor.methods({
                       }});
                       
         if(group.emailOptIn && group.emailPrime) {
-          const wig = WidgetDB.findOne({_id: widgetId},{fields:{'widget':1,'describe':1}});
           const ver = VariantDB.findOne({versionKey: vKey},{fields:{'variant':1}});
-          const isW = wig.widget.toUpperCase() + ' ' + ver.variant + ' - ' + wig.describe;
+          const isW = docW.widget.toUpperCase() + ' ' + ver.variant + ' - ' + docW.describe;
         
           Meteor.call('handleExtOrderEmail', 
             accessKey, group.emailPrime, group.emailSecond, 
@@ -157,7 +156,7 @@ Meteor.methods({
                        doc.tide && doc.tide.find( t => t.stopTime === false );
       
       let duplicate = !numswitch ? false :
-                      XBatchDB.findOne({batch: newBatchNum},{fields:{'_id':1}});
+                      XBatchDB.find({batch: newBatchNum},{fields:{'_id':1},limit:1}).count();
     
       if(!openTide && !duplicate) {
         if(vKey !== doc.versionKey){

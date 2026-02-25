@@ -142,34 +142,9 @@ const NCItemsPercent = ({ start, end, branch, app })=> {
       
       <button 
         className='action blackSolid'
-        onClick={(e)=>gettest('TESTbxLoop')} 
+        onClick={(e)=>gettest('TEST_batch_count_inspan')} 
         disabled={!start || !end}
       >Test Batch Loop</button>
-      
-      <hr />
-      
-      <button 
-        className='action blackSolid'
-        onClick={(e)=>gettest('TESTbxNUMLoop')} 
-        disabled={!start || !end}
-      >Test Create Finish Batch Loop</button>
-      
-      <hr />
-      
-      <button 
-        className='action blackSolid'
-        onClick={(e)=>gettest('TESTbxFetchSRSTideLoop')} 
-        disabled={!start || !end}
-      >Test with Tide -For Batch & Fetch Series- Loop</button>
-      
-      <hr />
-      
-      <button 
-        className='action blackSolid'
-        onClick={(e)=>gettest('TESTbxForSRSTideLoop')} 
-        disabled={!start || !end}
-      >Test with Tide -Fetch Batch & For Series- Loop</button>
-      
       
     </div>
   );
