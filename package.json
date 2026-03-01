@@ -33,8 +33,7 @@
     "react-mounter": "git+https://github.com/commutron/react-mounter-build.git",
     "react-multi-select-component": "^4.3.4",
     "react-toastify": "^9.1.3",
-    "react-transition-group": "^4.4.5",
-    "victory": "^36.9.2"
+    "react-transition-group": "^4.4.5"
   },
   "devDependencies": {}
 }

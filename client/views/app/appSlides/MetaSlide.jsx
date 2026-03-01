@@ -30,7 +30,7 @@ const MetaSlide = ()=> (
           <a href='https://www.mongodb.com/' target='_blank'>MongoDB</a>,&nbsp;
           <a href='https://momentjs.com/' target='_blank'>MomentJS</a>,&nbsp;
           <a href='https://fontawesome.com/' target='_blank'>Font Awesome</a>,&nbsp;
-          <a href='https://formidable.com/open-source/victory/' target='_blank'>Victory</a> and many more.
+          <a href='https://www.chartjs.org/' target='_blank'>ChartJS</a> and many more.
         </p>
         <br />
         <h3>Made possible by the</h3>
