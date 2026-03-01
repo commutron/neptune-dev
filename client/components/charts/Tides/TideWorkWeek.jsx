@@ -4,23 +4,40 @@ import {
   TimeInDay, UsersTimeTotal, HolidayCheck
 } from '/client/utility/WorkTimeCalc.js';
 import { round2Decimal } from '/client/utility/Convert.js';
-import { 
-  VictoryChart, VictoryArea, VictoryBar,
-  VictoryLabel, VictoryAxis, 
-  VictoryGroup, VictoryLegend
-} from 'victory';
-import Theme from '/client/global/themeV.js';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  BarElement,
+  LineElement,
+  Filler,
+  Title,
+  Tooltip
+} from 'chart.js';
+import { Bar } from 'react-chartjs-2';
+import 'chartjs-adapter-moment';
 
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  BarElement,
+  LineElement,
+  Filler,
+  Title,
+  Tooltip
+);
 
 const TideWorkWeek = ({ 
   tideTimes, weekStart, weekEnd, weekdays,
-  app, users, isDebug, selectDayUP,
+  app, users, isDebug, 
+  // selectDayUP,
   totalWeekHrsUP, totalLogHrsUP, diffPotHrsUP
 })=> {
   
   const [ dayhoursNum, dayhoursSet ] = useState([0, 0, 0, 0, 0]);
   const [ workhoursNum, workhoursSet ] = useState([0, 0, 0, 0, 0]);
-  const [ topDayHours, topDayHoursSet ] = useState(50);
   const [ nonDays, nonDaysSet ] = useState([]);
     
   useLayoutEffect( ()=> {
@@ -41,7 +58,7 @@ const TideWorkWeek = ({
           const dayHours = TimeInDay( app, dateTime );
           const isNoDay = HolidayCheck(app, dateTime);
           if(isNoDay) { 
-            nonWorkDays.push({ name: day, symbol: { type: "star" } });
+            nonWorkDays.push(day);
           }
           
           const tideTime = tideTimes.filter( x => 
@@ -73,11 +90,6 @@ const TideWorkWeek = ({
       );
       nonDaysSet(nonWorkDays);
       
-      const dht = Array.from(workDays, x => x.hoursDay );
-      const whr = Array.from(workDays, x => x.hoursRec.toString() );
-
-      topDayHoursSet( Math.max(...dht,...whr) );
-      
       totalWeekHrsUP( round2Decimal(totalWeekTime) );
       totalLogHrsUP( round2Decimal(totalLogTime) );
       diffPotHrsUP( round2Decimal(totalWeekTime - totalLogTime) );
@@ -86,103 +98,71 @@ const TideWorkWeek = ({
     }
   }, [tideTimes, weekStart, weekEnd]);
 
- 
-  isDebug && console.log({dayhoursNum, workhoursNum, topDayHours});
+  const options = {
+    responsive: true,
+    animation: false,
+    elements: {
+      line: {
+        borderColor: 'rgb(26, 188, 156)',
+        fill: false,
+        borderWidth: 2,
+      },
+    },
+    scales: {
+      x: {
+        type: 'category',
+        offset: true
+      },
+      y: {
+        type: 'linear',
+        ticks: {
+          precision: 1,
+        },
+      }
+    },
+    plugins: {
+      title: {
+        display: false
+      },
+      legend: false,
+    },
+  };
+  
+  isDebug && console.log({dayhoursNum, workhoursNum});
   
   return(
-    <div className=''>
-      
-    <VictoryChart 
-      theme={Theme.NeptuneVictory}
-      height={200} 
-      width={500}
-      padding={{ top: 10, bottom: 20, left: 20, right: 10 }}
-      domainPadding={25}
-      animate={ dayhoursNum === [0, 0, 0, 0, 0] ? null : 
-        { onLoad: { duration: 400 }} }
-    >
-    {nonDays.length > 0 &&
-      <VictoryLegend x={0} y={0}
-      	title="Holiday"
-        labels={{ fontSize: 15 }}
-        titleOrientation="left"
-        gutter={10}
-        symbolSpacer={3}
-        borderPadding={{ top: 4, bottom: 0 }}
-        orientation="horizontal"
-        style={{ 
-          border: { stroke: "grey" }, 
-          title: { padding: 2, fontSize: 10 } 
-        }}
-        data={nonDays}
-      />}
-      
-    
-    <VictoryAxis />
-        
-    <VictoryGroup
-      categories={{ x: weekdays }}
-      minDomain={{ y: 0 }}
-      maxDomain={{ y: topDayHours }}>
-      
-      <VictoryArea
-        data={dayhoursNum}
-        style={{ 
-          data: { 
-            fill: 'whitesmoke',
-            fillOpacity: 0.4,
-            stroke: 'rgb(26, 188, 156)',
-          } }}
-        labels={(d) => d.datum.y}
-        labelComponent={
-          <VictoryLabel 
-            style={{ fill: 'rgb(26, 188, 156)', fontSize: 12 }} 
-            renderInPortal
-            textAnchor='end' />
-        }
-      />
-      
-      <VictoryBar
-        data={workhoursNum}
-        style={{ data: { 
-          fill: 'rgb(23,123,201)', 
-          fillOpacity: 0.4, 
-          stroke: 'rgb(23,123,201)', 
-          strokeOpacity: 1, 
-          strokeWidth: 1 
-        } }}
-        labels={(d) => d.datum.y}
-        labelComponent={
-          <VictoryLabel 
-            style={{ fill: 'rgb(23,123,201)', fontSize: 12 }} 
-            renderInPortal
-            textAnchor='start' />
-        }
-        events={[
-          {
-            target: "data",
-            eventHandlers: {
-              onClick: () => {
-                return [{
-                  target: "labels",
-                  mutation: (props) => {
-                    const hours = props.datum.y;
-                    const day = props.datum.x;
-                    selectDayUP(day);
-                    let other = Math.round( moment.duration(hours, 'hours').asMinutes() );
-                    return props.text === other + ' min' ?
-                      null : { text: other + ' min' };
-                  }
-                }];
+    <div>
+      {nonDays.length > 0 &&
+        <div>
+          <span>Holiday: </span>
+          {nonDays.map( (n,i)=> <span key={i}>{n}</span> )}
+        </div>
+      }
+ 
+      <div className='chart50vContain'>
+        <Bar 
+          options={options} 
+          data={{
+            datasets:[
+              {
+                type:'bar',
+                data:workhoursNum,
+                normalized: true,
+                pointHitRadius: 10,
+                backgroundColor:'rgb(23,123,201,0.4)',
+                borderColor:'rgb(23,123,201)'
+              },
+              {
+                type:'line',
+                data:dayhoursNum,
+                normalized: true,
+                pointRadius:1,
+                pointHitRadius:10
               }
-            }
-          }
-        ]}
-      />
-      
-    </VictoryGroup>
-
-   </VictoryChart>
+            ]
+          }} 
+        />
+      </div>
    
       <details className='footnotes'>
         <summary>Chart Details</summary>

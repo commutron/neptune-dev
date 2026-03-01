@@ -9,8 +9,8 @@
   height: auto;
 }
 .chart50vContain {
-  height: 50vh;
-  height: 50dvh;
+  max-height: 50vh;
+  max-height: 50dvh;
 }
 
 .chart10Shrink {

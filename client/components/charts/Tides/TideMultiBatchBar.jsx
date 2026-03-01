@@ -1,23 +1,37 @@
 import React, { useState, useEffect } from 'react';
+import Pref from '/public/pref.js';
+
 import { CalcSpin } from '/client/components/tinyUi/Spin';
 
 import { ToggleSwitch } from '/client/components/smallUi/ToolBarTools';
-import { min2hr } from '/client/utility/Convert';
+import { toCap } from '/client/utility/Convert';
 
-import { 
-  VictoryBar, 
-  VictoryChart, 
-  VictoryAxis,
-  VictoryLabel,
-  VictoryStack
-} from 'victory';
-import Pref from '/client/global/pref.js';
-import Theme from '/client/global/themeV.js';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import { Bar } from 'react-chartjs-2';
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title, 
+  Tooltip,
+  Legend
+);
 
 const TideMultiBatchBar = ({ batchIDs, app, extraClass })=> {
   
   const [ batchTimes, storeTimes ] = useState(false);
   const [ tggl, tgglSet ] = useState(false);
+  
+  const [ series, seriesSet ] = useState([]);
   
   useEffect( ()=>{
     Meteor.call('countMultiBatchTideTimes', batchIDs, (error, reply)=>{
@@ -26,11 +40,70 @@ const TideMultiBatchBar = ({ batchIDs, app, extraClass })=> {
     });
   }, [batchIDs]);
   
+  useEffect( ()=>{
+    if(batchTimes) {
+      let dtsets = [];
+      const addDt = (title, data, color)=> {
+        dtsets.push({
+          label: title,
+          data: data.map( d => { return { y:d.y, x: tggl ? d.x / (d.z || 1) : d.x } },[]),
+          backgroundColor: color,
+          stack: 'stk'
+        });
+      };
+      addDt('Recorded', batchTimes.batchTides, "rgb(52, 152, 219)");
+      addDt('Remain', batchTimes.batchLeftBuffer, "rgb(149, 165, 166)");
+      addDt('Over', batchTimes.batchOverBuffer, "rgb(241, 196, 15)");
+      seriesSet(dtsets);
+    }
+  }, [batchTimes, tggl]);
+  
   if(!batchTimes) {
     return(
       <CalcSpin />
     );
   }
+  
+  const options = {
+    indexAxis: 'y',
+    responsive: true,
+    elements: {
+      bar: {
+        maxBarThickness: 3,
+      },
+    },
+    scales: {
+      x: {
+        type: 'linear',
+        ticks: {
+          precision: 0
+        },
+        stacked: true
+      },
+      y: {
+        type: 'category',
+        labels: [],
+        stacked: true,
+        ticks: {
+          callback: function(v) { 
+            return toCap( this.getLabelForValue(v) || "" ); 
+          }
+        }
+      }
+    },
+    plugins: {
+      legend: {
+        display: true,
+        position: 'top'
+      },
+      tooltip: {
+        callbacks: {
+          label: (cntxt)=> `${cntxt.raw.x.toFixed(2)} Hours`
+        }
+      },
+      title: false,
+    },
+  };
   
   if(batchTimes.batchTides.length > 0) {
     return(
@@ -45,81 +118,7 @@ const TideMultiBatchBar = ({ batchIDs, app, extraClass })=> {
           toggleSet={tgglSet}
         />
       </div>
-      
-        <VictoryChart
-          theme={Theme.NeptuneVictory}
-          padding={{top: 25, right: 50, bottom: 25, left: 25}}
-          domainPadding={{x: 10, y: 40}}
-          height={50 + ( batchTimes.batchTides.length * 25 )}
-        >
-          <VictoryAxis 
-            dependentAxis 
-            tickFormat={(t) => Math.round( min2hr(t) )}
-            style={ {
-              tickLabels: { 
-                fontSize: '6px' }
-            } }
-          />
-          <VictoryAxis
-            style={ {
-              tickLabels: { 
-                fontSize: '6px' }
-            } }
-          />
-          
-          <VictoryStack
-            theme={Theme.NeptuneVictory}
-            colorScale={["rgb(52, 152, 219)", "rgb(149, 165, 166)", "rgb(241, 196, 15)"]}
-            horizontal={true}
-            padding={0}
-          >
-            <VictoryBar
-              data={batchTimes.batchTides}
-              y={(d)=> tggl ? d.y / (d.z || 1) : d.y}
-              horizontal={true}
-              labels={(l) => tggl ? 
-                l.datum.y > 0 ? `${min2hr(l.datum.y / (l.datum.z || 1))} logged` : null :
-                l.datum.y > 0 ? `${min2hr(l.datum.y)} logged` : null
-              }
-              style={{ labels: { fontSize: '6px' } }}
-              labelComponent={
-                <VictoryLabel
-                  verticalAnchor="end"
-                />}
-              barWidth={10}
-            />
-            <VictoryBar
-              data={batchTimes.batchLeftBuffer}
-              y={(d)=> tggl ? d.y / (d.z || 1) : d.y}
-              horizontal={true}
-              labels={(l) => tggl ? 
-                l.datum.y > 0 ? `${min2hr(l.datum.y / (l.datum.z || 1))} Remaining` : null :
-                l.datum.y > 0 ? `${min2hr(l.datum.y)} Remaining` : null
-              }
-              style={{ labels: { fill: "#969696", fontSize: '6px' } }}
-              labelComponent={
-                <VictoryLabel
-                  verticalAnchor="start"
-                />}
-              barWidth={10}
-            />
-            <VictoryBar
-              data={batchTimes.batchOverBuffer}
-              y={(d)=> tggl ? d.y / (d.z || 1) : d.y}
-              horizontal={true}
-              labels={(l) => tggl ? 
-                l.datum.y > 0 ? `${min2hr(l.datum.y / (l.datum.z || 1))} Over` : null :
-                l.datum.y > 0 ? `${min2hr(l.datum.y)} Over` : null
-              }
-              style={{ labels: { fill: "dimgrey", fontSize: '6px' } }}
-              labelComponent={
-                <VictoryLabel
-                  verticalAnchor="start"
-                />}
-              barWidth={10}
-            />
-        </VictoryStack>
-        </VictoryChart>
+        <Bar options={options} data={{datasets:series}} />
         <div className='centreText small'>Duration in Hours</div>
       </div>
     );

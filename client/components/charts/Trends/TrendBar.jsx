@@ -18,13 +18,10 @@ ChartJS.register(
   BarElement
 );
 
-// statType // doneBatch'
-
 const TrendBar = ({ title, statType, cycleCount, cycleBracket, isDebug })=>{
 
   const thingMounted = useRef(true);
   const blank =  [ {x:1,y:0} ];
-  // const blank = Array(cycleCount);
   const [ dataG, dataGSet ] = useState( blank );
   const [ dataNG, dataNGSet ] = useState( blank );
   
@@ -134,6 +131,7 @@ const TrendBarChart = ({ dataG, dataNG, cycleCount, title })=> {
           {data:dataG,normalized: true,stack: 'stk', backgroundColor:"rgb(46, 204, 113)"},
           {data:dataNG,normalized: true,stack: 'stk', backgroundColor:"rgb(241, 196, 15)"}
         ]}} 
+        redraw={true}
       />
       <div className='centreText smCap'>{title}</div>
     </div>

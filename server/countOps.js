@@ -3,7 +3,7 @@ import moment from 'moment';
 import Config from '/server/hardConfig.js';
 import { batchTideTime, distTimeBudget } from './tideGlobalMethods.js';
 import { deliveryState } from './reportCompleted.js';
-import { avgOfArray, asRate, diffTrend } from './calcOps';
+import { avgOfArray, asRate, diffTrend, min2hr } from './calcOps';
 import { syncLocale, countMulti, countMultiRefs } from './utility';
 
 Meteor.methods({
@@ -20,9 +20,9 @@ Meteor.methods({
     
     const totalST = (batch)=> {
       if(!batch.tide) {
-        batchTides.push({ x: batch.batch, y: 0 });
-        batchLeftBuffer.push({ x: batch.batch, y: 0 });
-        batchOverBuffer.push({ x: batch.batch, y: 0 });
+        batchTides.push({ y: batch.batch, x: 0 });
+        batchLeftBuffer.push({ y: batch.batch, x: 0 });
+        batchOverBuffer.push({ y: batch.batch, x: 0 });
       }else{
         const totalTime = batchTideTime(batch.tide, batch.lockTrunc);
         
@@ -37,18 +37,18 @@ Meteor.methods({
         const totalOverMinutes = quote2tide < 0 ? bufferNice : 0;
         
         batchTides.push({
-          x: batch.batch,
-          y: totalTime,
+          y: batch.batch,
+          x: min2hr(totalTime),
           z: batch.quantity
         });
         batchLeftBuffer.push({
-          x: batch.batch,
-          y: totalLeftMinutes,
+          y: batch.batch,
+          x: min2hr(totalLeftMinutes),
           z: batch.quantity
         });
         batchOverBuffer.push({
-          x: batch.batch,
-          y: totalOverMinutes,
+          y: batch.batch,
+          x: min2hr(totalOverMinutes),
           z: batch.quantity
         });
       }

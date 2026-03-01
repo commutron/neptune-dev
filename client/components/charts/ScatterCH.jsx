@@ -83,6 +83,7 @@ const ScatterCH = ({ strdata, multidata, title, fillColor, area, intgr })=> {
             data: d.data_array,
             backgroundColor: d.data_color,
             borderColor: d.data_color,
+            normalized: true
           };
         })
       });
@@ -90,7 +91,8 @@ const ScatterCH = ({ strdata, multidata, title, fillColor, area, intgr })=> {
       dataSet({
         datasets: [{ 
           label: title || 'set1',
-          data: strdata || []
+          data: strdata || [],
+          normalized: true
         }]
       });
     }

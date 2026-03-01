@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 import MultiBatchKPI from './MultiBatchKPI';
 import TideMultiBatchBar from '/client/components/charts/Tides/TideMultiBatchBar';

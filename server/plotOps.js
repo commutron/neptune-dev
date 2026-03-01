@@ -11,8 +11,8 @@ export function plotCreatedOrders(batch) {
   const now = moment.tz(Config.clientTZ).format();
   const gap = (did, sSt)=> round1Decimal( moment(did).workingDiff(sSt, 'days') );
 
-  const did = b.completedAt || now;
-  const trnGap = gap( did, b.salesStart );
+  const did = batch.completedAt || now;
+  const trnGap = gap( did, batch.salesStart );
     
   return {
     x1: batch.createdAt,

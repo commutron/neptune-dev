@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-//import Pref from '/client/global/pref.js';
 
 import { NonConBarCH } from '/client/components/charts/NonCon/NonConBar';
 import { countMulti } from '/client/utility/Arrays';
