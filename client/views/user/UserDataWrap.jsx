@@ -6,7 +6,7 @@ import { branchesSort } from '/client/utility/Arrays.js';
 
 import { PlainFrame } from '/client/layouts/MainLayouts';
 import Spin from '/client/components/tinyUi/Spin';
-import Slides from '/client/layouts/TaskBars/Slides';
+import Slides, { Slbutton } from '/client/layouts/TaskBars/Slides';
 import ActivityPanel from './ActivityPanel';
 import QuotaPanel from './QuotaPanel';
 import ServicePanel from './ServicePanel';
@@ -35,7 +35,7 @@ const UserDataWrap = ({
   const branches = app.branches.filter( b => b.open === true );
   const brancheS = branchesSort(branches);
   
-  const iL = <i className='rAlign'>{user.inbox.length}</i>;
+  const iL = user.inbox.length;
   
   return(
     <PlainFrame title={user.username || 'user error'}>
@@ -43,14 +43,14 @@ const UserDataWrap = ({
       
         <Slides
           menu={[
-            <b><i className='fas fa-clock fa-fw gapR'></i>Project Time Log</b>,
-            <b><i className='fas fa-gem fa-fw gapR'></i>Project Activity</b>,
-            <b><i className='fas fa-screwdriver-wrench fa-fw gapR'></i>Equipment PM</b>,
-            <b><i className='fas fa-id-card fa-fw gapR'></i>Credentials</b>,
-            <b><i className='fas fa-sliders fa-fw gapR'></i>Preferences</b>,
-            <b><i className='fas fa-message fa-fw gapR'></i>Messages{iL}</b>
+            <Slbutton name='Project Time Log' icon='fa-clock' />,
+            <Slbutton name='Project Activity' icon='fa-gem' />,
+            <Slbutton name='Equipment PM' icon='fa-screwdriver-wrench' />,
+            <Slbutton name='Credentials' icon='fa-id-card' />,
+            <Slbutton name='Preferences' icon='fa-sliders' />,
+            <Slbutton name={`Messages ${iL}`} icon='fa-message' />,
           ]}
-          lowmenu={[<b><i className='fas fa-key fa-fw gapR'></i>Access & Privacy</b>]}
+          lowmenu={[<Slbutton name='Access & Privacy' icon='fa-key' />]}
           slide={slide}>
             
           <ActivityPanel

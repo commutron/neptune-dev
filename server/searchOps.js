@@ -291,7 +291,7 @@ Meteor.methods({
       fields: {
         'equip': 1,
         'alias': 1
-    }}).forEach( eq => {
+    }}).map( eq => {
       const maint = MaintainDB.find({
                       equipId: eq._id,
                       $or: [
@@ -304,12 +304,12 @@ Meteor.methods({
           'close': 1,
           'name': 1
       }}).fetch();
-      nextService.push({
+      return {
         equip: eq.equip,
         alias: eq.alias,
         serve: maint
-      });
-    });
+      };
+    }, []);
     
     return nextService;
   },

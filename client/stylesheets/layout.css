@@ -504,7 +504,8 @@ main {
 .slidesLayout, .slidesNestedLayout {
   display: grid;
   /*grid-template-rows: var(--vert_main);*/
-  grid-template-columns: minmax(min-content, 15vmin) 1fr;
+  /*grid-template-columns: minmax(min-content, 15vmin) 1fr;*/
+  grid-template-columns: clamp(150px, 20vmin, 300px) 1fr;
   width: 100%;
   height: var(--vert_main);
 }
@@ -558,14 +559,16 @@ main {
   font-family: var(--styled-font);
   display: block;
   width: 100%;
-  padding: 0 2vmin 0 1vmin;
+  padding: 0.5vmin 2vmin 0.5vmin 1vmin;
   cursor: pointer;
   text-align: left;
-  white-space: nowrap;
+  /*white-space: nowrap;*/
 }
 .slideMenuButton, .slideNestedMenuButton, .slideNestedLand {
   min-height: 6vmin;
+  min-height: clamp(45px, 6vmin, 65px);
   font-size: 1.75vmin;
+  font-size: clamp(13px, 1.75vmin, 16px);
   background-color: transparent;
   border-bottom: 1px solid black;
 }

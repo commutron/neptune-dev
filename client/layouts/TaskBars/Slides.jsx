@@ -60,3 +60,10 @@ const Slides = ({ menu, lowmenu, slide, disable, extraClass, children })=> {
 };
 
 export default Slides;
+
+export const Slbutton = ({ name, icon })=> (
+  <div className='beside gapminC'>
+    <i className={`fas ${icon} fa-fw gapR`}></i>
+    <b>{name}</b>
+  </div>
+);

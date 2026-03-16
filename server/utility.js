@@ -14,15 +14,15 @@ export function syncLocale(accessKey) {
   }
 }
 
-export const toLxDayStart = (day, format)=> {
+export const toLxDayStart = (day, format, range)=> {
   return DateTime
           .fromFormat(day, format, { zone: Config.clientTZ })
-          .startOf('day');
+          .startOf(range || 'day');
 };
-export const toLxDayEnd = (day, format)=> {
+export const toLxDayEnd = (day, format, range)=> {
   return DateTime
           .fromFormat(day, format, { zone: Config.clientTZ })
-          .endOf('day');
+          .endOf(range || 'day');
 };
 
 export function appValue(accessKey, onekey) {

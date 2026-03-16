@@ -1,6 +1,6 @@
 import React from 'react';
-import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 
+import { PopContextButton, PopContextMenu } from '/client/layouts/Models/Popover';
 
 const ForkMenu = ({ seriesId, serial, wFlowOps, wFlowNow, altIs })=> {
   
@@ -19,39 +19,35 @@ const ForkMenu = ({ seriesId, serial, wFlowOps, wFlowNow, altIs })=> {
   return(
     <div className='riverPath cap liteTip nottall' data-tip='Set Alt Flow'>
       {Roles.userIsInRole(Meteor.userId(), ['verify', 'run']) &&
-        <ContextMenuTrigger
-  				id={serial+'pathChange'}
-  				attributes={ {className:'moreStepAction centre'} }
-  				holdToDisplay={1}
-          renderTag='div'
-          >
-          <i className='fas fa-directions fa-fw fa-lg'></i>
-  			</ContextMenuTrigger>}
+        <PopContextButton
+  				targetid={serial+'pathChange'}
+  				extraClass='moreStepAction centre inherit'
+  				icon='fas fa-directions fa-fw fa-lg'
+  			/>}
   		
-      <ContextMenu id={serial+'pathChange'}>
-        <MenuItem disabled={true}><b>Use Alternative Flow</b></MenuItem>
+      <PopContextMenu targetid={serial+'pathChange'} extraClass='popDark'>
+        <div className='popTitle'>Use Alternative Flow</div>
         {wFlowOps.map( (entry, index)=>{
           if(wFlowNow === entry.flowKey) {
             if(altIs) {
               return(
-                <MenuItem 
+                <button
                   key={index}
                   onClick={()=>handleNoAlt(altIs.river)}
-                ><em>Return to </em>{entry.title}</MenuItem>
+                ><em>Return to </em>{entry.title}</button>
              );
             }else{ return null }
           }else{
             return(
-              <MenuItem 
-                key={index} 
+              <button 
+                key={index}
                 disabled={altIs && altIs.river === entry.flowKey}
                 onClick={()=>handleAlt(entry.flowKey)}
-              >{entry.title}
-              </MenuItem>
+              >{entry.title}</button>
             );
           }
         })}
-      </ContextMenu>
+      </PopContextMenu>
     </div>
   );
 };

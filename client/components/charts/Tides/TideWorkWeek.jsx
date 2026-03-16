@@ -139,7 +139,7 @@ const TideWorkWeek = ({
         </div>
       }
  
-      <div className='chart50vContain'>
+      <div className='chart50vContain centreRow'>
         <Bar 
           options={options} 
           data={{

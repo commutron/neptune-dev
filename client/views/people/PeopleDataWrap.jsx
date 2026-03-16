@@ -7,7 +7,7 @@ import { PlainFrame } from '/client/layouts/MainLayouts';
 import Pref from '/public/pref.js';
 import Spin from '../../components/tinyUi/Spin';
 
-import Slides from '/client/layouts/TaskBars/Slides';
+import Slides, { Slbutton } from '/client/layouts/TaskBars/Slides';
 
 import DashSlide from './DashSlide/DashSlide';
 import PerformanceSlide from './PerformanceSlide';
@@ -54,18 +54,16 @@ const PeopleDataWrap = ({
       
         <Slides
           menu={[
-            <b><i className='fas fa-walking fa-fw gapR'></i>Current</b>,
-            <b><i className='fas fa-history fa-fw gapR'></i>Daily History</b>,
-            <b><i className='fas fa-tachometer-alt fa-fw gapR'></i>Weekly Utilization</b>,
-            <b><i className='far fa-calendar-alt fa-fw gapR'></i>Work Schedule</b>,
-            <b><i className='fas fa-comments fa-fw gapR'></i>Message Log</b>,
-            <b><i className='fas fa-envelopes-bulk fa-fw gapR'></i>Email Log</b>,
-            <b><i className='fas fa-user-lock fa-fw gapR'></i>Permissions</b>,
-            <b><i className='fas fa-users-cog fa-fw gapR'></i>Accounts Manager</b>
+            <Slbutton name='Current' icon='fa-walking' />,
+            <Slbutton name='Daily History' icon='fa-history' />,
+            <Slbutton name='Weekly Utilization' icon='fa-tachometer-alt' />,
+            <Slbutton name='Work Schedule' icon='fa-calendar-alt' />,
+            <Slbutton name='Message Log' icon='fa-comments' />,
+            <Slbutton name='Email Log' icon='fa-envelopes-bulk' />,
+            <Slbutton name='Permissions' icon='fa-user-lock' />,
+            <Slbutton name='Accounts Manager' icon='fa-users-cog' />,
           ]}
-          lowmenu={[
-            <b><i className='fas fa-dice fa-fw gapR'></i>Revolving PIN</b>
-          ]}
+          lowmenu={[<Slbutton name='Revolving PIN' icon='fa-dice' />]}
           disable={[
             false, false, false, false, 
             antiAuth, antiAuth, false, antiAuth, antiAuth

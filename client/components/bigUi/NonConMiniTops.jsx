@@ -14,7 +14,7 @@ export const TotalNonCon = ({ noncons })=> (
 );
                 
 export const HasNonCon = ({ noncons, items })=> {
-  const iQty = items.length > 0 ? items.reduce((t,i)=> t + i.units, 0) : 0;
+  const iQty = items.length; /* > 0 ? items.reduce((t,i)=> t + i.units, 0) : 0;*/
   
   const hasNonCon = new Set( Array.from(noncons, x => x.serial) ).size;
   
@@ -54,7 +54,7 @@ export const HasNonCon = ({ noncons, items })=> {
 
 export const NonConPer = ({ noncons, items })=> {
   const ncG = countMulti( noncons.filter( n => !n.trash && !(n.inspect && !n.fix) ) );
-  const itemQty = items.length > 0 ? items.reduce((t,i)=> t + i.units, 0) : 0;
+  const itemQty = items.length; /* > 0 ? items.reduce((t,i)=> t + i.units, 0) : 0; */
   return(
     <KpiStat
       num={(ncG / itemQty).toFixed(1, 10)}

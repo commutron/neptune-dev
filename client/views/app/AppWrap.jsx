@@ -2,7 +2,7 @@ import React from 'react';
 import Pref from '/public/pref.js';
 import { branchesSort } from '/client/utility/Arrays.js';
 
-import Slides from '/client/layouts/TaskBars/Slides';
+import Slides, { Slbutton } from '/client/layouts/TaskBars/Slides';
 
 import BranchesSlide from './appSlides/BranchesSlide';
 import QtTaskSlide from './appSlides/QtTaskSlide';
@@ -30,20 +30,20 @@ const AppWrap = ({ isAdmin, isDebug, users, app })=> {
         
       <Slides
         menu={[
-          <b><i className='fas fa-wave-square fa-fw gapR'></i>Flow Behavior</b>,
-          <b><i className='fas fa-sitemap fa-fw gapR'></i>{Pref.branches}</b>,
-          <b><i className='fas fa-gem fa-fw gapR'></i>Quality Time</b>,
-          <b><i className='fas fa-shoe-prints fa-fw gapR'></i>Track Steps</b>,
-          <b><i className='fas fa-stopwatch fa-fw gapR'></i>Counter Steps</b>,
-          <b><i className='fas fa-times-circle fa-fw gapR'></i>NonCon Types</b>,
-          <b><i className='fas fa-ruler-horizontal fa-fw gapR'></i>Scales & Tags</b>,
-          <b><i className='fas fa-link fa-fw gapR'></i>Page Links</b>,
-          <b><i className='fas fa-bell fa-fw gapR'></i>Notifications</b>,
-          <b><i className='fas fa-robot fa-fw gapR'></i>CRON Jobs</b>,
-          <b><i className='fas fa-alarm-clock fa-fw gapR'></i>Overtime Errors</b>,
-          <b><i className='fas fa-toolbox fa-fw gapR'></i>Data Repair</b>
+          <Slbutton name='Flow Behavior' icon='fa-wave-square' />,
+          <Slbutton name={Pref.branches} icon='fa-sitemap' />,
+          <Slbutton name='Quality Time' icon='fa-gem' />,
+          <Slbutton name='Track Steps' icon='fa-shoe-prints' />,
+          <Slbutton name='Counter Steps' icon='fa-stopwatch' />,
+          <Slbutton name='NonCon Types' icon='fa-times-circle' />,
+          <Slbutton name='Scales & Tags' icon='fa-ruler-horizontal' />,
+          <Slbutton name='Page Links' icon='fa-link' />,
+          <Slbutton name='Notifications' icon='fa-bell' />,
+          <Slbutton name='CRON Jobs' icon='fa-robot' />,
+          <Slbutton name='Overtime Errors' icon='fa-alarm-clock' />,
+          <Slbutton name='Data Repair' icon='fa-toolbox' />,
         ]}
-        lowmenu={[<b><i className='fas fa-copyright fa-fw gapR'></i>Meta</b>]}
+        lowmenu={[<Slbutton name='Meta' icon='fa-copyright' />]}
       >
           
         <BehaviorSlide key={0} app={app} />

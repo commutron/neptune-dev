@@ -250,6 +250,11 @@ n-timeline-item:last-child n-timeline-marker:after {
   font-size: var(--sm9);
   text-transform: capitalize;
 }
+.popbutton.inherit {
+  font-size: inherit;
+  color: inherit;
+  background-color: inherit;
+}
 .popbutton.actions { anchor-name: --pop-actions; }
 .popmenu.actions { position-anchor: --pop-actions; }
 .popbutton.edits { anchor-name: --pop-edits; }
@@ -344,6 +349,33 @@ n-timeline-item:last-child n-timeline-marker:after {
 .popmenu button:last-child {
   border-block-end: none;
 }
+.popmenu .popTitle {
+  font-size: var(--sm8);
+  user-select: none;
+}
+
+.popDark,
+.popDark > div,
+.popDark > button {
+  background-color: var(--blackfrost);
+  border-color: var(--black);
+}
+.popDark div:hover,
+.popDark button:hover {
+  background-color: var(--dark);
+}
+.popbutton.inherit:hover {
+  color: inherit;
+  background-color: inherit;
+}
+.popTitle:hover {
+  background-color: oklab(from var(--clouds) 0.93 a b);
+}
+.popDark .popTitle:hover {
+  background-color: var(--blackfrost);
+}
+
+
 
 .inboxCard {
   position: relative;

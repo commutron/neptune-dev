@@ -311,23 +311,62 @@ Meteor.methods({
     return getBatches();
   },
   
-  getBrNcItemsPercent(branch, startDay, endDay) {
-    const startLx = toLxDayStart(startDay, "yyyy-LL-dd");
-    const endLx = toLxDayEnd(endDay, "yyyy-LL-dd");
+  getBrItemsSpan(branch, spanDay, qkeys, subtasks, tsteps) {
+    const startLx = toLxDayStart(spanDay, "yyyy-LL-dd", 'month');
+    const endLx = toLxDayEnd(spanDay, "yyyy-LL-dd", 'month');
     const interval = Interval.fromDateTimes(startLx, endLx);
     const from = startLx.toISO();
     const to = endLx.toISO();
     
+    const chkT = (t)=> interval.contains(DateTime.fromJSDate(t));
     
     const accessKey = Meteor.user().orgKey;
     // const xid = appValue(accessKey, "internalID");
-    var bRx = new RegExp('surface mount', 'i');
-    var iRx = new RegExp('smt', 'i');
-
+    const bRx = new RegExp(branch, 'i');
     
-    let seriesPack = [];
+    const tlist = tsteps.join('|');
+    const iRx = new RegExp(tlist, 'i');
     
-    let batchPack = XBatchDB.find({
+    // let batchPack = [];
+    // let seriesPack = [];
+    
+    // const num = (si)=> si.length > 0 ? si.reduce((t,i)=> t + i.units, 0) : 0;
+    const num = (si)=> si.length;
+    
+    const scp = (si)=> {
+      if(si.length === 0) {
+        return 0;
+      }else{
+        return si.reduce((t,i)=> {
+          if(i.scrapped === true && i.history.find( h => h.type === 'scrap' && h.good === true) ) {
+            return t + 1;
+          }else{
+            return t;
+          }
+        }, 0);
+      }
+    };
+    
+    const nserial = (narr)=> {
+      let ncScope = new Set();
+      for(let n of narr) {
+        ncScope.add(n.serial);
+      }
+      return ncScope.size;
+    };
+    
+    const asPcnt = (val, total)=> {
+      if(val === 0) {
+        return 0;
+      }else{
+        const prcnt = ((val / total) * 100 );
+        return prcnt < 1 ? prcnt.toFixed(1) : prcnt.toFixed(0);
+      }
+    };
+    
+    let batchNums = [];
+    
+    const batchPack = XBatchDB.find({
       orgKey: accessKey,
       // groupId: { $ne: xid },
       $and : [
@@ -337,74 +376,71 @@ Meteor.methods({
           { completedAt : { $gte: new Date( from ) } } 
         ] }
       ]
-    },{fields:{'batch':1}})
-    .map( (c)=> c.batch, []);
-    
-    XSeriesDB.find({
-      // createdAt: { $lte: new Date( to ) },
-      batch: { $in: batchPack }
-      },{fields:{'batch':1,'items':1,'nonCon':1}})
-    .forEach( (srs)=> {
-     
-      if(srs.items.some( (i)=> i.history.find( h => iRx.test(h.step) ) ) ) {
-        
-        const itemQty = srs.items.length > 0 ? srs.items.reduce((t,i)=> t + i.units, 0) : 0;
-        //this is all items, not just the ones processed in time period !!
-        
-      
-        let ncScope = new Set();
-        for(let n of srs.nonCon) {
-          if(bRx.test(n.where) && 
-            !n.trash && !(n.inspect && !n.fix) && 
-            interval.contains(DateTime.fromJSDate(n.time))
-          ) {
-            ncScope.add(n.serial);
-          }
-        }
-        
-        const per = Math.round( (ncScope.size / itemQty) * 100 );
-      
-        seriesPack.push([srs.batch, per]);
+    },{fields:{'batch':1, 'quoteTimeCycles':1, 'serialize':1, 'tide': 1}})
+    // .map( (c)=> c.batch, []);
+    .map( b => {
+      if(b.serialize) {
+        batchNums.push(b.batch);
       }
-    });
-    
-    return seriesPack;
-  },
-  
-  TEST_batch_count_inspan(branch, startDay, endDay) {
-    const startLx = toLxDayStart(startDay, "yyyy-LL-dd");
-    const endLx = toLxDayEnd(endDay, "yyyy-LL-dd");
-    const from = startLx.toISO();
-    const to = endLx.toISO();
-    
-    const accessKey = Meteor.user().orgKey;
-    const xid = appValue(accessKey, "internalID");
       
-    // Could be Active in the Time Span by create to complete
-    const exist = XBatchDB.find({
-      orgKey: accessKey,
-      groupId: { $ne: xid },
-      createdAt: { $lte: new Date( to ) },
-      $or : [ 
-          { completed : false }, 
-          { completedAt : { $gte: new Date( from ) } } 
-        ] 
-    }).count();
+      const spantide = (b.tide || []).filter( x => chkT(x.startTime) );
+      
+      const qttide = spantide.filter( x => qkeys.includes(x.qtKey) );
+      
+      const subtide = spantide.filter( x => subtasks.includes(x.subtask) );
+      
+      const quoteTimes = (b.quoteTimeCycles || []).filter( q=> qkeys.includes(q[0]) );
+      
+      return [
+        ['batch', b.batch],
+        ['tides in span by qtkey', qttide.length],
+        ['tides in span by subtask', subtide.length],
+        ['quoted qtasks', quoteTimes],
+      ];
+    },[]);
     
-    // Was Active in Time Span by Tide
-    const active = XBatchDB.find({
-      orgKey: accessKey,
-      groupId: { $ne: xid },
-      'tide.startTime': { $gte: new Date( from ), $lte: new Date( to ) }
-    }).count();
+    const seriesPack = XSeriesDB.find({
+      batch: { $in: batchNums }
+      },{fields:{'batch':1,'items':1,'nonCon':1}})
+    .map( (srs)=> {
+     
+      const itemQty = num(srs.items);
+      const scrap = scp(srs.items);
+      
+      const nbch = srs.nonCon.filter( (n)=> bRx.test(n.where) && !n.trash && !(n.inspect && !n.fix) );
+      const nbchNCsrls = nserial(nbch);
+      
+      const ncprcnt = asPcnt(nbchNCsrls, itemQty);
+      
+      // Processed in time period
+      const ispan = srs.items.filter( (i)=> i.history.find( h => iRx.test(h.step) && chkT(h.time)) );
+      const ispanQty = num(ispan);
+      const ispanScp = scp(ispan);
+      
+      const spanserialsNC = ispan.filter( i=> nbch.find( n=> n.serial === i.serial ) ).length;
+      // const nspan = ndpmnt.filter( (n)=> spanserials.includes(n.serial) );
+      // const nspanNCsrls = nserial(nspan);
+      const ncspanprcnt = asPcnt(spanserialsNC, ispanQty);
+      
+      return [
+        ['batch', srs.batch],
+        ['total quantity', itemQty],
+        ['total scrap', scrap],
+        ['total serials with noncons', nbchNCsrls],
+        ['percent of serials with noncons', ncprcnt],
+        ['processed quantity', ispanQty],
+        ['processed scrap', ispanScp],
+        ['processed with noncons', spanserialsNC],
+        ['percent of processed with noncons', ncspanprcnt],
+      ];
+    },[]);
     
-    const list = XBatchDB.find({
-      orgKey: accessKey,
-      groupId: { $ne: xid },
-      'tide.startTime': { $gte: new Date( from ), $lte: new Date( to ) }
-    }).map( (c)=> c.batch, []);
+    // console.log([ batchPack.length, seriesPack.length ]);
     
-    return [ exist,  active, list ];
-  }
+    return {
+      batch: batchPack,
+      series: seriesPack 
+    };
+  },
   
 })

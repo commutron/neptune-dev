@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Pref from '/client/global/pref.js';
 
 // import NumStat from '/client/components/tinyUi/NumStat';
@@ -15,7 +15,7 @@ const NonConExPanel = ({ brancheS, request, app })=> {
   
   const bPro = brancheS.filter(b=> b.open && b.pro).map((br)=>br.branch);
   
-  console.log(start, end);
+  // console.log(start, end);
   
   return(
     <div className='centreBox overscroll2x'>
@@ -52,7 +52,7 @@ const NonConExPanel = ({ brancheS, request, app })=> {
               />{Pref.rapidEx}
             </label>
           </p>
-          <p className='rowWrap'>
+          <p className='colNoWrap'>
             <i>Within Date Range</i>
             <DateRangeSelect
               setFrom={startSet}
@@ -75,77 +75,12 @@ const NonConExPanel = ({ brancheS, request, app })=> {
       <div className='printBr' />
       
       <div className='space'>
-        <h2 style={{marginBottom:'32px'}}>Percent Items NonCon Report</h2>
-        
-        <NCItemsPercent 
-          start={start} 
-          end={end}
-          branch={branch}
-          app={app}
-        />
-      </div>
-      
-      <hr className='vmargin' />
-      <div className='printBr' />
-      
-      <div className='space'>
         <h2 style={{marginBottom:'32px'}}>Monthly NonCon Time Report</h2>
         <NCTimeReport />
       </div>
-      
       
     </div>
   );
 };
 
 export default NonConExPanel;
-
-const NCItemsPercent = ({ start, end, branch, app })=> {
-  
-  function getReport() {
-    // workingSet(true);
-    Meteor.call('getBrNcItemsPercent', branch, start, end, (err, reply)=> {
-      err && console.log(err);
-      if(reply) {
-        
-        // workingSet(false);
-        // replySet(arrange);
-        
-        console.log(reply);
-      }
-    });
-  }
-  
-  function gettest(func) {
-    // workingSet(true);
-    Meteor.call(func, branch, start, end, (err, reply)=> {
-      err && console.log(err);
-      if(reply) {
-        
-        // workingSet(false);
-        // replySet(arrange);
-        
-        console.log(reply);
-      }
-    });
-  }
-  
-  return(
-    <div className='vmarginhalf noPrint'>
-      <button 
-        className='action blackSolid'
-        onClick={(e)=>getReport(e)} 
-        disabled={!start || !end}
-      >Get Percent Report</button>
-      
-      <hr />
-      
-      <button 
-        className='action blackSolid'
-        onClick={(e)=>gettest('TEST_batch_count_inspan')} 
-        disabled={!start || !end}
-      >Test Batch Loop</button>
-      
-    </div>
-  );
-};

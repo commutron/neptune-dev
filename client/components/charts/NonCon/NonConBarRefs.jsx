@@ -37,7 +37,7 @@ const NonConBarRefs = ({ ncOp, nonCons, app, isDebug })=> {
           });
         }
       }
-      const clrshift = "hwb(7.16deg 14.74% " + (ref.index*10) + "%)";
+      const clrshift = "hwb(7.16deg 14.74% " + (ref.index*5) + "%)";
         splitByType.push({
           label: ref.name,
           data: type,
