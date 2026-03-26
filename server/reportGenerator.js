@@ -321,14 +321,11 @@ Meteor.methods({
     const chkT = (t)=> interval.contains(DateTime.fromJSDate(t));
     
     const accessKey = Meteor.user().orgKey;
-    // const xid = appValue(accessKey, "internalID");
+    const xid = appValue(accessKey, "internalID");
     const bRx = new RegExp(branch, 'i');
     
     const tlist = tsteps.join('|');
     const iRx = new RegExp(tlist, 'i');
-    
-    // let batchPack = [];
-    // let seriesPack = [];
     
     // const num = (si)=> si.length > 0 ? si.reduce((t,i)=> t + i.units, 0) : 0;
     const num = (si)=> si.length;
@@ -368,7 +365,7 @@ Meteor.methods({
     
     const batchPack = XBatchDB.find({
       orgKey: accessKey,
-      // groupId: { $ne: xid },
+      groupId: { $ne: xid },
       $and : [
         { createdAt: { $lte: new Date( to ) } },
         { $or : [ 
@@ -376,8 +373,12 @@ Meteor.methods({
           { completedAt : { $gte: new Date( from ) } } 
         ] }
       ]
-    },{fields:{'batch':1, 'quoteTimeCycles':1, 'serialize':1, 'tide': 1}})
-    // .map( (c)=> c.batch, []);
+    },{fields:{
+      'batch': 1,
+      'quoteTimeCycles': 1,
+      'serialize': 1,
+      'tide': 1
+    }})
     .map( b => {
       if(b.serialize) {
         batchNums.push(b.batch);
@@ -398,7 +399,7 @@ Meteor.methods({
         ['quoted qtasks', quoteTimes],
       ];
     },[]);
-    
+      
     const seriesPack = XSeriesDB.find({
       batch: { $in: batchNums }
       },{fields:{'batch':1,'items':1,'nonCon':1}})

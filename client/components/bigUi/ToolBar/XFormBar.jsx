@@ -219,11 +219,11 @@ const QtStatus = ({ batchData, app, users, eng })=> {
   
   let bq = (batchData?.quoteTimeCycles || []).find( q => q[0] === eng.qtKey );
   let min = bq?.[1] || 0;
-  let max = qt.fixed ? min : ( min * (batchData?.quantity || 0) );
+  let max = qt.fixed ? min * 60 : ( (min * (batchData?.quantity || 0)) * 60 );
   
   const bTideThis = batchData.tide.filter( t => t.qtKey === eng.qtKey );
   const tCount = addTideArrayDuration(bTideThis); // rtn in seconds
-  const remain = (max * 60) - tCount;
+  const remain = max - tCount;
   
   const sty = {
     fontSize: 'var(--tx1)',
@@ -238,9 +238,12 @@ const QtStatus = ({ batchData, app, users, eng })=> {
       
       <span className='line1x noCopy centreRow centreText gapminC'
         >{TimeString(bq ? bq[1] : 0, 'minutes', 'h:mm')} {`${qt.fixed ? 'per ' + Pref.XBatch : 'per item'}`}</span>
-
-      <span className={`line1x noCopy centreRow gapminC ${remain < 0 ? 'redT' : ''}`}
-      >{bq ? <CountDownNum dur={remain} peers={pr} /> : <n-num>0:00:00</n-num>} remaining</span>
+      
+      <span className={`line1x noCopy centreRow gapminC`}
+      >{bq ? 
+        <CountDownNum dur={remain} max={max} peers={pr} /> : 
+        <n-num>0:00:00 remaining</n-num>
+      }</span>
     </div>
   );
 };

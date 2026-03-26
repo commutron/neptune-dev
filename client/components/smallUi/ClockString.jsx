@@ -95,7 +95,7 @@ export default ClockString;
 //     >{tick.toFormat('h:mm:ss')}</n-num>
 //   );
 // };
-export const CountDownNum = ({ dur, peers })=> {
+export const CountDownNum = ({ dur, max, peers })=> {
   
   const [ tick, tickingSet ] = useState( moment.duration() );
   const [ int, intSet ] = useState( 0 );
@@ -105,12 +105,26 @@ export const CountDownNum = ({ dur, peers })=> {
     tickingSet( tick => tick.subtract( (isNaN(peers) ? 1 : peers), 'seconds') );
     intSet( int => int + 1 ); // so it detects the change
   },1000);
-    
+  
+  const per = Math.round( ( tick / max) * 0.1 ) ;
+  const ringSty = {
+    '--miniRingPercent': per + '%',
+    width: '25px'
+  };
+  
+  let hr = Math.abs(tick.hours());
+  let min = (Math.abs(tick.minutes())).toString().padStart(2, 0);
+  let sec = (Math.abs(tick.seconds())).toString().padStart(2, 0);
+  
   return(
-    <n-num 
-      data-tip={`${peers} people on this task`}
-      class='liteTip'
-    >{`${tick.hours()}:${(tick.minutes()).toString().padStart(2, 0)}:${tick.seconds().toString().padStart(2, 0)}`}</n-num>
+    <span className={`beside ${tick.seconds() < 0 ? 'redT' : ''}`}>
+      <div className='cssMiniRing' style={ringSty}></div>
+      <n-num 
+        data-tip={`${peers} people on this task`}
+        class='liteTip'
+      >{`${tick.seconds() < 0 ? "-" : ""}${hr}:${min}:${sec}`}
+      </n-num><span className='nomargin'>&nbsp;remaining</span>
+    </span>
   );
 };
 

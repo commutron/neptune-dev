@@ -150,6 +150,25 @@ n-timeline-item:last-child n-timeline-marker:after {
   }
 }
 
+.cssMiniRing {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  background: conic-gradient(
+    var(--emerald) var(--miniRingPercent, 0%),
+    oklab(0.28 0 0) 0%
+  );
+  display: grid;
+  place-items: center;
+}
+/*.cssMiniRing::after {*/
+/*  content: '';*/
+/*  width: 60%;*/
+/*  border-radius: 50%;*/
+/*  background-color: var(--dark);*/
+/*  aspect-ratio: 1 / 1;*/
+/*}*/
+
 .dashNumBox {
   min-width: 8vmin;
   min-height: 8vmin;

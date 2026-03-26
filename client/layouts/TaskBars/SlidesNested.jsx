@@ -5,6 +5,7 @@ const SlidesNested = ({
   disable, disableAll, menuClass, extraClass, 
   topPage, defaultSlide, collapse,
   textStyle,
+  uri,
   children
 })=> {
   
@@ -17,6 +18,13 @@ const SlidesNested = ({
   useEffect( ()=>{
     setSection( df );
   }, [defaultSlide]);
+  
+  const doSelect = (index, name)=> {
+    setSection(index);
+    if(uri) {
+      !name ? FlowRouter.go(uri) : FlowRouter.go(uri + "&specify=" + name);
+    }
+  };
   
   let show = section;
   let dA = [];
@@ -45,7 +53,7 @@ const SlidesNested = ({
         {menuTitle &&
           <button
             key={'0x0'}
-            onClick={()=>setSection(false)}
+            onClick={()=>doSelect(false, null)}
             className={
               show === false ? 
                 'slideNestedLand cap slideOn' : 
@@ -65,7 +73,7 @@ const SlidesNested = ({
             return(
               <button
                 key={index}
-                onClick={()=>setSection(index)}
+                onClick={()=>doSelect(index, entry[0])}
                 className={`${clss}`}
                 disabled={dA[index+1]}
               ><b className={`${textStyle || 'cap'}${entry[1] ? ' strike darkgrayT' : ''} ${entry[3]}`}>{entry[0]}</b>

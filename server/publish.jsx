@@ -815,6 +815,37 @@ Meteor.publish('hotDataEx', function(dataView, dataRequest, hotWidget){
             // 'river': 1
         }})
       ];
+    }else if( dataRequest === 'branches' ) {
+      return [
+        // GroupDB.find({orgKey: orgKey}, {
+        //   fields: {
+        //     'orgKey': 0,
+        //     'shareKey': 0,
+        //     'topStats': 0
+        // }}),
+        // WidgetDB.find({orgKey: orgKey}, {
+        //   fields: {
+        //     'ncRate': 1
+        // }}),
+        // VariantDB.find({orgKey: orgKey}, {
+        //   fields: {
+        //     'createdAt': 1,
+        // }}),
+        // XBatchDB.find({orgKey: orgKey, completed: false }, {
+        //   sort: {batch:-1},
+        //   fields: {
+        //     'batch': 1,
+        //     'widgetId': 1,
+        //     'completed': 1,
+        // }}),
+        EquipDB.find({orgKey: orgKey, nullify: { $ne: true }}, {
+          fields: {
+            'alias': 1,
+            'branchKey': 1,
+            'hibernate': 1,
+            'online': 1
+        }})
+     ];
     }else {
       return [
         WidgetDB.find({widget: hothotWidget, orgKey: orgKey}, {

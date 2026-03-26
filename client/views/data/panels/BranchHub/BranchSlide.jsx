@@ -4,12 +4,12 @@ import Pref from '/public/pref.js';
 // import { PopoverButton, PopoverMenu, PopoverAction } from '/client/layouts/Models/Popover';
 
 // import DumbFilter from '/client/components/tinyUi/DumbFilter';
-
-import { MonthSelect, WeekSelect } from '/client/components/smallUi/DateRangeSelect';
+import NumStatBox from '/client/components/charts/Dash/NumStatBox';
+import { MonthSelect } from '/client/components/smallUi/DateRangeSelect';
 
 
 const BranchSlide = ({ 
-  brData, app, 
+  brData, equipData, app, 
   canRun, canEdt, canCrt, canRmv 
 })=>{
   
@@ -49,11 +49,10 @@ const BranchSlide = ({
     <div className='section overscroll' key={brData.brKey}>
           
       <h1 className='cap bigger centreText bottomLine'>{brData.branch}</h1>
-    
-        
+      
       <div className='wide comfort'>
        {brData.pro &&
-          <p className='w100 indenText'>
+          <p className='w100'>
           <span className='mockTag nBg'>
             <i className="fa-solid fa-paper-plane fa-lg gapR"></i>Pro
           </span>
@@ -61,16 +60,17 @@ const BranchSlide = ({
         }
       </div>
       
+      <div className='rowWrap'>
+        {equipData.map( (e, i)=> (
+          <span key={i} className={`mockTag gapR cap ${!e.online ? "darkgray" : "midnightblue"}`}>
+            {e.alias}
+          </span>
+        ))}
+      </div>
       
       <MonthSelect
         setDate={monthSet}
       />
-      
-      {/*
-      <WeekSelect
-        setDate={weekSet}
-      />
-      */}
               
       
       {!spanData ? null :
@@ -88,22 +88,154 @@ const BranchSlide = ({
               );
             })}
           </div>
-          <h3>Series Data</h3>
-          <div>
-            {spanData.series.map( (dt, ix)=> {
-              return(
-                <ul key={ix}>
-                  {dt.map( (s,sx)=> {
-                    return(
-                    <li key={sx}>{s[0]}: {s[1]}</li>
-                  )})}
-                </ul>
-              );
-            })}
+          
+          <SmpleDataSet 
+            title='Work Orders'
+            array={spanData.series} 
+            line={0}
+          />
+          
+          <div className='autoFlex'>
+            <TotalWrapper 
+              name="Total serials quantity"
+              array={spanData.series} 
+              line={1}
+              color="var(--neptuneColor)"
+            />
+            <TotalWrapper 
+              name="total serials scrapped"
+              array={spanData.series} 
+              line={2}
+              color="var(--pomegranate)"
+            />
+            <TotalWrapper 
+              name="total serials with noncons"
+              array={spanData.series} 
+              line={3}
+            />
+            <AvgWrapper 
+              name="average of serials with noncons"
+              append="%"
+              array={spanData.series} 
+              line={4}
+            />
           </div>
+          
+          <div className='rowWrap'>
+            <SmpleDataSet 
+              title='Total serials quantity'
+              array={spanData.series} 
+              line={1}
+            />
+            <SmpleDataSet 
+              title='total serials scrapped'
+              array={spanData.series} 
+              line={2}
+            />
+            <SmpleDataSet 
+              title='total serials with noncons'
+              array={spanData.series} 
+              line={3}
+            />
+            <SmpleDataSet 
+              title='percent of serials with noncons'
+              array={spanData.series} 
+              line={4}
+            />
+          </div>
+          
+          <div className='autoFlex'>
+            <TotalWrapper 
+              name="processed serials quantity"
+              array={spanData.series} 
+              line={5}
+              color="var(--neptuneColor)"
+            />
+            <TotalWrapper 
+              name="processed serials scrapped"
+              array={spanData.series} 
+              line={6}
+              color="var(--pomegranate)"
+            />
+            <TotalWrapper 
+              name="processed serials with noncons"
+              array={spanData.series} 
+              line={7}
+            />
+            <AvgWrapper 
+              name="average of processed serials with noncons"
+              append="%"
+              array={spanData.series} 
+              line={8}
+            />
+          </div>
+          
+          <div className='rowWrap'>
+            <SmpleDataSet 
+              title='processed serials quantity'
+              array={spanData.series} 
+              line={5}
+            />
+            <SmpleDataSet 
+              title='processed serials scrapped'
+              array={spanData.series} 
+              line={6}
+            />
+            <SmpleDataSet 
+              title='processed serials with noncons'
+              array={spanData.series} 
+              line={7}
+            />
+            <SmpleDataSet 
+              title='percent of processed serials with noncons'
+              array={spanData.series} 
+              line={8}
+            />
+          </div>
+          
         </div>}
     </div>
   );
 };
 
 export default BranchSlide;
+
+const SmpleDataSet = ({ title, array, line })=> (
+  <dl className='maxWide popSm spacehalf noindent'>
+    <dt className='bottomLine bold'>{title}</dt>
+    {array.map( (dt, index)=> {
+      return(
+        <dd key={index}>{dt[line][1]}</dd>
+      );
+    })}
+  </dl>
+);
+
+const TotalWrapper = ({ name, title, array, line, color })=> {
+  
+  const total = array.reduce( (x,y)=> x + y[line][1], 0);
+        
+  return(
+    <NumStatBox
+      number={total}
+      name={name}
+      title={title || ""}
+      borderColour={color || "var(--alizarin)"}
+    />
+  );
+};
+
+const AvgWrapper = ({ name, append, title, array, line, color })=> {
+  
+  const add = array.reduce( (x,y)=> x + Number(y[line][1]), 0);
+  const avg = ( add / array.length );
+  
+  return(
+    <NumStatBox
+      number={avg + append || ""}
+      name={name}
+      title={title || ""}
+      borderColour={color || "var(--alizarin)"}
+    />
+  );
+};

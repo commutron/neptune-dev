@@ -48,6 +48,7 @@ export const HasNonCon = ({ noncons, items })=> {
           </dl>
         </div>
       }
+      stOpen={hasNonCon > 0}
     />
   );
 };

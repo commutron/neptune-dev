@@ -290,6 +290,23 @@ a:has(.onlyHover):where(:hover, :active, :focus-visible) .onlyHover {
   transform: translateY(-150%);
 }
 
+.dptGridButton {
+  aspect-ratio: 1 / 1;
+  background-color: var(--cloudstrans);
+  box-shadow: var(--dropShadow00);
+  margin: 2vmin;
+  padding: 1vmin;
+  align-self: stretch;
+  font-size: clamp(18px, 2vmax, 22px);
+  font-family: var(--styled-font)
+}
+.dptGridButton:where(:hover,:focus-visible,:active) {
+  background-color: var(--asbestosfade);
+}
+.dptGridButton .small {
+  font-size: clamp(16px, 1.25vmax, 18px);
+}
+
 .leapText {
   min-width: 1rem;
 	min-height: 1rem;

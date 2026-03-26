@@ -13,7 +13,7 @@ const ExploreView = ({
   coldReady, hotReady, // subs
   user, isDebug, org, users, app, // self
   allGroup, allWidget, allVariant, // customers
-  allXBatch, hotXBatch, hotXSeries, hotXRapids, // relevant
+  allXBatch, hotXBatch, hotXSeries, hotXRapids, equipData, // relevant
   view, request, specify, subLink // routing
 })=> {
   
@@ -56,6 +56,7 @@ const ExploreView = ({
       hotXBatch={hotXBatch}
       hotXSeries={hotXSeries}
       hotXRapids={hotXRapids}
+      equipData={equipData}
       view={view}
       request={request}
       specify={specify}
@@ -102,6 +103,7 @@ export default withTracker( ({ view, request, specify }) => {
       hotXBatch: hotXBatch,
       hotXSeries: hotXSeries,
       hotXRapids: hotXRapids,
+      equipData: EquipDB.find( {}, { sort: { alias: -1 } } ).fetch(),
       view: view,
       request: request,
       specify: specify

@@ -7,7 +7,7 @@ import BranchLanding from './BranchLanding';
 import BranchSlide from './BranchSlide';
 
 const BranchHub = ({ 
-  brancheS, app, specify 
+  brancheS, equipData, app, specify 
 }) => {
   
   // const [ selectedBr, selectedBrSet ] = useState(false);
@@ -30,19 +30,22 @@ const BranchHub = ({
       menu={menuList}
       topPage={
         <BranchLanding
-         
+          uri={"/data/overview?request=branches"}
+          menuList={menuList}
           canEdt={canEdt}
         />
       }
       defaultSlide={defaultSlide}
       collapse='Not Pro'
-      textStyle='up'>
+      textStyle='up'
+      uri={"/data/overview?request=branches"}>
     
       {oBrancheS.map( (entry, index)=> {
         return(
           <BranchSlide
             key={index+entry.brKey}
             brData={entry}
+            equipData={equipData.filter( e=> e.branchKey === entry.brKey )}
             app={app}
             canRun={canRun}
             canEdt={canEdt}

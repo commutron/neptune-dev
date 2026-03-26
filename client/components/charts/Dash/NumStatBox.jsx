@@ -1,13 +1,17 @@
 import React from "react";
 
 const NumStatBox = ({ 
-  number, name, title,
+  number, name, title, fontSize,
   textColour, borderColour
 })=> {
   
   const sty = {
     color: textColour || 'black',
     "--kpiColor": borderColour
+  };
+  
+  const tSty = {
+    fontSize: fontSize || 'inherit'
   };
   
   const lSty = {
@@ -18,9 +22,9 @@ const NumStatBox = ({
   };
   
   return(
-    <div style={sty} className='dashNumBox noCopy' title={title}>
+    <div style={sty} className='dashNumBox noCopy cap' title={title}>
       <div>
-        <span className='numFont'>{number}</span> 
+        <span className='numFont' style={tSty}>{number}</span> 
       </div>
       <p style={lSty} className='centreText cap'>{name}</p>
     </div>

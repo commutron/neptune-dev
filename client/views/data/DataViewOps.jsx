@@ -31,7 +31,7 @@ const DataViewOps = ({
   allXBatch, 
   allGroup, allWidget, allVariant,
   user, isDebug, app, brancheS, users,
-  hotXBatch, hotXSeries, hotXRapids,
+  hotXBatch, hotXSeries, hotXRapids, equipData,
   view, request, specify,
   subLink
 })=> {
@@ -251,6 +251,7 @@ const DataViewOps = ({
         >
           <BranchHub
             brancheS={brancheS}
+            equipData={equipData}
             app={app}
             specify={specify} />
         </TraverseWrap>
