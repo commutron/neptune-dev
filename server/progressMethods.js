@@ -144,12 +144,17 @@ function collectBranchTime(privateKey, batchID) {
     const brancheS = sortBranches( app.branches.filter( b => b.open && b.pro ) );
 
     const bx = XBatchDB.findOne({_id: batchID},{
-                fields:{ 'tide': 1, 'quoteTimeCycles': 1, 'quantity': 1
+                fields:{ 'batch': 1, 'tide': 1, 'quoteTimeCycles': 1, 'quantity': 1
                 }});
     
     let branchTime = [];
     
     if(bx) {
+      const bQty = bx.quantity || 0;
+      const srs = XSeriesDB.findOne({batch: bx.batch},{fields:{'items.units': 1}});
+      const iQty = srs?.items.length || bQty;
+      // srs.items.reduce((t,i)=> t + i.units, 0)
+      
       const tide = bx.tide || [];
       
       const bQTtimes = bx.quoteTimeCycles || [];
@@ -163,7 +168,10 @@ function collectBranchTime(privateKey, batchID) {
         let brQtTasks = app.qtTasks.filter( q => q.brKey === branch.brKey );
         for( let qtTask of brQtTasks ) {
           const bqchunk = bQTtimes.find( bqt => bqt[0] === qtTask.qtKey );
-          const bsettime = !bqchunk ? 0 : qtTask.fixed ? bqchunk[1] : ( bqchunk[1] * (bx.quantity || 0) );
+          const bsettime = !bqchunk ? 0 : 
+                            qtTask.fixed ? bqchunk[1] :
+                            bqchunk[2] ? ( bqchunk[1] * bQty ) :
+                            ( bqchunk[1] * iQty );
           brQTime += bsettime;
         }
         const budgt = bQTtimes.length === 0 ? null : brQTime;

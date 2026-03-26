@@ -396,6 +396,11 @@ Meteor.methods({
       
       const quoteTimes = (b.quoteTimeCycles || []).filter( q=> qkeys.includes(q[0]) );
       
+      //const bsettime = !bqchunk ? 0 : 
+                            // qtTask.fixed ? bqchunk[1] :
+                            // bqchunk[2] ? ( bqchunk[1] * bQty ) :
+                            // ( bqchunk[1] * iQty );
+                            
       return [
         ['batch', b.batch],
         ['widget id', b.widgetId],

@@ -34,13 +34,15 @@ const QuoteTaskTime = ({
         for( let qt of qtS ) {
           const qtbr = app.branches.find( b => b.brKey === qt.brKey );
           if(qtbr && qtbr.open && qtbr.pro ) {
-            const qval = qtSaved.find( q => q[0] === qt.qtKey )?.[1] || 0;
-            ops.push( [ qt.qtKey, qt.qtTask, qt.subTasks.join(', '), qval, qt.fixed ] );
+            const qval = qtSaved.find( q => q[0] === qt.qtKey );
+            const qtime = qval?.[1] || 0;
+            const qx = qval?.[2] || false;
+            ops.push( [ qt.qtKey, qt.qtTask, qt.subTasks.join(', '), qtime, qt.fixed, qx ] );
           }
         }
         inputOpsSet(ops);
         
-        const opsObj = ops.reduce((acc, curr) =>(acc[curr[0]] = curr[3], acc), {});
+        const opsObj = ops.reduce((acc, curr) =>(acc[curr[0]] = [ curr[3], curr[5] ], acc), {});
         qtArrSet(opsObj);
       }
     }
@@ -48,22 +50,43 @@ const QuoteTaskTime = ({
 
   useEffect( ()=>{
     const objArr = Object.entries(qtArrState);
-    const arrTtl = objArr.reduce((x,y)=> x + y[1], 0);
+    const arrTtl = objArr.reduce((x,y)=> x + y[1][0], 0);
     subsumSet( arrTtl );
   }, [qtArrState]);
   
   const inputMinutes = (e) => {
+    const id = e.target.id;
     const val = e.target.value || 0;
     const inMin = parseFloat(val);
+    
+    const curr = qtArrState[id];
+    const curX = curr[1] || false;
+    
     qtArrSet({
       ...qtArrState,
-      [ e.target.id ]: inMin
+      [ e.target.id ]: [ inMin, curX ]
     });
   };
   
+  const inputMultiply = (e) => {
+    const val = e.target.checked ? true : false;
+    const id = e.target.id.split("_")[0];
+    
+    const curr = qtArrState[id];
+    const curT = curr[0] || false;
+    
+    const newObj = {
+      ...qtArrState,
+      [ id ]: [ curT, val ]
+    };
+    
+    qtArrSet(newObj);
+  };
+  
+  
   const setQtFlow = (e)=> {
     e.preventDefault();
-    const qttbArray = Object.entries(qtArrState).filter( x => x[1] > 0);
+    const qttbArray = Object.entries(qtArrState).map(q=> [ q[0], ...q[1] ]).filter( x => x[1] > 0);
     if(access) {
       Meteor.call('setFlowQuoteTime', id, flowKey, qttbArray, (err, re)=>{
         err && console.log(err);
@@ -124,6 +147,7 @@ const QuoteTaskTime = ({
               {isDebug ? <label className='min8 liteToolOff beside rightJust'>Hours</label> : null}
               <label className='miniIn10 gapL beside rightJust'>Minutes</label>
               <label className='gapL min8 liteToolOff beside rightJust'>Seconds</label>
+              <label className='gapL min8 liteToolOff beside rightJust'>&times; Units</label>
             </span>
           </div>
           {inputOps.map( (op, index)=>(
@@ -160,6 +184,17 @@ const QuoteTaskTime = ({
                 <label className='gapL min8'>
                   <i className='numberSet liteToolOff beside rightJust'
                   >{moment.duration(qtArrState[op[0]] || 0, 'minutes').asSeconds().toFixed(0,10)}</i>
+                </label>
+                <label className='gapL min8 centre'>
+                  <input
+                    type='checkbox'
+                    id={op[0]+'_multiple'}
+                    title='Multiply By Unit'
+                    defaultChecked={op[5] || false}
+                    onChange={(e)=>inputMultiply(e)}
+                    className='rightText numberSet tableAction'
+                    disabled={!access}
+                  />
                 </label>
               </span>
             </div>

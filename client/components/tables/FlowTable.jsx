@@ -82,6 +82,7 @@ const FlowTable = ({ id, flows, app, openActions, canEdt, canSls, isDebug })=> {
                     <td className='numFont smTxt rightText'>{qtTotalM}</td>
                     <td className='numFont smTxt rightText'>{qtTotalH}</td>
                     <th></th>
+                    <th></th>
                   </tr>
                 </tbody>
                 <tbody>
@@ -185,6 +186,7 @@ const FlowRow = ({ app, step })=> {
     </tr>
   );
 };
+
 const QtRow = ({ app, qt })=> {
   const qtapp = app.qtTasks?.find( x => x.qtKey === qt[0] );
   const inhr = moment.duration(qt[1], 'minutes').asHours().toFixed(2,10);
@@ -193,7 +195,7 @@ const QtRow = ({ app, qt })=> {
       <td>{qtapp?.qtTask || 'missing'}</td>
       <td className='numFont smTxt rightText'>{qt[1]}</td>
       <td className='numFont smTxt rightText'>{inhr}</td>
-      <td className='bold small smCap centreText'>{qtapp?.fixed ? 'STATIC' : ''}</td>
+      <td className='bold small smCap centreText'>{qtapp?.fixed ? 'STATIC' : qt[2] ? '× Units' : ''}</td>
     </tr>
   );
 };

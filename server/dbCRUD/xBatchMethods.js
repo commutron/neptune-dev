@@ -12,11 +12,18 @@ const syncQtTotal = (accessKey, batchId, riverId)=> {
   // const bs = XBatchDB.find({ river: riverId },{fields:{'quantity':1,'quoteTimeCycles':1}}).fetch();
   
   const app = AppDB.findOne({ orgKey: accessKey },{fields:{'qtTasks':1}});
-  const b = XBatchDB.findOne({ _id: batchId },{fields:{'quantity':1,'quoteTimeCycles':1}});
+  const b = XBatchDB.findOne({ _id: batchId },{fields:{'batch':1,'quantity':1,'quoteTimeCycles':1}});
+  
+  const bQty = b.quantity || 0;
+  const srs = XSeriesDB.findOne({batch: b.batch},{fields:{'items.units': 1}});
+  const iQty = srs?.items.length || bQty;
+  // srs.items.reduce((t,i)=> t + i.units, 0)
+      
+  
   let totalQT = 0;
   for( let qtC of b.quoteTimeCycles) {
     let qtApp = app.qtTasks.find( q => q.qtKey === qtC[0] );
-    let scaled = qtApp.fixed ? qtC[1] : ( qtC[1] * b.quantity );
+    let scaled = qtApp.fixed ? qtC[1] : qtC[2] ? ( qtC[1] * bQty ) : ( qtC[1] * iQty );
     totalQT += scaled;
   }
   return totalQT;

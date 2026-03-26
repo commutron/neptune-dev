@@ -30,6 +30,7 @@ const TimeTab = ({
         tideWall={app.tideWall}
         b={batchData}
         addTime={addTime}
+        iQuantity={seriesData ? seriesData.items.length : null}
         conversion={conversion}
         conversionSet={conversionSet}
         plus={plus}

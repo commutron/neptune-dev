@@ -14,7 +14,7 @@ import { splitTidebyPeople } from '/client/utility/WorkTimeCalc';
 import { min2hr, percentOf, percentOverUnder } from '/client/utility/Convert';
 
 const TimeBudgetsChunk = ({
-  tideWall, b, addTime, 
+  tideWall, b, addTime, iQuantity,
   conversion, conversionSet, plus, plusSet,
   isDebug, app
   // brancheS
@@ -59,6 +59,7 @@ const TimeBudgetsChunk = ({
           <QuoteTimeBudget
             bID={b._id}
             bQuantity={b.quantity || 0}
+            iQuantity={iQuantity}
             qtBudget={qtBudget}
             qtCycles={b.quoteTimeCycles || []}
             lockOut={b.lock} 
@@ -156,6 +157,7 @@ const TimeBudgetsChunk = ({
                     mlt='Includes Multi-tasking'
                     app={app}
                     quantity={b.quantity}
+                    iQty={iQuantity || b.quantity}
                   />
                 </dl>
               </div>
@@ -250,9 +252,10 @@ const TotalTide = ({ totalBudgetMinutes, totalTime, conversion, plus, plusSet, a
 };
 
 const QuotedTaskBreakdown = ({ 
-  branchTime, qtTaskTimesArray, timeAs, cnv, qtZero, mlt, app, quantity 
+  branchTime, qtTaskTimesArray, timeAs, cnv, qtZero, mlt, app, quantity, iQty
 })=> {
   
+  const bQty = quantity || 0;
   const mltIcn = <i className='fa-regular fa-clone fa-xs tealT gapL'></i>;
   
   return(
@@ -270,7 +273,9 @@ const QuotedTaskBreakdown = ({
                 const qtedData = qtTaskTimesArray.find( x => x[0] === qt.key );
                 let qtapp = !qtedData ? null : app.qtTasks.find( q => q.qtKey === qt.key );
                 let qtname = qtapp?.qtTask || qt.qt;
-                let qtnum = !qtapp ? null : qtapp.fixed ? qtedData[1] : ( qtedData[1] * (quantity || 0) );
+                let qtnum = !qtapp ? null : qtapp.fixed ? qtedData[1] : 
+                                            qtedData[2] ? ( qtedData[1] * bQty ) :
+                                            ( qtedData[1] * iQty );
                 
                 if((qt.qt === 'unquoted' && qt.qtTotal === 0) || (!qtZero && qt.qtTotal === 0)) {
                   return null;

@@ -153,6 +153,7 @@ const XFormBar = ({
         {timeOpen && show === 'QT' ?
           <QtStatus 
             batchData={batchData} 
+            seriesData={seriesData}
             app={app}
             users={users}
             eng={eng}
@@ -207,7 +208,7 @@ const FormToggle = ({
   );
 };
 
-const QtStatus = ({ batchData, app, users, eng })=> {
+const QtStatus = ({ batchData, seriesData, app, users, eng })=> {
   
   let qt = app.qtTasks.find( q => q.qtKey === eng.qtKey );
   
@@ -215,11 +216,15 @@ const QtStatus = ({ batchData, app, users, eng })=> {
     return null;
   }
   
+  const bQty = batchData?.quantity || 0;
+  const iQty = seriesData ? seriesData.items.length : bQty;
+  
   let pr = users.filter( u=> u.engaged && u.engaged.qtKey === eng.qtKey && u.engaged.tName === eng.tName ).length;
   
   let bq = (batchData?.quoteTimeCycles || []).find( q => q[0] === eng.qtKey );
+  let unt = bq?.[2] || false;
   let min = bq?.[1] || 0;
-  let max = qt.fixed ? min * 60 : ( (min * (batchData?.quantity || 0)) * 60 );
+  let max = qt.fixed ? min * 60 : unt ? ( (min * bQty) * 60 ) : ( (min * iQty) * 60 );
   
   const bTideThis = batchData.tide.filter( t => t.qtKey === eng.qtKey );
   const tCount = addTideArrayDuration(bTideThis); // rtn in seconds

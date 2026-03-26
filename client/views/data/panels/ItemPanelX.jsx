@@ -300,6 +300,7 @@ const ItemPanelX = ({
           rapId={rapid ? rapid.rapId : false}
           rapidsData={rapidsData}
           user={user}
+          isQA={accessQ}
           canInspect={accessI}
           canQAFin={accessQ || accessR}
           canQARmv={accessQ || accessD}

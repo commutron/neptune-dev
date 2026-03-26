@@ -9,7 +9,7 @@ import UserNice from '/client/components/smallUi/UserNice.jsx';
 
 const NonConBlock = ({
   entry, seriesId, serial, units,
-  done, iopen, irap, user, canQA, canVerify, canInspect,
+  done, iopen, irap, user, isQA, canQA, canVerify, canInspect,
   app, ncTypesCombo, flatCheckList, brancheS, cal
 })=> {
   
@@ -103,9 +103,8 @@ const NonConBlock = ({
                   }
                 </Fragment>;
 
-  const editAllow = canInspect && iopen;
+  const editAllow = ( canInspect && iopen ) || isQA;
   const editIndicate = editState && 'editStandout';
-
 	  
   return(
     <n-feed-info-block class={`noncon ${editIndicate} ${tSty}`}>
@@ -151,6 +150,7 @@ const NonConBlock = ({
               <select 
                 id='ncType'
                 className='miniIn24'
+                defaultValue={dt.type}
                 required
                 disabled={ncTypesCombo.length < 1}
               >

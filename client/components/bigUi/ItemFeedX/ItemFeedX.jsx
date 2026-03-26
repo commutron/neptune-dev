@@ -18,7 +18,7 @@ const ItemFeedX = ({
   noncons, ncTypesCombo, brancheS,
   shortfalls,
   done, rapId, rapidsData,
-  user, canInspect, canQAFin, canQARmv, canEdit,
+  user, isQA, canInspect, canQAFin, canQARmv, canEdit,
   app, cronofeed
 })=> {
   
@@ -298,6 +298,7 @@ const ItemFeedX = ({
                 iopen={iopen}
                 irap={rapDo !== false}
                 user={user}
+                isQA={isQA}
                 canQA={canQARmv}
                 canVerify={canVerify}
                 canInspect={canInspect}
@@ -317,6 +318,7 @@ const ItemFeedX = ({
                 units={units}
                 done={done}
                 iopen={iopen}
+                isQA={isQA}
                 canQA={canQARmv}
                 cal={calFunc} /> 
             );

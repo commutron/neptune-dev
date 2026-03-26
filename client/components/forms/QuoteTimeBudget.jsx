@@ -22,6 +22,7 @@ const QuoteTimeBudget = ({ bID, bQuantity, qtBudget, qtCycles, lockOut, app })=>
       <QuoteTimeBudgetForm
         bID={bID}
         bQuantity={bQuantity}
+        iQuantity={iQuantity || bQuantity}
         qtBudget={qtBudget}
         qtCycles={qtCycles}
         app={app}
@@ -34,7 +35,7 @@ const QuoteTimeBudget = ({ bID, bQuantity, qtBudget, qtCycles, lockOut, app })=>
 
 export default QuoteTimeBudget;
 
-const QuoteTimeBudgetForm = ({ bID, bQuantity, qtBudget, qtCycles, app, auth, lockOut })=> {
+const QuoteTimeBudgetForm = ({ bID, bQuantity, iQuantity, qtBudget, qtCycles, app, auth, lockOut })=> {
   
   const [ totalState, totalSet ] = useState(qtBudget || 0);
   
@@ -44,7 +45,9 @@ const QuoteTimeBudgetForm = ({ bID, bQuantity, qtBudget, qtCycles, app, auth, lo
     let totalQT = 0;
     for( let qtC of qtCycles) {
       let qtApp = app.qtTasks.find( q => q.qtKey === qtC[0] );
-      let scaled = qtApp.fixed ? qtC[1] : ( qtC[1] * bQuantity );
+      let scaled = qtApp.fixed ? qtC[1] :
+                   qtC[2] ? ( qtC[1] * bQuantity ) :
+                   ( qtC[1] * iQuantity );
       totalQT += scaled;
     }
     qtSumSet(totalQT);
