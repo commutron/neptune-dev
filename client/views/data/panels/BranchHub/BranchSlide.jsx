@@ -1,9 +1,9 @@
-import React, { Fragment, useMemo, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Pref from '/public/pref.js';
 // import TagsModule from '/client/components/bigUi/TagsModule';
 // import { PopoverButton, PopoverMenu, PopoverAction } from '/client/layouts/Models/Popover';
 
-// import DumbFilter from '/client/components/tinyUi/DumbFilter';
+import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock';
 import NumStatBox from '/client/components/charts/Dash/NumStatBox';
 import { MonthSelect } from '/client/components/smallUi/DateRangeSelect';
 
@@ -16,9 +16,10 @@ const BranchSlide = ({
   const [ spanData, spanDataSet ] = useState(false);
   
   const [ month, monthSet ] = useState(false);
-  // const [ week, weekSet ] = useState(false);
   
-  // const [ filterString, filterStringSet ] = useState( '' );
+  const [ subs, subsSet ] = useState([]);
+  const [ steps, stepsSet ] = useState([]);
+  
   useEffect( ()=> {
     const branch = brData.branch;
     
@@ -27,11 +28,13 @@ const BranchSlide = ({
     const qtasks = app.qtTasks.filter( q => q.brKey === brData.brKey);
     const qkeys = qtasks.map( qt => qt.qtKey, []);
     const subtasks = qtasks.map( qs => qs.subTasks, []).flat();
-  
+    subsSet(subtasks);
+    
     const trackops = app.trackOption.filter( t => t.branchKey === brData.brKey);
     const tsteps = [...new Set(trackops.map( to => to.step, []))];
+    stepsSet(tsteps);
     
-    console.log({qkeys, subtasks, tsteps});
+    console.log({qkeys});
     
     if(month) {
       Meteor.call('getBrItemsSpan', branch, month, qkeys, subtasks, tsteps, 
@@ -60,7 +63,7 @@ const BranchSlide = ({
         }
       </div>
       
-      <div className='rowWrap'>
+      <div className='rowWrap vmarginquarter'>
         {equipData.map( (e, i)=> (
           <span key={i} className={`mockTag gapR cap ${!e.online ? "darkgray" : "midnightblue"}`}>
             {e.alias}
@@ -68,130 +71,77 @@ const BranchSlide = ({
         ))}
       </div>
       
-      <MonthSelect
-        setDate={monthSet}
-      />
+      <div className='rowWrap vmarginquarter'>
+        {subs.map( (e, i)=> (
+          <span key={i} className="mockTag gapR cap">{e}</span>
+        ))}
+      </div>
+      
+      <div className='rowWrap vmarginquarter'>
+        {steps.map( (e, i)=> (
+          <span key={i} className="mockTag gapR cap blue">{e}</span>
+        ))}
+      </div>
+      
+      <div className='vmargin'>
+        <label>Get Report</label>
+        <MonthSelect
+          setDate={monthSet}
+        />
+      </div>
               
       
       {!spanData ? null :
-        <div>
-          <div>
-            <h3>Batch Data</h3>
-            {spanData.batch.map( (dt, ix)=> {
-              return(
-                <ul key={ix}>
-                  {dt.map( (b,bx)=> {
-                    return(
-                      <li key={bx}>{b[0]}: {b[1]}</li>
-                  )})}
-                </ul>
-              );
-            })}
-          </div>
+        <div className='vmargin'>
+          
+          <NumStatBox
+            number={spanData.series.length}
+            name="Live Work Orders"
+            borderColour="var(--neptuneColor)"
+          />
           
           <SmpleDataSet 
             title='Work Orders'
+            exlink='batch'
             array={spanData.series} 
             line={0}
           />
           
-          <div className='autoFlex'>
-            <TotalWrapper 
-              name="Total serials quantity"
-              array={spanData.series} 
-              line={1}
-              color="var(--neptuneColor)"
-            />
-            <TotalWrapper 
-              name="total serials scrapped"
-              array={spanData.series} 
-              line={2}
-              color="var(--pomegranate)"
-            />
-            <TotalWrapper 
-              name="total serials with noncons"
-              array={spanData.series} 
-              line={3}
-            />
-            <AvgWrapper 
-              name="average of serials with noncons"
-              append="%"
-              array={spanData.series} 
-              line={4}
-            />
-          </div>
+          <SrsSet 
+            dataset={spanData.series} 
+            filter={1} 
+            lines={[1, 2, 3, 4]} 
+            append='total' 
+          />
           
-          <div className='rowWrap'>
-            <SmpleDataSet 
-              title='Total serials quantity'
-              array={spanData.series} 
-              line={1}
-            />
-            <SmpleDataSet 
-              title='total serials scrapped'
-              array={spanData.series} 
-              line={2}
-            />
-            <SmpleDataSet 
-              title='total serials with noncons'
-              array={spanData.series} 
-              line={3}
-            />
-            <SmpleDataSet 
-              title='percent of serials with noncons'
-              array={spanData.series} 
-              line={4}
-            />
-          </div>
+          <SrsSet 
+            dataset={spanData.series} 
+            filter={5} 
+            lines={[5, 6, 7, 8]} 
+            append='processed' 
+          />
           
-          <div className='autoFlex'>
-            <TotalWrapper 
-              name="processed serials quantity"
-              array={spanData.series} 
-              line={5}
-              color="var(--neptuneColor)"
-            />
-            <TotalWrapper 
-              name="processed serials scrapped"
-              array={spanData.series} 
-              line={6}
-              color="var(--pomegranate)"
-            />
-            <TotalWrapper 
-              name="processed serials with noncons"
-              array={spanData.series} 
-              line={7}
-            />
-            <AvgWrapper 
-              name="average of processed serials with noncons"
-              append="%"
-              array={spanData.series} 
-              line={8}
-            />
-          </div>
-          
-          <div className='rowWrap'>
-            <SmpleDataSet 
-              title='processed serials quantity'
-              array={spanData.series} 
-              line={5}
-            />
-            <SmpleDataSet 
-              title='processed serials scrapped'
-              array={spanData.series} 
-              line={6}
-            />
-            <SmpleDataSet 
-              title='processed serials with noncons'
-              array={spanData.series} 
-              line={7}
-            />
-            <SmpleDataSet 
-              title='percent of processed serials with noncons'
-              array={spanData.series} 
-              line={8}
-            />
-          </div>
+          <details>
+            <summary>Raw batch data</summary>
+            <div>
+              <SmpleDataSet 
+                title='Widget IDs'
+                array={spanData.batch} 
+                line={1}
+              />
+              <h3>Batch Data</h3>
+              {spanData.batch.map( (dt, ix)=> {
+                return(
+                  <ul key={ix}>
+                    {dt.map( (b,bx)=> {
+                      return(
+                        <li key={bx}>{b[0]}: {Array.isArray(b[1]) ? <span>{b[1][0]}:: {b[1][1]}</span> : b[1]}</li>
+                    )})}
+                  </ul>
+                );
+              })}
+            </div>
+          </details>
           
         </div>}
     </div>
@@ -200,16 +150,88 @@ const BranchSlide = ({
 
 export default BranchSlide;
 
-const SmpleDataSet = ({ title, array, line })=> (
-  <dl className='maxWide popSm spacehalf noindent'>
-    <dt className='bottomLine bold'>{title}</dt>
-    {array.map( (dt, index)=> {
-      return(
-        <dd key={index}>{dt[line][1]}</dd>
-      );
-    })}
-  </dl>
-);
+const SrsSet = ({ dataset, filter, lines, append })=> {
+  
+  const isProc = dataset.filter( d => d[filter][1] > 0 );
+  
+  return(
+    <div className='vmargin'>
+      <h3 className='cap'>{append}</h3>
+      <div className='autoFlex'>
+        <TotalWrapper 
+          name={append + " serials quantity"}
+          array={isProc} 
+          line={lines[0]}
+          color="var(--neptuneColor)"
+        />
+        <TotalWrapper 
+          name={append + " serials scrapped"}
+          array={isProc} 
+          line={lines[1]}
+          color="var(--pomegranate)"
+        />
+        <TotalWrapper 
+          name={append + " serials with noncons"}
+          array={isProc} 
+          line={lines[2]}
+        />
+        <AvgWrapper 
+          name={`average of ${append} serials with noncons`}
+          append="%"
+          array={isProc} 
+          line={lines[3]}
+        />
+      </div>
+      <details>
+        <summary>test/proof</summary>
+        <div className='autoFlex'>
+          <SmpleDataSet 
+            title={append + ' serials quantity'}
+            array={isProc} 
+            line={lines[0]}
+          />
+          <SmpleDataSet 
+            title={append + ' serials scrapped'}
+            array={isProc} 
+            line={lines[1]}
+          />
+          <SmpleDataSet 
+            title={append + ' serials with noncons'}
+            array={isProc} 
+            line={lines[2]}
+          />
+          <SmpleDataSet 
+            title={`percent of ${append} serials with noncons`}
+            array={isProc} 
+            line={lines[3]}
+          />
+        </div>
+      </details>
+    </div>
+  );
+};
+
+const SmpleDataSet = ({ title, array, line, exlink })=> {
+  
+  const unqline = [...new Set(array.map( a => a[line][1] ))];
+  
+  return(
+    <dl className='maxWide popSm spacehalf noindent'>
+      <dt className='bottomLine bold'>{title}</dt>
+      {unqline.map( (dt, index)=> {
+        return(
+          <dd key={index}>
+            {exlink ?
+              <ExploreLinkBlock type={exlink} keyword={dt} />
+              :
+              dt
+            }
+          </dd>
+        );
+      })}
+    </dl>
+  );
+};
 
 const TotalWrapper = ({ name, title, array, line, color })=> {
   
@@ -228,11 +250,12 @@ const TotalWrapper = ({ name, title, array, line, color })=> {
 const AvgWrapper = ({ name, append, title, array, line, color })=> {
   
   const add = array.reduce( (x,y)=> x + Number(y[line][1]), 0);
-  const avg = ( add / array.length );
+  const avg = !add ? 0 : ( add / array.length );
+  const prcnt = avg < 1 ? avg.toFixed(2) : avg.toFixed(1);
   
   return(
     <NumStatBox
-      number={avg + append || ""}
+      number={prcnt + append || ""}
       name={name}
       title={title || ""}
       borderColour={color || "var(--alizarin)"}

@@ -304,12 +304,12 @@ pre {
   white-space: pre-wrap;
 }
 details {
-  line-height: 1;
+  line-height: 1.2;
   font-size: 1rem;
 	border: 0;
   margin: 0;
   padding: 0;
-  text-transform: capitalize;
+  /*text-transform: capitalize;*/
   box-shadow: none;
   overflow-x: clip;
   cursor: default;

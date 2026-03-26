@@ -171,6 +171,7 @@ n-timeline-item:last-child n-timeline-marker:after {
 
 .dashNumBox {
   min-width: 8vmin;
+  max-width: 250px;
   min-height: 8vmin;
   font-size: 4vmin;
   border: none;

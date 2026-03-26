@@ -53,7 +53,7 @@ export const MonthSelect = ({ setDate })=> {
   }
   
   return(
-    <span className='centreRow rowWrap gapL'>
+    <span className='centreRow rowWrap'>
       <Flatpickr
         id='startRange'
         title='From'
@@ -64,6 +64,7 @@ export const MonthSelect = ({ setDate })=> {
           dateFormat: "Y-m-d",
           altInput: true,
           altFormat: "F J Y",
+          maxDate: new Date(),
           plugins: [
             new monthSelectPlugin({})
           ]
@@ -80,7 +81,7 @@ export const WeekSelect = ({ setDate })=> {
   }
   
   return(
-    <span className='centreRow rowWrap gapL'>
+    <span className='centreRow rowWrap'>
       <Flatpickr
         id='startRange'
         title='From'
@@ -92,6 +93,7 @@ export const WeekSelect = ({ setDate })=> {
           altInput: true,
           altFormat: "F Y \\Week W",
           weekNumbers: true,
+          maxDate: new Date(),
           plugins: [
             new weekSelectPlugin({})
           ]

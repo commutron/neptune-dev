@@ -375,6 +375,7 @@ Meteor.methods({
       ]
     },{fields:{
       'batch': 1,
+      'widgetId': 1,
       'quoteTimeCycles': 1,
       'serialize': 1,
       'tide': 1
@@ -394,6 +395,7 @@ Meteor.methods({
       
       return [
         ['batch', b.batch],
+        ['widget id', b.widgetId],
         ['tides in span by qtkey', qttide.length],
         ['tides in span by subtask', subtide.length],
         ['quoted qtasks', quoteTimes],
