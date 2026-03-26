@@ -94,31 +94,20 @@ const BranchSlide = ({
       {!spanData ? null :
         <div className='vmargin'>
           
-          <NumStatBox
-            number={spanData.series.length}
-            name="Live Work Orders"
-            borderColour="var(--neptuneColor)"
-          />
-          
-          <SmpleDataSet 
-            title='Work Orders'
-            exlink='batch'
-            array={spanData.series} 
-            line={0}
+          <SrsSet 
+            dataset={spanData.series} 
+            filter={5} 
+            lines={[5, 6, 7, 8]} 
+            title='Items processed durring month' 
+            short='processed'
           />
           
           <SrsSet 
             dataset={spanData.series} 
             filter={1} 
             lines={[1, 2, 3, 4]} 
-            append='total' 
-          />
-          
-          <SrsSet 
-            dataset={spanData.series} 
-            filter={5} 
-            lines={[5, 6, 7, 8]} 
-            append='processed' 
+            title='All items from live work orders' 
+            short='live'
           />
           
           <details>
@@ -128,6 +117,7 @@ const BranchSlide = ({
                 title='Widget IDs'
                 array={spanData.batch} 
                 line={1}
+                unq={true}
               />
               <h3>Batch Data</h3>
               {spanData.batch.map( (dt, ix)=> {
@@ -135,7 +125,7 @@ const BranchSlide = ({
                   <ul key={ix}>
                     {dt.map( (b,bx)=> {
                       return(
-                        <li key={bx}>{b[0]}: {Array.isArray(b[1]) ? <span>{b[1][0]}:: {b[1][1]}</span> : b[1]}</li>
+                        <li key={bx}>{b[0]}: {Array.isArray(b[1]) ? b[1].join("-") : b[1]}</li>
                     )})}
                   </ul>
                 );
@@ -150,33 +140,47 @@ const BranchSlide = ({
 
 export default BranchSlide;
 
-const SrsSet = ({ dataset, filter, lines, append })=> {
+const SrsSet = ({ dataset, filter, lines, title, short })=> {
   
   const isProc = dataset.filter( d => d[filter][1] > 0 );
   
   return(
     <div className='vmargin'>
-      <h3 className='cap'>{append}</h3>
+      <h2 className='cap'>{title}</h2>
+      
+      <NumStatBox
+        number={isProc.length}
+        name={`${short} Work Orders`}
+        borderColour="var(--neptuneColor)"
+      />
+          
+      <SmpleDataSet 
+        title='Work Orders'
+        exlink='batch'
+        array={isProc} 
+        line={0}
+      />
+          
       <div className='autoFlex'>
         <TotalWrapper 
-          name={append + " serials quantity"}
+          name="serials quantity"
           array={isProc} 
           line={lines[0]}
           color="var(--neptuneColor)"
         />
         <TotalWrapper 
-          name={append + " serials scrapped"}
+          name="serials scrapped"
           array={isProc} 
           line={lines[1]}
           color="var(--pomegranate)"
         />
         <TotalWrapper 
-          name={append + " serials with noncons"}
+          name="serials with noncons"
           array={isProc} 
           line={lines[2]}
         />
         <AvgWrapper 
-          name={`average of ${append} serials with noncons`}
+          name={`average of work order's percent of serials with noncons`}
           append="%"
           array={isProc} 
           line={lines[3]}
@@ -186,24 +190,25 @@ const SrsSet = ({ dataset, filter, lines, append })=> {
         <summary>test/proof</summary>
         <div className='autoFlex'>
           <SmpleDataSet 
-            title={append + ' serials quantity'}
+            title='serials quantity'
             array={isProc} 
             line={lines[0]}
           />
           <SmpleDataSet 
-            title={append + ' serials scrapped'}
+            title='serials scrapped'
             array={isProc} 
             line={lines[1]}
           />
           <SmpleDataSet 
-            title={append + ' serials with noncons'}
+            title='serials with noncons'
             array={isProc} 
             line={lines[2]}
           />
           <SmpleDataSet 
-            title={`percent of ${append} serials with noncons`}
+            title="work order's percent of serials with noncons"
             array={isProc} 
             line={lines[3]}
+            sufix="%"
           />
         </div>
       </details>
@@ -211,20 +216,20 @@ const SrsSet = ({ dataset, filter, lines, append })=> {
   );
 };
 
-const SmpleDataSet = ({ title, array, line, exlink })=> {
+const SmpleDataSet = ({ title, array, line, exlink, unq, sufix })=> {
   
-  const unqline = [...new Set(array.map( a => a[line][1] ))];
+  const data = !unq ? array.map( a => a[line][1] ) : [...new Set(array.map( a => a[line][1] ))];
   
   return(
     <dl className='maxWide popSm spacehalf noindent'>
       <dt className='bottomLine bold'>{title}</dt>
-      {unqline.map( (dt, index)=> {
+      {data.map( (dt, index)=> {
         return(
           <dd key={index}>
             {exlink ?
               <ExploreLinkBlock type={exlink} keyword={dt} />
               :
-              dt
+              dt + (sufix || '')
             }
           </dd>
         );

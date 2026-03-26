@@ -10,6 +10,8 @@ import {
   appValue
 } from '/server/utility.js';
 
+import { batchTideTime } from '/server/tideGlobalMethods';
+
 function findRelevantSeries(from, to) {
   return new Promise(resolve => {
     const accessKey = Meteor.user().orgKey;
@@ -386,6 +388,7 @@ Meteor.methods({
       }
       
       const spantide = (b.tide || []).filter( x => chkT(x.startTime) );
+      const minutesTotal = batchTideTime(spantide);
       
       const qttide = spantide.filter( x => qkeys.includes(x.qtKey) );
       
@@ -399,6 +402,7 @@ Meteor.methods({
         ['tides in span by qtkey', qttide.length],
         ['tides in span by subtask', subtide.length],
         ['quoted qtasks', quoteTimes],
+        ['total logged minutes', minutesTotal]
       ];
     },[]);
       
