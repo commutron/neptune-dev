@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import ModelMedium from '/client/layouts/Models/ModelMedium';
 import { min2hr, toCap } from '/client/utility/Convert';
 
-const QuoteTimeBudget = ({ bID, bQuantity, qtBudget, qtCycles, lockOut, app })=> {
+const QuoteTimeBudget = ({ bID, bQuantity, iQuantity, qtBudget, qtCycles, lockOut, app })=> {
   
   const access = Roles.userIsInRole(Meteor.userId(), ['sales', 'edit']);
   

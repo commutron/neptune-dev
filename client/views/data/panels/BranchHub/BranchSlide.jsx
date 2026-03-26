@@ -96,18 +96,18 @@ const BranchSlide = ({
           
           <SrsSet 
             dataset={spanData.series} 
-            filter={5} 
-            lines={[5, 6, 7, 8]} 
-            title='Items processed durring month' 
-            short='processed'
+            filter={1} 
+            lines={[1, 2, 3, 4]} 
+            title='All items from live work orders (Entire Building)' 
+            short='live'
           />
           
           <SrsSet 
             dataset={spanData.series} 
-            filter={1} 
-            lines={[1, 2, 3, 4]} 
-            title='All items from live work orders' 
-            short='live'
+            filter={5} 
+            lines={[5, 6, 7, 8]} 
+            title='Items (serails) processed durring month' 
+            short='processed'
           />
           
           <details>
@@ -175,12 +175,12 @@ const SrsSet = ({ dataset, filter, lines, title, short })=> {
           color="var(--pomegranate)"
         />
         <TotalWrapper 
-          name="serials with noncons"
+          name="serials with noncons (in department)"
           array={isProc} 
           line={lines[2]}
         />
         <AvgWrapper 
-          name={`average of work order's percent of serials with noncons`}
+          name={`average of work order's percent of serials with noncons (in department)`}
           append="%"
           array={isProc} 
           line={lines[3]}
@@ -200,12 +200,12 @@ const SrsSet = ({ dataset, filter, lines, title, short })=> {
             line={lines[1]}
           />
           <SmpleDataSet 
-            title='serials with noncons'
+            title='serials with noncons (in department)'
             array={isProc} 
             line={lines[2]}
           />
           <SmpleDataSet 
-            title="work order's percent of serials with noncons"
+            title="work order's percent of serials with noncons (in department)"
             array={isProc} 
             line={lines[3]}
             sufix="%"

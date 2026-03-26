@@ -8,7 +8,9 @@ const BigTideTask = ({
   
   const [ br, brSet ] = useState(false);
   
-  const qttasks = taskState && app.qtTasks.filter( q => q.brKey === br ) || [];
+  const qttasks = taskState && app.qtTasks.filter( q => q.brKey === br )
+                                .sort( (q1, q2)=> q1.position < q2.position ? 1 : 
+                                                  q1.position > q2.position ? -1 : 0 ) || [];
   let subop = [];
   for(let qs of qttasks) {
     for(let st of qs.subTasks) {
