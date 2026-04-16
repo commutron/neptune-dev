@@ -23,18 +23,21 @@ const BranchSlide = ({
   useEffect( ()=> {
     const branch = brData.branch;
     
-    console.log({brData, month});
+    // console.log({brData, month});
     
-    const qtasks = app.qtTasks.filter( q => q.brKey === brData.brKey);
+    const qtasks = app.qtTasks.filter( q => q.brKey === brData.brKey)
+                    .sort( (q1, q2)=> q1.position < q2.position ? 1 : 
+                                      q1.position > q2.position ? -1 : 0 );
     const qkeys = qtasks.map( qt => qt.qtKey, []);
     const subtasks = qtasks.map( qs => qs.subTasks, []).flat();
     subsSet(subtasks);
     
     const trackops = app.trackOption.filter( t => t.branchKey === brData.brKey);
-    const tsteps = [...new Set(trackops.map( to => to.step, []))];
+    const tsteps = [...new Set(trackops.map( to => to.step, []))]
+                    .sort( (t1, t2)=> t1 < t2 ? 1 : t1 > t2 ? -1 : 0 );
     stepsSet(tsteps);
     
-    console.log({qkeys});
+    // console.log({qkeys});
     
     if(month) {
       Meteor.call('getBrItemsSpan', branch, month, qkeys, subtasks, tsteps, 
@@ -63,25 +66,26 @@ const BranchSlide = ({
         }
       </div>
       
-      <div className='rowWrap vmarginquarter'>
-        {equipData.map( (e, i)=> (
-          <span key={i} className={`mockTag gapR cap ${!e.online ? "darkgray" : "midnightblue"}`}>
-            {e.alias}
-          </span>
-        ))}
-      </div>
+      <Taglist 
+        title={Pref.equip}
+        list={equipData}
+        status='online'
+        name='alias'
+        oncolor="midnightblue"
+        offcolor="darkgray" 
+      />
       
-      <div className='rowWrap vmarginquarter'>
-        {subs.map( (e, i)=> (
-          <span key={i} className="mockTag gapR cap">{e}</span>
-        ))}
-      </div>
+      <Taglist 
+        title="Sub-Tasks"
+        list={subs}
+        oncolor=""
+      />
       
-      <div className='rowWrap vmarginquarter'>
-        {steps.map( (e, i)=> (
-          <span key={i} className="mockTag gapR cap blue">{e}</span>
-        ))}
-      </div>
+      <Taglist 
+        title={Pref.flow + ' steps'}
+        list={steps}
+        oncolor="blue"
+      />
       
       <div className='vmargin'>
         <label>Get Report</label>
@@ -267,3 +271,17 @@ const AvgWrapper = ({ name, append, title, array, line, color })=> {
     />
   );
 };
+
+
+const Taglist = ({ title, list, status, name, oncolor, offcolor })=> (
+  <div className='vmarginquarter'>
+    <p className='cap'>{title}</p>
+    <p className='rowWrap'>
+      {list.map( (e, i)=> (
+        <span key={i} className={`mockTag gapR cap ${status && !e[status] ? offcolor : oncolor}`}>
+          {name ? e[name] : e}
+        </span>
+      ))}
+    </p>
+  </div>
+);

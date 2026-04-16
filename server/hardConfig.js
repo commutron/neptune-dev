@@ -53,6 +53,8 @@ class Config {
     this.orgPhone = '306-854-2265';
     this.orgStreet = '302 Stanley Street, Elbow, Saskatchewan, S0H 1J0';
     
+    this.mfrAgr = 'https://commutron.ca/wp/wp-content/uploads/2026/04/MANUFACTURING-CONTRACT-AGREEMENT-Rev-2-March-23-2022.pdf';
+    
   }
 }
 

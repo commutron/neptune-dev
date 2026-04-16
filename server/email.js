@@ -41,10 +41,10 @@ function sendInternalEmail(to, subject, date, title, body, asid, foot, link, fin
 
 }
 
-function sendExternalEmail(to, cc, subject, date, body, foot, flvr, fine, plainbody) {
+function sendExternalEmail(to, cc, subject, date, body, product, sales, foot, flvr, fine, plainbody) {
   const from = '"' + Config.orgName  + '" ' + Config.sendEmail;
   const replyTo = Config.replyEmail;
-  
+
   const html = `
     <table style="min-width:140px;max-width:600px;width:80%;margin:0 auto;font-family:Verdana, sans-serif;line-height:1;table-layout:auto;border-collapse:separate;background-color:white">
       <tbody>
@@ -61,10 +61,12 @@ function sendExternalEmail(to, cc, subject, date, body, foot, flvr, fine, plainb
         <tr>
           <td colspan='2' style="padding:20px 10%;text-align:center;line-height: 1.5">
             <p style="color:black;margin:1rem 0">${date}</p>
-            <p style="color:black;margin:1rem 0">${body}</p>
+            <p style="color:black;margin:1rem 0;font-size:larger">${body}</p>
+            <p style="color:black;margin:1rem 0;font-size:larger"><strong>${product}</strong></p>
+            <p style="color:black;margin:1rem 0">Sales Order: <em>${sales}</em></p>
             <p style="color:black;margin:1rem 0">${foot}</p>
             <p style="color:black;margin:1rem 0">${flvr}</p>
-            <p style="color:black;margin:1rem 0"><small>${fine}</small></p>
+            <p style="color:black;margin:1rem 0;font-size:smaller">${fine}</p>
           </td>
         </tr>
         <tr>
@@ -78,7 +80,7 @@ function sendExternalEmail(to, cc, subject, date, body, foot, flvr, fine, plainb
       </tbody>
     </table>`;
     
-  const text = `COMMUTRON Industries Ltd.\n\nAutomated message\n\n${date}(CST)\n\n${plainbody}\n\n\nCustomer Service: ${Config.replyEmail}\n${Config.orgPhone}\n${Config.orgStreet}`;
+  const text = `COMMUTRON Industries Ltd.\n\nAutomated message\n\n${date}\n\n${plainbody}\n\n\nCustomer Service: ${Config.replyEmail}\n${Config.orgPhone}\n${Config.orgStreet}`;
   
   Email.send({ to, cc, from, replyTo, subject, html, text });
 }
@@ -153,6 +155,8 @@ Meteor.methods({
       const date = moment().tz(Config.clientTZ).format('h:mm:ss a, dddd, MMM Do YYYY');
       const title = "Email Test.";
       const body = `Sent by ${name}.`;
+      const product = 'Product Name';
+      const sales = '001';
       const asid = '';
       const foot = "no action required.";
       const flvr = '';
@@ -163,7 +167,7 @@ Meteor.methods({
       
       sendInternalEmail(to, subject, date, title, body, asid, foot, link, fine);
       
-      sendExternalEmail( to, cc, subject, date, body, foot, flvr, fine, plainbody );
+      sendExternalEmail( to, cc, subject, date, body, product, sales, foot, flvr, fine, plainbody );
     }
   },
   
@@ -299,18 +303,20 @@ Meteor.methods({
       
       const subject = `Production Notice — ${salesOrder}`;
       
-      const date = moment().tz(Config.clientTZ).format('h:mm a(CST), dddd, MMM Do YYYY');
+      const date = moment().tz(Config.clientTZ).format('dddd, MMM Do YYYY, h:mm a(CST)');
       const dueDate = moment(salesEnd).tz(Config.clientTZ).format('dddd, MMMM Do YYYY');
       
-      const body = `A Work Order has been issued for your sales order ${'<b>'}${salesOrder}${'</b>'}<br />of ${'<b>'}${toCap(isW, true)}${'</b>'}.`;
-      const foot = `Order due date is set for ${'<b>'}${dueDate}${'</b>'}.`;
-      const flvr = '';
+      const body = `A Work Order Has Been Issued`;
+      const product = toCap(isW, true);
+      const foot = `Due date is set for ${'<b>'}${dueDate}${'</b>'}.`;
+      const flvr = `Thank you for your order with Commutron Industries Ltd. It has now been entered into our scheduling for assembly. Please be aware that all orders submitted to Commutron are subject to the terms in the ${"<a href='"}${Config.mfrAgr}${"' target='_blank>"}Commutron Mfr Agreement${"</a>"}. If you are unable to access the document via the provided link, please contact us to request a copy.`;
+
       
       const fine = 'A notice will be sent when this work order enters production.';
       
-      const plainbody = `Work Order has been issued for your order — ${salesOrder} — of — ${toCap(isW, true)}.`;
+      const plainbody = `Work Order has been issued for your order — ${salesOrder} — of — ${product}.`;
       
-      sendExternalEmail( to, cc, subject, date, body, foot, flvr, fine, plainbody );
+      sendExternalEmail( to, cc, subject, date, body, product, salesOrder, foot, flvr, fine, plainbody );
       
       EmailDB.insert({
         sentTime: new Date(),
@@ -338,18 +344,19 @@ Meteor.methods({
       
       const subject = `Production Notice — ${salesOrder}`;
       
-      const date = moment().tz(Config.clientTZ).format('h:mm a(CST), dddd, MMM Do YYYY');
+      const date = moment().tz(Config.clientTZ).format('dddd, MMM Do YYYY, h:mm a(CST)');
       const dueDate = moment(salesEnd).tz(Config.clientTZ).format('dddd, MMMM Do YYYY');
       
-      const body = `New ship due date for your sales order ${'<b>'}${salesOrder}${'</b>'} of ${'<b>'}${toCap(isW, true)}${'</b>'}.`;
+      const body = `New Ship Due Date`;
+      const product = toCap(isW, true);
       const foot = `Order due date is set for ${'<b>'}${dueDate}${'</b>'}.`;
       const flvr = '';
       
       const fine = 'Once your order is completed, a packing slip will be provided.';
       
-      const plainbody = `Ship Due Date has been changed for your order — ${salesOrder} — of — ${toCap(isW, true)}.`;
+      const plainbody = `Ship Due Date has been changed for your order — ${salesOrder} — of — ${product}.`;
       
-      sendExternalEmail( to, cc, subject, date, body, foot, flvr, fine, plainbody );
+      sendExternalEmail( to, cc, subject, date, body, product, salesOrder, foot, flvr, fine, plainbody );
       
       EmailDB.insert({
         sentTime: new Date(),
@@ -377,18 +384,19 @@ Meteor.methods({
       
       const subject = `Production Notice — ${salesOrder}`;
       
-      const date = moment().tz(Config.clientTZ).format('h:mm a(CST), dddd, MMM Do YYYY');
+      const date = moment().tz(Config.clientTZ).format('dddd, MMM Do YYYY, h:mm a(CST)');
       const dueDate = moment(salesEnd).tz(Config.clientTZ).format('dddd, MMMM Do YYYY');
       
-      const body = `Your order ${'<b>'}${salesOrder}${'</b>'} of ${'<b>'}${toCap(isW, true)}${'</b>'} has ${'<b>'}Entered Production${'</b>'},`;
-      const foot = `Order due date is set for ${'<b>'}${dueDate}${'</b>'}.`;
+      const body = `Your Order Has Entered Production`;
+      const product = toCap(isW, true);
+      const foot = `Due date is set for ${'<b>'}${dueDate}${'</b>'}.`;
       const flvr = caution ? '** This order is begining with an expected part shortage. Contact customer service for details. **' : '';
       
       const fine = 'Once your order is completed, a packing slip will be provided.';
       
-      const plainbody = `Your order — ${salesOrder} — of — ${toCap(isW, true)} — has Entered Production.`;
+      const plainbody = `Your order — ${salesOrder} — of — ${product} — has Entered Production.`;
       
-      sendExternalEmail( to, cc, subject, date, body, foot, flvr, fine, plainbody );
+      sendExternalEmail( to, cc, subject, date, body, product, salesOrder, foot, flvr, fine, plainbody );
       
       EmailDB.insert({
         sentTime: new Date(),

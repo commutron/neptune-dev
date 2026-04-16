@@ -364,8 +364,9 @@ Meteor.methods({
    // Shortfall Items
   ///////////////////////////////////////////////////////////////////////////
   fetchShortfallParts() {
-    // Faster if split
-    let sMatch = [];
+
+    let batchNums = [];
+    let batchObjs = [];
     
     XBatchDB.find({
       orgKey: Meteor.user().orgKey,
@@ -373,31 +374,46 @@ Meteor.methods({
     },{fields:
       {'batch':1,'groupId':1,'widgetId':1,'versionKey':1,'salesOrder':1}
     }).forEach( bx => {
-      const srs = XSeriesDB.findOne({batch: bx.batch},{fields:{'shortfall':1}});
-      if(srs) {
-        const mShort = srs.shortfall.filter( s => !(s.inEffect || s.reSolve) );
+      batchNums.push(bx.batch);
+      
+      const whatIs = whatIsBatchRest(bx);
+      const describe = whatIs[0].join(' ');
+      batchObjs.push({
+        batch: bx.batch,
+        rad: whatIs[2],
+        so: bx.salesOrder, 
+        desc: describe
+      });
+    });
+      
+    let sMatch = [];
+    
+    XSeriesDB.find({
+      batch: { $in: batchNums }
+      },{fields:{'batch':1,'shortfall':1}})
+    .forEach( (srs)=> {
+      
+      const mShort = srs.shortfall.filter( s => !(s.inEffect || s.reSolve) );
           
-        if(mShort.length > 0) {
-          const whatIs = whatIsBatchRest(bx.batch);
-          const describe = whatIs[0].join(' ');
-          
-          const unqShort = _.uniq(mShort, false, n=> n.partNum );
-  
-          let bsMatch = [];
-          for(let mS of unqShort) {
-            bsMatch.push([
-              [ bx.batch, whatIs[2] ], bx.salesOrder, describe, mS.partNum,
-            ]);
-          }
-    	    bsMatch.map((ent, ix)=>{
-    	      const same = srs.shortfall.filter( s => s.partNum === ent[3] );
-    	      const locations = [].concat(...Array.from(same, sm => sm.refs));
-    	      const total = same.reduce((x,y)=> ( x + (Number(y.multi) || 1) * y.refs.length ), 0);
-    	      ent.push(_.uniq(locations).join(", "), total);
-    	      
-    	      sMatch.push(ent);
-    	    });
+      if(mShort.length > 0) {
+        const detail = batchObjs.find( d => d.batch === srs.batch );
+        
+        const unqShort = _.uniq(mShort, false, n=> n.partNum );
+
+        let bsMatch = [];
+        for(let mS of unqShort) {
+          bsMatch.push([
+            [ srs.batch, detail.rad ], detail.so, detail.desc, mS.partNum
+          ]);
         }
+  	    bsMatch.map((ent, ix)=>{
+  	      const same = srs.shortfall.filter( s => s.partNum === ent[3] );
+  	      const locations = [].concat(...Array.from(same, sm => sm.refs));
+  	      const total = same.reduce((x,y)=> ( x + (Number(y.multi) || 1) * y.refs.length ), 0);
+  	      ent.push(_.uniq(locations).join(", "), total);
+  	      
+  	      sMatch.push(ent);
+  	    });
       }
     });
     return sMatch;
@@ -470,7 +486,8 @@ Meteor.methods({
     XSeriesDB.find({
       orgKey: Meteor.user().orgKey,
       'items.scrapped': true
-    }).forEach( srs => {
+    },{fields:{'batch':1,'widgetId':1,'groupId':1,'items':1}})
+    .forEach( srs => {
       const w = WidgetDB.findOne({_id: srs.widgetId},{fields:{'widget':1}});
       const g = GroupDB.findOne({_id: srs.groupId},{fields:{'alias':1}});
       const items = srs.items.filter( x => x.scrapped === true );
@@ -500,7 +517,8 @@ Meteor.methods({
       orgKey: Meteor.user().orgKey,
       'items.history.type': 'test',
       'items.history.good': false
-    }).forEach( srs => {
+    },{fields:{'batch':1,'widgetId':1,'groupId':1,'items':1}})
+    .forEach( srs => {
       const w = WidgetDB.findOne({_id: srs.widgetId},{fields:{'widget':1}});
       const g = GroupDB.findOne({_id: srs.groupId},{fields:{'alias':1}});
       

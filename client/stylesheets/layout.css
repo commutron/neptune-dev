@@ -565,15 +565,15 @@ main {
   /*white-space: nowrap;*/
 }
 .slideMenuButton, .slideNestedMenuButton, .slideNestedLand {
-  min-height: 6vmin;
   min-height: clamp(45px, 6vmin, 65px);
-  font-size: 1.75vmin;
   font-size: clamp(13px, 1.75vmin, 16px);
   background-color: transparent;
   border-bottom: 1px solid black;
 }
 .slideMenuButton > .small, .slideNestedMenuButton  > .small {
   font-size: 1.25vmin;
+  font-size: clamp(10px, 1.25vmin, 12px);
+  text-transform: capitalize;
 }
 .slideMenuButton {
   color: var(--silver);
