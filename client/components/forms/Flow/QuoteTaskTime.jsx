@@ -132,12 +132,13 @@ const QuoteTaskTime = ({
                 >{moment.duration(subsumState || 0, 'minutes').asHours().toFixed(2,10)}</i>
               </label> : null}
               <label className='gapL min8'>
-                <i className={`numberSet liteToolOff beside rightJust`}
-                >{subsumState.toFixed(1,10)}</i>
+                <i className='numberSet liteToolOff beside rightJust'
+                >{subsumState.toFixed(1,10)}</i><br /><small>Minutes</small>
               </label>
               <label className='gapL min8'>
-                <i className={`numberSet liteToolOff beside rightJust`}
+                <i className='numberSet liteToolOff beside rightJust'
                 >{moment.duration(subsumState || 0, 'minutes').asSeconds().toFixed(0,10)}</i>
+                <br /><small>Seconds</small>
               </label>
             </span>
           </div>
@@ -161,7 +162,7 @@ const QuoteTaskTime = ({
               <span className='beside'>
                 {isDebug ? <label className='gapR min8'>
                   <i className='numberSet liteToolOff beside rightJust'
-                  >{moment.duration(qtArrState[op[0]] || 0, 'minutes').asHours().toFixed(2,10)}</i>
+                  >{moment.duration(qtArrState[op[0]][0] || 0, 'minutes').asHours().toFixed(2,10)}</i>
                 </label> : null}
                 <label className='gapL'>
                   <input
@@ -183,7 +184,7 @@ const QuoteTaskTime = ({
                 </label>
                 <label className='gapL min8'>
                   <i className='numberSet liteToolOff beside rightJust'
-                  >{moment.duration(qtArrState[op[0]] || 0, 'minutes').asSeconds().toFixed(0,10)}</i>
+                  >{moment.duration(qtArrState[op[0]][0] || 0, 'minutes').asSeconds().toFixed(0,10)}</i>
                 </label>
                 <label className='gapL min8 centre'>
                   <input

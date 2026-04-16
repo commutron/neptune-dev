@@ -309,9 +309,11 @@ Meteor.methods({
       const body = `A Work Order Has Been Issued`;
       const product = toCap(isW, true);
       const foot = `Due date is set for ${'<b>'}${dueDate}${'</b>'}.`;
-      const flvr = `Thank you for your order with Commutron Industries Ltd. It has now been entered into our scheduling for assembly. Please be aware that all orders submitted to Commutron are subject to the terms in the ${"<a href='"}${Config.mfrAgr}${"' target='_blank>"}Commutron Mfr Agreement${"</a>"}. If you are unable to access the document via the provided link, please contact us to request a copy.`;
+      /*
+      const flvr = `Thank you for your order with Commutron Industries Ltd. It has now been entered into our scheduling for assembly. Please be aware that all orders submitted to Commutron are subject to the terms in the <a href='${Config.mfrAgr}' target='_blank'>Commutron Mfr Agreement</a>. If you are unable to access the document via the provided link, please contact us to request a copy.`;
+      */
+      const flvr = `Thank you for your order with Commutron Industries Ltd. It has now been entered into our scheduling for assembly. Please be aware that all orders submitted to Commutron are subject to the terms in the agreement located <a href="${Config.mfrAgr}" target="_blank">here</a>. If you are unable to access the document via the provided link, please contact us to request a copy.`;
 
-      
       const fine = 'A notice will be sent when this work order enters production.';
       
       const plainbody = `Work Order has been issued for your order — ${salesOrder} — of — ${product}.`;

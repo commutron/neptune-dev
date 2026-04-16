@@ -717,7 +717,7 @@ Meteor.publish('skinnyData', function(){
           'widgetId': 1,
           'versionKey': 1,
           'variant': 1,
-          'createdAt': 1
+          // 'createdAt': 1
         }})
     ];
   }
@@ -768,6 +768,7 @@ Meteor.publish('hotDataEx', function(dataView, dataRequest, hotWidget){
         VariantDB.find({orgKey: orgKey}, {
           fields: {
             'createdAt': 1,
+            // 'live': 1
         }}),
         XBatchDB.find({orgKey: orgKey, completed: false }, {
           sort: {batch:-1},

@@ -28,6 +28,7 @@ const GroupSlide = ({
   canRun, canEdt, canCrt, canRmv 
 })=>{
   
+  const [ state, stateSet ] = useState(1);
   const [ filterString, filterStringSet ] = useState( '' );
   
   const g = groupData;
@@ -115,12 +116,17 @@ const GroupSlide = ({
         
         <span className='flexSpace' />
         
-        <div>
+        <div className='rowWrapR'>
+          <div className='margin5 balancer gapminC'>
+            <StateSelect label='All' id={0} func={stateSet} is={state} />
+            <StateSelect label='Active' id={1} func={stateSet} is={state} />
+            <StateSelect label='Inactive' id={2} func={stateSet} is={state} />
+          </div>
           <DumbFilter
             id='groupwidgettextfilter'
             inputClass='miniIn24 smTxt'
-            styleOv={{minHeight:'0',height:'calc(var(--sm9)* 1.75)'}}
-            onTxtChange={(e)=>filterStringSet(e)}
+            styleOv={{minHeight:'0',height:'calc(var(--sm9)* 1.75)',marginBlock:'5px'}}
+            onTxtChange={(e)=>{filterStringSet(e);stateSet(0)}}
           />
         </div>
       </div>
@@ -183,6 +189,7 @@ const GroupSlide = ({
         
       <WidgetsDepth
         filterString={filterString}
+        state={state}
         groupAlias={g.alias}
         widgetData={widgetsList}
         active={active} />
@@ -201,6 +208,18 @@ const GroupSlide = ({
 
 export default GroupSlide;
 
+const StateSelect = ({ label, id, func, is })=> (
+  <label className='beside textAction smTxt'>
+    <input 
+      id='wdgt_st_sltr'
+      name='widgets_state_selector' 
+      type='radio' 
+      className='minlineRadio'
+      checked={id === is}
+      onChange={()=>func(id)}
+  />{label}</label>
+);
+
 const Gbanner = ({ title, sub, icon, icon2, colour, bcolour })=> (
   <div className={'centreText comfort beside w100 vmargin cap ' + bcolour}>
     <i className={`fa-solid ${icon} fa-fw fa-2x gapL ${colour}`}></i>
@@ -211,3 +230,4 @@ const Gbanner = ({ title, sub, icon, icon2, colour, bcolour })=> (
     <i className={`fa-solid ${icon2 || icon} fa-fw fa-2x gapR ${colour}`}></i>
   </div>
 );
+

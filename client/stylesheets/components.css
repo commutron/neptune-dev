@@ -243,7 +243,7 @@ n-timeline-item:last-child n-timeline-marker:after {
 /*}*/
 
 .floattaskbar {
-  max-height: calc(var(--vert_adapt)*2);
+  /*max-height: calc(var(--vert_adapt)*2);*/
   margin: 1dvmin;
   padding: 0 1dvmin;
   border-radius: 2px;

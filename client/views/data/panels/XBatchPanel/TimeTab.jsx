@@ -12,7 +12,7 @@ import TimeMarksChunk from './time/TimeMarksChunk';
 import TimeCycleChunk from './time/TimeCycleChunk';
 
 const TimeTab = ({
-  batchData, seriesData, rapidsData, widgetData,
+  batchData, seriesData, rapidsData, widgetData, internal,
   floorRelease, done, allDone, riverFlow,
   user, isDebug, app, brancheS
 })=> {
@@ -29,6 +29,7 @@ const TimeTab = ({
       <TimeBudgetsChunk
         tideWall={app.tideWall}
         b={batchData}
+        internal={internal}
         addTime={addTime}
         iQuantity={seriesData ? seriesData.items.length : null}
         conversion={conversion}

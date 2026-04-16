@@ -367,6 +367,7 @@ const BatchPanelX = ({
           seriesData={seriesData}
           rapidsData={rapidsData}
           widgetData={widgetData}
+          internal={groupData.internal}
           user={user}
           isDebug={isDebug}
           totalUnits={b.quantity}

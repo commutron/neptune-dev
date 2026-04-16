@@ -399,7 +399,12 @@ Meteor.methods({
             
             for( let qsub of qt.subTasks ) {
               
-              const b_q_s_slim = slim.filter( t => Array.isArray(t.tasks) && t.tasks[2] === qt.qtKey && t.tasks[1] === qsub );
+              const b_q_s_slim = slim.filter( t => Array.isArray(t.tasks) && t.tasks[2] === qt.qtKey && t.tasks[1] === qsub);
+              
+              // duplicates unquoted
+              // const b_q_s_slim = slim.filter( t => Array.isArray(t.tasks) && 
+              //                                       ( t.tasks[2] === qt.qtKey && t.tasks[1] === qsub ) ||
+              //                                       ( !t.tasks[2] && t.tasks[0] === br.branch && t.tasks[1] === qsub ) );
           
               const b_q_s_sum = b_q_s_slim.reduce((x,y)=> x + y.dur, 0);
               const b_q_s_ml = b_q_s_slim.some( s => s.mlt );
@@ -472,6 +477,7 @@ Meteor.methods({
         
         slimTimes.push({
           // key: br.brKey,
+          pro: br.pro,
           branch: br.branch,
           brTotal: brDurr,
           brMulti: brMlti,

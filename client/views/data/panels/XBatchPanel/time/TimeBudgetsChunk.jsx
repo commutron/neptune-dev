@@ -14,7 +14,7 @@ import { splitTidebyPeople } from '/client/utility/WorkTimeCalc';
 import { min2hr, percentOf, percentOverUnder } from '/client/utility/Convert';
 
 const TimeBudgetsChunk = ({
-  tideWall, b, addTime, iQuantity,
+  tideWall, b, internal, addTime, iQuantity,
   conversion, conversionSet, plus, plusSet,
   isDebug, app
   // brancheS
@@ -49,8 +49,10 @@ const TimeBudgetsChunk = ({
   const tP = totalPeople.length;
   
   const oldTaskTimesArray = b.quoteTimeBreakdown ? b.quoteTimeBreakdown.timesAsMinutes : [];
-  
+            
   const cnv = conversion === 'minutes' ? 'min' : conversion === 'percent' ? '%' : 'hrs';
+  
+  isDebug && console.log(branchTime);
   
   return(
     <div>
@@ -144,7 +146,7 @@ const TimeBudgetsChunk = ({
                 <TimeSplitBar
                   title={Pref.branches}
                   nums={branchTime}
-                  chunks={branchTime.map(b=>b.brTotal>0)}
+                  chunks={internal ? branchTime.map(b=>b.brTotal>0) : branchTime.filter(n=>n.pro).map(b=>b.brTotal>0)}
                   colour='blue'
                 />
                 <dl className='readlines'>
