@@ -371,8 +371,9 @@ Meteor.methods({
     if( batch && Array.isArray(batch.tide) ) {  
       let notask = false;
       const slim = batch.tide.map( x => {
-        const dt = x.task ? [ x.task, x.subtask, x.qtKey ] : notask = true;
-                        
+        const dt = x.task ? [ x.task, x.subtask, x.qtKey ] : undefined;
+        if(!x.task) { notask = true }else{null}
+        
         const dur = addTideDuration(x);
         return {
           tasks: dt,
@@ -391,13 +392,22 @@ Meteor.methods({
         
         if(batch.quoteTimeCycles) {
           for( let qt of brQts ) {
-  
+            
+            let taskfilter = new Set(qt.subTasks);
+            
+            const recsubs = slim.filter( t => t.tasks && t.tasks[2] === qt.qtKey );
+            for( let rs of recsubs ) {
+              taskfilter.add(rs.tasks[1]);
+            }
+            const shared_subTasks = [...taskfilter];
+            // console.log(qt.subTasks, shared_subTasks);
+            
             let qtDurr = 0;
             let qtMlti = false;
             
             let qt_subs_arr = [];
             
-            for( let qsub of qt.subTasks ) {
+            for( let qsub of shared_subTasks ) {
               
               const b_q_s_slim = slim.filter( t => Array.isArray(t.tasks) && t.tasks[2] === qt.qtKey && t.tasks[1] === qsub);
               

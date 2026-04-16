@@ -60,13 +60,13 @@ function sendExternalEmail(to, cc, subject, date, body, product, sales, foot, fl
         <tr><td colspan='2' style="background-color:#2769ac;width:100%;height:15px"></td></tr>
         <tr>
           <td colspan='2' style="padding:20px 10%;text-align:center;line-height: 1.5">
-            <p style="color:black;margin:1rem 0">${date}</p>
+            <p style="color:black;margin:1rem 0">${date}(CST)</p>
             <p style="color:black;margin:1rem 0;font-size:larger">${body}</p>
-            <p style="color:black;margin:1rem 0;font-size:larger"><strong>${product}</strong></p>
-            <p style="color:black;margin:1rem 0">Sales Order: <em>${sales}</em></p>
+            <p style="color:black;margin:1rem 0"><strong>${product}</strong></p>
+            <p style="color:black;margin:1rem 0">Sales Order: ${sales}</p>
             <p style="color:black;margin:1rem 0">${foot}</p>
             <p style="color:black;margin:1rem 0">${flvr}</p>
-            <p style="color:black;margin:1rem 0;font-size:smaller">${fine}</p>
+            <p style="color:black;margin:1rem 0"><em>${fine}</em></p>
           </td>
         </tr>
         <tr>
@@ -303,7 +303,7 @@ Meteor.methods({
       
       const subject = `Production Notice — ${salesOrder}`;
       
-      const date = moment().tz(Config.clientTZ).format('dddd, MMM Do YYYY, h:mm a(CST)');
+      const date = moment().tz(Config.clientTZ).format('dddd, MMM Do YYYY, h:mm a');
       const dueDate = moment(salesEnd).tz(Config.clientTZ).format('dddd, MMMM Do YYYY');
       
       const body = `A Work Order Has Been Issued`;
@@ -346,7 +346,7 @@ Meteor.methods({
       
       const subject = `Production Notice — ${salesOrder}`;
       
-      const date = moment().tz(Config.clientTZ).format('dddd, MMM Do YYYY, h:mm a(CST)');
+      const date = moment().tz(Config.clientTZ).format('dddd, MMM Do YYYY, h:mm a');
       const dueDate = moment(salesEnd).tz(Config.clientTZ).format('dddd, MMMM Do YYYY');
       
       const body = `New Ship Due Date`;
@@ -386,7 +386,7 @@ Meteor.methods({
       
       const subject = `Production Notice — ${salesOrder}`;
       
-      const date = moment().tz(Config.clientTZ).format('dddd, MMM Do YYYY, h:mm a(CST)');
+      const date = moment().tz(Config.clientTZ).format('dddd, MMM Do YYYY, h:mm a');
       const dueDate = moment(salesEnd).tz(Config.clientTZ).format('dddd, MMMM Do YYYY');
       
       const body = `Your Order Has Entered Production`;
