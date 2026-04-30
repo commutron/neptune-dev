@@ -112,17 +112,18 @@ export const CountDownNum = ({ dur, max, peers })=> {
     width: '25px'
   };
   
-  let hr = Math.abs(tick.hours());
+  const seconds = tick.seconds();
+  let hr = Math.abs(Math.floor(tick.asHours()));
   let min = (Math.abs(tick.minutes())).toString().padStart(2, 0);
-  let sec = (Math.abs(tick.seconds())).toString().padStart(2, 0);
+  let sec = (Math.abs(seconds)).toString().padStart(2, 0);
   
   return(
-    <span className={`beside ${tick.seconds() < 0 ? 'redT' : ''}`}>
+    <span className={`beside ${seconds < 0 ? 'redT' : ''}`}>
       <div className='cssMiniRing' style={ringSty}></div>
       <n-num 
         data-tip={`${peers} people on this task`}
         class='liteTip'
-      >{`${tick.seconds() < 0 ? "-" : ""}${hr}:${min}:${sec}`}
+      >{`${seconds < 0 ? "-" : ""}${hr}:${min}:${sec}`}
       </n-num><span className='nomargin'>&nbsp;remaining</span>
     </span>
   );

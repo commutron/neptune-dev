@@ -11,9 +11,10 @@ const BatchXComplete = ({ batchData, allFlow, allFall, nowater, quantity, canRun
   
   function finishBatchX() {
     const batchID = batchData._id;
-    Meteor.call('finishBatchX', batchID, (error)=>{
-      error && console.log(error);
-    });
+    Meteor.apply('finishBatchX', [ batchID ], 
+      {wait: true},
+      (error)=>{ error && console.log(error); }
+    );
   }
   
   const [ datetime, datetimeSet ] = useState( moment().format() );
@@ -58,19 +59,23 @@ const BatchXComplete = ({ batchData, allFlow, allFall, nowater, quantity, canRun
   function backdateFinish() {
     const batchID = batchData._id;
     const setback = moment(datetime).format();
-    Meteor.call('fixCompleteTime', batchID, setback, (err)=>{
-      err && console.log(err);
-    });
+    Meteor.apply('fixCompleteTime', [ batchID, setback ], 
+      {wait: true},
+      (err)=>{ err && console.log(err); }
+    );
   }
   
   function undoFinishBatchX(late, pinInput) {
     const batchID = batchData._id;
     const override = late ? pinInput : false;
     if(batchData.completed === true) {
-      Meteor.call('undoFinishBatchX', batchID, override, (error, reply)=>{
-        error && console.log(error);
-        reply ? null : toast.error('Cannot Perform Function');
-      });
+      Meteor.apply('undoFinishBatchX', [ batchID, override ], 
+        {wait: true},
+        (error, reply)=>{
+          error && console.log(error);
+          reply ? null : toast.error('Cannot Perform Function');
+        }
+      );
     }
   }
   
@@ -173,7 +178,7 @@ const CompleteTimePicker = ({ datetime, datesearch, completedAt, canBackDate, da
     <Flatpickr
       id='backDateTime'
       value={datetime}
-      className='minWide transparent margin5 blackblackT'
+      className='minWide transparent margin5 blackblackT borderLightGray centreText'
       onChange={(e)=> datetimeSet( this.backDateTime.value )}
       options={{
         defaultDate: datetime,

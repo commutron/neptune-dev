@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, useMemo, Fragment } from 'react';
 import Pref from '/public/pref.js';
 import { toast } from 'react-toastify';
 
@@ -54,16 +54,17 @@ const AllGroups = ({
     });
   }
   
-  const inter = groupData.filter( g => g.internal );
+  // const inter = groupData.filter( g => g.internal );
+  const batchLive = useMemo(()=> batchDataX.filter( b => b.completed === false ), [batchDataX]);
   
   const groupS = groupData.sort((g1, g2)=>
                   g1.alias < g2.alias ? -1 : g1.alias > g2.alias ? 1 : 0 );
                   
-  const menuList = groupS.map( (entry)=> {
-                    const strk = entry.hibernate;
-                    let clss = entry.internal ? ' intrBlue' : '';
-                    let sub = entry.internal ? 'Internal' : '';
-                    return [entry.alias, strk, sub, clss];
+  const menuList = groupS.map( (g)=> {
+                    const strk = g.hibernate;
+                    let clss = g.internal ? ' intrBlue' : '';
+                    let sub = g.internal ? 'Internal' : '';
+                    return [g.alias, strk, sub, clss];
                   });
   
   const defaultSlide = specify ? 
@@ -104,18 +105,22 @@ const AllGroups = ({
       }
       defaultSlide={defaultSlide}
       collapse={Pref.hibernatated}
-      textStyle='up'>
+      textStyle='up'
+      uri={"/data/overview?request=groups"}>
     
-      {groupS.map( (entry, index)=> {
-        let widgetsList = widgetData.filter(x => x.groupId === entry._id);
+      {groupS.map( (g, index)=> {
+        let widgetsList = widgetData.filter(x => x.groupId === g._id);
+        let variantList = variantData.filter(v => v.groupId === g._id);
         return(
           <GroupSlide
-            key={index+entry._id}
-            groupData={entry}
+            key={index+g._id}
+            groupData={g}
             widgetsList={widgetsList}
-            batchDataX={batchDataX}
+            variantList={variantList}
+            batchLive={batchLive}
             app={app}
-            inter={!inter || inter.length < Pref.interMax || inter.find( x=> x._id === entry._id )}
+            // inter={!inter || inter.length < Pref.interMax || inter.find( x=> x._id === g._id )}
+            inter={g.internal}
             openActions={openActions}
             handleInterize={handleInterize}
             handleHibernate={handleHibernate}

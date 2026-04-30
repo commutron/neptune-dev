@@ -735,7 +735,7 @@ Meteor.methods({
   
   // Finish Batch
   finishBatchX(batchId, privateKey) {
-    if(privateKey ||
+    if(privateKey || 
       Roles.userIsInRole(Meteor.userId(), "BRKt3rm1n2t1ng8r2nch") ||
       Roles.userIsInRole(Meteor.userId(), "run") )
     {
@@ -805,8 +805,23 @@ Meteor.methods({
   			  finShipDue: endShipDue,
   			  finEndWork: endEndWork,
       }});
+      
+      // Meteor.defer( ()=>{
+      //   Meteor.call('DebugEmail', batchId);
+      // });
     }
   },
+  
+  // DebugEmail(bID) {
+  //   const doc = XBatchDB.findOne({_id: bID},
+  //                 {fields:{'tide':0,'waterfall':0,'blocks':0}});
+  //   const trc = TraceDB.findOne({batchID: bID});
+    
+  //   const text_doc = JSON.stringify(doc);
+  //   const text_trc = JSON.stringify(trc);
+  //   const text_blk = text_doc + ' ___ ' + text_trc;
+  //   Meteor.call('handleDevMonitorEmail', text_blk);
+  // },
   
   fixCompleteTime(batchId, backDate) {
     const accessKey = Meteor.user().orgKey;
@@ -828,7 +843,7 @@ Meteor.methods({
   
   // Undo Finish Batch
   undoFinishBatchX(batchId, override) {
-    if(!Roles.userIsInRole(Meteor.userId(), 'run' || override === undefined)) {
+    if(!Roles.userIsInRole(Meteor.userId(), 'BRKt3rm1n2t1ng8r2nch' || override === undefined)) {
       null;
     }else{
       const doc = XBatchDB.findOne({_id: batchId},{fields:{'completed':1,'completedAt':1,'lock':1}});

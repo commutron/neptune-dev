@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React from 'react';
 import { toast } from 'react-toastify';
 import StoneProgRing from './StoneProgRing';
 
@@ -12,17 +12,10 @@ const StoneFinish = ({
 	
 	enactEntry,
 	resolveEntry,
+	parentMounted,
 	workingState,
 	commTxtState
-})=> { 
-	
-	const mounted = useRef(true);
-	
-	useEffect(() => {
-    return () => { 
-      mounted.current = false;
-    };
-  }, []);
+})=> {
   
 	function finish() {
 		enactEntry();
@@ -35,11 +28,11 @@ const StoneFinish = ({
 			    console.log(error);
 			    toast.error('Server Error');
 				}
-			  if(reply === true && mounted.current) {
+			  if(reply === true && parentMounted) {
 					resolveEntry();
-				}else{
+				}else if(reply === false) {
 					toast.warning('Insufficient Permissions');
-			  }
+			  }else{null}
 			});
 		}else{
 			Meteor.call('finishItemX', batchId, seriesId, serial, sKey, step, type, comm, benchmark, 
@@ -48,11 +41,11 @@ const StoneFinish = ({
 			    console.log(error);
 			    toast.error('Server Error');
 				}
-			  if(reply === true && mounted.current) {
+			  if(reply === true && parentMounted) {
 					resolveEntry();
-				}else{
+			  }else if(reply === false) {
 					toast.warning('Insufficient Permissions');
-			  }
+			  }else{null}
 			});
 		}
 	}

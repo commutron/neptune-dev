@@ -3,14 +3,14 @@ import Pref from '/client/global/pref.js';
 import LeapLine from '/client/components/tinyUi/LeapLine';
 import NumStat from '/client/components/tinyUi/NumStat';
 
-const WidgetsDepth = ({ filterString, widgetData, state, active })=> {
+const WidgetsDepth = ({ filterString, widgetData, state })=> {
   
   const w = widgetData.sort((w1, w2)=>
               w1.widget < w2.widget ? -1  : w1.widget > w2.widget ? 1 : 0 );
   
   let statList = !state ? w : state == 1 ? 
-                  w.filter( rd => active.includes(rd._id) ) :
-                  w.filter( rd => !active.includes(rd._id) );
+                  w.filter( rd => rd.vopen ) :
+                  w.filter( rd => !rd.vopen );
                   
   let showList = statList.filter( 
     tx => tx.widget.toLowerCase().includes(filterString) === true ||
@@ -35,7 +35,7 @@ const WidgetsDepth = ({ filterString, widgetData, state, active })=> {
           <p className='centreText'>no match found</p>
       :
         showList.map( (entry)=> {
-        let ac = active.includes(entry._id) ? 'activeMark' : '';
+        let ac = entry.blive ? 'activeMark' : '';
           return(
             <WidgetIndexCard 
               key={entry._id} 

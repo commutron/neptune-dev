@@ -195,7 +195,7 @@ Meteor.methods({
     }
   },
   
-  handleDevMonitorEmail() {
+  handleDevMonitorEmail(plaintext) {
     this.unblock();
     const app = AppDB.findOne({});
     const emailGlobal = app && app.emailGlobal && app.devEmail;
@@ -207,20 +207,30 @@ Meteor.methods({
       const date = moment().tz(Config.clientTZ).format('h:mm a, dddd, MMM Do YYYY');
       const title = `Neptune is running version ${Pref.neptuneVersion}`;
       
-      const appAll = JSON.stringify(app);
-      const pin = app.orgPIN;
-      // const hrs = JSON.stringify(app.workingHours);
+      if(plaintext) {
+        
+        const body = plaintext;
+        const asid = '';
+        const foot = 'Diagnostic Data. CONFIDENTIAL';
+        const link = '';
+        
+        sendInternalEmail(to, subject, date, title, body, asid, foot, link, ":0");
       
-      const db = Meteor.call("serverDatabaseSize");
-      
-      const body = `<ul><li>Users: ${db.u}, Active-Users: ${db.uA}</li><li>Groups: ${db.g}, Widgets: ${db.w}, Variants: ${db.v}</li><li>Batches: ${db.b}, Live-Batches: ${db.bL}, Series(Items): ${db.i}, Rapids: ${db.r}, Traces: ${db.t}</li><li>Equips: ${db.e}, Maints: ${db.m}</li><li>TimeDB-Times: ${db.tm}, Caches: ${db.ch}, Email-Log: ${db.em}</li></ul>`;
-      const asid = `OrgPIN: ${pin}`;
-      // const foot = `WorkingHours: ${hrs}`;
-      const foot = `Full App: ${appAll}`;
-      const link = `config: tz:${Config.clientTZ} reply:${Config.replyEmail} tel:${Config.orgTel}`;
-      
-      sendInternalEmail(to, subject, date, title, body, asid, foot, link, ";P");
-      
+      }else{
+        const appAll = JSON.stringify(app);
+        const pin = app.orgPIN;
+        // const hrs = JSON.stringify(app.workingHours);
+        
+        const db = Meteor.call("serverDatabaseSize");
+        
+        const body = `<ul><li>Users: ${db.u}, Active-Users: ${db.uA}</li><li>Groups: ${db.g}, Widgets: ${db.w}, Variants: ${db.v}</li><li>Batches: ${db.b}, Live-Batches: ${db.bL}, Series(Items): ${db.i}, Rapids: ${db.r}, Traces: ${db.t}</li><li>Equips: ${db.e}, Maints: ${db.m}</li><li>TimeDB-Times: ${db.tm}, Caches: ${db.ch}, Email-Log: ${db.em}</li></ul>`;
+        const asid = `OrgPIN: ${pin}`;
+        // const foot = `WorkingHours: ${hrs}`;
+        const foot = `Full App: ${appAll}`;
+        const link = `config: tz:${Config.clientTZ} reply:${Config.replyEmail} tel:${Config.orgTel}`;
+        
+        sendInternalEmail(to, subject, date, title, body, asid, foot, link, ";P");
+      }
       return true;
     }else{
       return false;

@@ -129,9 +129,22 @@ function getFastPriority(bData, now, shipAim, shipLoaded) {
 
     const qtBready = !bData.quoteTimeBudget ? false : true;
     
+    const trc = TraceDB.findOne({batchID: bData._id},
+                    {fields:{
+                      'donePnt': 1,
+                      'quote2tide': 1,
+                      'est2tide': 1,
+                      'est2item': 1,
+                      'estSoonest': 1,
+                      'bffrRel': 1,
+                      'estEnd2fillBuffer': 1,
+                      'overQuote': 1,
+                      'performTgt': 1
+                    }});
+                    
     if(qtBready && bData.tide && !doneEntry) {
       const shipLoad = !isNaN(shipLoaded) ? shipLoaded : getShipLoad(now);
-      const trc = TraceDB.findOne({batchID: bData._id},{fields:{'performTgt':1,'donePnt': 1}});
+      
       const tgt = trc ? trc.performTgt || 0 : 0;
       
       const mEst = getEst(bData.widgetId, bData.quantity, tgt);
@@ -155,6 +168,17 @@ function getFastPriority(bData, now, shipAim, shipLoaded) {
         estEnd2fillBuffer: dryCalc.estEnd2fillBuffer,
         overQuote: dryCalc.overQuote,
         isQuoted: dryCalc.isQuoted
+      });
+    }else if(trc) {
+      resolve({
+        quote2tide: trc.quote2tide || 0,
+        est2tide: trc.est2tide || false,
+        est2item: trc.est2item || 0,
+        estSoonest: trc.estSoonest || false,
+        bffrRel: trc.bffrRel || false,
+        estEnd2fillBuffer: trc.estEnd2fillBuffer || 0,
+        overQuote: trc.overQuote || false,
+        isQuoted: trc.isQuoted || false
       });
     }else{
       resolve({

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import moment from 'moment';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import { toast } from 'react-toastify';
 
 import CreateTag from '/client/components/tinyUi/CreateTag';
@@ -68,6 +68,14 @@ const VariantCards = ({
         />
       : null}
       
+      {varS.every( v => !v.live ) &&
+          <p className='w100'>
+          <span className='mockTag darkgray cap'>
+            <i className="fa-solid fa-folder-closed fa-lg gapR"></i>{Pref.widget} Inactive, All {Pref.variants} Archived
+          </span>
+          </p>
+        }
+      
       {varS.map( (ventry, index)=> {
         return(  
           <VentryCard
@@ -122,7 +130,7 @@ const VentryCard = ({
           {v.live ? 
             <n-fa0><i className='fas fa-folder-open blueT fa-fw'></i>Open</n-fa0>
             :
-            <n-fa1><i className='fas fa-folder grayT fa-fw'></i>Closed</n-fa1>
+            <n-fa1><i className='fas fa-folder-closed grayT fa-fw'></i>Closed</n-fa1>
           }
         </div>
       </div>

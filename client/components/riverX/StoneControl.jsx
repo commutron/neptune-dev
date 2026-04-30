@@ -179,6 +179,7 @@ const StoneControl = ({
 			topTitle={topTitle}
 			enactEntry={()=>enactEntry()}
 			resolveEntry={()=>resolveEntry(true)}
+			parentMounted={mounted}
 			workingState={workingState}
 			commTxtState={commTxtState}
 		/>;

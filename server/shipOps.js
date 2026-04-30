@@ -15,7 +15,7 @@ export function getShipAim(batchId, salesEnd, recalc) {
   };
   
   if(!salesEnd) {
-    console.error('invalid salesEnd');
+    console.log('invalid salesEnd');
     return moment().format();
   }else if(recalc) {
     return calcAim(salesEnd);
@@ -44,7 +44,7 @@ export function getShipDue(batchId, salesEnd, recalc) {
   };
     
   if(!salesEnd) {
-    console.error('invalid salesEnd');
+    console.log('invalid salesEnd');
     return moment().format();
   }else if(recalc) {
     return calcDue(salesEnd);
@@ -72,7 +72,7 @@ export function getEndWork(batchId, salesEnd, recalc) {
   };
   
   if(!salesEnd) {
-    console.error('invalid salesEnd');
+    console.log('invalid salesEnd');
     return moment().format();
   }else if(recalc) {
     return calcWork(salesEnd);

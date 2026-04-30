@@ -1,7 +1,7 @@
 import React from 'react';
 
-const DumbFilter = ({ id, size, wrapClass, inputClass, styleOv, onTxtChange, list })=> (
-  <span className={`noWrap ${wrapClass || ''}`}>
+const DumbFilter = ({ id, title, size, wrapClass, inputClass, styleOv, onTxtChange, list })=> (
+  <label title={title || ''} className={`noWrap ${wrapClass || ''}`}>
     <i className='fas fa-filter fa-fw'></i>
     <input
       id={id}
@@ -18,7 +18,7 @@ const DumbFilter = ({ id, size, wrapClass, inputClass, styleOv, onTxtChange, lis
         <option key={index} value={entry} className={size}>{entry}</option>
       ))}
     </datalist>
-  </span>
+  </label>
 );
   
 export default DumbFilter;

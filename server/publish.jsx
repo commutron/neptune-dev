@@ -768,7 +768,7 @@ Meteor.publish('hotDataEx', function(dataView, dataRequest, hotWidget){
         VariantDB.find({orgKey: orgKey}, {
           fields: {
             'createdAt': 1,
-            // 'live': 1
+            'live': 1
         }}),
         XBatchDB.find({orgKey: orgKey, completed: false }, {
           sort: {batch:-1},

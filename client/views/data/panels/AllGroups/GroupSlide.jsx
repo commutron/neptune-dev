@@ -9,30 +9,28 @@ import Remove from '/client/components/forms/Remove';
 import GroupTops from '/client/components/charts/GroupTops';
 import DumbFilter from '/client/components/tinyUi/DumbFilter';
 
-function groupActiveWidgets(widgetsList, allXBatch) {
-  
-  let activeBatch = allXBatch.filter( b => b.completed === false);
-
-  const hasBatch = (id)=> activeBatch.find( b => b.widgetId === id) ? true : false;
-  
-  let activeWidgets = widgetsList.filter( w => hasBatch(w._id) == true );
-  
-  const activeList = Array.from(activeWidgets, w => w._id);
-  return activeList;
+function activeWidgets(widgetsList, variantList, batchLive) {
+  const agrWidgets = widgetsList.map( w => {
+                      return {
+                        ...w,
+                        vopen: variantList.filter( v => v.widgetId === w._id ).some( y => y.live ),
+                        blive: batchLive.findIndex( b => b.widgetId === w._id) >= 0 ? true : false
+                      }});
+  return agrWidgets;
 }
 
 const GroupSlide = ({ 
-  groupData, widgetsList, batchDataX, app, 
+  groupData, widgetsList, variantList, batchLive, app, 
   inter, openActions, 
   handleInterize, handleHibernate, handleEnableEmail,
   canRun, canEdt, canCrt, canRmv 
-})=>{
+})=> {
   
   const [ state, stateSet ] = useState(1);
   const [ filterString, filterStringSet ] = useState( '' );
   
   const g = groupData;
-  const active = useMemo(()=>groupActiveWidgets(widgetsList, batchDataX), [widgetsList, batchDataX]);
+  const agrWidgets = useMemo(()=>activeWidgets(widgetsList, variantList, batchLive), [widgetsList,variantList,batchLive]);
   const shrtI = g.wiki && !g.wiki.includes('http');
   
   const doNew = canCrt && !g.hibernate;
@@ -118,12 +116,13 @@ const GroupSlide = ({
         
         <div className='rowWrapR'>
           <div className='margin5 balancer gapminC'>
-            <StateSelect label='All' id={0} func={stateSet} is={state} />
-            <StateSelect label='Active' id={1} func={stateSet} is={state} />
-            <StateSelect label='Inactive' id={2} func={stateSet} is={state} />
+            <StateSelect label='All' title={`all ${Pref.widget}s`}id={0} func={stateSet} is={state} />
+            <StateSelect label='Active' title={`${Pref.widget}s where ${Pref.variants} are open`} id={1} func={stateSet} is={state} />
+            <StateSelect label='Inactive' title={`${Pref.widget}s where all ${Pref.variants} are archived`} id={2} func={stateSet} is={state} />
           </div>
           <DumbFilter
             id='groupwidgettextfilter'
+            title='Filter Products By ID or Description'
             inputClass='miniIn24 smTxt'
             styleOv={{minHeight:'0',height:'calc(var(--sm9)* 1.75)',marginBlock:'5px'}}
             onTxtChange={(e)=>{filterStringSet(e);stateSet(0)}}
@@ -191,8 +190,8 @@ const GroupSlide = ({
         filterString={filterString}
         state={state}
         groupAlias={g.alias}
-        widgetData={widgetsList}
-        active={active} />
+        widgetData={agrWidgets}
+      />
       
       <div className='wide'>
         <CreateTag
@@ -208,8 +207,8 @@ const GroupSlide = ({
 
 export default GroupSlide;
 
-const StateSelect = ({ label, id, func, is })=> (
-  <label className='beside textAction smTxt'>
+const StateSelect = ({ label, id, title, func, is })=> (
+  <label title={title || ''} className='beside textAction smTxt'>
     <input 
       id='wdgt_st_sltr'
       name='widgets_state_selector' 
