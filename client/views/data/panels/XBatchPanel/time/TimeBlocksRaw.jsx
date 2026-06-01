@@ -7,24 +7,13 @@ import { ForceRemoveTideBlock } from '/client/views/app/appSlides/DataRepair';
 
 import { addTideDuration } from '/client/utility/WorkTimeCalc';
 
-const TimeBlocksRaw = ({ batch, tide, lockOut, isDebug })=> {
+const TimeBlocksRaw = ({ batch, tide, showZero, lockOut, isDebug })=> {
   
   const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
   const isSuper = Roles.userIsInRole(Meteor.userId(), 'peopleSuper');
   
-  const [ showZero, showZeroSet ] = useState(isDebug);
-  
   return(
     <div className='cardSelf'>
-      <p>
-        <label className='beside'>
-        <input
-          type='checkbox'
-          className='minHeight'
-          defaultChecked={showZero}
-          onChange={()=>showZeroSet(!showZero)} 
-        />Show Zero Durations</label>
-      </p>
         
       <table className='numFont w100 vmargin'>
         <tbody>

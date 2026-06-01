@@ -19,6 +19,7 @@ ChartJS.register(
 );
 
 import UserName from '/client/utility/Username.js';
+import { flexSort } from '/client/utility/Arrays.js';
 
 const PeopleScatter = ({ tide, period, xform, xlabel, isDebug })=> {
   
@@ -40,7 +41,7 @@ const PeopleScatter = ({ tide, period, xform, xlabel, isDebug })=> {
     }
     
     const slim = _.uniq(wt, n=> n.a + n.y );
-    const slimS = slim.sort((a,b)=> a.a > b.a ? 1 : a.a < b.a ? -1 : 0);
+    const slimS = flexSort(slim, 'a');
     
     uUsersSet( _.uniq(slim, n=> n.y ).map( c => c.y ) );
     

@@ -3,6 +3,7 @@ import Pref from '/client/global/pref.js';
 
 import LeapButton from '/client/components/tinyUi/LeapButton';
 import FilterActive from '/client/components/bigUi/FilterActive';
+import { flexSort } from '/client/utility/Arrays.js';
 
 const BatchesList = ({ batchData, widgetData, variantData })=> {
   
@@ -29,8 +30,7 @@ const BatchesList = ({ batchData, widgetData, variantData })=> {
       b;
     let showList = basicFilter.filter( 
                     tx => tx.batch.toLowerCase().includes(textString) === true );
-    let sortList = showList.sort((b1, b2)=>
-                    b1.batch < b2.batch ? 1 : b1.batch > b2.batch ? -1 : 0 );
+    let sortList = flexSort(showList, 'batch');
     listSet(sortList);
   }, [ batchData, filter, textString ]);
             

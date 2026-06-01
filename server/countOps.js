@@ -54,7 +54,7 @@ Meteor.methods({
       }
     };
     
-    XBatchDB.find({ _id: { $in: batchIDs } })
+    XBatchDB.find({ _id: { $in: batchIDs }},{sort: {batch:-1}})
     .forEach( batch => totalST(batch) );
     
     return { 

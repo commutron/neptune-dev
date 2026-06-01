@@ -1,16 +1,14 @@
 import React from 'react';
 import Pref from '/public/pref.js';
 import { toast } from 'react-toastify';
-
+import { flexSort } from '/client/utility/Arrays.js';
 import CountStepEdit from '/client/components/forms/CountStepEdit';
 
 const CounterSlide = ({ app, branchesS })=> {
   
   const rndmKey = Math.random().toString(36).substr(2, 5);
   
-  const counterS = app.countOption.sort((c1, c2)=> {
-                  return c1.gate < c2.gate ? -1 : c1.gate > c2.gate ? 1 : 0 });
-  
+  const counterS = flexSort(app.countOption, 'gate');
   
   function addCountTrackOp(e) {
     e.preventDefault();

@@ -805,23 +805,8 @@ Meteor.methods({
   			  finShipDue: endShipDue,
   			  finEndWork: endEndWork,
       }});
-      
-      // Meteor.defer( ()=>{
-      //   Meteor.call('DebugEmail', batchId);
-      // });
     }
   },
-  
-  // DebugEmail(bID) {
-  //   const doc = XBatchDB.findOne({_id: bID},
-  //                 {fields:{'tide':0,'waterfall':0,'blocks':0}});
-  //   const trc = TraceDB.findOne({batchID: bID});
-    
-  //   const text_doc = JSON.stringify(doc);
-  //   const text_trc = JSON.stringify(trc);
-  //   const text_blk = text_doc + ' ___ ' + text_trc;
-  //   Meteor.call('handleDevMonitorEmail', text_blk);
-  // },
   
   fixCompleteTime(batchId, backDate) {
     const accessKey = Meteor.user().orgKey;

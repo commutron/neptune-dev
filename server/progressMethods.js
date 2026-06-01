@@ -92,13 +92,13 @@ function collectBranchCondition(privateKey, batchID) {
           const branchSteps = progSteps.filter( x => x.branchKey === branch.brKey );
           const conArr = Array.from(branchSteps, x => x.condition );
            
-          const nonConLeft = branch.brKey === 't3rm1n2t1ng8r2nch' ? rNC.length :
+          const nonConLeft = branch.brKey === 't3rm1n2t1ng8r2nch' ? rNC.length > 0 :
                               rNC.some( x => x.where === branch.branch );
           
           const branchCon = branchSteps.length === 0 ? false :
             conArr.includes('canStart') ||
             conArr.includes('stepRemain') ||
-            nonConLeft > 0 ? 
+            nonConLeft ? 
             'open' :
             conArr.includes('onHold') ? 'onHold' :
             'closed';
@@ -260,11 +260,11 @@ function collectProgress(privateKey, batchID) {
         const calNum = calPer > 0 && calPer < 1 ? 
                           calPer.toPrecision(1) : Math.floor( calPer );
         
-        const nonConLeft = branch.brKey === 't3rm1n2t1ng8r2nch' ? rNC.length > 0 :
-                            rNC.filter( x => x.where === branch.branch ).length > 0;
+        const nonConLeft = branch.brKey === 't3rm1n2t1ng8r2nch' ? rNC.length :
+                            rNC.filter( x => x.where === branch.branch ).length;
         const shortLeft = (!srs ? [] : srs.shortfall).filter( s => 
                             s.inEffect !== true && s.reSolve !== true 
-                          ).length > 0;
+                          ).length;
                         
         branchProg.push({
           branch: branch.branch,

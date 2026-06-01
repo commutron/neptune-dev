@@ -25,7 +25,7 @@ import ItemsListX from './lists/ItemsListX';
 
 import FlowCounter, { FallCounter, WhiteWaterCounter } from '/client/utility/ProgressCounterX';
 import { NonConMerge } from '/client/utility/NonConOptions';
-
+import { flexSort } from '/client/utility/Arrays.js';
 
 const DataViewOps = ({ 
   allXBatch, 
@@ -65,8 +65,7 @@ const DataViewOps = ({
   }
   
   function widgetVariants(wId) {
-    return allVariant.filter(x => x.widgetId === wId)
-      .sort((a,b)=> a.variant > b.variant ? 1 : a.variant < b.variant ? -1 : 0);
+    return flexSort(allVariant.filter(x => x.widgetId === wId),  'variant');
   }
   
   function getFlowData(batchData, seriesData, widgetData, appData) {

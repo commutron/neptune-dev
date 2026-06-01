@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import Pref from '/public/pref.js';
-// import TagsModule from '/client/components/bigUi/TagsModule';
 // import { PopoverButton, PopoverMenu, PopoverAction } from '/client/layouts/Models/Popover';
 
 import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock';
 import NumStatBox from '/client/components/charts/Dash/NumStatBox';
 import { MonthSelect } from '/client/components/smallUi/DateRangeSelect';
-
+import { flexSort } from '/client/utility/Arrays.js';
 
 const BranchSlide = ({ 
   brData, equipData, app, 
@@ -17,6 +16,7 @@ const BranchSlide = ({
   
   const [ month, monthSet ] = useState(false);
   
+  const [ eqs, eqsSet ] = useState([]);
   const [ subs, subsSet ] = useState([]);
   const [ steps, stepsSet ] = useState([]);
   
@@ -24,17 +24,17 @@ const BranchSlide = ({
     const branch = brData.branch;
     
     // console.log({brData, month});
+    const equipS = flexSort(equipData, 'alias');
+    eqsSet(equipS);
     
-    const qtasks = app.qtTasks.filter( q => q.brKey === brData.brKey)
-                    .sort( (q1, q2)=> q1.position < q2.position ? 1 : 
-                                      q1.position > q2.position ? -1 : 0 );
-    const qkeys = qtasks.map( qt => qt.qtKey, []);
-    const subtasks = qtasks.map( qs => qs.subTasks, []).flat();
+    const qtasks = app.qtTasks.filter( q => q.brKey === brData.brKey);
+    const qtaskS = flexSort(qtasks, 'position', true);
+    const qkeys = qtaskS.map( qt => qt.qtKey, []);
+    const subtasks = qtaskS.map( qs => qs.subTasks, []).flat();
     subsSet(subtasks);
     
     const trackops = app.trackOption.filter( t => t.branchKey === brData.brKey);
-    const tsteps = [...new Set(trackops.map( to => to.step, []))]
-                    .sort( (t1, t2)=> t1 < t2 ? 1 : t1 > t2 ? -1 : 0 );
+    const tsteps = flexSort([...new Set(trackops.map( to => to.step, []))]);
     stepsSet(tsteps);
     
     // console.log({qkeys});
@@ -68,7 +68,7 @@ const BranchSlide = ({
       
       <Taglist 
         title={Pref.equip}
-        list={equipData}
+        list={eqs}
         status='online'
         name='alias'
         oncolor="midnightblue"

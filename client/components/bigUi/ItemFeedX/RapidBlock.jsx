@@ -1,7 +1,7 @@
 import React from 'react';
 import { toast } from 'react-toastify';
 import './style.css';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
 
 import UserNice from '/client/components/smallUi/UserNice';

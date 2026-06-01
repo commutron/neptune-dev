@@ -98,11 +98,11 @@ const BranchProgress = ({
               }else{
                 let isRed = /* calNum >= 100 && */ br.ncLeft;
                 let redLne = isRed ? ' redRight' : '';
-                let redtxt = isRed ? `\nUnresolved ${Pref.nonCons}` : '';
+                let redtxt = isRed ? `\n${Pref.nonCon}s to resolve: ${br.ncLeft}` : '';
                 
                 let isYllw = calNum < 100 && br.shLeft;
                 let ylwLne = isYllw ? ' yellowLeft' : '';
-                let ylwTxt = isYllw ? `\nBlocked by ${Pref.shortfalls}` : '';
+                let ylwTxt = isYllw ? `\n${Pref.shortfalls}to resolve: ${br.shLeft}` : '';
               
                 return(
                   <div 

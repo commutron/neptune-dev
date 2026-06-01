@@ -75,10 +75,10 @@ const WidgetPanel = ({
     document.getElementById(dialogId)?.showModal();
   };
                            
-  const bS = b.sort((b1, b2)=> b1.batch < b2.batch ? -1 : b1.batch > b2.batch ? 1 : 0 );
+  const bS = b.sort((b1, b2)=> b1.batch < b2.batch ? 1 : b1.batch > b2.batch ? -1 : 0 );
   const batchIDs = Array.from( bS, x => x._id );
   const batches = Array.from( bS, x => x.batch );
-  
+
   const canSls = Roles.userIsInRole(Meteor.userId(), ['admin','sales']);
   const canEdt = Roles.userIsInRole(Meteor.userId(), 'edit');
   const canRun = Roles.userIsInRole(Meteor.userId(), 'run');

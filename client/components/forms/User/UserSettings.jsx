@@ -106,7 +106,7 @@ const UserSettings = ({ brancheS })=> {
           userSetting={Meteor.user().defaultOverview || false}
           optionObjArr={overOps}
           labelText='Default Overview Area'
-          yesText={`The Overview section will default to the ${Meteor.user().defaultOverview || 'All'} ${Pref.branch}`}
+          yesText={`The Overview section and Equipment calendar will default to the ${Meteor.user().defaultOverview || 'All'} ${Pref.branch}`}
           callMethod='setDefaultOverview' />
   
       </div>
@@ -156,7 +156,7 @@ const UserToggleSetting = ({ userSetting, labelText, yesText, noText, callMethod
   }
   let icon = userSetting ? 
               <n-fa0><i className='fas fa-check-circle fa-2x'></i></n-fa0> : 
-              <n-fa1><i className='far fa-check-circle fa-2x'></i></n-fa1>;
+              <n-fa1><i className='far fa-times-circle fa-2x'></i></n-fa1>;
   return(
     <div className='bigInfoBox' 
       data-describe={userSetting ? yesText : noText}>

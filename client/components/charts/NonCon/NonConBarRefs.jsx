@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import { NonConBarCH } from '/client/components/charts/NonCon/NonConBar';
+import { toCap } from '/client/utility/Convert.js';
 import { countMulti } from '/client/utility/Arrays';
 
 const NonConBarRefs = ({ ncOp, nonCons, app, isDebug })=> {
@@ -29,17 +30,17 @@ const NonConBarRefs = ({ ncOp, nonCons, app, isDebug })=> {
       for(let n of nonConOptions) {
         const typeCount = countMulti( ref.ncs.filter( x => x.type === n ) );
         if(typeCount > 0) {
-          typeSet.add(n);
+          typeSet.add(toCap(n, true));
           type.push({
             x: typeCount,
-            y: n,
-            l: ref.name,
+            y: toCap(n, true),
+            l: ref.name.toUpperCase(),
           });
         }
       }
       const clrshift = "hwb(7.16deg 14.74% " + (ref.index*5) + "%)";
         splitByType.push({
-          label: ref.name,
+          label: ref.name.toUpperCase(),
           data: type,
           backgroundColor: clrshift,
           stack: 'stk'

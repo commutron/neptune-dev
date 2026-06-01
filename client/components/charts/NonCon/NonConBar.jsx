@@ -8,7 +8,7 @@ import {
   BarElement,
   Title,
   Tooltip,
-  Legend,
+  Legend
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 
@@ -49,17 +49,17 @@ const NonConBar = ({ ncOp, nonCons, app, isDebug })=> {
         for(let ncType of ncOptions) {
           const typeCount = countMulti( ncSet.pNC.filter( x => x.type === ncType ) || [] );
           if(typeCount > 0) {
-            typeSet.add(ncType);
+            typeSet.add(toCap(ncType, true));
             ncWhere.push({
               x: typeCount,
-              y: ncType,
-              l: ncSet.where
+              y: toCap(ncType, true),
+              l: toCap(ncSet.where, true)
             });
           }
         }
         const clrshift = "hwb(7.16deg 14.74% " + (ncSet.index*10) + "%)";
         ncCounts.push({
-          label: ncSet.where,
+          label: toCap(ncSet.where, true),
           data: ncWhere,
           backgroundColor: clrshift,
           stack: 'stk'
@@ -111,23 +111,13 @@ export const NonConBarCH = ({ series, types, title, isDebug })=> {
       y: {
         type: 'category',
         labels: types,
-        stacked: true,
-        ticks: {
-          callback: function(v) { 
-            return toCap( this.getLabelForValue(v) || "" ); 
-          }
-        }
+        stacked: true
       }
     },
     plugins: {
       legend: {
         display: true,
         position: 'top'
-      },
-      tooltip: {
-        callbacks: {
-          label: (cntxt)=> `${toCap(cntxt.raw.l)} = ${cntxt.raw.x}`
-        }
       },
       title: false,
     },

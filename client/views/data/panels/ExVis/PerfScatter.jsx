@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 // import moment from 'moment';
 import ZeroLineScatterChart from '/client/components/charts/ZeroLineScatterChart';
-
+import { flexSort } from '/client/utility/Arrays.js';
 import PrintThis from '/client/components/tinyUi/PrintThis';
 
 const PerfScatter = ({ app })=> {
@@ -15,7 +15,7 @@ const PerfScatter = ({ app })=> {
       err && console.log(err);
       if(re) {
         if(mounted.current) {
-          tickXYSet( re.sort((a,b)=> a.x > b.x ? 1 : a.x < b.x ? -1 : 0) );
+          tickXYSet( flexSort(re, 'x') );
         }
       }
     });

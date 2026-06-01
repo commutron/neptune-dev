@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { ToggleSwitch } from '/client/components/smallUi/ToolBarTools';
 import PrintThis from '/client/components/tinyUi/PrintThis';
 import ScatterCH from '/client/components/charts/ScatterCH';
+import { flexSort } from '/client/utility/Arrays.js';
 
 const OrderScatter = ({})=> {
   
@@ -33,7 +34,7 @@ const OrderScatter = ({})=> {
     const cnvrt = (tickXY || []).map((r) => { return {
                 x: tggl ? r.x2.toISOString() : r.x1.toISOString(), y: tggl ? perQty ? Math.round(r.y2 / (r.y1 || 1)) : r.y2 : r.y1
         }});
-    const cnvrtS = cnvrt.sort((a,b)=> a.x > b.x ? 1 : a.x < b.x ? -1 : 0);
+    const cnvrtS = flexSort(cnvrt, 'x');
     cvrtDataSet(cnvrtS);
   }, [tickXY, tggl, perQty]);
   

@@ -114,49 +114,56 @@ Meteor.methods({
    ///////////////////////////
   // nonCon Rate ////////////
   //////////////////////////
-  nonConRateLoop(batches) {
+  nonConRateLoop(batch) {
     // loop for Batch "recorded rate" chart  
-    const allNC = XSeriesDB.find(
-      {batch: { $in: batches }},
+    const thisBatch = XSeriesDB.findOne(
+      {batch: batch },
       {fields:{'nonCon':1}}
-    ).map( x => x.nonCon );
+    );
+    const theseNC = thisBatch && thisBatch.nonCon || [];
     
-    function oneRate(theseNC) {
+    if(theseNC.length > 0) {
       // ploting the ncs as flagged (not how they're resolved)
-      function recordedNC(noncons, qDay) {
+      const ondayNC = (noncons, qDay)=> {
         let relevant = noncons.filter(
                         x => moment(x.time)
-                          .isSameOrBefore(qDay, 'day') );
+                          .isSame(qDay, 'day') );
         let ncPack = {
           'x': new Date(qDay),
           'y': countMulti(relevant)
         };
         return ncPack;
-      }
+      };
       
       const begin = moment(theseNC[0].time);
       const end = moment(theseNC[theseNC.length - 1].time);
       const range = end.diff(begin, 'day') + 2;
       
-      let nonconSet = [];
+      let noncon_onday = [];
+      
+      let noncon_uptoday = [];
+      
       for(let i = 0; i < range; i++) {
         let qDay = begin.clone().add(i, 'day').format();
         
-        let ncCount = recordedNC(theseNC, qDay);
-        nonconSet.push(ncCount);
+        let ncday = ondayNC(theseNC, qDay);
+        noncon_onday.push(ncday);
       }
-      return nonconSet;
+      
+      let total_counter = 0;
+      for(let d of noncon_onday) {
+        if(d.y > 0) {
+          total_counter += d.y;
+        }
+        noncon_uptoday.push({
+          'x': d.x,
+          'y': total_counter
+        });
+      }
+      return [ noncon_onday, noncon_uptoday ];
+    }else{
+      return [ [], [] ];
     }
-    
-    nonconCollection = [];
-    for(let nc of allNC) {
-      if(nc.length > 0) {
-        let rateLoop = oneRate(nc);
-        nonconCollection.push(rateLoop);
-      }else{null}
-    }
-    
-    return nonconCollection;
   },
   
   

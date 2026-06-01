@@ -70,7 +70,6 @@ const WTimeTab = ({
       
       <TideMultiBatchBar 
         batchIDs={batchIDs}
-        app={app}
         extraClass='cardSelf vmargin' />
       
       <ShipScatter 

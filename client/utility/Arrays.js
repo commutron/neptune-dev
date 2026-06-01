@@ -15,7 +15,21 @@ export const branchesOpenSort = (branches, pro)=> {
           b1.position < b2.position ? 1 : 
           b1.position > b2.position ? -1 : 0 );
 };
-
+export const flexSort = (array, key, flip)=> {
+  let sorted = [];
+  if(!Array.isArray(array)) {
+    return sorted;
+  }
+  if(key) {
+    sorted = array.sort((a, b)=> a[key] < b[key] ? -1 : a[key] > b[key] ? 1 : 0 );
+  }else{
+    sorted = array.sort((a, b)=> a < b ? -1 : a > b ? 1 : 0 );
+  }
+  if(flip) {
+    sorted = sorted.toReversed();
+  }
+  return sorted;
+};
 export function countMulti(ncArr) {
   const inst = Array.from(ncArr, x => Number(x.multi) || 1);
   const count = inst.reduce((x,y)=> x + y, 0);

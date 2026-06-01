@@ -26,7 +26,7 @@ ChartJS.register(
   Legend
 );
 
-const TideMultiBatchBar = ({ batchIDs, app, extraClass })=> {
+const TideMultiBatchBar = ({ batchIDs, extraClass })=> {
   
   const [ batchTimes, storeTimes ] = useState(false);
   const [ tggl, tgglSet ] = useState(false);

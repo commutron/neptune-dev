@@ -6,6 +6,7 @@ import {
   TimeScale,
   LinearScale,
   LineElement,
+  BarElement
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import 'chartjs-adapter-moment';
@@ -13,38 +14,33 @@ import 'chartjs-adapter-moment';
 ChartJS.register(
   TimeScale,
   LinearScale,
-  LineElement
+  LineElement,
+  BarElement
 );
 
-const NonConRate = ({ batches, title, lineColor })=> {
+const NonConRate = ({ batch, title })=> {
   
-  const [ ratesC, setCount ] = useState( false );
+  const [ counts, setCounts ] = useState( false );
+  const [ totals, setTotals ] = useState( false );
   
   useEffect( ()=>{
-    Meteor.call('nonConRateLoop', batches, (error, reply)=>{
+    Meteor.call('nonConRateLoop', batch, (error, reply)=>{
       error && console.log(error);
-      reply && setCount( reply.flat() );
+      if(reply) {
+        setCounts( reply[0] );
+        setTotals( reply[1] );
+      }
     });
-  }, [batches]);
+  }, []);
 
   const options = {
     responsive: true,
-    elements: {
-      point: {
-        radius: 0
-      },
-      line: {
-        backgroundColor: lineColor,
-        borderColor: lineColor,
-        borderWidth: 3,
-      },
-    },    
     scales: {
       x: {
         type: 'time',
         time: {
           tooltipFormat: 'MMM D YYYY'
-        },
+        }
       },
       y: {
         ticks: {
@@ -62,7 +58,7 @@ const NonConRate = ({ batches, title, lineColor })=> {
     },
   };
   
-  if(!ratesC) {
+  if(!counts || !totals) {
     return(
       <CalcSpin />
     );
@@ -70,8 +66,32 @@ const NonConRate = ({ batches, title, lineColor })=> {
   
   return(
     <div className='space chart50vContain centre'>
-      <Line options={options} data={{datasets:[{data:ratesC,normalized: true}]}} />
+      <Line 
+        options={options} 
+        data={{
+          datasets:[
+            {
+              type:'bar',
+              data:counts,
+              normalized: true,
+              pointHitRadius: 10,
+              backgroundColor:'rgb(231, 76, 60)',
+              borderColor:'rgb(231, 76, 60)'
+            },
+            {
+              type:'line',
+              data:totals,
+              normalized: true,
+              pointRadius:0,
+              pointHitRadius:10,
+              backgroundColor:'oklab(0.37 0.11 0.06)',
+              borderColor:'oklab(0.37 0.11 0.06)',
+              borderWidth: 3
+            }
+          ]
+        }} />
       <p className='centreText small cap'>{title}</p>
+      <p className='centreText small cap'><em>Bar shows logged on that day. Line shows the cumulative total.</em>{title}</p>
     </div>
   );
 };

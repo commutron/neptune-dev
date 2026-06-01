@@ -1,6 +1,6 @@
 import React from 'react';
 import Pref from '/public/pref.js';
-import { branchesSort } from '/client/utility/Arrays.js';
+import { branchesSort, flexSort } from '/client/utility/Arrays.js';
 
 import Slides, { Slbutton } from '/client/layouts/TaskBars/Slides';
 
@@ -22,8 +22,7 @@ const AppWrap = ({ isAdmin, isDebug, users, app })=> {
  
   const brancheS = branchesSort(app.branches);
  
-  const sortedTrackOptions = app.trackOption.sort((t1, t2)=>
-                          t1.step < t2.step ? -1 : t1.step > t2.step ? 1 : 0 );
+  const sortedTrackOptions = flexSort(app.trackOption, 'step');
   
   return(
     <div className='simpleContent locked'>

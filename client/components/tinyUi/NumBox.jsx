@@ -4,8 +4,7 @@ import React from 'react';
     display: 'inline-block',
     textAlign: 'center',
     margin: '5px',
-    width: '105px',
-    lineHeight: 1.3
+    width: '105px'
   };
   const bSty = {
     fontSize: '2em',
@@ -16,7 +15,7 @@ import React from 'react';
     fontSize: '1em',
     verticalAlign: 'top',
     textTransform: 'capitalize',
-    fontVariant: 'small-caps',
+    fontVariant: 'all-small-caps',
     wordWrap: 'keep-all'
   };
  

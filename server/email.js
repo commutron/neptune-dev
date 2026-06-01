@@ -195,7 +195,7 @@ Meteor.methods({
     }
   },
   
-  handleDevMonitorEmail(plaintext) {
+  handleDevMonitorEmail() {
     this.unblock();
     const app = AppDB.findOne({});
     const emailGlobal = app && app.emailGlobal && app.devEmail;
@@ -207,30 +207,41 @@ Meteor.methods({
       const date = moment().tz(Config.clientTZ).format('h:mm a, dddd, MMM Do YYYY');
       const title = `Neptune is running version ${Pref.neptuneVersion}`;
       
-      if(plaintext) {
-        
-        const body = plaintext;
-        const asid = '';
-        const foot = 'Diagnostic Data. CONFIDENTIAL';
-        const link = '';
-        
-        sendInternalEmail(to, subject, date, title, body, asid, foot, link, ":0");
+      const appstate = JSON.stringify({
+        orgPIN: app.orgPIN,
+        createdAt: app.createdAt,
+        tideWall: app.tideWall,
+        devEmail: app.devEmail,
+        instruct: app.instruct,
+        helpDocs: app.helpDocs,
+        timeClock: app.timeClock
+      });
+      const appmin = JSON.stringify({
+        branches: app.branches.length,
+        qtTasks: app.qtTasks.length,
+        trackOption: app.trackOption.length,
+        lastTrack: app.lastTrack.key,
+        countOption: app.countOption.length,
+        nonConOption: app.nonConOption.length,
+        nonConTypeLists: app.nonConTypeLists.length,
+        missingType: app.missingType,
+        repeatOption: app.repeatOption.length,
+        alterFulfillReasons: app.alterFulfillReasons.length,
+        tagOption: app.tagOption.length,
+        latestSerial: app.latestSerial,
+        priorityScale: app.priorityScale,
+        lockType: app.lockType,
+        nonWorkDays: app.nonWorkDays.length
+      });
+      const db = Meteor.call("serverDatabaseSize");
       
-      }else{
-        const appAll = JSON.stringify(app);
-        const pin = app.orgPIN;
-        // const hrs = JSON.stringify(app.workingHours);
-        
-        const db = Meteor.call("serverDatabaseSize");
-        
-        const body = `<ul><li>Users: ${db.u}, Active-Users: ${db.uA}</li><li>Groups: ${db.g}, Widgets: ${db.w}, Variants: ${db.v}</li><li>Batches: ${db.b}, Live-Batches: ${db.bL}, Series(Items): ${db.i}, Rapids: ${db.r}, Traces: ${db.t}</li><li>Equips: ${db.e}, Maints: ${db.m}</li><li>TimeDB-Times: ${db.tm}, Caches: ${db.ch}, Email-Log: ${db.em}</li></ul>`;
-        const asid = `OrgPIN: ${pin}`;
-        // const foot = `WorkingHours: ${hrs}`;
-        const foot = `Full App: ${appAll}`;
-        const link = `config: tz:${Config.clientTZ} reply:${Config.replyEmail} tel:${Config.orgTel}`;
-        
-        sendInternalEmail(to, subject, date, title, body, asid, foot, link, ";P");
-      }
+      const body = `<ul><li>Users: ${db.u}, Active-Users: ${db.uA}</li><li>Groups: ${db.g}, Widgets: ${db.w}, Variants: ${db.v}</li><li>Batches: ${db.b}, Live-Batches: ${db.bL}, Series(Items): ${db.i}, Rapids: ${db.r}, Traces: ${db.t}</li><li>Equips: ${db.e}, Maints: ${db.m}</li><li>TimeDB-Times: ${db.tm}, Caches: ${db.ch}, Email-Log: ${db.em}</li></ul>`;
+      const foot = `${appstate}`;
+      const link = `config: tz:${Config.clientTZ} reply:${Config.replyEmail} tel:${Config.orgTel}`;
+      const fine = `${appmin}`;
+      
+      sendInternalEmail(to, subject, date, title, body, "xxxxx", foot, link, fine);
+    
       return true;
     }else{
       return false;

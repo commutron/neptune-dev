@@ -3,7 +3,7 @@ import Pref from '/client/global/pref.js';
 
 import LeapButton from '/client/components/tinyUi/LeapButton';
 import FilterActive from '/client/components/bigUi/FilterActive';
-
+import { flexSort } from '/client/utility/Arrays.js';
 
 const WidgetsList = ({ active, widgetData, groupAlias })=> {
   
@@ -17,8 +17,7 @@ const WidgetsList = ({ active, widgetData, groupAlias })=> {
   
   useEffect( ()=> {
     const a = active;
-    const w = widgetData.sort((w1, w2)=>
-                w1.widget < w2.widget ? -1 : w1.widget > w2.widget ? 1 : 0 );
+    const w = flexSort(widgetData, 'widget');
     const f = filter;
   
     let basicFilter = 

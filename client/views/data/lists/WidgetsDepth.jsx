@@ -2,12 +2,12 @@ import React, { useState, useEffect, Fragment } from 'react';
 import Pref from '/client/global/pref.js';
 import LeapLine from '/client/components/tinyUi/LeapLine';
 import NumStat from '/client/components/tinyUi/NumStat';
+import { flexSort } from '/client/utility/Arrays.js';
 
 const WidgetsDepth = ({ filterString, widgetData, state })=> {
   
-  const w = widgetData.sort((w1, w2)=>
-              w1.widget < w2.widget ? -1  : w1.widget > w2.widget ? 1 : 0 );
-  
+  const w = flexSort(widgetData, 'widget');
+
   let statList = !state ? w : state == 1 ? 
                   w.filter( rd => rd.vopen ) :
                   w.filter( rd => !rd.vopen );

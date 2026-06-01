@@ -1,6 +1,6 @@
 import React, { useState, Fragment } from 'react';
 import './style.css';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import { toast } from 'react-toastify';
 
 import { NonConCheck, onFire } from '/client/utility/NonConOptions';

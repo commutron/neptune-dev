@@ -1,7 +1,8 @@
 import React, { Fragment, useState, useLayoutEffect } from 'react';
 import moment from 'moment';
 import 'moment-business-time';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
+import { flexSort } from '/client/utility/Arrays.js';
 import { CalcSpin } from '/client/components/tinyUi/Spin';
 import WeekBrowse from '/client/components/bigUi/WeekBrowse/WeekBrowse';
 import TideWorkWeek from '/client/components/charts/Tides/TideWorkWeek';
@@ -103,19 +104,13 @@ const PerformanceSlide = ({ app, user, users, traceDT, isDebug })=> {
             u1.username.toLowerCase() < u2.username.toLowerCase() ? -1 : 0 );
     setUserList(unqUserS);
     
-    const unqBatcheS = [...new Set( Array.from(dayFiltered, x => x.batch ) )]
-                        .filter(f=>f)
-                        .sort((b1, b2)=> b1 < b2 ? 1 : b1 > b2 ? -1 : 0 );
+    const unqBatcheS = flexSort([...new Set( Array.from(dayFiltered, x => x.batch ) )].filter(f=>f), false, true);
     setBatchList(unqBatcheS);
     
-    const unqTaskSclean = [...new Set( Array.from(dayFiltered, x => x.task ) )]
-                          .filter(f=>f)
-                          .sort((t1, t2)=> t1 > t2 ? 1 : t1 < t2 ? -1 : 0 );
+    const unqTaskSclean = flexSort([...new Set( Array.from(dayFiltered, x => x.task ) )].filter(f=>f));
     setTaskList(unqTaskSclean);
     
-    const unqEquipS = [...new Set( Array.from(dayFiltered, x => x.project?.split(" ~ ")?.[0]?.split("-")[1] ) )]
-                      .filter(f=>f)
-                      .sort((b1, b2)=> b1 > b2 ? 1 : b1 < b2 ? -1 : 0 );
+    const unqEquipS = flexSort([...new Set( Array.from(dayFiltered, x => x.project?.split(" ~ ")?.[0]?.split("-")[1] ) )].filter(f=>f));
     setEquipList(unqEquipS);
     
   }, [weekData, selectDayState, weekDays]);

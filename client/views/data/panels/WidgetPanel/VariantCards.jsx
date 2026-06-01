@@ -14,6 +14,7 @@ import AssemblyList from './AssemblyList';
 import { MatchButton } from '/client/layouts/Models/Popover';
 
 import { cleanURL } from '/client/utility/Convert';
+import { flexSort } from '/client/utility/Arrays.js';
 
 const VariantCards = ({ 
   variantData, widgetData, 
@@ -53,7 +54,7 @@ const VariantCards = ({
     }
   }
   
-  const varS = variantData.sort((v1, v2)=> v1.createdAt > v2.createdAt ? -1 : v1.createdAt < v2.createdAt ? 1 : 0 );
+  const varS = flexSort(variantData, 'createdAt', true);
   
   return(
     <div className='rowWrap cardify'>

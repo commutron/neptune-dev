@@ -2,6 +2,7 @@ import React, { Fragment, useState, useEffect } from 'react';
 import moment from 'moment';
 import 'moment-timezone';
 import { HolidayCheck } from '/client/utility/WorkTimeCalc.js';
+import { flexSort } from '/client/utility/Arrays.js';
 import Pref from '/client/global/pref.js';
 import { CalcSpin } from '/client/components/tinyUi/Spin';
 import Flatpickr from 'react-flatpickr';
@@ -22,8 +23,7 @@ const HistorySlide = ({ app, user, users, traceDT, isDebug })=> {
     setDayData(false);
     Meteor.call('fetchOrgTideActivity', dateString, (err, rtn)=>{
 	    err && console.log(err);
-	    const cronoTimes = rtn.sort((x1, x2)=>
-              x1.startTime < x2.startTime ? 1 : x1.startTime > x2.startTime ? -1 : 0 );
+	    const cronoTimes = flexSort(rtn, 'startTime', true);
       setDayData(cronoTimes);
 	  });
   }
@@ -197,18 +197,13 @@ const TidePeoplePlot = ({ tide, isDebug, app })=> {
 
 const TideTaskCols = ({ tide, traceDT })=> {
   
-  const userList = [...new Set( Array.from(tide, x => x.who ) )]
-                      .sort((u1, u2)=> u1 > u2 ? 1 : u1 < u2 ? -1 : 0 );
+  const userList = flexSort([...new Set( Array.from(tide, x => x.who ) )]);
                       
-  const batchList = [...new Set( Array.from(tide, x => x.batch ) )].filter(f=>f)
-                      .sort((b1, b2)=> b1 > b2 ? 1 : b1 < b2 ? -1 : 0 );
+  const batchList = flexSort([...new Set( Array.from(tide, x => x.batch ) )].filter(f=>f), false, true);
                       
-  const maintList = [...new Set( Array.from(tide, x => x.project?.split(" ~ ")?.[0]?.split("-")[1] ) )].filter(f=>f)
-                      .sort((b1, b2)=> b1 > b2 ? 1 : b1 < b2 ? -1 : 0 );
+  const maintList = flexSort([...new Set( Array.from(tide, x => x.project?.split(" ~ ")?.[0]?.split("-")[1] ) )].filter(f=>f));
                       
-  const taskList = [...new Set( Array.from(tide, x => x.task ) )]
-                    .filter(f=>f)
-                    .sort((t1, t2)=> t1 > t2 ? 1 : t1 < t2 ? -1 : 0 );
+  const taskList = flexSort([...new Set( Array.from(tide, x => x.task ) )].filter(f=>f));
 
   return(
     <div className='autoGrid'>

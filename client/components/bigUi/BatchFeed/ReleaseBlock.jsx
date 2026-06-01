@@ -1,5 +1,5 @@
 import React from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import '/client/components/bigUi/ItemFeedX/style.css';
 
 import UserNice from '/client/components/smallUi/UserNice.jsx';

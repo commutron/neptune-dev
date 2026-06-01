@@ -27,7 +27,6 @@ const NonConBubble = ({ ncOp, nonCons, app, isDebug })=> {
   useEffect( ()=> {
     const nonConOptions = ncOp || [];
     const splitByWhere = [...new Set( Array.from(nonCons, n => n.where ) ) ];
-    wheresSet(splitByWhere);
     
     const splitOut = splitByWhere.map( (where, index)=> {
       let match = nonCons.filter( y => y.where === where );
@@ -40,23 +39,28 @@ const NonConBubble = ({ ncOp, nonCons, app, isDebug })=> {
     isDebug && console.log(splitOut);
       
     let ncCounts = [];
-    let typeSet = new Set();
+    let nice_typeSet = new Set();
+    let nice_whereSet = new Set();
     
     for(let ncSet of splitOut) {
       for(let ncType of nonConOptions) {
         const typeCount = countMulti( ncSet.pNC.filter( x => x.type === ncType ) );
         if(typeCount > 0) {
-          typeSet.add(ncType);
+          const nicetype = toCap(ncType, true);
+          nice_typeSet.add(nicetype);
+          const nicewhere = toCap(ncSet.where, true);
+          nice_whereSet.add(nicewhere);
           ncCounts.push({
-            x: ncSet.where,
-            y: ncType,
+            x: nicewhere,
+            y: nicetype,
             r: typeCount
           });
         }
       }
     }
     
-    typesSet([...typeSet]);
+    wheresSet([...nice_whereSet]);
+    typesSet([...nice_typeSet]);
     seriesSet(ncCounts);
     
   }, []);
@@ -75,21 +79,21 @@ const NonConBubble = ({ ncOp, nonCons, app, isDebug })=> {
         type: 'category',
         labels: wheres,
         offset: true,
-        ticks: {
-          callback: function(v) { 
-            return toCap( this.getLabelForValue(v) || "" ); 
-          }
-        }
+        // ticks: {
+        //   callback: function(v) { 
+        //     return toCap( this.getLabelForValue(v) || "" ); 
+        //   }
+        // }
       },
       y: {
         type: 'category',
         labels: types,
         offset: true,
-        ticks: {
-          callback: function(v) { 
-            return toCap( this.getLabelForValue(v) || "" );
-          }
-        }
+        // ticks: {
+        //   callback: function(v) { 
+        //     return toCap( this.getLabelForValue(v) || "" );
+        //   }
+        // }
       }
     },
     plugins: {
@@ -99,7 +103,7 @@ const NonConBubble = ({ ncOp, nonCons, app, isDebug })=> {
       legend: false,
       tooltip: {
         callbacks: {
-          label: (cntxt)=> `${cntxt.raw.x}, ${cntxt.raw.y}, qty: ${cntxt.raw.r}`
+          label: (cntxt)=> `${cntxt.raw.x}, ${cntxt.raw.y}, Qty: ${cntxt.raw.r}`
         }
       }
     },

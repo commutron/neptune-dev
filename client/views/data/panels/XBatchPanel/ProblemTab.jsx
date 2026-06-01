@@ -126,9 +126,9 @@ const ProblemTab = ({
             isDebug={isDebug} />
          
           <NonConRate 
-            batches={[batch]}
+            batch={batch}
             title='NonCon Rate'
-            lineColor='rgb(231, 76, 60)' />
+          />
           
           <ShortScatter
             shortfalls={srsShorts}

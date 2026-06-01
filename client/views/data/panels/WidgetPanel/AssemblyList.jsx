@@ -3,14 +3,14 @@ import Pref from '/client/global/pref.js';
 
 import CompForm from '/client/components/forms/CompForm';
 import { MatchButton } from '/client/layouts/Models/Popover';
+import { flexSort } from '/client/utility/Arrays.js';
 
 const AssemblyList = ({ variantData, doCmp, canRmv })=> {
   
   const [ addState, addSet ] = useState(false);
   const [ rmvState, rmvSet ] = useState(false);
 
-  const vAssmbl = variantData.assembly.sort((p1, p2)=>
-      p1.component < p2.component ? -1 : p1.component > p2.component ? 1 : 0 );
+  const vAssmbl = flexSort(variantData.assembly, 'component');
   
   function downloadComp(vID, vName) {
     Meteor.call('componentExport', widgetData._id, vID, (error, reply)=>{

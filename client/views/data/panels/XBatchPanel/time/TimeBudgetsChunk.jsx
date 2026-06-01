@@ -21,7 +21,7 @@ const TimeBudgetsChunk = ({
 }) =>	{
   
   const [ branchTime, branchTimeSet ] = useState(false);
-  const [ qtZero, showQtZero ] = useState(false);
+  const [ showZero, changeZero ] = useState(false);
 
   useEffect( ()=>{
     Meteor.call('collateBranchTime', b.batch, (err, reply)=>{
@@ -70,13 +70,14 @@ const TimeBudgetsChunk = ({
           <em>{b.quoteTimeCycles ? "QT Time (2025) Enabled" : "Legacy Task Time Estimates Used"}</em>
         </div>
         
-        <span className='rowWrap'>Zero Sub-Tasks
-          <label className='beside gapR'>
+        <span className='rowWrap'>
+          <label className='beside liteTool liteToolOff medSm gapR'>Show Zeros
             <input
               type='checkbox'
-              className='minHeight medSm'
-              defaultChecked={qtZero}
-              onChange={()=>showQtZero(!qtZero)} 
+              className='minHeight'
+              style={{marginInline: '5px 0'}}
+              defaultChecked={showZero}
+              onChange={()=>changeZero(!showZero)} 
             /></label>
           <ToggleBar
             toggleIcons={['𝗛𝗿', '𝗠𝗻', 
@@ -104,6 +105,7 @@ const TimeBudgetsChunk = ({
         <TimeBlocksRaw 
           batch={b.batch}
           tide={b.tide}
+          showZero={showZero}
           lockOut={b.lock}
           isDebug={isDebug} />
       : 
@@ -155,7 +157,7 @@ const TimeBudgetsChunk = ({
                     qtTaskTimesArray={b.quoteTimeCycles || oldTaskTimesArray} 
                     timeAs={timeAs}
                     cnv={cnv}
-                    qtZero={qtZero}
+                    qtZero={showZero}
                     mlt='Includes Multi-tasking'
                     app={app}
                     quantity={b.quantity}

@@ -4,9 +4,10 @@ import moment from 'moment';
 import UserNice from '../smallUi/UserNice.jsx';
 import BlockForm from '../forms/BlockForm.jsx';
 import { SolveBlock } from '../forms/BlockForm.jsx';
+import { flexSort } from '/client/utility/Arrays.js';
 
 const BlockList = ({ id, data, doneLock, truncate, canRun })=> {
-  let blocks = data.sort((s1, s2) => s1.time < s2.time);
+  let blocks = flexSort(data, 'time');
   if(blocks.length > 0) {
     return (
       <div className='blockerList'>

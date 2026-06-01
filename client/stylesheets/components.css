@@ -118,6 +118,12 @@ n-timeline-item:last-child n-timeline-marker:after {
   cursor: default;
   line-height: 1.5;
 }
+.miniStack > p:first-child {
+  margin-bottom: 5px;
+}
+.miniStack > p:last-child {
+  margin-top: 5px;
+}
 .miniStack::after {
   content: attr(data-new) '\a' 
            attr(data-not) '\a'

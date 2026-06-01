@@ -3,15 +3,14 @@ import { toast } from 'react-toastify';
 import './style.css';
 
 import { textToArray } from '/client/utility/Convert';
+import { flexSort } from '/client/utility/Arrays.js';
 import { DoButton, BrTxtAr } from './BranchBuilder';
 
 const QtTaskBuilder = ({ app, branchesS, isDebug })=> {
   
   const qtTasks = app.qtTasks || [];
-  const qtTasksSort = qtTasks.sort((q1, q2)=>
-          q1.position < q2.position ? 1 : q1.position > q2.position ? -1 : 0 );
+  const qtTasksSort = flexSort(qtTasks, 'position', true);
 
-  
   return(
     <div className='stepList'>
       <QtTaskHead />

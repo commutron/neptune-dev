@@ -4,6 +4,7 @@ import moment from 'moment';
 import Pref from '/public/pref.js';
 import { CalcSpin } from '/client/components/tinyUi/Spin';
 import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock';
+import { flexSort } from '/client/utility/Arrays.js';
 
 const ServicePanel = ()=> {
   
@@ -13,9 +14,7 @@ const ServicePanel = ()=> {
     Meteor.call('getEquipAssigned', (err, rtn)=>{
 	    err && console.log(err);
 	    if(rtn) {
-	    const alpha = rtn.sort((x1, x2)=>
-                      x1.equip > x2.equip ? 1 : 
-                      x1.equip < x2.equip ? -1 : 0 );
+	    const alpha = flexSort(rtn, 'equip');
       setEquipData(alpha);
 	    }
 	  });
@@ -49,10 +48,7 @@ const ServicePanel = ()=> {
           <h3 className='cap'><ExploreLinkBlock type='equip' keyword={eq.alias} altName={eq.equip} /></h3>
           <dl>
             <dt>Next Service</dt>
-            {eq.serve.sort((x1, x2)=>
-                        x1.close < x2.close ? -1 : 
-                        x1.close > x2.close ? 1 : 0 )
-                      .map( (sv, ix)=>(
+            {flexSort(eq.serve, 'close').map( (sv, ix)=>(
               <dd key={ix} className='cap'
               ><button
                 className='cap textLinkButton'

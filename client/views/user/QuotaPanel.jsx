@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import 'moment-timezone';
 import { CalcSpin } from '/client/components/tinyUi/Spin';
+import { flexSort } from '/client/utility/Arrays.js';
 import WeekBrowse from '/client/components/bigUi/WeekBrowse/WeekBrowse';
 import TideWeekMini from '/client/components/charts/Tides/TideWeekMini';
 
@@ -19,9 +20,7 @@ const QuotaPanel = ({ app, brancheS, user, isDebug, users, traceDT })=> {
       Meteor.call('fetchWeekTideActivity', yearNum, weekNum, false, userID,
       (err, rtn)=>{
   	    err && console.log(err);
-  	    const cronoTimes = rtn.sort((x1, x2)=>
-                              x1.startTime < x2.startTime ? 1 : 
-                              x1.startTime > x2.startTime ? -1 : 0 );
+  	    const cronoTimes = flexSort(rtn, 'startTime', true);
         setWeekData(cronoTimes);
   	  });
     }

@@ -13,7 +13,7 @@
 n-feed-info-block {
   display: grid;
   width: 100%;
-  margin: calc(var(--vert_border) * 2) 0;
+  margin: calc(var(--vert_border) * 1.5) 0;
   grid-auto-columns: 75px auto 75px;
   grid-auto-flow: column;
 }

@@ -2,11 +2,10 @@ import React from 'react';
 import moment from 'moment';
 import './style.css';
 
-import CreateBlock from './CreateBlock';
+import { CreateBlock, AltBlock } from './ABlock';
 import HistoryBlock from './HistoryBlock';
 import NonConBlock from './NonConBlock';
 import ShortBlock from './ShortBlock';
-import AltBlock from './AltBlock';
 import NestBlock from './NestBlock';
 import RapidBlock from './RapidBlock';
 import UserNice from '/client/components/smallUi/UserNice';
@@ -251,7 +250,7 @@ const ItemFeedX = ({
       <div className='infoFeed'>
       
         <CreateBlock
-          title='serial number created'
+          title='serial number'
           user={createBy}
           datetime={createTime}
           cal={calFunc} />
