@@ -688,6 +688,12 @@ main {
 .gapsR { row-gap: 2vh; }
 .gapsC { column-gap: 2vw; }
 .gapminC { column-gap: 5px; }
+.vgapdivs > div {
+  margin-block: 5px;
+}
+.spaceinnerdivs > div div {
+  padding: 10px;
+}
 
 .badge {
   position: absolute;

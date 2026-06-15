@@ -29,6 +29,7 @@ const HomeIcon = () => {
         position="top-right"
         theme='colored'
         newestOnTop 
+        // stacked={true} // newer version
       />
       
       <div 

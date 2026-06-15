@@ -86,7 +86,7 @@ function getFirsts(items) {
   return [].concat(...Array.from( items, x => x.history.filter( y => y.type === 'first') ) );
 }
     
-function FlowCounter(flow, seriesData) {
+function FlowCounter(flow, seriesData, riverKey) {
   const srsItems = seriesData?.items || [];
   
   const now = new Date().toDateString();
@@ -97,8 +97,8 @@ function FlowCounter(flow, seriesData) {
   
   const firstsFlat = getFirsts(allLiveItems);
   
-  const stndItems = allLiveItems.filter( i => i.altPath.every( a => !a.river ) );
-  const althItems = allLiveItems.filter( i => i.altPath.some( a => a.river !== false ) );
+  const stndItems = allLiveItems.filter( i => i.altPath.every( a => !a.river ) || i.altPath.find( a => a.river === riverKey ) );
+  const althItems = allLiveItems.filter( i => i.altPath.some( a => a.river !== false && a.river !== riverKey ) );
   
   const liveUnits = unitTotalCount(stndItems);
   const altUnits = unitTotalCount(althItems);

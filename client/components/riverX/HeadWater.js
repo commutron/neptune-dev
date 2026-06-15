@@ -19,7 +19,7 @@ function HeadWater( batchData, seriesData, widgetData ) {
       hasRiver = true;
     }
     
-    flowCounts = FlowCounter(flow, seriesData);
+    flowCounts = FlowCounter(flow, seriesData, batchData.river);
   }
    
   return { hasRiver, flow, srange, flowCounts };

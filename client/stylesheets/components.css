@@ -155,6 +155,11 @@ n-timeline-item:last-child n-timeline-marker:after {
     transition: opacity 150ms ease-in;
   }
 }
+.extraList {
+  background-color: rgb(125,125,125,0.05);
+  border: 1px solid rgb(125,125,125,0.2);
+  padding-inline: 10px;
+}
 
 .cssMiniRing {
   width: 100%;

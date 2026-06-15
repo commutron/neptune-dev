@@ -23,7 +23,7 @@ const MiniStack = ({
     letterSpacing: '1px'
   };
   
-  const per = (val)=> Math.max(0, Math.ceil( ( val / t ) * 100 ) );
+  const per = (val)=> Math.max(0, Math.ceil( ( val / (t || 1) ) * 100 ) );
   
   const by = per(dataArr[0]);
   const dn = by + per(dataArr[1]);

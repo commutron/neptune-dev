@@ -69,6 +69,7 @@ const DataViewOps = ({
   }
   
   function getFlowData(batchData, seriesData, widgetData, appData) {
+    const riverKey = batchData?.river || false;
     let riverTitle = 'unset';
     let riverFlow = [];
     
@@ -80,10 +81,10 @@ const DataViewOps = ({
     const srange = itemS && itemS.length > 0 ?
                   `${itemS[0].serial} - ${itemS[itemS.length-1].serial}` : null;
                   
-    const getRiverFirst = (w, bx)=> {
+    const getRiverFirst = (w, bxriver)=> {
       return new Promise(function(resolve) {
-        if( w && bx ) {
-          const river = w.flows.find( x => x.flowKey === bx.river);
+        if( w && bxriver ) {
+          const river = w.flows.find( x => x.flowKey === bxriver);
           if(river) {
             riverTitle = river.title;
             riverFlow = river.flow;
@@ -95,11 +96,11 @@ const DataViewOps = ({
     };
     
     const generateSecond = (srs)=> {
-      flowCounts = FlowCounter(riverFlow, srs);
+      flowCounts = FlowCounter(riverFlow, srs, riverKey);
       ncTypesComboFlat = NonConMerge(ncListKeys, appData, user, true);
     };
 
-    getRiverFirst(widgetData, batchData).then(generateSecond(seriesData));
+    getRiverFirst(widgetData, riverKey).then(generateSecond(seriesData));
 
     return {
       riverTitle, riverFlow, srange,

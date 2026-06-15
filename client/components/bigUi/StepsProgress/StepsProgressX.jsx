@@ -159,6 +159,7 @@ const StepsProgressX  = ({
         </span>
       : null}
       
+      <div className='extraList'>
       {( dt?.altItems || 0 ) > 0 &&
         <MiniStack
           key='altCombo'
@@ -183,7 +184,7 @@ const StepsProgressX  = ({
             ]}
             truncate={truncate} />
       )})}
-      
+      </div>
     </div>
     
   );
