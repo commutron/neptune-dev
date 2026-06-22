@@ -148,84 +148,49 @@ const TotalSet = ({ srsCount, dataset })=> {
         num={srsCount}
         name={`Live Work Orders`}
         color='var(--neptuneColor)'
-        index={1}
       />
       <NumWrapper
         num={dataset[1][1]}
-        name={`Total Items`}
+        name={`Total Items of live wo`}
         color='var(--peterriver)'
-        index={2}
+      />
+      
+      <h4>Processed in Month</h4>
+      
+      <NumWrapper
+        num={dataset[1][1]}
+        name='Processed in timespan items'
+        color='var(--peterriver)'
+      />
+      <NumWrapper
+        num={dataset[6][1]}
+        name={`First-off Items`}
+        color='var(--belizeHole)'
       />
       <NumWrapper
         num={dataset[2][1]}
-        name={`Total Items with NonCons`}
+        name='Processed in timespan items with noncons'
         color='var(--alizarin)'
-        index={3}
       />
       <NumWrapper
         num={dataset[3][1] + '%'}
-        name={`Percent of all Items with NonCons`}
+        name='of Processed in timespan items with noncons'
         color='var(--alizarin)'
-        index={4}
-      />  
+      /> 
       
-      <hr />
+      <h4>Scrapped Items</h4>
       
-      <h4>Discovered in Month</h4>
-      
-      <NumWrapper
+      <NumWrapper 
+        name="Processed serials scrapped"
         num={dataset[4][1]}
-        name='discovered in timespan noncons'
-        color='var(--alizarin)'
-        index={5}
+        color="var(--pomegranate)"
       />
-      <NumWrapper
-        num={dataset[5][1]}
-        name='discovered in timespan noncons serails'
-        color='var(--alizarin)'
-        index={6}
+      <NumWrapper 
+        num={dataset[5][1] + '%'}
+        name="Of processed serials scrapped"
+        color="var(--pomegranate)"
       />
-      <NumWrapper
-        num={dataset[6][1] + '%'}
-        name='of items with discovered in timespan noncons'
-        color='var(--alizarin)'
-        index={7}
-      /> 
-      
-      <hr />
-      
-      <h4>Inpected in Month</h4>
-      
-      <NumWrapper
-        num={dataset[7][1]}
-        name='inspected in timespan items'
-        color='var(--peterriver)'
-        index={8}
-      />
-      <NumWrapper
-        num={dataset[8][1]}
-        name='inspected in timespan items with noncons'
-        color='var(--alizarin)'
-        index={9}
-      />
-      <NumWrapper
-        num={dataset[9][1] + '%'}
-        name='of inspected in timespan items with noncons'
-        color='var(--alizarin)'
-        index={10}
-      /> 
-      
-      <hr />
-      
-      <h4>Discovered & Inspected in Month</h4>
-      
-      <NumWrapper
-        num={dataset[10][1] + '%'}
-        name='of inspected in timespan items with in timespan noncons'
-        color='var(--alizarin)'
-        index={11}
-      />
-      
+
       <hr />
           
     </div>
@@ -238,76 +203,6 @@ const SrsSet = ({ dataset, filter })=> {
   
   return(
     <div className='vmargin vgapdivs spaceinnerdivs'>
-      
-      <h4>Work Orders Averaged</h4>
-      
-      <AvgWrapper 
-        name={`average of serials with noncons`}
-        append="%"
-        array={isProc} 
-        line={3}
-        index={12}
-      />
-      <AvgWrapper 
-        name={`average of serials with in timespan noncons`}
-        append="%"
-        array={isProc} 
-        line={5}
-        index={13}
-      />
-      <AvgWrapper 
-        name={`average of inspected serials with noncons`}
-        append="%"
-        array={isProc} 
-        line={8}
-        index={14}
-      />
-      <AvgWrapper 
-        name={`average of inspected serials with in timespan noncons`}
-        append="%"
-        array={isProc} 
-        line={10}
-        index={15}
-      />
-      
-      <hr />
-      
-      <h4>Scrapped Items</h4>
-        
-      <TotalWrapper 
-        name="total serials scrapped"
-        array={isProc} 
-        line={11}
-        color="var(--pomegranate)"
-        index={16}
-      />
-      <AvgWrapper 
-        name="average serials scrapped"
-        append="%"
-        array={isProc} 
-        line={11}
-        color="var(--pomegranate)"
-        index={17}
-      />
-      
-      <TotalWrapper 
-        name="total inspected serials scrapped"
-        array={isProc} 
-        line={12}
-        color="var(--pomegranate)"
-        index={18}
-      />
-      <AvgWrapper 
-        name="average inspected serials scrapped"
-        append="%"
-        array={isProc} 
-        line={12}
-        color="var(--pomegranate)"
-        index={19}
-      />
-
-      <hr />
-      
       <details>
         <summary>test/proof</summary>
         <div>
@@ -323,72 +218,40 @@ const SrsSet = ({ dataset, filter })=> {
               array={isProc} 
               line={1}
             />
+          </div>
+          <div className='autoFlex'>
             <SmpleDataSet 
-              title='serials with noncon'
+              title='serials processed'
               array={isProc} 
               line={2}
             />
             <SmpleDataSet 
-              title="percent of serials with noncons"
-              array={isProc} 
-              line={3}
-              sufix="%"
-            />
-          </div>
-          <div className='autoFlex'>
-            <SmpleDataSet 
-              title='serials with in timespan noncons'
-              array={isProc} 
-              line={4}
-            />
-            <SmpleDataSet 
-              title='serials with in timespan noncons'
-              array={isProc} 
-              line={5}
-              sufix="%"
-            />
-          </div>
-          <div className='autoFlex'>
-            <SmpleDataSet 
-              title='serials inspected'
-              array={isProc} 
-              line={6}
-            />
-            <SmpleDataSet 
-              title='serials inspected with noncons'
+              title='serials processed as first-offs'
               array={isProc} 
               line={7}
             />
             <SmpleDataSet 
-              title='serials inspected with noncons'
+              title='serials processed with noncons'
               array={isProc} 
-              line={8}
+              line={3}
+            />
+            <SmpleDataSet 
+              title='serials processed with noncons'
+              array={isProc} 
+              line={4}
               sufix="%"
             />
           </div>
           <div className='autoFlex'>
             <SmpleDataSet 
-              title='serials inspected in timespan noncons'
+              title='serials processed then scrapped'
               array={isProc} 
-              line={9}
+              line={5}
             />
             <SmpleDataSet 
-              title='serials inspected in timespan noncons'
+              title='serials processed then scrapped'
               array={isProc} 
-              line={10}
-              sufix="%"
-            />
-          </div>
-          <div className='autoFlex'>
-            <SmpleDataSet 
-              title='total serials scapped'
-              array={isProc} 
-              line={11}
-            />
-            <SmpleDataSet 
-              title='serials inspected in timespan then scapped'
-              array={isProc} 
-              line={12}
+              line={6}
             />
           </div>
         </div>
@@ -419,50 +282,44 @@ const SmpleDataSet = ({ title, array, line, exlink, unq, sufix })=> {
   );
 };
 
-const NumWrapper = ({ name, title, num, color, index })=> (
-  <div className='rowWrap'>
-    <span className='numFont'>{index.toString().padStart(2, '0')}</span>
-    <input type='checkbox' className='medBig' />
-    <KpiStat
-      num={num}
-      name={name}
-      title={title || ""}
-      color={color || "var(--alizarin)"}
-    /> 
-  </div>
+const NumWrapper = ({ name, title, num, color })=> (
+  <KpiStat
+    num={num}
+    name={name}
+    title={title || ""}
+    color={color || "var(--alizarin)"}
+  /> 
 );
 
-const TotalWrapper = ({ name, title, array, line, color, index })=> {
+// const TotalWrapper = ({ name, title, array, line, color })=> {
   
-  const total = array.reduce( (x,y)=> x + y[line][1], 0);
+//   const total = array.reduce( (x,y)=> x + y[line][1], 0);
         
-  return(
-    <NumWrapper
-      num={total}
-      name={name}
-      title={title || ""}
-      color={color || "var(--alizarin)"}
-      index={index || 0}
-    /> 
-  );
-};
+//   return(
+//     <NumWrapper
+//       num={total}
+//       name={name}
+//       title={title || ""}
+//       color={color || "var(--alizarin)"}
+//     /> 
+//   );
+// };
 
-const AvgWrapper = ({ name, append, title, array, line, color, index })=> {
+// const AvgWrapper = ({ name, append, title, array, line, color })=> {
   
-  const add = array.reduce( (x,y)=> x + Number(y[line][1]), 0);
-  const avg = !add ? 0 : ( add / array.length );
-  const prcnt = avg < 1 ? avg.toFixed(2) : avg.toFixed(1);
+//   const add = array.reduce( (x,y)=> x + Number(y[line][1]), 0);
+//   const avg = !add ? 0 : ( add / array.length );
+//   const prcnt = avg < 1 ? avg.toFixed(2) : avg.toFixed(1);
   
-  return(
-    <NumWrapper
-      num={prcnt + append || ""}
-      name={name}
-      title={title || ""}
-      color={color || "var(--alizarin)"}
-      index={index || 0}
-    />
-  );
-};
+//   return(
+//     <NumWrapper
+//       num={prcnt + append || ""}
+//       name={name}
+//       title={title || ""}
+//       color={color || "var(--alizarin)"}
+//     />
+//   );
+// };
 
 
 const Taglist = ({ title, list, status, name, oncolor, offcolor })=> (

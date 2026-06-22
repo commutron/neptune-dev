@@ -339,7 +339,6 @@ Meteor.methods({
         return si.reduce((t,i)=> {
           if(i.scrapped === true && i.history.find( h => h.type === 'scrap' && 
                                                          h.good === true
-                                      // scapped in time spane && chkT(h.time)
                                                   ) 
           ) {
             return t + 1;
@@ -348,14 +347,6 @@ Meteor.methods({
           }
         }, 0);
       }
-    };
-    
-    const nserial = (narr)=> {
-      let ncScope = new Set();
-      for(let n of narr) {
-        ncScope.add(n.serial);
-      }
-      return ncScope.size;
     };
     
     const asPcnt = (val, total)=> {
@@ -404,7 +395,7 @@ Meteor.methods({
                             // qtTask.fixed ? bqchunk[1] :
                             // bqchunk[2] ? ( bqchunk[1] * bQty ) :
                             // ( bqchunk[1] * iQty );
-                            
+      
       return [
         ['batch', b.batch],
         ['widget id', b.widgetId],
@@ -413,20 +404,15 @@ Meteor.methods({
         ['quoted qtasks', quoteTimes],
         ['total logged minutes', minutesTotal]
       ];
-    },[]);
-    
-    let disc_noncons = 0;
-    
-    let disc_nspan = 0;
+    },[])
+    .filter( ar => ar[5][1] > 0 );
     
     let batch_items = 0;
-    let noncon_items = 0;
     
-    let nspan_items = 0;
-    
-    let inspect_items = 0;
-    let inspect_ncitems = 0;
-    let inspect_ncspanitems = 0;
+    let proc_items = 0;
+    let frst_items = 0;
+    let proc_ncitems = 0;
+    let proc_scpitems = 0;
     
     const seriesPack = XSeriesDB.find({
       batch: { $in: batchNums }
@@ -436,96 +422,66 @@ Meteor.methods({
       const itemQty = num(srs.items);
       batch_items += itemQty;
       
-      const nbch = srs.nonCon.filter( (n)=> bRx.test(n.where) && !n.trash && !(n.inspect && !n.fix) );
-      disc_noncons += nbch.length;
-      const nbchNCsrls = nserial(nbch);
-      noncon_items += nbchNCsrls;
-      
-      const ncprcnt = asPcnt(nbchNCsrls, itemQty);
-      
-      // Discovered in time period
-      const nspan = nbch.filter( (n)=> chkT(n.time) );
-      disc_nspan += nspan.length;
-      const nspanNCsrls = nserial(nspan);
-      nspan_items += nspanNCsrls;
-      
-      const nspanprcnt = asPcnt(nspanNCsrls, itemQty);
+      const ncbr = srs.nonCon.filter( (n)=> bRx.test(n.where) && !n.trash && !(n.inspect && !n.fix) );
       
       // Processed in time period
       const ispan = srs.items.filter( (i)=> i.history.find( h => iRx.test(h.step) && chkT(h.time)) );
       const ispanQty = num(ispan);
-      inspect_items += ispanQty;
+      proc_items += ispanQty;
+      
+      const ifirst = ispan.reduce( (t,i)=> i.history.find( h => h.type === 'first' && iRx.test(h.step) && chkT(h.time)) ? t + 1 : t, 0);
+      frst_items += ifirst;
       
       // - ispected with noncon
-      const spanserialsNC = ispan.filter( i=> nbch.find( n=> n.serial === i.serial ) ).length;
-      inspect_ncitems += spanserialsNC;
+      const ispanNC = ispan.filter( i=> ncbr.find( n=> n.serial === i.serial ) ).length;
+      proc_ncitems += ispanNC;
       
-      const ncispanprcnt = asPcnt(spanserialsNC, ispanQty);
+      const ncispanprcnt = asPcnt(ispanNC, ispanQty);
       
-      // - inspected with inspan noncon
-      const spanserials_spannc = ispan.filter( i=> nspan.find( n=> n.serial === i.serial ) ).length;
-      inspect_ncspanitems += spanserials_spannc;
-      
-      const nspanispanprcnt = asPcnt(spanserials_spannc, ispanQty);
-      
-      
-      
-      const scrap = scp(srs.items);
+      // - ispected then scrapped
       const ispanScp = scp(ispan);
+      proc_scpitems += ispanScp;
+      
+      const scpispanprcnt = asPcnt(ispanScp, ispanQty);
       
       return [
         ['batch', srs.batch],
         
         ['total quantity', itemQty],
-        ['total serials with noncons', nbchNCsrls],
-        ['percent of serials with noncons', ncprcnt],
-        
-        ['total serials with in timespan noncons', nspanNCsrls],
-        ['percent of serials with in timespan noncons', nspanprcnt],
-        
+
         ['processed quantity', ispanQty],
-        ['processed with noncons', spanserialsNC],
-        ['percent of processed with noncons', ncispanprcnt],
+        ['processed with noncons', ispanNC], // KEEP
+        ['percent of processed with noncons', ncispanprcnt],// KEEP
         
-        ['processed with in timespan noncons', spanserials_spannc],
-        ['percent of processed with in timespan noncons', nspanispanprcnt],
-        
-        ['total scrap', scrap],
         ['processed scrap', ispanScp],
+        ['percent of processed scrap', scpispanprcnt],
+        
+        ['first-off items', ifirst]
       ];
     },[]);
     
     // console.log([ batchPack.length, seriesPack.length ]);
     
-    const ncitems_prcnt = asPcnt(noncon_items, batch_items);
-    
-    const nspan_items_prcnt = asPcnt(nspan_items, batch_items);
-    
-    const inspect_ncitems_prcnt = asPcnt(inspect_ncitems, inspect_items);
-    
-    const nspan_inspect_items_prcnt = asPcnt(inspect_ncspanitems, inspect_items);
-    
+    const proc_ncitems_prcnt = asPcnt(proc_ncitems, proc_items);
+    const proc_scitems_prcnt = asPcnt(proc_scpitems, proc_items);
     
     return {
       batch: batchPack,
       series: seriesPack,
       dpmt: [
-        ['total noncons', disc_noncons],
         ['total quantity', batch_items],
-        ['total serials with noncons', noncon_items],
-        ['percent of items with noncons', ncitems_prcnt],
         
-        ['discovered in timespan noncons', disc_nspan],
-        ['discovered in timespan noncons serails', nspan_items],
-        ['percent of items with discovered in timespan noncons', nspan_items_prcnt],
+        ['inspected in timespan items', proc_items],
 
-        ['inspected in timespan items', inspect_items],
-        ['inspected in timespan items with noncons', inspect_ncitems],
-        ['percent of inspected in timespan items with noncons', inspect_ncitems_prcnt],
+        ['inspected in timespan items with noncons', proc_ncitems],
+        ['percent of inspected in timespan items with noncons', proc_ncitems_prcnt],
         
-        ['percent of inspected in timespan items with in timespan noncons', nspan_inspect_items_prcnt],
+        ['inspected in timespan items scrapped', proc_scpitems],
+        ['percent of inspected in timespan items scrapped', proc_scitems_prcnt],
+        
+        ['first-off items', frst_items]
       ]
     };
-  },
+  }
   
 })

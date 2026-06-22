@@ -312,7 +312,7 @@ Meteor.methods({
           moment(x.startTime).week() === getWeek);
           
         const rtnBlock = slimTideArray(btch.batch, yourWeek, btch.lock);
-        Array.prototype.push.apply(slimCollection, rtnBlock);
+        slimCollection.push(...rtnBlock);
       }
       
       const dayTimez = !allOrg ?

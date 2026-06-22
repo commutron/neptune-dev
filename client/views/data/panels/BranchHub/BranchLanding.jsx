@@ -1,9 +1,4 @@
 import React from 'react';
-// import Pref from '/public/pref.js';
-
-// import KpiStat from '/client/components/smallUi/StatusBlocks/KpiStat';
-
-// import { timeRanges } from '/client/utility/CycleCalc';
 
 const BranchLanding = ({ uri, menuList })=> {
   

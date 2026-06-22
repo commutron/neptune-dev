@@ -47,7 +47,7 @@ const TideFollow = ({ tOpen, canMulti })=> {
 	const username = user.username;
 	
 	const uFl = username.charAt(0);
-	const usp = username.split('.');
+	const usp = username.split(/[\s.\-\_]/);
 	const uLl = usp[1] ? usp[1].charAt(0) : username.charAt(1);
 	
 	const engaged = user.engaged;

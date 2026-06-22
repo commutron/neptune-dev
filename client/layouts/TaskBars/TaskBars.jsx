@@ -207,22 +207,34 @@ export const DownTaskBar = ({ subLink }) => (
   </div>
 );
 
-const FilterElement = ({ title, subTitle, goLink, branchON, changeBranch, icon, iconAdj, size, shrink, lock }) => (
-  <button
-    aria-label={toCap(title, true)}
-    style={shrink ? {minHeight:'unset',padding:'5px 0'} : {}}
-    className={
-      `taskLink taskTip numFont 
-      ${branchON ? 'onTL' : ''} 
-      ${size || ''} 
-      ${icon ? '' : 'nomarginB'}
-    `}
-    onClick={()=>{FlowRouter.go( '/overview' );changeBranch( goLink )}}
-    disabled={lock}
-  >{icon ? <i className={icon} data-fa-transform={iconAdj}></i> : 
-           <i className={size}>{toCap(subTitle)}</i>}
-  </button>
-);
+const FilterElement = ({ 
+  title, subTitle, 
+  goLink, branchON, changeBranch, 
+  icon, iconAdj, size, shrink, lock 
+}) => {
+  
+  const t1 = title.charAt(0);
+	const tsp = title.split(/\s/);
+	const t2 = tsp[1]?.charAt(0) || false;
+	const itit = t2 && (t1 !== t2) ? (t1 + t2).toUpperCase() : toCap(subTitle);
+	
+  return(
+    <button
+      aria-label={toCap(title, true)}
+      style={shrink ? {minHeight:'unset',padding:'5px 0'} : {}}
+      className={
+        `taskLink taskTip numFont 
+        ${branchON ? 'onTL' : ''} 
+        ${size || ''} 
+        ${icon ? '' : 'nomarginB'}
+      `}
+      onClick={()=>{FlowRouter.go( '/overview' );changeBranch( goLink )}}
+      disabled={lock}
+    >{icon ? <i className={icon} data-fa-transform={iconAdj}></i> : 
+             <i className={size}>{itit}</i>}
+    </button>
+  );
+};
 
 export const OverMenuBar = ({ brancheS, branchON, changeBranch, light }) => {
   

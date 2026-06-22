@@ -65,6 +65,7 @@ export const MonthSelect = ({ setDate })=> {
           altInput: true,
           altFormat: "F J Y",
           maxDate: new Date(),
+          disableMobile: true,
           plugins: [
             new monthSelectPlugin({})
           ]
@@ -94,6 +95,7 @@ export const WeekSelect = ({ setDate })=> {
           altFormat: "F Y \\Week W",
           weekNumbers: true,
           maxDate: new Date(),
+          // disableMobile: true, // maybe required?
           plugins: [
             new weekSelectPlugin({})
           ]
