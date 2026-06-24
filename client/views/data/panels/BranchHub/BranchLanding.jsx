@@ -13,6 +13,9 @@ const BranchLanding = ({ uri, menuList })=> {
       
       <div className='autoColGrid space36v'>
         {menuList.map( (entry, index)=>{
+          if(entry[1]) {
+            return null;
+          }else{
           return(
             <button
               key={index}
@@ -22,7 +25,7 @@ const BranchLanding = ({ uri, menuList })=> {
             {entry[2] && <div className='small cap'>{entry[2]}</div>}
             </button>
           );
-        })}
+        }})}
       </div>
             
     </div>

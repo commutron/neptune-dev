@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import Pref from '/public/pref.js';
 // import { PopoverButton, PopoverMenu, PopoverAction } from '/client/layouts/Models/Popover';
 
@@ -7,6 +7,7 @@ import KpiStat from '/client/components/smallUi/StatusBlocks/KpiStat';
 import NumStatBox from '/client/components/charts/Dash/NumStatBox';
 import { MonthSelect } from '/client/components/smallUi/DateRangeSelect';
 import { flexSort } from '/client/utility/Arrays.js';
+import ReportBasicTable from '/client/components/tables/ReportBasicTable';
 
 const BranchSlide = ({ 
   brData, equipData, app, 
@@ -18,19 +19,19 @@ const BranchSlide = ({
   const [ month, monthSet ] = useState(false);
   
   const [ eqs, eqsSet ] = useState([]);
+  const [ qs, qsSet ] = useState([]);
   const [ subs, subsSet ] = useState([]);
   const [ steps, stepsSet ] = useState([]);
   
-  useEffect( ()=> {
-    const branch = brData.branch;
-    
-    // console.log({brData, month});
+  useLayoutEffect( ()=> {
     const equipS = flexSort(equipData, 'alias');
     eqsSet(equipS);
     
     const qtasks = app.qtTasks.filter( q => q.brKey === brData.brKey);
     const qtaskS = flexSort(qtasks, 'position', true);
     const qkeys = qtaskS.map( qt => qt.qtKey, []);
+    qsSet(qkeys);
+    
     const subtasks = qtaskS.map( qs => qs.subTasks, []).flat();
     subsSet(subtasks);
     
@@ -38,10 +39,15 @@ const BranchSlide = ({
     const tsteps = flexSort([...new Set(trackops.map( to => to.step, []))]);
     stepsSet(tsteps);
     
-    // console.log({qkeys});
-    
+  },[]);
+  
+  useEffect( ()=> {
     if(month) {
-      Meteor.call('getBrItemsSpan', branch, month, qkeys, subtasks, tsteps, 
+      spanDataSet(false);
+      
+      const branch = brData.branch;
+      
+      Meteor.call('getBrItemsSpan', branch, month, qs, subs, steps, 
       (err, rtn)=> {
         err && console.error(err);
         rtn && spanDataSet(rtn);
@@ -72,6 +78,7 @@ const BranchSlide = ({
         list={eqs}
         status='online'
         name='alias'
+        bcolor=''
         oncolor="midnightblue"
         offcolor="darkgray" 
       />
@@ -80,24 +87,30 @@ const BranchSlide = ({
         title="Sub-Tasks"
         list={subs}
         oncolor=""
+        bcolor='borderGreen'
       />
       
       <Taglist 
         title={Pref.flow + ' steps'}
         list={steps}
         oncolor="blue"
+        bcolor='borderBlue'
       />
       
       <div className='vmargin'>
-        <label>Get Report</label>
-        <MonthSelect
-          setDate={monthSet}
-        />
+        <h4 className='centreText'>Get Report</h4>
+        <div className='centre'>
+          <label>Select Month</label>
+          <MonthSelect
+            setDate={monthSet}
+            moreclass='centreText'
+          />
+        </div>
       </div>
               
       
       {!spanData ? null :
-        <div className='vmargin'>
+        <div className='vmargin centre'>
           
           <TotalSet
             srsCount={spanData.series.length}
@@ -107,10 +120,12 @@ const BranchSlide = ({
           <SrsSet 
             dataset={spanData.series} 
             filter={1}
+            title={`${brData.branch}_${month}_processed_noncons`}
           />
           
           <details>
-            <summary>Raw batch data</summary>
+            <summary>Product & Time Data</summary>
+            <p className='centreText bold'><em>UI Work in Progress. Numbers are Technically Acurate.</em></p>
             <div>
               <SmpleDataSet 
                 title='Widget IDs'
@@ -142,119 +157,81 @@ export default BranchSlide;
 const TotalSet = ({ srsCount, dataset })=> {
   
   return(
-    <div className='vmargin vgapdivs spaceinnerdivs'>
-      
-      <NumWrapper
-        num={srsCount}
-        name={`Live Work Orders`}
-        color='var(--neptuneColor)'
-      />
+    <div className='centre vmargin vgapdivs spaceinnerdivs'>
+      {/*
       <NumWrapper
         num={dataset[1][1]}
         name={`Total Items of live wo`}
         color='var(--peterriver)'
       />
-      
-      <h4>Processed in Month</h4>
-      
+      */}      
+      <h4>Processed</h4>
+      <NumWrapper
+        num={srsCount}
+        name={`Active Work Orders`}
+        color='var(--neptuneColor)'
+      />
       <NumWrapper
         num={dataset[1][1]}
-        name='Processed in timespan items'
+        name='Items Processed'
         color='var(--peterriver)'
       />
       <NumWrapper
         num={dataset[6][1]}
-        name={`First-off Items`}
+        name={`Items with First-off `}
         color='var(--belizeHole)'
       />
+      <h4>Items with Nonconformances</h4>
       <NumWrapper
         num={dataset[2][1]}
-        name='Processed in timespan items with noncons'
+        name='Items with Noncons'
         color='var(--alizarin)'
       />
       <NumWrapper
         num={dataset[3][1] + '%'}
-        name='of Processed in timespan items with noncons'
+        name='Of Processed Items have Noncons'
         color='var(--alizarin)'
       /> 
       
-      <h4>Scrapped Items</h4>
+      <h4>Items Scrapped</h4>
       
       <NumWrapper 
-        name="Processed serials scrapped"
+        name="Items Scrapped"
         num={dataset[4][1]}
         color="var(--pomegranate)"
       />
       <NumWrapper 
         num={dataset[5][1] + '%'}
-        name="Of processed serials scrapped"
+        name="Of Processed Items have been Scrapped"
         color="var(--pomegranate)"
       />
-
-      <hr />
           
     </div>
   );
 };
 
-const SrsSet = ({ dataset, filter })=> {
+const SrsSet = ({ dataset, title })=> {
   
-  const isProc = dataset.filter( d => d[filter][1] > 0 );
+  let vals = dataset.map( d => Array.from(d, e => e[1]), []);
+  vals.unshift(['WO',
+               'serials processed',
+               'with noncon',
+               'scrapped',
+               'with first-off'
+              ]);
   
   return(
-    <div className='vmargin vgapdivs spaceinnerdivs'>
-      <details>
-        <summary>test/proof</summary>
-        <div>
-          <div className='autoFlex'>
-            <SmpleDataSet 
-              title='Work Orders'
-              exlink='batch'
-              array={isProc} 
-              line={0}
-            />
-            <SmpleDataSet 
-              title='serials quantity'
-              array={isProc} 
-              line={1}
-            />
-          </div>
-          <div className='autoFlex'>
-            <SmpleDataSet 
-              title='serials processed'
-              array={isProc} 
-              line={2}
-            />
-            <SmpleDataSet 
-              title='serials processed as first-offs'
-              array={isProc} 
-              line={7}
-            />
-            <SmpleDataSet 
-              title='serials processed with noncons'
-              array={isProc} 
-              line={3}
-            />
-            <SmpleDataSet 
-              title='serials processed with noncons'
-              array={isProc} 
-              line={4}
-              sufix="%"
-            />
-          </div>
-          <div className='autoFlex'>
-            <SmpleDataSet 
-              title='serials processed then scrapped'
-              array={isProc} 
-              line={5}
-            />
-            <SmpleDataSet 
-              title='serials processed then scrapped'
-              array={isProc} 
-              line={6}
-            />
-          </div>
-        </div>
+    <div className='centre vmargin vgapdivs spaceinnerdivs'>
+      <details className='centre'>
+        <summary>Work Order Detail</summary>
+        <ReportBasicTable
+          title={title}
+          dateString=''
+          rows={vals}
+        />
+        <p className='small max500'>
+          <em>Report is concerning items processed, in this month, in this department. Can be read as: serials processed in 'department' in 'month' with one or more noncon recorded in 'department'.</em>
+        </p>
       </details>
     </div>
   );
@@ -291,40 +268,9 @@ const NumWrapper = ({ name, title, num, color })=> (
   /> 
 );
 
-// const TotalWrapper = ({ name, title, array, line, color })=> {
-  
-//   const total = array.reduce( (x,y)=> x + y[line][1], 0);
-        
-//   return(
-//     <NumWrapper
-//       num={total}
-//       name={name}
-//       title={title || ""}
-//       color={color || "var(--alizarin)"}
-//     /> 
-//   );
-// };
-
-// const AvgWrapper = ({ name, append, title, array, line, color })=> {
-  
-//   const add = array.reduce( (x,y)=> x + Number(y[line][1]), 0);
-//   const avg = !add ? 0 : ( add / array.length );
-//   const prcnt = avg < 1 ? avg.toFixed(2) : avg.toFixed(1);
-  
-//   return(
-//     <NumWrapper
-//       num={prcnt + append || ""}
-//       name={name}
-//       title={title || ""}
-//       color={color || "var(--alizarin)"}
-//     />
-//   );
-// };
-
-
-const Taglist = ({ title, list, status, name, oncolor, offcolor })=> (
-  <div className='vmarginquarter readPs'>
-    <p className='cap smTxt'>{title}</p>
+const Taglist = ({ title, list, status, name, bcolor, oncolor, offcolor })=> (
+  <details className='vmarginhalf'>
+    <summary className={`cap smTxt spaceLine borderLeft ${bcolor}`}>{title}</summary>
     <p className='rowWrap'>
       {list.map( (e, i)=> (
         <span key={i} className={`mockTag gapR cap ${status && !e[status] ? offcolor : oncolor}`}>
@@ -332,5 +278,5 @@ const Taglist = ({ title, list, status, name, oncolor, offcolor })=> (
         </span>
       ))}
     </p>
-  </div>
+  </details>
 );

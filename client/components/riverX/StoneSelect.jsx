@@ -90,19 +90,21 @@ const StoneSelect = ({
             shortfalls.every( x => x.inEffect === true || x.reSolve === true );
   
   function handleStepUndo() {
-		Meteor.call('popHistoryX', seriesId, item.serial, ()=>{
+		Meteor.apply('popHistoryX', [seriesId, item.serial], 
+		{wait: true},
+		()=>{
 			closeUndoOption();
 		});
 	}
 	
-  for(let flowStep of flow) {
+  for(let [index, flowStep] of flow.entries()) {
     const brKey = flowStep && flowStep.branchKey;
     const branchObj = brancheS.find( b => b.brKey === brKey ) || null;
     const stepBranch = branchObj ? branchObj.branch : flowStep.step;
     
-    const first = flowStep.type === 'first';
+    const isFirst = flowStep.type === 'first';
     
-    const didFirst = !first ? false : altIs ? 
+    const didFirst = !isFirst ? false : altIs ? 
             allItems.find( i => i.altPath.some( x => x.river !== false ) &&
               i.history.find( x => x.key === flowStep.key && x.good !== false ) 
             ) ? true : false
@@ -111,10 +113,10 @@ const StoneSelect = ({
               i.history.find( x => x.key === flowStep.key && x.good !== false ) 
         ) ? true : false;
   
-    const stepComplete = first ? 
-      iDone.find(ip => ip.key === flowStep.key) || didFirst
+    const stepComplete = isFirst ? 
+      iDone.find(ip => ip.key === flowStep.key) ? true : didFirst
       :
-      iDone.find(ip => ip.key === flowStep.key && ip.good === true);
+      iDone.find(ip => ip.key === flowStep.key && ip.good === true)?.good;
     
     const ncFromHere = ncOutstanding.filter( x => x.where === stepBranch );
     const ncResolved = ncFromHere.length === 0;
@@ -124,8 +126,10 @@ const StoneSelect = ({
     const ncAllClear = ncOutstanding.length === 0;
     const shAllClear = allAnswered === true;
       
-    if( ( ( flowStep.type === 'first' || flowStep.type === 'build' ) && stepComplete ) 
-        || ( stepComplete && ncResolved ) 
+    // if( ( ( isFirst || flowStep.type === 'build' ) && stepComplete ) 
+    if( 
+        ( stepComplete && ncResolved ) 
+        || ( stepComplete && (!ncResolved && flow[index+1]?.branchKey === brKey ) )
       ) {
       null;
     }else{

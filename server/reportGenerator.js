@@ -378,34 +378,38 @@ Meteor.methods({
       'tide': 1
     }})
     .map( b => {
-      if(b.serialize) {
-        batchNums.push(b.batch);
-      }
       
       const spantide = (b.tide || []).filter( x => chkT(x.startTime) );
       const minutesTotal = batchTideTime(spantide);
       
-      const qttide = spantide.filter( x => qkeys.includes(x.qtKey) );
-      
-      const subtide = spantide.filter( x => subtasks.includes(x.subtask) );
-      
-      const quoteTimes = (b.quoteTimeCycles || []).filter( q=> qkeys.includes(q[0]) );
-      
-      //const bsettime = !bqchunk ? 0 : 
-                            // qtTask.fixed ? bqchunk[1] :
-                            // bqchunk[2] ? ( bqchunk[1] * bQty ) :
-                            // ( bqchunk[1] * iQty );
-      
-      return [
-        ['batch', b.batch],
-        ['widget id', b.widgetId],
-        ['tides in span by qtkey', qttide.length],
-        ['tides in span by subtask', subtide.length],
-        ['quoted qtasks', quoteTimes],
-        ['total logged minutes', minutesTotal]
-      ];
+      if(minutesTotal > 0) {
+        const qttide = spantide.filter( x => qkeys.includes(x.qtKey) );
+        
+        const subtide = spantide.filter( x => subtasks.includes(x.subtask) );
+        
+        const quoteTimes = (b.quoteTimeCycles || []).filter( q=> qkeys.includes(q[0]) );
+        
+        //const bsettime = !bqchunk ? 0 : 
+                              // qtTask.fixed ? bqchunk[1] :
+                              // bqchunk[2] ? ( bqchunk[1] * bQty ) :
+                              // ( bqchunk[1] * iQty );
+        
+        if(b.serialize) {
+          batchNums.push(b.batch);
+        }
+        return [
+          ['batch', b.batch],
+          ['widget id', b.widgetId],
+          ['tides in span by qtkey', qttide.length],
+          ['tides in span by subtask', subtide.length],
+          ['quoted qtasks', quoteTimes],
+          ['total logged minutes', minutesTotal]
+        ];
+      }else{
+        return null;
+      }
     },[])
-    .filter( ar => ar[5][1] > 0 );
+    .filter( bdt => bdt !== null );
     
     let batch_items = 0;
     
@@ -446,15 +450,11 @@ Meteor.methods({
       
       return [
         ['batch', srs.batch],
-        
-        ['total quantity', itemQty],
-
+        // ['total quantity', itemQty],
         ['processed quantity', ispanQty],
-        ['processed with noncons', ispanNC], // KEEP
-        ['percent of processed with noncons', ncispanprcnt],// KEEP
-        
-        ['processed scrap', ispanScp],
-        ['percent of processed scrap', scpispanprcnt],
+        ['processed with noncons', `${ispanNC} (${ncispanprcnt}%)` ], // KEEP
+
+        ['processed scrap', `${ispanScp} (${scpispanprcnt}%)`],
         
         ['first-off items', ifirst]
       ];

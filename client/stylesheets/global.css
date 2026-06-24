@@ -318,7 +318,7 @@ details[open] summary {
   opacity: 1;
 }
 summary {
-  min-height: 2.5rem;
+  min-height: min-content;
   line-height: 1.2;
   margin: 0;
   padding: 1vw;

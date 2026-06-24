@@ -35,7 +35,7 @@ const StoneControl = ({
 	useEffect(() => {
     return () => { mounted.current = false; };
   }, []);
-  
+
 	useEffect( ()=> {
 		if(mounted.current) {
 			const checkLock = holdState || blockStone || doneStone;

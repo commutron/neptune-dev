@@ -86,10 +86,7 @@ const ReportBasicTable = ({ title, dateString, rows, extraClass })=> {
               }})}
             </tbody>
           </table>
-         
-            
         </div>
-        
     </div>
   );
 };

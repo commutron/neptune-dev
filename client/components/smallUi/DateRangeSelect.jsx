@@ -46,7 +46,7 @@ const DateRangeSelect = ({ setFrom, setTo })=> {
       
 export default DateRangeSelect;
 
-export const MonthSelect = ({ setDate })=> {
+export const MonthSelect = ({ setDate, moreclass })=> {
   
   function sendUp(e) {
     setDate( moment(e[0]).format('YYYY-MM-DD') );
@@ -57,7 +57,7 @@ export const MonthSelect = ({ setDate })=> {
       <Flatpickr
         id='startRange'
         title='From'
-        className='miniIn18'
+        className={`miniIn18 ${moreclass || ''}`}
         onChange={(e)=>sendUp(e)}
         required
         options={{
