@@ -15,7 +15,7 @@ const StreamLayout = ({
   if(!user || !app) {
     return(
       <PlainFrame title={title} tag={tag}>
-        <div className='centre wide'>
+        <div className={`centre wide' ${user?.preferLight ? '' : 'darkTheme'}`}>
           <Spin />
         </div>
       </PlainFrame>

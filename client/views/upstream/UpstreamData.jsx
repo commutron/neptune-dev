@@ -1,7 +1,7 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 import { localeUpdate } from '/client/utility/WorkTimeCalc';
 import { branchesOpenSort } from '/client/utility/Arrays.js';
@@ -10,18 +10,19 @@ import StreamLayout from '/client/layouts/StreamLayout';
 import UpstreamWrap from './UpstreamWrap';
 
 const View = ({
-  login,
   ready, readyT, view,
   user, app, users, isDebug,
   batchX, traceDT,
 })=> {
   
-  if( !ready || !readyT || !app || !users || !user ) {
+  if( !ready || !readyT || !app  || !user || !users) {
     return(
       <StreamLayout
         title={Pref.upstream}
         tag='kit'
         navBar='up'
+        user={user}
+        app={app}
       >
         <div></div>
       </StreamLayout>
@@ -31,6 +32,7 @@ const View = ({
   localeUpdate(app);
   
   const brancheS = branchesOpenSort(app.branches);
+  const isAuth = Roles.userIsInRole(Meteor.userId(), ['run', 'kitting']);
 
   return(
     <UpstreamWrap 
@@ -38,6 +40,7 @@ const View = ({
       batchX={batchX}
       traceDT={traceDT}
       user={user}
+      isAuth={isAuth}
       app={app}
       users={users}
       brancheS={brancheS}
@@ -63,7 +66,7 @@ export default withTracker( ({ view } ) => {
     };
   }else{
     return {
-      login: Meteor.userId(),
+      // login: Meteor.userId(),
       ready: sub.ready(),
       readyT: subT.ready(),
       view: view,

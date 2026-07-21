@@ -1,7 +1,11 @@
 import React from 'react';
 
 export const PopoverButton = ({ targetid, attach, text, icon })=> (
-	<button className={`popbutton ${attach}`} data-menu='--pop-button' popovertarget={targetid}
+	<button 
+		type='button'
+		className={`popbutton ${attach}`} 
+		data-menu='--pop-button' 
+		popovertarget={targetid}
 	>{icon && <i className={`${icon} fa-fw gapR`}></i>}{text}</button>
 );
 
@@ -13,6 +17,7 @@ export const PopoverMenu = ({ targetid, attach, extraClass, children })=> (
 
 export const PopoverAction = ({ text, icon, doFunc, lock })=> (
   <button 
+  	type='button'
     onClick={()=>doFunc()}
     disabled={lock}
   >{icon ? <i className={`${icon} fa-fw gapR`}></i> : null}{text}</button>
@@ -20,6 +25,7 @@ export const PopoverAction = ({ text, icon, doFunc, lock })=> (
 
 export const MatchButton = ({ title, text, icon, doFunc, lock })=> (
   <button
+  	type='button'
     title={title}
     className='popbutton'
     onClick={()=>doFunc()}
@@ -27,12 +33,14 @@ export const MatchButton = ({ title, text, icon, doFunc, lock })=> (
   >{icon ? <i className={`${icon} fa-fw gapR`}></i> : null}{text}</button>
 );
 
-export const PopContextButton = ({ targetid, extraClass, text, icon })=> (
+export const PopContextButton = ({ targetid, extraClass, text, title, icon })=> (
 	<button 
+		type='button'
+		title={title || null}
 	  popovertarget={targetid}
 	  className={`popbutton ${extraClass || ''}`} 
 	  style={{anchorName: `--${targetid}`}} 
-	>{icon && <i className={`${icon} fa-fw gapR`}></i>}{text}</button>
+	>{icon && <i className={`${icon} fa-fw ${text ? 'gapR':''}`}></i>}{text || null}</button>
 );
 
 export const PopContextMenu = ({ targetid, extraClass, children })=> (

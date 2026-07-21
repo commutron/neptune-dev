@@ -1,5 +1,5 @@
 import React from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 import StreamLayout from '/client/layouts/StreamLayout';
 
@@ -13,20 +13,18 @@ import DocsReadySlide from '/client/views/upstream/DocsReadySlide';
 const UpstreamWrap = ({ 
   view,
   batchX, traceDT,
-  user, app, users, brancheS,
+  user, isAuth, app, users, brancheS,
   isDebug
 })=> {
   
-  const isAuth = Roles.userIsInRole(Meteor.userId(), ['run', 'kitting']);
-  
-  if( view === 'parts' && app.partsGlobal) {
+  if( view === 'parts' && app.partsGlobal ) {
     return (
       <StreamLayout
         user={user}
         app={app}
         title='Parts Search'
         subLink={view}
-        action={false}
+        navBar='up'
         isAuth={isAuth}
       >
         <CompSearchData
@@ -45,7 +43,7 @@ const UpstreamWrap = ({
         app={app}
         title={Pref.shortfalls}
         subLink={view}
-        action={false}
+        navBar='up'
         isAuth={isAuth}
       >
         <ReportShort
@@ -63,7 +61,7 @@ const UpstreamWrap = ({
         app={app}
         title='Value Conversion'
         subLink={view}
-        action={false}
+        navBar='up'
         isAuth={isAuth}
       >
         <CompValuesSlide
@@ -81,7 +79,7 @@ const UpstreamWrap = ({
         app={app}
         title='Instruction Docs'
         subLink={view}
-        action={false}
+        navBar='up'
       >
         <DocsReadySlide
           traceDT={traceDT}
@@ -91,14 +89,14 @@ const UpstreamWrap = ({
     );
   }
   
-  if(view === 'emailrec' && (isAuth || Roles.userIsInRole(Meteor.userId(), 'admin')) ) {
+  if(view === 'emailrec' && (isAuth || Roles.userIsInRole(Meteor.userId(), 'admin'))) {
     return (
       <StreamLayout
         user={user}
         app={app}
         title='PCB Emails'
         subLink={view}
-        action={false}
+        navBar='up'
         isAuth={isAuth}
       >
         <EmailRec
@@ -116,6 +114,7 @@ const UpstreamWrap = ({
       title={Pref.upstream}
       subLink={false}
       tag='kit'
+      navBar='up'
       isAuth={isAuth}
     >
       <UpstreamView

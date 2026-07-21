@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 // import NumStat from '/client/components/tinyUi/NumStat';
 import PrintThis from '/client/components/tinyUi/PrintThis';

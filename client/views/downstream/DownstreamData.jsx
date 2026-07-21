@@ -1,7 +1,7 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 import { localeUpdate } from '/client/utility/WorkTimeCalc';
 
@@ -9,7 +9,7 @@ import StreamLayout from '/client/layouts/StreamLayout';
 import DownstreamWrap from './DownstreamWrap';
 
 const View = ({
-  login, readyT, view,
+  readyT, view,
   user, app, isDebug,
   traceDT, dayTime, dayIFin
 })=> {
@@ -56,7 +56,7 @@ export default withTracker( ({ view } ) => {
     };
   }else{
     return {
-      login: Meteor.userId(),
+      // login: Meteor.userId(),
       readyT: subT.ready(),
       view: view,
       user: user,

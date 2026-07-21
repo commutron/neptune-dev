@@ -1,5 +1,5 @@
 import React from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 import StreamLayout from '/client/layouts/StreamLayout';
 
@@ -11,7 +11,7 @@ import TrendWrap from './DownTrends/TrendWrap';
 import ZPlanGrid from './ZPlanGrid';
 
 const DownstreamWrap = ({ 
-  view, subLink, 
+  view,
   traceDT, dayTime, dayIFin,
   user, app, isDebug
 })=> {

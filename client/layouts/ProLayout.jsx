@@ -10,7 +10,7 @@ import EquipMenu from '/client/views/production/lists/EquipMenu';
 import TideMulti from '/client/components/tide/TideControl/TideMulti';
 import TimeStop from '/client/components/tide/TimeStop';
 import TideFollow from '/client/components/tide/TideFollow';
-import XFormBar from '/client/components/bigUi/ToolBar/XFormBar';
+import XFormBar from '/client/components/riverX/toolBar/XFormBar';
 import { NonConMerge } from '/client/utility/NonConOptions';
 
 
@@ -206,12 +206,13 @@ export const ProWrap = ({
         </div>
       
         <XFormBar
-          batchData={batchData}
-          seriesData={seriesData}
-          itemData={itemData}
+          b={batchData}
+          srs={seriesData}
+          item={itemData}
           rapIs={rapIs}
           widgetData={widgetData}
           radioactive={radioactive}
+          brancheS={brancheS}
           
           timeOpen={timeOpen}
           ncTypesCombo={ncTypesComboFlat}

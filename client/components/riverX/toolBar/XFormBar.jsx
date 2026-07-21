@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import './style.css';
 import Pref from '/public/pref.js';
 import TideFormLock from '/client/components/tide/TideFormLock';
@@ -11,7 +11,8 @@ import { addTideArrayDuration } from '/client/utility/WorkTimeCalc.js';
 import { CountDownNum, TimeString } from '/client/components/smallUi/ClockString';
 
 const XFormBar = ({ 
-  batchData, seriesData, itemData, rapIs, radioactive,
+  b, srs, item, rapIs, radioactive,
+  brancheS, 
   timeOpen, ncTypesCombo, 
   action, showVerifyState, handleVerify, 
   user, eng, app, users
@@ -20,14 +21,10 @@ const XFormBar = ({
   const [ show, showSet ] = useState('QT');
   
   useEffect( ()=> { showSet('QT') }, [eng.qtKey]);
-  
-  const b = batchData;
-  const srs = seriesData;
-  const i = itemData;
     
   const showBatch = b && srs && b.completed === false;
   const showFall = b && !srs && b.completed === false;
-  const showItem = srs && i && (i.completed === false || rapIs);
+  const showItem = srs && item && (item.completed === false || rapIs);
   
   let pnums = [];
   let prefs = [];
@@ -46,76 +43,21 @@ const XFormBar = ({
   const caution = b && b.releases.findIndex( x => 
                     x.type === 'floorRelease' && x.caution !== false) >= 0;
   
-  const tgsty = {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: '100%',
-    gridGap: '0 2px'
-  };
-  
-  const FirstTg = <FormToggle
-          id='firstselect'
-          type='checkbox'
-          title='Redo Step'
-          check={showVerifyState === true}
-          change={()=>handleVerify(null, true)}
-          lock={!verAuth} 
-          icon='fa-solid fa-check-double fa-fw'
-          color='butBlue'
-          spec={true}
-        />;
-        
-  const QuoteTg = <FormToggle
-            id='qtStatusSelect'
-            type='radio'
-            title='Quoted Time'
-            check={show === 'QT'}
-            change={()=>showSet( 'QT' )}
-            icon='fa-solid fa-hourglass-half fa-fw'
-            color='butGreen'
-          />;
-  
-  const NonTg = <FormToggle
-            id='ncFormSelect'
-            type='radio'
-            title={Pref.nonCon}
-            check={show === 'NC'}
-            change={()=>showSet( 'NC' )}
-            icon='fa-solid fa-times fa-fw'
-            color='butRed'
-          />;
-  
-  const ShortTg = <FormToggle
-            id='shortFormSelect'
-            type='radio'
-            title={Pref.shortfall}
-            check={show === 'S'}
-            change={()=>showSet( 'S' )}
-            icon='fa-solid fa-triangle-exclamation fa-fw'
-            color='butYellow'
-          />;
-  
   return(
     <div className='darkTheme proActionForm thinScroll'>
-      {!lockOutAll && showItem ?
-        <div style={tgsty}>
-          {action === 'xBatchBuild' ? null : FirstTg}
-          {QuoteTg}
-          {NonTg}
-          {ShortTg}
-        </div>
-      : !lockOutAll && !i && showBatch ?
-        <div style={tgsty}>
-          {QuoteTg}
-          {NonTg}
-        </div>
-      : !lockOutAll && showFall ?
-        <div style={tgsty}>
-          {QuoteTg}
-        </div>
-      : null}
+      <FormToggles 
+        item={item}
+        action={action}
+        show={show}
+        showItem={showItem}
+        showBatch={showBatch}
+        showFall={showFall}
+        showSet={showSet}
+        showVerifyState={showVerifyState}
+        handleVerify={handleVerify}
+        verAuth={verAuth}
+        lockOutAll={lockOutAll}
+      />
       <div style={{flexGrow: '2'}}>
         <TideFormLock 
           currentLive={timeOpen && b.live} 
@@ -125,21 +67,22 @@ const XFormBar = ({
           holding={b && b.hold}>
         {lockOutAll ? null 
         : 
-          i && showItem ?
+          item && showItem ?
             show === 'NC' ?
               <NCAdd
                 seriesId={srs._id}
-                serial={i.serial}
-                units={i.units}
+                serial={item.serial}
+                units={item.units}
                 user={user}
                 app={app}
-                ncTypesCombo={ncTypesCombo} 
+                ncTypesCombo={ncTypesCombo}
+                brancheS={brancheS}
               />
             : show === 'S' ?
               <ShortAdd
                 seriesId={srs._id}
-                serial={i.serial}
-                units={i.units}
+                serial={item.serial}
+                units={item.units}
                 pastPN={pastPN}
                 pastRF={pastRF}
                 user={user}
@@ -148,7 +91,7 @@ const XFormBar = ({
         : null
         }
             
-        {!lockOutAll && !i && showBatch && show === 'NC' ?
+        {!lockOutAll && !item && showBatch && show === 'NC' ?
           <NCFlood
             seriesId={srs._id}
             live={b.completed === false}
@@ -160,8 +103,8 @@ const XFormBar = ({
         
         {timeOpen && show === 'QT' ?
           <QtStatus 
-            batchData={batchData} 
-            seriesData={seriesData}
+            batchData={b} 
+            seriesData={srs}
             app={app}
             users={users}
             eng={eng}
@@ -175,19 +118,103 @@ const XFormBar = ({
 
 export default XFormBar;
 
-const FormToggle = ({ 
+const FormToggles = ({ 
+  item, action,
+  show, showItem, showBatch, showFall,
+  showSet,
+  showVerifyState,
+  handleVerify,
+  verAuth, lockOutAll
+})=> {
+  
+  const tgsty = {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100%',
+    gridGap: '0 2px',
+    paddingLeft: '5px'
+  };
+  
+  const FirstTg = <ToggleButton
+          id='firstselect'
+          type='checkbox'
+          title='Redo Step'
+          check={showVerifyState === true}
+          change={()=>handleVerify(null, true)}
+          lock={!verAuth} 
+          icon='fa-solid fa-check-double fa-fw'
+          color='butBlue'
+          spec={true}
+        />;
+        
+  const QuoteTg = <ToggleButton
+            id='qtStatusSelect'
+            type='radio'
+            title='Quoted Time'
+            check={show === 'QT'}
+            change={()=>showSet( 'QT' )}
+            icon='fa-solid fa-hourglass-half fa-fw'
+            color='butGreen'
+          />;
+  
+  const NonTg = <ToggleButton
+            id='ncFormSelect'
+            type='radio'
+            title={Pref.nonCon}
+            check={show === 'NC'}
+            change={()=>showSet( 'NC' )}
+            icon='fa-solid fa-times fa-fw'
+            color='butRed'
+          />;
+  
+  const ShortTg = <ToggleButton
+            id='shortFormSelect'
+            type='radio'
+            title={Pref.shortfall}
+            check={show === 'S'}
+            change={()=>showSet( 'S' )}
+            icon='fa-solid fa-triangle-exclamation fa-fw'
+            color='butYellow'
+          />;
+          
+  return(
+    <Fragment>
+      {!lockOutAll && showItem ?
+        <div style={tgsty}>
+          {action === 'xBatchBuild' ? null : FirstTg}
+          {QuoteTg}
+          {NonTg}
+          {ShortTg}
+        </div>
+      : !lockOutAll && !item && showBatch ?
+        <div style={tgsty}>
+          {QuoteTg}
+          {NonTg}
+        </div>
+      : !lockOutAll && showFall ?
+        <div style={tgsty}>
+          {QuoteTg}
+        </div>
+      : null}
+    </Fragment>
+  );
+};
+
+const ToggleButton = ({ 
   id, type, title, 
   check, change, lock, 
   icon, color, spec 
 })=> {
-  
-  const sty = {
+
+  const lblsty = {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
     transition: 'all 150ms ease-in-out',
-    margin: '0 1vmin',
+    margin: '0 5px',
     fontSize: '30px',
     width: '40px',
     minHeight: '40px',
@@ -201,7 +228,7 @@ const FormToggle = ({
   };
   
   return(
-    <label htmlFor={id} data-tip={title} style={sty} className={`taskLink liteTip ${spec ? 'sq' : 'tall'} ${color}`}>
+    <label htmlFor={id} data-tip={title} style={lblsty} className={`taskLink liteTip ${spec ? 'sq' : 'tall'} ${color}`}>
       <input
         type={type}
         id={id}

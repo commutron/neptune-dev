@@ -337,6 +337,14 @@ n-timeline-item:last-child n-timeline-marker:after {
   right: anchor(right);
   margin-block-start: 0.8dvmin;
 }
+.popmenu.forcetop {
+  position-area: top;
+  top: auto;
+  max-height: 85dvh;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
 .popbutton,
 .popmenu,
 .popmenu > div,

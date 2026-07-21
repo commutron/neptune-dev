@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 
 import { NonConCheck, onFire } from '/client/utility/NonConOptions';
+import { PopContextButton, PopContextMenu } from '/client/layouts/Models/Popover';
 
-const NCAdd = ({ seriesId, serial, units, user, ncTypesCombo })=> {
+const NCAdd = ({ seriesId, serial, units, user, ncTypesCombo, brancheS })=> {
+  
+  const [ brOvrd, brOvrdSet ] = useState(false);
   
   const station = localStorage.getItem("local_station");
   
@@ -18,7 +21,7 @@ const NCAdd = ({ seriesId, serial, units, user, ncTypesCombo })=> {
       
     const tgood = NonConCheck(this.ncType, flatCheckList);
     
-    const where = Session.get('ncWhere') || "";
+    const where = brOvrd || Session.get('ncWhere') || "";
     
     const refEntry = this.ncRefs.value.trim().toLowerCase();
     const refCut = refEntry.replace(Pref.listCut, "|");
@@ -33,7 +36,7 @@ const NCAdd = ({ seriesId, serial, units, user, ncTypesCombo })=> {
             error && console.log(error);
           });
         }else{
-          toast.warn("Can't add '" + ref + "', A referance can only be 7 characters long", {
+          toast.warn("Can't add '" + ref + "', A reference can only be 7 characters long", {
             position: toast.POSITION.BOTTOM_CENTER,
             autoClose: 10000,
             closeOnClick: false
@@ -42,6 +45,7 @@ const NCAdd = ({ seriesId, serial, units, user, ncTypesCombo })=> {
       }
       this.ncRefs.value = '';
       units > 1 ? this.ncMulti.value = 1 : null;
+      brOvrdSet(false);
       if(user.ncFocusReset) {
         document.getElementById('lookup').focus();
       }else{
@@ -67,6 +71,7 @@ const NCAdd = ({ seriesId, serial, units, user, ncTypesCombo })=> {
         id='ncRefs'
         className='redIn up'
         placeholder='R1 C122 X_8'
+        title='Location reference required'
         disabled={lock}
         autoFocus
         required />
@@ -164,23 +169,60 @@ const NCAdd = ({ seriesId, serial, units, user, ncTypesCombo })=> {
           <label htmlFor='ncType' className='whiteT'>{Pref.nonConType}</label>
         </span>
       }
-      <button
+      
+      <PopContextButton
+  			targetid='branchOverrideButton'
+  			extraClass={`inherit ${brOvrd ? 'redGlow' : ''}`}
+  			icon='fas fa-sitemap medBig darkgrayT'
+  			title={`Override auto-${Pref.branch}\nWill effect place in ${Pref.flow}`}
+  		/>
+  		<PopContextMenu targetid='branchOverrideButton' extraClass='forcetop popDark cap'>
+  		  <span className='medSm darkCard darkgrayT nomargin wide centreText'>Where Override</span>
+        {brancheS.map((b,x)=> (
+          <button 
+            type='button'
+            title={now == b.branch ? 'auto-selection' : ''}
+            key={x}
+            style={
+              now == b.branch ? !brOvrd ?
+                {backgroundColor: 'var(--pomegranatetrans)'} : 
+                {borderColor: 'var(--pomegranatetrans)'} : null}
+            className={(brOvrd||now) == b.branch ? 'redGlow':''}
+            onClick={()=>brOvrdSet(b.branch == now ? false : b.branch)}
+            popovertarget='branchOverrideButton' 
+            popovertargetaction="hide"
+          >{b.branch}</button>
+        ))}
+      </PopContextMenu>
+      
+      <NCdo
         type='submit'
         id='goNcAdd'
-        disabled={lock}
-        className='smallAction redHover bold transparent'
-      >Repair Later</button>
+        text='Repair Later'
+        onclick={null}
+        lock={lock}
+      />
       
-      <button
+      <NCdo
         type='button'
         id='goNcFixAdd'
-        onClick={(e)=>handleNC(e, true)}
-        disabled={lock}
-        className='smallAction redHover bold transparent'
-      >Repaired Now</button>
+        text='Repaired Now'
+        onclick={(e)=>handleNC(e, true)}
+        lock={lock}
+      />
           
     </form>
   );
 };
 
 export default NCAdd;
+
+const NCdo = ({ type, id, text, onclick, lock })=> (
+  <button
+    type={type || 'button'}
+    id={id}
+    onClick={onclick}
+    disabled={lock}
+    className='smallAction redHover bold transparent'
+  >{text}</button>
+);
