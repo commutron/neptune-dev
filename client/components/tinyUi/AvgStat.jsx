@@ -1,8 +1,8 @@
 import React from 'react';
 
 const AvgStat = ({ num, trend, type, flip })=> (
-  <span title={trend || ''} className='beside bigger' style={{ maxWidth: '125px' }}>
-    <n-num class='centre'>
+  <span title={trend || ''} className='beside bigger' style={{ maxWidth: '125px', lineHeight: '1.25'}}>
+    <n-num class='colNoWrap'>
       <span>{num}</span>
       <n-sm class='grayT cap centreText'>{type}</n-sm>
     </n-num>

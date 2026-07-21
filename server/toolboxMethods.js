@@ -119,6 +119,17 @@ Meteor.methods({
     }
   },
   
+  findNonConsWithStation() {
+    let loc_is_set = 0;
+    
+    XSeriesDB.find({ 'nonCon.loc': {$exists: true} })
+    .forEach( srs => {
+      const srsnc = srs.nonCon.reduce( (x,y)=> y.loc !== undefined ? x + 1 : x, 0);
+      loc_is_set += srsnc;
+    });
+    return loc_is_set;
+  },
+  
   replaceTasksDANGEROUS(currTask, rplcTask, rplcSubT) {
     if(!Roles.userIsInRole(Meteor.userId(), 'admin')) {
       return false;

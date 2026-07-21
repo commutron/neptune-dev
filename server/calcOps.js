@@ -35,9 +35,11 @@ export function round2Decimal(thrtytw) {
   return trunc;
 }
 
-export function percentOf(goalNumber, realNumber) {
+export function percentOf(goalNumber, realNumber, intg) {
   const perOf = ( realNumber / goalNumber ) * 100;
-  const perOfClean = isNaN(perOf) ? 0 : round2Decimal(perOf);
+  const perOfClean = isNaN(perOf) ? 0 : 
+                     intg ? perOf < 1 ? Number(perOf.toFixed(1)) : Number(perOf.toFixed(0)) : 
+                     round2Decimal(perOf);
   return perOfClean;
 }
 

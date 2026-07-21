@@ -8,7 +8,7 @@ import WTimeCycle from './WTimeCycle';
 import { round1Decimal } from '/client/utility/Convert';
 
 const WTimeTab = ({ 
-  widgetData, batchIDs, 
+  widgetData, batcheS, 
   app
 })=> {
   
@@ -27,6 +27,8 @@ const WTimeTab = ({
         resultSet(reply) : null;
     });
   }, []);
+  
+  const batchIDs = batcheS.map( b => b._id, []);
   
   return(
     <div className='space' key={widgetData._id+'times'}>

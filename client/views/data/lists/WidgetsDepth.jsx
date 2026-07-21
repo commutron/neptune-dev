@@ -4,18 +4,18 @@ import LeapLine from '/client/components/tinyUi/LeapLine';
 import NumStat from '/client/components/tinyUi/NumStat';
 import { flexSort } from '/client/utility/Arrays.js';
 
-const WidgetsDepth = ({ filterString, widgetData, state })=> {
+const WidgetsDepth = ({ filterString, clearfilter,widgetData, state })=> {
   
-  const w = flexSort(widgetData, 'widget');
-
-  let statList = !state ? w : state == 1 ? 
-                  w.filter( rd => rd.vopen ) :
-                  w.filter( rd => !rd.vopen );
-                  
-  let showList = statList.filter( 
+  let textList = !filterString ? widgetData : widgetData.filter( 
     tx => tx.widget.toLowerCase().includes(filterString) === true ||
           tx.describe.toLowerCase().includes(filterString) === true);
-
+  
+  let statList = !state ? textList : state == 1 ? 
+                  textList.filter( rd => rd.vopen ) :
+                  textList.filter( rd => !rd.vopen );
+  
+  const showList = flexSort(statList, 'widget');
+  
   return(
     <div className='wide vspacehalf max1000'>
       <div className='leapHead stick'>
@@ -28,11 +28,19 @@ const WidgetsDepth = ({ filterString, widgetData, state })=> {
           <span>NC</span>
         </div>
       </div>
-      {w.length < 1 ? 
+      {widgetData.length < 1 ? 
         <p className='centreText'>no {Pref.widget}s created</p>
       :
         showList.length < 1 ? 
-          <p className='centreText'>no match found</p>
+          <div>
+            <p className='centreText'>No Match Found</p>
+            <p className='centreText'>
+              <button 
+                onClick={()=>clearfilter()}
+                className='smallAction textAction'
+              >Show All</button>
+            </p>
+          </div>
       :
         showList.map( (entry)=> {
         let ac = entry.blive ? 'activeMark' : '';

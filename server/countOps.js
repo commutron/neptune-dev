@@ -3,7 +3,7 @@ import moment from 'moment';
 import Config from '/server/hardConfig.js';
 import { batchTideTime, distTimeBudget } from './tideGlobalMethods.js';
 import { deliveryState } from './reportCompleted.js';
-import { avgOfArray, asRate, diffTrend, min2hr } from './calcOps';
+import { avgOfArray, asRate, percentOf, diffTrend, min2hr } from './calcOps';
 import { syncLocale, countMulti, countMultiRefs } from './utility';
 
 Meteor.methods({
@@ -324,6 +324,7 @@ Meteor.methods({
               moment.duration(moment().diff(moment(statime))).as('hours') > Config.freche;
     if(stale) {
       let rateArr = [];
+      let nsrlArr = [];
       
       XSeriesDB.find(
         { widgetId: wID },
@@ -331,14 +332,23 @@ Meteor.methods({
       ).forEach( srs => {
         const done = XBatchDB.find({ batch: srs.batch, completed: true },{limit:1}).count();
         if(done) {
+          let itotal = 0;
+          let utotal = 0;
+          for( let i of srs.items ) {
+            itotal += 1;
+            utotal += i.units;
+          }
           // -- nc rate calculation filter --
           const total = countMulti( srs.nonCon.filter( n => !n.trash && !(n.inspect && !n.fix) ) );
-          const units = srs.items.reduce((t,i)=> t + i.units, 0);
-          rateArr.push( asRate(total, units) );
+          rateArr.push( asRate(total, utotal) );
+          
+          const serialNC = new Set( srs.nonCon.map(n => n.serial, []) ).size;
+          nsrlArr.push( percentOf(itotal, serialNC, true) );
         }
       });
-      
+
       const avgRate = avgOfArray(rateArr, true);
+      const avgPcnt = avgOfArray(nsrlArr, true);
       
       const lastavg = widget.ncRate;
       const runningavg = lastavg ? lastavg.rate : 0;
@@ -350,12 +360,13 @@ Meteor.methods({
           ncRate: {
             rate: avgRate,
             trend: trend,
+            pcnt: avgPcnt,
             updatedAt: new Date(),
           }
       }});
-      return [ avgRate, trend ];
+      return [ avgRate, trend, avgPcnt ];
     }else{
-      return [ ncRate.rate, ncRate.trend ];
+      return [ ncRate.rate, ncRate.trend, ncRate.pcnt ];
     }
   }
   

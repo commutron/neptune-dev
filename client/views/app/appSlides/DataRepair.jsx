@@ -15,7 +15,7 @@ const DataRepair = ({ app, users })=> {
       error && console.log(error);
       re && toast.success((mtrMethod+' success'), {autoClose: false});
       if(rtnLog) {
-        console.log(re);
+        console.log(mtrMethod + ' = ' + re);
       }
     });
   }
@@ -43,6 +43,14 @@ const DataRepair = ({ app, users })=> {
   return(
     <div className='space3v'>
       <div className='autoGrid cardify twoDfill'>
+        <DoCard
+          title='Check for noncon loc usage'
+          icon='calculator'
+          color='nSolid'
+          button='Count'
+          action={()=>doCallThing('findNonConsWithStation', true)}
+        />
+        
         <DoCard
           title='Force Randomize Org PIN'
           sub='Runs every day at 12:00am (CST)'

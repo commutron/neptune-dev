@@ -65,6 +65,16 @@
   border-style: solid;
   border-color: var(--actionColor);
 }
+/*.nHover:where(:hover,:focus-visible),*/
+/*.greenHover:where(:hover,:focus-visible),*/
+/*.blueHover:where(:hover,:focus-visible),*/
+/*.redHover:where(:hover,:focus-visible),*/
+/*.orangeHover:where(:hover,:focus-visible),*/
+/*.blackHover:where(:hover,:focus-visible),*/
+/*.wetHover:where(:hover,:focus-visible) {*/
+/*  color: var(--actionText, white);*/
+/*  background-color: var(--actionColor);*/
+/*} // .transparent causes a conflict */
 .nHover:hover,
 .greenHover:hover,
 .blueHover:hover,

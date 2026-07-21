@@ -24,7 +24,6 @@ main {
 }
 
 .forceScroll { overflow-y: auto !important; }
-.wideScroll { overflow-x: auto !important; }
 .forceScrollStyle {
   scrollbar-width: thin;
   scrollbar-color: var(--navIndicatorB) var(--navIndicatorA);

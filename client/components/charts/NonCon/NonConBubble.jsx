@@ -26,8 +26,8 @@ const NonConBubble = ({ ncOp, nonCons, app, isDebug })=> {
   
   useEffect( ()=> {
     const nonConOptions = ncOp || [];
-    const splitByWhere = [...new Set( Array.from(nonCons, n => n.where ) ) ];
-    
+    const splitByWhere = [...new Set( nonCons.map( n => n.where, []) ) ];
+   
     const splitOut = splitByWhere.map( (where, index)=> {
       let match = nonCons.filter( y => y.where === where );
       return{

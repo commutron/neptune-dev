@@ -116,7 +116,7 @@ const GroupSlide = ({
         
         <div className='rowWrapR'>
           <div className='margin5 balancer gapminC'>
-            <StateSelect label='All' title={`all ${Pref.widget}s`}id={0} func={stateSet} is={state} />
+            <StateSelect label='All' title={`all ${Pref.widget}s`} id={0} func={stateSet} is={state} />
             <StateSelect label='Active' title={`${Pref.widget}s where ${Pref.variants} are open`} id={1} func={stateSet} is={state} />
             <StateSelect label='Inactive' title={`${Pref.widget}s where all ${Pref.variants} are archived`} id={2} func={stateSet} is={state} />
           </div>
@@ -125,6 +125,7 @@ const GroupSlide = ({
             title='Filter Products By ID or Description'
             inputClass='miniIn24 smTxt'
             styleOv={{minHeight:'0',height:'calc(var(--sm9)* 1.75)',marginBlock:'5px'}}
+            textState={filterString}
             onTxtChange={(e)=>{filterStringSet(e);stateSet(0)}}
           />
         </div>
@@ -188,6 +189,7 @@ const GroupSlide = ({
         
       <WidgetsDepth
         filterString={filterString}
+        clearfilter={()=>{stateSet(0);filterStringSet('')}}
         state={state}
         groupAlias={g.alias}
         widgetData={agrWidgets}

@@ -397,6 +397,12 @@ button.stoneExtra {
 #goShAdd {
   --pro_prob: var(--carrot);
 }
+#goShAdd:where(:hover,:focus-visible),
+#goNcFld:where(:hover,:focus-visible),
+#goNcFixAdd:where(:hover,:focus-visible),
+#goNcAdd:where(:hover,:focus-visible) {
+  --actionText: black;
+}
 
 n-trib-row, n-short-row, .testFail {
 	animation-name: fadeIn;

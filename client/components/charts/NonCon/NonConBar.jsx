@@ -70,7 +70,7 @@ const NonConBar = ({ ncOp, nonCons, app, isDebug })=> {
     }
     
     try{
-      const splitByWhere = [...new Set( Array.from(nonCons, n => n.where ) ) ];
+      const splitByWhere = [...new Set( nonCons.map( n => n.where, []) ) ];
       let calc = ncCounter(nonCons, nonConOptions, splitByWhere);
       seriesSet( calc );
     }catch(err) {

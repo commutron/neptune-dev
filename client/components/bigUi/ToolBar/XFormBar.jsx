@@ -28,9 +28,17 @@ const XFormBar = ({
   const showBatch = b && srs && b.completed === false;
   const showFall = b && !srs && b.completed === false;
   const showItem = srs && i && (i.completed === false || rapIs);
-    
-  const pastPN = srs && srs.shortfall ? [...new Set( Array.from(srs.shortfall, x => x.partNum ) )] : [];
-  const pastRF = srs && srs.shortfall ? [...new Set( Array.from(srs.shortfall, x => x.refs.toString() ) )] : [];
+  
+  let pnums = [];
+  let prefs = [];
+  if(srs?.shortfall) {
+    for(let s of srs.shortfall) {
+      pnums.push(s.partNum);
+      prefs.push(s.refs.toString());
+    }
+  }
+  const pastPN = [...new Set( pnums ) ];
+  const pastRF = [...new Set( prefs ) ];
   
   const verAuth = Roles.userIsInRole(Meteor.userId(), 'verify');
   const lockOutAll = !timeOpen || !b.live;

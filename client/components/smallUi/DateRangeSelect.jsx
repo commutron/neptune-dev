@@ -56,9 +56,11 @@ export const MonthSelect = ({ setDate, moreclass })=> {
     <span className='centreRow rowWrap'>
       <Flatpickr
         id='startRange'
-        title='From'
+        title='Select Month'
         className={`miniIn18 ${moreclass || ''}`}
         onChange={(e)=>sendUp(e)}
+        placeholder='Select Month'
+        aria-label='Select Month'
         required
         options={{
           dateFormat: "Y-m-d",
@@ -66,6 +68,7 @@ export const MonthSelect = ({ setDate, moreclass })=> {
           altFormat: "F J Y",
           maxDate: new Date(),
           disableMobile: true,
+          position: 'auto center',
           plugins: [
             new monthSelectPlugin({})
           ]

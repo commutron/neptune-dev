@@ -6,7 +6,9 @@ import WidgetMultiBatchBar from '/client/components/charts/WidgetMultiBatchBar';
 import FailScatterChart from '/client/components/charts/FailScatterChart';
 import AvgStat from '/client/components/tinyUi/AvgStat';
 
-const WProbTab = ({ widgetData, batches, app })=> {
+const WProbTab = ({ widgetData, 
+//batcheS, app
+})=> {
   
   const mounted = useRef(true);
   
@@ -21,6 +23,8 @@ const WProbTab = ({ widgetData, batches, app })=> {
     
     return () => { mounted.current = false; };
   }, []);
+  
+  // const batches = batcheS.map( b => b.batch, []);
   
   return(
     <div className='space'>
@@ -39,7 +43,10 @@ const WProbTab = ({ widgetData, batches, app })=> {
           ]}>
               
           <div>      
-            <div className='rowWrapR vmarginquarter'>
+            <div className='rowWrapR vmarginquarter gapsC'>
+              {rate[2] ? 
+                <AvgStat num={`μ ${rate[2]}%`} type='NC Items' />
+              : null}
               <AvgStat num={rate[0]} trend={rate[1]} type='NC Rate' flip={true} />
             </div>
           

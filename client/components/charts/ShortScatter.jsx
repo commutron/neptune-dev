@@ -23,7 +23,7 @@ const ShortScatter = ({ shortfalls, app, isDebug })=> {
   const [ yArr, ySet ] = useState([]);
   
   useEffect( ()=> {
-    const partNums = [...new Set(Array.from(shortfalls, x=> x.partNum))];
+    const partNums = [...new Set( shortfalls.map( x => x.partNum, []))];
     ySet(partNums);
     
     let shCounts = [];

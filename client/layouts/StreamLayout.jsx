@@ -38,7 +38,7 @@ const StreamLayout = ({
         
         <div className='contentAreaEx'>
           <div className='baseContainer'>
-            <div className='traverseContent forceScroll wideScroll forceScrollStyle'>
+            <div className='traverseContent forceScroll scrollWrap forceScrollStyle'>
               {children[0] || children}
             </div>
           </div>

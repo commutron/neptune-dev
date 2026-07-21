@@ -76,8 +76,6 @@ const WidgetPanel = ({
   };
                            
   const bS = b.sort((b1, b2)=> b1.batch < b2.batch ? 1 : b1.batch > b2.batch ? -1 : 0 );
-  const batchIDs = Array.from( bS, x => x._id );
-  const batches = Array.from( bS, x => x.batch );
 
   const canSls = Roles.userIsInRole(Meteor.userId(), ['admin','sales']);
   const canEdt = Roles.userIsInRole(Meteor.userId(), 'edit');
@@ -194,13 +192,15 @@ const WidgetPanel = ({
         
         <WTimeTab
           widgetData={widgetData}
-          batchIDs={batchIDs}
-          app={a} />
+          batcheS={bS}
+          app={a} 
+        />
           
         <WProbTab
           widgetData={widgetData}
-          app={a}
-          batches={batches} />
+          // batcheS={bS}
+          // app={a}
+        />
         
       </Tabs>
 

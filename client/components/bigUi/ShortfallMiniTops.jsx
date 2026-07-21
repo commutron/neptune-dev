@@ -13,7 +13,7 @@ export const TotalShortfall = ({ shortfalls })=> (
 );
                 
 export const HasShortfall = ({ shortfalls, items })=> {
-  const hasShort = [... new Set( Array.from(shortfalls, x => x.serial) ) ].length;
+  const hasShort = [... new Set( shortfalls.map( x => x.serial, []) ) ].length;
   return(
     <KpiStat
       num={((hasShort / items.length) * 100 ).toFixed(0) + '%'}
@@ -36,7 +36,7 @@ export const RefCount = ({ shortfalls })=> {
 };
 
 export const PartsShort = ({ shortfalls })=> {
-  const partShort = [... new Set( Array.from(shortfalls, x => x.partNum) ) ].length;
+  const partShort = [... new Set( shortfalls.map( x => x.partNum, []) ) ].length;
   return(
     <KpiStat
       num={partShort}

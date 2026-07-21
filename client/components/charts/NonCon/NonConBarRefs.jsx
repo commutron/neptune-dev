@@ -10,7 +10,7 @@ const NonConBarRefs = ({ ncOp, nonCons, app, isDebug })=> {
   const [ types, typeNumSet ] = useState(null);
   
   useEffect( ()=> {
-    const uniqueRefs =  new Set( Array.from(nonCons, x => x.ref) );
+    const uniqueRefs =  new Set( nonCons.map( x => x.ref, []) );
     
     const splitByRef = [...uniqueRefs].map( (ref, index)=> {
       let match = nonCons.filter( y => y.ref === ref );

@@ -1,6 +1,9 @@
 import React from 'react';
 
-const DumbFilter = ({ id, title, size, wrapClass, inputClass, styleOv, onTxtChange, list })=> (
+const DumbFilter = ({ 
+  id, title, size, wrapClass, inputClass, styleOv, 
+  onTxtChange, textState, list
+})=> (
   <label title={title || ''} className={`noWrap ${wrapClass || ''}`}>
     <i className='fas fa-filter fa-fw'></i>
     <input
@@ -10,6 +13,7 @@ const DumbFilter = ({ id, title, size, wrapClass, inputClass, styleOv, onTxtChan
       className={inputClass || ''}
       style={styleOv}
       onChange={(e)=>onTxtChange(e.target.value)}
+      value={textState || ''}
       autoFocus={true}
       disabled={!onTxtChange} 
       required />

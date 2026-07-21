@@ -16,7 +16,7 @@ export const TotalNonCon = ({ noncons })=> (
 export const HasNonCon = ({ noncons, items })=> {
   const iQty = items.length; /* > 0 ? items.reduce((t,i)=> t + i.units, 0) : 0;*/
   
-  const hasNonCon = new Set( Array.from(noncons, x => x.serial) ).size;
+  const hasNonCon = new Set( noncons.map( x => x.serial, []) ).size;
   
   const asPcnt = (val, total)=> {
     const prcnt = ((val / total) * 100 );
@@ -24,11 +24,11 @@ export const HasNonCon = ({ noncons, items })=> {
   };
   
   let splitOut = [];
-  const haswhere = new Set( Array.from(noncons, x => x.where) );
+  const haswhere = new Set( noncons.map( x => x.where, []) );
   for( let w of haswhere) {
     splitOut.push({
       wh: w,
-      num: new Set( Array.from(noncons, x => x.where === w && x.serial).filter(f=>f) ).size
+      num: new Set( noncons.map( x => x.where === w && x.serial, []).filter(f=>f) ).size
     });
   }
   return(
