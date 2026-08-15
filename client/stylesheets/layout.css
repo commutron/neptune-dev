@@ -180,7 +180,7 @@ main {
   grid-template-columns: 
     var(--vert_frame)
     var(--vert_adapt)
-    0
+    var(--vert_adapt)
     1fr 
     var(--vert_adapt)
     var(--vert_adapt);

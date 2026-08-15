@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Pref from '/public/pref.js';
 import CreateTag from '/client/components/tinyUi/CreateTag';
 import Tabs from '/client/components/smallUi/Tabs/Tabs';
@@ -6,7 +6,7 @@ import { PopoverButton, PopoverMenu, PopoverAction, MatchButton } from '/client/
 
 import VariantCards from './VariantCards';
 import WModels from './WModels';
-import FlowTable from '/client/components/tables/FlowTable';
+import FlowSystem from './FlowSystem';
 import WTimeTab from './WTimeTab';
 import WProbTab from './WProbTab';
 
@@ -18,42 +18,6 @@ const WidgetPanel = ({
 
   const [ selectedFlow, selectedFlowSet ] = useState(false);
   const [ bload, bloadSet ] = useState(false);
-  const [ imods, imodsSet ] = useState(new Set());
-  
-  useEffect( ()=> {
-    if(variantData) { 
-      const root = app.instruct || '';
-      
-      const urls = variantData.map( v => v.live && v.instruct );
-      
-      for(let u of urls) {
-        const http = !u ? undefined :
-                    u.slice(0,4) === 'http' ? u + ".json" : 
-                    u.slice(0,1) === '/' ? root + u + ".json" :
-                    root + '/' + u + ".json";
-        if(http) {
-          try {
-            fetch(http, {})
-            .catch( ()=> {
-              null;
-            })
-            .then( (response)=> {
-              if(response?.ok) { return response.json(); }
-            })
-            .then( (articles)=> {
-              if(articles && articles.modules) { 
-                let names = imods;
-                articles.modules.map( m=> m.module ).forEach( a => names.add(a) );
-                imodsSet(names);
-              }
-            });
-          } catch(e) {
-            null;
-          }
-        }
-      }
-    }
-  }, []);
   
   const w = widgetData;
   const v = variantData;
@@ -88,7 +52,7 @@ const WidgetPanel = ({
   const doRmv = b.length === 0 && (!v || v.length === 0) && canRmv;
 
   return(
-    <div className='space' key={w.widget}>
+    <div className='space'>
       
       <WModels
         widgetData={widgetData}
@@ -98,15 +62,12 @@ const WidgetPanel = ({
         app={app}
         selectedFlow={selectedFlow}
         bload={bload}
-        imods={[...imods].sort()}
         clearOnClose={()=>selectedFlowSet(false)}
         unloadOnClose={()=>bloadSet(false)}
         doVar={doVar} 
         canEdt={canEdt}
-        canSls={canSls}
         doBch={doBch}
         doRmv={doRmv}
-        isDebug={isDebug}
       />
       
       <div className='floattaskbar stick light'>
@@ -180,10 +141,14 @@ const WidgetPanel = ({
           }
         </div>
         
-        <FlowTable 
+        <FlowSystem 
           id={w._id}
           flows={w.flows}
           app={a}
+          widgetData={widgetData}
+          variantData={variantData}
+          selectedFlow={selectedFlow}
+          selectedFlowSet={selectedFlowSet}
           openActions={openActions}
           canEdt={canEdt}
           canSls={canSls}

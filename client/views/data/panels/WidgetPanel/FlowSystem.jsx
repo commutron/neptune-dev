@@ -3,11 +3,16 @@ import moment from 'moment';
 import Pref from '/public/pref.js';
 import { toast } from 'react-toastify';
 
+import FlowModels from './FlowModels';
 import TabsVert from '/client/components/smallUi/Tabs/TabsVert';
 import { MatchButton } from '/client/layouts/Models/Popover';
-import FlowRemove from '../forms/Flow/FlowRemove';
+import FlowRemove from '/client/components/forms/Flow/FlowRemove';
 
-const FlowTable = ({ id, flows, app, openActions, canEdt, canSls, isDebug })=> {
+const FlowSystem = ({ 
+  id, flows, 
+  widgetData, variantData, selectedFlow, selectedFlowSet,
+  app, openActions, canEdt, canSls, isDebug 
+})=> {
   
   function handleRebuild() {
     if(canSls) {
@@ -21,6 +26,17 @@ const FlowTable = ({ id, flows, app, openActions, canEdt, canSls, isDebug })=> {
 
   return(
     <div>
+      <FlowModels
+        widgetData={widgetData}
+        variantData={variantData}
+        app={app}
+        selectedFlow={selectedFlow}
+        clearOnClose={()=>selectedFlowSet(false)}
+        canEdt={canEdt}
+        canSls={canSls}
+        isDebug={isDebug}
+      />
+      
       {flows.map( (entry, index)=>{ 
         const qtTotalM = (entry.qtTime || []).reduce((x,y)=> x + y[1], 0).toFixed(2,10);
         const qtTotalH = moment.duration(qtTotalM, 'minutes').asHours().toFixed(2,10);
@@ -119,6 +135,8 @@ const FlowTable = ({ id, flows, app, openActions, canEdt, canSls, isDebug })=> {
   );
 };
 
+export default FlowSystem;
+
 const FlowToolbar = ({ id, entry, canEdt, canSls, openActions })=> (
   <div className='floattaskbar shallow light'>
       <MatchButton 
@@ -199,5 +217,3 @@ const QtRow = ({ app, qt })=> {
     </tr>
   );
 };
-
-export default FlowTable;

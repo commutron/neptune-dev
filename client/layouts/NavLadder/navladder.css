@@ -1,4 +1,4 @@
-.cookieRow, .cookieCrumb {
+.ladderRow, .ladderRung {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -6,7 +6,7 @@
   overflow: hidden;
 }
 
-.cookieRow {
+.ladderRow {
   grid-area: frontCenter;/*proLeft / proLeft / frontCenter / frontCenter;*/
   background-color: rgb(25,25,25);
   width: 100%;
@@ -16,7 +16,7 @@
   padding: 0;
 }
 
-.cookieCrumb {
+.ladderRung {
   background-color: transparent;
   transition: all 200ms ease-in-out;
   transition-property: background-color, color, max-width;
@@ -26,32 +26,32 @@
   text-indent: var(--vert_border);
   cursor: pointer;
 }
-.cookie {
+.ladder {
   max-width: 25vw;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.cookieCrumb:first-child > .cookie {
+.ladderRung:first-child > .ladder {
   margin-left: 1ch;
 }
-.cookieCrumb:hover > .cookie {
+.ladderRung:hover > .ladder {
   max-width: calc( 100vw - ( 24vh + 10vmin ) );
   max-width: calc( 100vw - ( var(--vert_adapt) * 3 ) + 10vmin ) );
 }
-.cookieCrumb:first-child {
+.ladderRung:first-child {
   height: 100%;
 }
 
-.crumb, .endCrumb {
+.rung, .endRung {
   color: var(--silverfade);
   overflow: hidden;
   width: 5vmin;
   min-width: 3ch;
   margin-right: 0.5vmin;
 }
-.crumb::before,
-.endCrumb::before {
+.rung::before,
+.endRung::before {
   background-color: rgb(25,25,25);
 	border-style: solid;
 	border-width: 0.75vmin 0.75vmin 0 0;
@@ -69,17 +69,17 @@
   transition-property: background-color, color;
 }
 
-.cookieCrumb:where(:hover,:active) {
+.ladderRung:where(:hover,:active) {
   background-color: var(--silver);
   color: rgb(25,25,25);
 }
-.cookieCrumb:hover > .crumb::before,
-.cookieCrumb:active > .crumb::before {
+.ladderRung:hover > .rung::before,
+.ladderRung:active > .rung::before {
   color: var(--silver);
 }
-.cookieCrumb:hover + .cookieCrumb > .crumb::before,
-.cookieCrumb:hover + .endCrumb::before,
-.cookieCrumb:active + .cookieCrumb > .crumb::before,
-.cookieCrumb:active + .endCrumb::before {
+.ladderRung:hover + .ladderRung > .rung::before,
+.ladderRung:hover + .endRung::before,
+.ladderRung:active + .ladderRung > .rung::before,
+.ladderRung:active + .endRung::before {
   background-color: var(--silver);
 }

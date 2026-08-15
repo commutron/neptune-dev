@@ -1,22 +1,22 @@
 import React from 'react';
 import Pref from '/public/pref.js';
 
-import './cookie';
+import './navladder.css';
 
-const CookieBar = ({ 
+const NavLadder = ({ 
   alias, widget, variant,
   batch, item, 
 })=> (
-  <div className='cookieRow'>
+  <div className='ladderRow'>
     {alias &&
-      <CookieButton
+      <LadderButton
         label={alias}
         title={`${Pref.group}: ${alias}`}
         uri={'/data/overview?request=groups&specify=' + alias}
       />}
         
     {widget && 
-      <CookieButton
+      <LadderButton
         label={widget}
         sub={variant}
         title={`${Pref.widget}: ${widget}${variant && ' v.'+ variant}`}
@@ -25,26 +25,26 @@ const CookieBar = ({
       />}
       
     {batch && 
-      <CookieButton
+      <LadderButton
         label={batch}
         title={`${Pref.xBatch}: ${batch}`}
         uri={'/data/batch?request=' + batch}
         crmb={true}
       />}
       
-    {item && <span className='endCrumb'></span>}
+    {item && <span className='endRung'></span>}
   </div>
 );
 
-export default CookieBar;
+export default NavLadder;
 
-const CookieButton = ({ label, sub, title, uri, crmb })=> (
+const LadderButton = ({ label, sub, title, uri, crmb })=> (
   <button 
-    className='cookieCrumb numFont up'
+    className='ladderRung numFont up'
     title={title}
     onClick={()=>FlowRouter.go(uri)}>
-    {crmb && <span className='crumb'></span>}
-    <span className='cookie'>{label}{sub && <i className='clean'>{' v.'+ sub}</i>}</span>
+    {crmb && <span className='rung'></span>}
+    <span className='ladder'>{label}{sub && <i className='clean'>{' v.'+ sub}</i>}</span>
   </button>
   
 );

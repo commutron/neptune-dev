@@ -178,21 +178,25 @@ const NCAdd = ({ seriesId, serial, units, user, ncTypesCombo, brancheS })=> {
   		/>
   		<PopContextMenu targetid='branchOverrideButton' extraClass='forcetop popDark cap'>
   		  <span className='medSm darkCard darkgrayT nomargin wide centreText'>Where Override</span>
-        {brancheS.map((b,x)=> (
-          <button 
-            type='button'
-            title={now == b.branch ? 'auto-selection' : ''}
-            key={x}
-            style={
-              now == b.branch ? !brOvrd ?
-                {backgroundColor: 'var(--pomegranatetrans)'} : 
-                {borderColor: 'var(--pomegranatetrans)'} : null}
-            className={(brOvrd||now) == b.branch ? 'redGlow':''}
-            onClick={()=>brOvrdSet(b.branch == now ? false : b.branch)}
-            popovertarget='branchOverrideButton' 
-            popovertargetaction="hide"
-          >{b.branch}</button>
-        ))}
+        {brancheS.map((b,x)=> {
+          if(b.pro) {
+            return(
+              <button 
+                type='button'
+                title={now == b.branch ? 'auto-selection' : ''}
+                key={x}
+                style={
+                  now == b.branch ? !brOvrd ?
+                    {backgroundColor: 'var(--pomegranatetrans)'} : 
+                    {borderColor: 'var(--pomegranatetrans)'} : null}
+                className={(brOvrd||now) == b.branch ? 'redGlow':''}
+                onClick={()=>brOvrdSet(b.branch == now ? false : b.branch)}
+                popovertarget='branchOverrideButton' 
+                popovertargetaction="hide"
+              >{b.branch}</button>
+            );
+          }else{null}
+        })}
       </PopContextMenu>
       
       <NCdo

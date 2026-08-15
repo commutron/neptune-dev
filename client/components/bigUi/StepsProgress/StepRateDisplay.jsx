@@ -11,14 +11,14 @@ const StepRateDisplay = ({ step, subtitle, gFirst, ngFirst, truncate })=> {
     <p className={`cap smTxt meterprogStack nomargin ${hidden}`}>
       <span className='comfort' style={{flexWrap: 'wrap-reverse'}}>
       <span className='colNoWrap' style={{letterSpacing: '1px'}}>
-        <span>{step} first {name}</span>
+        <span>{step} first</span>
         {!truncate && <i className='smaller'>{subtitle}</i>}
       </span>
-      <span className='beside'>
+      <span className='beside med' title={name}>
       {gFirst === true ?
         <span className='fa-stack'>
           <i className="fas fa-certificate fa-stack-2x fa-fw greenT"></i>
-          <i className="fas fa-check-double fa-stack-1x fa-lg fa-fw whiteT" data-fa-transform="right-1"></i>
+          <i className="fas fa-check-double fa-stack-1x fa-fw whiteT" data-fa-transform="right-1"></i>
         </span>
       : ngFirst === true ?
         <n-fa2 class='medBig'><i className="fa-solid fa-check-circle fa-fw fa-lg yellowT"></i></n-fa2>

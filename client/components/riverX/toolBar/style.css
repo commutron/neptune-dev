@@ -4,12 +4,6 @@
   -webkit-appearance: none;
 }
 
-.actionForm .redIn option,
-.actionForm .redIn optgroup {
-  color: black;
-  background-color: white;
-}
-
 .redIn, .orangeIn {
   color: white;
 }
@@ -19,18 +13,17 @@
   line-height: 1rem;
 }
 
-input.redIn, input.orangeIn {
-  background-color: transparent;
-  border-bottom-color: var(--clouds);
-}
+input.redIn, input.orangeIn,
 select.redIn, select.orangeIn {
   background-color: transparent;
-  border-color: var(--clouds);
+  border-bottom-color: var(--clouds);
 }
 
 select.redIn > option,
 select.orangeIn > option {
-  color: black;
+  color-scheme: dark;
+  color: white;
+  background-color: var(--dark);
 }
 
 input.redIn:focus {

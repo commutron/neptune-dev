@@ -4,7 +4,7 @@ import { Meteor } from 'meteor/meteor';
 import HomeIcon from '/client/layouts/HomeIcon';
 import TideFollow from '/client/components/tide/TideFollow';
 import { ExTaskBar } from './TaskBars/TaskBars';
-import CookieBar from './CookieBar/CookieBar';
+import NavLadder from './NavLadder/NavLadder';
 
 export const TraverseWrap = ({
   itemData,
@@ -42,7 +42,7 @@ export const TraverseWrap = ({
           <div className='frontCenterTitle cap'>{title}
           {beta && <sup className='big monoFont'>BETA</sup>}</div>
         :
-          <CookieBar
+          <NavLadder
             batch={batchData.batch}
             item={itemData ? true : false}
             widget={widgetData.widget}
