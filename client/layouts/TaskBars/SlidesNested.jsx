@@ -5,7 +5,7 @@ const SlidesNested = ({
   disable, disableAll, menuClass, extraClass, 
   topPage, defaultSlide, collapse,
   textStyle,
-  uri,
+  uri, nest,
   children
 })=> {
   
@@ -22,7 +22,7 @@ const SlidesNested = ({
   const doSelect = (index, name)=> {
     setSection(index);
     if(uri) {
-      !name ? FlowRouter.go(uri) : FlowRouter.go(uri + "&specify=" + name);
+      !name ? FlowRouter.go(uri) : FlowRouter.go(uri + (nest || "&specify") + "=" + name);
     }
   };
   

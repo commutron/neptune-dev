@@ -14,9 +14,9 @@ const ExploreView = ({
   user, isDebug, org, users, app, // self
   allGroup, allWidget, allVariant, // customers
   allXBatch, hotXBatch, hotXSeries, hotXRapids, equipData, // relevant
-  view, request, specify, subLink // routing
+  view, request, specify, query, subLink // routing
 })=> {
-  
+  console.log({view, request, specify, query, subLink});
   const brancheS = useMemo( ()=> branchesSort(app?.branches || []), [app]);
   
   if( !coldReady || !hotReady || !user || !app ) {
@@ -25,8 +25,6 @@ const ExploreView = ({
         batchData={false}
         widgetData={false}
         groupData={false}
-        user={false}
-        app={false}
         title={false}
         subLink={subLink}
         action={false}
@@ -60,27 +58,26 @@ const ExploreView = ({
       view={view}
       request={request}
       specify={specify}
+      query={query}
       subLink={subLink}
     />
   );
 };
 
-export default withTracker( ({ view, request, specify }) => {
+export default withTracker( ({ view, request, specify, query }) => {
   let login = Meteor.userId() ? true : false;
   
   let user = login ? Meteor.user() : false;
   let org = user ? user.org : false;
   let active = user ? Roles.userIsInRole(Meteor.userId(), 'active') : false;
-  const isDebug = user ? Roles.userIsInRole(Meteor.userId(), 'debug') : false;
+  const isDebug = false;//user ? Roles.userIsInRole(Meteor.userId(), 'debug') : false;
 
-  const coldSub = login ? Meteor.subscribe('skinnyData') : false;
-  
-  const hotXBatch = XBatchDB.findOne({ batch: request }) || false;
-  const hotXSeries = XSeriesDB.findOne({ batch: request }) || false;
-  const hotXRapids = XRapidsDB.find({ extendBatch: request }).fetch() || false;
-  const hotWidget = view === 'widget' ? request : false;
-  
-  const hotSubEx = Meteor.subscribe('hotDataEx', view, request, hotWidget);
+  const coldSub = active ? Meteor.subscribe('skinnyData') : false;
+ 
+ // Crappy reloading on just flipping through groups
+  const stableSpec = request === 'groups' ? specify : false;
+  const hotSubEx = Meteor.subscribe('hotDataEx', view, request, stableSpec, query);
+
 
   if( !login || !active ) {
     return {
@@ -100,13 +97,10 @@ export default withTracker( ({ view, request, specify }) => {
       allWidget: WidgetDB.find( {}, { sort: { widget: 1 } } ).fetch(),
       allVariant: VariantDB.find( {} ).fetch(),
       allXBatch: XBatchDB.find( {}, { sort: { batch: -1 } } ).fetch(),
-      hotXBatch: hotXBatch,
-      hotXSeries: hotXSeries,
-      hotXRapids: hotXRapids,
-      equipData: EquipDB.find( {}, { sort: { alias: -1 } } ).fetch(),
-      view: view,
-      request: request,
-      specify: specify
+      hotXBatch: XBatchDB.findOne({ batch: request }) || false,
+      hotXSeries: XSeriesDB.findOne({ batch: request }) || false,
+      hotXRapids: XRapidsDB.find({ extendBatch: request }).fetch() || false,
+      equipData: EquipDB.find( {}, { sort: { alias: -1 } } ).fetch()
     };
   }
 })(ExploreView);

@@ -30,7 +30,7 @@ const BatchesList = ({ batchData, widgetData, variantData })=> {
       b;
     let showList = basicFilter.filter( 
                     tx => tx.batch.toLowerCase().includes(textString) === true );
-    let sortList = flexSort(showList, 'batch');
+    let sortList = flexSort(showList, 'batch', true);
     listSet(sortList);
   }, [ batchData, filter, textString ]);
             

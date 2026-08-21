@@ -29,7 +29,7 @@ const FailAllTable = ({ failData, gList, showEntries })=> (
                   <LeapTextLink
                     title={g} 
                     sty='blackT medBig'
-                    address={'/data/overview?request=groups&specify=' + g}
+                    address={'/data/overview?request=groups&specify=' + g.toLowerCase()}
                   />
                 </td>
               </tr>
@@ -44,7 +44,7 @@ const FailAllTable = ({ failData, gList, showEntries })=> (
                           <LeapTextLink
                             title={w} 
                             sty='blackT'
-                            address={'/data/widget?request=' + w}
+                            address={'/data/overview?request=groups&specify=' + g.toLowerCase() + '&query=' + w.toLowerCase()}
                           />
                         </td>
                         <td colSpan={2} className={showEntries ? 'hidden' : ''}>

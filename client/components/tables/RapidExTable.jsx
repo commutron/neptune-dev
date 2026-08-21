@@ -66,7 +66,7 @@ const RapidExRow = ({ rex, calString })=> (
       <LeapTextLink
         title={rex.widget} 
         sty='blackT'
-        address={'/data/widget?request=' + rex.widget}
+        address={'/data/overview?request=groups&specify=' + rex.group + '&query=' + rex.widget}
       />
     </td>
     <td>

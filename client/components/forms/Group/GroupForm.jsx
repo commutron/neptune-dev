@@ -33,6 +33,7 @@ const GroupForm = ({ gObj, clearOnClose, rootURL })=> {
         if(reply) {
           clearOnClose();
           toast.success('Saved');
+          FlowRouter.go('/data/overview?request=groups&specify=' + groupAlias);
         }else{
           toast.error('Server Error / Duplicate');
         }

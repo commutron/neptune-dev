@@ -2,7 +2,8 @@ Meteor.methods({
   
   //// Widgets \\\\
   addNewWidget(widget, groupId, desc) {
-    const duplicate = WidgetDB.find({widget: widget},{fields:{'_id':1},limit:1}).count();
+    // const duplicate = WidgetDB.find({widget: widget},{fields:{'_id':1},limit:1}).count();
+    const duplicate = WidgetDB.find({widget: widget, groupId: groupId},{fields:{'_id':1},limit:1}).count();
     if(!duplicate && Roles.userIsInRole(Meteor.userId(), 'create')) {
       const appDoc = AppDB.findOne({orgKey: Meteor.user().orgKey});
       const endTrack = appDoc.lastTrack;
@@ -37,8 +38,10 @@ Meteor.methods({
   },
   
   editWidget(widgetId, newName, newDesc) {
-    const doc = WidgetDB.findOne({_id: widgetId},{fields:{'widget':1}});
-    let duplicate = WidgetDB.find({widget: newName},{fields:{'_id':1},limit:1}).count();
+    const doc = WidgetDB.findOne({_id: widgetId},{fields:{'widget':1,'groupId':1}});
+    // let duplicate = WidgetDB.find({widget: newName},{fields:{'_id':1},limit:1}).count();
+    let duplicate = WidgetDB.find({widget: newName, groupId: doc.groupId},{fields:{'_id':1},limit:1}).count();
+    
     doc.widget === newName ? duplicate = false : null;
     if(!duplicate && Roles.userIsInRole(Meteor.userId(), 'edit')) {
       WidgetDB.update({_id: widgetId, orgKey: Meteor.user().orgKey}, {

@@ -113,6 +113,8 @@ const privlegedRoutes = FlowRouter.group({
   subscriptions: function(params, queryParams) {
     this.register('routerSubSelf', SubMngr.subscribe('selfData'));
     this.register('routerSubApp', SubMngr.subscribe('appData'));
+    
+    // this.register('routerSubSkim', SubMngr.subscribe('skinnyData'));
   }
 });
 
@@ -331,8 +333,14 @@ privlegedRoutes.route('/data/:view', {
                   view={params.view}
                   request={queryParams.request}
                   specify={queryParams.specify}
+                  query={queryParams.query}
                   subLink={params.view + queryParams.request} />
                 )
+      // '/data/overview?request=groups&specify=' + alias
+      // '/data/widget?request=' + widgetId
+      // '/data/overview?request=groups&specify=' + alias + '&query=' + widget
+      // '/data/batch?request=' + batchNum
+      // '/data/batch?request=' + batchNum + '&specify=' + serial
     });
   },
 });

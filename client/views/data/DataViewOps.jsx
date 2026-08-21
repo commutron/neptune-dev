@@ -32,7 +32,7 @@ const DataViewOps = ({
   allGroup, allWidget, allVariant,
   user, isDebug, app, brancheS, users,
   hotXBatch, hotXSeries, hotXRapids, equipData,
-  view, request, specify,
+  view, request, specify, query,
   subLink
 })=> {
   
@@ -49,9 +49,6 @@ const DataViewOps = ({
     return allGroup.find(x => x._id === gId);
   }
   
-  function getWidget(request) {
-    return allWidget.find( x => x._id === request || x.widget === request );
-  }
   function linkedWidget(wId) {
     return allWidget.find(x => x._id === wId);
   }
@@ -214,12 +211,65 @@ const DataViewOps = ({
       </TraverseWrap>
     );
   }
+
+  // Widget
+  if(view === 'widget' || (request === 'groups' && query)) {
+    let widgetfocus = view === 'widget' ? request : null;
+    let focus_widget = false;
+    let focus_widgetgroup = false;
     
+    if(widgetfocus) {
+      focus_widget = linkedWidget(widgetfocus);
+    }else if(request === 'groups' && query ) {
+      const gG = allGroup.find( g => g.alias === specify );
+      const gW = allWidget.find( x => x.groupId === gG?._id && x.widget === query );
+      if(gW) {
+        focus_widgetgroup = gG;
+        focus_widget = gW;
+      }
+    }
+  
+    if(focus_widget) {
+      Session.set('nowBatch', false);
+      let group = focus_widgetgroup || linkedGroup(focus_widget.groupId);
+      let allWidgets = groupWidgets(focus_widget.groupId);
+      let allVariants = widgetVariants(focus_widget._id);
+      let allBatches = allLinkedBatches(focus_widget._id);
+      return(
+        <TraverseWrap
+          batchData={false}
+          itemData={false}
+          widgetData={focus_widget}
+          variantData={false}
+          groupData={group}
+          title='Widget'
+          subLink={subLink}
+        >
+          <WidgetPanel
+            widgetData={focus_widget}
+            groupData={group}
+            variantData={allVariants}
+            batchRelated={allBatches}
+            brancheS={brancheS}
+            app={app}
+            user={user}
+            users={users}
+            isDebug={isDebug}
+          />
+          <BatchesList
+            batchData={allBatches}
+            widgetData={allWidgets}
+            variantData={allVariants} />
+        </TraverseWrap>
+      );
+    }
+  }
+
   if(view === 'overview') {
     if(request === 'groups') {
       return(
         <TraverseWrap
-		      batchData={false}
+  	      batchData={false}
           widgetData={false}
           variantData={false}
           groupData={false}
@@ -234,7 +284,9 @@ const DataViewOps = ({
             variantData={allVariant}
             groupData={allGroup} 
             app={app}
-            specify={specify} />
+            specify={specify}
+            // query={query} 
+          />
         </TraverseWrap>
       );
     }else if(request === 'branches') {
@@ -263,8 +315,6 @@ const DataViewOps = ({
           widgetData={false}
           variantData={false}
           groupData={false}
-          user={user}
-          app={app}
           title={Pref.widget + ' ' + Pref.radioactive + 's'}
           subLink={subLink}
           action={false}
@@ -281,8 +331,6 @@ const DataViewOps = ({
           widgetData={false}
           variantData={false}
           groupData={false}
-          user={user}
-          app={app}
           title={`${Pref.rapidExd} ${Pref.xBatchs}`}
           subLink={subLink}
           action={false}
@@ -299,8 +347,6 @@ const DataViewOps = ({
           widgetData={false}
           variantData={false}
           groupData={false}
-          user={user}
-          app={app}
           title='Tests Failed'
           subLink={subLink}
           action={false}
@@ -317,8 +363,6 @@ const DataViewOps = ({
           widgetData={false}
           variantData={false}
           groupData={false}
-          user={user}
-          app={app}
           title='Scraps'
           subLink={subLink}
           action={false}
@@ -335,8 +379,6 @@ const DataViewOps = ({
           widgetData={false}
           variantData={false}
           groupData={false}
-          user={user}
-          app={app}
           title=''
           subLink={subLink}
           action={false}
@@ -463,44 +505,6 @@ const DataViewOps = ({
 		        flowData={flowData}
 		        fallData={fallData}
 		        isDebug={isDebug} />
-        </TraverseWrap>
-      );
-    }
-  }
-// Widget
-  if(view === 'widget') {
-    const widget = getWidget(request);
-    if(widget) {
-      Session.set('nowBatch', false);
-      let group = linkedGroup(widget.groupId);
-      let allWidgets = groupWidgets(widget.groupId);
-      let allVariants = widgetVariants(widget._id);
-      let allBatches = allLinkedBatches(widget._id);
-      return(
-        <TraverseWrap
-          batchData={false}
-          itemData={false}
-          widgetData={widget}
-          variantData={false}
-          groupData={group}
-          title='Widget'
-          subLink={subLink}
-        >
-          <WidgetPanel
-            widgetData={widget}
-            groupData={group}
-            variantData={allVariants}
-            batchRelated={allBatches}
-            brancheS={brancheS}
-            app={app}
-            user={user}
-            users={users}
-            isDebug={isDebug}
-          />
-          <BatchesList
-            batchData={allBatches}
-            widgetData={allWidgets}
-            variantData={allVariants} />
         </TraverseWrap>
       );
     }

@@ -6,16 +6,30 @@ Meteor.startup(function () {
   AppDB._ensureIndex({ org : 1, orgKey: 1 }, { unique: true });
   Meteor.users._ensureIndex({ orgKey: 1, username : 1 }, { unique: true });
   XBatchDB._ensureIndex({ orgKey: 1, batch: 1 }, { unique: true });
-  XSeriesDB._ensureIndex({ orgKey: 1, batch: 1, 'items.serial' : 1 }, { unique: true });
+  // XSeriesDB._ensureIndex({ orgKey: 1, batch: 1, 'items.serial' : 1 }, { unique: true });
+  XSeriesDB._dropIndex('orgKey_1_batch_1_items.serial_1');
+  // XSeriesDB._ensureIndex({ orgKey: 1, batch: 1 }, { unique: true });
+      
   XRapidsDB._ensureIndex({ orgKey: 1, rapid: 1, extendBatch: 1 }, { unique: true });
   
-  GroupDB._ensureIndex({ orgKey: 1, group : 1 }, { unique: true });
-  WidgetDB._ensureIndex({ orgKey: 1, widget : 1 }, { unique: true });
+  // GroupDB._ensureIndex({ orgKey: 1, alias : 1 }, { unique: true });
+  GroupDB._dropIndex("orgKey_1_group_1");
+  // WidgetDB._ensureIndex({ orgKey: 1, widget : 1, groupId: 1 }, { unique: true });
+  WidgetDB._dropIndex("orgKey_1_widget_1");
   VariantDB._ensureIndex({ orgKey: 1, versionKey : 1 }, { unique: true });
   EquipDB._ensureIndex({ orgKey: 1, alias : 1 }, { unique: true });
 
   CacheDB._ensureIndex({ dataName : 1 }, { unique: true });
   TraceDB._ensureIndex({ batchID : 1 }, { unique: true });
+  
+  // XSeriesDB.rawCollection().indexes((err, indexes) => {
+  //   if (err) {
+  //     console.error("Error fetching indexes:", err);
+  //     return;
+  //   }
+  //   console.log("=== Collection Indexes ===");
+  //   console.log(indexes);
+  // });
 });
 
 Meteor.methods({

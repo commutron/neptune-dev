@@ -64,7 +64,7 @@ const ScrapRow = ({ entry, group, batchNum, widget, barcode })=> (
       <LeapTextLink
         title={widget} 
         sty='blackT'
-        address={'/data/widget?request=' + widget}
+        address={'/data/overview?request=groups&specify=' + group + '&query=' + widget}
       />
     </td>
     <td>{moment(entry.time).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm a"})}</td>

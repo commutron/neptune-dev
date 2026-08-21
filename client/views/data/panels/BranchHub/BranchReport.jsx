@@ -194,7 +194,9 @@ const SmpleDataSet = ({ title, array, line, exlink, unq, sufix })=> {
         return(
           <dd key={index}>
             {exlink ?
-              <ExploreLinkBlock type={exlink} keyword={dt} />
+              <ExploreLinkBlock 
+              type={exlink} // batch or equip
+              keyword={dt} />
               :
               dt + (sufix || '')
             }

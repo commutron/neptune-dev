@@ -723,6 +723,160 @@ Meteor.publish('skinnyData', function(){
   }
 });
 
+Meteor.publish('hotDataEx', function(dataView, dataRequest, dataSpec, dataQuery){
+  const user = Meteor.users.findOne({_id: this.userId});
+  const orgKey = user ? user.orgKey : false;
+  
+  let hothotGroupID = false;
+  let hothotWidgetID = false;
+  
+  if(dataView === 'batch') {
+    const hotXBatch = XBatchDB.findOne({ batch: dataRequest });
+    if(hotXBatch) {
+      const maybe = WidgetDB.findOne({ _id: hotXBatch.widgetId });
+      if(maybe) {
+        hothotWidgetID = maybe._id;
+      }
+    }
+  }else if(dataRequest === 'groups') {
+    const getGroup = GroupDB.findOne({ alias: dataSpec },{fields:{'_id':1}});
+    if(getGroup) {
+      hothotGroupID = getGroup._id;
+      if(dataQuery) {
+        // '/data/overview?request=groups&specify=' + alias + '&query=' + widget
+        const confirmWgt = WidgetDB.findOne({ groupId: getGroup._id, widget: dataQuery },{fields:{'_id':1}});
+        if(confirmWgt) {
+          hothotWidgetID = confirmWgt._id;
+        }
+      }
+    }
+  }else if(dataView === 'widget') {
+    // '/data/widget?request=' + widgetId
+    const confirmId = WidgetDB.findOne({ _id: dataRequest },{fields:{'groupId':1}});
+                      
+    if(confirmId) {
+      hothotGroupID = confirmId.groupId;
+      hothotWidgetID = confirmId._id;
+    }
+  }else{
+    null;
+  }
+  
+  if(!this.userId){
+    return this.ready();
+  }else{
+    if( dataRequest === 'groups' && !dataQuery ) { 
+      return [
+        GroupDB.find({_id: hothotGroupID}, {
+          fields: {
+            'orgKey': 0,
+            'shareKey': 0,
+            'topStats': 0
+        }}),
+        WidgetDB.find({orgKey: orgKey, groupId: hothotGroupID}, {
+          fields: {
+            'ncRate': 1
+        }}),
+        VariantDB.find({orgKey: orgKey, groupId: hothotGroupID}, {
+          fields: {
+            'createdAt': 1,
+            'live': 1
+        }}),
+        XBatchDB.find({orgKey: orgKey, groupId: hothotGroupID, completed: false }, {
+          sort: {batch:-1},
+          fields: {
+            'batch': 1,
+            'widgetId': 1,
+            'completed': 1,
+        }})
+      ];
+    }else if( dataView === 'widget' || ( dataRequest === 'groups' && dataQuery ) ) {
+      return [
+        GroupDB.find({_id: hothotGroupID, orgKey: orgKey}, {
+          fields: {
+            'group': 1,
+            'alias': 1,
+            'hibernate': 1,
+            'internal': 1,
+            'wiki': 1,
+            'emailOptIn': 1
+          }}),
+        WidgetDB.find({_id: hothotWidgetID, orgKey: orgKey}, {
+          fields: {
+            'orgKey': 0,
+            'quoteStats': 0,
+            'turnStats': 0,
+            'ncRate': 0
+          }}),
+        VariantDB.find({orgKey: orgKey, widgetId: hothotWidgetID}, {
+          fields: {
+            'orgKey': 0,
+          }}),
+        XBatchDB.find({orgKey: orgKey, widgetId: hothotWidgetID}, {
+          sort: {batch:-1},
+          fields: {
+            'batch': 1,
+            'groupId': 1,
+            'widgetId': 1,
+            'versionKey': 1,
+            'createdAt': 1,
+            'live': 1,
+            'salesOrder': 1,
+            'completed': 1,
+            'completedAt': 1,
+            'quantity': 1
+            // 'river': 1
+        }})
+      ];
+    }else if( dataRequest === 'branches' ) {
+      return [
+        EquipDB.find({orgKey: orgKey, nullify: { $ne: true }}, {
+          fields: {
+            'alias': 1,
+            'branchKey': 1,
+            'hibernate': 1,
+            'online': 1
+        }})
+     ];
+    }else if(dataView === 'batch') {
+      return [
+        WidgetDB.find({_id: hothotWidgetID, orgKey: orgKey}, {
+          fields: {
+            'orgKey': 0,
+            'quoteStats': 0,
+            'turnStats': 0,
+            'ncRate': 0
+          }}),
+        VariantDB.find({widgetId: hothotWidgetID, orgKey: orgKey}, {
+          fields: {
+            'orgKey': 0,
+          }}),
+        XBatchDB.find({batch: dataRequest, orgKey: orgKey}, {
+          fields: {
+            'orgKey': 0,
+            'shareKey': 0,
+            'lockTrunc': 0,
+            'finShipAim': 0,
+            // 'finShipDue': 0,
+            'finEndWork': 0,
+            'finBffrRel': 0
+        }}),
+        XSeriesDB.find({batch: dataRequest, orgKey: orgKey}, {
+          fields: {
+            'orgKey': 0
+        }}),
+        XRapidsDB.find({extendBatch: dataRequest, orgKey: orgKey}, {
+          fields: {
+            'orgKey': 0
+        }})
+      ];
+    }else{
+      return this.ready();
+    }
+  }
+});
+/*
+// OLD
 Meteor.publish('hotDataEx', function(dataView, dataRequest, hotWidget){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;
@@ -818,27 +972,6 @@ Meteor.publish('hotDataEx', function(dataView, dataRequest, hotWidget){
       ];
     }else if( dataRequest === 'branches' ) {
       return [
-        // GroupDB.find({orgKey: orgKey}, {
-        //   fields: {
-        //     'orgKey': 0,
-        //     'shareKey': 0,
-        //     'topStats': 0
-        // }}),
-        // WidgetDB.find({orgKey: orgKey}, {
-        //   fields: {
-        //     'ncRate': 1
-        // }}),
-        // VariantDB.find({orgKey: orgKey}, {
-        //   fields: {
-        //     'createdAt': 1,
-        // }}),
-        // XBatchDB.find({orgKey: orgKey, completed: false }, {
-        //   sort: {batch:-1},
-        //   fields: {
-        //     'batch': 1,
-        //     'widgetId': 1,
-        //     'completed': 1,
-        // }}),
         EquipDB.find({orgKey: orgKey, nullify: { $ne: true }}, {
           fields: {
             'alias': 1,
@@ -882,7 +1015,7 @@ Meteor.publish('hotDataEx', function(dataView, dataRequest, hotWidget){
     }
   }
 });
-
+*/
 Meteor.publish('thinEquip', function(){
   const user = Meteor.users.findOne({_id: this.userId});
   const orgKey = user ? user.orgKey : false;

@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 
 import ModelNative from '/client/layouts/Models/ModelNative';
 
-const WidgetNew = ({ groupId, clearOnClose })=> {
+const WidgetNew = ({ groupId, groupAlias, clearOnClose })=> {
 
   function saveNewWidget() {
     this.goSvNwWg.disabled = true;
@@ -14,7 +14,7 @@ const WidgetNew = ({ groupId, clearOnClose })=> {
     Meteor.call('addNewWidget', newName, groupId, desc, (error, reply)=>{
       error && console.log(error);
       if(reply) {
-        FlowRouter.go('/data/widget?request=' + newName);
+        groupAlias && FlowRouter.go('/data/overview?request=groups&specify=' + groupAlias + '&query=' + newName);
       }else{
         toast.error('Server Error');
         this.goSvNwWg.disabled = false;
@@ -74,7 +74,7 @@ export const WidgetEdit = ({ id, now })=> {
     Meteor.call('editWidget', id, newName, desc, (error, reply)=>{
       error && console.log(error);
       if(reply) {
-        FlowRouter.go('/data/widget?request=' + newName);
+        FlowRouter.go('/data/widget?request=' + id);
         toast.success('Saved');
       }else{
         toast.error('Server Error');

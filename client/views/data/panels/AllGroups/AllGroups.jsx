@@ -10,7 +10,7 @@ import GroupEmails from '/client/components/forms/Group/GroupEmails';
 import WidgetNew from '/client/components/forms/WidgetForm';
 
 const AllGroups = ({ 
-  groupData, widgetData, variantData, batchDataX, app, specify 
+  groupData, widgetData, variantData, batchDataX, app, specify //, query 
 }) => {
   
   const [ selectedGroup, selectedGroupSet ] = useState(false);
@@ -88,6 +88,7 @@ const AllGroups = ({
       />
       <WidgetNew 
         groupId={selectedGroup?._id || null}
+        groupAlias={selectedGroup?.alias || null}
         clearOnClose={()=>selectedGroupSet(false)}
       />
      
@@ -106,7 +107,9 @@ const AllGroups = ({
       defaultSlide={defaultSlide}
       collapse={Pref.hibernatated}
       textStyle='up'
-      uri={"/data/overview?request=groups"}>
+      uri="/data/overview?request=groups"
+      nest="&specify"
+    >
     
       {groupS.map( (g, index)=> {
         let widgetsList = widgetData.filter(x => x.groupId === g._id);

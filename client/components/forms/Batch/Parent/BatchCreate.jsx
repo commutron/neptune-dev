@@ -127,7 +127,7 @@ const BatchCreate = ({ groupId, gemail, widgetId, allVariants, prerun, clearOnCl
         {radState &&
           <p className='nospace vmarginquarter cap centreText contrast'
             ><n-fa1>
-              <i className='fas fa-radiation-alt fa-fw fa-lg darkOrangeT gapR'></i>
+              <i className='fas fa-burst fa-fw fa-lg darkOrangeT gapR'></i>
             </n-fa1>{Pref.variant} {Pref.radioactive} <b>{radState}</b>
           </p>
         }

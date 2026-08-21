@@ -49,7 +49,7 @@ const RadioRow = ({ rad, group, widget, variant, vlive, batchs })=> (
       <LeapTextLink
         title={widget.toUpperCase() + ' v.' + variant} 
         sty='blackT clean'
-        address={'/data/widget?request=' + widget}
+        address={'/data/overview?request=groups&specify=' + group + '&query=' + widget}
       />
     </td>
     <td>{vlive ? 'open' : 'closed'}</td>

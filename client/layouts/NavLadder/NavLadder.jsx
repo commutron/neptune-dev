@@ -4,7 +4,7 @@ import Pref from '/public/pref.js';
 import './navladder.css';
 
 const NavLadder = ({ 
-  alias, widget, variant,
+  alias, widget, widgetId, variant,
   batch, item, 
 })=> (
   <div className='ladderRow'>
@@ -20,7 +20,8 @@ const NavLadder = ({
         label={widget}
         sub={variant}
         title={`${Pref.widget}: ${widget}${variant && ' v.'+ variant}`}
-        uri={'/data/widget?request=' + widget}
+        // uri={'/data/widget?request=' + widgetId}
+        uri={'/data/overview?request=groups&specify=' + alias + '&query=' + widget}
         crmb={true}
       />}
       

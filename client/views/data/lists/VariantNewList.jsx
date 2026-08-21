@@ -42,7 +42,7 @@ const VariantNewList = ({
               cThree={ent[1].toUpperCase()}
               cFour={ent[2].toUpperCase()}
               sty='numFont activeMark'
-              address={'/data/widget?request=' + ent[1] + '&specify=' + ent[3]}
+              address={'/data/overview?request=groups&specify=' + ent[0] + '&query=' + ent[1]}
             />
         )})}
   		</Fragment>

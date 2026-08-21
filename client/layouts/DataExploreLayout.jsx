@@ -46,6 +46,7 @@ export const TraverseWrap = ({
             batch={batchData.batch}
             item={itemData ? true : false}
             widget={widgetData.widget}
+            widgetId={widgetData._id}
             variant={variantData.variant}
             alias={groupData.alias}
           />
