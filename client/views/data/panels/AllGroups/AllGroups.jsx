@@ -114,6 +114,7 @@ const AllGroups = ({
       {groupS.map( (g, index)=> {
         let widgetsList = widgetData.filter(x => x.groupId === g._id);
         let variantList = variantData.filter(v => v.groupId === g._id);
+        
         return(
           <GroupSlide
             key={index+g._id}

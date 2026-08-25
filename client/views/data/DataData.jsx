@@ -16,7 +16,7 @@ const ExploreView = ({
   allXBatch, hotXBatch, hotXSeries, hotXRapids, equipData, // relevant
   view, request, specify, query, subLink // routing
 })=> {
-  console.log({view, request, specify, query, subLink});
+
   const brancheS = useMemo( ()=> branchesSort(app?.branches || []), [app]);
   
   if( !coldReady || !hotReady || !user || !app ) {
@@ -74,10 +74,8 @@ export default withTracker( ({ view, request, specify, query }) => {
 
   const coldSub = active ? Meteor.subscribe('skinnyData') : false;
  
- // Crappy reloading on just flipping through groups
-  const stableSpec = request === 'groups' ? specify : false;
+  const stableSpec = request === 'groups' && query ? specify : false;
   const hotSubEx = Meteor.subscribe('hotDataEx', view, request, stableSpec, query);
-
 
   if( !login || !active ) {
     return {

@@ -8,8 +8,8 @@ import { MonthSelect } from '/client/components/smallUi/DateRangeSelect';
 import ReportBasicTable from '/client/components/tables/ReportBasicTable';
 
 const BranchReport = ({ 
-  branch, qs, subs, steps, app, 
-  reportCol, colIndex
+  branch, qs, subs, steps, 
+  reportCol, colIndex, isWdg, isQt
 })=>{
   
   const [ working, workingSet ] = useState(false);
@@ -34,8 +34,6 @@ const BranchReport = ({
     }
     
   },[month]);
-  
-  console.log({spanData});
     
   return(
     <div style={{border: '1px solid var(--silver)'}} className='spacehalf overscroll'>
@@ -64,34 +62,15 @@ const BranchReport = ({
           
           <SrsSet 
             dataset={spanData.series} 
-            filter={1}
             title={`${branch}_${month}_processed_noncons`}
           />
           
-          <details>
-            <summary>Product & Time Data</summary>
-            <p className='centreText bold'><em>UI Work in Progress. Numbers are Technically Acurate.</em></p>
-            <div>
-              <SmpleDataSet 
-                title='Widget IDs'
-                array={spanData.batch} 
-                line={1}
-                unq={true}
-              />
-              <h4>Batch Data</h4>
-              {spanData.batch.map( (dt, ix)=> {
-                return(
-                  <ul key={ix}>
-                    {dt.map( (b,bx)=> {
-                      return(
-                        <li key={bx}>{b[0]}: {Array.isArray(b[1]) ? b[1].join("-") : b[1]}</li>
-                    )})}
-                  </ul>
-                );
-              })}
-            </div>
-          </details>
-          
+          <TimeTaskSet
+            dataset={spanData.batch} 
+            title={`${branch}_${month}_time_task`}
+            isWdg={isWdg}
+            isQt={isQt}
+          />
         </Fragment>}
         </div>
     </div>
@@ -183,27 +162,38 @@ const SrsSet = ({ dataset, title })=> {
   );
 };
 
-const SmpleDataSet = ({ title, array, line, exlink, unq, sufix })=> {
+const TimeTaskSet = ({ dataset, title, isWdg, isQt })=> {
   
-  const data = !unq ? array.map( a => a[line][1] ) : [...new Set(array.map( a => a[line][1] ))];
+  // const unqWidgets = [...new Set(dataset.map( a => a[1][1] ))];
   
   return(
-    <dl className='maxWide popSm spacehalf noindent'>
-      <dt className='bottomLine bold'>{title}</dt>
-      {data.map( (dt, index)=> {
-        return(
-          <dd key={index}>
-            {exlink ?
-              <ExploreLinkBlock 
-              type={exlink} // batch or equip
-              keyword={dt} />
-              :
-              dt + (sufix || '')
-            }
-          </dd>
-        );
-      })}
-    </dl>
+    <div className='centre vmargin vgapdivs spaceinnerdivs'>
+      <details className='centre'>
+        <summary>Product & Time Data</summary>
+        {dataset.map( (dt, ix)=> {
+          return(
+            <dl key={ix} className='bottomLine readlines'>
+              <dd>
+                <ExploreLinkBlock type='batch' keyword={dt[0][1]} />
+              </dd>
+              <dd>{isWdg(dt[1][1])}</dd>
+              <dd>Total Minutes: {dt[4][1]}</dd>
+              <dd><ul>
+                {dt[3][1].map( (b,bx)=> (
+                  <li key={bx}>{isQt(b[0])}</li>
+                ))}
+              </ul></dd>
+            </dl>
+          );
+        })}
+          
+          {/*
+            Compare time to Quoted
+        */}
+        
+        
+      </details>
+    </div>
   );
 };
 

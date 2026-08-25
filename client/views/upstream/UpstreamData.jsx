@@ -21,10 +21,11 @@ const View = ({
         title={Pref.upstream}
         tag='kit'
         navBar='up'
+        subLink={view}
         user={user}
         app={app}
       >
-        <div></div>
+        <div className={user?.preferLight ? '' : 'darkTheme'}></div>
       </StreamLayout>
     );
   }

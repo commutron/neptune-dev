@@ -738,7 +738,15 @@ Meteor.publish('hotDataEx', function(dataView, dataRequest, dataSpec, dataQuery)
         hothotWidgetID = maybe._id;
       }
     }
-  }else if(dataRequest === 'groups') {
+  }else if(dataView === 'widget') {
+    // '/data/widget?request=' + widgetId
+    const confirmId = WidgetDB.findOne({ _id: dataRequest },{fields:{'groupId':1}});
+                      
+    if(confirmId) {
+      hothotGroupID = confirmId.groupId;
+      hothotWidgetID = confirmId._id;
+    }
+  }else if(dataRequest === 'groups' && dataQuery) {
     const getGroup = GroupDB.findOne({ alias: dataSpec },{fields:{'_id':1}});
     if(getGroup) {
       hothotGroupID = getGroup._id;
@@ -750,14 +758,7 @@ Meteor.publish('hotDataEx', function(dataView, dataRequest, dataSpec, dataQuery)
         }
       }
     }
-  }else if(dataView === 'widget') {
-    // '/data/widget?request=' + widgetId
-    const confirmId = WidgetDB.findOne({ _id: dataRequest },{fields:{'groupId':1}});
-                      
-    if(confirmId) {
-      hothotGroupID = confirmId.groupId;
-      hothotWidgetID = confirmId._id;
-    }
+  
   }else{
     null;
   }
@@ -766,28 +767,11 @@ Meteor.publish('hotDataEx', function(dataView, dataRequest, dataSpec, dataQuery)
     return this.ready();
   }else{
     if( dataRequest === 'groups' && !dataQuery ) { 
+      const lstyear = ( d => new Date(d.setDate(d.getDate()-7)) )(new Date);
       return [
-        GroupDB.find({_id: hothotGroupID}, {
+        VariantDB.find({orgKey: orgKey, createdAt: {$gte: new Date(lstyear)}}, {
           fields: {
-            'orgKey': 0,
-            'shareKey': 0,
-            'topStats': 0
-        }}),
-        WidgetDB.find({orgKey: orgKey, groupId: hothotGroupID}, {
-          fields: {
-            'ncRate': 1
-        }}),
-        VariantDB.find({orgKey: orgKey, groupId: hothotGroupID}, {
-          fields: {
-            'createdAt': 1,
-            'live': 1
-        }}),
-        XBatchDB.find({orgKey: orgKey, groupId: hothotGroupID, completed: false }, {
-          sort: {batch:-1},
-          fields: {
-            'batch': 1,
-            'widgetId': 1,
-            'completed': 1,
+            'createdAt': 1
         }})
       ];
     }else if( dataView === 'widget' || ( dataRequest === 'groups' && dataQuery ) ) {
@@ -875,6 +859,45 @@ Meteor.publish('hotDataEx', function(dataView, dataRequest, dataSpec, dataQuery)
     }
   }
 });
+
+Meteor.publish('groupDataEx', function(groupId){
+  const user = Meteor.users.findOne({_id: this.userId});
+  const orgKey = user ? user.orgKey : false;
+  
+  if(!this.userId){
+    return this.ready();
+  }else{
+    if( groupId ) { 
+      return [
+        GroupDB.find({_id: groupId}, {
+          fields: {
+            'orgKey': 0,
+            'shareKey': 0,
+            'topStats': 0
+        }}),
+        WidgetDB.find({orgKey: orgKey, groupId: groupId}, {
+          fields: {
+            'ncRate': 1
+        }}),
+        VariantDB.find({orgKey: orgKey, groupId: groupId}, {
+          fields: {
+            'createdAt': 1,
+            'live': 1
+        }}),
+        XBatchDB.find({orgKey: orgKey, groupId: groupId, completed: false }, {
+          sort: {batch:-1},
+          fields: {
+            'batch': 1,
+            'widgetId': 1,
+            'completed': 1,
+        }})
+      ];
+    }else{
+      return this.ready();
+    }
+  }
+});
+
 /*
 // OLD
 Meteor.publish('hotDataEx', function(dataView, dataRequest, hotWidget){

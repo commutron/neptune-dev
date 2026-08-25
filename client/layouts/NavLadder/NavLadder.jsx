@@ -20,8 +20,8 @@ const NavLadder = ({
         label={widget}
         sub={variant}
         title={`${Pref.widget}: ${widget}${variant && ' v.'+ variant}`}
-        // uri={'/data/widget?request=' + widgetId}
-        uri={'/data/overview?request=groups&specify=' + alias + '&query=' + widget}
+        uri={'/data/widget?request=' + widgetId}
+        // uri={'/data/overview?request=groups&specify=' + alias + '&query=' + widget}
         crmb={true}
       />}
       

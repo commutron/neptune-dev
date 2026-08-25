@@ -7,7 +7,7 @@ import BranchLanding from './BranchLanding';
 import BranchSlide from './BranchSlide';
 
 const BranchHub = ({ 
-  brancheS, equipData, app, specify 
+  brancheS, equipData, allWidget, app, specify 
 }) => {
   
   // const [ selectedBr, selectedBrSet ] = useState(false);
@@ -46,6 +46,7 @@ const BranchHub = ({
             key={index+entry.brKey}
             brData={entry}
             equipData={equipData.filter( e=> e.branchKey === entry.brKey )}
+            allWidget={allWidget}
             app={app}
             canRun={canRun}
             canEdt={canEdt}

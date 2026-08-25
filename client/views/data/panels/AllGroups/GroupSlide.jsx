@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import { withTracker } from 'meteor/react-meteor-data';
 import Pref from '/public/pref.js';
 import CreateTag from '/client/components/tinyUi/CreateTag';
 import WidgetsDepth from '../../lists/WidgetsDepth';
@@ -20,7 +21,7 @@ function activeWidgets(widgetsList, variantList, batchLive) {
 }
 
 const GroupSlide = ({ 
-  groupData, widgetsList, variantList, batchLive, app, 
+  gReady, groupData, widgetsList, variantList, batchLive, app, 
   inter, openActions, 
   handleInterize, handleHibernate, handleEnableEmail,
   canRun, canEdt, canCrt, canRmv 
@@ -36,6 +37,9 @@ const GroupSlide = ({
   const doNew = canCrt && !g.hibernate;
   const doRmv = (!widgetsList || widgetsList.length === 0) && g.hibernate && canRmv;
   
+  if(!gReady) {
+    return <div className='pulseload'></div>;
+  }
   return(
     <div className='section overscroll' key={g.alias}>
       {doRmv &&
@@ -207,7 +211,18 @@ const GroupSlide = ({
   );
 };
 
-export default GroupSlide;
+export default withTracker( ({ groupData }) => {
+  if(groupData?._id) {
+    const gSub = Meteor.subscribe('groupDataEx', groupData._id);
+    return {
+      gReady: gSub.ready()
+    };
+  }else{
+    return {
+      gReady: false
+    };
+  }
+})(GroupSlide);
 
 const StateSelect = ({ label, id, title, func, is })=> (
   <label title={title || ''} className='beside textAction smTxt'>

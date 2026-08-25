@@ -304,6 +304,7 @@ const DataViewOps = ({
           <BranchHub
             brancheS={brancheS}
             equipData={equipData}
+            allWidget={allWidget}
             app={app}
             specify={specify} />
         </TraverseWrap>

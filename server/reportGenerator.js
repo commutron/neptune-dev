@@ -383,7 +383,7 @@ Meteor.methods({
       const minutesTotal = batchTideTime(spantide);
       
       if(minutesTotal > 0) {
-        const qttide = spantide.filter( x => qkeys.includes(x.qtKey) );
+        // const qttide = spantide.filter( x => qkeys.includes(x.qtKey) );
         
         const subtide = spantide.filter( x => subtasks.includes(x.subtask) );
         
@@ -400,7 +400,7 @@ Meteor.methods({
         return [
           ['batch', b.batch],
           ['widget id', b.widgetId],
-          ['tides in span by qtkey', qttide.length],
+          // ['tides in span by qtkey', qttide.length],
           ['tides in span by subtask', subtide.length],
           ['quoted qtasks', quoteTimes],
           ['total logged minutes', minutesTotal]

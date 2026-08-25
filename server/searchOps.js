@@ -1,6 +1,7 @@
 import moment from 'moment';
 import timezone from 'moment-timezone';
 import Config from '/server/hardConfig.js';
+import { noIg } from './utility';
 
 function whatIsBatchRest(batch) {
   const group = GroupDB.findOne({_id: batch.groupId},{fields:{'alias':1,'hibernate':1}});
@@ -280,6 +281,17 @@ Meteor.methods({
     const shipS = distile(ships);
     
     return [ perfS, shipS ];
+  },
+  
+  groupRecentCreated() {
+    const xid = noIg();
+    const lstyear = ( d => new Date(d.setDate(d.getDate()-365)) )(new Date);
+      
+    const gdates = GroupDB.find({_id: { $ne: xid },createdAt: {$gte: new Date(lstyear)}}).map( x=> x.createdAt);
+    const wdates = WidgetDB.find({groupId: { $ne: xid },createdAt: {$gte: new Date(lstyear)}}).map( x=> x.createdAt);
+    const vdates = VariantDB.find({groupId: { $ne: xid },createdAt: {$gte: new Date(lstyear)}}).map( x=> x.createdAt);
+
+    return [ gdates, wdates, vdates ];
   },
   
   getEquipAssigned() {

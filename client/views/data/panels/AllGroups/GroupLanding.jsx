@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import Pref from '/public/pref.js';
 
 import { MatchButton } from '/client/layouts/Models/Popover';
@@ -8,24 +8,10 @@ import VariantNewList from '../../lists/VariantNewList';
 
 import { timeRanges } from '/client/utility/CycleCalc';
 
-function countNewCollection(collected, rangeStart, rangeEnd) {
-  const collectFind = collected.filter( x =>
-    x.createdAt > new Date(rangeStart) &&
-    x.createdAt < new Date(rangeEnd) 
-  );
-  return collectFind.length;
-}
-
-const GroupLanding = ({ groupData, widgetData, variantData, openActions, canEdt })=> {
-  
-  const og = groupData.find( x => x.internal );
-  const ogID = og ? og._id : 'none';
-  const g = groupData.filter( x => x._id !== ogID );
-  const xyG = timeRanges(g, countNewCollection, 12, 'month');
-  const w = widgetData.filter( x => x.groupId !== ogID );
-  const xyW = timeRanges(w, countNewCollection, 12, 'month');
-  const v = variantData.filter( x => x.groupId !== ogID );
-  const xyV = timeRanges(v, countNewCollection, 12, 'month');
+const GroupLanding = ({ 
+  groupData, widgetData, variantData, 
+  openActions, canEdt 
+})=> {
   
   return(
     <div className='overscroll'>
@@ -59,6 +45,54 @@ const GroupLanding = ({ groupData, widgetData, variantData, openActions, canEdt 
 
       </div>
       
+      <RecentCharts />
+      
+      <div className='wide max875 vspacehalf'>
+        <h3>New from the Last 7 Days</h3>
+        
+        <VariantNewList
+          widgetData={widgetData}
+          variantData={variantData}
+          groupData={groupData}
+          daysBack={7}
+        />
+
+      </div>
+            
+    </div>
+  );
+};
+
+export default GroupLanding;
+
+function countNewCollection(collected, rangeStart, rangeEnd) {
+  const collectFind = collected.filter( x =>
+    x > new Date(rangeStart) &&
+    x < new Date(rangeEnd) 
+  );
+  return collectFind.length;
+}
+
+const RecentCharts = ()=> {
+  
+  const [ charts, chartsSet ] = useState(false);
+  
+  useEffect( ()=> {
+    Meteor.call('groupRecentCreated' , (err, re)=> {
+      err && console.log(err);
+      if(re) {
+        chartsSet(re);
+      }
+    });
+  },[]);
+  
+  const xyG = charts ? timeRanges(charts[0], countNewCollection, 12, 'month') : [];
+  const xyW = charts ? timeRanges(charts[1], countNewCollection, 12, 'month') : [];
+  const xyV = charts ? timeRanges(charts[2], countNewCollection, 12, 'month') : [];
+  
+  return(
+    <Fragment>
+      
       <div className='centreRow'>
         
         <TrendLine 
@@ -91,21 +125,6 @@ const GroupLanding = ({ groupData, widgetData, variantData, openActions, canEdt 
           Read left to right as past to current.
         </p>
       </details>
-      
-      <div className='wide max875 vspacehalf'>
-        <h3>New from the Last 7 Days</h3>
-        
-        <VariantNewList
-          widgetData={widgetData}
-          variantData={variantData}
-          groupData={groupData}
-          daysBack={7}
-        />
-
-      </div>
-            
-    </div>
+    </Fragment>
   );
 };
-
-export default GroupLanding;

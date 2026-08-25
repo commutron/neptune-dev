@@ -12,15 +12,15 @@ const StreamLayout = ({
   children
 })=> {
   
-  if(!user || !app) {
-    return(
-      <PlainFrame title={title} tag={tag}>
-        <div className={`centre wide' ${user?.preferLight ? '' : 'darkTheme'}`}>
-          <Spin />
-        </div>
-      </PlainFrame>
-    );
-  }
+  // if(!user || !app) {
+  //   return(
+  //     <PlainFrame title={title} tag={tag}>
+  //       <div className={`centre wide' ${user?.preferLight ? '' : 'darkTheme'}`}>
+  //         <Spin />
+  //       </div>
+  //     </PlainFrame>
+  //   );
+  // }
   
   return(
     <PlainFrame title={title} tag={tag} container='containerEx'>
@@ -30,7 +30,7 @@ const StreamLayout = ({
             <DownTaskBar subLink={subLink} /> :
             <UpTaskBar 
               subLink={subLink} 
-              showParts={app.partsGlobal}
+              showParts={app?.partsGlobal}
               isAuth={isAuth}
             />
           }

@@ -6,7 +6,7 @@ import { flexSort } from '/client/utility/Arrays.js';
 import BranchReport from './BranchReport';
 
 const BranchSlide = ({ 
-  brData, equipData, app, 
+  brData, equipData, allWidget, app, 
   // canRun, canEdt, canCrt, canRmv 
 })=>{
   
@@ -34,7 +34,10 @@ const BranchSlide = ({
     stepsSet(tsteps);
     
   },[]);
-    
+  
+  const isWdg = (id)=> allWidget.find( w => w._id === id)?.widget?.toUpperCase();
+  const isQt = (id)=> app.qtTasks.find( u => u.qtKey === id )?.qtTask || '?';
+  
   return(
     <div className='section overscroll' key={brData.brKey}>
           
@@ -86,7 +89,8 @@ const BranchSlide = ({
           qs={qs}
           subs={subs}
           steps={steps}
-          
+          isWdg={(w)=>isWdg(w)}
+          isQt={(q)=>isQt(q)}
           rmvCol={()=>reportColSet(reportCol-1)}
         />
       ))}

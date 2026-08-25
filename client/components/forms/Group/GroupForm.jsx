@@ -69,7 +69,7 @@ const GroupForm = ({ gObj, clearOnClose, rootURL })=> {
             id='gName'
             value={name}
             onChange={(e)=>setgName(e.target.value)}
-            placeholder='ie. Trailer Safegaurd'
+            placeholder='ie. International Road Dynamics '
             className='dbbleWide'
             pattern='[A-Za-z0-9 _\-]*'
             maxLength={Pref.groupMax}
@@ -85,7 +85,7 @@ const GroupForm = ({ gObj, clearOnClose, rootURL })=> {
             id='gAlias'
             value={alias}
             onChange={(e)=>setgAlias(e.target.value)}
-            placeholder='ie. TSG'
+            placeholder='ie. IRD'
             pattern='[A-Za-z0-9 _\-]*'
             maxLength={Pref.aliasMax}
             required />
