@@ -232,46 +232,45 @@ const BackdateIssue = ({ eqId, liveUsers })=> {
       <form id='backeqissue' onSubmit={(e)=>newBackIssue(e)}>
         <h4>Backdate New Issue</h4>
         <div className='balance gapsC'>
-          <div>
-            <p>
+          <div className='w100 balancer gapsC'>
+            <p className='nomargin'>
               <label>Issue<br />
                 <input type='text' id='backtitle' required />
               </label>
               <span className='blk small max250 vmarginquarter'>Only the Point-Person will be able to edit the title.</span>
             </p>
-            <p>
+            <p className='nomargin'>
               <label>Action / Troubleshooting<br />
                 <textarea id='backlog' rows='4' style={{maxWidth: '240px'}} required></textarea>
               </label>
               <span className='blk small max250'>Issue logs are permanent and non-editable</span>
             </p>
-          </div>
-        <div>
-          <p>
-            <label>Date<br />
-              <input 
-                type='datetime-local'
-                id='backdate'
-                defaultValue={max}
-                max={max}
-                required
-              />
-            </label>
-          </p>
-          <p>
-            <label>Point-Person<br />
-              <select id='backuser' defaultValue={Meteor.userId()} required>
-                {liveUsers.map( (u)=>(
-                  <option key={u._id} value={u._id}>{u.username}</option>
-                ))}
-              </select>
-            </label>
-          </p>
-          <p>
-            <label className='beside'>
-            <input type='checkbox' id='backwip' className='gapR' defaultChecked={true} />
-            Work In Progress</label>
-          </p>
+            <p className='nomargin'>
+              <label>Date<br />
+                <input 
+                  type='datetime-local'
+                  id='backdate'
+                  defaultValue={max}
+                  max={max}
+                  required
+                />
+              </label>
+            </p>
+            <p className='nomargin'>
+              <label>Point-Person<br />
+                <select id='backuser' defaultValue={Meteor.userId()} className='cap' required>
+                  {liveUsers.map( (u)=>(
+                    <option key={u._id} value={u._id}>{u.username}</option>
+                  ))}
+                </select>
+              </label>
+            </p>
+            <p className='centreSelf nomargin'>
+              <label>Status<br />
+              <label className='beside' htmlFor='backwip'>
+              <input type='checkbox' id='backwip' className='gapR' defaultChecked={true} />
+              Work In Progress</label></label>
+            </p>
           </div>
         </div>
         <p className='centreText'>

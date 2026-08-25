@@ -1,23 +1,27 @@
 import React, { Fragment } from 'react';
-import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
-
-const ActionConf = ({ id, doFunc, title, confirm, icon, color, noText, lockOut }) => (
+import { PopContextButton, PopContextMenu } from '/client/layouts/Models/Popover';
+      
+const ActionConf = ({ id, title, icon, color, lockOut, doFunc, confirm }) => (
   <Fragment>
-    <ContextMenuTrigger
-      id={id || 'actionconfirm'}
-      attributes={{ title: title, className:'transparent', disabled:lockOut }}
-      holdToDisplay={1}
-      renderTag='button'>
-      <label className='navIcon actionIconWrap'>
-        <i className={icon + ' fa-lg ' + color}></i>
-        {!noText && <span className={'actionIconText ' + color}>{title}</span>}
-      </label>
-    </ContextMenuTrigger>
-    
-    <ContextMenu id={id || 'actionconfirm'} className='noCopy'>
-      <MenuItem onClick={()=>_.isFunction(doFunc) ? doFunc() : null}
-      >{confirm}</MenuItem>
-    </ContextMenu>
+    <PopContextButton
+      targetid={id+'_actionconfirm'}
+      title={title}
+      extraClass='transparent centre actionIconWrap blackT'
+      icon={icon + ' fa-lg ' + color}
+      text={title}
+      disabled={lockOut}
+    />
+      
+    <PopContextMenu targetid={id+'_actionconfirm'} extraClass='noCopy'>
+      <button
+        popovertarget={id+'_actionconfirm'}
+        popovertargetaction="hide"
+      
+        type='button'
+        disabled={lockOut}
+        onClick={()=>_.isFunction(doFunc) ? doFunc() : null}
+      >{confirm}</button>
+    </PopContextMenu>
   </Fragment>
 );
 

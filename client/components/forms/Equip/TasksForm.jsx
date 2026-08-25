@@ -75,6 +75,8 @@ const TasksForm = ({ id, serveKey, tasks, qtTime, selfclose })=> {
     });
   }
   
+  console.log({taskArray});
+  
   return(
     <div className='centre'>
       <div className='w100 max300 breaklines split doJustWeen'>
@@ -129,7 +131,7 @@ const TasksForm = ({ id, serveKey, tasks, qtTime, selfclose })=> {
         {taskArray.map( (entry, index)=> {
           return( 
             <div key={index} className='comfort bottomLine'>
-              <div className='indenText leftText'>{entry}</div>
+              <div className='leftText'>{entry}</div>
               <div>
                 <button
                   type='button'

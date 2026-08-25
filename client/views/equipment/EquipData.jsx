@@ -11,7 +11,7 @@ import Spin from '/client/components/tinyUi/Spin';
 const EquipData = ({
   coldReady, // sub
   equipData, maintainData,
-  user, app, users, isDebug, specify 
+  app, users, isDebug, specify 
 })=> {
   
   const brancheS = useMemo( ()=> branchesSort(app?.branches || []), [app]);
@@ -60,10 +60,8 @@ export default withTracker( ({ specify }) => {
       coldReady: coldSub.ready(),
       user: user,
       app: AppDB.findOne({org: org}),
-      // users: users,
-      users: Meteor.users.find( {}, { sort: { username: 1 } } ).fetch(),
+      users: Meteor.users.find( {}, { collation: { locale: 'en', strength: 2 },sort: { username: 1 } } ).fetch(),
       isDebug: isDebug,
-      
       equipData: EquipDB.find( {}, { sort: { alias: -1 } } ).fetch(),
       maintainData: MaintainDB.find( {}, { sort: { name: -1 } } ).fetch(),
       specify: specify

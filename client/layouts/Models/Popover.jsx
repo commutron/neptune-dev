@@ -33,13 +33,14 @@ export const MatchButton = ({ title, text, icon, doFunc, lock })=> (
   >{icon ? <i className={`${icon} fa-fw gapR`}></i> : null}{text}</button>
 );
 
-export const PopContextButton = ({ targetid, extraClass, text, title, icon })=> (
+export const PopContextButton = ({ targetid, extraClass, text, title, icon, disabled })=> (
 	<button 
 		type='button'
 		title={title || null}
 	  popovertarget={targetid}
 	  className={`popbutton ${extraClass || ''}`} 
-	  style={{anchorName: `--${targetid}`}} 
+	  style={{anchorName: `--${targetid}`}}
+	  disabled={disabled || false}
 	>{icon && <i className={`${icon} fa-fw ${text ? 'gapR':''}`}></i>}{text || null}</button>
 );
 

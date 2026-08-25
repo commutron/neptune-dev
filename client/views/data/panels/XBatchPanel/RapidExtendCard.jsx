@@ -64,7 +64,7 @@ const RapidExtendCard = ({
               <span className='actionIconText blackT gap'>Print Label</span>
             </label>
           </button>
-          
+      
           <ActionConf
             key={rapid.rapid+'open'}
             id={rapid.rapid+'open'}

@@ -29,8 +29,6 @@ const EquipSlide = ({
   const liveUsers = users.filter( x => Roles.userIsInRole(x._id, 'active') && 
                                        !Roles.userIsInRole(x._id, 'readOnly') );
                                         
-  const shrtI = eq.instruct && eq.instruct.indexOf('http') === -1;
-  
   const nowD = new Date();
   
   const weekday = {
@@ -154,24 +152,6 @@ const EquipSlide = ({
         <p className='bold vspacehalf max875'>Offline equipment is temporarily not in use, so frequent daily and weekly maintenance will default to 'not required'.<br/>Less frequent monthly and yearly maintenance will still be required by default.</p>
       : null}
       
-      <p className='w100 vmarginhalf capFL wordBr'>
-        {Pref.premaintain} {Pref.instruct}: {shrtI ? app.instruct : null}
-        <a 
-          className='clean wordBr' 
-          href={shrtI ? app.instruct + eq.instruct : eq.instruct} 
-          target='_blank'
-        >{eq.instruct}</a>
-      </p>
-      
-      <p className='w100 vmarginhalf capFL wordBr'>
-        Repair documents: {shrtI ? app.instruct : null}
-        <a 
-          className='clean wordBr' 
-          href={shrtI ? app.instruct + eq.library : eq.library} 
-          target='_blank'
-        >{eq.library}</a>
-      </p>
-      
       <Tabs
         tabs={['Nameplate', Pref.premaintain, Pref.eqissue]}
         wide={true}
@@ -185,6 +165,7 @@ const EquipSlide = ({
             users={users}
             isEqSup={isEqSup}
             isEdit={isEdit}
+            app={app}
           />
         </div>
         
@@ -257,15 +238,13 @@ const EquipHotData = ({
   );
 };
 
-export default withTracker( ({ equipLite, app, users, isDebug, brancheS }) => {
+export default withTracker( ({ equipLite, isDebug, brancheS }) => {
   const hotSub = Meteor.subscribe('hotEquip', equipLite._id);
   const isEqSup = Roles.userIsInRole(Meteor.userId(), ['admin','equipSuper']);
   const isEdit = Roles.userIsInRole(Meteor.userId(), ['edit','equipPlus']);
   
   return {
     hotReady: hotSub.ready(),
-    app: app,
-    users: users,
     isDebug: isDebug,
     isEqSup: isEqSup,
     isEdit: isEdit,

@@ -39,9 +39,10 @@ const PeopleDataWrap = ({
   
   localeUpdate(app);
   
-  const userS = users.sort((u1, u2)=>
-          u1.username.toLowerCase() > u2.username.toLowerCase() ? 1 : 
-          u1.username.toLowerCase() < u2.username.toLowerCase() ? -1 : 0 );
+  const userS = users;
+  // .sort((u1, u2)=>
+  //         u1.username.toLowerCase() > u2.username.toLowerCase() ? 1 : 
+  //         u1.username.toLowerCase() < u2.username.toLowerCase() ? -1 : 0 );
   const brancheS = branchesSort(app.branches);
      
   const isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin');
@@ -177,7 +178,9 @@ export default withTracker( () => {
       org: org,
       app: AppDB.findOne({org: org}),
       traceDT: TraceDB.find({}).fetch(),
-      users: Meteor.users.find({}).fetch(),
+      // users: Meteor.users.find({}).fetch(),
+      users: Meteor.users.find( {}, { collation: { locale: 'en', strength: 2 },sort: { username: 1 } } ).fetch(),
+
       loggedIn: CacheDB.findOne({dataName: 'userLogin_status'})?.dataArray
     };
   }

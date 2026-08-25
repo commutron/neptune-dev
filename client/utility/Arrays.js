@@ -35,3 +35,8 @@ export function countMulti(ncArr) {
   const count = inst.reduce((x,y)=> x + y, 0);
   return count;
 }
+
+  // case-insensitive( ()=> {
+  //   const colr = new Intl.Collator('en', { sensitivity: 'base' });
+  //   return users.sort((a, b) => colr.compare(a.username, b.username));
+  // }, [users]);

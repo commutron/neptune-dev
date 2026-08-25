@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import moment from 'moment';
 import 'moment-timezone';
 import 'moment-business-time';
@@ -8,7 +8,7 @@ import Pref from '/public/pref.js';
 import ContactForm from '/client/components/forms/Equip/ContactForm';
 import ActionFunc from '/client/components/tinyUi/ActionFunc';
 
-const Nameplate = ({ equipData, users, isEqSup, isEdit })=> {
+const Nameplate = ({ equipData, users, isEqSup, isEdit, app })=> {
   
   const [ ctctKey, ctctKeySet ] = useState(false);
   
@@ -25,8 +25,46 @@ const Nameplate = ({ equipData, users, isEqSup, isEdit })=> {
   };
   
   const eq = equipData;
+  const fx = (link)=> link && link.indexOf('http') === -1 ? true : false;
 
   return(
+    <Fragment>
+      <div className='w100'>
+        <p className='w100 vmarginhalf capFL wordBr max875'>
+          {Pref.premaintain} {Pref.instruct}: <a 
+            className='clean wordBr' 
+            href={fx(eq.instruct) ? app.instruct + eq.instruct : eq.instruct} 
+            target='_blank'
+          >{eq.instruct}</a>
+        </p>
+        
+        <p className='w100 vmarginhalf capFL wordBr max875'>
+          Repair documents: <a 
+            className='clean wordBr' 
+            href={fx(eq.library) ? app.instruct + eq.library : eq.library} 
+            target='_blank'
+          >{eq.library}</a>
+        </p>
+        
+        <div className='gapsC' style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(300px,1fr))'}}>
+        
+          <dl className='min300 max400'>
+            <DataLine l='Model' n={eq.model} />
+            <DataLine l='Manufacture Serial' n={eq.mfserial} />
+            <DataLine l='Manufacture Year' n={eq.mfyear} />
+            <DataLine l='Warranty Expiration' n={eq.mfwrnty ? moment(eq.mfwrnty).tz('UTC').format('MMM D YYYY') : ''} />
+          </dl>
+          
+          <dl className='max300'>
+            <DataLine l={`${Pref.steward}s`} />
+            {(eq.stewards || []).map( (uID, index)=> ( 
+              <dd key={index} className='cap'
+              >{users.find( u => u._id === uID )?.username?.replace('.', ' ')?.replace('_', ' ')}</dd>
+            ))}
+          </dl>
+        </div>
+      
+      </div>
     <div className='w100'>
       <ContactForm 
         ctctKey={ctctKey} 
@@ -42,23 +80,6 @@ const Nameplate = ({ equipData, users, isEqSup, isEdit })=> {
           color='blackT'
           lockOut={!isEqSup}
         />
-      </div>
-      
-      <div className='autoFlex gapsC'>
-        <dl className='min300 max400'>
-          <DataLine l='Model' n={eq.model} />
-          <DataLine l='Manufacture Serial' n={eq.mfserial} />
-          <DataLine l='Manufacture Year' n={eq.mfyear} />
-          <DataLine l='Warranty Expiration' n={eq.mfwrnty ? moment(eq.mfwrnty).tz('UTC').format('MMM D YYYY') : ''} />
-        </dl>
-        
-        <dl className='max300'>
-          <DataLine l={`${Pref.steward}s`} />
-          {(eq.stewards || []).map( (uID, index)=> ( 
-            <dd key={index} className='cap'
-            >{users.find( u => u._id === uID )?.username?.replace('.', ' ')?.replace('_', ' ')}</dd>
-          ))}
-        </dl>
       </div>
       
       <div className='vmargin autoFlex gapsC'>
@@ -79,6 +100,7 @@ const Nameplate = ({ equipData, users, isEqSup, isEdit })=> {
       )) || null}
       </div>
     </div>
+    </Fragment>
   );
 };
 
