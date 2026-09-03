@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import moment from 'moment';
 import 'moment-business-time';
 
@@ -8,6 +8,7 @@ import ServeForm from '/client/components/forms/Equip/ServeForm';
 import ServeDisable from '/client/components/forms/Equip/ServeDisable';
 import ServeRemove from '/client/components/forms/Equip/ServeRemove';
 import TasksForm from '/client/components/forms/Equip/TasksForm';
+import TasksFormPlus from '/client/components/forms/Equip/TasksFormPlus';
 
 import MainHistory from './MainHistory';
 import KpiStat from '/client/components/smallUi/StatusBlocks/KpiStat';
@@ -47,7 +48,16 @@ const ServiceSlides = ({
               <div className='big cap gap beside'>{sv.name}</div>
           
               <div className='centreRow vmarginhalf'>
-                <TasksForm
+                {/*<TasksForm
+                  id={eq._id}
+                  serveKey={sv.serveKey}
+                  name={sv.name}
+                  tasks={sv.tasks}
+                  qtTime={sv.qtTime || 0}
+                  lockOut={eq.hibernate}
+                />
+                */}
+                <TasksFormPlus
                   id={eq._id}
                   serveKey={sv.serveKey}
                   name={sv.name}
@@ -86,25 +96,36 @@ const ServiceSlides = ({
             </div>
             
             
-              <div className='comfort'>
-                <div className='margin5 rowWrap gapsC'>
-                  <span className='startSelf'>
-                    <p>Last Modified: <n-num>{moment(sv.updatedAt).format('MMMM Do, YYYY. h:mm a')}</n-num></p>
-                    <p className='cap'>Frequency: <n-num>{sv.recur} {sv.timeSpan}{sv.recur > 1 ? 's' : ''}</n-num></p>
-                    <p className='cap'>Due/Cycle Day: <n-num>{
-                      sv.timeSpan === 'year' ? month[sv.whenOf] : 
-                      sv.timeSpan === 'month' ? monthday[sv.whenOf] : 
-                      weekday[sv.whenOf]
-                    } of {sv.timeSpan}</n-num></p>
-                    <p>Workdays To Complete: <n-num>{sv.period}</n-num></p>
-                    <p>Workdays Late Grace: <n-num>{sv.grace}</n-num></p>
-                  </span>
-                  
-                  <dl className='startSelf overscroll max400'>
+            <div className='split flexBal'>
+              <div className='margin5 rowWrap gapsC'>
+                <span className='startSelf'>
+                  <p>Last Modified: <n-num>{moment(sv.updatedAt).format('MMMM Do, YYYY. h:mm a')}</n-num></p>
+                  <p className='cap'>Frequency: <n-num>{sv.recur} {sv.timeSpan}{sv.recur > 1 ? 's' : ''}</n-num></p>
+                  <p className='cap'>Due/Cycle Day: <n-num>{
+                    sv.timeSpan === 'year' ? month[sv.whenOf] : 
+                    sv.timeSpan === 'month' ? monthday[sv.whenOf] : 
+                    weekday[sv.whenOf]
+                  } of {sv.timeSpan}</n-num></p>
+                  <p>Workdays To Complete: <n-num>{sv.period}</n-num></p>
+                  <p>Workdays Late Grace: <n-num>{sv.grace}</n-num></p>
+                </span>
+                <dl className='startSelf overscroll max400'>
                     <dt className='vmarginquarter'>Checklist:</dt>
-                    {sv.tasks.map( (entry, index)=>( 
-                      <dd key={index} className='line15x cap'>☑ {entry}</dd>
-                    ))}
+                    {sv.tasks.map( (entry, index)=>{
+                      if(Array.isArray(entry)) {
+                        return( 
+                          <dd key={index} className='line15x cap'
+                            >☑ {entry[0]}
+                              {entry[1] && <a title={entry[1]} target='_blank' href={entry[1]}><n-fa0><i className="fa-solid fa-paperclip medSm gapL"></i></n-fa0></a>}
+                              {entry[2] && <a title={entry[2]} target='_blank' href={entry[2]}><n-fa1><i className="fa-solid fa-image medSm gapL"></i></n-fa1></a>}
+                          </dd>
+                        );
+                      }else{
+                        return( 
+                          <dd key={index} className='line15x cap'>☑ {entry}</dd>
+                        );
+                      }
+                    })}
                   </dl>
                 </div>
                 
@@ -127,16 +148,17 @@ const ServiceSlides = ({
                   <KpiStat
                     num={inplt}
                     name='Incomplete'
-                    color='var(--sunflower)'
+                    color='var(--sunflowerfade)'
                   />
                 </div>
-              </div>
+            </div> 
             
-              <MainHistory 
-                maintData={maint} 
-                sving={sving} 
-                svqtTime={sv.qtTime}
-                isDebug={isDebug} />
+            <MainHistory 
+              maintData={maint} 
+              sving={sving} 
+              svqtTime={sv.qtTime}
+              isDebug={isDebug} 
+            />
           </div>
         )})}
         

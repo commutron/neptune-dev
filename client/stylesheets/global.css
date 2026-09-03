@@ -231,7 +231,7 @@ option {
 
 textarea {
   min-width: 15rem;
-  min-height: 2rem;
+  min-height: 3rem;
   field-sizing: content;
   border-color: inherit;
   padding-inline: 0.25rem;

@@ -84,8 +84,18 @@ const doneCheck = (mn)=> {
   const eq = EquipDB.findOne({_id: mn.equipId},{fields:{'service':1}});
   const sv = eq.service.find( s => s.serveKey === mn.serveKey );
     
-  const all = sv.tasks.length === 0 || sv.tasks.every( t => mn.checklist.find( c => c.task === t ) );
-  if(all){
+  // const all = sv.tasks.length === 0 || sv.tasks.every( t => mn.checklist.find( c => c.task === t ) );
+  
+  const allDone = sv.tasks.length === 0 || sv.tasks.every( t => {
+    let tx = Array.isArray(t) ? t[0] : t;
+    if(mn.checklist.find( c => c.task === tx )) {
+      return true;
+    }else{
+      return false;
+    }
+  });
+      
+  if(allDone){
     return true;
   }else{
     return false;
@@ -294,7 +304,7 @@ Meteor.methods({
                 Meteor.defer( ()=>{
                   const equip = EquipDB.findOne({_id: mn.equipId},{fields:{'equip':1,'stewards':1}});
                   const titl = equip ? equip.equip : "";
-                  const sendto = equip ? equip.stewards : [];
+                  const sendto = equip ? equip.stewards || [] : [];
                   Meteor.call('handleIntMaintEmail', orgKey, sendto, titl, mn.name, "now_open", mn.close); 
                 });
               }

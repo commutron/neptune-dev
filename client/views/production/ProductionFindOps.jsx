@@ -267,7 +267,7 @@ const ProductionFindOps = ({
           brancheS={brancheS}
           plainBatchS={plainBatchS} 
           canMulti={canMulti}
-          defaultWide={true}
+          defaultWide={2}
           eqAlias={eqData.alias}
           equipId={eqData._id}
         >
@@ -300,7 +300,7 @@ const ProductionFindOps = ({
           brancheS={brancheS}
           plainBatchS={plainBatchS} 
           canMulti={canMulti}
-          defaultWide={true}
+          defaultWide={2}
           eqAlias={eqData.alias}
           maintId={maintData._id}
         >

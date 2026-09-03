@@ -75,8 +75,6 @@ const TasksForm = ({ id, serveKey, tasks, qtTime, selfclose })=> {
     });
   }
   
-  console.log({taskArray});
-  
   return(
     <div className='centre'>
       <div className='w100 max300 breaklines split doJustWeen'>

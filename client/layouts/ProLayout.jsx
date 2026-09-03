@@ -24,8 +24,8 @@ export const ProWrap = ({
   children
 })=> {
 
-  const [ expand, expandSet ] = useState( defaultWide || false);
-  
+  const [ expand, expandSet ] = useState( defaultWide || false );
+  console.log({expand});
   const [ isFirst, isFirstSet ] = useState(false);
   const [ showVerifyState, showVerifySet ] = useState(false);
   const [ optionVerify, optionVerifySet ] = useState(false);
@@ -57,7 +57,7 @@ export const ProWrap = ({
   }, [(itemData && itemData.history)]);
   
   useLayoutEffect( ()=> {
-    !Session.get('riverExpand') ? null : expandSet( true );
+    !Session.get('riverExpand') ? null : expandSet( defaultWide || false );
     
     if(itemData && itemData.altPath) {
       const ropen = itemData.altPath.find( x => {
@@ -98,7 +98,8 @@ export const ProWrap = ({
   }
   
   function handleExpand(direct) {
-    const openState = direct !== null ? direct : !expand;
+    const openState = direct !== null ? direct : 
+                      !expand ? defaultWide || true : false;
     expandSet( openState );
     Session.set( 'riverExpand', openState );
   }
@@ -131,7 +132,8 @@ export const ProWrap = ({
 
   const viewContainer = standAlone ? 'pro_100' :
                         !expand ? 'pro_20_80' : 
-                                    'pro_40_60';
+                        expand === 2 ? 'pro_W_60' : 
+                                        'pro_40_60';
   
   return(
     <div className={viewContainer + ' containerPro'}>
@@ -196,7 +198,10 @@ export const ProWrap = ({
         
         <button
           type='button'
-          className={!expand ? 'riverExpandToggle' : 'riverShrinkToggle'}
+          className={'riverToggle ' +
+            (!expand ? 'riverExpandToggle' : 
+            expand === 2 ? 'riverAdaptToggle' :
+            'riverShrinkToggle')}
           onClick={()=>handleExpand(null)}>
           <i className='fas fa-grip-lines-vertical fa-2x'></i>
         </button>

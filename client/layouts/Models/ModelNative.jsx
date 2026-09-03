@@ -30,7 +30,7 @@ const ModelNative = ({ dialogId, title, icon, colorT, dark, closeFunc, children 
 
 export default ModelNative;
 
-export const OpenModelNative = ({ dialogId, title, icon, iconObj, colorB, colorT, lock })=> {
+export const OpenModelNative = ({ dialogId, title, icon, iconObj, colorB, colorT, pre, lock })=> {
   
   const open = ()=> {
     document.getElementById(dialogId)?.showModal();
@@ -40,7 +40,7 @@ export const OpenModelNative = ({ dialogId, title, icon, iconObj, colorB, colorT
     <button
       title={title}
       className={`action beside ${colorB}`}
-      onClick={()=>open()}
+      onClick={()=>{pre ? pre() : null;open();}}
       disabled={lock}>
       {iconObj || <i className={`${icon} fa-fw fa-lg gap ${colorT}`}></i>}
       <span className={colorT}>{title}</span>

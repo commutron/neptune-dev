@@ -63,6 +63,10 @@ n-med-tide-container .tideIcon {
 n-tide-task {
   width: 100%;
   border-top-width: 0;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  background-color: rgb(25, 25, 25);
 }
 n-tide-task select {
   height: 2.5vmax;
@@ -78,7 +82,6 @@ n-tide-task label {
   font-size: min(1.3vmax, 1rem) !important;
   line-height: 1.5;
   text-align: center;
-  background-color: rgb(25,25,25);
 }
 
 .tideIn, .tideOut, .tideFlip, .tideMulti, .tideFix, .tideLock {

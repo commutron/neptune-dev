@@ -43,6 +43,12 @@
 .pro_40_60 {
   grid-template-columns: 28vmax 1fr;
 }
+.pro_W_60 {
+  grid-template-columns: clamp(28vmax, 40%, 40vw) 1fr;
+  grid-template-rows: 
+    var(--vert_frame) 
+    var(--vert_main);
+}
 
 .proSearch {
   grid-area: proSearch;
@@ -95,8 +101,7 @@
   height: 0.5vmax;
 }
 
-.riverExpandToggle, 
-.riverShrinkToggle {
+.riverToggle {
   position: absolute;
   top: 50%;
   z-index: 2;
@@ -109,8 +114,8 @@
 }
 .riverExpandToggle { left: 14vmax; }
 .riverShrinkToggle { left: 28vmax; }
-.riverExpandToggle:hover, 
-.riverShrinkToggle:hover {
+.riverAdaptToggle { left: clamp(28vmax, 40%, 40vw); }
+.riverToggle:hover {
   opacity: 1;
 }
 

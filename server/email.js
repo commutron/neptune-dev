@@ -90,7 +90,8 @@ function sortInternalRecipient(accessKey, emailUserIDs, subject, date, title, bo
   const emailGlobal = doc && doc.emailGlobal;
   const emailpcbKit = doc && doc.emailpcbKit;
   
-  const sendIDs = emailUserIDs === 'APP_emailpcbKit' ? emailpcbKit : emailUserIDs;
+  const sendIDs = emailUserIDs === 'APP_emailpcbKit' ? emailpcbKit : 
+                  Array.isArray(emailUserIDs) ? emailUserIDs : [];
     
   let emails = [];
   let ininbox = [];

@@ -2,6 +2,8 @@ import React, { useState, Fragment } from 'react';
 // import Pref from '/public/pref.js';
 import { toast } from 'react-toastify';
 import ModelInline from '/client/layouts/Models/ModelInline';
+import ModelNative, { OpenModelNative } from '/client/layouts/Models/ModelNative';
+
 // import { CountDownNum } from '/client/components/smallUi/ClockString';
 
 const ServiceDock = ({ maintData, serve
@@ -14,7 +16,8 @@ const ServiceDock = ({ maintData, serve
   
   const [ work, setWork ] = useState( false );
   const [ notes, setNotes ] = useState( maintData.notes );
-
+  const [ photo, setPhoto ] = useState( '' );
+  
   function notReq() {
     Meteor.call('serveNoReqSet', maintData._id, noReq, (error)=>{
 			if(error) {
@@ -40,8 +43,14 @@ const ServiceDock = ({ maintData, serve
   		(err)=> cllbk(err)
   		);
     }else{
-      const isDone = serve.tasks.every( t => task === t ||
-              maintData.checklist.find( c => c.task === t ) );
+      const isDone = serve.tasks.every( t => {
+        let tx = Array.isArray(t) ? t[0] : t;
+        if(task === tx || maintData.checklist.find( c => c.task === tx )) {
+          return true;
+        }else{
+          return false;
+        }
+      });
   		Meteor.apply('serveCheck', [ maintData._id, task, isDone ],
   		{wait: true},
   		(err)=> cllbk(err)
@@ -61,6 +70,19 @@ const ServiceDock = ({ maintData, serve
   return(
     <Fragment>
       
+      <ModelNative
+        dialogId='service_card_checklist_model'
+        title=''
+        icon=''
+        colorT='blueT'>
+        <img 
+          style={{ maxWidth: '100%', maxHeight: '80%'}}
+          // src="https://static.clideo.com/assets/images/landing/cut-audio-2x.png" 
+          src={photo}
+          alt='Link to photo is not found'
+         />
+      </ModelNative>
+        
       <div className='fakeFielset centreText'>
         <div className='beside gapminC'>
           <i className='fa-solid fa-hourglass-start fa-fw' style={{color:'var(--emerald)'}}></i>
@@ -72,20 +94,17 @@ const ServiceDock = ({ maintData, serve
       {!noReq &&
   			<div className='fakeFielset overscroll'>
     			<div className='checkboxList'>
-            {serve.tasks.map( (m, ix)=> {
-              let chk = maintData.checklist.find( c => c.task === m ) ? true : false;
-              return(
-                <label key={ix} htmlFor={'tsk'+ix} className='beside margin5 borderGray noCopy'>
-                  <input
-                    id={'tsk'+ix}
-                    type='checkbox'
-                    checked={chk}
-                    onChange={()=>doCheck(m, !chk, ix)}
-                    disabled={work === ix}
-                  />
-                  <i className='line15x'>{m}</i>
-                </label>
-            )})}
+            {serve.tasks.map( (m, index)=> (
+              <ChecklistItem
+                key={index}
+                index={index}
+                m={m}
+                maintData={maintData}
+                doCheck={doCheck}
+                work={work}
+                setPhoto={setPhoto}
+              />
+            ))}
           </div>
         </div>
       }
@@ -156,3 +175,41 @@ const ServiceDock = ({ maintData, serve
 };
 
 export default ServiceDock;
+
+const ChecklistItem = ({ index, m, maintData, doCheck, work, setPhoto })=> {
+  
+  let mK = Array.isArray(m);
+  let txt = mK ? m[0] : m;
+  let chk = maintData.checklist.find( c => c.task === txt ) ? true : false;
+  
+  return(
+    <div className='margin5 borderGray noCopy'>         
+      <label htmlFor={'tsk'+index} className='beside'>
+        <input
+          id={'tsk'+index}
+          type='checkbox'
+          checked={chk}
+          onChange={()=>doCheck(txt, !chk, index)}
+          disabled={work === index}
+        />
+        <i className='line15x'>{mK ? m[0] : m}</i>
+      </label>
+      <span>
+        {mK && m[1] ? 
+          <a target='_blank' href={m[1]}><n-fa0><i className="fa-solid fa-paperclip fa-lg"></i></n-fa0></a>
+        : null}
+        {mK && m[2] ? 
+        
+          <OpenModelNative 
+            dialogId='service_card_checklist_model'
+            title=''
+            icon='fa-solid fa-image'
+            colorB='transparent wetSolid smallAction nospace nomargin'
+            colorT='nT'
+            pre={()=>setPhoto(m[2])}
+          />
+        : null}
+      </span>
+  </div>  
+  );
+};

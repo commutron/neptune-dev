@@ -942,6 +942,9 @@ n-sm-model-content {
   display: flex;
   flex-direction: row-reverse;
 }
+.flexBal {
+  flex-wrap: balance;
+}
 
 .lastSpanRight span:last-child {
   justify-self: right;
