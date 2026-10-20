@@ -6,12 +6,13 @@ import PagingSelect from '/client/components/tinyUi/PagingSelect';
 import { chunkArray } from '/client/utility/Convert';
 import MainDetail from './MainDetail';
 
-const MainHistory = ({ maintData, sving, svqtTime, isDebug })=>{
+const MainHistory = ({ maintData, sving, svqtTime, svData, isDebug })=>{
   
   const [ pageState, pageSet ] = useState(0);
   
   const inpieces = useMemo( ()=> chunkArray(maintData, 5), [maintData]);
   
+  const adminAuth = Roles.userIsInRole(Meteor.userId(), 'admin');
   isDebug && console.log(maintData);
   
   return(
@@ -39,14 +40,14 @@ const MainHistory = ({ maintData, sving, svqtTime, isDebug })=>{
                 <td>{moment(m.expire).format(frmt)}</td>
                 <td>{m.doneAt && moment(m.doneAt).format(frmt)}</td>
                 <td className='centreRow'>
-                  {m.checklist.length > 0 || m.notes ? 
-                    <MainDetail
-                      dialogId={m._id+'mHistory'}
-                      title={m.name + ' - Due ' + moment(m.close).format('MMM D, YYYY')}
-                      mData={m}
-                      svqtTime={svqtTime}
-                    />
-                  : null}
+                  <MainDetail
+                    dialogId={m._id+'mHistory'}
+                    title={m.name + ' - Due ' + moment(m.close).format('MMM D, YYYY')}
+                    mData={m}
+                    svqtTime={svqtTime}
+                    svData={svData}
+                    adminAuth={adminAuth}
+                  />
                 </td>
               </tr>
           )})}

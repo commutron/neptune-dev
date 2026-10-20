@@ -24,7 +24,7 @@ export const ProWrap = ({
   children
 })=> {
 
-  const [ expand, expandSet ] = useState( defaultWide || false );
+  const [ expand, expandSet ] = useState( defaultWide || (Session.get('riverExpand') || false) );
   console.log({expand});
   const [ isFirst, isFirstSet ] = useState(false);
   const [ showVerifyState, showVerifySet ] = useState(false);
@@ -57,7 +57,7 @@ export const ProWrap = ({
   }, [(itemData && itemData.history)]);
   
   useLayoutEffect( ()=> {
-    !Session.get('riverExpand') ? null : expandSet( defaultWide || false );
+    expandSet( defaultWide || (Session.get('riverExpand') || false) );
     
     if(itemData && itemData.altPath) {
       const ropen = itemData.altPath.find( x => {
@@ -84,7 +84,6 @@ export const ProWrap = ({
       }
       const allKeys = rapIs ? true : false;
       getNCTypesCombo = NonConMerge(getNCListKeys, app, user, allKeys);
-      
     }
     ncTypesComboSet(getNCTypesCombo);
     

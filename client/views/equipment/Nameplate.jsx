@@ -8,7 +8,7 @@ import Pref from '/public/pref.js';
 import ContactForm from '/client/components/forms/Equip/ContactForm';
 import ActionFunc from '/client/components/tinyUi/ActionFunc';
 
-const Nameplate = ({ equipData, users, isEqSup, isEdit, app })=> {
+const Nameplate = ({ equipData, users, liveUsers, isEqSup, isEdit, app })=> {
   
   const [ ctctKey, ctctKeySet ] = useState(false);
   
@@ -59,7 +59,7 @@ const Nameplate = ({ equipData, users, isEqSup, isEdit, app })=> {
             <DataLine l={`${Pref.steward}s`} />
             {(eq.stewards || []).map( (uID, index)=> ( 
               <dd key={index} className='cap'
-              >{users.find( u => u._id === uID )?.username?.replace('.', ' ')?.replace('_', ' ')}</dd>
+              >{liveUsers.find( u => u._id === uID )?.username?.replace('.', ' ')?.replace('_', ' ')}</dd>
             ))}
           </dl>
         </div>

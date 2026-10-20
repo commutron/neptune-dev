@@ -121,6 +121,7 @@ const EquipSlide = ({
             id={eq._id}
             service={false}
             lockOut={eq.hibernate}
+            access={isEqSup || isEdit}
           />
           
           <EquipEmails
@@ -163,6 +164,7 @@ const EquipSlide = ({
           <Nameplate 
             equipData={equipData}
             users={users}
+            liveUsers={liveUsers}
             isEqSup={isEqSup}
             isEdit={isEdit}
             app={app}
@@ -176,6 +178,8 @@ const EquipSlide = ({
           weekday={weekday}
           monthday={monthday}
           month={month}
+          isEqSup={isEqSup}
+          isEdit={isEdit}
           isDebug={isDebug}
         />
         

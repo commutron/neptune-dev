@@ -185,14 +185,6 @@ const DataRepair = ({ app, users })=> {
       <div className='autoGrid cardify twoDfill'>
         
         <DoCard
-          title='Delete "Missed" Maintain Entries'
-          icon='crosshairs'
-          color='redSolid'
-          button='Bulk Delete Entries'
-          action={()=>doCallThing('removePMnoise')}
-        />
-        
-        <DoCard
           title='Delete all CacheDB Entries'
           icon='snowplow'
           color='redSolid'

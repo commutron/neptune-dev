@@ -159,7 +159,9 @@ const InfoTab = ({
             
         <div className='flxGrow startSelf'>
           <h3>Notes</h3>
-          
+          {b.quoteTimeBudget?.[0].timeAsMinutes > 0 ? null :
+            <div className='mockTag yellow vmarginquarter'>Time Budget Total Not Set</div>
+          }
           <BlockForm
             id={b._id}
             edit={false}

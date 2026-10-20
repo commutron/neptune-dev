@@ -7,7 +7,7 @@ import TabsVert from '/client/components/smallUi/Tabs/TabsVert';
 import ServeForm from '/client/components/forms/Equip/ServeForm';
 import ServeDisable from '/client/components/forms/Equip/ServeDisable';
 import ServeRemove from '/client/components/forms/Equip/ServeRemove';
-import TasksForm from '/client/components/forms/Equip/TasksForm';
+// import TasksForm from '/client/components/forms/Equip/TasksForm';
 import TasksFormPlus from '/client/components/forms/Equip/TasksFormPlus';
 
 import MainHistory from './MainHistory';
@@ -15,12 +15,14 @@ import KpiStat from '/client/components/smallUi/StatusBlocks/KpiStat';
 
 const ServiceSlides = ({ 
   equipData, maintainData, nowD, weekday, monthday, month,
-  isDebug
+  isEqSup, isEdit, isDebug
 })=> {
   
   const eq = equipData;
   
   const svNames = eq.service.map((sv)=>sv.name);
+  
+  const isEqS_edit = Roles.userIsInRole(Meteor.userId(), ['equipSuper','edit']);
   
   return(
     <TabsVert 
@@ -45,18 +47,14 @@ const ServiceSlides = ({
           <div key={sv.serveKey} className='w100'>
             <div className='comfort'>
           
-              <div className='big cap gap beside'>{sv.name}</div>
+              <div className='big cap gap beside wrap' style={{flex: '1 1',minWidth: '350px'}}
+                ><span>{sv.name}
+                <span style={{fontSize:'var(--sm8)',verticalAlign:'super'}} className={`mockTag gapL ${sv.disable ? 'yellow' : 'green'}`}>
+                 {sv.disable ? 'Disabled' : 'Enabled'}
+                </span></span>
+              </div>
           
               <div className='centreRow vmarginhalf'>
-                {/*<TasksForm
-                  id={eq._id}
-                  serveKey={sv.serveKey}
-                  name={sv.name}
-                  tasks={sv.tasks}
-                  qtTime={sv.qtTime || 0}
-                  lockOut={eq.hibernate}
-                />
-                */}
                 <TasksFormPlus
                   id={eq._id}
                   serveKey={sv.serveKey}
@@ -64,12 +62,14 @@ const ServiceSlides = ({
                   tasks={sv.tasks}
                   qtTime={sv.qtTime || 0}
                   lockOut={eq.hibernate}
+                  access={isEqSup || isEdit}
                 />
                 <ServeForm
                   id={eq._id}
                   service={sv}
                   lockOut={eq.hibernate}
                   servicing={sving}
+                  access={isEqSup || isEdit}
                 />
                 
                 <ServeDisable
@@ -77,6 +77,7 @@ const ServiceSlides = ({
                   serveKey={sv.serveKey}
                   disable={sv.disable}
                   lockOut={eq.hibernate}
+                  access={isEqSup || isEdit}
                   name={sv.name}
                   opendates={maintainData.filter( m => m.serveKey === sv.serveKey && m.status === false )}
                 />
@@ -90,6 +91,7 @@ const ServiceSlides = ({
                     lockOut={eq.hibernate}
                     name={sv.name}
                     opendates={maintainData.filter( m => m.serveKey === sv.serveKey && m.status === false )}
+                    access={isEqSup || isEdit}
                   />
                 }
               </div>
@@ -157,6 +159,7 @@ const ServiceSlides = ({
               maintData={maint} 
               sving={sving} 
               svqtTime={sv.qtTime}
+              svData={sv}
               isDebug={isDebug} 
             />
           </div>

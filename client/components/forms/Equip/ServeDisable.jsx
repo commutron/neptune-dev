@@ -4,9 +4,7 @@ import { toast } from 'react-toastify';
 
 import ModelSmall from '/client/layouts/Models/ModelSmall';
 
-const ServeDisable = ({ id, serveKey, name, disable, lockOut, opendates })=> {
-  
-  const access = Roles.userIsInRole(Meteor.userId(), ['equipSuper','edit']);
+const ServeDisable = ({ id, serveKey, name, disable, lockOut, access, opendates })=> {
   
   return(
     <ModelSmall

@@ -9,7 +9,7 @@ const TabsLite = ({ tabs, names, children, tcls, left })=> {
   return(
     <div className={'posRel ' + tcls || ''}>
       <div className={`liteTabs vmarginhalf ${left ? '' : 'flexRR'}`}>
-        {tabs.map( (entry, index)=>{
+        {tabs.filter(f=>f).map( (entry, index)=>{
           let clss =  show === index ? 'liteToolOn' : 'liteToolOff';
           return (
             <button

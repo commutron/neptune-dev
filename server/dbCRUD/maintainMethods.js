@@ -181,6 +181,22 @@ Meteor.methods({
     }
   },
   
+  maintainManualEdit(mtId, eStatus, eOpen, eClose, eExp) {
+    if( Roles.userIsInRole(Meteor.userId(), 'admin') ) {
+      MaintainDB.update({_id: mtId}, {
+        $set: {
+          open: new Date( eOpen ),
+          close: new Date( eClose ),
+          expire: new Date( eExp ),
+          status: eStatus
+        }
+      });
+      return true;
+    }else{
+      return false;
+    }
+  },
+  
   pmUpdate(eqId, serveKey, accessKey) {
     syncLocale(accessKey);
     
@@ -220,7 +236,9 @@ Meteor.methods({
           $or: [ 
             { status: false },
             { status: 'willnotrequire' }
-          ]},{
+          ],
+          checklist: { $size: 0 }
+        },{
           $set: {
             name: sv.name,
             open: new Date( open ),
@@ -356,7 +374,9 @@ Meteor.methods({
                   $or: [ 
                     { status: false },
                     { status: 'willnotrequire' }
-                  ]},{
+                  ],
+                  checklist: { $size: 0 }
+                },{
                   $set: {
                     name: sv.name,
                     open: new Date( open ),
@@ -509,26 +529,6 @@ Meteor.methods({
   
   getMaintTime(mID) {
     return TimeDB.find({ 'link': mID }, { fields: { 'who':1,'startTime':1,'stopTime':1 } }).fetch();
-  },
-  
-  removePMnoise() {
-    // const orgKey = Meteor.user().orgKey;
-    if( Roles.userIsInRole(Meteor.userId(), 'admin') ) {
-      const years = ( d => new Date(d.setDate(d.getDate()-(365*2))) )(new Date);
-      MaintainDB.remove({
-        status: 'willnotrequire', 
-        expire: { $lt: new Date() }
-      });
-      MaintainDB.remove({
-        status: 'notrequired', 
-        expire: { $lt: years }
-      });
-      MaintainDB.remove({
-        status: 'missed', 
-        expire: { $lt: years }
-      });
-      return true;
-    }
   }
   
 });

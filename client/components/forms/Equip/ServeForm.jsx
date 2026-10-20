@@ -6,13 +6,11 @@ import ModelMedium from '/client/layouts/Models/ModelMedium';
 
 const ServeFormWrapper = ({ 
   id, service,
-  lockOut, servicing
+  lockOut, servicing, access
 })=> {
   const bttn = service ? 'Edit' : 'Add Service';
   const title = service ? 'Edit Service Pattern' : 'Add Service Pattern';
   
-  const access = Roles.userIsInRole(Meteor.userId(), ['equipSuper','edit']);
-
   return(
     <ModelMedium
       button={bttn}

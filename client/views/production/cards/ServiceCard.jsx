@@ -25,6 +25,10 @@ const ServiceCard = ({ eqData, maintData, brancheS, tideKey, timeOpen, engagedPr
         <p className='medBig'>Service Due {moment(m.close).format('dddd MMMM Do')}</p>
         
         <p className='medSm vmarginquarter'>Grace period ends {moment(m.expire).format('dddd MMMM Do')}</p>
+      
+        {m.status === 'notrequired' && <p className='medSm vmarginquarter orangeList'>Marked as 'Not Required'</p>}
+        {m.status === 'willnotrequire' && <p className='medSm vmarginquarter orangeList'>Marked as 'Will Not Require'</p>}
+        
       </div>
       
       {!timeOpen ?

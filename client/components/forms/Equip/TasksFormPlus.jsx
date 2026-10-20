@@ -3,10 +3,8 @@ import { toast } from 'react-toastify';
 
 import ModelMedium from '/client/layouts/Models/ModelMedium';
 
-const TasksFormPlusWrapper = ({ id, serveKey, name, tasks, qtTime, lockOut })=> {
+const TasksFormPlusWrapper = ({ id, serveKey, name, tasks, qtTime, lockOut, access })=> {
   
-  const access = Roles.userIsInRole(Meteor.userId(), ['equipSuper','edit']);
- 
   return(
     <ModelMedium
       button='Checklist Plus'
@@ -42,9 +40,9 @@ const TasksFormPlus = ({ id, serveKey, tasks, qtTime, selfclose })=> {
     e.preventDefault();
     let tsks = new Set(taskArray);
     
-    const donew = this.new_task.value;
-    const gonew = this.new_ext_link.value || '';
-    const senew = this.new_photo_link.value || '';
+    const donew = this.new_task.value.trim();
+    const gonew = this.new_ext_link.value.trim() || '';
+    const senew = this.new_photo_link.value.trim() || '';
     
     const newtaskarr = [donew, gonew, senew];
     tsks.add(newtaskarr);
@@ -121,7 +119,7 @@ const TasksFormPlus = ({ id, serveKey, tasks, qtTime, selfclose })=> {
           <textarea
             type='text'
             id='new_task'
-            className='dbbleWide'
+            className='dbbleWide max300'
             required
             autoComplete="false"
           ></textarea>
@@ -146,7 +144,7 @@ const TasksFormPlus = ({ id, serveKey, tasks, qtTime, selfclose })=> {
             type='submit'
             id='addtask'
             className='smallAction nHover vmarginquarter'
-           >Add New</button>
+           >Add To List</button>
         </div>
       </form>
       

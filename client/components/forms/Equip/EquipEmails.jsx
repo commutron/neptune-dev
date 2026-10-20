@@ -33,11 +33,15 @@ export default EquipEmailsManager;
 const EquipEmails = ({ id, stewards, liveUsers, selfclose })=> {
   
   const [ eList, eListSet ] = useState( [ { label: 'name', value: 'name' } ] );
+  const [ xList, xListSet ] = useState([]);
   const [ emails, emailSet ] = useState( [] );
 
   useEffect( ()=>{
     const listUsers = Array.from(liveUsers, x => { return { label: x.username, value: x._id } } );
     eListSet(listUsers);
+    
+    const xusers = stewards.filter( f => !listUsers.find(l => l.value === f));
+    xListSet(xusers);
     
     const emDefault = listUsers.filter( x => (stewards || []).find( y => y === x.value ));
     emailSet(emDefault);
@@ -82,6 +86,13 @@ const EquipEmails = ({ id, stewards, liveUsers, selfclose })=> {
               /></label>
             </div>
           </span>
+          {xList.length > 0 ?
+            <dl>
+              <dt>Inactive Users <em>(saving will clear)</em></dt>
+              {xList.map( (x, i)=> <dd key={i}>{x}</dd> )}
+            </dl>
+            : null
+          }
           <p className='centreText'> 
             <button
               type='submit'

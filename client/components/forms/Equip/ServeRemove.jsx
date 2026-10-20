@@ -4,9 +4,7 @@ import { toast } from 'react-toastify';
 
 import ModelSmall from '/client/layouts/Models/ModelSmall';
 
-const ServeRemove = ({ id, serveKey, lockOut, name, opendates })=> {
-  
-  const access = Roles.userIsInRole(Meteor.userId(), ['equipSuper','edit']);
+const ServeRemove = ({ id, serveKey, lockOut, name, opendates, access })=> {
   
   return(
     <ModelSmall
