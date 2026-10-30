@@ -73,6 +73,7 @@ const SlidesNested = ({
             return(
               <button
                 key={index}
+                title={entry[4] || ''}
                 onClick={()=>doSelect(index, entry[0])}
                 className={`${clss}`}
                 disabled={dA[index+1]}

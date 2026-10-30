@@ -20,6 +20,26 @@ const DataRepair = ({ app, users })=> {
     });
   }
   
+  function doCallData(mtrMethod, dataname) {
+    Meteor.apply(mtrMethod, [], {wait: true}, (error, data)=>{
+      error && console.log(error);
+      if(data) {
+        toast(
+          <a href={`data:json/plain;charset=UTF-8,${data}`}
+            download={`${dataname}.json`}
+          >Download database data as JSON file</a>
+        , {autoClose: false, closeOnClick: false, theme: 'light'}
+        );
+        toast(
+          <a href={`data:text/plain;charset=UTF-8,${data}`}
+            download={`${dataname}.txt`}
+          >Download database data as Text file</a>
+        , {autoClose: false, closeOnClick: false, theme: 'light'}
+        );
+      }
+    });
+  }
+  
   function doProgToTimeCurve() {
     Meteor.call('getAvgTimeShare', (err, reply)=>{
 	    err && console.log(err);
@@ -52,6 +72,14 @@ const DataRepair = ({ app, users })=> {
           action={()=>doCallThing('randomizePIN')}
         />
         <DoCard
+          title='Sync Equipment Fault Flag'
+          sub=''
+          icon='refresh'
+          color='nSolid'
+          button='Update Equip.'
+          action={()=>doCallThing('syncTrueFaultKeys')}
+        />
+        <DoCard
           title='Test DM Log Clear'
           sub='Runs every day at 12:01am (CST)'
           icon='message'
@@ -79,6 +107,15 @@ const DataRepair = ({ app, users })=> {
       
       <h2 className='centreText vmargin yellowT dropCeiling borderOrange topLine'>Large Tasks - May Cause Disruption For All Users</h2>
       <div className='autoGrid cardify twoDfill'>
+        
+        <DoCard
+          title='Get Maintenance Data'
+          sub='Raw Data Download'
+          icon='download'
+          color='midnightSolid'
+          button='Get Data'
+          action={()=>doCallData('getMaintRecords', 'MaintainDB')}
+        />
         
         <DoCard
           title='Run Maintenance Schedule Robot'

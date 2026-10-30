@@ -446,6 +446,7 @@ Meteor.publish('thinData', function(){
         fields: {
           'alias': 1,
           'hibernate': 1,
+          'fault': 1,
           'branchKey': 1
       }}),
       MaintainDB.find({orgKey: orgKey,
@@ -662,7 +663,12 @@ Meteor.publish('hotProEquip', function(hotEquipId) {
       EquipDB.find({_id: hotEquipId, orgKey: orgKey}, {
         fields: {
           'orgKey': 0,
-          'stewards': 0
+          'model': 0,
+          'mfserial': 0,
+          'mfyear': 0,
+          'mfwrnty': 0,
+          'stewards': 0,
+          'contacts': 0
         }})
     ];
   }
@@ -819,7 +825,8 @@ Meteor.publish('hotDataEx', function(dataView, dataRequest, dataSpec, dataQuery)
             'alias': 1,
             'branchKey': 1,
             'hibernate': 1,
-            'online': 1
+            'online': 1,
+            'fault': 1
         }})
      ];
     }else if(dataView === 'batch') {
@@ -1056,7 +1063,8 @@ Meteor.publish('thinEquip', function(){
           'branchKey': 1,
           'hibernate': 1,
           'online': 1,
-          'nullify': 1
+          'nullify': 1,
+          'fault': 1
       }}),
       MaintainDB.find({orgKey: orgKey, status: false,
                       close: { $gte: new Date(week0), $lte: new Date(week6) }

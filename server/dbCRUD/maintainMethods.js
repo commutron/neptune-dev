@@ -529,6 +529,13 @@ Meteor.methods({
   
   getMaintTime(mID) {
     return TimeDB.find({ 'link': mID }, { fields: { 'who':1,'startTime':1,'stopTime':1 } }).fetch();
+  },
+  
+  getMaintRecords() {
+    if( Roles.userIsInRole(Meteor.userId(), 'admin') ) {
+      const allM = MaintainDB.find({}).fetch();
+      return JSON.stringify(allM);
+    }
   }
   
 });

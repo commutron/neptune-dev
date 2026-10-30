@@ -119,6 +119,13 @@ export const RepairCard = ({ eqData, brancheS, tideKey, timeOpen, engagedPro, en
           </div>
         }
         
+        {eqData.fault ?
+          <div className='margin5'
+          ><n-fa0><i className='fa-solid fa-triangle-exclamation orangeT fa-2x fa-fw'></i></n-fa0>
+          <br /><small>Issues</small>
+          </div>
+        : null}
+        
         </div>
         
       </div>

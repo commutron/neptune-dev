@@ -32,6 +32,7 @@ Meteor.methods({
   			updatedAt: new Date(),
   			updatedWho: Meteor.userId(),
   			online: true,
+  			fault: false,
         instruct: instruct,
         library: library,
         stewards: [],
@@ -358,9 +359,11 @@ Meteor.methods({
   },
   editEqIssueState(eqId, iKey, open) {
     if( Roles.userIsInRole(Meteor.userId(), 'active') ) {
-
+      const any = open || EquipDB.find({_id: eqId, 'issues.open': true}).count() > 1;
+      
       EquipDB.update({_id: eqId, 'issues.issueKey': iKey}, {
         $set : {
+          fault: any,
           'issues.$.updatedAt': new Date(),
           'issues.$.open': open, // true-wip / false-resolved 
       }});
@@ -415,6 +418,9 @@ Meteor.methods({
       const newKey = new Meteor.Collection.ObjectID().valueOf();
       
       EquipDB.update({_id: eqId, orgKey: accessKey}, {
+        $set : {
+          fault : true
+        },
         $push : {
           issues: { 
             issueKey: newKey,
@@ -443,6 +449,17 @@ Meteor.methods({
         open += (eq.issues || []).filter( i => i.open).length;
       });
     return open;
+  },
+   syncTrueFaultKeys() {
+    if( Roles.userIsInRole(Meteor.userId(), 'admin') ) {
+      EquipDB.update({'issues.open': true}, {
+        $set : {
+          fault: true
+      }},{multi: true});
+      return true;
+    }else{
+      return false;
+    }
   },
   
   getEqIssueTime(eqID, issKey) {

@@ -29,12 +29,17 @@ const EquipLayout = ({
                   e1.alias > e2.alias ? 1 : 0 );
         
   const menuList = equipS.map( (e)=> {
-                    const ttle = !e.online && !e.hibernate ? `・ ${e.alias}` :
-                                 e.hibernate ? `✕ ${e.alias}` : e.alias;
-                    const strk = e.nullify;
-                    const clss = e.hibernate ? 'darkgrayT' : '';
+                    const O = e.online;
+                    const F = e.fault;
+                    const H = e.hibernate;
+                    const N = e.nullify;
+                    const name = (F ? '⚠ ' : '') + e.alias;
+                    const ttle = !O && !H ? `・ ${name}` :
+                                 H ? `✕ ${name}` : name;
+                    const clss = H ? 'darkgrayT' : '';
                     const br = brancheS.find( b => b.brKey === e.branchKey)?.branch || 'Facility';
-                    return [ttle, strk, br, clss];
+                    const tip = `${!O && !H ? 'Offline' : H ? 'Hibernated' : 'Online'}\n${F ? 'WIP Issues' : 'No Issues'}\n${N ? 'Decommissioned' : ''}`;
+                    return [ttle, N, br, clss, tip];
                   });
   
   const defaultSlide = specify ? equipS.findIndex( x => x.alias === specify ) : false;

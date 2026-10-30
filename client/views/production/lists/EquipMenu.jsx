@@ -48,6 +48,7 @@ const EquipMenuCore = ({ user, brancheS, allEquip })=> {
                   onClick={()=>goclose(eq.alias, eq._id)}
                 >{eqfxON && eng.tName.split("<*>")[1] === eq._id ?
                 <n-fa1><i className='fa-solid fa-circle-notch midnightblueT fa-fw gapR fa-spin'></i></n-fa1>
+                : null}{eq.fault ? <n-fa2><i className='fa-solid fa-triangle-exclamation orangeT fa-fw gapR'></i></n-fa2>
                 : null}{eq.alias}</button>
               ))}
             </details>
