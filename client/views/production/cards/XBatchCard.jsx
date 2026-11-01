@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import moment from 'moment';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 import Tabs from '/client/components/smallUi/Tabs/Tabs';
 
@@ -14,7 +14,6 @@ import BlockList from '/client/components/bigUi/BlockList';
 const BatchCardX = ({
   batchData, seriesData,
   bOpen, bClosed, rapidData,
-  // user,
   app, brancheS,
   floorReleased, 
   srange, flowCounts, fallCounts,

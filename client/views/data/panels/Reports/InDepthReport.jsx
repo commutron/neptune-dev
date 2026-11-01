@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import { asRate, percentOf } from '/client/utility/Convert';
 
 import ReportStatsTable from '/client/components/tables/ReportStatsTable'; 
@@ -81,8 +81,6 @@ const InDepthReport = ({ start, end, dataset })=> {
       }
     });
   }
-  
-  const title = dataset === 'live' ? 'Live' : 'Completed';
 
   return(
     <div className='overscroll'>
@@ -99,13 +97,12 @@ const InDepthReport = ({ start, end, dataset })=> {
         <p>This may take a while...<n-fa0><i className='fas fa-spinner fa-lg fa-spin gapL'></i></n-fa0></p>
       :
         <ReportStatsTable 
-          title={`KPI report (${title})`}
+          title={`KPI report (${dataset === 'live' ? 'Live' : 'Completed'})`}
           dateString={`${start} to ${end}`}
           rows={replyData}
           extraClass='max600' 
         />
       }
-          
     </div>
   );
 };

@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import 'moment-business-time';
-import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
+import Pref from '/public/pref.js';
 
 import ModelSmall from '/client/layouts/Models/ModelSmall';
 import PriorityKPIData from '/client/components/smallUi/StatusBlocks/PriorityKPI';
-
 
 const AlterFulfill = ({ 
   batchId, createdAt, batch, end, app, canDo, lock, 

@@ -1,8 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import React, { useRef, useState, useEffect } from 'react';
-// import Pref from '/client/global/pref.js';
-// import moment from 'moment';
-// import 'moment-timezone';
+
 import {
   Chart as ChartJS,
   TimeScale,

@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-// import Pref from '/client/global/pref.js';
-// import { countMulti } from '/client/utility/Arrays';
 
 import {
   Chart as ChartJS,

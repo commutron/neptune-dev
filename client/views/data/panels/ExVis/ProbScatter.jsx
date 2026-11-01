@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import { ToggleSwitch } from '/client/components/smallUi/ToolBarTools';
 import { FilterSelect } from '/client/components/smallUi/ToolBarTools';
 import PrintThis from '/client/components/tinyUi/PrintThis';
 import ScatterCH from '/client/components/charts/ScatterCH';
 
-const ProbScatter = ({ fetchFunc, fillfade, title, brancheS, app })=> {
+const ProbScatter = ({ fetchFunc, fillfade, title, brancheS })=> {
   
   const mounted = useRef(true);
   

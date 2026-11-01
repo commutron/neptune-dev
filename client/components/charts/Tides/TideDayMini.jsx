@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
+import Pref from '/public/pref.js';
+
 import { TimeInDay } from '/client/utility/WorkTimeCalc.js';
 import { UsersTimeTotal } from '/client/utility/WorkTimeCalc.js';
 import { round1Decimal } from '/client/utility/Convert.js';
-import Pref from '/client/global/pref.js';
 import NumStatBox from '/client/components/charts/Dash/NumStatBox';
 
 const TideDayMini = ({ tideTimes, dateTime, showUser, app, users })=> {
@@ -18,7 +19,6 @@ const TideDayMini = ({ tideTimes, dateTime, showUser, app, users })=> {
     const getDayHours = TimeInDay( app, dateTime );
     dayHoursSet(getDayHours);
   }, [dateTime]);
-  
   
   useEffect( ()=> {
     const userIDs = new Set( Array.from(tideTimes, x => x.who ) );

@@ -1,5 +1,5 @@
 import React from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 import TrinaryStat from '/client/components/tinyUi/TrinaryStat';
 import { ReleaseWrapper } from '/client/components/bigUi/ReleasesModule';
@@ -15,8 +15,6 @@ const ReleasedCheck = ({
     const floorRelease = !releasedToFloor ? false :
       releases.find( x => x.type === 'floorRelease');
     
-    const qReady = tBatch.isQuoted;
-    
     return(
       <ReleaseWrapper
         id={batchID}
@@ -29,8 +27,8 @@ const ReleasedCheck = ({
         unholdText={`Released without ${Pref.shortfall}`}
         undoText='Cancel Release'
         contextText='to the floor'
-        lockout={isDone || isRO || (!releasedToFloor && !qReady)}
-        qReady={qReady}
+        lockout={isDone || isRO || (!releasedToFloor && !tBatch.isQuoted)}
+        qReady={tBatch.isQuoted}
         isAuth={isAuth}>
         <TrinaryStat
           status={releasedToFloor ? !floorRelease.caution ? true : false : null}

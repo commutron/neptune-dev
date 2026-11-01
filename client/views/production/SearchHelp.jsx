@@ -1,5 +1,5 @@
 import React from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 const SearchHelp = ()=> (
   <div className='popSm vmargin spacehalf smTxt darkCard'>

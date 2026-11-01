@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 import Spin from '/client/components/tinyUi/Spin';
 import NumStat from '/client/components/tinyUi/NumStat';
-
-import RadioTableAll from '/client/components/tables/RadioTableAll';
-
 import PagingSelect from '/client/components/tinyUi/PagingSelect';
 import { chunkArray } from '/client/utility/Convert';
+import RadioTableAll from '/client/components/tables/RadioTableAll';
 
-
-const RadioPanel = ({ app })=> {
+const RadioPanel = ()=> {
   
   const [ radios, radiosSet ] = useState(false);
   
@@ -26,9 +23,8 @@ const RadioPanel = ({ app })=> {
   }, []);
   
   useEffect( ()=>{
-    
     if(Array.isArray(radios)) {
-
+      
       const sortList = radios.sort((s1, s2)=> {
               if (s1.widget + s1.variant > s2.widget + s1.variant) { return 1 }
               if (s1.widget + s1.variant < s2.widget + s1.variant) { return -1 }
@@ -38,9 +34,7 @@ const RadioPanel = ({ app })=> {
       pageSet(0);
       workingListSet(sortList);
     }
-                    
   }, [radios]);
-  
   
   if(!radios) {
    return(

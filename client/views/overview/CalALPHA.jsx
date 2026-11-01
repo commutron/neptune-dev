@@ -2,7 +2,7 @@ import React from 'react';
 // import React, { useRef, useState, useEffect } from 'react';
 // import moment from 'moment';
 // import 'moment-business-time';
-// import Pref from '/client/global/pref.js';
+// import Pref from '/public/pref.js';
 
 // import CalComp from './CalComp';
 

@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
+import Pref from '/public/pref.js';
+
 import { CalcSpin } from '/client/components/tinyUi/Spin.jsx';
-import Pref from '/client/global/pref.js';
-
 import { NonConBarCH } from '/client/components/charts/NonCon/NonConBar';
-
 
 const WidgetMultiBatchBar = ({ fetchFunc, widgetId, title, color })=> {
   

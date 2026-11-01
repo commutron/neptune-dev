@@ -1,5 +1,5 @@
 import React, { useState, Fragment } from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import { toast } from 'react-toastify';
 
 import ModelNative from '/client/layouts/Models/ModelNative';

@@ -1,13 +1,11 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import moment from 'moment';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 import ReportStatsTable from '/client/components/tables/ReportStatsTable'; 
 import NumLine from '/client/components/tinyUi/NumLine';
-import PrintThis from '/client/components/tinyUi/PrintThis';
 
-
-const BuildHistory = ({ allVariant, allWidget, allGroup })=> {
+const BuildHistory = ({ allWidget, allGroup })=> {
   
   const [ vPack, vPackSet ] = useState([]);
 
@@ -254,7 +252,6 @@ const BuildHistory = ({ allVariant, allWidget, allGroup })=> {
 };
 
 export default BuildHistory;
-
 
 const GroupSelector = ({ groupState, groupSet, allGroup, showANY })=> (
   <select

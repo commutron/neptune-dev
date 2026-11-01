@@ -1,7 +1,7 @@
 import React from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
-const MultiCard = ({  })=> {
+const MultiCard = ()=> {
   
   const openMutiTide = ()=> {
     const dialog = document.getElementById('multiprojdialog');
@@ -19,7 +19,7 @@ const MultiCard = ({  })=> {
   	    >
   	    <b>
   	      <span className='fa-stack tideIcon biggester'>
-  	        <i className="fas fa-circle-notch fa-stack-2x tideIndicate"></i>
+  	        <i className="fa-solid fa-circle-notch fa-stack-2x tideIndicate"></i>
   	        <i className="fa-regular fa-clone fa-stack-1x" data-fa-transform="shrink-1"></i>
   	      </span>
   	    </b>

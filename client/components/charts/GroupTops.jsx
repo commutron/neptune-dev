@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import moment from 'moment';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import NumStatBox from '/client/components/charts/Dash/NumStatBox';
 
 const GroupTops = ({ groupId, alias })=> {

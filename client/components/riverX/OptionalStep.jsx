@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 import ButtonRedo from '/client/components/tinyUi/ButtonRedo';
 
@@ -15,7 +15,8 @@ const OptionalStep = ({ batchId, seriesId, itemData, close })=> {
     lockSet(true);
     const com = commTxt.trim();
     
-		Meteor.call('addOpX', batchId, seriesId, itemData.serial, step, pass, com, 
+		Meteor.apply('addOpX', [ batchId, seriesId, itemData.serial, step, pass, com, ],
+		{wait: true},
 		(error, reply)=>{
 	    error && console.log(error);
 			reply === true ? close() :

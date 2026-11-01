@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 import Spin from '/client/components/tinyUi/Spin';
 
@@ -8,11 +8,9 @@ import { FocusSelect, FilterSelect } from '/client/components/smallUi/ToolBarToo
 import NumBox from '/client/components/tinyUi/NumBox';
 import PagingSelect from '/client/components/tinyUi/PagingSelect';
 import RapidExTable from '/client/components/tables/RapidExTable';
-
 import { chunkArray } from '/client/utility/Convert';
 
-
-const RextendPanel = ({ app })=> {
+const RextendPanel = ()=> {
   
   const [ rapex, rapexSet ] = useState(false);
   

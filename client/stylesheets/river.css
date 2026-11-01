@@ -845,12 +845,17 @@ n-trib-action-all {
   color-scheme: light;
   accent-color: var(--wetasphalt) !important;
 }
+.checkboxList input.checkskip {
+  color-scheme: dark;
+  accent-color: var(--asbestos) !important;
+}
 .checkboxList div {
   padding: 0.5rem 0;
   border-bottom: 1px solid lightgray;
   margin: 0;
   display: flex;
   justify-content: stretch;
+  column-gap: 5px;
 }
 .checkboxList div > span {
    display: flex;
@@ -859,7 +864,8 @@ n-trib-action-all {
    justify-content: center;
    gap: 5px 0;
    width: 1.5rem;
-   margin: 0 10px;
+   min-width: 24px;
+   margin: 0 5px;
 }
 .checkboxList label {
   cursor: pointer;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import { CalcSpin } from '/client/components/tinyUi/Spin.jsx';
 import PrintThis from '/client/components/tinyUi/PrintThis';
 import WeekBrowse from '/client/components/bigUi/WeekBrowse/WeekBrowse.jsx';
@@ -123,16 +123,17 @@ const WeeklyReport = ({ app })=> {
       <div className='printBr' />
       
       {totalData === false ?
-          <div>
-            <p className='centreText'>This may take a while...</p>
-            <CalcSpin />
-          </div>
+        <div>
+          <p className='centreText'>This may take a while...</p>
+          <CalcSpin />
+        </div>
         :   
         <ReportStatsTable 
           title={`${Pref.xBatchs} totals`}
           dateString={`${weekChoice.yearNum}w${weekChoice.weekNum}`}
           rows={totalData}
-          extraClass='max500' />
+          extraClass='max500' 
+        />
       }
            
     </div>

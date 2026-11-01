@@ -1,5 +1,5 @@
 import React from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 import CompleteRest from '/client/components/riverX/CompleteRest';
 import RapidFork from '/client/components/riverX/RapidFork';

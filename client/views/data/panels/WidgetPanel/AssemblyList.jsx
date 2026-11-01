@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 import CompForm from '/client/components/forms/CompForm';
 import { MatchButton } from '/client/layouts/Models/Popover';

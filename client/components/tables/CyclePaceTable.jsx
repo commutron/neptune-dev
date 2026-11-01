@@ -1,5 +1,5 @@
 import React from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 const CyclePaceTable = ({ stepTimes, fallTimes })=> (
   <table className='w100 vmargin cap leftText numFont'>

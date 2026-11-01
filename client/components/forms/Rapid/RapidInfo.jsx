@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import 'moment-business-time';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import UserNice from '/client/components/smallUi/UserNice';
 import { min2hr, cleanURL } from '/client/utility/Convert.js';
 import { toast } from 'react-toastify';

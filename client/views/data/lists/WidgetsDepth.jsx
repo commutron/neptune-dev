@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import LeapLine from '/client/components/tinyUi/LeapLine';
 import NumStat from '/client/components/tinyUi/NumStat';
 import { flexSort } from '/client/utility/Arrays.js';
@@ -22,7 +22,6 @@ const WidgetsDepth = ({ filterString, clearfilter,widgetData, state })=> {
         <div></div>
         <div></div>
         <div className='cap'>
-          {/*}<span>{Pref.variants}</span>*/}
           <span>{Pref.xBatchs}</span>
           <span>Qty</span>
           <span>NC</span>
@@ -78,12 +77,6 @@ const WidgetIndexCard = ({ data, barStyle })=>{
       cTwo={data.describe}
       cThree={
         <Fragment>
-          {/*<NumStat
-            num={moreData[0]}
-            title={`Total ${Pref.variants}`}
-            color='blueT'
-            size='medBig'
-          />*/}
           <NumStat
             num={moreData[1]}
             title={`Total ${Pref.xBatchs}`}

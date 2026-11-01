@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import { CalcSpin } from '/client/components/tinyUi/Spin.jsx';
 import NumBox from '/client/components/tinyUi/NumBox.jsx';
 
@@ -10,7 +10,10 @@ const TopViewStats = ({ users, groups, widgets, batches, live })=> {
   const [ counts, countSet ] = useState(false);
   
   useEffect( ()=> {
-    Meteor.call('topViewStats', users, groups, widgets, batches, live, (error, reply)=> {
+    Meteor.apply('topViewStats', 
+      [users, groups, widgets, batches, live], 
+      {wait: true},
+      (error, reply)=> {
       error ? console.log(error) : null;
       if(thingMounted.current) {
         countSet(reply);

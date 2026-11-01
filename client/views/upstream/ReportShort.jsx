@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 import { CalcSpin } from '/client/components/tinyUi/Spin';
 import PrintThis from '/client/components/tinyUi/PrintThis';
 import ReportBasicTable from '/client/components/tables/ReportBasicTable'; 
 
-const ReportShort = ({ app, user, isDebug })=> {
+const ReportShort = ({ isDebug })=> {
   
   const [shortData, setShortData] = useState(false);
   
@@ -37,7 +37,6 @@ const ReportShort = ({ app, user, isDebug })=> {
           <p className='medBig centreText line3x'>No unresolved {Pref.shortfalls}</p>
         </div>
       :
-      
       <ReportBasicTable 
         title={`unresolved ${Pref.shortfalls} report`}
         dateString={(new Date).toLocaleString()}

@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 import StoneControl from './StoneControl';
 import ForkMenu from './ForkMenu';
@@ -125,8 +125,7 @@ const StoneSelect = ({
   
     const ncAllClear = ncOutstanding.length === 0;
     const shAllClear = allAnswered === true;
-      
-    // if( ( ( isFirst || flowStep.type === 'build' ) && stepComplete ) 
+    
     if( 
         ( stepComplete && ncResolved ) 
         || ( stepComplete && (!ncResolved && flow[index+1]?.branchKey === brKey ) )

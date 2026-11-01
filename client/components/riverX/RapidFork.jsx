@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import Pref from '/client/global/pref.js';
-
+import Pref from '/public/pref.js';
 import useTimeOut from '/client/utility/useTimeOutHook.js';
 
 const RapidFork = ({ seriesId, serial, rapidData })=> {
@@ -37,7 +36,6 @@ const RapidFork = ({ seriesId, serial, rapidData })=> {
       </div>
     );
   }
-  
   return null;
 };
 

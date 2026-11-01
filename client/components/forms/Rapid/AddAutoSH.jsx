@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import '/client/components/bigUi/ArrayBuilder/style.css';
 
 export const AddAutoSHwrap = ({ rapidData, vassembly, rSetItems, editAuth })=> {

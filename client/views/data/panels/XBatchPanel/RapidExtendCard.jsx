@@ -1,11 +1,9 @@
 import React from 'react';
 import { toast } from 'react-toastify';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 import ActionConf from '/client/components/tinyUi/ActionConf';
-
 import NotesModule from '/client/components/bigUi/NotesModule';
-
 import RapidInfoEdit from '/client/components/forms/Rapid/RapidInfo';
 import { FlowStepsWrap } from '/client/components/forms/Rapid/AddFlowSteps';
 import { AddAutoNCwrap } from '/client/components/forms/Rapid/AddAutoNC';
@@ -15,7 +13,7 @@ import RemoveRapid from '/client/components/forms/Rapid/RemoveRapid';
 
 
 const RapidExtendCard = ({ 
-  batchData, hasSeries, rSetItems, widgetData, vassembly, urlString,
+  batchData, hasSeries, rSetItems, vassembly, urlString,
   rapid, rOpenid, app, ncTypesCombo, user, editAuth, cal
 })=> {
   

@@ -1,5 +1,5 @@
 import React from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import { toast } from 'react-toastify';
 
 import ModelNative from '/client/layouts/Models/ModelNative';
@@ -22,8 +22,6 @@ const UnitSet = ({ seriesId, item, access })=> {
       });
     }else{null}
   }
-        	    
-  let done = item.completed !== false;
     
   return(
     <ModelNative
@@ -34,10 +32,11 @@ const UnitSet = ({ seriesId, item, access })=> {
       dark={false}>
     
       <div className='centre centreText min200 max400 wide'>
-        {done &&
+        {item.completed !== false ?
           <p className='bold'
             >This serial number is finished, are you sure you want to adjust how many units were included under this serial?
-          </p>}
+          </p>
+        : null}
         <p>
           <input
             type='number'

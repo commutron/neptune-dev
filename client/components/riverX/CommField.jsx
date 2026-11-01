@@ -1,5 +1,4 @@
 import React from 'react';
-// import Pref from '/client/global/pref.js';
 
 export const CommTrigger = ({ commTrigger })=> (
   <button
@@ -11,7 +10,6 @@ export const CommTrigger = ({ commTrigger })=> (
 	</button>
 );
 
-    	
 export const CommField = ({ commSet })=> (
   <textarea 
     id='stoneCommField'

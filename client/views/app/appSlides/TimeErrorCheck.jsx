@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import moment from 'moment';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import { toast } from 'react-toastify';
 
 import { LuxonTestString } from '/client/components/smallUi/ClockString';

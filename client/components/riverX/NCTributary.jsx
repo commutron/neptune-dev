@@ -1,6 +1,6 @@
 import React, { useState, Fragment } from 'react';
 import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 const NCTributary = ({ seriesId, nonCons, sType, rapIs, canVerify })=> {
   

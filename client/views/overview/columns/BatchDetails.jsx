@@ -1,5 +1,5 @@
 import React, { useMemo, useEffect } from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 import BatchDetailChunk, { ServeDetailChunk } from './BatchDetailChunk';
 
@@ -46,13 +46,12 @@ const BatchDetails = ({
               isDebug={isDebug}
             />
       )})}
-    
       
       <div className='overGridRowScroll labels'>
         {headersArr.map( (entry, index)=>{
           return(
             <div key={entry+index} className='cap ovColhead'>{entry}</div>
-      )})}
+        )})}
       </div>
       
       {!oB ? null :
@@ -97,7 +96,6 @@ const BatchDetails = ({
       
       {holdShow &&
         hB.map( (entry, index)=>{
-          // const tBatch = traceDT.find( t => t.batchID === entry._id );
           return(
             <BatchDetailChunk
               key={`${entry.batchID}live${index}`}

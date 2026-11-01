@@ -1,5 +1,5 @@
 import React from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 import EquipForm from '/client/components/forms/Equip/EquipForm';
 import NumBox from '/client/components/tinyUi/NumBox';
@@ -11,7 +11,6 @@ const Landing = ({ equipData, maintainData, issues, app, brancheS })=> {
   
   return(
     <div>
-      
       <div className='wide rowWrap'>
         <span className='rowWrap gapminC'>
           <NumBox

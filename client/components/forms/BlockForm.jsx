@@ -1,5 +1,5 @@
 import React from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import { toast } from 'react-toastify';
 
 import ModelSmall from '/client/layouts/Models/ModelSmall';
@@ -28,7 +28,6 @@ const BlockAdd = ({ id, edit, noText, smIcon, lgIcon, doneLock, canRun })=> {
     </ModelSmall>
   );
 };
-
 
 const BlockAddForm = ({ id, edit, doneLock, selfclose })=> {
 

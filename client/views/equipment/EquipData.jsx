@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
-// import Pref from '/client/global/pref.js';
 import { localeUpdate } from '/client/utility/WorkTimeCalc';
 import { branchesSort } from '/client/utility/Arrays.js';
 

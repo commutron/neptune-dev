@@ -1,5 +1,5 @@
 import React from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 export const SortSelect = ({ sortState, changeFunc, extraClass })=> (
   <span className='liteTip' data-tip='Sort list by'>
@@ -96,27 +96,6 @@ export const YearSelect = ({
         <option key={yr+'-'+ix} value={yr}>{yr}{append}</option>
       ))}
     </select>
-  </span>
-);
-
-export const LayoutSwitch = ({ denseState, changeFunc })=> (
-  <span>
-    <ToolButton
-      kID='denseOff'
-      tip='Comfort Layout'
-      changeFunc={changeFunc}
-      stateVal={denseState}
-      onVal={false}
-      icon='fa-solid fa-expand'
-    />
-    <ToolButton
-      kID='miniOn'
-      tip='Minifyed Layout'
-      changeFunc={changeFunc}
-      stateVal={denseState}
-      onVal={true}
-      icon='fa-solid fa-compress'
-    />
   </span>
 );
 

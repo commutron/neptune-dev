@@ -1,5 +1,5 @@
 import React from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import { toast } from 'react-toastify';
 
 function flowGo(serial) {
@@ -10,7 +10,7 @@ function flowGo(serial) {
   });
 }
 
-const SubItemLink = ({ seriesId, serial, nestedSerial })=> (
+const SubItemLink = ({ nestedSerial })=> (
   <button
     className='inlineLink'
     onClick={()=>flowGo(nestedSerial)}

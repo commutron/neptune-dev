@@ -1,5 +1,4 @@
 import React, { Fragment, useState } from 'react';
-// import Pref from '/client/global/pref.js';
 
 const InlineNewSerial = ({ canSerial, gem, user })=> {
 	

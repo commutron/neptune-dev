@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import ButtonRedo from '/client/components/tinyUi/ButtonRedo';
 
 const RedoStep = ({ 
@@ -10,7 +10,6 @@ const RedoStep = ({
   const isInspect = Roles.userIsInRole(Meteor.userId(), 'inspect');
   const isTester = Roles.userIsInRole(Meteor.userId(), 'test');
   
-  // const [ intend, intendSet ] = useState(false);
   const [ lock, lockSet ] = useState(false);
   
   const reSteps = itemData.history.filter( x => x.good === true &&
@@ -71,14 +70,6 @@ const RedoStep = ({
   return(
     <div className='dBotGap stoneForm'>
       <div className='space1v centreText medBig cap'>Repeat {types}</div>
-      {/*
-      <button
-        className='blue action blueSolid whiteT space1v layerOne centreText medBig clean lnht cap'
-        onClick={()=>intendSet(!intend)}
-      >Repeat {types}</button>
-      
-      {!intend ? null :
-      */}
         <div className='fakeFielset'>
           <label htmlFor='redoCommField' className='wideStone'>
             <textarea 

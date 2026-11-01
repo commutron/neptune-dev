@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import { NonConCheck, onFire } from '/client/utility/NonConOptions';
 
 export const AddAutoNCwrap = ({ rapidData, ncTypesCombo, rSetItems, user, editAuth })=> {

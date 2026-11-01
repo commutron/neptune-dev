@@ -1,8 +1,7 @@
 import React from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
-const FilterItems = ({ 
-  title,
+const FilterItems = ({
   total,
   advancedList,
   selectedKeyword,
@@ -27,8 +26,8 @@ const FilterItems = ({
           {!selectedToggle ?
             <b id='itmTglOFF'><i className='fas fa-filter fa-lg fa-fw'></i></b> :
             <span id='itmTglON' title='NOT' className="fa-layers fa-fw">
-              <i className='fas fa-filter fa-lg fa-fw'></i>
-              <i className="fas fa-ban fa-2x fa-fw redT" data-fa-transform="left-3"></i>
+              <i className='fa-solid fa-filter fa-lg fa-fw'></i>
+              <i className="fa-solid fa-ban fa-2x fa-fw redT" data-fa-transform="left-3"></i>
             </span>}
         </label>
         <select
@@ -37,7 +36,7 @@ const FilterItems = ({
           defaultValue={selectedKeyword}
           onChange={(e)=>onKeywordChange(e.target.value)}
           required>
-          <option value={false} label='' />
+          <option value={false} />
           <optgroup label='Categories' className='cap'>
             <option value='complete'>Complete</option>
             <option value='in progress'>In Progress</option>
@@ -67,7 +66,7 @@ const FilterItems = ({
     
     <div>
       <label className='fltrsInput'
-      ><i className='far fa-calendar-alt fa-lg fa-fw'></i>
+      ><i className='fa-regular fa-calendar-alt fa-lg fa-fw'></i>
       <input
         type='date'
         id='fltItmdate'

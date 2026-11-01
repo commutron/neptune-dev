@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import CreateTag from '/client/components/tinyUi/CreateTag';
 
 import AnimateOnChange from 'react-animate-on-change';

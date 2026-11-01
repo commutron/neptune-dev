@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import { percentOf } from '/client/utility/Convert';
 import { ToggleSwitch } from '/client/components/smallUi/ToolBarTools';
 import ReportStatsTable from '/client/components/tables/ReportStatsTable'; 
@@ -47,8 +47,6 @@ const NCcrossReport = ({ start, end, dataset, branch })=> {
       }
     });
   }
-  
-  const title = Pref.nonCons;
 
   return(
     <div className='overscroll'>
@@ -61,13 +59,12 @@ const NCcrossReport = ({ start, end, dataset, branch })=> {
         >Generate Report</button>
       </div>
       
-      
       {working ?
         <p>This may take a while...<n-fa0><i className='fas fa-spinner fa-lg fa-spin gapL'></i></n-fa0></p>
       :
         !branch || branch === 'ALL' ?
           <ReportStatsTable 
-            title={`${title} KPI report`}
+            title={`${Pref.nonCons} KPI report`}
             dateString={`${start} to ${end}`}
             rows={replyData}
             extraClass='max600' 
@@ -91,7 +88,7 @@ const NCcrossReport = ({ start, end, dataset, branch })=> {
           </div>
           {table ?
             <ReportCrossTable 
-              title={`${title} Types (${branch})`}
+              title={`${Pref.nonCons} Types (${branch})`}
               dateString={`${start} to ${end}`}
               rows={crossData}
               extraClass='max1200'

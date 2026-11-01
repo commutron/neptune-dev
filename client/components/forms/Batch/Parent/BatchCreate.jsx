@@ -2,8 +2,8 @@ import React, { useState, useLayoutEffect } from 'react';
 import moment from 'moment';
 import 'moment-business-time';
 import 'moment-timezone';
-import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
+import Pref from '/public/pref.js';
 
 import ModelNative from '/client/layouts/Models/ModelNative';
 import { onFire } from '/client/utility/NonConOptions';

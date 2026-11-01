@@ -1,5 +1,4 @@
 import React, { useState, Fragment } from 'react';
-// import Pref from '/public/pref.js';
 import { toast } from 'react-toastify';
 import ModelInline from '/client/layouts/Models/ModelInline';
 import ModelNative, { OpenModelNative } from '/client/layouts/Models/ModelNative';
@@ -57,6 +56,28 @@ const ServiceDock = ({ maintData, serve
   		);
     }
 	}
+	function doSkip(task, state, index) {
+	  setWork(index);
+    if(!state || state === 'false') {
+  		Meteor.apply('serveNotCheck', [ maintData._id, task ],
+  		{wait: true},
+  		(err)=> cllbk(err)
+  		);
+    }else{
+      const isDone = serve.tasks.every( t => {
+        let tx = Array.isArray(t) ? t[0] : t;
+        if(task === tx || maintData.checklist.find( c => c.task === tx )) {
+          return true;
+        }else{
+          return false;
+        }
+      });
+  		Meteor.apply('serveCheck', [ maintData._id, task, isDone ],
+  		{wait: true},
+  		(err)=> cllbk(err)
+  		);
+    }
+	}
 	
 	function saveNotes() {
     Meteor.call('serveNotesSet', maintData._id, notes, (error)=>{
@@ -91,6 +112,29 @@ const ServiceDock = ({ maintData, serve
         {/*<div>{serve.qtTime && <CountDownNum dur={serve.qtTime * 60} peers={1} />} Remaining</div>*/}
       </div>
       
+      <div className='fakeFielset centreText'>
+        <label htmlFor='rangeTick' className=''>
+        <input
+          type='range'
+          id='rangeTick'
+          className='rangeTriSwitch'
+          max='2'
+          min='0'
+          step='1'
+          inputMode='numeric'
+          list='rngticks'
+          defaultValue='0'
+          required
+          onChange={(e)=>console.log(e.target.value)} />
+          <datalist id="rngticks">
+            <option value="0" label="0"></option>
+            <option value="1" label="1"></option>
+            <option value="2" label="2"></option>
+          </datalist>
+         </label>
+         
+      </div>
+      
       {!noReq &&
   			<div className='fakeFielset overscroll'>
     			<div className='checkboxList'>
@@ -101,6 +145,7 @@ const ServiceDock = ({ maintData, serve
                 m={m}
                 maintData={maintData}
                 doCheck={doCheck}
+                doSkip={doSkip}
                 work={work}
                 setPhoto={setPhoto}
               />
@@ -176,7 +221,7 @@ const ServiceDock = ({ maintData, serve
 
 export default ServiceDock;
 
-const ChecklistItem = ({ index, m, maintData, doCheck, work, setPhoto })=> {
+const ChecklistItem = ({ index, m, maintData, doCheck, doSkip, work, setPhoto })=> {
   
   let mK = Array.isArray(m);
   let txt = mK ? m[0] : m;
@@ -184,6 +229,16 @@ const ChecklistItem = ({ index, m, maintData, doCheck, work, setPhoto })=> {
   
   return(
     <div className='margin5 borderGray noCopy'>         
+      <span>
+        <input
+          id={'notsk'+index}
+          type='checkbox'
+          className='checkskip'
+          checked={chk}
+          onChange={(e)=>{doSkip(txt, !chk, index);!chk ?e.target.indeterminate = true : null;}}
+          disabled={work === index}
+        />
+      </span>
       <label htmlFor={'tsk'+index} className='beside'>
         <input
           id={'tsk'+index}

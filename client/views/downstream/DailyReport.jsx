@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import 'moment-timezone';
+import Pref from '/public/pref.js';
 import { HolidayCheck } from '/client/utility/WorkTimeCalc.js';
-import Pref from '/client/global/pref.js';
 import PrintThis from '/client/components/tinyUi/PrintThis';
 import { CalcSpin } from '/client/components/tinyUi/Spin';
 import Flatpickr from 'react-flatpickr';
@@ -12,7 +12,7 @@ import AvgStat from '/client/components/tinyUi/AvgStat';
 
 import ReportBasicTable from '/client/components/tables/ReportBasicTable'; 
 
-const DailyReport = ({ dayIFin, app, user, isDebug })=> {
+const DailyReport = ({ dayIFin, app, isDebug })=> {
   
   const [ dateString, setDateString ] = useState(moment().format('YYYY-MM-DD'));
   const [ dayData, setDayData ] = useState(false);
@@ -99,7 +99,6 @@ const DailyReport = ({ dayIFin, app, user, isDebug })=> {
         rows={dayData}
       />
       }
-      
     </div>
   );
 };

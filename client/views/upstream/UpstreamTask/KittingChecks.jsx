@@ -1,9 +1,8 @@
 import React, { Fragment } from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 import TrinaryStat from '/client/components/tinyUi/TrinaryStat';
 import { ReleaseWrapper } from '/client/components/bigUi/ReleasesModule';
-
 
 const KittingChecks = ({ 
   batchID, batchNum, tBatch,

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ContextMenu, MenuItem, ContextMenuTrigger } from 'react-contextmenu';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 const TagsModule = ({ action, id, vKey, tags, tagOps, truncate, rad, canRun })=>	{
 

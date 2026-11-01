@@ -1,7 +1,6 @@
 import React from 'react';
-import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
-
+import Pref from '/public/pref.js';
 
 const RiverSelect = ({ bID, wFlows, river, riverTitle, lock, access })=> {
 

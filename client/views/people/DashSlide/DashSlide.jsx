@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import NumStatBox from '/client/components/charts/Dash/NumStatBox';
 import PeoplePanel from './PeoplePanel';
-
 
 const DashSlide = ({ users, loggedIn, traceDT, brancheS, isDebug })=> {
   
@@ -139,7 +138,6 @@ const DashSlide = ({ users, loggedIn, traceDT, brancheS, isDebug })=> {
       </div>
     
       <div className='wide'>
-         
         <PeoplePanel
           eUsers={eUsersState}
           lUsers={lUsersState}
@@ -149,8 +147,8 @@ const DashSlide = ({ users, loggedIn, traceDT, brancheS, isDebug })=> {
           updateBranches={(id, br)=>updateBranches(id, br)}
           removeBranch={(id)=>removeBranch(id)}
           update={update}
-          isDebug={isDebug} />
-          
+          isDebug={isDebug} 
+        />
       </div>    
           
     </div>

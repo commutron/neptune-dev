@@ -1,13 +1,12 @@
 import React, { Fragment, useState } from 'react';
 import moment from 'moment';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import { toast } from 'react-toastify';
 
 import ModelNative from '/client/layouts/Models/ModelNative';
 
 const UndoFinish = ({ 
-  batchId, seriesId, serial, completedAtI, rapidData, rapids,
-  access
+  batchId, seriesId, serial, completedAtI, rapidData, rapids
 })=> {
   
   const [ pinOpen, pinOpenSet ] = useState(false);

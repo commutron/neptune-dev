@@ -1,12 +1,11 @@
 import React, { Fragment, useState } from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import moment from 'moment';
 import { chunkArray } from '/client/utility/Convert';
 
 import PrintThis from '/client/components/tinyUi/PrintThis';
 import PagingSelect from '/client/components/tinyUi/PagingSelect';
 import UserName from '/client/utility/Username.js';
-
 
 const DMLogSlide = ()=> {
   
@@ -92,7 +91,6 @@ const DMLogSlide = ()=> {
         />
       </Fragment>
       }
-        
     </div>
   );
 };

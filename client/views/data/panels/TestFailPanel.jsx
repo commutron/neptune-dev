@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 import Spin from '/client/components/tinyUi/Spin';
 import TimeWindower from '/client/components/bigUi/TimeWindower/TimeWindower';
@@ -25,7 +25,6 @@ const TestFailPanel = ({ app })=> {
   const [ entryState, entrySet ] = useState(false);
   
   const [ workingList, workingListSet ] = useState([]);
-  
   
   useEffect( ()=> {
     Meteor.call('testFailItems', (error, reply)=> {
@@ -65,8 +64,6 @@ const TestFailPanel = ({ app })=> {
       </div>
     );
   }
-  
-  const zeroState = workingList.length === 0 ? true : false;
   
   const gList = _.uniq( Array.from(fails, r => r.group.toUpperCase() ) ).sort();
   const wList = _.uniq( Array.from(fails, r => 
@@ -114,7 +111,7 @@ const TestFailPanel = ({ app })=> {
           
         <div className='comfort vbreak'>
           
-          {zeroState ? <div></div> :
+          {workingList.length === 0 ? <div></div> :
             <FailTops workingList={workingList} />}
           
           <FailCharts

@@ -1,11 +1,10 @@
 import React, { useRef, useState, useEffect } from 'react';
 import moment from 'moment';
-import Pref from '/client/global/pref.js';
-
+import Pref from '/public/pref.js';
 
 const NSYrWkSqItemFormX = ({ 
   bID, seriesId, quantity,
-  app, isDebug, quantityCheck, showToast, updateToast
+  isDebug, quantityCheck, showToast, updateToast
 })=> {
   
   const thingMounted = useRef(true);
@@ -25,7 +24,6 @@ const NSYrWkSqItemFormX = ({
   const [ previewData, previewSet ] = useState([]);
   const [ resultMess, resultSet ] = useState(false);
   
-
 	function handleCheck(e) {
     e.preventDefault();
     resultSet(false);
@@ -77,7 +75,6 @@ const NSYrWkSqItemFormX = ({
         startLoopNum, stopLoopNum, tryData
       });
 	}
-	
 	
 	function handleAdd(e) {
     if(previewData.length > 0) {

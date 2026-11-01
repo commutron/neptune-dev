@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 import BatchTopStatus from '/client/views/overview/columns/BatchTopStatus';
 import KittingChecks from './KittingChecks';
@@ -105,7 +105,6 @@ const UpstreamDetails = ({
 
 export default UpstreamDetails;
 
-
 const UpstreamDetailChunk = ({ 
   oB, tBatch,
   branchClear,
@@ -113,8 +112,6 @@ const UpstreamDetailChunk = ({
   kitCols, 
   focusBy, tagBy
 })=> {
-  
-  const isDone = oB.completed;
   
   const highG = tBatch && focusBy ? tBatch.isWhat[0] === focusBy ? '' : 'hide' : '';
   const highT = tagBy ? tBatch.tags && tBatch.tags.includes(tagBy) ? '' : 'hide' : '';
@@ -142,7 +139,7 @@ const UpstreamDetailChunk = ({
         batchID={oB._id}
         batchNum={oB.batch}
         tBatch={tBatch}
-        isDone={isDone}
+        isDone={oB.completed}
         releasedToFloor={releasedToFloor}
         releases={oB.releases}
         branchClear={branchClear}

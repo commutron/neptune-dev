@@ -1,5 +1,5 @@
 import React from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import { toast } from 'react-toastify';
 
 import ModelNative from '/client/layouts/Models/ModelNative';
@@ -33,28 +33,27 @@ const ItemIncomplete = ({ seriesId, item, access })=> {
       icon='fa-solid fa-flag-checkered'
       colorT='darkOrangeT'
       dark={false}>
-	    
-  	<form className='centre' onSubmit={(e)=>handleFinish(e)}>
-	    <p>Skip the remaining flow and finish this item.</p>
-	     <p><b>This will result in an incomplete record.</b></p>
-      <p>
-        <textarea
-          id='fincomment'
-          placeholder='user discretion'
-          rows='3'
-          required></textarea>
-        <label htmlFor='scomment'>reason for an irregular finish</label>
-      </p>
-      <p>
-        <button 
-          type="submit"
-          formMethod="dialog"
-          id='inFinGo'
-          className='action orangeSolid'
-          disabled={false}
-          >Finish {item.serial}</button>
-      </p>
-    </form>
+    	<form className='centre' onSubmit={(e)=>handleFinish(e)}>
+  	    <p>Skip the remaining flow and finish this item.</p>
+  	     <p><b>This will result in an incomplete record.</b></p>
+        <p>
+          <textarea
+            id='fincomment'
+            placeholder='user discretion'
+            rows='3'
+            required></textarea>
+          <label htmlFor='scomment'>reason for an irregular finish</label>
+        </p>
+        <p>
+          <button 
+            type="submit"
+            formMethod="dialog"
+            id='inFinGo'
+            className='action orangeSolid'
+            disabled={false}
+            >Finish {item.serial}</button>
+        </p>
+      </form>
     </ModelNative>
   );
 };

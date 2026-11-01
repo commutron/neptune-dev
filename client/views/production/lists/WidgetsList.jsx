@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 import LeapButton from '/client/components/tinyUi/LeapButton';
 import FilterActive from '/client/components/bigUi/FilterActive';

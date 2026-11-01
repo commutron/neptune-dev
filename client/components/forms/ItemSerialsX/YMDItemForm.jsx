@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import moment from 'moment';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 const YMDItemForm = ({ 
   bID, seriesId, unit, quantity, 

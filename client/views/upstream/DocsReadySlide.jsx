@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 import Spin from '/client/components/tinyUi/Spin.jsx';
 
-const DocsReadySlide = ({ traceDT, app })=> {
+const DocsReadySlide = ({ traceDT })=> {
   
   const [ liveState, liveSet ] = useState(false);
   

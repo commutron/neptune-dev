@@ -90,6 +90,13 @@ const EquipSlide = ({
             auth={isEqSup || isEdit}
           />
           
+          {eq.fault ?
+            <div className='margin5'
+            ><n-fa0><i className='fa-solid fa-triangle-exclamation orangeT fa-2x fa-fw'></i></n-fa0>
+            <br /><small>Issues</small>
+            </div>
+          : null}
+          
           <h3 className='spacehalf gapL cap'
           >{!eq.branchKey || eq.branchKey === 'false' ? 'Facility' : 
             brancheS.find( b => b.brKey === eq.branchKey).branch}

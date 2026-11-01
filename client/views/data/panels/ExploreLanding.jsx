@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import React, { useState, useLayoutEffect } from 'react';
 import moment from 'moment';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 import TrendLine from '/client/components/charts/Trends/TrendLine';
 import { TrendBarCache } from '/client/components/charts/Trends/TrendBar';

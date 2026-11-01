@@ -1,5 +1,5 @@
 import React from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 import NonConRate from '/client/components/charts/NonCon/NonConRate';
 import { 
@@ -17,7 +17,6 @@ import {
   HasShortfall,
   RefCount,
   PartsShort,
-  // LeftToResolve,
   ShortDec, ShortPass, ShortWait, ShortRes
 } from '/client/components/bigUi/ShortfallMiniTops';
 import TabsLite from '/client/components/smallUi/Tabs/TabsLite';
@@ -28,7 +27,7 @@ import ShortScatter from '/client/components/charts/ShortScatter';
 
 const ProblemTab = ({
   batch, seriesData,
-  app, ncTypesCombo, brancheS,
+  app, ncTypesCombo,
   isDebug
 })=>	{
   
@@ -76,7 +75,6 @@ const ProblemTab = ({
                 <HasShortfall shortfalls={srsShorts} items={srsItems} />
                 <PartsShort shortfalls={srsShorts} />
                 <RefCount shortfalls={srsShorts} />
-                {/*<LeftToResolve shortfalls={srsShorts} />*/}
               </span>
               <span>
                 <ShortDec shortfalls={srsShorts} />

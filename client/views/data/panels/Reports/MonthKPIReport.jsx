@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 import ReportStatsTable from '/client/components/tables/ReportStatsTable'; 
 
@@ -59,7 +59,6 @@ const MonthKPIReport = ({ start, end, dataset, isDebug })=> {
           extraClass='max500' 
         />
       }
-           
     </div>
   );
 };

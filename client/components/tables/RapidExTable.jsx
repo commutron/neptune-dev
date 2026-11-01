@@ -1,10 +1,8 @@
 import React from 'react';
 import moment from 'moment';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 import { LeapTextLink } from '../tinyUi/LeapText.jsx';
-// import UserNice from '../smallUi/UserNice.jsx';
-
 import './style.css';
 
 const RapidExTable = ({ dataObj })=> (
@@ -24,21 +22,18 @@ const RapidExTable = ({ dataObj })=> (
         </tr>
       </thead>
       <tbody>
-      {dataObj.map( (rex, index)=>{
-        return (
+      {dataObj.map( (rex, index)=> (
           <RapidExRow 
             key={rex.rapid+index}
             rex={rex}
             calString="MMMM Do YYYY" />
-        );
-      })}
+      ))}
       </tbody>
     </table>
   </div>
 );
 
 export default RapidExTable;
-
 
 const RapidExRow = ({ rex, calString })=> (
 	<tr>

@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import { min2hr, avgOfArray } from '/client/utility/Convert';
 
 import ProJump from '/client/components/smallUi/ProJump';

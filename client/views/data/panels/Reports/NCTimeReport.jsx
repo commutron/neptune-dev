@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import moment from 'moment';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 import { min2hr } from '/client/utility/Convert';
 import ReportStatsTable from '/client/components/tables/ReportStatsTable'; 
@@ -177,7 +177,6 @@ const NCTimeReport = ({})=> {
           <p>Reports are auto generated at the end of each month.</p>
         </span>
       }
-          
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect, useLayoutEffect } from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 import FirstForm from '/client/components/riverX/FirstForm';
 import RedoStep from '/client/components/riverX/RedoStep';
@@ -85,7 +85,6 @@ const RedoIsland = ({
               </div>
             </Fragment>
         	}
-        
       
           {optionVerify || (stepKeyState && repeatOpState) ?
             <FirstForm

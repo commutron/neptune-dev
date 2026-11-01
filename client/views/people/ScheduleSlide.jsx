@@ -5,11 +5,11 @@ import 'moment-business-time';
 import { toast } from 'react-toastify';
 import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/themes/airbnb.css';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 import TimesEdit from '/client/components/forms/LocaleTime';
 
-const ScheduleSlide = ({ app, user, users, isAdmin, isPeopleSuper })=> {
+const ScheduleSlide = ({ app, isAdmin, isPeopleSuper })=> {
   
   const now = moment().format('YYYY-MM-DD');
   const nArr = now.split('-');
@@ -210,7 +210,6 @@ const ScheduleSlide = ({ app, user, users, isAdmin, isPeopleSuper })=> {
 };
 
 export default ScheduleSlide;
-
 
 const TimeObjMap = ({timeObj})=> (
   <Fragment>

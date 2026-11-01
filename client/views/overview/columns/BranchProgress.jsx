@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect, useRef } from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 import NumStat from '/client/components/tinyUi/NumStat';
 import { min2hr, percentOf } from '/client/utility/Convert';
@@ -63,8 +63,10 @@ const BranchProgress = ({
               name='Total Items'
               title='Total Items Quantity'
               color='blueT'
-              size='big' />
-          </div>}
+              size='big' 
+            />
+          </div>
+        }
       
         {(branchArea ? dtProg.filter( b => b.branch === filterBy) : dtProg)
           .map( (br, index)=>{
@@ -92,11 +94,11 @@ const BranchProgress = ({
               if(br.steps === 0) {
                 return(
                   <div key={batchID + br.branch + index + 'x'} title={br.branch}>
-                   <i className='fade small label'>{br.branch}</i>
+                    <i className='fade small label'>{br.branch}</i>
                   </div>
                 );
               }else{
-                let isRed = /* calNum >= 100 && */ br.ncLeft;
+                let isRed = br.ncLeft;
                 let redLne = isRed ? ' redRight' : '';
                 let redtxt = isRed ? `\n${Pref.nonCon}s to resolve: ${br.ncLeft}` : '';
                 
@@ -113,7 +115,8 @@ const BranchProgress = ({
                       num={isNaN(calNum) ? '' : `${calNum}%`}
                       name={niceName}
                       color='blackT'
-                      size='big' />
+                      size='big'
+                    />
                   </div>
                 );
               }
@@ -127,7 +130,8 @@ const BranchProgress = ({
                     num={isNaN(br.time) || br.time === 0 ? '' : `${min2hr(br.time)} 𝗁𝗋𝗌`}
                     name={niceName}
                     color='blackT'
-                    size='big' />
+                    size='big'
+                  />
                 </div>
               );
             }

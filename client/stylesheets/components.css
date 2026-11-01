@@ -482,3 +482,64 @@ n-timeline-item:last-child n-timeline-marker:after {
   background-color: transparent;
   cursor: pointer;
 }
+
+.rangeTriSwitch {
+  
+}
+/*********** Baseline, reset styles ***********/
+.rangeTriSwitch {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+  width: 4.5rem;
+  border: 0;
+}
+
+/******** Chromium  ********/
+.rangeTriSwitch::-webkit-slider-runnable-track {
+  background-color: white;
+  border-radius: 3px;
+  border: 1px solid var(--silver);
+  height: 1.5rem;
+  background-image: linear-gradient(
+  to right,
+  var(--wetasphalt), var(--wetasphalt) 33%, 
+  var(--clouds) 33%, var(--clouds) 66%, 
+  var(--silver) 66%);
+  border: none;
+}
+/* slider thumb */
+.rangeTriSwitch::-webkit-slider-thumb {
+  -webkit-appearance: none; 
+  appearance: none;
+  margin-top: 0rem;
+  background-color: var(--neptuneColor);
+  border-radius: 3px;
+  height: 1.5rem;
+  width: 1.5rem;
+}
+
+/* Firefox */
+.rangeTriSwitch::-moz-range-track {
+  background-color: white;
+  border-radius: 3px;
+  border: 1px solid var(--silver);
+  height: 1.5rem;
+  background-image: linear-gradient(
+  to right,
+  var(--wetasphalt), var(--wetasphalt) 33%, 
+  var(--clouds) 33%, var(--clouds) 66%, 
+  var(--silver) 66%);
+  border: none;
+}
+
+.rangeTriSwitch::-moz-range-thumb {
+   -webkit-appearance: none; 
+  appearance: none;
+  margin-top: 0rem;
+  background-color: var(--neptuneColor);
+  border-radius: 3px;
+  height: 1.5rem;
+  width: 1.5rem;
+}

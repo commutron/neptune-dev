@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import moment from 'moment';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 import { FilterSelect, YearSelect } from '/client/components/smallUi/ToolBarTools';
 import { cyclyPaceCalc } from '/client/utility/CycleCalc.js';
 import { ToggleSwitch } from '/client/components/smallUi/ToolBarTools';
 import CyclePaceTable from '/client/components/tables/CyclePaceTable';
-
 
 const WTimeCycle = ({ wID, flows, app })=> {
   

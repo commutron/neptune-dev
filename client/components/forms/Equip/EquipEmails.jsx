@@ -1,6 +1,6 @@
 import React , { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 import { MultiSelect } from "react-multi-select-component";
 import ModelSmall from '/client/layouts/Models/ModelSmall';
@@ -28,7 +28,6 @@ const EquipEmailsManager = ({ id, stewards, liveUsers, auth })=> {
 };
 
 export default EquipEmailsManager;
-
 
 const EquipEmails = ({ id, stewards, liveUsers, selfclose })=> {
   

@@ -1,15 +1,13 @@
 import React from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import ClockString from '/client/components/smallUi/ClockString';
 import { 
   FocusSelect, FilterSelect, ProgSwitch,
-  // LayoutSwitch, 
   ThemeSwitch, StormySwitch
 } from '/client/components/smallUi/ToolBarTools';
 
-
 const DownstreamTools = ({
-  app, traceDT, loadTimeUP, 
+  traceDT, loadTimeUP, 
   numUP, changeNumUP,
   focusByUP, changeFocusByUP,
   salesByUP, changeSalesUP,
@@ -72,7 +70,7 @@ const DownstreamTools = ({
           selectState={tagBy}
           falsey='—'
           changeFunc={changeTagsUP}
-          icon='fas fa-tag'
+          icon='fa-solid fa-tag'
           extraClass='miniIn12'
         />
       }

@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import moment from 'moment';
 import { toast } from 'react-toastify';
 import { chunkArray } from '/client/utility/Convert';
 
 import PrintThis from '/client/components/tinyUi/PrintThis';
 import PagingSelect from '/client/components/tinyUi/PagingSelect';
-
 
 const EmailLogSlide = ()=> {
   

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
+import Pref from '/public/pref.js';
+
 import { TimeInWeek } from '/client/utility/WorkTimeCalc.js';
 import { UserTime } from '/client/utility/WorkTimeCalc.js';
 import { round1Decimal } from '/client/utility/Convert.js';
-import Pref from '/client/global/pref.js';
 import NumStatBox from '/client/components/charts/Dash/NumStatBox';
 
 const TideWeekMini = ({ tideTimes, dateTime, app, user })=> {
@@ -19,7 +20,6 @@ const TideWeekMini = ({ tideTimes, dateTime, app, user })=> {
       
     maxHoursSet(proHours);
   }, [dateTime]);
-  
   
   useEffect( ()=> {
     const qBatches = tideTimes.reduce( (allBatch, batch, index, array)=> { 

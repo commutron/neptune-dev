@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { toast } from 'react-toastify';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 import BatchXComplete from '/client/components/forms/Batch/BatchXComplete';
 import KpiStat from '/client/components/smallUi/StatusBlocks/KpiStat';

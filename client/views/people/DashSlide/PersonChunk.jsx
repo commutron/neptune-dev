@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 import UserNice from '/client/components/smallUi/UserNice';
 import { TaskTagLite } from '/client/components/tide/TaskTag';

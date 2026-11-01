@@ -1,13 +1,11 @@
 import React, { useState, useEffect, useLayoutEffect } from 'react';
 import moment from 'moment';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 import Spin from '/client/components/tinyUi/Spin.jsx';
-
 import UpstreamTools from './UpstreamTools';
 import UpstreamHeaders from './UpstreamHeaders';
 import UpstreamDetails from './UpstreamDetails';
-
 
 const UpstreamView = ({ batchX, traceDT, user, app, brancheS, isAuth, isDebug })=> {
   

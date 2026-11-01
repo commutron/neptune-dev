@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import moment from 'moment';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 import { LeapTextLink } from '../tinyUi/LeapText.jsx';
 import UserNice from '../smallUi/UserNice.jsx';
@@ -73,37 +73,37 @@ const FailAllTable = ({ failData, gList, showEntries })=> (
 
 export default FailAllTable;
 
-const FailRow = ({ entries, group, batchNum, widget, serial, showEntries })=> (
+const FailRow = ({ entries, batchNum, serial, showEntries })=> (
 	<Fragment>
-  <tr className={showEntries ? '' : 'collapse'}>
-    <td colSpan={2}></td>
-    <td colSpan={2}>
-      <LeapTextLink
-        title={batchNum} 
-        sty='numFont noWrap blackT'
-        address={'/data/batch?request=' + batchNum}
-      />
-      {" / "}
-      <LeapTextLink
-        title={serial}
-        sty='numFont noWrap blackT'
-        address={'/data/batch?request=' + batchNum + '&specify=' + serial}
-      />
-    </td>
-  </tr>
-  {entries.map( (e, ix)=>{
-    return(
-      <tr key={ix+e.serial+e.time.toISOString()} 
-          className={showEntries ? '' : 'collapse'}>
-        <td colSpan={3}></td>
-        <td colSpan={1}>
-    		  <span>
-    		    <small>{moment(e.time).calendar(null, 
-    		      {sameElse: "ddd, MMM D /YY, h:mm a"})
-    		     } by <UserNice id={e.who} />.</small><br />{e.comm}
-    		  </span>
-        </td>
-    	</tr>
-  )})}
+    <tr className={showEntries ? '' : 'collapse'}>
+      <td colSpan={2}></td>
+      <td colSpan={2}>
+        <LeapTextLink
+          title={batchNum} 
+          sty='numFont noWrap blackT'
+          address={'/data/batch?request=' + batchNum}
+        />
+        {" / "}
+        <LeapTextLink
+          title={serial}
+          sty='numFont noWrap blackT'
+          address={'/data/batch?request=' + batchNum + '&specify=' + serial}
+        />
+      </td>
+    </tr>
+    {entries.map( (e, ix)=>{
+      return(
+        <tr key={ix+e.serial+e.time.toISOString()} 
+            className={showEntries ? '' : 'collapse'}>
+          <td colSpan={3}></td>
+          <td colSpan={1}>
+      		  <span>
+      		    <small>{moment(e.time).calendar(null, 
+      		      {sameElse: "ddd, MMM D /YY, h:mm a"})
+      		     } by <UserNice id={e.who} />.</small><br />{e.comm}
+      		  </span>
+          </td>
+      	</tr>
+    )})}
 	</Fragment>
 );

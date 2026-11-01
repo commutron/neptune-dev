@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 const ToggleSearch = ({ 
   tggl, tgglSet, queryState, queryUP, resultUP

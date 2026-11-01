@@ -1,12 +1,13 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import moment from 'moment';
 import 'moment-timezone';
-import { HolidayCheck } from '/client/utility/WorkTimeCalc.js';
-import { flexSort } from '/client/utility/Arrays.js';
-import Pref from '/client/global/pref.js';
-import { CalcSpin } from '/client/components/tinyUi/Spin';
 import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/themes/airbnb.css';
+import Pref from '/public/pref.js';
+
+import { HolidayCheck } from '/client/utility/WorkTimeCalc.js';
+import { flexSort } from '/client/utility/Arrays.js';
+import { CalcSpin } from '/client/components/tinyUi/Spin';
 import TideDayMini from '/client/components/charts/Tides/TideDayMini';
 import TabsLite from '/client/components/smallUi/Tabs/TabsLite';
 import PeopleScatter from '/client/components/charts/BatchBurn/PeopleScatter';
@@ -14,7 +15,7 @@ import PeopleScatter from '/client/components/charts/BatchBurn/PeopleScatter';
 import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock';
 import UserNice from '/client/components/smallUi/UserNice';
 
-const HistorySlide = ({ app, user, users, traceDT, isDebug })=> {
+const HistorySlide = ({ app, users, traceDT, isDebug })=> {
   
   const [dateString, setDateString] = useState(moment().format('YYYY-MM-DD'));
   const [dayData, setDayData] = useState(false);
@@ -96,8 +97,7 @@ const HistorySlide = ({ app, user, users, traceDT, isDebug })=> {
       >
         <TidePeoplePlot
           tide={dayData}
-          isDebug={isDebug} 
-          app={app} 
+          isDebug={isDebug}
         />
         
         <TideTaskCols 
@@ -164,7 +164,7 @@ const HistorySlide = ({ app, user, users, traceDT, isDebug })=> {
 
 export default HistorySlide;
 
-const TidePeoplePlot = ({ tide, isDebug, app })=> {
+const TidePeoplePlot = ({ tide, isDebug })=> {
   
   const [ hrs, hrsSet ] = useState([]);
   

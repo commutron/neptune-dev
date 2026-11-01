@@ -359,7 +359,10 @@ Meteor.methods({
   },
   editEqIssueState(eqId, iKey, open) {
     if( Roles.userIsInRole(Meteor.userId(), 'active') ) {
-      const any = open || EquipDB.find({_id: eqId, 'issues.open': true}).count() > 1;
+      let any = open;
+      if(!open) {
+        EquipDB.find({_id: eqId}).forEach( e => e.issues.filter(i=>i.open).length > 1 ? any = true : null );
+      }
       
       EquipDB.update({_id: eqId, 'issues.issueKey': iKey}, {
         $set : {

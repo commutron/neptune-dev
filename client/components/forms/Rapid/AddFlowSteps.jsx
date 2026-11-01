@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import { toast } from 'react-toastify';
 
 import '/client/components/bigUi/ArrayBuilder/style.css';
@@ -110,8 +110,6 @@ export const FlowStepsWrap = ({
     </div>
   );
 };
-
-
 
 const AddFlowSteps = ({ 
   rSetItems, app, 

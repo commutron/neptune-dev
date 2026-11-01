@@ -1,10 +1,9 @@
 import React from 'react';
 import moment from 'moment';
-//import Pref from '/client/global/pref.js';
 
-import UserNice from '/client/components/smallUi/UserNice.jsx';
+import UserNice from '/client/components/smallUi/UserNice';
 
-const NoteLine = ({ action, id, versionKey, entry, plain, lgIcon })=> {
+const NoteLine = ({ entry, plain })=> {
 
   let dt = entry;
   const dateStr = (date)=> moment(date).calendar(null, {sameElse: "ddd, MMM D /YY, h:mm a"});

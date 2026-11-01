@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import { toast } from 'react-toastify';
 
 import { onFire } from '/client/utility/NonConOptions';
 
-const CompSearchWrap = ({ plCache, user, app })=> {
+const CompSearchWrap = ({ plCache })=> {
   
   const [ bChk, setB ] = useState(true);
   const [ uChk, setU ] = useState(false);

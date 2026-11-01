@@ -255,8 +255,7 @@ const BackdateIssue = ({ eqId, liveUsers })=> {
                   required
                 />
               </label>
-            </p>
-            <p className='nomargin'>
+              <br />
               <label>Point-Person<br />
                 <select id='backuser' defaultValue={Meteor.userId()} className='cap' required>
                   {liveUsers.map( (u)=>(

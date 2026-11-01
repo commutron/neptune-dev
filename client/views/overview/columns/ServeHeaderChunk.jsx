@@ -1,5 +1,5 @@
 import React from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 import KpiStat from '/client/components/smallUi/StatusBlocks/KpiStat';
 import ExploreLinkBlock from '/client/components/tinyUi/ExploreLinkBlock';

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import { toast } from 'react-toastify';
 
 import ModelNative from '/client/layouts/Models/ModelNative';
@@ -27,7 +27,6 @@ const FlowFormRoute = ({
     const widgetId = id;
     const flowObj = flow;
     
-    // edit existing
     const editId = preFillKey ? preFillKey : false;
     
     if(!flowObj) {

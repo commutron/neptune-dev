@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 import Spin from '/client/components/tinyUi/Spin';
 
@@ -14,7 +14,6 @@ import ScrapTableAll from '/client/components/tables/ScrapTableAll';
 import PagingSelect from '/client/components/tinyUi/PagingSelect';
 import { chunkArray } from '/client/utility/Convert';
 import { timeRanges } from '/client/utility/CycleCalc';
-
 
 const ScrapPanel = ({ app })=> {
   
@@ -61,7 +60,6 @@ const ScrapPanel = ({ app })=> {
     }
                     
   }, [scraps, cycleCount, cycleBracket, groupState, typeState]);
-  
   
   if(!scraps) {
    return(
@@ -111,7 +109,8 @@ const ScrapPanel = ({ app })=> {
         <div className='comfort vbreak'>
           
           {zeroState ? <div></div> :
-            <ScrapTops workingList={workingList} />}
+            <ScrapTops workingList={workingList} />
+          }
           
           <ScrapCharts
             workingList={workingList}

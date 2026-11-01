@@ -1,5 +1,5 @@
 import React from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 import moment from 'moment';
 
 const MiniHistory = ({ history, iAlt, altitle })=> {
@@ -19,8 +19,7 @@ const MiniHistory = ({ history, iAlt, altitle })=> {
   return(
     <div>
       
-      {altitle && 
-        <div className='altBanner cap'>Alt Flow: {altitle}</div> }
+      {altitle && <div className='altBanner cap'>Alt Flow: {altitle}</div> }
             
       {extended.map( (e, ix)=>(
         <div key={ix} className='rapDidBanner'

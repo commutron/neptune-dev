@@ -1,18 +1,13 @@
 import React, { useState, useLayoutEffect, Fragment } from 'react';
 import moment from 'moment';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 import HeadWater, { HighWater, WhiteWater } from '/client/components/riverX/HeadWater';
-
 import TideWall from '/client/components/riverX/TideWall';
-
 import ReleaseAction from '/client/components/bigUi/ReleasesModule';
-
 import WaterfallSelect from '/client/components/riverX/waterfall/WaterfallSelect';
-
 import River from '/client/components/riverX/River';
 import RedoIsland from '/client/components/riverX/RedoIsland';
-
 import XItemCard from './XItemCard';
 import XBatchCard from './XBatchCard';
 

@@ -1,14 +1,14 @@
 import React, { useState, useLayoutEffect, Fragment } from 'react';
-import Pref from '/client/global/pref.js';
 import { toast } from 'react-toastify';
 import { MultiSelect } from "react-multi-select-component";
+import Pref from '/public/pref.js';
 
 const FirstForm = ({ 
   batchId, seriesId, serial,
   sKey, sStep, sBranch,
   repeatOp,
   handleVerify,
-  app, users
+  users
 })=> {
   
   const [ inspectCombo, inspectComboSet ] = useState( false );

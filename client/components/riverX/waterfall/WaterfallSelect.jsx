@@ -1,7 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-import Pref from '/client/global/pref.js';
-// import { toast } from 'react-toastify';
+import Pref from '/public/pref.js';
 import './style';
 
 import WaterFall from './WaterFall';

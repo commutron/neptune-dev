@@ -1,9 +1,8 @@
 import React, { useRef, useState, useEffect } from 'react';
+import Pref from '/public/pref.js';
 
 import { round2Decimal } from '/client/utility/Convert';
 import NumLine from '/client/components/tinyUi/NumLine.jsx';
-
-import Pref from '/client/global/pref.js';
 
 const MultiBatchKPI = ({ widgetId })=> {
   

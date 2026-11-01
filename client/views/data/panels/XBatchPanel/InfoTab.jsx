@@ -1,7 +1,7 @@
 import React, { useMemo, Fragment } from 'react';
 import moment from 'moment';
 import 'moment-business-time';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 import { min2hr, toCap } from '/client/utility/Convert.js';
 
@@ -23,7 +23,7 @@ import KpiStat from '/client/components/smallUi/StatusBlocks/KpiStat';
 import StepsProgressX from '/client/components/bigUi/StepsProgress/StepsProgressX';
 
 const InfoTab = ({
-  b, hasSeries, widgetData, radioactive, user, isDebug,
+  b, hasSeries, widgetData, radioactive, isDebug,
   released, done, allFlow, allFall, nowater,
   flowCounts, fallCounts, rapidsData, riverTitle, srange,
   app, brancheS
@@ -186,33 +186,24 @@ const InfoTab = ({
 
 export default InfoTab;
 
-const StatusGroup = ({ id, live, done, salesEnd, lock, app, isDebug })=> {
-  
-  // const blockwrap = {
-  //   minWidth: "50%",
-  //   display: "flex",
-  //   alignItems: "center"
-  // };
-  
-  return(
-    <Fragment>
-      {live &&
-        <PriorityKPIData
-          batchID={id}
-          app={app}
-          dbDay={salesEnd}
-          isDone={done}
-          isDebug={isDebug}
-        />
-      }
-      
-      {!lock && <ActivityKPIData batchID={id} app={app} /> }
-      
-      <PerformKPIData batchID={id} />
-      
-    </Fragment>
-  );
-};
+const StatusGroup = ({ id, live, done, salesEnd, lock, app, isDebug })=> (
+  <Fragment>
+    {live &&
+      <PriorityKPIData
+        batchID={id}
+        app={app}
+        dbDay={salesEnd}
+        isDone={done}
+        isDebug={isDebug}
+      />
+    }
+    
+    {!lock && <ActivityKPIData batchID={id} app={app} /> }
+    
+    <PerformKPIData batchID={id} />
+    
+  </Fragment>
+);
 
 const SalesSegment = ({ b, srange, flowCounts, end, shipDue })=> {
   
@@ -261,7 +252,6 @@ const SalesSegment = ({ b, srange, flowCounts, end, shipDue })=> {
       {cmplt !== null ? null : 
         <DataLine l='Ship Due in' n={remainClean + ' workdays'}  r={remain < 0} />
       }
-  
     </div>
   );
 };
