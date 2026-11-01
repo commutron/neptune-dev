@@ -73,7 +73,7 @@ const CalWrap = ({ brancheS })=> {
 	  	  events={events}
 	  	  getEvents={getEvents}
 	  	  defaultView='week'
-	  	  height='74dvh'
+	  	  height='72dvh'
 	  	/>
 	  </div>
   );

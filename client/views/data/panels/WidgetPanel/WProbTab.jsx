@@ -1,14 +1,12 @@
 import React, { useRef, useState, useEffect } from 'react';
-import Pref from '/client/global/pref.js';
+import Pref from '/public/pref.js';
 
 import TabsLite from '/client/components/smallUi/Tabs/TabsLite';
 import WidgetMultiBatchBar from '/client/components/charts/WidgetMultiBatchBar';
 import FailScatterChart from '/client/components/charts/FailScatterChart';
 import AvgStat from '/client/components/tinyUi/AvgStat';
 
-const WProbTab = ({ widgetData, 
-//batcheS, app
-})=> {
+const WProbTab = ({ widgetData })=> {
   
   const mounted = useRef(true);
   
@@ -23,8 +21,6 @@ const WProbTab = ({ widgetData,
     
     return () => { mounted.current = false; };
   }, []);
-  
-  // const batches = batcheS.map( b => b.batch, []);
   
   return(
     <div className='space'>

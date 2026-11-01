@@ -10,12 +10,15 @@ import Spin from '/client/components/tinyUi/Spin';
 const EquipData = ({
   coldReady, // sub
   equipData, maintainData,
-  app, users, isDebug, specify 
+  user, app, users, isDebug, specify 
 })=> {
   
   const brancheS = useMemo( ()=> branchesSort(app?.branches || []), [app]);
+  const isRO = useMemo( ()=> Roles.userIsInRole(Meteor.userId(), 'readOnly'), [user]);
+  const liveUsers = useMemo( ()=> (users || []).filter( x => x.roles.includes('active') && 
+                                                            !x.roles.includes('readOnly') ), [users]);
   
-  if( !coldReady || !users || !app ) {
+  if( !coldReady || !users || !liveUsers || !app ) {
     return(
       <PlainFrame title=''>
         <div className='centre wide'>
@@ -33,6 +36,8 @@ const EquipData = ({
       maintainData={maintainData}
       app={app}
       users={users}
+      liveUsers={liveUsers}
+      isRO={isRO}
       isDebug={isDebug}
       brancheS={brancheS}
       specify={specify} 

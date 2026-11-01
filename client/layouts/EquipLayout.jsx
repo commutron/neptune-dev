@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo }from 'react';
+import React, { useEffect, useState }from 'react';
 import Pref from '/public/pref.js';
 
 import HomeIcon from '/client/layouts/HomeIcon';
@@ -10,7 +10,8 @@ import EquipSlide from '/client/views/equipment/EquipSlide';
 
 const EquipLayout = ({ 
   equipData, maintainData,
-  app, users, isDebug, brancheS, specify 
+  app, users, liveUsers,
+  isRO, isDebug, brancheS, specify 
 }) => {
   
   const [ issues, issueSet ] = useState(0);
@@ -21,8 +22,6 @@ const EquipLayout = ({
       re && issueSet(re);
     }); 
   },[]);
-  
-  const isRO = useMemo( ()=> Roles.userIsInRole(Meteor.userId(), 'readOnly'), [users]);
   
   const equipS = equipData.sort((e1, e2)=>
                   e1.alias < e2.alias ? -1 : 
@@ -43,6 +42,36 @@ const EquipLayout = ({
                   });
   
   const defaultSlide = specify ? equipS.findIndex( x => x.alias === specify ) : false;
+  
+  const weekday = {
+    0: 'sunday',
+    1: 'monday',
+    2: 'tuesday',
+    3: 'wednesday',
+    4: 'thursday',
+    5: 'friday',
+    6: 'saturday',
+    startOf: 'start',
+    endOf: 'end'
+  };
+  
+  const monthday = {
+    1:"1st", 2:"2nd", 3:"3rd", 4:"4th", 5:"5th",
+    6:"6th", 7:"7th", 8:"8th", 9:"9th", 10:"10th",
+    11:"11th", 12:"12th", 13:"13th", 14:"14th", 15:"15th",
+    16:"16th", 17:"17th", 18:"18th", 19:"19th", 20:"20th",
+    21:"21st", 22:"22nd", 23:"23rd", 24:"24th", 25:"25th",
+    26:"26th", 27:"27th", 28:"28th", 29:"29th", 30:"30th", 31:"31st",
+    startOf: 'start', endOf: 'end'
+  };
+  
+  const month = {
+    0: "January", 1: "Febuary", 2: "March",
+    3: "April", 4: "May", 5: "June",
+    6: "July", 7: "August", 8: "September",
+    9: "October", 10: "November", 11: "December",
+    startOf: 'start', endOf: 'end'
+  };
   
   return(
     <div className='simpleContainer'>
@@ -74,7 +103,7 @@ const EquipLayout = ({
           menu={menuList}
           topPage={
             <Landing
-              equipData={equipData}
+              equipData={equipS}
               maintainData={maintainData}
               issues={issues}
               app={app}
@@ -92,8 +121,12 @@ const EquipLayout = ({
               equipLite={entry}
               app={app}
               users={users}
+              liveUsers={liveUsers}
               isDebug={isDebug}
               brancheS={brancheS}
+              weekday={weekday}
+              monthday={monthday}
+              month={month}
             />
           ))} 
         </SlidesNested>

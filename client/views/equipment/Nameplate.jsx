@@ -8,8 +8,8 @@ import Pref from '/public/pref.js';
 import ContactForm from '/client/components/forms/Equip/ContactForm';
 import ActionFunc from '/client/components/tinyUi/ActionFunc';
 
-const Nameplate = ({ equipData, users, liveUsers, isEqSup, isEdit, app })=> {
-  
+const Nameplate = ({ equipData, liveUsers, isEqSup, isEdit, app })=> {
+  console.log(liveUsers);
   const [ ctctKey, ctctKeySet ] = useState(false);
   
   const openAction = (cID)=> {
