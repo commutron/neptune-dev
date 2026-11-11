@@ -35,9 +35,9 @@ export const FocusSelect = ({ gList, focusState, changeFunc })=> (
 
 export const FilterSelect = ({ 
   unqID, title, selectList, selectState, falsey, changeFunc, 
-  extraClass, icon, optgroup
+  wrapClass, extraClass, icon, optgroup
 })=> (
-  <span className='liteTip' data-tip={title}>
+  <span className={`liteTip ${wrapClass || ''}`} data-tip={title}>
     <i className={`${icon || 'fas fa-filter'} fa-fw darkgrayT`}></i>
     <select
       id={'filterSelect'+unqID}

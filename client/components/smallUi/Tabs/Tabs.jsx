@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import './style.css';
 
-const Tabs = ({ tabs, names, wide, stick, hold, sessionTab, disable, children })=> {
+const Tabs = ({ 
+  tabs, names, wide, stick, tabcss, bodycss,
+  hold, sessionTab, disable, children 
+})=> {
   
   const ssn = Session.get(sessionTab);
   const dfTab = tabs[ssn] ? ssn : 0;
@@ -19,8 +22,8 @@ const Tabs = ({ tabs, names, wide, stick, hold, sessionTab, disable, children })
   const dA = Array.isArray(disable) ? disable : [];
   
   return(
-    <div>
-      <div className={sticky} style={{ display: 'flex' }}>
+    <Fragment>
+      <div className={`${sticky} ${tabcss || ''}`} style={{ display: 'flex' }}>
         {tabs.map( (entry, index)=>{
           let clss =  show === index ? 'tabOn' : 'tabOff';
           return (
@@ -33,12 +36,12 @@ const Tabs = ({ tabs, names, wide, stick, hold, sessionTab, disable, children })
             >{entry} {names && names[index]}</button>
         )})}
       </div>
-      <div className='tabBody'>
+      <div className={`tabBody ${bodycss || ''}`}>
 
         {children[show]}
       
       </div>
-    </div>
+    </Fragment>
   );
 };
 

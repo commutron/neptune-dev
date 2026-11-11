@@ -1,23 +1,16 @@
 import React, { useRef, useState, useEffect } from 'react';
 import moment from 'moment';
 import 'moment-business-time';
-import Pref from '/public/pref.js';
 
 import CalComp from './CalComp';
-import { FilterSelect } from '/client/components/smallUi/ToolBarTools';
 
-const CalWrap = ({ brancheS })=> {
+const CalWrap = ({ brKey })=> {
   
   const mounted = useRef(true);
-  const [ brKey, brKeySet ] = useState(null);
   const [ work, workSet ] = useState(false);
   const [ float, floatSet ] = useState( false );
   
   const [ events, eventsSet ] = useState([]);
-  
-  const handleEqBr = (val)=> {
-  	brKeySet(val === 'false' ? null : val === '0undefined' ? false : val);
-  };
   
   function getEvents(dateStr, force) {
   	workSet(true);
@@ -55,20 +48,6 @@ const CalWrap = ({ brancheS })=> {
   return(
 	  <div className='uspace vmarginhalf'>
 	  	{work ?	<div className='pulseload'></div> : null}
-	  	
-	  	<div className='rowWrapR'>
-		  	<FilterSelect
-	        unqID='fltrEQbranch'
-	        title={`Filter by ${Pref.branch}`}
-	        selectList={[['0undefined','Unassigned'],...brancheS.map( (br)=>[br.brKey, br.branch])]}
-	        selectState={brKey}
-	        falsey={`All ${Pref.branches}`}
-	        changeFunc={(v)=>handleEqBr(v.target.value)}
-	        icon='fas fa-code-branch'
-	        extraClass='minWfit'
-	      />
-      </div>
-        
 	  	<CalComp
 	  	  events={events}
 	  	  getEvents={getEvents}

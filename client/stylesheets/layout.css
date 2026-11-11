@@ -685,6 +685,7 @@ main {
 .gapR { margin-inline-end: 5px; }
 .gapL { margin-inline-start: 5px; }
 .gapsR { row-gap: 2vh; }
+.gapminR { row-gap: 5px; }
 .gapsC { column-gap: 2vw; }
 .gapminC { column-gap: 5px; }
 .vgapdivs > div {
@@ -1552,6 +1553,25 @@ n-col-table-head > span {
   color: white;
 }
 
+.slotGrid {
+  display: grid;
+  grid-template-rows: auto auto;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-areas: 
+    'leftSlot . rightSlot'
+    'autoSlot autoSlot autoSlot';
+}
+.leftSlot { 
+  grid-area: leftSlot;
+  justify-content: left;
+}
+.rightSlot { 
+  grid-area: rightSlot;
+  justify-content: right;
+}
+.autoSlot {
+  grid-area: autoSlot;
+}
 
 .tabsVert {
   display: grid;
